@@ -25,7 +25,6 @@ public class ProController {
 	@GetMapping("proCreate")
 	public String 프로젝트생성페이지(Model model) {
 		model.addAttribute("proVO", new ProVO());
-		System.out.println(model);
 		return "pro/proCreate";
 	}
 	
