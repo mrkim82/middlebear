@@ -1,6 +1,6 @@
 package com.groo.bear.pro.service.impl;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class ProServiceImpl implements ProService {
 //	}
 
 	@Override
-	public void insertPro(HashMap<String, Object> map) {
+	public void insertPro(Map<String, Object> map) {
 		proMapper.createPro(map);
 		System.out.println("서비스임플" + map);
 	}
