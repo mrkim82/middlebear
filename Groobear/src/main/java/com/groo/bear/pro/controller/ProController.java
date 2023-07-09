@@ -41,6 +41,7 @@ public class ProController {
 	//프로젝트 생성
 	@PostMapping("proCreate")
 	public String 프로젝트생성(ProVO proVO) {
+		//7.09고유키 오류 뜬 적 있음
 		Map<String, Object> param = new HashMap<String, Object>();
 		
 		param.put("v_pro_name", proVO.getProName());
@@ -51,7 +52,7 @@ public class ProController {
 		param.put("v_post_view_auth", proVO.getPostViewAuth());
 		param.put("v_com_write_auth", proVO.getComWriteAuth());
 		param.put("v_file_auth", proVO.getFileAuth());
-		param.put("v_id", proVO.getId());
+		param.put("v_id", "phantom88");
 		
 		proService.insertPro(param);
 		System.out.println("param 결과 : " + param.toString());

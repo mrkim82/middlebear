@@ -49,7 +49,7 @@
 						<tr>
 							<td>작성 권한</td>
 							<td>
-								<select name="postW">
+								<select name="postWriteAuth">
 									<option th:value="1">전체</option>
 									<option th:value="2">프로젝트 관리자만</option>
 								</select>
@@ -58,9 +58,9 @@
 						<tr>
 							<td>수정 권한</td>
 							<td>
-								<select name="postV">
+								<select name="postUpdateAuth">
 									<option th:value="1">전체</option>
-									<option th:value="2">프로젝트 관리자 + 작성자만</option>
+									<option th:value="2" selected>프로젝트 관리자 + 작성자만</option>
 									<option th:value="3">작성자만</option>
 								</select>
 							</td>
@@ -68,7 +68,7 @@
 						<tr>
 							<td>조회 권한</td>
 							<td>
-								<select name="postV">
+								<select name="postViewAuth">
 									<option th:value="1">전체</option>
 									<option th:value="2">프로젝트 관리자 + 작성자만</option>
 								</select>
@@ -80,7 +80,7 @@
 						<tr>
 							<td>작성 권한</td>
 							<td>
-								<select name="comW">
+								<select name="comWriteAuth">
 									<option th:value="1">전체</option>
 									<option th:value="2">프로젝트 관리자만</option>
 								</select>
@@ -92,7 +92,7 @@
 						<tr>
 							<td>조회/다운로드 권한</td>
 							<td>
-								<select name="fileA">
+								<select name="fileAuth">
 									<option th:value="1">전체</option>
 									<option th:value="2">프로젝트 관리자 + 작성자만</option>
 								</select>
