@@ -1,10 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+>
 <head>
 <meta charset="UTF-8">
 <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 </head>
 <body>
 	<a th:onclick="|location.href='@{/proCreate}'|">프젝 생성</a>
+	<div>
+		<table>
+			<thead>
+				<th>즐겨찾기</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>색</td>
+					<td>즐찾</td>
+					<td>업무이름</td>
+					<td>참여자</td>
+					<td>알림</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>
