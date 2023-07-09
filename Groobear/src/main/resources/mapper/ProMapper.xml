@@ -5,7 +5,22 @@
 <mapper namespace="com.groo.bear.pro.mapper.ProMapper">
 	
 	<!-- 프로젝트 생성 -->
-	<insert id="createProject" parameterType="ProVO">
+	<select id="createPro" statementType="CALLABLE" parameterType="hashMap">
+		{call cre_project(
+				#{v_pro_name, 		  mode=IN, jdbcType=VARCHAR2,  javaType=String},
+				#{v_pro_content, 	  mode=IN, jdbcType=VARCHAR2,  javaType=String}},
+				#{v_pro_def_tab,	  mode=IN, jdbcType=CHAR, 	   javaType=String}},
+				#{v_post_write_auth,  mode=IN, jdbcType=CHAR, 	   javaType=String}},
+				#{v_post_update_auth, mode=IN, jdbcType=CHAR, 	   javaType=String}},
+				#{v_post_view_auth,	  mode=IN, jdbcType=CHAR, 	   javaType=String}},
+				#{v_com_write_auth,	  mode=IN, jdbcType=CHAR, 	   javaType=String}},
+				#{v_file_auth, 		  mode=IN, jdbcType=CHAR, 	   javaType=String}},
+				#{v_id, 			  mode=IN, jdbcType=VARCHAR,   javaType=String}2}
+			)
+		}
+	</select>
+	
+	<!-- <insert id="createProject" parameterType="ProVO">
 		<selectKey keyProperty="proNo"
 				   resultType="int"
 				   order="BEFORE">
@@ -57,6 +72,6 @@
 				, #{fileAuth}
 			</if>
 		)
-	</insert>
+	</insert> -->
 	
 </mapper>
