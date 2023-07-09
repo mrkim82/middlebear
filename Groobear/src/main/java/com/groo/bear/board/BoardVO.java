@@ -1,4 +1,4 @@
-package com.groo.bear.board.service;
+package com.groo.bear.board;
 
 import java.util.Date;
 
