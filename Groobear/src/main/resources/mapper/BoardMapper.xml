@@ -15,6 +15,7 @@
 			   COUNT       
 	     FROM  BOARD
 	    WHERE  BPARD_NO > 0
+	 ORDER BY  DESC
 	 ]]>
 	</select>
 	<select id="selectBoard" resultType="int">
