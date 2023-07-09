@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<style>
+	th {
+		text-align: left;
+	}
+</style>
 </head>
 <body>
 	<div>
@@ -33,6 +38,69 @@
 				</div>
 				
 			</div>
+			
+			<div>
+				<div>권한 설정</div>
+				
+				<table>
+						<tr>
+							<th colspan="2" >게시글</th>
+						</tr>
+						<tr>
+							<td>작성 권한</td>
+							<td>
+								<select name="postW">
+									<option th:value="1">전체</option>
+									<option th:value="2">프로젝트 관리자만</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>수정 권한</td>
+							<td>
+								<select name="postV">
+									<option th:value="1">전체</option>
+									<option th:value="2">프로젝트 관리자 + 작성자만</option>
+									<option th:value="3">작성자만</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>조회 권한</td>
+							<td>
+								<select name="postV">
+									<option th:value="1">전체</option>
+									<option th:value="2">프로젝트 관리자 + 작성자만</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th colspan="2">댓글</th>
+						</tr>
+						<tr>
+							<td>작성 권한</td>
+							<td>
+								<select name="comW">
+									<option th:value="1">전체</option>
+									<option th:value="2">프로젝트 관리자만</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th colspan="2">파일</th>
+						</tr>
+						<tr>
+							<td>조회/다운로드 권한</td>
+							<td>
+								<select name="fileA">
+									<option th:value="1">전체</option>
+									<option th:value="2">프로젝트 관리자 + 작성자만</option>
+								</select>
+							</td>
+						</tr>
+				</table>
+			</div>
+			
 			<div>
 				<button type="submit">등록</button>
 				<button type="button" th:onclick="|location.href='@{/proMain}'|">돌아가기</button>
