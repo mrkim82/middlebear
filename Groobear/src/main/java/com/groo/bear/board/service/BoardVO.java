@@ -17,14 +17,14 @@ public class BoardVO {
 //	UPDATE_DATE	DATE
 //	COUNT	NUMBER(3,0)
 	
-	private int bNo;
+	private int boardNo;
 	private String id;
-	private String bType;
+	private String boardType;
 	private String title;
 	private String content;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date inDate;
+	private Date insertDate;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date upDate;
+	private Date updateDate;
 	private int count;
 }

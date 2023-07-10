@@ -3,8 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.groo.bear.board.mapper.BoardMapper">
-	<select id="selectAllList">
-	<![CDATA[
+	<select id="selectAllList" resultType="boardVO">
 		SELECT BOARD_NO          
 			   ,ID           
 			   ,BOARD_TYPE     
@@ -14,9 +13,7 @@
 			   ,UPDATE_DATE           
 			   ,COUNT       
 	     FROM  BOARD
-	    WHERE  BOARD_NO > 0
 	 ORDER BY  BOARD_NO DESC
-	 ]]>
 	</select>
 	<select id="selectBoard" resultType="int">
 		SELECT BOARD_NO
@@ -28,9 +25,9 @@
 			   ,UPDATE_DATE
 			   ,COUNT
 		FROM   BOARD
-		WHERE  BOARD_NO = #{bNo}
+		WHERE  BOARD_NO = #{boardNo}
 	</select>
-	<insert id="insertBoard">
+	<insert id="insertBoard" parameterType="boardVO">
 		<selectKey keyProperty="bNo"
 				   resultType="int"
 				   order="BEFORE">
@@ -38,30 +35,51 @@
 			FROM BOARD
 	   </selectKey>
 	 
-	   INSERT INTO BOARD (BOARD_NO, 
+	   INSERT INTO BOARD (
+	   			BOARD_NO
 	   		<if test="title != '' and title != null">
 	   		  , TITLE
 	   		</if>
 	   		<if test="content != '' and content != null">
 	   		  , CONTENT
 	   		</if>
-	   		<if test="bType != '' and bType != null">
+	   		<if test="boardType != '' and boardType != null">
 	   		  , BOARD_TYPE
 	   		</if>
 	   		  , INSERT_DATE
 	   		  
-	   ) VALUES (#{bNo},
+	   ) VALUES (
+	   			#{boardNo}
 	   		<if test="title != '' and title != null">
 	   		  , #{title}
 	   		</if>
 	   		<if test="content != '' and content != null">
 	   		  , #{content}
 	   		</if>
-	   		<if test="bType != '' and bType != null">
-	   		  , #{bType}
+	   		<if test="boardType != '' and boardType != null">
+	   		  , #{boardType}
 	   		</if>
 	   		  , sysdate
 	   		  
 	   )
+	</insert>
+	<!-- 파일 insert -->
+	<insert id="addFiles" parameterType="filesVO">
+		INSERT INTO FILES 
+						   ( FILE_NO
+						   , ORIGIN_FILE_NAME
+						   , CHANGE_FILE_NAME
+						   , FILE_SIZE
+						   , FILE_DATE
+						   , BOARD_NO
+						   )
+						   VALUES 
+						   ( #{fileNo}
+						   , #{originFileName}
+						   , #{changeFileName}
+						   , #{fileSize}
+						   , sysdate
+						   , #{boardNo}
+						   )
 	</insert>
 </mapper>
