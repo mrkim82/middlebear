@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.board.mapper.BoardMapper">
+	<select id="selectAllList">
+	<![CDATA[
+		SELECT BOARD_NO          
+			   ,ID           
+			   ,BOARD_TYPE     
+			   ,TITLE        
+			   ,CONTENT     
+			   ,INSERT_DATE            
+			   ,UPDATE_DATE           
+			   ,COUNT       
+	     FROM  BOARD
+	    WHERE  BOARD_NO > 0
+	 ORDER BY  BOARD_NO DESC
+	 ]]>
+	</select>
+	<select id="selectBoard" resultType="int">
+		SELECT BOARD_NO
+			   ,ID
+			   ,BOARD_TYPE
+			   ,TITLE
+			   ,CONTENT
+			   ,INSERT_DATE
+			   ,UPDATE_DATE
+			   ,COUNT
+		FROM   BOARD
+		WHERE  BOARD_NO = #{bNo}
+	</select>
+	<insert id="insertBoard">
+		<selectKey keyProperty="bNo"
+				   resultType="int"
+				   order="BEFORE">
+			SELECT NVL(MAX(BOARD_NO), 0) + 1
+			FROM BOARD
+	   </selectKey>
+	 
+	   INSERT INTO BOARD (BOARD_NO, 
+	   		<if test="title != '' and title != null">
+	   		  , TITLE
+	   		</if>
+	   		<if test="content != '' and content != null">
+	   		  , CONTENT
+	   		</if>
+	   		<if test="bType != '' and bType != null">
+	   		  , BOARD_TYPE
+	   		</if>
+	   		  , INSERT_DATE
+	   		  
+	   ) VALUES (#{bNo},
+	   		<if test="title != '' and title != null">
+	   		  , #{title}
+	   		</if>
+	   		<if test="content != '' and content != null">
+	   		  , #{content}
+	   		</if>
+	   		<if test="bType != '' and bType != null">
+	   		  , #{bType}
+	   		</if>
+	   		  , sysdate
+	   		  
+	   )
+	</insert>
+</mapper>

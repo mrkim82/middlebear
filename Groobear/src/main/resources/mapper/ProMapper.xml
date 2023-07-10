@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.pro.mapper.ProMapper">
+	
+	<!-- 프로젝트 생성 -->
+	<insert id="createProject" parameterType="ProVO">
+		<selectKey keyProperty="proNo"
+				   resultType="int"
+				   order="BEFORE">
+			SELECT NVL(MAX(pro_no), 0) + 1
+			FROM pro
+		</selectKey>
+		
+		INSERT INTO pro (pro_no, pro_name, pro_def_tab, id
+			<if test="proContent != null and proContent != '' ">
+				, pro_content
+			</if>
+			<if test="postWriteAuth != null and postWriteAuth != '' ">
+				, post_write_auth
+			</if>
+			<if test="postUpdateAuth != null and postUpdateAuth != '' ">
+				, post_update_auth
+			</if>
+			<if test="postUpdateAuth != null and postUpdateAuth != '' ">
+				, post_update_auth
+			</if>
+			<if test="comWriteAuth != null and comWriteAuth != '' ">
+				, com_write_auth
+			</if>
+			<if test="fileAuth != null and fileAuth != '' ">
+				, file_auth
+			</if>
+		)
+		VALUES(
+			#{proNo},
+			#{proName},
+			#{proDefTab},
+			#{id}
+			<if test="proContent != null and proContent != '' ">
+				, #{proContent}
+			</if>
+			<if test="postWriteAuth != null and postWriteAuth != '' ">
+				, #{postWriteAuth}
+			</if>
+			<if test="postUpdateAuth != null and postUpdateAuth != '' ">
+				, #{postUpdateAuth}
+			</if>
+			<if test="postUpdateAuth != null and postUpdateAuth != '' ">
+				, #{postUpdateAuth}
+			</if>
+			<if test="comWriteAuth != null and comWriteAuth != '' ">
+				, #{comWriteAuth}
+			</if>
+			<if test="fileAuth != null and fileAuth != '' ">
+				, #{fileAuth}
+			</if>
+		)
+	</insert>
+	
+</mapper>
