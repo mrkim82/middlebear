@@ -19,8 +19,6 @@
 					<td th:text="${pro.proColor}"></td>
 					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
 					<td th:text="${pro.proName}"></td>
-					<td th:text="${pro.proColor}"></td>
-					<td th:text="${pro.proColor}"></td>
 				</tr>
 			</th:block>
 			<th:block th:if="${projectMainList.?[proStarCheck == 'N'].size() > 0}">
@@ -32,8 +30,6 @@
 					<td th:text="${pro.proColor}"></td>
 					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
 					<td th:text="${pro.proName}"></td>
-					<td th:text="${pro.proColor}"></td>
-					<td th:text="${pro.proColor}"></td>
 				</tr>
 			</th:block>
 		</table>

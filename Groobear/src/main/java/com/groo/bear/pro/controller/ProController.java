@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,7 +29,6 @@ public class ProController {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProject((String)session.getAttribute("Id")));
 		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
-		System.out.println("메인"+model);
 		return "pro/proMain";
 	}
 	
@@ -45,6 +45,15 @@ public class ProController {
 	public String proMainPageS(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProjectStar((String)session.getAttribute("Id")));
+		return "pro/proMainNormal";
+	}
+	
+	//프로젝트 그룹 상세 리스트 보기
+	@GetMapping("proGroupD/{groupNo}")
+	public String proGroupDetailList(Model model, @PathVariable int groupNo, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("Id");
+		model.addAttribute("projectMainList", proService.readProjectGroupDetail(groupNo, id));
 		return "pro/proMainNormal";
 	}
 	

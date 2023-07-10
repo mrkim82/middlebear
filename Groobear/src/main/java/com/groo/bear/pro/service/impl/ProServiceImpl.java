@@ -53,8 +53,8 @@ public class ProServiceImpl implements ProService {
 	}
 
 	@Override
-	public List<ProGroupVO> readProjectGroupDetail(String id) {
-		return proMapper.readProjectGroupDetail(id);
+	public List<ProGroupVO> readProjectGroupDetail(int groupNo, String id) {
+		return proMapper.readProjectGroupDetail(groupNo, id);
 	}
 
 

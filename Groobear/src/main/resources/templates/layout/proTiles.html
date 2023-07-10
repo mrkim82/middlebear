@@ -128,10 +128,9 @@
 				        <a href="#"><span class="material-icons">mail</span> 모아보기</a>
 				        <a href="#"><span class="material-icons">mail</span> 프로젝트 폴더
 				        			<span id="popupProjectBtn">+</span></a>
-				        <ul>
-				        	<li th:each="proG:${projectGroupList}" th:text="${proG.groupName}"
-				        		th:attr="data-gN=${proG.groupNo}"></li>
-				        </ul>
+				        	<a th:each="proG:${projectGroupList}" th:text="${proG.groupName}"
+				        		th:attr="data-gN=${proG.groupNo}"
+				        		th:href="@{proGroupD/{groupNo}(groupNo=${proG.groupNo})}"></a>
 				    </div>
 				    <!-- modal창 -->
 				    <div id="modalWrap">

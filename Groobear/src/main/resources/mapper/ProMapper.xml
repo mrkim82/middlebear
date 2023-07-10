@@ -93,6 +93,7 @@
 		    JOIN pro_group u
 		    ON g.group_no = u.group_no
 		WHERE u.group_no = #{groupNo}
+		AND u.id = #{id}
 	</select>
 	
 </mapper>
