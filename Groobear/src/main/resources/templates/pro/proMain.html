@@ -11,20 +11,26 @@
 	<a th:onclick="|location.href='@{/proCreate}'|">프젝 생성</a>
 	<div>
 		<table>
-			<thead>
-				<tr>
-					<th>즐겨찾기</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>색</td>
-					<td>즐찾</td>
-					<td>업무이름</td>
-					<td>참여자</td>
-					<td>알림</td>
-				</tr>
-			</tbody>
+			<tr>
+				<th>즐겨찾기</th>
+			</tr>
+			<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}">
+				<td th:text="${pro.proColor}">색Y</td>
+				<td th:text="${pro.proStarCheck}">즐찾Y</td>
+				<td th:text="${pro.proName}">업무이름Y</td>
+				<td th:text="${pro.proColor}">참여자Y</td>
+				<td th:text="${pro.proColor}">알림Y</td>
+			</tr>
+			<tr>
+				<th>참여중</th>
+			</tr>
+			<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'N'}">
+				<td th:text="${pro.proColor}">색Y</td>
+				<td th:text="${pro.proStarCheck}">즐찾Y</td>
+				<td th:text="${pro.proName}">업무이름Y</td>
+				<td th:text="${pro.proColor}">참여자Y</td>
+				<td th:text="${pro.proColor}">알림Y</td>
+			</tr>
 		</table>
 	</div>
 </body>

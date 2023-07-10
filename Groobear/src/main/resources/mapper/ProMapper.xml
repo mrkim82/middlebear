@@ -20,58 +20,27 @@
 		}
 	</select>
 	
-	<!-- <insert id="createProject" parameterType="ProVO">
-		<selectKey keyProperty="proNo"
-				   resultType="int"
-				   order="BEFORE">
-			SELECT NVL(MAX(pro_no), 0) + 1
-			FROM pro
-		</selectKey>
-		
-		INSERT INTO pro (pro_no, pro_name, pro_def_tab, id
-			<if test="proContent != null and proContent != '' ">
-				, pro_content
-			</if>
-			<if test="postWriteAuth != null and postWriteAuth != '' ">
-				, post_write_auth
-			</if>
-			<if test="postUpdateAuth != null and postUpdateAuth != '' ">
-				, post_update_auth
-			</if>
-			<if test="postUpdateAuth != null and postUpdateAuth != '' ">
-				, post_update_auth
-			</if>
-			<if test="comWriteAuth != null and comWriteAuth != '' ">
-				, com_write_auth
-			</if>
-			<if test="fileAuth != null and fileAuth != '' ">
-				, file_auth
-			</if>
-		)
-		VALUES(
-			#{proNo},
-			#{proName},
-			#{proDefTab},
-			#{id}
-			<if test="proContent != null and proContent != '' ">
-				, #{proContent}
-			</if>
-			<if test="postWriteAuth != null and postWriteAuth != '' ">
-				, #{postWriteAuth}
-			</if>
-			<if test="postUpdateAuth != null and postUpdateAuth != '' ">
-				, #{postUpdateAuth}
-			</if>
-			<if test="postUpdateAuth != null and postUpdateAuth != '' ">
-				, #{postUpdateAuth}
-			</if>
-			<if test="comWriteAuth != null and comWriteAuth != '' ">
-				, #{comWriteAuth}
-			</if>
-			<if test="fileAuth != null and fileAuth != '' ">
-				, #{fileAuth}
-			</if>
-		)
-	</insert> -->
+	<!-- 프로젝트 조회 -->
+	<!-- 나중에 orderby 알림순 추가 -->
+	<select id="readProject" resultType="ProVO">
+		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check
+		FROM pro p, pro_mem m
+		WHERE p.id = #{id}
+		AND p.pro_no = m.pro_no
+	</select>
+	
+	<!-- 프로젝트 즐겨찾기 등록 -->
+	<update id="updateStarY" parameterType="int">
+		UPDATE pro_mem
+		SET pro_star_check = 'Y'
+		WHERE pro_mem_no = #{proMemNo}
+	</update>
+	
+	<!-- 프로젝트 즐겨찾기 취소 -->
+	<update id="updateStarN" parameterType="int">
+		UPDATE pro_mem
+		SET pro_star_check = 'N'
+		WHERE pro_mem_no = #{proMemNo}
+	</update>
 	
 </mapper>

@@ -5,13 +5,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProVO;
@@ -24,23 +24,19 @@ public class ProController {
 	
 	//프로젝트 메인 페이지 이동
 	@GetMapping("proMain")
-	public String proMainPage(Model model) {
+	public String proMainPage(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		model.addAttribute("projectMainList", proService.readProject((String)session.getAttribute("UserId")));
 		return "pro/proMain";
 	}
 	
 	//프로젝트 생성 페이지 이동
 	@GetMapping("proCreate")
 	public String 프로젝트생성페이지(Model model) {
-		model.addAttribute("proVO", new ProVO());
+		//model.addAttribute("proVO", new ProVO());//생성 수정 관리, 페이지에서 field값 수정
+		System.out.println(model);
 		return "pro/proCreate";
 	}
-	
-//	//프로젝트 생성
-//	@PostMapping("proCreate")
-//	public String 프로젝트생성(ProVO proVO) {
-//		proService.createProject(proVO);
-//		return "redirect:proMain";
-//	}
 	
 	//프로젝트 생성
 	@PostMapping("proCreate")
@@ -57,10 +53,18 @@ public class ProController {
 		param.put("v_post_view_auth", proVO.getPostViewAuth());
 		param.put("v_com_write_auth", proVO.getComWriteAuth());
 		param.put("v_file_auth", proVO.getFileAuth());
-		param.put("v_id", session.getAttribute("UserId"));
+		param.put("v_id", (String)session.getAttribute("UserId"));
 		
 		proService.insertPro(param);
 		System.out.println("param 결과 : " + param.toString());
 		return "redirect:proMain";
 	}
+	
+//	//프로젝트 즐겨찾기
+//	@PutMapping("")
+//	public void starCheck() {
+//		//프로젝트 즐겨찾기 등록
+//		
+//		//프로젝트 즐겨찾기 취소
+//	}
 }
