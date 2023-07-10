@@ -5,7 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.groo.bear.emp.service.EmpService;
@@ -17,16 +17,33 @@ public class EmpController {
 	EmpService empService;
 	
 	@GetMapping("login")
-	public String login(HttpServletRequest request, EmpVO empVO, Model model) {
+	public String login(HttpServletRequest request, EmpVO empVO) {
 		HttpSession session = request.getSession();
-		System.out.println(empVO);
-		System.out.println(empService.login(empVO));
 		if(empService.login(empVO) != null) {
-			session.setAttribute("UserId", empVO.getId());
+			session.setAttribute("Id", empService.login(empVO).getId());
+			session.setAttribute("Name", empService.login(empVO).getName());
+			session.setAttribute("Rank", empService.login(empVO).getRank());
+			session.setAttribute("Pno", empService.login(empVO).getPno());
+			session.setAttribute("DeptNo", empService.login(empVO).getDeptNo());
+			session.setAttribute("Email", empService.login(empVO).getEmail());
+			session.setAttribute("Phone", empService.login(empVO).getPhone());
+			session.setAttribute("Addr", empService.login(empVO).getAddr());
+			session.setAttribute("EmpGrade", empService.login(empVO).getEmpGrade());
+			session.setAttribute("Sign", empService.login(empVO).getSign());
+			session.setAttribute("ProfileImg", empService.login(empVO).getProfileImg());
+			session.setAttribute("ProfileNote", empService.login(empVO).getProfileNote());		
 			return "main/main";
 		}else {
-			return null;
+			return "../static/index";
 		}
-		
+	}
+	
+	@GetMapping("logout")
+	public String logout(HttpServletRequest request) {
+		HttpSession session = request.getSession(false); 
+        if(session != null) {
+			session.invalidate();
+		}
+		return "redirect:/";
 	}
 }
