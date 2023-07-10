@@ -7,3 +7,4 @@ public interface CarMapper {
 	//전체조회
 	public List<CarVO> selectAllCar();
 }
+  
