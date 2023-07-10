@@ -1,0 +1,183 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+  <head>
+  	<title>Groobear</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+		
+	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+	<link rel="stylesheet" href="/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<style>
+		#modalWrap {
+		  position: fixed; /* Stay in place */
+		  z-index: 1; /* Sit on top */
+		  padding-top: 100px; /* Location of the box */
+		  left: 0;
+		  top: 0;
+		  width: 100%; /* Full width */
+		  height: 100%; /* Full height */
+		  overflow: auto; /* Enable scroll if needed */
+		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+		  display: none;
+		}
+		
+		#modalBody {
+		  width: 500px;
+		  height: 300px;
+		  padding: 30px 30px;
+		  margin: 0 auto;
+		  border: 1px solid #777;
+		  background-color: #fff;
+		}
+		
+		#closeBtn {
+		  float:right;
+		  font-weight: bold;
+		  color: #777;
+		  font-size:25px;
+		  cursor: pointer;
+		}
+	</style>
+  </head>
+  <body>
+  	<div>
+    <header class="blog-header lh-1 py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+            <div class="col-4 pt-1">
+	    		<img src="" title="" style="width: 200px;">
+			</div>
+            
+            <div class="col-4 text-center">
+                <a class="blog-header-logo text-body-emphasis" href="#">Groobear</a>
+            </div>
+            <div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px; font-family: 'Hahmlet', serif;">
+                <table style="width: 300px;">
+                	<tbody>
+	                	<tr>
+	                		<td><a>[[${session.Name }]]님 반갑습니다</a></td>
+	                	</tr>
+	                	<tr>
+	                		<td><span><a href="logout">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
+	                		<span><a href="#">마이페이지</a></span></td>
+
+	                	</tr>
+                	</tbody>
+                </table>
+            </div>
+        </div>
+    </header>
+	</div>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+        aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarColor01">
+      
+	        <ul class="navbar-nav mr-auto">
+	          <li class="nav-item active">
+	            <a class="nav-link" href="#">Home
+	              <span class="sr-only">(current)</span>
+	            </a>
+	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link" href="#">Features</a>
+	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link" href="#">Pricing</a>
+	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link" href="#">About</a>
+	          </li>
+	          <li class="nav-item dropdown">
+	            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+	              aria-expanded="false">Dropdown</a>
+	            <div class="dropdown-menu">
+	              <a class="dropdown-item" href="#">Action</a>
+	              <a class="dropdown-item" href="#">Another action</a>
+	              <a class="dropdown-item" href="#">Something else here</a>
+	              <div class="dropdown-divider"></div>
+	              <a class="dropdown-item" href="#">Separated link</a>
+	            </div>
+	          </li>
+	          <li>
+	          	<a th:text="${session.UserId}"></a>
+	          </li>
+	        </ul>
+        </div>
+        
+    </nav>
+    <div>
+    <table>
+    	<tbody>
+    		<tr>
+    			<td style="vertical-align: top" class="col-4">
+    				<div class="sidebar">
+				        <a href="proCreate"><span class="material-icons">home</span> 새 프로젝트 생성</a>
+				        <a href="proMain"><span class="material-icons">home</span> 내 프로젝트</a>
+				        <a href="proMainS"><span class="material-icons">info</span> 즐겨찾기</a>
+				        <a href="#contact"><span class="material-icons">mail</span> 미확인(x)</a>
+				        <a href="#contact"><span class="material-icons">mail</span> 미분류(x)</a>
+				        <a href="proMainH"><span class="material-icons">build</span> 숨김</a>
+				        <a href="#"><span class="material-icons">mail</span> 모아보기</a>
+				        <a href="#"><span class="material-icons">mail</span> 프로젝트 폴더
+				        			<span id="popupProjectBtn">+</span></a>
+				        <ul>
+				        	<li th:each="proG:${projectGroupList}" th:text="${proG.groupName}"
+				        		th:attr="data-gN=${proG.groupNo}"></li>
+				        </ul>
+				    </div>
+				    <!-- modal창 -->
+				    <div id="modalWrap">
+					  <div id="modalContent">
+					    <div id="modalBody">
+					      <span id="closeBtn">&times;</span>
+					      <p>프로젝트 폴더 만들기</p>
+					      <input type="text" placeholder="프로젝트 폴더명을 입력하세요">
+					      <button type="button" id="closeBtn2">취소</button>
+					      <button type="button" id="createfloder">확인</button>
+					    </div>
+					  </div>
+					</div>
+    			</td>
+    			<td class="col-8">
+    				<div>
+				    	<div layout:fragment="content" ></div>
+				    </div>
+    			</td>
+    		</tr>
+    	</tbody>
+    </table>
+    </div>
+    <script>
+	    let btn = document.getElementById('popupProjectBtn');
+	    let modal = document.getElementById('modalWrap');
+	    let closeBtn = document.getElementById('closeBtn');
+	
+	    btn.onclick = function(e) {
+			e.preventDefault();
+			modal.style.display = 'block';
+	    }
+	    
+	    closeBtn.onclick = function() {
+	      modal.style.display = 'none';
+	    }
+
+	    closeBtn2.onclick = function() {
+	      modal.style.display = 'none';
+	    }
+	
+	    window.onclick = function(event) {
+	      if (event.target == modal) {
+	        modal.style.display = "none";
+	      }
+	    }
+    </script>
+  </body>
+</html>

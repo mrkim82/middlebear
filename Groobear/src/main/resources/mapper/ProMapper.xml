@@ -27,6 +27,29 @@
 		FROM pro p, pro_mem m
 		WHERE p.id = #{id}
 		AND p.pro_no = m.pro_no
+		AND m.pro_hide_check = 'N'
+		ORDER BY p.pro_no DESC
+	</select>
+	
+	<!-- 프로젝트 숨김 조회 -->
+	<select id="readProjectHide" resultType="ProVO">
+		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no
+		FROM pro p, pro_mem m
+		WHERE p.id = #{id}
+		AND p.pro_no = m.pro_no
+		AND m.pro_hide_check = 'Y'
+		ORDER BY p.pro_no DESC
+	</select>
+	
+	<!-- 프로젝트 숨김 조회 -->
+	<select id="readProjectStar" resultType="ProVO">
+		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no
+		FROM pro p, pro_mem m
+		WHERE p.id = #{id}
+		AND p.pro_no = m.pro_no
+		AND m.pro_star_check = 'Y'
+		AND m.pro_hide_check = 'N'
+		ORDER BY p.pro_no DESC
 	</select>
 	
 	<!-- 프로젝트 즐겨찾기 등록 -->
@@ -42,5 +65,34 @@
 		SET pro_star_check = 'N'
 		WHERE pro_mem_no = #{proMemNo}
 	</update>
+	
+	<!-- 프로젝트 그룹 목록 조회 -->
+	<select id="readProjectGroup" resultType="ProGroupVO">
+		SELECT group_name, group_no
+		FROM pro_group
+		WHERE id = #{id}
+		ORDER BY group_no DESC
+	</select>
+	
+	<!-- 프로젝트 그룹 프로젝트 조회 -->
+	<select id="readProjectGroupDetail" resultType="ProGroupVO">
+		SELECT g.group_no,
+			   g.pro_mem_no,
+			   k.pro_name,
+			   k.pro_color,
+			   k.pro_star_check,
+			   k.pro_hide_check,
+			   k.pro_no,
+			   u.group_name,
+			   u.id
+		FROM pro_group_management g
+		    JOIN (SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no
+		          FROM pro p JOIN pro_mem m
+		          ON p.pro_no = m.pro_no) k
+		    ON g.pro_mem_no = k.pro_mem_no
+		    JOIN pro_group u
+		    ON g.group_no = u.group_no
+		WHERE u.group_no = #{groupNo}
+	</select>
 	
 </mapper>

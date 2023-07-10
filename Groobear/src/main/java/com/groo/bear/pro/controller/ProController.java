@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.groo.bear.pro.service.ProService;
@@ -28,13 +27,31 @@ public class ProController {
 	public String proMainPage(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProject((String)session.getAttribute("Id")));
+		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
+		System.out.println("메인"+model);
 		return "pro/proMain";
+	}
+	
+	//프로젝트 메인 페이지 숨김 보기
+	@GetMapping("proMainH")
+	public String proMainPageH(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		model.addAttribute("projectMainList", proService.readProjectHide((String)session.getAttribute("Id")));
+		return "pro/proMainNormal";
+	}
+	
+	//프로젝트 메인 페이지 즐찾 보기
+	@GetMapping("proMainS")
+	public String proMainPageS(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		model.addAttribute("projectMainList", proService.readProjectStar((String)session.getAttribute("Id")));
+		return "pro/proMainNormal";
 	}
 	
 	//프로젝트 생성 페이지 이동
 	@GetMapping("proCreate")
 	public String 프로젝트생성페이지(Model model) {
-		//model.addAttribute("proVO", new ProVO());//생성 수정 관리, 페이지에서 field값 수정
+		model.addAttribute("proVO", new ProVO());//생성 수정 관리, 페이지에서 field값 수정
 		System.out.println(model);
 		return "pro/proCreate";
 	}
