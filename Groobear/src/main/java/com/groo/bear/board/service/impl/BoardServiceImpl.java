@@ -1,9 +1,13 @@
-package com.groo.bear.board;
+package com.groo.bear.board.service.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.groo.bear.board.mapper.BoardMapper;
+import com.groo.bear.board.service.BoardService;
+import com.groo.bear.board.service.BoardVO;
 
 @Service
 public class BoardServiceImpl implements BoardService{
