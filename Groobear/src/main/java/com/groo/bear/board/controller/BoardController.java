@@ -1,6 +1,8 @@
 package com.groo.bear.board.controller;
 
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,23 +29,22 @@ public class BoardController {
 	
 	//단건조회페이지
 	@GetMapping("getBoard")
-	public String getBoard(Model model, @RequestParam int bNo) {
-		model.addAttribute("getBoard", boardService.selectBoard(bNo));
+	public String getBoard(Model model, @RequestParam int boardNo) {
+		model.addAttribute("getBoard", boardService.selectBoard(boardNo));
 		return "board/getBoard";
 	}
 	
-	//등록 페이지
+	//등록페이지
 	@GetMapping("boardInsert")
 	public String boardInsertForm(Model model) {
-		model.addAttribute("BoardVO", new BoardVO());
-		//if()
-		return "board/boardInsert";
+	    model.addAttribute("BoardVO", new BoardVO());
+	    return "board/boardInsert";
 	}
 	
 	//등록 처리
 	@PostMapping("boardInsert")
 	public String boardInsert(BoardVO vo) {
 		boardService.insertBoard(vo);
-		return "board/boardInsert";
+		return "redirect:/boardList";
 	}
 }

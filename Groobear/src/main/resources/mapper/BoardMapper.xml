@@ -28,14 +28,8 @@
 		WHERE  BOARD_NO = #{boardNo}
 	</select>
 	<insert id="insertBoard" parameterType="boardVO">
-		<selectKey keyProperty="bNo"
-				   resultType="int"
-				   order="BEFORE">
-			SELECT NVL(MAX(BOARD_NO), 0) + 1
-			FROM BOARD
-	   </selectKey>
-	 
 	   INSERT INTO BOARD (
+	   			
 	   			BOARD_NO
 	   		<if test="title != '' and title != null">
 	   		  , TITLE
@@ -49,7 +43,8 @@
 	   		  , INSERT_DATE
 	   		  
 	   ) VALUES (
-	   			#{boardNo}
+	   			
+	   			BOARD_SEQ.NEXTVAL
 	   		<if test="title != '' and title != null">
 	   		  , #{title}
 	   		</if>

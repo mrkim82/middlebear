@@ -6,28 +6,25 @@
     <title>Insert a new Board</title>
 </head>
 <body>
-    <div>
+    <div layout:fragment="content">
         <h2>글 작성</h2>
-        <form th:action="@{/boardInsert}" th:object="${BoardVO}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/boardInsert}" method="post">
             <table>
                 <tr>
                     <td>제목:</td>
-                    <td><input type="text" id="title" th:field="*{title}" required /></td>
+                    <td><input type="text" id="title" th:field="${BoardVO.title}" required /></td>
                 </tr>
                 <tr>
                     <td>내용:</td>
-                    <td><textarea id="content" th:field="*{content}" required></textarea></td>
+                    <td><textarea id="content" th:field="${BoardVO.content}" required></textarea></td>
                 </tr>
                 <tr>
                     <td>작성자 ID:</td>
-                    <td><input type="text" id="id" th:field="*{id}" required /></td>
+                    <td><input type="text" id="id" th:value="${session.Id}" required /></td>
                 </tr>
-                <tr>
-                    <td>첨부파일:</td>
-                    <td><input type="file" id="" th:field="*{attachment}" /></td>
-                </tr>
+                
             </table>
-            <button type="submit">게시글 등록</button>
+            <button type="submit" onclick="location.href='boardList'">게시글 등록</button>
         </form>
     </div>
 </body>
