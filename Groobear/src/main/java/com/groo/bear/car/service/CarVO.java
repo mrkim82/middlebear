@@ -1,4 +1,4 @@
-package com.groo.bear.car;
+package com.groo.bear.car.service;
 
 import java.util.Date;
 
@@ -14,5 +14,10 @@ public class CarVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date carDate;
 	private String id;
+	private String deptName;
+	private String phone;
+	private String name;
+	private int empNo;
+	
 	
 }

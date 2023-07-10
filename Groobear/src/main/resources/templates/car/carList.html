@@ -7,14 +7,14 @@
 <body>
 
 	<div>
-		<select name="" id="">
+		<select id="car_select">
 			<option value="">선택</option>
 			<option value="name">이름</option>
 			<option value="deptName">부서</option>
 			<option value="carNo">차량번호</option>
 		</select>		
 		<input type="text">
-		<button>검색</button>
+		<button id="searchBtn">검색</button>
 		
 		<table>
 			<thead>
@@ -28,21 +28,32 @@
 			</thead>
 			<tbody>
 				<tr th:each="car, es:${carList}">
-					<td>[[${car.}]]</td>
-					
+					<td>[[${car.empNo}]]</td>
+					<td>[[${car.deptName}]]</td>
+					<td>[[${car.name}]]</td>
+					<td>[[${car.carNo}]]</td>
+					<td>[[${car.phone}]]</td>
 				</tr>
 			</tbody>
 		</table>
-
-
-
-
-
-
-
-
-
 	</div>
-
 </body>
+<script>
+	document.querySelector('#searchBtn').addEventListener('click',function(){
+		
+	})
+
+	function changeSel(){
+			let sel = document.getElementById('car_select')
+			let val = (sel.options[car_select.selectedIndex].value);
+			alert ("value = "+ val );
+		}
+
+
+
+</script>
+
+
+
+
 </html>
