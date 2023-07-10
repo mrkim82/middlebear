@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table>
+		<thead>
+			<tr>
+				<td>글번호</td>
+				<td>제목</td>
+				<td>작성자</td>
+				<td>작성일자</td>
+				<td>조회수</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="board, stat : ${boardList}">
+				<td>[[${board.bNo}]]</td>
+				<td>[[${board.title}]]</td>
+				<td>[[${board.id}]]</td>
+				<td th:text="${#dates.format(board.inDate, 'yyyy/MM/dd')}"></td>
+				<td>[[${board.count}]]</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
