@@ -3,6 +3,10 @@ package com.groo.bear.pro.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +44,8 @@ public class ProController {
 	
 	//프로젝트 생성
 	@PostMapping("proCreate")
-	public String 프로젝트생성(ProVO proVO) {
+	public String 프로젝트생성(ProVO proVO, HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		//7.09고유키 오류 뜬 적 있음
 		Map<String, Object> param = new HashMap<String, Object>();
 		
@@ -52,7 +57,7 @@ public class ProController {
 		param.put("v_post_view_auth", proVO.getPostViewAuth());
 		param.put("v_com_write_auth", proVO.getComWriteAuth());
 		param.put("v_file_auth", proVO.getFileAuth());
-		param.put("v_id", "phantom88");
+		param.put("v_id", session.getAttribute("UserId"));
 		
 		proService.insertPro(param);
 		System.out.println("param 결과 : " + param.toString());
