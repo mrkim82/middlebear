@@ -23,7 +23,7 @@
 	<!-- 프로젝트 조회 -->
 	<!-- 나중에 orderby 알림순 추가 -->
 	<select id="readProject" resultType="ProVO">
-		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check
+		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no
 		FROM pro p, pro_mem m
 		WHERE p.id = #{id}
 		AND p.pro_no = m.pro_no

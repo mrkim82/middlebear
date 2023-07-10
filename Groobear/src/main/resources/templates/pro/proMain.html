@@ -14,9 +14,10 @@
 			<tr>
 				<th>즐겨찾기</th>
 			</tr>
-			<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}">
+			<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}"
+				th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}">
 				<td th:text="${pro.proColor}">색Y</td>
-				<td th:text="${pro.proStarCheck}">즐찾Y</td>
+				<td th:text="${pro.proStarCheck}" class="starCheck">즐찾Y</td>
 				<td th:text="${pro.proName}">업무이름Y</td>
 				<td th:text="${pro.proColor}">참여자Y</td>
 				<td th:text="${pro.proColor}">알림Y</td>
@@ -24,14 +25,43 @@
 			<tr>
 				<th>참여중</th>
 			</tr>
-			<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'N'}">
+			<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'N'}"
+				th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}">
 				<td th:text="${pro.proColor}">색Y</td>
-				<td th:text="${pro.proStarCheck}">즐찾Y</td>
+				<td th:text="${pro.proStarCheck}" class="starCheck">즐찾Y</td>
 				<td th:text="${pro.proName}">업무이름Y</td>
 				<td th:text="${pro.proColor}">참여자Y</td>
 				<td th:text="${pro.proColor}">알림Y</td>
 			</tr>
 		</table>
 	</div>
+	<script>
+		let starCheck = document.querySelectorAll(".starCheck");
+
+		starCheck.forEach(sC => {
+			sC.addEventListener("click", changeStar);
+
+		})
+	
+		function changeStar() {
+			let dpMN = this.parentNode.getAttribute("data-pMN");
+			let starC = this.parentNode.getAttribute("data-starC");
+			console.log(dpMN);
+			console.log(starC);
+			
+			let formData = new FormData();
+	        formData.append('pMN', dpMN);
+	        formData.append('starC', starC);
+
+			fetch("proUpdate", {
+				method: 'POST',
+				body : formData
+			})
+			.then(response => response.json())
+			.then(res => {
+				this.parentNode.remove();
+			})
+		}
+	</script>
 </body>
 </html>
