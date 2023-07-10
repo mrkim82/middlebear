@@ -1,6 +1,8 @@
-package com.groo.bear.board;
+package com.groo.bear.board.mapper;
 
 import java.util.List;
+
+import com.groo.bear.board.service.BoardVO;
 
 
 public interface BoardMapper {
