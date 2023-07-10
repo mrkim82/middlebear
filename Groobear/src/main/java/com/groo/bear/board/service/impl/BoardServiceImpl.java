@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.board.mapper.BoardMapper;
 import com.groo.bear.board.service.BoardService;
 import com.groo.bear.board.service.BoardVO;
+import com.groo.bear.files.FilesVO;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -38,6 +39,11 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int deleteBoard(int bNo) {
 		return boardMapper.deleteBoard(bNo);
+	}
+
+	@Override
+	public int addFiles(FilesVO filesVO) {
+		return boardMapper.addFiles(filesVO);
 	}
 	
 	

@@ -2,6 +2,8 @@ package com.groo.bear.board.service;
 
 import java.util.List;
 
+import com.groo.bear.files.FilesVO;
+
 public interface BoardService {
 	//전체조회
 	public List<BoardVO> selectAllList();
@@ -17,4 +19,7 @@ public interface BoardService {
 	
 	//게시글 삭제
 	public int deleteBoard(int bNo);
+	
+	//첨부파일
+	public int addFiles(FilesVO filesVO);
 }
