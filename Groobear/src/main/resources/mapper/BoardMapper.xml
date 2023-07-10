@@ -29,31 +29,17 @@
 	</select>
 	<insert id="insertBoard" parameterType="boardVO">
 	   INSERT INTO BOARD (
-	   			
-	   			BOARD_NO
-	   		<if test="title != '' and title != null">
+	   			ID
+	   			,BOARD_NO
 	   		  , TITLE
-	   		</if>
-	   		<if test="content != '' and content != null">
 	   		  , CONTENT
-	   		</if>
-	   		<if test="boardType != '' and boardType != null">
-	   		  , BOARD_TYPE
-	   		</if>
 	   		  , INSERT_DATE
 	   		  
 	   ) VALUES (
-	   			
-	   			BOARD_SEQ.NEXTVAL
-	   		<if test="title != '' and title != null">
+	   			#{id}
+	   			,BOARD_SEQ.NEXTVAL
 	   		  , #{title}
-	   		</if>
-	   		<if test="content != '' and content != null">
 	   		  , #{content}
-	   		</if>
-	   		<if test="boardType != '' and boardType != null">
-	   		  , #{boardType}
-	   		</if>
 	   		  , sysdate
 	   		  
 	   )

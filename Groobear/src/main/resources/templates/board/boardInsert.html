@@ -8,19 +8,19 @@
 <body>
     <div layout:fragment="content">
         <h2>글 작성</h2>
-        <form th:action="@{/boardInsert}" method="post">
+        <form action="/boardInsert" method="post">
             <table>
                 <tr>
                     <td>제목:</td>
-                    <td><input type="text" id="title" th:field="${BoardVO.title}" required /></td>
+                    <td><input type="text" id="title" name="title"  required /></td>
                 </tr>
                 <tr>
                     <td>내용:</td>
-                    <td><textarea id="content" th:field="${BoardVO.content}" required></textarea></td>
+                    <td><textarea id="content" name="content" required></textarea></td>
                 </tr>
                 <tr>
                     <td>작성자 ID:</td>
-                    <td><input type="text" id="id" th:value="${session.Id}" required /></td>
+                    <td><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
                 </tr>
                 
             </table>

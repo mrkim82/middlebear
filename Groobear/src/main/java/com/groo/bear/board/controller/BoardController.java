@@ -22,7 +22,6 @@ public class BoardController {
 	//전체조회페이지
 	@GetMapping("boardList")
 	public String boardList(Model model) {
-		System.out.println(boardService.selectAllList());
 		model.addAttribute("boardList", boardService.selectAllList());
 		return "board/boardList";
 	}
@@ -36,15 +35,14 @@ public class BoardController {
 	
 	//등록페이지
 	@GetMapping("boardInsert")
-	public String boardInsertForm(Model model) {
-	    model.addAttribute("BoardVO", new BoardVO());
+	public String boardInsertForm() {
 	    return "board/boardInsert";
 	}
 	
 	//등록 처리
 	@PostMapping("boardInsert")
-	public String boardInsert(BoardVO vo) {
-		boardService.insertBoard(vo);
+	public String boardInsert(Model model, BoardVO vo) {
+		model.addAttribute("boardInsert", boardService.insertBoard(vo));
 		return "redirect:/boardList";
 	}
 }
