@@ -4,6 +4,20 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.groo.bear.car.CarMapper">
 
-
+	<select id="selectAllCar" resultType="CarVO">
+		select u.emp_no, 
+			   d.dept_name, 
+			   ui.name,
+			   c.car_no,
+			   u.phone
+		from users u, 
+			 departments d, 
+			 user_info ui, 
+			 car c
+		where d.dept_no = ui.dept_no 
+			  and ui.emp_no = u.emp_no 
+			  and u.id = c.id
+		order by u.emp_no
+	</select>
 
 </mapper>
