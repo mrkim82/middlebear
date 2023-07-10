@@ -20,6 +20,7 @@ public class BoardController {
 	//전체조회페이지
 	@GetMapping("boardList")
 	public String boardList(Model model) {
+		System.out.println(boardService.selectAllList());
 		model.addAttribute("boardList", boardService.selectAllList());
 		return "board/boardList";
 	}
@@ -33,8 +34,10 @@ public class BoardController {
 	
 	//등록 페이지
 	@GetMapping("boardInsert")
-	public void boardInsertForm(Model model) {
+	public String boardInsertForm(Model model) {
 		model.addAttribute("BoardVO", new BoardVO());
+		//if()
+		return "board/boardInsert";
 	}
 	
 	//등록 처리
