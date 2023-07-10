@@ -8,7 +8,7 @@
   <script src="https://kit.fontawesome.com/a81368914c.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-  	*{
+     *{
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -260,32 +260,33 @@ a:hover{
                     <input type="password" class="input" name="password">
                  </div>
               </div>
+              <input type="checkbox" id="idSaveCheck">아이디 기억하기
               <a href="#">Forgot Password?</a>
               <button type="submit" class="btn">Login</button>
             </form>
         </div>
     </div>
     <script>
-	    const inputs = document.querySelectorAll(".input");
-	
-	
-	    function addcl(){
-	      let parent = this.parentNode.parentNode;
-	      parent.classList.add("focus");
-	    }
-	
-	    function remcl(){
-	      let parent = this.parentNode.parentNode;
-	      if(this.value == ""){
-	        parent.classList.remove("focus");
-	      }
-	    }
-	
-	
-	    inputs.forEach(input => {
-	      input.addEventListener("focus", addcl);
-	      input.addEventListener("blur", remcl);
-	    });
+       const inputs = document.querySelectorAll(".input");
+   
+   
+       function addcl(){
+         let parent = this.parentNode.parentNode;
+         parent.classList.add("focus");
+       }
+   
+       function remcl(){
+         let parent = this.parentNode.parentNode;
+         if(this.value == ""){
+           parent.classList.remove("focus");
+         }
+       }
+   
+   
+       inputs.forEach(input => {
+         input.addEventListener("focus", addcl);
+         input.addEventListener("blur", remcl);
+       });
     </script>
 </body>
 </html>

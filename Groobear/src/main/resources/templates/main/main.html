@@ -3,10 +3,11 @@
  layout:decorate="~{layout/tiles}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Groobear</title>
 </head>
 <body layout:fragment="content">
-<span th:text="${session.UserId}"></span>
-<span>[[${session.UserId}]]</span>
+<p><span th:text="${session.Id}"></span></p>
+<p><span>[[${session.Name}]]</span></p>
+<p><span th:text="${session.Pno}"></span></p>
 </body>
 </html>
