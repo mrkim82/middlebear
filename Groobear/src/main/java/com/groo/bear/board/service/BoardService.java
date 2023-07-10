@@ -1,4 +1,4 @@
-package com.groo.bear.board;
+package com.groo.bear.board.service;
 
 import java.util.List;
 
