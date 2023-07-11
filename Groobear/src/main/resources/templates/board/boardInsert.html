@@ -6,9 +6,9 @@
     <title>Insert a new Board</title>
 </head>
 <body>
-    <div>
+    <div layout:fragment="content">
         <h2>글 작성</h2>
-        <form th:action="@{/boardInsert}" th:object="${BoardVO}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/boardInsert}" th:object="${BoardVO}" method="post">
             <table>
                 <tr>
                     <td>제목:</td>
