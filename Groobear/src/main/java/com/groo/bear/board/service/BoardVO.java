@@ -19,6 +19,7 @@ public class BoardVO {
 	
 	private int boardNo;
 	private String id;
+	private String name;
 	private String boardType;
 	private String title;
 	private String content;
@@ -27,4 +28,5 @@ public class BoardVO {
 	//@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date updateDate;
 	private int count;
+	
 }

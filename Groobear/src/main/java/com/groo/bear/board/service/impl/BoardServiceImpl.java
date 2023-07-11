@@ -46,6 +46,7 @@ public class BoardServiceImpl implements BoardService{
 	public int addFiles(FilesVO filesVO) {
 		return boardMapper.addFiles(filesVO);
 	}
+
 	
 	
 	

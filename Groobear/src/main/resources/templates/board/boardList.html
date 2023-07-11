@@ -4,10 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
 </head>
 <body>
 <div layout:fragment="content" >
-	<table>
+	<table id="list">
 		<thead>
 			<tr>
 				<td>글번호</td>
@@ -21,13 +22,71 @@
 			<tr th:each="board, stat : ${boardList}" th:attr="onclick='window.location.href=\'/boardInfo?boardNo=' + ${board.boardNo} + '\''">
 				<td>[[${board.boardNo}]]</td>
 				<td>[[${board.title}]]</td>
-				<td>[[${board.id}]]</td>
+				<td>[[${board.name}]]</td>
 				<td th:text="${#dates.format(board.insertDate, 'yy.MM.dd')}"></td>
 				<td>[[${board.count}]]</td>
 			</tr>
 		</tbody>
 	</table>
-	<button type="button" id="write" onclick="location.href='boardInsert'">글쓰기</button>
-	</div>
+		<button type="button" id="write" onclick="location.href='boardInsert'">글쓰기</button>
+		<select name="type">
+			<option value='' selected>-- 선택 --</option>
+			<option value='title'>제목</option>
+			<option value='content'>내용</option>
+			<option value='name'>작성자</option>
+		</select>
+		<input type="text" name="keyword" value=""/>
+		<input type="button" id="searchBtn" value="검색"/>
+		<button type="button" id="resetBtn">취소</button>
+
+</div>
+<script>
+function init() {
+    //검색버튼
+    document.getElementById('searchBtn')
+        .addEventListener('click', searchEmpInfo);
+}
+const headers = ['boardNo','title','name','insertDate', 'count'];
+//검색
+function searchEmpInfo(){
+    document.getElementsByTagName('tbody')[0].replaceChildren();
+    let sTag = document.getElementById('search').value;
+    console.log('sTag = ',sTag);
+    let kTag = document.getElementsByName('keyword')[0].value;
+    console.log('kTag = ',kTag);
+    let boardTitle ="";
+    let boardWriter ="";
+    let boardContent ="";
+    if(sTag == 'boardTitle'){
+        boardTitle = kTag;
+        console.log('1',kTag);
+    }else if(sTag == 'boardWriter'){
+        boardWriter = kTag;
+        console.log('2',kTag);
+    }else{
+        boardContent = kTag;
+        console.log('3',kTag);
+    }
+    fetch('http://localhost:8081/boardList?title='+title+'&name='+name+'&content='+content)
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(board => {
+            let trTag = document.createElement('tr');
+            //trTag.addEventListener('click', printEmpInfo);
+            let tdTag = document.createElement('td');
+
+            for (let header of headers) {
+                tdTag = document.createElement('td');
+                tdTag.textContent = board[header];
+                trTag.append(tdTag);
+            }
+            trTag.append(tdTag);
+            let tbody = document.querySelector('table tbody')
+            tbody.append(trTag);
+        })
+    })
+    .catch(reject => console.log(reject));
+}
+</script>
 </body>
 </html>

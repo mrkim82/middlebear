@@ -20,9 +20,11 @@
                 </tr>
                 <tr>
                     <td>작성자 ID:</td>
-                    <td><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
+                    <td><input type="text" id="name" name="name" th:value="${session.Name}" readonly /></td>
                 </tr>
-                
+                <tr>
+                	<td style="display:none;"><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
+               	</tr>
             </table>
             <button type="submit" onclick="location.href='boardList'">게시글 등록</button>
         </form>
