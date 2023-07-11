@@ -72,12 +72,12 @@
         </div>
     </header>
 	</div>
+	
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
         aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-  
       <div class="collapse navbar-collapse" id="navbarColor01">
       
 	        <ul class="navbar-nav mr-auto">
@@ -111,8 +111,8 @@
 	          </li>
 	        </ul>
         </div>
-        
     </nav>
+    
     <div>
     <table>
     	<tbody>
@@ -129,13 +129,12 @@
 				        <a href="#"><span class="material-icons">mail</span> 프로젝트 폴더
 				        			<span id="popupProjectBtn">+</span></a>
 				        <!-- 프로젝트 그룹 리스트 -->
-				        <div id="proGroup">
-				        	<a th:each="proG:${projectGroupList}" th:text="${proG.groupName}"
+				        <ul id="proGroup">
+				        	<li><a th:each="proG:${projectGroupList}" th:text="${proG.groupName}"
 				        		th:attr="data-gN=${proG.groupNo}"
 				        		th:href="@{proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
-				        		<span>:</span></a>
+				        		<span>:</span></a></li></ul>
 			        	</div>
-				    </div>
 				    <!-- modal창 -->
 				    <div id="modalFolderCreate">
 					  <div id="modalContent">
