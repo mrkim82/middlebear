@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProVO;
 
@@ -26,21 +24,26 @@ public class ProController {
 	@Autowired
 	ProService proService;
 	
+	//공통 데이터 전달
+	private Model proData(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		
+		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
+		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
+		
+		return model;
+	}
+	
 	//프로젝트 메인 페이지 이동
 	@GetMapping("proMain")
 	public String proMainPage(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProject((String)session.getAttribute("Id")));
-		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
+//		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
+//		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
+		proData(model, request);
+		
 		return "pro/proMain";
-	}
-	
-	//프로젝트 메인 페이지 숨김 보기
-	@GetMapping("proMainH")
-	public String proMainPageH(Model model, HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		model.addAttribute("projectMainList", proService.readProjectHide((String)session.getAttribute("Id")));
-		return "pro/proMainNormal";
 	}
 	
 	//프로젝트 메인 페이지 즐찾 보기
@@ -48,8 +51,22 @@ public class ProController {
 	public String proMainPageS(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProjectStar((String)session.getAttribute("Id")));
-		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
-		return "pro/proMainNormal";
+//		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
+//		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
+		proData(model, request);
+		return "pro/proMainStar";
+	}
+	
+	//프로젝트 메인 페이지 숨김 보기
+	@GetMapping("proMainH")
+	public String proMainPageH(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		model.addAttribute("projectMainList", proService.readProjectHide((String)session.getAttribute("Id")));
+//		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
+//		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
+		proData(model, request);
+		System.out.println(model);
+		return "pro/proMainHide";
 	}
 	
 	//프로젝트 그룹 상세 리스트 보기
@@ -58,7 +75,10 @@ public class ProController {
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
 		model.addAttribute("projectMainList", proService.readProjectGroupDetail(groupNo, id));
-		return "pro/proMainNormal";
+//		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
+//		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
+		proData(model, request);
+		return "pro/proMainHide";
 	}
 	
 	//프로젝트 그룹 생성
@@ -86,9 +106,10 @@ public class ProController {
 	
 	//프로젝트 생성 페이지 이동
 	@GetMapping("proCreate")
-	public String 프로젝트생성페이지(Model model) {
+	public String 프로젝트생성페이지(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		model.addAttribute("proVO", new ProVO());//생성 수정 관리, 페이지에서 field값 수정
-		System.out.println(model);
+		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
 		return "pro/proCreate";
 	}
 	

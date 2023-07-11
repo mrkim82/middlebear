@@ -15,6 +15,9 @@ public interface ProMapper {
 	public List<ProVO> readProjectHide(String id);
 	public List<ProVO> readProjectStar(String id);
 	
+	//프로젝트 참가자수 조회
+	public List<ProVO> readProjectParti(String id);
+	
 	//프로젝트 즐겨찾기 등록
 	public int updateStarY(int pMN);
 	

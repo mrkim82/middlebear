@@ -15,35 +15,56 @@
 				<td th:text="${pro.proColor}"></td>
 				<td th:text="${pro.proStarCheck}" class="starCheck"></td>
 				<td th:text="${pro.proName}"></td>
+				<td th:each="parti:${projectPartiList}" th:if="${parti.proNo == pro.proNo}"
+					th:text="${parti.count} + '명'"></td>
 			</tr>
 		</table>
 	</div>
 	<script>
 		let starCheck = document.querySelectorAll(".starCheck");
-
+	
 		starCheck.forEach(sC => {
 			sC.addEventListener("click", changeStar);
-
 		})
 	
 		function changeStar() {
 			let dpMN = this.parentNode.getAttribute("data-pMN");
 			let starC = this.parentNode.getAttribute("data-starC");
-			console.log(dpMN);
-			console.log(starC);
 			
 			let formData = new FormData();
 	        formData.append('pMN', dpMN);
 	        formData.append('starC', starC);
-
+	
 			fetch("proUpdate", {
 				method: 'POST',
 				body : formData
 			})
 			.then(response => response.json())
 			.then(res => {
-				this.parentNode.remove();
+				let rC = res.result;
+				let headData = this.parentNode;
+				
+				if (rC == '등록' || rC == '취소') {
+					changeProOne(rC, headData);
+					
+				} else {
+					alert('요청이 취소 되었습니다.');
+				}
+				
 			})
+		}
+	
+		//즐겨찾기 변경
+		function changeProOne(rC, headData) {
+			
+			if (rC == '등록') {
+				headData.setAttribute('data-starc', 'Y');
+				headData.getElementsByClassName('starCheck')[0].textContent = 'Y';
+			} else {
+				headData.setAttribute('data-starc', 'N');
+				headData.getElementsByClassName('starCheck')[0].textContent = 'N';
+			}
+	
 		}
 	</script>
 </body>

@@ -23,7 +23,10 @@
 					<td th:text="${pro.proColor}"></td>
 					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
 					<td th:text="${pro.proName}"></td>
+					<td th:each="parti:${projectPartiList}" th:if="${parti.proNo == pro.proNo}"
+						th:text="${parti.count} + '명'"></td>
 				</tr>
+				
 			</tbody>
 		</table>
 		<table>
@@ -40,6 +43,8 @@
 					<td th:text="${pro.proColor}"></td>
 					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
 					<td th:text="${pro.proName}"></td>
+					<td th:each="parti:${projectPartiList}" th:if="${parti.proNo == pro.proNo}"
+						th:text="${parti.count} + '명'"></td>
 				</tr>
 			</tbody>
 		</table>

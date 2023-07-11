@@ -42,6 +42,15 @@
 		  font-size:25px;
 		  cursor: pointer;
 		}
+		details {
+	    padding: 12px;
+	    text-decoration: none;
+	    font-size: 16px;
+	    color: #bdc3c7;
+	    display: flex;
+	    align-items: center;
+	    transition: 0.3s;
+		}
 	</style>
   </head>
   <body>
@@ -126,22 +135,27 @@
 				        <a href="#"><span class="material-icons">mail</span> 미확인(x)</a>
 				        <a href="#"><span class="material-icons">drafts</span> 미분류(x)</a>
 				        <a href="/proMainH"><span class="material-icons">visibility_off</span> 숨김</a>
-				        <a href="#"><span class="material-icons">mail</span> 모아보기</a>
 				        <details>
-				        	<summary><a href="javascript:void(0);">모아보기</a></summary>
+				        	<summary>모아보기</summary>
 				        	<ul>
-				        		<li><a>눕</a></li>
-				        		<li><a href="#">눕2</a></li>
+				        		<li>전체업무</li>
+				        		<li>북마크</li>
+				        		<li>나를 언급</li>
+				        		<li>내 게시물</li>
 				        	</ul>
 				        </details>
-				        <a href="#"><span class="material-icons">work</span> 프로젝트 폴더
-				        			<span id="popupProjectBtn">+</span></a>
-				        <!-- 프로젝트 그룹 리스트 -->
-				        <ul id="proGroup">
-				        	<li><a th:each="proG:${projectGroupList}" th:text="${proG.groupName}"
-				        		th:attr="data-gN=${proG.groupNo}"
-				        		th:href="@{proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
-				        		<span>:</span></a></li></ul>
+				        <details>
+				        	<summary>프로젝트 폴더<span id="popupProjectBtn" class="material-icons">add</span></summary>
+					        <!-- 프로젝트 그룹 리스트 -->
+					        <ul id="proGroup">
+					        	<li><a th:each="proG:${projectGroupList}" th:text="${proG.groupName}"
+					        		th:attr="data-gN=${proG.groupNo}"
+					        		th:href="@{proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
+					        		<span class="material-icons">more_vert</span></a>
+					        	</li>
+					        </ul>
+				        </details>
+				        			
 			        	</div>
 				    <!-- modal창 -->
 				    <div id="modalFolderCreate">
