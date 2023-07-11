@@ -113,20 +113,28 @@
         </div>
     </nav>
     
+    <!-- 사이드바 -->
     <div>
     <table>
     	<tbody>
     		<tr>
     			<td style="vertical-align: top" class="col-4">
     				<div class="sidebar">
-				        <a href="/proCreate"><span class="material-icons">home</span> 새 프로젝트 생성</a>
+				        <a href="/proCreate"><span class="material-icons">add_box</span> 새 프로젝트 생성</a>
 				        <a href="/proMain"><span class="material-icons">home</span> 내 프로젝트</a>
-				        <a href="/proMainS"><span class="material-icons">info</span> 즐겨찾기</a>
+				        <a href="/proMainS"><span class="material-icons">star</span> 즐겨찾기</a>
 				        <a href="#"><span class="material-icons">mail</span> 미확인(x)</a>
-				        <a href="#"><span class="material-icons">mail</span> 미분류(x)</a>
-				        <a href="/proMainH"><span class="material-icons">build</span> 숨김</a>
+				        <a href="#"><span class="material-icons">drafts</span> 미분류(x)</a>
+				        <a href="/proMainH"><span class="material-icons">visibility_off</span> 숨김</a>
 				        <a href="#"><span class="material-icons">mail</span> 모아보기</a>
-				        <a href="#"><span class="material-icons">mail</span> 프로젝트 폴더
+				        <details>
+				        	<summary><a href="javascript:void(0);">모아보기</a></summary>
+				        	<ul>
+				        		<li><a>눕</a></li>
+				        		<li><a href="#">눕2</a></li>
+				        	</ul>
+				        </details>
+				        <a href="#"><span class="material-icons">work</span> 프로젝트 폴더
 				        			<span id="popupProjectBtn">+</span></a>
 				        <!-- 프로젝트 그룹 리스트 -->
 				        <ul id="proGroup">
