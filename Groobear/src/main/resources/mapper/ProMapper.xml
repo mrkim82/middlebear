@@ -96,4 +96,12 @@
 		AND u.id = #{id}
 	</select>
 	
+	<!-- 프로젝트 그룹 생성 -->
+	<insert id="createProjectGroup" parameterType="String">
+		INSERT INTO pro_group
+		VALUES((SELECT NVL(MAX(group_no), 0) + 1
+		        FROM pro_group), #{groupName}, #{id})
+	</insert>
+	
+	
 </mapper>

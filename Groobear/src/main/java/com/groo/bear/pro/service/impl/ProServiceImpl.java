@@ -57,6 +57,11 @@ public class ProServiceImpl implements ProService {
 		return proMapper.readProjectGroupDetail(groupNo, id);
 	}
 
+	@Override
+	public int createProjectGroup(String groupName, String id) {
+		return proMapper.createProjectGroup(groupName, id);
+	}
+
 
 
 }

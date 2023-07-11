@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProVO;
 
@@ -37,6 +40,7 @@ public class ProController {
 	public String proMainPageH(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProjectHide((String)session.getAttribute("Id")));
+		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
 		return "pro/proMainNormal";
 	}
 	
@@ -56,6 +60,16 @@ public class ProController {
 		model.addAttribute("projectMainList", proService.readProjectGroupDetail(groupNo, id));
 		return "pro/proMainNormal";
 	}
+	
+	//프로젝트 그룹 생성
+	@PostMapping("proGroupC")
+	public String proGroupCreate(HttpServletRequest request, String groupName) {
+		HttpSession session = request.getSession();
+		System.out.println(groupName);
+		proService.createProjectGroup(groupName, (String)session.getAttribute("Id"));
+		return "ss";
+	}
+	
 	
 	//프로젝트 생성 페이지 이동
 	@GetMapping("proCreate")
@@ -87,10 +101,13 @@ public class ProController {
 		return "redirect:proMain";
 	}
 	
-//	//프로젝트 즐겨찾기
+	//프로젝트 즐겨찾기
 	@PostMapping("proUpdate")
-	public String starCheck(@RequestParam("pMN") int pMN, @RequestParam("starC") String starC) {
+	@ResponseBody
+	public Map<String, Object> starCheck(@RequestParam("pMN") int pMN, @RequestParam("starC") String starC) {
 		String res;
+		Map <String, Object> map = new HashMap<>();
+		
 		if(starC.equals("N")) {
 			//프로젝트 즐겨찾기 등록
 			proService.updateStarY(pMN);
@@ -100,6 +117,9 @@ public class ProController {
 			proService.updateStarN(pMN);
 			res = "취소";
 		}
-		return res;
+		
+		map.put("result", res);
+		
+		return map;
 	}
 }

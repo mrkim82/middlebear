@@ -27,6 +27,9 @@ public interface ProMapper {
 	
 	// 프로젝트 그룹 프로젝트 조회
 	public List<ProGroupVO> readProjectGroupDetail(int groupNo, String id);
+	
+	// 프로젝트 그룹 생성
+	public int createProjectGroup(String groupName, String id);
 //	
 //	// 단건조회
 //	public EmpVO selectEmpInfo(EmpVO empVO);

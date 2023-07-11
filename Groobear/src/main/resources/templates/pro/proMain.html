@@ -9,29 +9,35 @@
 </head>
 <body layout:fragment="content">
 	<div>
-		<table>
-			<th:block th:if="${projectMainList.?[proStarCheck == 'Y'].size() > 0}">
+		<table th:if="${projectMainList.?[proStarCheck == 'Y'].size() > 0}">
+			<thead>
 				<tr>
 					<th>즐겨찾기</th>
 				</tr>
+			</thead>
+			<tbody id="YesStar">
 				<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}"
 					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}">
 					<td th:text="${pro.proColor}"></td>
 					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
 					<td th:text="${pro.proName}"></td>
 				</tr>
-			</th:block>
-			<th:block th:if="${projectMainList.?[proStarCheck == 'N'].size() > 0}">
+			</tbody>
+		</table>
+		<table th:if="${projectMainList.?[proStarCheck == 'N'].size() > 0}">
+			<thead>
 				<tr>
 					<th>참여중</th>
 				</tr>
+			</thead>
+			<tbody id="NoStar">
 				<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'N'}"
 					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}">
 					<td th:text="${pro.proColor}"></td>
 					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
 					<td th:text="${pro.proName}"></td>
 				</tr>
-			</th:block>
+			</tbody>
 		</table>
 	</div>
 	<script>
@@ -45,8 +51,6 @@
 		function changeStar() {
 			let dpMN = this.parentNode.getAttribute("data-pMN");
 			let starC = this.parentNode.getAttribute("data-starC");
-			console.log(dpMN);
-			console.log(starC);
 			
 			let formData = new FormData();
 	        formData.append('pMN', dpMN);
@@ -58,8 +62,36 @@
 			})
 			.then(response => response.json())
 			.then(res => {
-				this.parentNode.remove();
+				let rC = res.result;
+				let headData = this.parentNode;
+				
+				if (rC == '등록' || rC == '취소') {
+					makeProOne(rC, headData);
+					
+				} else {
+					alert('요청이 취소 되었습니다.');
+				}
+				
 			})
+		}
+
+		function makeProOne(rC, headData) {
+			console.log(rC);
+			console.log(headData);
+			let yStar = document.getElementById('YesStar');
+			console.log(yStar);
+			let nStar = document.getElementById('NoStar');
+			//let pMN = headData.getAttribute('data-pMN')
+			//해당 삭제
+			//headData.remove();
+			if (rC == '등록') {
+				yStar.appendChild(headData);
+			} else {
+				nStar.appendChild(headData);
+			}
+			//let tr = document.createElement('tr');
+			//let td = document.createElement('td');
+
 		}
 	</script>
 </body>
