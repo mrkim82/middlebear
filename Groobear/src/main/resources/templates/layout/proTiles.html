@@ -143,7 +143,7 @@
 					      <span id="closeBtn">&times;</span>
 					      <p>프로젝트 폴더 만들기</p>
 					      <input type="text" placeholder="프로젝트 폴더명을 입력하세요" id="folderContent">
-					      <button type="button" id="closeBtn2">취소</button>
+					      <button type="button" id="closeBtn2" class="btn btn-primary">취소</button>
 					      <button type="button" id="createfolder">확인</button>
 					    </div>
 					  </div>
@@ -182,7 +182,8 @@
 	        modal.style.display = "none";
 	      }
 	    }
-
+		
+	    //그룹 폴더 만들기
 	    creFolder.onclick = function() {
 			let fC = document.getElementById('folderContent');
 			let fCV = fC.value;
@@ -201,12 +202,10 @@
 				if(rC == '등록') {
 					let aC = document.createElement('a');
 					let pG = document.getElementById('proGroup');
+					aC.setAttribute('href', 'proGroupD/6')
 					aC.setAttribute('data-gN', 6)
 					aC.textContent = fCV;
-					aC.addEventListener('click', function () {
-						location.href='proGroupD/6'
-					});
-					pG.prepend()(aC);
+					pG.prepend(aC);
 				} else {
 					alert('요청이 취소 되었습니다.');
 				}

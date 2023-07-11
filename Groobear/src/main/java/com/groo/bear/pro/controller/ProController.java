@@ -40,7 +40,6 @@ public class ProController {
 	public String proMainPageH(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProjectHide((String)session.getAttribute("Id")));
-		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
 		return "pro/proMainNormal";
 	}
 	
