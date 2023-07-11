@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style>
-		#modalWrap {
+		#modalFolderCreate {
 		  position: fixed; /* Stay in place */
 		  z-index: 1; /* Sit on top */
 		  padding-top: 100px; /* Location of the box */
@@ -128,17 +128,21 @@
 				        <a href="#"><span class="material-icons">mail</span> 모아보기</a>
 				        <a href="#"><span class="material-icons">mail</span> 프로젝트 폴더
 				        			<span id="popupProjectBtn">+</span></a>
+				        <!-- 프로젝트 그룹 리스트 -->
+				        <div id="proGroup">
 				        	<a th:each="proG:${projectGroupList}" th:text="${proG.groupName}"
 				        		th:attr="data-gN=${proG.groupNo}"
-				        		th:href="@{proGroupD/{groupNo}(groupNo=${proG.groupNo})}"></a>
+				        		th:href="@{proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
+				        		<span>:</span></a>
+			        	</div>
 				    </div>
 				    <!-- modal창 -->
-				    <div id="modalWrap">
+				    <div id="modalFolderCreate">
 					  <div id="modalContent">
 					    <div id="modalBody">
 					      <span id="closeBtn">&times;</span>
 					      <p>프로젝트 폴더 만들기</p>
-					      <input type="text" placeholder="프로젝트 폴더명을 입력하세요">
+					      <input type="text" placeholder="프로젝트 폴더명을 입력하세요" id="folderContent">
 					      <button type="button" id="closeBtn2">취소</button>
 					      <button type="button" id="createfolder">확인</button>
 					    </div>
@@ -156,9 +160,9 @@
     </div>
     <script>
 	    let btn = document.getElementById('popupProjectBtn');
-	    let modal = document.getElementById('modalWrap');
+	    let modal = document.getElementById('modalFolderCreate');
 	    let closeBtn = document.getElementById('closeBtn');
-			let creFolder = document.getElementById('createfolder');
+		let creFolder = document.getElementById('createfolder');
 	
 	    btn.onclick = function(e) {
 			e.preventDefault();
@@ -179,9 +183,36 @@
 	      }
 	    }
 
-			creFolder.onclick = function() {
+	    creFolder.onclick = function() {
+			let fC = document.getElementById('folderContent');
+			let fCV = fC.value;
+
+			let formData = new FormData();
+			formData.append('gN', fCV);
+			
+			fetch("proGroupC", {
+				method: 'POST',
+				body : formData
+			})
+			.then(response => response.json())
+			.then(res => {
+				let rC = res.result;
 				
-			}
+				if(rC == '등록') {
+					let aC = document.createElement('a');
+					let pG = document.getElementById('proGroup');
+					aC.setAttribute('data-gN', 6)
+					aC.textContent = fCV;
+					aC.addEventListener('click', function () {
+						location.href='proGroupD/6'
+					});
+					pG.prepend()(aC);
+				} else {
+					alert('요청이 취소 되었습니다.');
+				}
+			});
+			
+		}
     </script>
   </body>
 </html>

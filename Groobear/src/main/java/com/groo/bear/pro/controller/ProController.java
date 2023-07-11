@@ -49,6 +49,7 @@ public class ProController {
 	public String proMainPageS(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProjectStar((String)session.getAttribute("Id")));
+		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
 		return "pro/proMainNormal";
 	}
 	
@@ -63,11 +64,24 @@ public class ProController {
 	
 	//프로젝트 그룹 생성
 	@PostMapping("proGroupC")
-	public String proGroupCreate(HttpServletRequest request, String groupName) {
+	@ResponseBody
+	public Map<String, Object> proGroupCreate(HttpServletRequest request, @RequestParam("gN") String groupName) {
 		HttpSession session = request.getSession();
-		System.out.println(groupName);
-		proService.createProjectGroup(groupName, (String)session.getAttribute("Id"));
-		return "ss";
+		Map <String, Object> map = new HashMap<>();
+		String res;
+		
+		int result = proService.createProjectGroup(groupName, (String)session.getAttribute("Id"));
+		System.out.println(result);
+		
+		if(result > 0) {
+			res = "등록";
+		} else {
+			res = "취소";
+		}
+		
+		map.put("result", res);
+		
+		return map;
 	}
 	
 	

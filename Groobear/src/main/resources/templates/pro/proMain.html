@@ -9,11 +9,13 @@
 </head>
 <body layout:fragment="content">
 	<div>
-		<table th:if="${projectMainList.?[proStarCheck == 'Y'].size() > 0}">
+		<table>
 			<thead>
-				<tr>
-					<th>즐겨찾기</th>
-				</tr>
+				<th:block th:if="${projectMainList.?[proStarCheck == 'Y'].size() > 0}">
+					<tr>
+						<th>즐겨찾기</th>
+					</tr>
+				</th:block>
 			</thead>
 			<tbody id="YesStar">
 				<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}"
@@ -24,11 +26,13 @@
 				</tr>
 			</tbody>
 		</table>
-		<table th:if="${projectMainList.?[proStarCheck == 'N'].size() > 0}">
+		<table>
 			<thead>
-				<tr>
-					<th>참여중</th>
-				</tr>
+				<th:block th:if="${projectMainList.?[proStarCheck == 'N'].size() > 0}">
+					<tr>
+						<th>참여중</th>
+					</tr>
+				</th:block>
 			</thead>
 			<tbody id="NoStar">
 				<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'N'}"
@@ -45,7 +49,6 @@
 
 		starCheck.forEach(sC => {
 			sC.addEventListener("click", changeStar);
-
 		})
 	
 		function changeStar() {
@@ -66,7 +69,7 @@
 				let headData = this.parentNode;
 				
 				if (rC == '등록' || rC == '취소') {
-					makeProOne(rC, headData);
+					changeProOne(rC, headData);
 					
 				} else {
 					alert('요청이 취소 되었습니다.');
@@ -74,23 +77,23 @@
 				
 			})
 		}
-
-		function makeProOne(rC, headData) {
+	
+		//즐겨찾기 변경
+		function changeProOne(rC, headData) {
 			console.log(rC);
 			console.log(headData);
 			let yStar = document.getElementById('YesStar');
-			console.log(yStar);
 			let nStar = document.getElementById('NoStar');
-			//let pMN = headData.getAttribute('data-pMN')
-			//해당 삭제
-			//headData.remove();
+			
 			if (rC == '등록') {
 				yStar.appendChild(headData);
+				headData.setAttribute('data-starc', 'Y');
+				headData.getElementsByClassName('starCheck')[0].textContent = 'Y';
 			} else {
 				nStar.appendChild(headData);
+				headData.setAttribute('data-starc', 'N');
+				headData.getElementsByClassName('starCheck')[0].textContent = 'N';
 			}
-			//let tr = document.createElement('tr');
-			//let td = document.createElement('td');
 
 		}
 	</script>
