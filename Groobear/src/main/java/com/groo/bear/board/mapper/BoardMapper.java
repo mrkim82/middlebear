@@ -25,6 +25,9 @@ public interface BoardMapper {
 	//첨부파일
 	public int addFiles(FilesVO filesVO);
 	
+	//검색
+	//public 
+	
 }
 
 
