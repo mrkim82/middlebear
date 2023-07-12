@@ -11,7 +11,7 @@ public interface ProMapper {
 	public void createPro(Map<String, Object> map);
 	
 	//프로젝트 조회
-	public List<ProVO> readProject(String id);
+	public List<ProVO> readProject(Map<String, Object> map);
 	public List<ProVO> readProjectHide(String id);
 	public List<ProVO> readProjectStar(String id);
 	public List<ProVO> readProjectNoGroup(String id);

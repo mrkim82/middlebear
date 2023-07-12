@@ -10,9 +10,11 @@
 <body layout:fragment="content">
 	<div>
 		<h2>내 프로젝트</h2>
-		<select class="form-select" aria-label="Default select example">
-		  <option selected>내가 참여중인 프로젝트</option>
-		  <option value="1">내가 관리자인 프로젝트</option>
+		<select class="form-select" aria-label="Default select example"
+				name="parti" onchange="chagepartiSelect()"
+				id="partiSelect">
+		  <option selected value="">내가 참여중인 프로젝트</option>
+		  <option th:value="${session.Id}">내가 관리자인 프로젝트</option>
 		</select>
 	</div>
 	<div>
@@ -107,6 +109,13 @@
 				headData.getElementsByClassName('starCheck')[0].textContent = 'N';
 			}
 
+		}
+		
+		//프로젝트 master여부
+		function chagepartiSelect() {
+			let partiSelectId = document.getElementById('partiSelect').value;
+			console.log(partiSelectId);
+			
 		}
 	</script>
 </body>

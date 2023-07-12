@@ -22,8 +22,8 @@ public class ProServiceImpl implements ProService {
 	}
 
 	@Override
-	public List<ProVO> readProject(String id) {
-		return proMapper.readProject(id);
+	public List<ProVO> readProject(Map<String, Object> map) {
+		return proMapper.readProject(map);
 	}
 
 	@Override
