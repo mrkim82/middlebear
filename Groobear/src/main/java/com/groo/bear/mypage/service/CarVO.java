@@ -1,4 +1,4 @@
-package com.groo.bear.car.service;
+package com.groo.bear.mypage.service;
 
 import java.util.Date;
 
@@ -19,5 +19,5 @@ public class CarVO {
 	private String name;
 	private int empNo;
 	private String rank;
-	
+	private String empGrade;
 }

@@ -1,4 +1,4 @@
-package com.groo.bear.car.service;
+package com.groo.bear.mypage.service;
 
 import java.util.List;
 

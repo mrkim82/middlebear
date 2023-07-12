@@ -1,8 +1,8 @@
-package com.groo.bear.car.mapper;
+package com.groo.bear.mypage.mapper;
 
 import java.util.List;
 
-import com.groo.bear.car.service.CarVO;
+import com.groo.bear.mypage.service.CarVO;
 
 public interface CarMapper {
 

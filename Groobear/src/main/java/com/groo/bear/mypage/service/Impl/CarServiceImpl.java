@@ -1,13 +1,13 @@
-package com.groo.bear.car.service.Impl;
+package com.groo.bear.mypage.service.Impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.groo.bear.car.mapper.CarMapper;
-import com.groo.bear.car.service.CarService;
-import com.groo.bear.car.service.CarVO;
+import com.groo.bear.mypage.mapper.CarMapper;
+import com.groo.bear.mypage.service.CarService;
+import com.groo.bear.mypage.service.CarVO;
 
 @Service
 public class CarServiceImpl implements CarService {
