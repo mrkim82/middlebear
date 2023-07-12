@@ -19,7 +19,6 @@ public class ProServiceImpl implements ProService {
 	@Override
 	public void insertPro(Map<String, Object> map) {
 		proMapper.createPro(map);
-		System.out.println("서비스임플" + map);
 	}
 
 	@Override
@@ -75,6 +74,16 @@ public class ProServiceImpl implements ProService {
 	@Override
 	public int readProjectGroupNo() {
 		return proMapper.readProjectGroupNo();
+	}
+
+	@Override
+	public int updateGroupName(String groupName, int groupNo) {
+		return proMapper.updateGroupName(groupName, groupNo);
+	}
+
+	@Override
+	public int deleteGroup(int groupNo) {
+		return proMapper.deleteGroup(groupNo);
 	}
 
 

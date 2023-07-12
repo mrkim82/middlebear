@@ -144,14 +144,14 @@
 				        		<li>내 게시물</li>
 				        	</ul>
 				        </details>
-				        <details open>
+				        <details id="groupFolderList" open>
 				        	<summary>프로젝트 폴더<span id="popupProjectBtn" class="material-icons">add</span></summary>
 					        <!-- 프로젝트 그룹 리스트 -->
 					        <ul id="proGroup">
 					        	<th:block th:each="proG : ${projectGroupList}">
 						        	<li><a th:attr="data-gN=${proG.groupNo}"
 						        		th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
-						        		[[${proG.groupName}]]<span class='material-icons' style='display : none;'>more_vert</span></a>
+						        		[[${proG.groupName}]]<span class='material-icons moreVertIcons' style='display : none;'>more_vert</span></a>
 						        	</li>
 					        	</th:block>
 					        </ul>
@@ -264,24 +264,61 @@
 	    
 	    //동적 폴더 생성
 	    function createFolder(pGN) {
+				let pG = document.getElementById('proGroup');
 	    	let liC = document.createElement('li');
-			let aC = document.createElement('a');
-			
-			
-			aC.setAttribute('href', 'proGroupD/'+ pGN);
-			aC.setAttribute('data-gN', pGN)
-			aC.textContent = fC.value;
-			
-			let pG = document.getElementById('proGroup');
-			liC.append(aC);
-			pG.prepend(liC);
-			
-			fC.value = '';
-			modal.style.display = 'none';
-			
-			pGCUp++;
+				let aC = document.createElement('a');
+				let spanC = document.createElement('span');
+
+				spanC.className = 'material-icons moreVertIcons';
+				spanC.style = 'display : none;';
+				spanC.textContent = 'more_vert';
+				
+				aC.setAttribute('href', 'proGroupD/'+ pGN);
+				aC.setAttribute('data-gN', pGN)
+				aC.textContent = fC.value;
+				
+				aC.append(spanC);
+				liC.append(aC);
+				pG.prepend(liC);
+				
+				fC.value = '';
+				modal.style.display = 'none';
+				
+				pGCUp++;
 	    };
 	    
+	    // 프로젝트 그룹 상태 등장 효과
+		let detailsGroup = document.querySelector('#groupFolderList ul');
+		
+		detailsGroup.addEventListener("mouseover", makeGroupStatus);
+		detailsGroup.addEventListener("mouseout", deleteGroupStatus);
+		
+		function makeGroupStatus() {
+			if(event.target.tagName == "A") {
+				event.target.childNodes[1].style.display = 'block';
+			} else if (event.target.tagName == "SPAN") {
+				event.target.style.display = 'block';
+			}
+		};
+		
+		function deleteGroupStatus() {
+			if(event.target.tagName == "A") {
+				event.target.childNodes[1].style.display = 'none';
+			} else if (event.target.tagName == "SPAN") {
+				event.target.style.display = 'none';
+			}
+		};
+		
+		//프로젝트 그룹 상태 속성
+		let groupButton = document.querySelector('#groupFolderList ul');
+		groupButton.addEventListener("click", groupStatusModal);
+		
+		function groupStatusModal(event) {
+			if(event.target.tagName == "SPAN") {
+				event.preventDefault();
+				console.log(event.target);
+			}
+		};
     	
     /*]]>*/
     </script>

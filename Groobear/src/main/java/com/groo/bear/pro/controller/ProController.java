@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -98,8 +100,6 @@ public class ProController {
 		
 		int result = proService.createProjectGroup(groupName, (String)session.getAttribute("Id"));
 		int proGroupNo = proService.readProjectGroupNo();
-		System.out.println(result);
-		System.out.println(proGroupNo);
 		
 		if(result > 0) {
 			res = "등록";
@@ -114,6 +114,28 @@ public class ProController {
 		return map;
 	}
 	
+	//프로젝트 그룹 수정
+	@PutMapping
+	@ResponseBody
+	public Map<String, Object> proGroupUpdate(@RequestBody String groupName, @RequestBody int groupNo) {
+		Map <String, Object> map = new HashMap<>();
+		String res;
+		
+		int result = proService.updateGroupName(groupName, groupNo);
+		
+		if(result > 0) {
+			res = "등록";
+			
+		} else {
+			res = "취소";
+		}
+		
+		map.put("result", res);
+		
+		return map;
+	}
+	
+	//프로젝트 그룹 삭제
 	
 	//프로젝트 생성 페이지 이동
 	@GetMapping("proCreate")

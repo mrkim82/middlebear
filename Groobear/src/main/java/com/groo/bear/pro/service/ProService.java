@@ -35,4 +35,10 @@ public interface ProService {
 	// 프로젝트 그룹 생성 후 번호 조회
 	public int readProjectGroupNo();
 	
+	//프로젝트 그룹 이름 수정
+	public int updateGroupName(String groupName, int groupNo);
+	
+	//프로젝트 그룹 삭제
+	public int deleteGroup(int groupNo);
+	
 }

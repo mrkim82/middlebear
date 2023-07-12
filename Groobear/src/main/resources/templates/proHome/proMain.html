@@ -9,11 +9,18 @@
 </head>
 <body layout:fragment="content">
 	<div>
-		<table>
+		<h2>내 프로젝트</h2>
+		<select class="form-select" aria-label="Default select example">
+		  <option selected>내가 참여중인 프로젝트</option>
+		  <option value="1">내가 관리자인 프로젝트</option>
+		</select>
+	</div>
+	<div>
+		<table class="table table-hover">
 			<thead>
 				<th:block th:if="${projectMainList.?[proStarCheck == 'Y'].size() > 0}">
 					<tr>
-						<th>즐겨찾기</th>
+						<th scope="col">즐겨찾기</th>
 					</tr>
 				</th:block>
 			</thead>
@@ -29,11 +36,11 @@
 				
 			</tbody>
 		</table>
-		<table>
+		<table class="table table-hover">
 			<thead>
 				<th:block th:if="${projectMainList.?[proStarCheck == 'N'].size() > 0}">
 					<tr>
-						<th>참여중</th>
+						<th scope="col">참여중</th>
 					</tr>
 				</th:block>
 			</thead>

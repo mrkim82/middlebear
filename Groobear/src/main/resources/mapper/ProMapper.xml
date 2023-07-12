@@ -137,4 +137,17 @@
 		FROM pro_group
 	</select>
 	
+	<!-- 프로젝트 그룹 이름 수정 -->
+	<update id="updateGroupName">
+		UPDATE pro_group
+		SET group_name = #{groupName}
+		WHERE group_no = #{groupNo}
+	</update>
+	
+	<!-- 프로젝트 그룹 삭제 -->
+	<delete id="deleteGroup" parameterType="int">
+		DELETE FROM pro_group
+		WHERE group_no = #{groupNo}
+	</delete>
+	
 </mapper>
