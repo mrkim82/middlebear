@@ -131,5 +131,10 @@
 		        FROM pro_group), #{groupName}, #{id})
 	</insert>
 	
+	<!-- 프로젝트 그룹 생성 후 번호 조회 -->
+	<select id="readProjectGroupNo" resultType="int">
+		SELECT MAX(group_no)
+		FROM pro_group
+	</select>
 	
 </mapper>

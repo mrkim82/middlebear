@@ -72,6 +72,11 @@ public class ProServiceImpl implements ProService {
 		return proMapper.readProjectNoGroup(id);
 	}
 
+	@Override
+	public int readProjectGroupNo() {
+		return proMapper.readProjectGroupNo();
+	}
+
 
 
 }

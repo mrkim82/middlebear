@@ -97,15 +97,19 @@ public class ProController {
 		String res;
 		
 		int result = proService.createProjectGroup(groupName, (String)session.getAttribute("Id"));
+		int proGroupNo = proService.readProjectGroupNo();
 		System.out.println(result);
+		System.out.println(proGroupNo);
 		
 		if(result > 0) {
 			res = "등록";
+			
 		} else {
 			res = "취소";
 		}
 		
 		map.put("result", res);
+		map.put("pGN", proGroupNo);
 		
 		return map;
 	}

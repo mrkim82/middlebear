@@ -32,4 +32,7 @@ public interface ProService {
 	// 프로젝트 그룹 생성
 	public int createProjectGroup(String groupName, String id);
 	
+	// 프로젝트 그룹 생성 후 번호 조회
+	public int readProjectGroupNo();
+	
 }

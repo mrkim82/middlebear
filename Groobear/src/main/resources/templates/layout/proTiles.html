@@ -144,15 +144,17 @@
 				        		<li>내 게시물</li>
 				        	</ul>
 				        </details>
-				        <details>
+				        <details open>
 				        	<summary>프로젝트 폴더<span id="popupProjectBtn" class="material-icons">add</span></summary>
 					        <!-- 프로젝트 그룹 리스트 -->
 					        <ul id="proGroup">
-					        	<li><a th:each="proG:${projectGroupList}" th:text="${proG.groupName}"
-					        		th:attr="data-gN=${proG.groupNo}"
-					        		th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
-					        		<span class="material-icons">more_vert</span></a>
-					        	</li>
+					        	<th:block th:each="proG : ${projectGroupList}">
+						        	<li><a th:text="${proG.groupName}"
+						        		th:attr="data-gN=${proG.groupNo}"
+						        		th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
+						        		<span class="material-icons">more_vert</span></a>
+						        	</li>
+					        	</th:block>
 					        </ul>
 				        </details>
 				        			
@@ -179,11 +181,17 @@
     	</tbody>
     </table>
     </div>
-    <script>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
 	    let btn = document.getElementById('popupProjectBtn');
 	    let modal = document.getElementById('modalFolderCreate');
 	    let closeBtn = document.getElementById('closeBtn');
 		let creFolder = document.getElementById('createfolder');
+		let fC = document.getElementById('folderContent');
+		
+		//그룹 갯수 체크
+    	let pGC = /*[[${projectGroupList}]]*/ [];
+    	let pGCUp = pGC.length;
 	
 	    btn.onclick = function(e) {
 			e.preventDefault();
@@ -209,36 +217,64 @@
 		
 	    //그룹 폴더 만들기
 	    creFolder.onclick = function() {
-			let fC = document.getElementById('folderContent');
-			let fCV = fC.value;
-
+	    	
+	    	console.log(pGCUp);
+			
+	    	if(pGCUp >= 10) {
+	    		alert('프로젝트 폴더는 최대 10개 생성 할 수 있습니다.');
+	    		fC.value = '';
+	    		modal.style.display = "none";
+	    	} else {
+				makeDbFolder();
+	    	}
+				
+		}
+	    
+	    //db 정보 삽입
+	    function makeDbFolder() {
+	    	let fCV = fC.value;
 			let formData = new FormData();
 			formData.append('gN', fCV);
 			
-			fetch("proGroupC", {
+			fetch("/proGroupC", {
 				method: 'POST',
 				body : formData
 			})
 			.then(response => response.json())
 			.then(res => {
-				let rC = res.result;
-				
+			let rC = res.result;
+			let pGN = res.pGN;
+			
 				if(rC == '등록') {
-					let aC = document.createElement('a');
-					let pG = document.getElementById('proGroup');
-					aC.setAttribute('href', 'proGroupD/6')
-					aC.setAttribute('data-gN', 6)
-					aC.textContent = fCV;
-					pG.prepend(aC);
-					
-					fC.value = '';
-					modal.style.display = 'none';
+					createFolder(pGN);					
 				} else {
 					alert('요청이 취소 되었습니다.');
 				}
 			});
+	    };
+	    
+	    //동적 폴더 생성
+	    function createFolder(pGN) {
+	    	let liC = document.createElement('li');
+			let aC = document.createElement('a');
 			
-		}
+			
+			aC.setAttribute('href', 'proGroupD/'+ pGN);
+			aC.setAttribute('data-gN', pGN)
+			aC.textContent = fC.value;
+			
+			let pG = document.getElementById('proGroup');
+			liC.append(aC);
+			pG.prepend(liC);
+			
+			fC.value = '';
+			modal.style.display = 'none';
+			
+			pGCUp++;
+	    };
+	    
+    	
+    /*]]>*/
     </script>
   </body>
 </html>
