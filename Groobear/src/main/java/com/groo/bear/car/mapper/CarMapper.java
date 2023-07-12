@@ -6,10 +6,10 @@ import com.groo.bear.car.service.CarVO;
 
 public interface CarMapper {
 
-	//전체조회
+	//차량 전체조회
 	public List<CarVO> selectAllCar();
-	
-	
+	//내차량 조회
+	public List<CarVO> getMyCar(String id);	
 	
 	
 	

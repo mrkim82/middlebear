@@ -19,6 +19,11 @@ public class CarServiceImpl implements CarService {
 	public List<CarVO> getAllCarList() {
 		return carMapper.selectAllCar();
 	}
+
+	@Override
+	public List<CarVO> getMyCarList(String id) {
+		return carMapper.getMyCar(id);
+	}
 	
 	
 	

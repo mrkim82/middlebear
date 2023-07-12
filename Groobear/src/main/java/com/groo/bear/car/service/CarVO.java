@@ -18,6 +18,6 @@ public class CarVO {
 	private String phone;
 	private String name;
 	private int empNo;
-	
+	private String rank;
 	
 }
