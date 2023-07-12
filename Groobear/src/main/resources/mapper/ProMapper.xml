@@ -25,7 +25,7 @@
 	<select id="readProject" resultType="ProVO">
 		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no
 		FROM pro p, pro_mem m
-		WHERE p.id = #{id}
+		WHERE m.id = #{id}
 		AND p.pro_no = m.pro_no
 		AND m.pro_hide_check = 'N'
 		AND m.pro_parti_check = 'Y'
@@ -46,7 +46,7 @@
 	<select id="readProjectHide" resultType="ProVO">
 		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no
 		FROM pro p, pro_mem m
-		WHERE p.id = #{id}
+		WHERE m.id = #{id}
 		AND p.pro_no = m.pro_no
 		AND m.pro_hide_check = 'Y'
 		ORDER BY p.pro_no DESC
@@ -56,7 +56,7 @@
 	<select id="readProjectStar" resultType="ProVO">
 		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no
 		FROM pro p, pro_mem m
-		WHERE p.id = #{id}
+		WHERE m.id = #{id}
 		AND p.pro_no = m.pro_no
 		AND m.pro_star_check = 'Y'
 		AND m.pro_hide_check = 'N'
@@ -70,8 +70,7 @@
 		ON p.pro_no = m.pro_no
 		FULL OUTER JOIN pro_group_management g
 		ON m.pro_mem_no = g.pro_mem_no
-		WHERE p.id = #{id}
-		AND m.id = #{id}
+		WHERE m.id = #{id}
 		AND m.pro_hide_check = 'N'
 		AND m.pro_parti_check = 'Y'
 		AND group_no IS NULL
