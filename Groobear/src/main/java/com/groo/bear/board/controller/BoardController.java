@@ -20,15 +20,10 @@ public class BoardController {
 	
 	//전체조회페이지
 	@GetMapping("boardList")
-	public String boardList(Model model  ) {
-		model.addAttribute("boardList", boardService.selectAllList());
+	public String boardList(Model model, BoardVO boardvo) {
+		model.addAttribute("boardList", boardService.selectAllList(boardvo));
 		return "board/boardList";
 	}
-//	//전체조회페이지 안의 검색
-//	@GetMapping("boardSearch")
-//	@ResponseBody
-//	public String boardSearch()
-	
 	
 	//단건조회페이지
 	@GetMapping("getBoard")

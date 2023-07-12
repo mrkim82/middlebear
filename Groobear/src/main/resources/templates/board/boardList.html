@@ -4,8 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
 </head>
+
 <body>
 <div layout:fragment="content" >
 	<table id="list">
@@ -36,39 +36,42 @@
 			<option value='name'>작성자</option>
 		</select>
 		<input type="text" name="keyword" value=""/>
-		<input type="button" id="searchBtn" value="검색"/>
+		<button type="button" id="searchBtn">검색</button>
 		<button type="button" id="resetBtn">취소</button>
-
-</div>
 <script>
-function init() {
-    //검색버튼
-    document.getElementById('searchBtn')
-        .addEventListener('click', searchEmpInfo);
-}
 const headers = ['boardNo','title','name','insertDate', 'count'];
+    //검색버튼
+    document.querySelector('#searchBtn')
+       .addEventListener("click", searchEmpInfo);
+
 //검색
 function searchEmpInfo(){
     document.getElementsByTagName('tbody')[0].replaceChildren();
-    let sTag = document.getElementById('search').value;
+    //let sTag = document.getElementById('search').value;
+    let sTag = document.getElementsByName('type')[0].value;
     console.log('sTag = ',sTag);
     let kTag = document.getElementsByName('keyword')[0].value;
     console.log('kTag = ',kTag);
-    let boardTitle ="";
-    let boardWriter ="";
-    let boardContent ="";
-    if(sTag == 'boardTitle'){
-        boardTitle = kTag;
+    let title ="";
+    let name ="";
+    let content ="";
+    if(sTag == 'title'){
+    	title = kTag;
         console.log('1',kTag);
-    }else if(sTag == 'boardWriter'){
-        boardWriter = kTag;
+    }else if(sTag == 'name'){
+    	name = kTag;
         console.log('2',kTag);
     }else{
-        boardContent = kTag;
+    	content = kTag;
         console.log('3',kTag);
     }
     fetch('http://localhost:8081/boardList?title='+title+'&name='+name+'&content='+content)
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         data.forEach(board => {
             let trTag = document.createElement('tr');
@@ -88,5 +91,6 @@ function searchEmpInfo(){
     .catch(reject => console.log(reject));
 }
 </script>
+</div>
 </body>
 </html>

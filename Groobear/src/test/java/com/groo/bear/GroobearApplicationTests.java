@@ -13,9 +13,9 @@ class GroobearApplicationTests {
 	@Autowired
 	BoardService boardService;
 	
-	@Test
-	public String boardList(Model model) {
-		model.addAttribute("boardList", boardService.selectAllList());
-		return "board/boardList";
-	}
+//	@Test
+//	public String boardList(Model model) {
+//		model.addAttribute("boardList", boardService.selectAllList());
+//		return "board/boardList";
+//	}
 }

@@ -17,8 +17,8 @@ public class BoardServiceImpl implements BoardService{
 	BoardMapper boardMapper;
 	
 	@Override
-	public List<BoardVO> selectAllList() {
-		return boardMapper.selectAllList();
+	public List<BoardVO> selectAllList(BoardVO boardvo) {
+		return boardMapper.selectAllList(boardvo);
 	}
 
 	@Override
