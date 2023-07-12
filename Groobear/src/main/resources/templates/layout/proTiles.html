@@ -133,7 +133,7 @@
 				        <a href="/proMain"><span class="material-icons">home</span> 내 프로젝트</a>
 				        <a href="/proMainS"><span class="material-icons">star</span> 즐겨찾기</a>
 				        <a href="#"><span class="material-icons">mail</span> 미확인(x)</a>
-				        <a href="#"><span class="material-icons">drafts</span> 미분류(x)</a>
+				        <a href="/proMainG"><span class="material-icons">drafts</span> 미분류</a>
 				        <a href="/proMainH"><span class="material-icons">visibility_off</span> 숨김</a>
 				        <details>
 				        	<summary>모아보기</summary>
@@ -150,7 +150,7 @@
 					        <ul id="proGroup">
 					        	<li><a th:each="proG:${projectGroupList}" th:text="${proG.groupName}"
 					        		th:attr="data-gN=${proG.groupNo}"
-					        		th:href="@{proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
+					        		th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
 					        		<span class="material-icons">more_vert</span></a>
 					        	</li>
 					        </ul>
@@ -192,15 +192,18 @@
 	    
 	    closeBtn.onclick = function() {
 	      modal.style.display = 'none';
+	      document.getElementById('folderContent').value='';
 	    }
 
 	    closeBtn2.onclick = function() {
 	      modal.style.display = 'none';
+	      document.getElementById('folderContent').value='';
 	    }
 	
 	    window.onclick = function(event) {
 	      if (event.target == modal) {
 	        modal.style.display = "none";
+	        document.getElementById('folderContent').value='';
 	      }
 	    }
 		
@@ -227,6 +230,9 @@
 					aC.setAttribute('data-gN', 6)
 					aC.textContent = fCV;
 					pG.prepend(aC);
+					
+					fC.value = '';
+					modal.style.display = 'none';
 				} else {
 					alert('요청이 취소 되었습니다.');
 				}

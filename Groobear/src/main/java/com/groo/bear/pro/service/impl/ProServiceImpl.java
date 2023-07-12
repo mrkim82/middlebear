@@ -67,6 +67,11 @@ public class ProServiceImpl implements ProService {
 		return proMapper.readProjectParti(id);
 	}
 
+	@Override
+	public List<ProVO> readProjectNoGroup(String id) {
+		return proMapper.readProjectNoGroup(id);
+	}
+
 
 
 }

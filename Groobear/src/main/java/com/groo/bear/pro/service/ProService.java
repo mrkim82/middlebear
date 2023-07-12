@@ -11,6 +11,7 @@ public interface ProService {
 	public List<ProVO> readProject(String id);
 	public List<ProVO> readProjectHide(String id);
 	public List<ProVO> readProjectStar(String id);
+	public List<ProVO> readProjectNoGroup(String id);
 	
 	//프로젝트 참가자수 조회
 	public List<ProVO> readProjectParti(String id);

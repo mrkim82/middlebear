@@ -63,6 +63,21 @@
 		ORDER BY p.pro_no DESC
 	</select>
 	
+	<!-- 프로젝트 미분류 조회 -->
+	<select id="readProjectNoGroup" resultType="ProVO">
+		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no
+		FROM pro p JOIN pro_mem m
+		ON p.pro_no = m.pro_no
+		FULL OUTER JOIN pro_group_management g
+		ON m.pro_mem_no = g.pro_mem_no
+		WHERE p.id = #{id}
+		AND m.id = #{id}
+		AND m.pro_hide_check = 'N'
+		AND m.pro_parti_check = 'Y'
+		AND group_no IS NULL
+		ORDER BY p.pro_no DESC
+	</select>
+	
 	<!-- 프로젝트 즐겨찾기 등록 -->
 	<update id="updateStarY" parameterType="int">
 		UPDATE pro_mem

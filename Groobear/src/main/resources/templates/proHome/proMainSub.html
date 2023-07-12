@@ -34,16 +34,19 @@
 			let formData = new FormData();
 	        formData.append('pMN', dpMN);
 	        formData.append('starC', starC);
-	
-			fetch("proUpdate", {
+			
+	        console.log(formData.get("pMN"));
+	        console.log(formData.get("starC"));
+	        
+	        //경로 주의!
+			fetch("/proUpdate", {
 				method: 'POST',
-				body : formData
+				body : formData,
 			})
 			.then(response => response.json())
 			.then(res => {
 				let rC = res.result;
 				let headData = this.parentNode;
-				
 				if (rC == '등록' || rC == '취소') {
 					changeProOne(rC, headData);
 					
@@ -51,6 +54,9 @@
 					alert('요청이 취소 되었습니다.');
 				}
 				
+			})
+			.catch(() => {
+				console.log('에러');
 			})
 		}
 	
