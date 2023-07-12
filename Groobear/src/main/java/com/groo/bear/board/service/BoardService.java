@@ -22,4 +22,5 @@ public interface BoardService {
 	
 	//첨부파일
 	public int addFiles(FilesVO filesVO);
+
 }

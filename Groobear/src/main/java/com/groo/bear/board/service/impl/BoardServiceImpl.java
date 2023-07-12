@@ -38,6 +38,7 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int deleteBoard(int bNo) {
+		
 		return boardMapper.deleteBoard(bNo);
 	}
 
@@ -45,6 +46,7 @@ public class BoardServiceImpl implements BoardService{
 	public int addFiles(FilesVO filesVO) {
 		return boardMapper.addFiles(filesVO);
 	}
+
 	
 	
 	
