@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/proTiles}"
+>
+<head>
+<meta charset="UTF-8">
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+</head>
+<body layout:fragment="content">
+	<div>
+		<table>
+			<tr th:each="pro:${projectMainList}"
+				th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}">
+				<td th:text="${pro.proColor}"></td>
+				<td th:text="${pro.proStarCheck}" class="starCheck"></td>
+				<td th:text="${pro.proName}"></td>
+				<td th:each="parti:${projectPartiList}" th:if="${parti.proNo == pro.proNo}"
+					th:text="${parti.count} + '명'"></td>
+			</tr>
+		</table>
+	</div>
+	<script>
+		let starCheck = document.querySelectorAll(".starCheck");
+
+		starCheck.forEach(sC => {
+			sC.addEventListener("click", changeStar);
+
+		})
+	
+		function changeStar() {
+			let dpMN = this.parentNode.getAttribute("data-pMN");
+			let starC = this.parentNode.getAttribute("data-starC");
+			
+			let formData = new FormData();
+	        formData.append('pMN', dpMN);
+	        formData.append('starC', starC);
+
+			fetch("proUpdate", {
+				method: 'POST',
+				body : formData
+			})
+			.then(response => response.json())
+			.then(res => {
+				this.parentNode.remove();
+			})
+		}
+	</script>
+</body>
+</html>

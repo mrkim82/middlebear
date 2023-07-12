@@ -1,6 +1,5 @@
 <!doctype html>
-<html 
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
   <head>
   	<title>Groobear</title>
     <meta charset="utf-8">
@@ -31,7 +30,8 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	                	</tr>
 	                	<tr>
 	                		<td><span><a href="logout">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
-	                		<span><a href="mypage">마이페이지</a></span></td>
+	                		<span><a href="#">마이페이지</a></span></td>
+
 	                	</tr>
                 	</tbody>
                 </table>
@@ -73,9 +73,6 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	              <a class="dropdown-item" href="#">Separated link</a>
 	            </div>
 	          </li>
-	          <li>
-	          	<a th:text="${session.UserId}"></a>
-	          </li>
 	        </ul>
         </div>
         
@@ -90,9 +87,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 				        <a href="boardList?boardType=U"><span class="material-icons">info</span> 언론보도</a>
 				        <a href="boardList?boardType=F"><span class="material-icons">mail</span> 자유게시판</a>
 				    </div>
-				   <div class="sidebar" id="myPageMainA">
-				        <a href="carList"><span class="material-icons">info</span> 차량 관리</a>
-				    </div>
+				    
     			</td>
     			<td class="col-8">
     				<div>
@@ -115,13 +110,11 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	if(path=="board" || path=="/getMulti.do" || path=="/addMulti.do" || path=="/updateMulti.do"){
 		document.getElementById('board').style="display:block";
 	} 
-	/*else if(path=="mypage" || path=="#" || path=="#" || path=="#"){
-		document.getElementById('myPageMainA').style="display:block";
-	}
-	else if(path=="/introduce.do" || path=="/plusMileage.do" || path=="/buyLottery.do" || path=="/buyAuto.do" || path=="/buyManual.do"){
+	/* else if(path=="/listCS.do" || path=="/getCS.do" || path=="/addCS.do" || path=="/updateCS.do"){
+		document.getElementById('CSSide').style="display:block";
+	} else if(path=="/introduce.do" || path=="/plusMileage.do" || path=="/buyLottery.do" || path=="/buyAuto.do" || path=="/buyManual.do"){
 		document.getElementById('LotterySide').style="diplay:block";
-	} 
-	 else if(path=="/storelist.do" || path=="/storesearch.do"){
+	} else if(path=="/storelist.do" || path=="/storesearch.do"){
 		document.getElementById('StoreSide').style="diplay:block";
 	} else if(path=="/listLotto.do" || path=="/liveReward.do"){
 		document.getElementById('ResultSide').style="diplay:block";
