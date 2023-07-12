@@ -141,7 +141,7 @@
 	</select>
 	
 	<!-- 프로젝트 그룹 이름 수정 -->
-	<update id="updateGroupName">
+	<update id="updateGroupName" parameterType="ProGroupVO">
 		UPDATE pro_group
 		SET group_name = #{groupName}
 		WHERE group_no = #{groupNo}

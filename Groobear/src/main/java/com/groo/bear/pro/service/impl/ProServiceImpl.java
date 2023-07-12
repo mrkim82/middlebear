@@ -77,8 +77,8 @@ public class ProServiceImpl implements ProService {
 	}
 
 	@Override
-	public int updateGroupName(String groupName, int groupNo) {
-		return proMapper.updateGroupName(groupName, groupNo);
+	public int updateGroupName(ProGroupVO vo) {
+		return proMapper.updateGroupName(vo);
 	}
 
 	@Override

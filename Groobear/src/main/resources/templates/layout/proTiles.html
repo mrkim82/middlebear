@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style>
-		#modalFolderCreate, #modalFolderCreate2, #modalFolderCreate3{
+		#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3{
 		  position: fixed; /* Stay in place */
 		  z-index: 1; /* Sit on top */
 		  padding-top: 100px; /* Location of the box */
@@ -170,12 +170,12 @@
     </table>
     
     <!-- modal창 -->
-    <div id="modalFolderCreate">
+    <div id="modalFolderCreate1">
 	  <div id="modalContent">
 	    <div id="modalBody">
 	      <span id="closeBtn">&times;</span>
 	      <p>프로젝트 폴더 만들기</p>
-	      <input type="text" placeholder="프로젝트 폴더명을 입력하세요" id="folderContent">
+	      <input type="text" placeholder="프로젝트 폴더명을 입력하세요" id="folderContent1">
 	      <button type="button" id="cancelBtn" class="btn btn-primary">취소</button>
 	      <button type="button" id="createFolder">확인</button>
 	    </div>
@@ -213,7 +213,7 @@
     	let pGCUp = pGC.length;
     	
     	//변수선언
-	    let modal1 = document.getElementById('modalFolderCreate');
+	    let modal1 = document.getElementById('modalFolderCreate1');
 	    let modal2 = document.getElementById('modalFolderCreate2');
 	    let modal3 = document.getElementById('modalFolderCreate3');
 	    let closeBtn1 = document.getElementById('closeBtn');
@@ -221,7 +221,7 @@
 	    let cancelBtn1 = document.getElementById('cancelBtn');
 	    let cancelBtn2 = document.getElementById('cancelBtn2');
 	    let cancelBtn3 = document.getElementById('cancelBtn3');
-		let folderC1 = document.getElementById('folderContent');
+		let folderC1 = document.getElementById('folderContent1');
 		let folderC2 = document.getElementById('folderContent2');
 		//변수선언2
 	    let popupBtn = document.getElementById('popupProjectBtn');
@@ -236,10 +236,11 @@
 		let folderInputs = [folderC1, folderC2];
 
 		//그룹 생성 모달창 띄우기
-		popupBtn.onclick = function(e) {
+		popupBtn.addEventListener("click",function(e) { 
 		  e.preventDefault();
+		  console.log(this);
 		  modal1.style.display = 'block';
-		};
+		});
 
 		for (let i = 0; i < modals.length; i++) {
 		  let modal = modals[i];
@@ -256,6 +257,7 @@
 		  };
 
 		  window.onclick = function(event) {
+			  console.log(modal);
 		    if (event.target === modal) {
 		      closeModal(modal, folderInput);
 		    }
@@ -375,7 +377,6 @@
 				
 				//그룹no값 가져오기
 				let groupNo = event.target.parentNode.dataset.gn;
-				console.log(event.target);
 				//그룹 모달창 생성(모달4)
 				miniModal(event.target);
 				
@@ -391,7 +392,9 @@
 					modal2.style.display = 'block';
 					
 					//디비 수정
-					uFolderName.addEventListener('click', groupNameChangeDb(groupNo));
+					uFolderName.addEventListener('click', function() {
+						groupNameChangeDb(groupNo);
+					});
 					
 			    });
 				
@@ -439,15 +442,7 @@
 		
 		
 		//그룹명 디비 수정
-		function groupNameChangeDb(groupNo, event) {
-			event.preventDefault();
-			console.log('텟');
-			
-			let formData = new FormData();
-			formData.append('groupName', folderC2.value);
-			formData.append('groupNo', groupNo);
-			console.log(folderC2.value);
-			
+		function groupNameChangeDb(groupNo) {
 			if(folderC2.value == '') {
 	    		alert('폴더 이름은 공백을 허용하지 않습니다!');
 	    		return;
@@ -455,17 +450,23 @@
 	    		alert('폴더 이름은 최대 30자 까지 가능합니다!');
 	    		return;
 	    	} else {
-				fetch("/proGroupNameC", {
-					method: 'PUT',
-					body : formData
-				})
+	    		fetch("/proGroupNameC", {
+    			  method: 'PUT',
+    			  headers: {
+    			    'Content-Type': 'application/json'
+    			  },
+    			  body: JSON.stringify({
+    				    groupName: folderC2.value,
+    				    groupNo: groupNo
+    				  })
+    			})
 				.then(response => response.json())
 				.then(res => {
 					let rC = res.result;
-					console.log(rC);
 				
 					if(rC == '성공') {
-						
+						modal2.style.display = 'none';
+						document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].childNodes[0].textContent = folderC2.value;
 					} else {
 						alert('요청이 취소 되었습니다.');
 					}
@@ -479,7 +480,6 @@
 			// 선택한 요소
 			let targetElement = target.parentNode;
 			let groupNum = targetElement.dataset.gn;
-			console.log('네'+groupNum);
 
 			// 모달 창 생성
 			let modal4 = document.createElement('div');
@@ -517,7 +517,6 @@
 			// 버튼 내용 추가
 			let content1 = document.createTextNode('수정');
 			button1.appendChild(content1);
-			
 			
 			// 버튼 생성
 			let button2 = document.createElement('button');

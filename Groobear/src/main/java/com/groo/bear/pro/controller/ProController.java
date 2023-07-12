@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.groo.bear.pro.service.ProGroupVO;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProVO;
 
@@ -126,11 +127,11 @@ public class ProController {
 	//프로젝트 그룹 수정
 	@PutMapping("proGroupNameC")
 	@ResponseBody
-	public Map<String, Object> proGroupUpdate(@RequestBody String groupName, @RequestBody int groupNo) {
+	public Map<String, Object> proGroupUpdate(@RequestBody ProGroupVO vo) {
 		Map <String, Object> map = new HashMap<>();
 		String res;
 		
-		int result = proService.updateGroupName(groupName, groupNo);
+		int result = proService.updateGroupName(vo);
 		
 		if(result > 0) {
 			res = "성공";
@@ -140,7 +141,6 @@ public class ProController {
 		}
 		
 		map.put("result", res);
-		
 		return map;
 	}
 	
@@ -148,7 +148,6 @@ public class ProController {
 	@DeleteMapping("FolderGroupD/{groupNo}")
 	@ResponseBody
 	public Map<String, Object> proGroupDelete(@PathVariable int groupNo) {
-		System.out.println(groupNo);
 		Map <String, Object> map = new HashMap<>();
 		String res;
 		
@@ -162,7 +161,6 @@ public class ProController {
 		}
 		
 		map.put("result", res);
-		System.out.println("맵"+map);
 		return map;
 	}
 	
