@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.mypage.mapper.CarMapper">
+	
+	<!-- 전체조회 -->
+	
+	<select id="selectAllCar" resultType="CarVO">
+		select u.emp_no, 
+			   d.dept_name, 
+			   ui.name,
+			   c.car_no,
+			   u.phone,
+			   c.car_date
+		from users u, 
+			 departments d, 
+			 user_info ui, 
+			 car c
+		where d.dept_no = ui.dept_no 
+			  and ui.emp_no = u.emp_no 
+			  and u.id = c.id
+		<if test="empNo != null and empNo != 0">
+			and u.emp_no = #{empNo}
+		</if>
+	</select>
+	
+	
+	<!-- 개인차량 조회--> 
+	<select id="getMyCar" parameterType="String" resultType="CarVO">
+		select u.emp_no, 
+			   d.dept_name, 
+			   ui.name,
+			   c.car_no,
+			   u.phone,
+			   c.car_date,
+			   ui.rank,
+			   u.emp_grade
+		from users u, 
+			 departments d, 
+			 user_info ui, 
+			 car c
+		where d.dept_no = ui.dept_no 
+			  and ui.emp_no = u.emp_no 
+			  and u.id = c.id
+			  and u.id = #{id}
+	</select>
+
+
+
+
+	<!-- 부분조회 -->	
+	<select id="selectCar" parameterType="CarVO" resultType="CarVO">
+		select u.emp_no, 
+			   d.dept_name, 
+			   ui.name,
+			   c.car_no,
+			   u.phone,
+			   c.car_no
+		from users u, 
+			 departments d, 
+			 user_info ui, 
+			 car c
+		<where>
+			  d.dept_no = ui.dept_no 
+			  and ui.emp_no = u.emp_no 
+			  and u.id = c.id
+			  <if test="name != null and name != ''">
+			  	and ui.name = #{name}
+			  </if>
+			  <if test="deptName != null and deptName != ''">
+			  	and d.dept_name = #{deptName}
+			  </if>
+			  <if test="carNo != null and carNo != ''">
+			  	and c.car_no = #{carNo}
+			  </if>
+		</where>  
+	</select>		
+
+
+
+
+
+
+
+
+
+
+</mapper>
