@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.board.mapper.BoardMapper">
+	<select id="selectAllList" resultType="BoardVO" parameterType="BoardVO">
+	    SELECT * 
+	    FROM BOARD b JOIN (SELECT *
+	                        FROM  user_info i JOIN users u
+	                        ON i.emp_no = u.emp_no) a
+	    ON b.id = a.id
+	    <where>
+	        BOARD_TYPE = #{boardType}
+	        <if test="title != null and !title.equals('')">
+	            AND b.title LIKE '%${title}%'
+	        </if>
+	        <if test="name != null and !name.equals('')">
+	            AND a.name LIKE '%${name}%'
+	        </if>
+	        <if test="content != null and !content.equals('')">
+	            AND b.content LIKE '%${content}%'
+	        </if>
+	    </where>
+	    ORDER BY b.board_no DESC
+	</select>
+
+	<select id="selectBoard" resultType="int">
+		SELECT BOARD_NO
+			   ,ID
+			   ,BOARD_TYPE
+			   ,TITLE
+			   ,CONTENT
+			   ,INSERT_DATE
+			   ,UPDATE_DATE
+			   ,COUNT
+		FROM   BOARD
+		WHERE  BOARD_NO = #{boardNo}
+	</select>
+	<insert id="insertBoard" parameterType="BoardVO">
+	   INSERT INTO BOARD (
+	   			ID
+	   			,BOARD_NO
+	   		  , TITLE
+	   		  , CONTENT
+	   		  , INSERT_DATE
+	   		  
+	   ) VALUES (
+	   			#{id}
+	   			,BOARD_SEQ.NEXTVAL
+	   		  , #{title}
+	   		  , #{content}
+	   		  , sysdate
+	   		  
+	   )
+	</insert>
+	<!-- 파일 insert -->
+	<insert id="addFiles" parameterType="FilesVO">
+		INSERT INTO FILES 
+						   ( FILE_NO
+						   , ORIGIN_FILE_NAME
+						   , CHANGE_FILE_NAME
+						   , FILE_SIZE
+						   , FILE_DATE
+						   , BOARD_NO
+						   )
+						   VALUES 
+						   ( #{fileNo}
+						   , #{originFileName}
+						   , #{changeFileName}
+						   , #{fileSize}
+						   , sysdate
+						   , #{boardNo}
+						   )
+	</insert>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateCount" parameterType="int">
+		update board 
+		set count=count+1 where BOARD_NO = #{boardNo}
+	</update>
+	
+</mapper>

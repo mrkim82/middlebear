@@ -149,10 +149,9 @@
 					        <!-- 프로젝트 그룹 리스트 -->
 					        <ul id="proGroup">
 					        	<th:block th:each="proG : ${projectGroupList}">
-						        	<li><a th:text="${proG.groupName}"
-						        		th:attr="data-gN=${proG.groupNo}"
+						        	<li><a th:attr="data-gN=${proG.groupNo}"
 						        		th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
-						        		<span class="material-icons">more_vert</span></a>
+						        		[[${proG.groupName}]]<span class='material-icons' style='display : none;'>more_vert</span></a>
 						        	</li>
 					        	</th:block>
 					        </ul>
@@ -282,6 +281,7 @@
 			
 			pGCUp++;
 	    };
+	    
     	
     /*]]>*/
     </script>

@@ -7,8 +7,8 @@
 	<!-- 프로젝트 생성 -->
 	<select id="createPro" statementType="CALLABLE" parameterType="hashMap">
 		{call cre_project(
-				#{v_pro_name, 		  mode=IN, jdbcType=VARCHAR,  javaType=String},
-				#{v_pro_content, 	  mode=IN, jdbcType=VARCHAR,  javaType=String},
+				#{v_pro_name, 		  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_pro_content, 	  mode=IN, jdbcType=VARCHAR,   javaType=String},
 				#{v_pro_def_tab,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
 				#{v_post_write_auth,  mode=IN, jdbcType=CHAR, 	   javaType=String},
 				#{v_post_update_auth, mode=IN, jdbcType=CHAR, 	   javaType=String},
@@ -121,6 +121,7 @@
 		    ON g.group_no = u.group_no
 		WHERE u.group_no = #{groupNo}
 		AND u.id = #{id}
+		AND k.pro_hide_check = 'N'
 	</select>
 	
 	<!-- 프로젝트 그룹 생성 -->
