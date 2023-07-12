@@ -17,29 +17,28 @@ public class BoardServiceImpl implements BoardService{
 	BoardMapper boardMapper;
 	
 	@Override
-	public List<BoardVO> selectAllList(BoardVO boardvo) {
-		return boardMapper.selectAllList(boardvo);
+	public List<BoardVO> selectAllList(BoardVO boardVO) {
+		return boardMapper.selectAllList(boardVO);
 	}
 
 	@Override
-	public int selectBoard(int bNo) {
-		return boardMapper.selectBoard(bNo);
+	public BoardVO selectBoard(int boardNo) {
+		return boardMapper.selectBoard(boardNo);
 	}
 
 	@Override
-	public int insertBoard(BoardVO vo) {
-		return boardMapper.insertBoard(vo);
+	public int insertBoard(BoardVO boardVO) {
+		return boardMapper.insertBoard(boardVO);
 	}
 
 	@Override
-	public int updateBoard(BoardVO vo) {
-		return boardMapper.updateBoard(vo);
+	public int updateBoard(BoardVO boardVO) {
+		return boardMapper.updateBoard(boardVO);
 	}
 
 	@Override
-	public int deleteBoard(int bNo) {
-		
-		return boardMapper.deleteBoard(bNo);
+	public int deleteBoard(int boardNo) {
+		return boardMapper.deleteBoard(boardNo);
 	}
 
 	@Override
