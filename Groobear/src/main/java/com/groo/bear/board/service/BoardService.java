@@ -6,7 +6,7 @@ import com.groo.bear.files.FilesVO;
 
 public interface BoardService {
 	//전체조회
-	public List<BoardVO> selectAllList();
+	public List<BoardVO> selectAllList(BoardVO boardvo);
 	
 	//게시글 단건조회
 	public int selectBoard(int bNo);
@@ -22,4 +22,7 @@ public interface BoardService {
 	
 	//첨부파일
 	public int addFiles(FilesVO filesVO);
+
+	//검색조회
+	//public List<BoardVO> selectBoardAll(BoardVO boardVO);
 }

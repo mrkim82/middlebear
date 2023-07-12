@@ -17,8 +17,8 @@ public class BoardServiceImpl implements BoardService{
 	BoardMapper boardMapper;
 	
 	@Override
-	public List<BoardVO> selectAllList() {
-		return boardMapper.selectAllList();
+	public List<BoardVO> selectAllList(BoardVO boardvo) {
+		return boardMapper.selectAllList(boardvo);
 	}
 
 	@Override
@@ -38,6 +38,7 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int deleteBoard(int bNo) {
+		
 		return boardMapper.deleteBoard(bNo);
 	}
 
@@ -45,6 +46,7 @@ public class BoardServiceImpl implements BoardService{
 	public int addFiles(FilesVO filesVO) {
 		return boardMapper.addFiles(filesVO);
 	}
+
 	
 	
 	
