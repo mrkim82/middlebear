@@ -215,7 +215,7 @@
 	      }
 	    }
 		
-	    //그룹 폴더 만들기
+	    //클릭 후 그룹 폴더 만들기
 	    creFolder.onclick = function() {
 	    	
 	    	console.log(pGCUp);
@@ -225,6 +225,7 @@
 	    		fC.value = '';
 	    		modal.style.display = "none";
 	    	} else {
+	    		
 				makeDbFolder();
 	    	}
 				
@@ -236,21 +237,30 @@
 			let formData = new FormData();
 			formData.append('gN', fCV);
 			
-			fetch("/proGroupC", {
-				method: 'POST',
-				body : formData
-			})
-			.then(response => response.json())
-			.then(res => {
-			let rC = res.result;
-			let pGN = res.pGN;
+			if(fC.value == '') {
+	    		alert('폴더 이름은 공백을 허용하지 않습니다!');
+	    		return;
+	    	} else if (fC.value.length > 30) {
+	    		alert('폴더 이름은 최대 30자 까지 가능합니다!');
+	    		return;
+	    	} else {
+				fetch("/proGroupC", {
+					method: 'POST',
+					body : formData
+				})
+				.then(response => response.json())
+				.then(res => {
+				let rC = res.result;
+				let pGN = res.pGN;
+				
+					if(rC == '등록') {
+						createFolder(pGN);				
+					} else {
+						alert('요청이 취소 되었습니다.');
+					}
+				});
+	    	}
 			
-				if(rC == '등록') {
-					createFolder(pGN);					
-				} else {
-					alert('요청이 취소 되었습니다.');
-				}
-			});
 	    };
 	    
 	    //동적 폴더 생성
@@ -272,7 +282,6 @@
 			
 			pGCUp++;
 	    };
-	    
     	
     /*]]>*/
     </script>
