@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/proTiles}"
+>
+<head>
+<meta charset="UTF-8">
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+</head>
+<body layout:fragment="content">
+	<div>
+		<table>
+			<thead>
+				<th:block th:if="${projectMainList.?[proStarCheck == 'Y'].size() > 0}">
+					<tr>
+						<th>즐겨찾기</th>
+					</tr>
+				</th:block>
+			</thead>
+			<tbody id="YesStar">
+				<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}"
+					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}">
+					<td th:text="${pro.proColor}"></td>
+					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
+					<td th:text="${pro.proName}"></td>
+					<td th:each="parti:${projectPartiList}" th:if="${parti.proNo == pro.proNo}"
+						th:text="${parti.count} + '명'"></td>
+				</tr>
+				
+			</tbody>
+		</table>
+		<table>
+			<thead>
+				<th:block th:if="${projectMainList.?[proStarCheck == 'N'].size() > 0}">
+					<tr>
+						<th>참여중</th>
+					</tr>
+				</th:block>
+			</thead>
+			<tbody id="NoStar">
+				<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'N'}"
+					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}">
+					<td th:text="${pro.proColor}"></td>
+					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
+					<td th:text="${pro.proName}"></td>
+					<td th:each="parti:${projectPartiList}" th:if="${parti.proNo == pro.proNo}"
+						th:text="${parti.count} + '명'"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<script>
+		let starCheck = document.querySelectorAll(".starCheck");
+
+		starCheck.forEach(sC => {
+			sC.addEventListener("click", changeStar);
+		})
+	
+		function changeStar() {
+			let dpMN = this.parentNode.getAttribute("data-pMN");
+			let starC = this.parentNode.getAttribute("data-starC");
+			
+			let formData = new FormData();
+	        formData.append('pMN', dpMN);
+	        formData.append('starC', starC);
+
+			fetch("proUpdate", {
+				method: 'POST',
+				body : formData
+			})
+			.then(response => response.json())
+			.then(res => {
+				let rC = res.result;
+				let headData = this.parentNode;
+				
+				if (rC == '등록' || rC == '취소') {
+					changeProOne(rC, headData);
+					
+				} else {
+					alert('요청이 취소 되었습니다.');
+				}
+				
+			})
+		}
+	
+		//즐겨찾기 변경
+		function changeProOne(rC, headData) {
+			console.log(rC);
+			console.log(headData);
+			let yStar = document.getElementById('YesStar');
+			let nStar = document.getElementById('NoStar');
+			
+			if (rC == '등록') {
+				yStar.appendChild(headData);
+				headData.setAttribute('data-starc', 'Y');
+				headData.getElementsByClassName('starCheck')[0].textContent = 'Y';
+			} else {
+				nStar.appendChild(headData);
+				headData.setAttribute('data-starc', 'N');
+				headData.getElementsByClassName('starCheck')[0].textContent = 'N';
+			}
+
+		}
+	</script>
+</body>
+</html>
