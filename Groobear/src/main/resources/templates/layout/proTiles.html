@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style>
-		#modalFolderCreate {
+		#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3{
 		  position: fixed; /* Stay in place */
 		  z-index: 1; /* Sit on top */
 		  padding-top: 100px; /* Location of the box */
@@ -26,7 +26,7 @@
 		  display: none;
 		}
 		
-		#modalBody {
+		#modalBody, #modalBody2, #modalBody3{
 		  width: 500px;
 		  height: 300px;
 		  padding: 30px 30px;
@@ -35,7 +35,7 @@
 		  background-color: #fff;
 		}
 		
-		#closeBtn {
+		#closeBtn, #closeBtn2{
 		  float:right;
 		  font-weight: bold;
 		  color: #777;
@@ -144,33 +144,21 @@
 				        		<li>내 게시물</li>
 				        	</ul>
 				        </details>
-				        <details open>
+				        <details id="groupFolderList" open>
 				        	<summary>프로젝트 폴더<span id="popupProjectBtn" class="material-icons">add</span></summary>
 					        <!-- 프로젝트 그룹 리스트 -->
 					        <ul id="proGroup">
 					        	<th:block th:each="proG : ${projectGroupList}">
-						        	<li><a th:text="${proG.groupName}"
-						        		th:attr="data-gN=${proG.groupNo}"
+						        	<li><a th:attr="data-gN=${proG.groupNo}"
 						        		th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
-						        		<span class="material-icons">more_vert</span></a>
+						        		[[${proG.groupName}]]<span class='material-icons moreVertIcons' style='display : none;'>more_vert</span></a>
 						        	</li>
 					        	</th:block>
 					        </ul>
 				        </details>
 				        			
 			        	</div>
-				    <!-- modal창 -->
-				    <div id="modalFolderCreate">
-					  <div id="modalContent">
-					    <div id="modalBody">
-					      <span id="closeBtn">&times;</span>
-					      <p>프로젝트 폴더 만들기</p>
-					      <input type="text" placeholder="프로젝트 폴더명을 입력하세요" id="folderContent">
-					      <button type="button" id="closeBtn2" class="btn btn-primary">취소</button>
-					      <button type="button" id="createfolder">확인</button>
-					    </div>
-					  </div>
-					</div>
+				    
     			</td>
     			<td class="col-8">
     				<div>
@@ -180,109 +168,435 @@
     		</tr>
     	</tbody>
     </table>
+    
+    <!-- modal창 -->
+    <div id="modalFolderCreate1">
+	  <div id="modalContent">
+	    <div id="modalBody">
+	      <span id="closeBtn">&times;</span>
+	      <p>프로젝트 폴더 만들기</p>
+	      <input type="text" placeholder="프로젝트 폴더명을 입력하세요" id="folderContent1">
+	      <button type="button" id="cancelBtn" class="btn btn-primary">취소</button>
+	      <button type="button" id="createFolder">확인</button>
+	    </div>
+	  </div>
+	</div>
+    <!-- modal창2 -->
+    <div id="modalFolderCreate2">
+	  <div id="modalContent2">
+	    <div id="modalBody2">
+	      <span id="closeBtn2">&times;</span>
+	      <p>프로젝트 폴더명 수정하기</p>
+	      <input type="text" placeholder="프로젝트 폴더명을 입력하세요" id="folderContent2">
+	      <button type="button" id="cancelBtn2" class="btn btn-primary">취소</button>
+	      <button type="button" id="updateFolderName">변경</button>
+	    </div>
+	  </div>
+	</div>
+    <!-- modal창3 -->
+    <div id="modalFolderCreate3">
+	  <div id="modalContent3">
+	    <div id="modalBody3">
+	      <p>프로젝트 폴더를 삭제하시겠습니까?</p>
+	      <p>프로젝트 폴더에 포함된 프로젝트는 삭제되지 않습니다.</p>
+	      <button type="button" id="cancelBtn3" class="btn btn-primary">취소</button>
+	      <button type="button" id="deleteFolder">확인</button>
+	    </div>
+	  </div>
+	</div>
+					
     </div>
     <script th:inline="javascript">
     /*<![CDATA[*/
-	    let btn = document.getElementById('popupProjectBtn');
-	    let modal = document.getElementById('modalFolderCreate');
-	    let closeBtn = document.getElementById('closeBtn');
-		let creFolder = document.getElementById('createfolder');
-		let fC = document.getElementById('folderContent');
-		
 		//그룹 갯수 체크
     	let pGC = /*[[${projectGroupList}]]*/ [];
     	let pGCUp = pGC.length;
-	
-	    btn.onclick = function(e) {
-			e.preventDefault();
-			modal.style.display = 'block';
-	    }
-	    
-	    closeBtn.onclick = function() {
-	      modal.style.display = 'none';
-	      document.getElementById('folderContent').value='';
-	    }
-
-	    closeBtn2.onclick = function() {
-	      modal.style.display = 'none';
-	      document.getElementById('folderContent').value='';
-	    }
-	
-	    window.onclick = function(event) {
-	      if (event.target == modal) {
-	        modal.style.display = "none";
-	        document.getElementById('folderContent').value='';
-	      }
-	    }
+    	
+    	//변수선언
+	    let modal1 = document.getElementById('modalFolderCreate1');
+	    let modal2 = document.getElementById('modalFolderCreate2');
+	    let modal3 = document.getElementById('modalFolderCreate3');
+	    let closeBtn1 = document.getElementById('closeBtn');
+	    let closeBtn2 = document.getElementById('closeBtn2');
+	    let cancelBtn1 = document.getElementById('cancelBtn');
+	    let cancelBtn2 = document.getElementById('cancelBtn2');
+	    let cancelBtn3 = document.getElementById('cancelBtn3');
+		let folderC1 = document.getElementById('folderContent1');
+		let folderC2 = document.getElementById('folderContent2');
+		//변수선언2
+	    let popupBtn = document.getElementById('popupProjectBtn');
+		let creFolder = document.getElementById('createFolder');
+		let uFolderName = document.getElementById('updateFolderName');
+		let dFolder = document.getElementById('deleteFolder');
 		
-	    //클릭 후 그룹 폴더 만들기
+		//취소 공통
+		let modals = [modal1, modal2];
+		let closeBtns = [closeBtn1, closeBtn2];
+		let cancelBtns = [cancelBtn1, cancelBtn2];
+		let folderInputs = [folderC1, folderC2];
+
+		//그룹 생성 모달창 띄우기
+		popupBtn.addEventListener("click",function(e) { 
+		  e.preventDefault();
+		  console.log(this);
+		  modal1.style.display = 'block';
+		});
+
+		for (let i = 0; i < modals.length; i++) {
+		  let modal = modals[i];
+		  let closeBtn = closeBtns[i];
+		  let cancelBtn = cancelBtns[i];
+		  let folderInput = folderInputs[i];
+
+		  closeBtn.onclick = function() {
+		    closeModal(modal, folderInput);
+		  };
+
+		  cancelBtn.onclick = function() {
+		    closeModal(modal, folderInput);
+		  };
+
+		  window.onclick = function(event) {
+			  console.log(modal);
+		    if (event.target === modal) {
+		      closeModal(modal, folderInput);
+		    }
+		  };
+		}
+
+		function closeModal(modal, input) {
+		  modal.style.display = 'none';
+		  input.value = '';
+		}
+		
+		
+		//시작
+		
+	    //클릭 후 그룹 폴더 만들기(모달1)
 	    creFolder.onclick = function() {
-	    	
-	    	console.log(pGCUp);
-			
 	    	if(pGCUp >= 10) {
 	    		alert('프로젝트 폴더는 최대 10개 생성 할 수 있습니다.');
-	    		fC.value = '';
-	    		modal.style.display = "none";
+	    		folderC1.value = '';
+	    		modal1.style.display = "none";
 	    	} else {
-	    		
-				makeDbFolder();
+	    		//폴더명 확인
+				checkGroupFolderName();
 	    	}
 				
 		}
 	    
-	    //db 정보 삽입
-	    function makeDbFolder() {
-	    	let fCV = fC.value;
+	    //폴더명 확인
+	    function checkGroupFolderName() {
 			let formData = new FormData();
-			formData.append('gN', fCV);
+			formData.append('gN', folderC1.value);
 			
-			if(fC.value == '') {
+			if(folderC1.value == '') {
 	    		alert('폴더 이름은 공백을 허용하지 않습니다!');
 	    		return;
-	    	} else if (fC.value.length > 30) {
+	    	} else if (folderC1.value.length > 30) {
 	    		alert('폴더 이름은 최대 30자 까지 가능합니다!');
 	    		return;
 	    	} else {
+	    		//db정보 삽입
 				fetch("/proGroupC", {
 					method: 'POST',
 					body : formData
 				})
 				.then(response => response.json())
 				.then(res => {
-				let rC = res.result;
-				let pGN = res.pGN;
+					let rC = res.result;
+					let latelyGroupNum = res.pGN;
 				
-					if(rC == '등록') {
-						createFolder(pGN);				
+					if(rC == '성공') {
+						//동적 폴더 생성
+						createFolder(latelyGroupNum);				
 					} else {
 						alert('요청이 취소 되었습니다.');
 					}
 				});
-	    	}
+	    	};
 			
 	    };
 	    
 	    //동적 폴더 생성
-	    function createFolder(pGN) {
-	    	let liC = document.createElement('li');
-			let aC = document.createElement('a');
-			
-			
-			aC.setAttribute('href', 'proGroupD/'+ pGN);
-			aC.setAttribute('data-gN', pGN)
-			aC.textContent = fC.value;
-			
-			let pG = document.getElementById('proGroup');
-			liC.append(aC);
-			pG.prepend(liC);
-			
-			fC.value = '';
-			modal.style.display = 'none';
-			
-			pGCUp++;
+	    function createFolder(lGN) {
+				let pG = document.getElementById('proGroup');
+	    		let liC = document.createElement('li');
+				let aC = document.createElement('a');
+				let spanC = document.createElement('span');
+
+				spanC.className = 'material-icons moreVertIcons';
+				spanC.style = 'display : none;';
+				spanC.textContent = 'more_vert';
+				
+				aC.setAttribute('href', 'proGroupD/'+ lGN);
+				aC.setAttribute('data-gN', lGN);
+				aC.textContent = folderC1.value;
+				
+				aC.append(spanC);
+				liC.append(aC);
+				pG.prepend(liC);
+				
+				folderC1.value = '';
+				modal1.style.display = 'none';
+				
+				pGCUp++;
 	    };
+	    
+	    // 프로젝트 그룹 상태 등장 효과
+		let groupFolderUL = document.querySelector('#groupFolderList>ul');
+		
+		groupFolderUL.addEventListener("mouseover", makeGroupStatus);
+		groupFolderUL.addEventListener("mouseout", deleteGroupStatus);
+		
+		//상태 등장
+		function makeGroupStatus() {
+			if(event.target.tagName == "A") {
+				event.target.childNodes[1].style.display = 'block';
+			} else if (event.target.tagName == "SPAN") {
+				event.target.style.display = 'block';
+			}
+		};
+		
+		//상태 숨김
+		function deleteGroupStatus() {
+			if(event.target.tagName == "A") {
+				event.target.childNodes[1].style.display = 'none';
+			} else if (event.target.tagName == "SPAN") {
+				event.target.style.display = 'none';
+			}
+		};
+		
+		//프로젝트 그룹 상태 클릭 속성(모달4)
+		groupFolderUL.addEventListener("click", groupStatusModal);
+		
+		function groupStatusModal(event) {
+			
+			if(event.target.tagName == "SPAN") {
+				event.preventDefault();
+				
+				//그룹no값 가져오기
+				let groupNo = event.target.parentNode.dataset.gn;
+				//그룹 모달창 생성(모달4)
+				miniModal(event.target);
+				
+				let groupNameChange = document.getElementById('groupNameChange' + groupNo);
+				let groupDelte = document.getElementById('groupDelte' + groupNo);
+				
+				//프로젝트 수정창 띄우기(모달2)
+				groupNameChange.addEventListener("click", function(e) {
+					e.preventDefault();
+					//상태 모달창 삭제
+					document.getElementById('groupModal' + groupNo).remove();
+					
+					modal2.style.display = 'block';
+					
+					//디비 수정
+					uFolderName.addEventListener('click', function() {
+						groupNameChangeDb(groupNo);
+					});
+					
+			    });
+				
+				//프로젝트 삭제창(모달3)
+				groupDelte.addEventListener("click", function(e) {
+					e.preventDefault();
+					//상태 모달창 삭제
+					document.getElementById('groupModal' + groupNo).remove();
+					
+					modal3.style.display = 'block';
+					
+					window.onclick = function(event) {
+				      if (event.target == modal3) {
+				        modal3.style.display = "none";
+				      }
+				    }
+					
+					cancelBtn3.onclick = function() {
+				      modal3.style.display = 'none';
+				    }
+					
+					dFolder.addEventListener("click", function() {
+						
+						fetch("/FolderGroupD/" + groupNo, {
+							method: 'DELETE'
+						})
+						.then(response => response.json())
+						.then(res => {
+							let rC = res.result;
+							console.log(document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].parentNode);
+						
+							if(rC == '성공') {
+								document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].parentNode.remove();
+								modal3.style.display = 'none';
+							} else {
+								alert('요청이 취소 되었습니다.');
+							}
+						});
+					});
+					
+			    });
+				
+			}
+		};
+		
+		
+		//그룹명 디비 수정
+		function groupNameChangeDb(groupNo) {
+			if(folderC2.value == '') {
+	    		alert('폴더 이름은 공백을 허용하지 않습니다!');
+	    		return;
+	    	} else if (folderC2.value.length > 30) {
+	    		alert('폴더 이름은 최대 30자 까지 가능합니다!');
+	    		return;
+	    	} else {
+	    		fetch("/proGroupNameC", {
+    			  method: 'PUT',
+    			  headers: {
+    			    'Content-Type': 'application/json'
+    			  },
+    			  body: JSON.stringify({
+    				    groupName: folderC2.value,
+    				    groupNo: groupNo
+    				  })
+    			})
+				.then(response => response.json())
+				.then(res => {
+					let rC = res.result;
+				
+					if(rC == '성공') {
+						modal2.style.display = 'none';
+						document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].childNodes[0].textContent = folderC2.value;
+					} else {
+						alert('요청이 취소 되었습니다.');
+					}
+				});
+	    	};
+		};
+		
+		
+		//그룹 모달창 생성
+		function miniModal(target) {
+			// 선택한 요소
+			let targetElement = target.parentNode;
+			let groupNum = targetElement.dataset.gn;
+
+			// 모달 창 생성
+			let modal4 = document.createElement('div');
+			modal4.id = 'groupModal' + groupNum;
+			modal4.style.maxWidth = '100%';
+			modal4.style.width = '68px';
+			modal4.style.height = '58px';
+			modal4.style.backgroundColor = 'lightgray';
+			modal4.style.padding = '10px';
+			modal4.style.position = 'absolute';
+			modal4.style.top = targetElement.offsetTop + targetElement.offsetHeight + 68 + 'px';
+			modal4.style.left = (targetElement.offsetLeft + 190) + 'px';
+			modal4.style.marginTop = '4px';
+			modal4.style.display = 'flex';
+			modal4.style.flexDirection = 'column';
+			modal4.style.alignItems = 'center';
+			modal4.style.justifyContent = 'center';
+			modal4.style.zIndex = '9999';
+
+			// 버튼 추가
+			let button1 = document.createElement('button');
+			button1.type = 'button';
+			button1.id = 'groupNameChange' + groupNum;
+			button1.style.backgroundColor = 'transparent';
+			button1.style.border = 'none';
+			button1.style.display = '-webkit-box';
+			button1.style.webkitLineClamp = '2';
+			button1.style.webkitBoxOrient = 'vertical';
+			button1.style.overflow = 'hidden';
+			button1.style.textOverflow = 'ellipsis';
+			button1.style.maxHeight = '2.8em';
+			button1.style.lineHeight = '1.4em';
+			button1.style.fontSize = '12px';
+			
+			// 버튼 내용 추가
+			let content1 = document.createTextNode('수정');
+			button1.appendChild(content1);
+			
+			// 버튼 생성
+			let button2 = document.createElement('button');
+			button2.type = 'button';
+			button2.id = 'groupDelte' + groupNum;
+			button2.style.backgroundColor = 'transparent';
+			button2.style.border = 'none';
+			button2.style.display = '-webkit-box';
+			button2.style.webkitLineClamp = '2';
+			button2.style.webkitBoxOrient = 'vertical';
+			button2.style.overflow = 'hidden';
+			button2.style.textOverflow = 'ellipsis';
+			button2.style.maxHeight = '2.8em';
+			button2.style.lineHeight = '1.4em';
+			button2.style.fontSize = '12px';
+			
+			// 버튼 내용 추가
+			let content2 = document.createTextNode('삭제');
+			button2.appendChild(content2);
+
+			// 버튼을 모달 창에 추가
+			modal4.appendChild(button1);
+			modal4.appendChild(button2);
+
+			document.body.appendChild(modal4);
+
+		}
     	
+		
+		//변수 정리
+		
+	
+    	/* popupBtn.onclick = function(e) {
+			e.preventDefault();
+			modal1.style.display = 'block';
+	    }
+	    
+	    closeBtn1.onclick = function() {
+	      modal1.style.display = 'none';
+	      folderC1.value='';
+	    }
+
+	    cancelBtn1.onclick = function() {
+	      modal1.style.display = 'none';
+	      folderC1.value='';
+	    }
+	
+	    window.onclick = function(event) {
+	      if (event.target == modal1) {
+	        modal1.style.display = "none";
+	        folderC1.value='';
+	      } else if (event.target == modal2) {
+	        modal2.style.display = "none";
+	        folderC2.value='';
+	      } else if (event.target == modal3) {
+	        modal3.style.display = "none";
+	        folderC3.value='';
+	      } 
+	    }
+	    
+	    closeBtn2.onclick = function() {
+	      modal2.style.display = 'none';
+	      folderC2.value='';
+	    }
+
+	    cancelBtn2.onclick = function() {
+	      modal2.style.display = 'none';
+	      folderC2.value='';
+	    }
+	
+	    
+	    closeBtn3.onclick = function() {
+	      modal3.style.display = 'none';
+	      folder3.value='';
+	    }
+	
+	     */
+		
+		
+		
     /*]]>*/
     </script>
   </body>

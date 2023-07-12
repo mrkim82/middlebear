@@ -9,12 +9,16 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.groo.bear.pro.service.ProGroupVO;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProVO;
 
@@ -38,9 +42,17 @@ public class ProController {
 	@GetMapping("proMain")
 	public String proMainPage(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		model.addAttribute("projectMainList", proService.readProject((String)session.getAttribute("Id")));
-//		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
-//		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		String projcetMasterId = "";//기본값 참여중or관리자 프로젝트 구분
+		String orderBy = "DESC";//정렬 기본값
+		
+		
+		param.put("id", (String)session.getAttribute("Id"));
+		param.put("pid", projcetMasterId);
+		param.put("oBy", orderBy);
+		
+		model.addAttribute("projectMainList", proService.readProject(param));
 		proData(model, request);
 		
 		return "proHome/proMain";
@@ -98,11 +110,9 @@ public class ProController {
 		
 		int result = proService.createProjectGroup(groupName, (String)session.getAttribute("Id"));
 		int proGroupNo = proService.readProjectGroupNo();
-		System.out.println(result);
-		System.out.println(proGroupNo);
 		
 		if(result > 0) {
-			res = "등록";
+			res = "성공";
 			
 		} else {
 			res = "취소";
@@ -114,6 +124,45 @@ public class ProController {
 		return map;
 	}
 	
+	//프로젝트 그룹 수정
+	@PutMapping("proGroupNameC")
+	@ResponseBody
+	public Map<String, Object> proGroupUpdate(@RequestBody ProGroupVO vo) {
+		Map <String, Object> map = new HashMap<>();
+		String res;
+		
+		int result = proService.updateGroupName(vo);
+		
+		if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+		
+		map.put("result", res);
+		return map;
+	}
+	
+	//프로젝트 그룹 삭제
+	@DeleteMapping("FolderGroupD/{groupNo}")
+	@ResponseBody
+	public Map<String, Object> proGroupDelete(@PathVariable int groupNo) {
+		Map <String, Object> map = new HashMap<>();
+		String res;
+		
+		int result = proService.deleteGroup(groupNo);
+		
+		if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+		
+		map.put("result", res);
+		return map;
+	}
 	
 	//프로젝트 생성 페이지 이동
 	@GetMapping("proCreate")

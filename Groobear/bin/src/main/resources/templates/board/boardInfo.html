@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/tiles}">
+<head>
+    <meta charset="UTF-8">
+    <title>Board Details</title>
+</head>
+<body>
+    <h2>게시글 단건조회</h2>
+
+    <table>
+        <tr>
+            <td>제목:</td>
+            <td><input type="text" th:value="${board.title}" readonly/></td>
+        </tr>
+        <tr>
+            <td>내용:</td>
+            <td><textarea th:text="${board.content}" readonly></textarea></td>
+        </tr>
+        <tr>
+            <td>첨부파일 : </td>
+            <!-- <td><a th:href="@{/files/} + ${board.attachment}" th:text="${board.attachment}">file.txt</a></td> -->
+        </tr>
+        <tr>
+            <td>작성자:</td>
+            <td><input type="text" th:value="${board.id}" readonly /></td>
+        </tr>
+        <tr>
+            <td>작성일:</td>
+            <td><input type="text" th:value="${#dates.format(board.inDate, 'yyyy/MM/dd')}" readonly /></td>
+        </tr>
+    </table>
+
+    <!-- Button to go back to the list -->
+    <button type="button" onclick="location.href='boardList'">목록으로</button>
+
+</body>
+</html>

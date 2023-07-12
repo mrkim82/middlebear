@@ -8,7 +8,7 @@ public interface ProService {
 	public void insertPro(Map<String, Object> map);
 	
 	//프로젝트 조회
-	public List<ProVO> readProject(String id);
+	public List<ProVO> readProject(Map<String, Object> map);
 	public List<ProVO> readProjectHide(String id);
 	public List<ProVO> readProjectStar(String id);
 	public List<ProVO> readProjectNoGroup(String id);
@@ -34,5 +34,11 @@ public interface ProService {
 	
 	// 프로젝트 그룹 생성 후 번호 조회
 	public int readProjectGroupNo();
+	
+	//프로젝트 그룹 이름 수정
+	public int updateGroupName(ProGroupVO vo);
+	
+	//프로젝트 그룹 삭제
+	public int deleteGroup(int groupNo);
 	
 }

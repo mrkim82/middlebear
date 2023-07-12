@@ -7,8 +7,8 @@
 	<!-- 프로젝트 생성 -->
 	<select id="createPro" statementType="CALLABLE" parameterType="hashMap">
 		{call cre_project(
-				#{v_pro_name, 		  mode=IN, jdbcType=VARCHAR,  javaType=String},
-				#{v_pro_content, 	  mode=IN, jdbcType=VARCHAR,  javaType=String},
+				#{v_pro_name, 		  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_pro_content, 	  mode=IN, jdbcType=VARCHAR,   javaType=String},
 				#{v_pro_def_tab,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
 				#{v_post_write_auth,  mode=IN, jdbcType=CHAR, 	   javaType=String},
 				#{v_post_update_auth, mode=IN, jdbcType=CHAR, 	   javaType=String},
@@ -22,14 +22,17 @@
 	
 	<!-- 프로젝트 조회 -->
 	<!-- 나중에 orderby 알림순 추가 -->
-	<select id="readProject" resultType="ProVO">
+	<select id="readProject" resultType="ProVO" parameterType="hashMap">
 		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no
 		FROM pro p, pro_mem m
 		WHERE m.id = #{id}
 		AND p.pro_no = m.pro_no
 		AND m.pro_hide_check = 'N'
 		AND m.pro_parti_check = 'Y'
-		ORDER BY p.pro_no DESC
+		<if test="pid != null and pid != ''">
+		 	AND p.id = #{pid}
+	 	</if>
+		ORDER BY p.pro_no ${oBy}
 	</select>
 	
 	<!-- 프로젝트 참가자 -->
@@ -121,6 +124,7 @@
 		    ON g.group_no = u.group_no
 		WHERE u.group_no = #{groupNo}
 		AND u.id = #{id}
+		AND k.pro_hide_check = 'N'
 	</select>
 	
 	<!-- 프로젝트 그룹 생성 -->
@@ -135,5 +139,18 @@
 		SELECT MAX(group_no)
 		FROM pro_group
 	</select>
+	
+	<!-- 프로젝트 그룹 이름 수정 -->
+	<update id="updateGroupName" parameterType="ProGroupVO">
+		UPDATE pro_group
+		SET group_name = #{groupName}
+		WHERE group_no = #{groupNo}
+	</update>
+	
+	<!-- 프로젝트 그룹 삭제 -->
+	<delete id="deleteGroup" parameterType="int">
+		DELETE FROM pro_group
+		WHERE group_no = #{groupNo}
+	</delete>
 	
 </mapper>

@@ -11,7 +11,7 @@ public interface ProMapper {
 	public void createPro(Map<String, Object> map);
 	
 	//프로젝트 조회
-	public List<ProVO> readProject(String id);
+	public List<ProVO> readProject(Map<String, Object> map);
 	public List<ProVO> readProjectHide(String id);
 	public List<ProVO> readProjectStar(String id);
 	public List<ProVO> readProjectNoGroup(String id);
@@ -37,10 +37,14 @@ public interface ProMapper {
 	
 	// 프로젝트 그룹 생성 후 번호 조회
 	public int readProjectGroupNo();
+	
+	//프로젝트 그룹 이름 수정
+	public int updateGroupName(ProGroupVO vo);
+	
+	//프로젝트 그룹 삭제
+	public int deleteGroup(int groupNo);
 //	
 //	// 단건조회
 //	public EmpVO selectEmpInfo(EmpVO empVO);
 //	
-//	//
-//	public int insertEmpInfo(EmpVO empVO);
 }
