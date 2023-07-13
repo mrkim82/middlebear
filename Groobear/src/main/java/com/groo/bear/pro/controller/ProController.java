@@ -59,19 +59,15 @@ public class ProController {
 	}
 	
 	//프로젝트 메인 페이지 카테고리 및 정렬
-	@GetMapping("proMain")
-	@ResponseBody
-	public String proMainPageOrder(Model model, HttpServletRequest request) {
+	@GetMapping("proMainO")
+	public String proMainPageOrder(Model model, HttpServletRequest request,
+			@RequestParam("projcetMasterId") String projcetMasterId, @RequestParam("orderBy") String orderBy) {
 		HttpSession session = request.getSession();
 		Map<String, Object> param = new HashMap<String, Object>();
 		
-		String projcetMasterId = "";//기본값 참여중or관리자 프로젝트 구분
-		String orderBy = "DESC";//정렬 기본값
-		
-		
 		param.put("id", (String)session.getAttribute("Id"));
-		param.put("pid", projcetMasterId);
-		param.put("oBy", orderBy);
+		param.put("pid", projcetMasterId);//기본값 참여중or관리자 프로젝트 구분
+		param.put("oBy", orderBy);//정렬 기본값
 		
 		model.addAttribute("projectMainList", proService.readProject(param));
 		proData(model, request);
