@@ -1,5 +1,8 @@
 package com.groo.bear.mypage.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -7,8 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.groo.bear.mypage.paging.Criteria;
+import com.groo.bear.mypage.paging.Paging;
 import com.groo.bear.mypage.service.CarService;
+import com.groo.bear.mypage.service.CarVO;
 import com.groo.bear.mypage.service.UserService;
 
 @Controller
@@ -16,6 +26,7 @@ public class CarController {
 
 	@Autowired
 	CarService carService;
+	
 	@Autowired
 	UserService userService;
 	
@@ -42,6 +53,32 @@ public class CarController {
 			return "car/carPList";
 		}
 		
+	}
+	//검색
+	@PostMapping("searchPList")
+	   @ResponseBody
+	   public List<CarVO> searchList(@RequestBody CarVO carVO) {
+	      System.out.println(carVO);
+	      return carService.getAllCarList(carVO);
+	   }
+	
+	@RequestMapping(value="/carList")
+	public String carList(Criteria cri, Model model) throws Exception{
+		
+		int carListCnt = carService.carListCnt();
+	        
+	        // 페이징 객체
+	        Paging paging = new Paging();
+	        paging.setCri(cri);
+	        paging.setTotalCount(carListCnt);    
+	        
+	        List<Map<String, Object>> list = carService.carList(cri);
+	        
+	        model.addAttribute("list", list);    
+	        model.addAttribute("paging", paging);    
+		
+		
+		return "carList";
 	}
 	
 	//개인차량 등록 
