@@ -18,13 +18,14 @@
 				<td>조회수</td>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody id="bodyWash">
 			<tr th:each="board, stat : ${boardList}" th:attr="onclick='window.location.href=\'/boardInfo?boardNo=' + ${board.boardNo} + '\''">
 				<td>[[${board.boardNo}]]</td>
 				<td>[[${board.title}]]</td>
 				<td>[[${board.name}]]</td>
-				<td th:text="${#dates.format(board.insertDate, 'yy.MM.dd')}"></td>
+				<td th:text="${#dates.format(board.insertDate, 'yyyy.MM.dd')}"></td>
 				<td>[[${board.count}]]</td>
+				<td style="display:none;">[[${board.boardType}]]</td>
 			</tr>
 		</tbody>
 	</table>
@@ -37,55 +38,118 @@
 		</select>
 		<input type="text" name="keyword" value=""/>
 		<button type="button" id="searchBtn">검색</button>
-		<button type="button" id="resetBtn">취소</button>
-<script>
+		<button type="button" id="resetBtn" onclick=formInit()>초기화</button>
+		
+<script th:inline="javascript">
+//초기화
+function formInit() {
+    let insertList = document.querySelectorAll('tbody > td');
+    insertList.forEach(el => el.value = '');
+}
+//날짜포맷 맞춰주는 함수 
+//https://carrotweb.tistory.com/160 참고사이트.
+function SimpleDateTimeFormat(date, pattern) {
+	var dateString = pattern.replace(/(yyyy|MM|dd|HH|mm|ss|SSS)/g, function(match) {
+		var matchString = "";
+		switch(match) {
+			case "yyyy":
+				matchString = date.getFullYear();
+				break;
+			case "MM":
+				matchString = date.getMonth() + 1;
+				break;
+			case "dd":
+				matchString = date.getDate();
+				break;
+			case "HH":
+				matchString = date.getHours();
+				break;
+			case "mm":
+				matchString = date.getMinutes();
+				break;
+			case "ss":
+				matchString = date.getSeconds();
+				break;
+			case "SSS":
+				matchString = date.getMilliseconds();
+				break;
+			default :
+				matchString = match;
+				break;
+		}
+		if (match == "SSS") {
+			if (matchString < 10) {
+				matchString = "00" + matchString;
+			} else if (matchString < 100) {
+				matchString = "0" + matchString;
+			}
+		} else {
+			if ((typeof(matchString) == "number" && matchString < 10)) {
+				matchString = "0" + matchString;
+			}
+		}
+		return matchString;
+	});
+
+	return dateString;
+}
+
 const headers = ['boardNo','title','name','insertDate', 'count'];
     //검색버튼
     document.querySelector('#searchBtn')
-       .addEventListener("click", searchEmpInfo);
+       .addEventListener("click", searchBoardInfo);
+    let boardType = /*[[${boardList[0].boardType}]]*/;
+    
 
 //검색
-function searchEmpInfo(){
-    document.getElementsByTagName('tbody')[0].replaceChildren();
+function searchBoardInfo(){
+    document.querySelector('#bodyWash').replaceChildren();
     //let sTag = document.getElementById('search').value;
     let sTag = document.getElementsByName('type')[0].value;
-    console.log('sTag = ',sTag);
     let kTag = document.getElementsByName('keyword')[0].value;
-    console.log('kTag = ',kTag);
     let title ="";
     let name ="";
     let content ="";
     if(sTag == 'title'){
     	title = kTag;
-        console.log('1',kTag);
     }else if(sTag == 'name'){
     	name = kTag;
-        console.log('2',kTag);
     }else{
     	content = kTag;
-        console.log('3',kTag);
     }
-    fetch('http://localhost:8081/boardList?title='+title+'&name='+name+'&content='+content)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
+    fetch('http://localhost:8081/searchList', {
+        method: "POST",
+        headers : {
+        	'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "title" : title,
+            "name" : name,
+            "content" : content,
+            "boardType" : boardType
+        })
     })
-    .then(data => {
+    .then(response =>  response.json())
+    .then(data => 
+    {
         data.forEach(board => {
             let trTag = document.createElement('tr');
-            //trTag.addEventListener('click', printEmpInfo);
             let tdTag = document.createElement('td');
-
-            for (let header of headers) {
+            
+          for (let header of headers) {
                 tdTag = document.createElement('td');
-                tdTag.textContent = board[header];
+                if(header == 'insertDate'){
+                    let myDate = board[header]
+                    let date = new Date(myDate);
+                    tdTag.textContent = SimpleDateTimeFormat(date, "yyyy.MM.dd");
+                } else {
+                	tdTag.textContent = board[header];
+               	}
                 trTag.append(tdTag);
             }
             trTag.append(tdTag);
-            let tbody = document.querySelector('table tbody')
-            tbody.append(trTag);
+            let table = document.querySelector('#list')
+            table.append(trTag);
         })
     })
     .catch(reject => console.log(reject));

@@ -8,10 +8,10 @@ import com.groo.bear.files.FilesVO;
 
 public interface BoardMapper {
 	//게시글 전체조회
-	public List<BoardVO> selectAllList(BoardVO boardvo);
+	public List<BoardVO> selectAllList(BoardVO boardVO);
 	
 	//게시글 단건조회
-	public int selectBoard(int boardNo);
+	public BoardVO selectBoard(int boardNo);
 	
 	//게시글 등록
 	public int insertBoard(BoardVO boardVO);
