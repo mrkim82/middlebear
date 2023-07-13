@@ -71,6 +71,34 @@
 			});
 			
 		});
+		
+		function changeStar() {
+			let dpMN = event.target.parentNode.getAttribute("data-pMN");
+			let starC = event.target.parentNode.getAttribute("data-starC");
+			let trTag = event.target.parentNode;
+			console.log(trTag);
+			
+			let formData = new FormData();
+	        formData.append('pMN', dpMN);
+	        formData.append('starC', starC);
+
+			fetch("/proUpdate", {
+				method: 'POST',
+				body : formData
+			})
+			.then(response => response.json())
+			.then(res => {
+				let rC = res.result;
+				
+				if (rC == '등록' || rC == '취소') {
+					changeProOne(rC, trTag);
+					
+				} else {
+					alert('요청이 취소 되었습니다.');
+				}
+				
+			})
+		}
 	
 		//즐겨찾기 변경
 		function changeProOne(rC, trTag) {

@@ -162,7 +162,7 @@
 					        <!-- 프로젝트 그룹 리스트 -->
 					        <ul id="proGroup">
 					        	<th:block th:each="proG : ${projectGroupList}">
-						        	<li><a th:attr="data-gN=${proG.groupNo}"
+						        	<li><a th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
 						        		th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
 						        		[[${proG.groupName}]]<span class='material-icons moreVertIcons' style='display : none;'>more_vert</span></a>
 						        	</li>
@@ -363,6 +363,7 @@
 				
 				aC.setAttribute('href', 'proGroupD/'+ lGN);
 				aC.setAttribute('data-gN', lGN);
+				aC.setAttribute('data-fName', folderC1.value);
 				aC.textContent = folderC1.value;
 				
 				aC.append(spanC);
@@ -409,6 +410,8 @@
 				
 				//그룹no값 가져오기
 				let groupNo = event.target.parentNode.dataset.gn;
+				let groupName = event.target.parentNode.dataset.fname;
+				
 				//그룹 모달창 생성(모달4)
 				miniModal(event.target);
 				
@@ -418,6 +421,9 @@
 				//프로젝트 수정창 띄우기(모달2)
 				groupNameChange.addEventListener("click", function(e) {
 					e.preventDefault();
+					
+					//인풋상자 값 넣어주기
+					folderC2.value = groupName;
 					//상태 모달창 삭제
 					document.querySelector('[data-group-modal]').remove();
 					

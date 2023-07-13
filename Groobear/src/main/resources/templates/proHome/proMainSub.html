@@ -10,7 +10,7 @@
 <body layout:fragment="content">
 	<div>
 		<table class="table table-hover" id="goProjectDetail">
-			<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}"
+			<tr th:each="pro:${projectMainList}"
 					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
 					style="cursor:pointer">
 				<td th:text="${pro.proColor}"></td>
@@ -41,15 +41,16 @@
 			let formData = new FormData();
 	        formData.append('pMN', dpMN);
 	        formData.append('starC', starC);
-
-			fetch("proUpdate", {
+			console.log(formData.get('pMN'))
+			console.log(formData.get('starC'))
+			fetch("/proUpdate", {
 				method: 'POST',
 				body : formData
 			})
 			.then(response => response.json())
 			.then(res => {
 				let rC = res.result;
-				
+				console.log(rC)
 				if (rC == '등록' || rC == '취소') {
 					changeProOne(rC, trTag);
 				} else {

@@ -58,6 +58,28 @@ public class ProController {
 		return "proHome/proMain";
 	}
 	
+	//프로젝트 메인 페이지 카테고리 및 정렬
+	@GetMapping("proMain")
+	@ResponseBody
+	public String proMainPageOrder(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		String projcetMasterId = "";//기본값 참여중or관리자 프로젝트 구분
+		String orderBy = "DESC";//정렬 기본값
+		
+		
+		param.put("id", (String)session.getAttribute("Id"));
+		param.put("pid", projcetMasterId);
+		param.put("oBy", orderBy);
+		
+		model.addAttribute("projectMainList", proService.readProject(param));
+		proData(model, request);
+		
+		return "proHome/proMain";
+	}
+	
+	
 	//프로젝트 메인 페이지 즐찾 보기
 	@GetMapping("proMainS")
 	public String proMainPageS(Model model, HttpServletRequest request) {
@@ -73,7 +95,6 @@ public class ProController {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProjectHide((String)session.getAttribute("Id")));
 		proData(model, request);
-		System.out.println(model);
 		return "proHome/proMainSub";
 	}
 	
@@ -93,6 +114,7 @@ public class ProController {
 		String id = (String)session.getAttribute("Id");
 		model.addAttribute("projectMainList", proService.readProjectGroupDetail(groupNo, id));
 		proData(model, request);
+		System.out.println(model);
 		return "proHome/proMainSub";
 	}
 	
@@ -138,6 +160,7 @@ public class ProController {
 		
 		map.put("result", res);
 		System.out.println(vo);
+		
 		return map;
 	}
 	
@@ -158,6 +181,7 @@ public class ProController {
 		}
 		
 		map.put("result", res);
+		System.out.println(map);
 		return map;
 	}
 	
@@ -188,7 +212,6 @@ public class ProController {
 		param.put("v_id", (String)session.getAttribute("Id"));
 		
 		proService.insertPro(param);
-		System.out.println("param 결과 : " + param.toString());
 		return "redirect:proMain";
 	}
 	
@@ -210,7 +233,7 @@ public class ProController {
 		}
 		
 		map.put("result", res);
-		
+		System.out.println(map);
 		return map;
 	}
 	
