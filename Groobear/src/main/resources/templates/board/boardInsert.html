@@ -25,9 +25,12 @@
                 <tr>
                 	<td style="display:none;"><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
                	</tr>
+               	<tr>
+               		<td style="display:none"><input type="text" id="boardType" name="boardType" th:value="N"></td>
+               	</tr>
             </table>
-            <button type="submit" th:onclick="location.href='boardList?boardType=N'">게시글 등록</button>
-           <!--  <button type="submit" th:attr="onclick='window.location.href=\'/boardList?boardType=${boardType}">게시글 목록</button> -->
+            <button type="submit" >게시글 등록</button>
+           <button type="submit" th:attr="onclick='window.location.href=\'/boardList?boardType=${boardType}">게시글 목록</button>
         </form>
     </div>
 </body>

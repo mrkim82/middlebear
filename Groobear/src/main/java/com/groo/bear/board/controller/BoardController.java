@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,8 +59,11 @@ public class BoardController {
 	//등록 처리
 	@PostMapping("boardInsert")
 	public String boardInsert(Model model, BoardVO boardVO) {
+		System.out.println(boardVO);
 		model.addAttribute("boardInsert", boardService.insertBoard(boardVO));
-		return "redirect:/boardList";
+		String boardType = boardVO.getBoardType();
+		System.out.println(boardType);
+		return "redirect:/boardList?boardType=" + boardType;
 	}
 	
 	//수정페이지
@@ -81,9 +85,16 @@ public class BoardController {
 	//삭제처리
 	@DeleteMapping("boardDelete/{boardNo}")
 	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
+//	@PostMapping("boardDelete/{boardNo}")
+//	@ResponseBody
 	public void boardDelete(@PathVariable("boardNo") int boardNo) {
 	    boardService.deleteBoard(boardNo);
 	}
+
+//	@GetMapping("boardDelete")
+//	public String boardDelete(@RequestParam int boardNo) {
+//		boardService.deleteBoard(boardNo);
+//		return "boardList";
+//	}
 	
 }
