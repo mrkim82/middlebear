@@ -8,7 +8,7 @@
 <body>
     <div layout:fragment="content">
         <h2>글 작성</h2>
-        <form action="/boardInsert" method="post">
+        <form th:action="@{/boardInsert}" th:object="${BoardVO}" method="post">
             <table>
                 <tr>
                     <td>제목:</td>

@@ -16,7 +16,7 @@ public class EmpController {
 	@Autowired
 	EmpService empService;
 	
-	@GetMapping("login")
+/*	@GetMapping("login")
 	public String login(HttpServletRequest request, EmpVO empVO) {
 		HttpSession session = request.getSession();
 		if(empService.login(empVO) != null) {
@@ -36,7 +36,7 @@ public class EmpController {
 		}else {
 			return "../static/index";
 		}
-	}
+	}*/
 	
 	@GetMapping("logout")
 	public String logout(HttpServletRequest request) {
@@ -46,4 +46,13 @@ public class EmpController {
 		}
 		return "redirect:/";
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

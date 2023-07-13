@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/tiles}">
+<head>
+<meta charset="UTF-8">
+<title>Groobear</title>
+</head>
+<body layout:fragment="content">
+<p><span th:text="${session.Id}"></span></p>
+<p><span>[[${session.Name}]]</span></p>
+<p><span th:text="${session.Pno}"></span></p>
+</body>
+</html>
