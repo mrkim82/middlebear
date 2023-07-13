@@ -24,16 +24,12 @@
 	    ORDER BY b.board_no DESC
 	</select>
 
-	<select id="selectBoard" resultType="int">
-		SELECT BOARD_NO
-			   ,ID
-			   ,BOARD_TYPE
-			   ,TITLE
-			   ,CONTENT
-			   ,INSERT_DATE
-			   ,UPDATE_DATE
-			   ,COUNT
-		FROM   BOARD
+	<select id="selectBoard" resultType="BoardVO" parameterType="int">
+		SELECT * 
+	    FROM BOARD b JOIN (SELECT *
+	                        FROM  user_info i JOIN users u
+	                        ON i.emp_no = u.emp_no) a
+	    ON b.id = a.id
 		WHERE  BOARD_NO = #{boardNo}
 	</select>
 	<insert id="insertBoard" parameterType="BoardVO">
@@ -74,9 +70,27 @@
 	</insert>
 	
 	<!-- 조회수 증가 -->
-	<update id="updateCount" parameterType="int">
+	<update id="updateCount" parameterType="BoardVO" >
 		update board 
 		set count=count+1 where BOARD_NO = #{boardNo}
 	</update>
 	
+	<update id="updateBoard" parameterType="BoardVO">
+		UPDATE BOARD
+		<set>
+			<if test="title != null and !title.equals('')">
+				TITLE = #{title},
+			</if>
+			<if test="content != null and !content.equals('')">
+				content = #{content},
+			</if>
+			UPDATE_DATE = #{updateDate}
+		</set>
+		WHERE BOARD_NO = #{boardNo}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM BOARD
+		WHERE BOARD_NO = #{boardNo}
+	</delete>
 </mapper>
