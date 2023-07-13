@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- layout:decorate="~{layout/tiles}">
+ layout:decorate="~{layout/boardTiles}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -33,6 +33,9 @@
             <td>작성일:</td>
             <td><input th:value="${#dates.format(board.insertDate, 'yyyy.MM.dd')}" readonly /></td>
         </tr>
+        <tr>
+        	<td style="display:none"><input type="text" id="boardType" name="boardType" th:value="${board.boardType}"></td>
+        </tr>
     </table>
 	<a th:href="@{/boardUpdate/{boardNo}(boardNo=${board.boardNo})}"><button type="button">수정</button></a>
     <button type="button" onclick="location.href='boardList?boardType=N'">목록으로</button>
@@ -61,44 +64,73 @@
     </div>
   </div>
 </div>
-
-<script>
-$(document).ready(function() {
-    $('#deleteButton').on('click', function() {
-        //let boardNo = $('#deletePostModal').data('board-no');
-        let boardNo = '${board.boardNo}';
-        console.log(boardNo);
-        $.ajax({
-            url: 'boardDelete/' + boardNo,
-            type: 'delete',
-            dataType : 'json',
-            success: function(result) {
-                alert("게시글이 삭제되었습니다.");
-                window.location.href = "/boardList";
-            },
-            error: function(xhr, status, error) {
-            	console.log(xhr)
-            	console.log(status)
-                alert("게시글 삭제에 실패했습니다: " + error);
-            }
-        });
-        /* $.ajax({
-        	url: 'boardDelete?boardNo=' + boardNo,
-      		type: 'get',
-      		dataType: 'json'
-        })
-        .done(result => {
-        	alert("게시글 삭제 성공");
-        })
-        .fail(error => {
-        	alert("게시글 삭제 실패");
-        })
-    });
-}); */
-</script>
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">Success</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="successModalBody">
+        게시글이 삭제되었습니다.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="errorModalBody">
+        게시글 삭제에 실패했습니다.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+	<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script th:inline="javascript">
+    var $jq = jQuery.noConflict();
+    $jq(document).ready(function() {
+        $jq('#deleteButton').click(function() {
+            let boardNo = /*[[${board.boardNo}]]*/;
+            console.log(boardNo)
+            $jq.ajax({
+                url: 'boardDelete/' + boardNo, // 실제 삭제를 처리하는 서버 URL입니다.
+                type: 'DELETE',
+                success: function(result) {
+                    // 삭제 성공 시 처리 로직
+                    $jq('#successModal').modal('show'); // 성공 모달 표시
+                },
+                error: function(xhr, status, error) {
+                    // 삭제 실패 시 처리 로직
+                    $jq('#errorModalBody').text("게시글 삭제에 실패했습니다: " + error);
+                    $jq('#errorModal').modal('show'); // 에러 모달 표시
+                }
+            });
+        });
+    });
+    </script>
+
+</div>
 </body>
 </html>
