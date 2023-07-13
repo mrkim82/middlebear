@@ -7,19 +7,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.groo.bear.emp.service.EmpVO;
-import com.groo.bear.security.mapper.UserMapper;
-import com.groo.bear.security.service.UserService;
-import com.groo.bear.security.service.UserVO;
+import com.groo.bear.security.mapper.SecurityMapper;
+import com.groo.bear.security.service.SecurityService;
+import com.groo.bear.security.service.SecurityVO;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class SecurityServiceImpl implements SecurityService, UserDetailsService {
 	
 	@Autowired
-	UserMapper userMapper;
+	SecurityMapper userMapper;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserVO vo = userMapper.secLogin(username);
+		SecurityVO vo = userMapper.secLogin(username);
 		
 		if(vo == null) {
 			throw new UsernameNotFoundException("no user");
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public UserVO secLogin(String id) {
+	public SecurityVO secLogin(String id) {
 		return userMapper.secLogin(id);
 	}
 

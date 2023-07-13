@@ -11,20 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import com.groo.bear.security.service.UserService;
-import com.groo.bear.security.service.UserVO;
+import com.groo.bear.security.service.SecurityService;
+import com.groo.bear.security.service.SecurityVO;
 
 
 public class CustomSuccessHandler implements AuthenticationSuccessHandler{
-	@Autowired
-	UserService userService;
+
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		System.out.println("handler 실행");
 		HttpSession session = request.getSession();
-		UserVO vo = (UserVO) authentication.getPrincipal();
+		SecurityVO vo = (SecurityVO) authentication.getPrincipal();
 		System.out.println(vo.getName());
 		if(vo != null) {
 			session.setAttribute("Id", vo.getId());

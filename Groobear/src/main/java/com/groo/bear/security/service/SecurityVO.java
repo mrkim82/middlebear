@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.Data;
 
 @Data
-public class UserVO implements UserDetails{
+public class SecurityVO implements UserDetails{
 	
 	private int empNo;
 	private String name;
