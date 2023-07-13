@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div>
+		<select id="car_select">
+			<option value="">선택</option>
+			<option value="name">이름</option>
+			<option value="deptName">부서</option>
+			<option value="carNo">차량번호</option>
+		</select>		
+		<input type="text">
+		<button id="searchBtn">검색</button>
+		
+		<table>
+			<thead>
+				<tr>
+					<th>사번</th>
+					<th>부서</th>
+					<th>이름</th>
+					<th>차량번호</th>
+					<th>연락처</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="car, es:${carList}">
+					<td>[[${car.empNo}]]</td>
+					<td>[[${car.deptName}]]</td>
+					<td>[[${car.name}]]</td>
+					<td>[[${car.carNo}]]</td>
+					<td>[[${car.phone}]]</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+<script>
+	document.querySelector('#searchBtn').addEventListener('click',function(){
+		
+	})
+
+	function changeSel(){
+			let sel = document.getElementById('car_select')
+			let val = (sel.options[car_select.selectedIndex].value);
+			alert ("value = "+ val );
+		}
+
+
+
+</script>
+
+
+
+
+</html>

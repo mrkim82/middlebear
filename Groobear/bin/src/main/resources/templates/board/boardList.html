@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/tiles}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+<body>
+<div layout:fragment="content" >
+	<table id="list">
+		<thead>
+			<tr>
+				<td>글번호</td>
+				<td>제목</td>
+				<td>작성자</td>
+				<td>작성일자</td>
+				<td>조회수</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="board, stat : ${boardList}" th:attr="onclick='window.location.href=\'/boardInfo?boardNo=' + ${board.boardNo} + '\''">
+				<td>[[${board.boardNo}]]</td>
+				<td>[[${board.title}]]</td>
+				<td>[[${board.name}]]</td>
+				<td th:text="${#dates.format(board.insertDate, 'yy.MM.dd')}"></td>
+				<td>[[${board.count}]]</td>
+			</tr>
+		</tbody>
+	</table>
+		<button type="button" id="write" onclick="location.href='boardInsert'">글쓰기</button>
+		<select name="type">
+			<option value='' selected>-- 선택 --</option>
+			<option value='title'>제목</option>
+			<option value='content'>내용</option>
+			<option value='name'>작성자</option>
+		</select>
+		<input type="text" name="keyword" value=""/>
+		<button type="button" id="searchBtn">검색</button>
+		<button type="button" id="resetBtn">취소</button>
+<script>
+const headers = ['boardNo','title','name','insertDate', 'count'];
+    //검색버튼
+    document.querySelector('#searchBtn')
+       .addEventListener("click", searchEmpInfo);
+
+//검색
+function searchEmpInfo(){
+    document.getElementsByTagName('tbody')[0].replaceChildren();
+    //let sTag = document.getElementById('search').value;
+    let sTag = document.getElementsByName('type')[0].value;
+    console.log('sTag = ',sTag);
+    let kTag = document.getElementsByName('keyword')[0].value;
+    console.log('kTag = ',kTag);
+    let title ="";
+    let name ="";
+    let content ="";
+    if(sTag == 'title'){
+    	title = kTag;
+        console.log('1',kTag);
+    }else if(sTag == 'name'){
+    	name = kTag;
+        console.log('2',kTag);
+    }else{
+    	content = kTag;
+        console.log('3',kTag);
+    }
+    fetch('http://localhost:8081/boardList?title='+title+'&name='+name+'&content='+content)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        data.forEach(board => {
+            let trTag = document.createElement('tr');
+            //trTag.addEventListener('click', printEmpInfo);
+            let tdTag = document.createElement('td');
+
+            for (let header of headers) {
+                tdTag = document.createElement('td');
+                tdTag.textContent = board[header];
+                trTag.append(tdTag);
+            }
+            trTag.append(tdTag);
+            let tbody = document.querySelector('table tbody')
+            tbody.append(trTag);
+        })
+    })
+    .catch(reject => console.log(reject));
+}
+</script>
+</div>
+</body>
+</html>

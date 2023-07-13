@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/tiles}">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert a new Board</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h2>글 작성</h2>
+        <form th:action="@{/boardInsert}" th:object="${BoardVO}" method="post">
+            <table>
+                <tr>
+                    <td>제목:</td>
+                    <td><input type="text" id="title" name="title"  required /></td>
+                </tr>
+                <tr>
+                    <td>내용:</td>
+                    <td><textarea id="content" name="content" required></textarea></td>
+                </tr>
+                <tr>
+                    <td>작성자 ID:</td>
+                    <td><input type="text" id="name" name="name" th:value="${session.Name}" readonly /></td>
+                </tr>
+                <tr>
+                	<td style="display:none;"><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
+               	</tr>
+            </table>
+            <button type="submit" th:onclick="location.href='boardList?boardType=N'">게시글 등록</button>
+           <!--  <button type="submit" th:attr="onclick='window.location.href=\'/boardList?boardType=${boardType}">게시글 목록</button> -->
+        </form>
+    </div>
+</body>
+</html>
