@@ -20,8 +20,14 @@
 		where d.dept_no = ui.dept_no 
 			  and ui.emp_no = u.emp_no 
 			  and u.id = c.id
-		<if test="empNo != null and empNo != 0">
-			and u.emp_no = #{empNo}
+		<if test="name != null and !name.equals('')">
+				and name LIKE '%${name}%'
+		</if>
+		<if test="carNo != null and !carNo.equals('')">
+				and carNo LIKE '%${carNo}%'
+		</if>
+		<if test="deptName != null and !deptName.equals('')">
+				and deptName LIKE '%${deptName}%'
 		</if>
 	</select>
 	

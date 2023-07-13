@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	  layout:decorate="~{layout/tiles}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-
+<div layout:fragment="content">
 	<div>
 		<select id="car_select">
 			<option value="">선택</option>
@@ -13,7 +15,7 @@
 			<option value="deptName">부서</option>
 			<option value="carNo">차량번호</option>
 		</select>		
-		<input type="text">
+		<input type="text" id="keyword">
 		<button id="searchBtn">검색</button>
 		
 		<table>
@@ -37,18 +39,23 @@
 			</tbody>
 		</table>
 	</div>
+</div>
 </body>
 <script>
-	document.querySelector('#searchBtn').addEventListener('click',function(){
-		
-	})
+	const headers = ['name','carNo','deptName'];
 
-	function changeSel(){
-			let sel = document.getElementById('car_select')
-			let val = (sel.options[car_select.selectedIndex].value);
-			alert ("value = "+ val );
-		}
+	document.querySelector('#searchBtn').addEventListener('click',searchCarInfo)
 
+	function searchCarInfo(){
+		document.getElementsByTagName('tbody')[2].replaceChildren();
+		let searchBtn = document.getElementById('searchBtn');
+		let keyword = document.getElementById('keyword');
+		console.log(searchBtn,keyword);
+		let name = "";
+		let carNo = "";
+		let deptName = "";
+
+	}
 
 
 </script>
