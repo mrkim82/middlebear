@@ -35,14 +35,16 @@
 	<insert id="insertBoard" parameterType="BoardVO">
 	   INSERT INTO BOARD (
 	   			ID
-	   			,BOARD_NO
+	   		  , BOARD_NO
+	   		  , BOARD_TYPE
 	   		  , TITLE
 	   		  , CONTENT
 	   		  , INSERT_DATE
 	   		  
 	   ) VALUES (
 	   			#{id}
-	   			,BOARD_SEQ.NEXTVAL
+	   		  , BOARD_SEQ.NEXTVAL
+	   		  , #{boardType}
 	   		  , #{title}
 	   		  , #{content}
 	   		  , sysdate

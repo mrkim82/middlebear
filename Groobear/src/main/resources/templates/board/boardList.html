@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- layout:decorate="~{layout/tiles}">
+ layout:decorate="~{layout/boardTiles}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 
 <body>
+
 <div layout:fragment="content" >
+  <div>
+    <p th:if="${boardList[0].boardType == 'N'}">공지사항</p>
+    <p th:if="${boardList[0].boardType == 'C'}">언론보도</p>
+    <p th:if="${boardList[0].boardType == 'K'}">자유게시판</p>
 	<table id="list">
 		<thead>
 			<tr>
@@ -19,7 +24,8 @@
 			</tr>
 		</thead>
 		<tbody id="bodyWash">
-			<tr th:each="board, stat : ${boardList}" th:attr="onclick='window.location.href=\'/boardInfo?boardNo=' + ${board.boardNo} + '\''">
+		<!-- th:each="board, stat : ${boardList}" --> 
+			<tr th:each="board : ${boardList}" th:attr="onclick='window.location.href=\'/boardInfo?boardNo=' + ${board.boardNo} + '\''">
 				<td>[[${board.boardNo}]]</td>
 				<td>[[${board.title}]]</td>
 				<td>[[${board.name}]]</td>
@@ -29,7 +35,8 @@
 			</tr>
 		</tbody>
 	</table>
-		<button type="button" id="write" onclick="location.href='boardInsert'">글쓰기</button>
+	</div>
+		<button type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardList[0].boardType})}'|">글쓰기</button>
 		<select name="type">
 			<option value='' selected>-- 선택 --</option>
 			<option value='title'>제목</option>
