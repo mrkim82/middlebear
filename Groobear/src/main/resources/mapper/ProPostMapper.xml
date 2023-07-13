@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.pro.mapper.ProPostMapper">
+	
+	<!-- 상단메뉴바 조회 -->
+	<select id="readTopMenu" resultType="ProPostVO">
+		SELECT m.pro_color, m.pro_star_check, m.home_tab, p.pro_name, p.pro_content
+		FROM pro_mem m JOIN pro p
+		ON m.pro_no = p.pro_no
+		WHERE m.pro_mem_no = #{proMemNo}
+	</select>
+	
+	<!-- 프로젝트 즐겨찾기 등록
+	<update id="updateStarY" parameterType="int">
+		UPDATE pro_mem
+		SET pro_star_check = 'Y'
+		WHERE pro_mem_no = #{proMemNo}
+	</update>
+	
+	프로젝트 그룹 생성
+	<insert id="createProjectGroup" parameterType="String">
+		INSERT INTO pro_group
+		VALUES((SELECT NVL(MAX(group_no), 0) + 1
+		        FROM pro_group), #{groupName}, #{id})
+	</insert>
+	
+	프로젝트 그룹 삭제
+	<delete id="deleteGroup" parameterType="int">
+		DELETE FROM pro_group
+		WHERE group_no = #{groupNo}
+	</delete> -->
+	
+</mapper>
