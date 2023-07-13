@@ -28,7 +28,7 @@ public class ProController {
 	@Autowired
 	ProService proService;
 	
-	//공통 데이터 전달
+	//공통 데이터(사이드바) 전달
 	private Model proData(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		
@@ -63,8 +63,6 @@ public class ProController {
 	public String proMainPageS(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProjectStar((String)session.getAttribute("Id")));
-//		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
-//		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
 		proData(model, request);
 		return "proHome/proMainStar";
 	}
@@ -74,8 +72,6 @@ public class ProController {
 	public String proMainPageH(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProjectHide((String)session.getAttribute("Id")));
-//		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
-//		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
 		proData(model, request);
 		System.out.println(model);
 		return "proHome/proMainSub";
@@ -120,7 +116,7 @@ public class ProController {
 		
 		map.put("result", res);
 		map.put("pGN", proGroupNo);
-		
+		System.out.println(map);
 		return map;
 	}
 	

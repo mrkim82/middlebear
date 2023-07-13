@@ -255,6 +255,13 @@
 		  cancelBtn.addEventListener('click', function() {
 		    closeModal(modal, folderInput);
 		  });
+		  
+		  window.addEventListener('keydown', function(e) {
+			if(event.keyCode == 27){
+				closeModal(modal, folderInput);
+				modal3.style.display = "none";
+			}
+		  });
 
 		  window.addEventListener('click', function(event) {
 		    if (event.target === modal) {
@@ -288,6 +295,7 @@
 	    function checkGroupFolderName() {
 			let formData = new FormData();
 			formData.append('gN', folderC1.value);
+			console.log(formData.get('gN'));
 			
 			if(folderC1.value == '') {
 	    		alert('폴더 이름은 공백을 허용하지 않습니다!');
@@ -305,7 +313,7 @@
 				.then(res => {
 					let rC = res.result;
 					let latelyGroupNum = res.pGN;
-				
+					console.log(rC)
 					if(rC == '성공') {
 						//동적 폴더 생성
 						createFolder(latelyGroupNum);				

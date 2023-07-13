@@ -9,9 +9,10 @@
 </head>
 <body layout:fragment="content">
 	<div>
-		<table>
-			<tr th:each="pro:${projectMainList}"
-				th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}">
+		<table class="table table-hover">
+			<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}"
+					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
+					style="cursor:pointer">
 				<td th:text="${pro.proColor}"></td>
 				<td th:text="${pro.proStarCheck}" class="starCheck"></td>
 				<td th:text="${pro.proName}"></td>
@@ -22,53 +23,51 @@
 	</div>
 	<script>
 		let starCheck = document.querySelectorAll(".starCheck");
-	
+		
 		starCheck.forEach(sC => {
-			sC.addEventListener("click", changeStar);
-		})
+			
+			sC.addEventListener("click", function(event) {
+				event.stopPropagation();
+				changeStar();
+			});
+			
+		});
 	
 		function changeStar() {
-			let dpMN = this.parentNode.getAttribute("data-pMN");
-			let starC = this.parentNode.getAttribute("data-starC");
-			
+			let dpMN = event.target.parentNode.getAttribute("data-pMN");
+			let starC = event.target.parentNode.getAttribute("data-starC");
+			let trTag = event.target.parentNode;
+
 			let formData = new FormData();
 	        formData.append('pMN', dpMN);
 	        formData.append('starC', starC);
-			
-	        console.log(formData.get("pMN"));
-	        console.log(formData.get("starC"));
-	        
-	        //경로 주의!
-			fetch("/proUpdate", {
+
+			fetch("proUpdate", {
 				method: 'POST',
-				body : formData,
+				body : formData
 			})
 			.then(response => response.json())
 			.then(res => {
 				let rC = res.result;
-				let headData = this.parentNode;
+				
 				if (rC == '등록' || rC == '취소') {
-					changeProOne(rC, headData);
-					
+					changeProOne(rC, trTag);
 				} else {
 					alert('요청이 취소 되었습니다.');
-				}
+				} 
 				
 			})
-			.catch(() => {
-				console.log('에러');
-			})
-		}
+		};
 	
 		//즐겨찾기 변경
-		function changeProOne(rC, headData) {
+		function changeProOne(rC, trTag) {
 			
 			if (rC == '등록') {
-				headData.setAttribute('data-starc', 'Y');
-				headData.getElementsByClassName('starCheck')[0].textContent = 'Y';
+				trTag.setAttribute('data-starc', 'Y');
+				trTag.getElementsByClassName('starCheck')[0].textContent = 'Y';
 			} else {
-				headData.setAttribute('data-starc', 'N');
-				headData.getElementsByClassName('starCheck')[0].textContent = 'N';
+				trTag.setAttribute('data-starc', 'N');
+				trTag.getElementsByClassName('starCheck')[0].textContent = 'N';
 			}
 	
 		}
