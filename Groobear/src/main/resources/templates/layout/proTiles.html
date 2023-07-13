@@ -248,20 +248,19 @@
 		  let cancelBtn = cancelBtns[i];
 		  let folderInput = folderInputs[i];
 
-		  closeBtn.onclick = function() {
+		  closeBtn.addEventListener('click', function() {
 		    closeModal(modal, folderInput);
-		  };
+		  });
 
-		  cancelBtn.onclick = function() {
+		  cancelBtn.addEventListener('click', function() {
 		    closeModal(modal, folderInput);
-		  };
+		  });
 
-		  window.onclick = function(event) {
-			  console.log(modal);
+		  window.addEventListener('click', function(event) {
 		    if (event.target === modal) {
 		      closeModal(modal, folderInput);
 		    }
-		  };
+		  });
 		}
 
 		function closeModal(modal, input) {
@@ -450,6 +449,7 @@
 	    		alert('폴더 이름은 최대 30자 까지 가능합니다!');
 	    		return;
 	    	} else {
+	    		console.log('gn몇개 드가?'+groupNo);
 	    		fetch("/proGroupNameC", {
     			  method: 'PUT',
     			  headers: {
