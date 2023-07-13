@@ -240,7 +240,7 @@ a:hover{
       <img src="https://raw.githubusercontent.com/sefyudem/Responsive-Login-Form/master/img/bg.svg">
     </div>
     <div class="login-content">
-      <form action="login" method="GET">
+      <form th:action="@{/login}" method="post">
         <img src="https://raw.githubusercontent.com/sefyudem/Responsive-Login-Form/master/img/avatar.svg">
         <h2 class="title">Welcome</h2>
               <div class="input-div one">
@@ -249,7 +249,7 @@ a:hover{
                  </div>
                  <div class="div">
                     <h5>ID</h5>
-                    <input type="text" class="input" name="id" id="id">
+                    <input type="text" class="input" name="username" id="id">
                  </div>
               </div>
               <div class="input-div pass">
