@@ -67,9 +67,11 @@ $(document).ready(function() {
     $('#deleteButton').on('click', function() {
         //let boardNo = $('#deletePostModal').data('board-no');
         let boardNo = '${board.boardNo}';
+        console.log(boardNo);
         $.ajax({
             url: 'boardDelete/' + boardNo,
             type: 'delete',
+            dataType : 'json',
             success: function(result) {
                 alert("게시글이 삭제되었습니다.");
                 window.location.href = "/boardList";
@@ -80,8 +82,19 @@ $(document).ready(function() {
                 alert("게시글 삭제에 실패했습니다: " + error);
             }
         });
+        /* $.ajax({
+        	url: 'boardDelete?boardNo=' + boardNo,
+      		type: 'get',
+      		dataType: 'json'
+        })
+        .done(result => {
+        	alert("게시글 삭제 성공");
+        })
+        .fail(error => {
+        	alert("게시글 삭제 실패");
+        })
     });
-});
+}); */
 </script>
 </div>
 
