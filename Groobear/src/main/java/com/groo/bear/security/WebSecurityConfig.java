@@ -31,7 +31,7 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.csrf().disable()	
+			.csrf().disable()
 			.authorizeHttpRequests()
 			//.antMatchers("/status", "images/**", "/js/", "auth/join").permitAll()
 			//.antMatchers("/", "/main").permitAll()
