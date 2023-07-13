@@ -10,7 +10,7 @@
 <body layout:fragment="content">
 	<div>
 		<h2>즐겨찾기</h2>
-		<table class="table table-hover">
+		<table class="table table-hover" id="goProjectDetail">
 			<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}"
 					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
 					style="cursor:pointer">
@@ -64,25 +64,16 @@
 	
 	<!-- 프로젝트 홈에서 상세 페이지 이동 -->
 	<script>
-		let trDetailsY = document.querySelectorAll('#YesStar tr');
-		let trDetailsN = document.querySelectorAll('#NoStar tr');
-
-		trDetailsY.forEach(trDetailY => {
-			let homeTabNum = trDetailY.dataset.hometab;
-			trDetailY.addEventListener('click', function() {
-				projectDetail(homeTabNum)
+		let gPList = document.querySelectorAll('#goProjectDetail tr');
+		
+		gPList.forEach(gPDetail => {
+			let homeTabNum = gPDetail.dataset.hometab;
+			gPDetail.addEventListener('click', function() {
+				projectDetail(homeTabNum);
 			});
 		});
-
-		trDetailsN.forEach(trDetailN => {
-			let homeTabNum = trDetailN.dataset.hometab;
-			trDetailN.addEventListener('click', function() {
-				projectDetail(homeTabNum)
-			});
-		});
-
+	
 		function projectDetail(homeTNum) {
-			console.log('4' + homeTNum);
 			location.href="/proPostMain/" + homeTNum;
 		}
 	</script>

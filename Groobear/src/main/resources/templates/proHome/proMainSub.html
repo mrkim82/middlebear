@@ -9,7 +9,7 @@
 </head>
 <body layout:fragment="content">
 	<div>
-		<table class="table table-hover">
+		<table class="table table-hover" id="goProjectDetail">
 			<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}"
 					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
 					style="cursor:pointer">
@@ -70,6 +70,29 @@
 				trTag.getElementsByClassName('starCheck')[0].textContent = 'N';
 			}
 	
+		}
+		
+		//프로젝트 master여부
+		function chagepartiSelect() {
+			let partiSelectId = document.getElementById('partiSelect').value;
+			console.log(partiSelectId);
+			
+		}
+	</script>
+	
+	<!-- 프로젝트 홈에서 상세 페이지 이동 -->
+	<script>
+		let gPList = document.querySelectorAll('#goProjectDetail tr');
+		
+		gPList.forEach(gPDetail => {
+			let homeTabNum = gPDetail.dataset.hometab;
+			gPDetail.addEventListener('click', function() {
+				projectDetail(homeTabNum);
+			});
+		});
+	
+		function projectDetail(homeTNum) {
+			location.href="/proPostMain/" + homeTNum;
 		}
 	</script>
 </body>

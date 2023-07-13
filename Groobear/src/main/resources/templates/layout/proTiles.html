@@ -26,6 +26,18 @@
 		  display: none;
 		}
 		
+		#modalFolderCreate4{
+		  position: fixed; /* Stay in place */
+		  z-index: 1; /* Sit on top */
+		  padding-top: 100px; /* Location of the box */
+		  left: 0;
+		  top: 0;
+		  width: 100%; /* Full width */
+		  height: 100%; /* Full height */
+		  overflow: auto; /* Enable scroll if needed */
+		  display: none;
+		}
+		
 		#modalBody, #modalBody2, #modalBody3{
 		  width: 500px;
 		  height: 300px;
@@ -228,6 +240,7 @@
 		let creFolder = document.getElementById('createFolder');
 		let uFolderName = document.getElementById('updateFolderName');
 		let dFolder = document.getElementById('deleteFolder');
+		let modalBack;
 		
 		//취소 공통
 		let modals = [modal1, modal2];
@@ -265,9 +278,12 @@
 
 		  window.addEventListener('click', function(event) {
 		    if (event.target === modal) {
-		      closeModal(modal, folderInput);
+		    	console.log('뭘까' + event.target);
+		    	console.log(event.target);
+		        closeModal(modal, folderInput);
 		    }
 		  });
+		  
 		}
 
 		function closeModal(modal, input) {
@@ -275,6 +291,21 @@
 		  input.value = '';
 		}
 		
+		//모달4
+		window.addEventListener('keydown', function(e) {
+			if(event.keyCode == 27){
+				document.getElementById('groupModal' + modalDeleteNum).remove();
+			}
+		});
+		
+		window.addEventListener('click', function(event) {
+			//console.log(event.target);
+			let modal4 = document.getElementById('groupModal' + modalDeleteNum);
+			modalBack = document.getElementById(modalFolderCreate4);
+		    if (event.target === modalBack) {
+		    	modal4.remove();
+		    }
+		});
 		
 		//시작
 		
@@ -389,6 +420,7 @@
 				
 				let groupNameChange = document.getElementById('groupNameChange' + groupNo);
 				let groupDelte = document.getElementById('groupDelte' + groupNo);
+				modalDeleteNum = groupNo;
 				
 				//프로젝트 수정창 띄우기(모달2)
 				groupNameChange.addEventListener("click", function(e) {
@@ -549,61 +581,13 @@
 			modal4.appendChild(button1);
 			modal4.appendChild(button2);
 
-			document.body.appendChild(modal4);
+			let modalBackC = document.createElement('div');
+			modalBackC.id = 'modalFolderCreate4';
+			modalBackC.appendChild(modal4);
+			
+			document.body.appendChild(modalBackC);
 
 		}
-    	
-		
-		//변수 정리
-		
-	
-    	/* popupBtn.onclick = function(e) {
-			e.preventDefault();
-			modal1.style.display = 'block';
-	    }
-	    
-	    closeBtn1.onclick = function() {
-	      modal1.style.display = 'none';
-	      folderC1.value='';
-	    }
-
-	    cancelBtn1.onclick = function() {
-	      modal1.style.display = 'none';
-	      folderC1.value='';
-	    }
-	
-	    window.onclick = function(event) {
-	      if (event.target == modal1) {
-	        modal1.style.display = "none";
-	        folderC1.value='';
-	      } else if (event.target == modal2) {
-	        modal2.style.display = "none";
-	        folderC2.value='';
-	      } else if (event.target == modal3) {
-	        modal3.style.display = "none";
-	        folderC3.value='';
-	      } 
-	    }
-	    
-	    closeBtn2.onclick = function() {
-	      modal2.style.display = 'none';
-	      folderC2.value='';
-	    }
-
-	    cancelBtn2.onclick = function() {
-	      modal2.style.display = 'none';
-	      folderC2.value='';
-	    }
-	
-	    
-	    closeBtn3.onclick = function() {
-	      modal3.style.display = 'none';
-	      folder3.value='';
-	    }
-	
-	     */
-		
-		
 		
     /*]]>*/
     </script>
