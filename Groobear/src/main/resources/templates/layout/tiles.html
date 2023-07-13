@@ -1,6 +1,5 @@
 <!doctype html>
-<html 
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
   <head>
   	<title>Groobear</title>
     <meta charset="utf-8">
@@ -31,7 +30,8 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	                	</tr>
 	                	<tr>
 	                		<td><span><a href="logout">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
-	                		<span><a href="mypage">마이페이지</a></span></td>
+	                		<span><a href="#">마이페이지</a></span></td>
+
 	                	</tr>
                 	</tbody>
                 </table>
@@ -63,8 +63,8 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	            <a class="nav-link" href="#">About</a>
 	          </li>
 	          <li class="nav-item dropdown">
-	            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="boardList?boardType=A" role="button" aria-haspopup="true"
-	              aria-expanded="false">게시판</a>
+	            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+	              aria-expanded="false">Dropdown</a>
 	            <div class="dropdown-menu">
 	              <a class="dropdown-item" href="#">Action</a>
 	              <a class="dropdown-item" href="#">Another action</a>
@@ -82,13 +82,11 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     	<tbody>
     		<tr>
     			<td style="vertical-align: top" class="col-4">
-    				<div class="sidebar" id="board">
-				        <a href="boardList?boardType=N"><span class="material-icons">home</span> 공지사항</a>
-				        <a href="boardList?boardType=U"><span class="material-icons">info</span> 언론보도</a>
-				        <a href="boardList?boardType=F"><span class="material-icons">mail</span> 자유게시판</a>
-				    </div>
-				   <div class="sidebar" id="myPageMainA">
-				        <a href="carList"><span class="material-icons">info</span> 차량 관리</a>
+    				<div class="sidebar">
+				        <a href="#home"><span class="material-icons">home</span> 홈</a>
+				        <a href="#services"><span class="material-icons">build</span> 서비스</a>
+				        <a href="#about"><span class="material-icons">info</span> 소개</a>
+				        <a href="#contact"><span class="material-icons">mail</span> 연락처</a>
 				    </div>
     			</td>
     			<td class="col-8">
@@ -99,36 +97,9 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     		</tr>
     	</tbody>
     </table>
-   </div>
-<script>
-	
-	let path;
-	if(document.location.href.lastIndexOf('?') > 0){
-		path = document.location.href.substring(document.location.href.lastIndexOf('/'),document.location.href.lastIndexOf('?'));
-	}else{
-		path = document.location.href.substring(document.location.href.lastIndexOf('/'));
-	}
-	
-	if(path=="board" || path=="/getMulti.do" || path=="/addMulti.do" || path=="/updateMulti.do"){
-		document.getElementById('board').style="display:block";
-	} 
-	/*else if(path=="mypage" || path=="#" || path=="#" || path=="#"){
-		document.getElementById('myPageMainA').style="display:block";
-	}
-	else if(path=="/introduce.do" || path=="/plusMileage.do" || path=="/buyLottery.do" || path=="/buyAuto.do" || path=="/buyManual.do"){
-		document.getElementById('LotterySide').style="diplay:block";
-	} 
-	 else if(path=="/storelist.do" || path=="/storesearch.do"){
-		document.getElementById('StoreSide').style="diplay:block";
-	} else if(path=="/listLotto.do" || path=="/liveReward.do"){
-		document.getElementById('ResultSide').style="diplay:block";
-	} else if(path=="/mypage.do" || path=="/deletemember.do"){
-		document.getElementById('MypageSide').style="diplay:block";
-	}
-	
-	 */
-</script>
+    
 
     
+    </div>
   </body>
 </html>

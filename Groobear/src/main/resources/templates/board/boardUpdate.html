@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/tiles}">
+<head>
+    <meta charset="UTF-8">
+    <title>Update a Board</title>
+	
+</head>
+<body>
+    <!-- 기존의 폼 요소들 -->
+ <div layout:fragment="content">
+        <h2>글 수정</h2>
+        <form th:action="@{/boardUpdate}" method="post">
+            <table>
+                <tr>
+				    <td style="visibility: hidden;">게시글 번호:</td>
+				    <td><input type="hidden" id="boardNo" name="boardNo" th:value="${board.boardNo}" /></td>
+				</tr>
+                <tr>
+                    <td>제목:</td>
+                    <td><input type="text" id="title" name="title" th:value="${board.title}" required /></td>
+                </tr>
+                <tr>
+                    <td>내용:</td>
+                    <td><textarea id="content" name="content" required th:text="${board.content}"></textarea></td>
+                </tr>
+                <tr>
+                    <td style="visibility: hidden;">작성자 ID:</td>
+                    <td><input type="hidden" id="name" name="name" th:value="${session.Name}" readonly /></td>
+                </tr>
+                <tr>
+                    <td style="display:none;"><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
+                </tr>
+            </table>
+            <button type="submit" >저장</button>
+            <button type="button" onclick="location.href='boardList?boardType=N'">목록으로</button>
+        </form>
+    </div>
+    
+</body>
+</html>
