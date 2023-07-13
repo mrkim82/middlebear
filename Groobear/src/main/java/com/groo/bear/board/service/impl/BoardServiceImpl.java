@@ -8,21 +8,27 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.board.mapper.BoardMapper;
 import com.groo.bear.board.service.BoardService;
 import com.groo.bear.board.service.BoardVO;
-import com.groo.bear.files.FilesVO;
+import com.groo.bear.files.domain.FilesVO;
 
 @Service
 public class BoardServiceImpl implements BoardService{
 	
 	@Autowired
 	BoardMapper boardMapper;
+
+	@Override
+	public List<BoardVO> selectAllListPaged(BoardVO boardVO, int startRow, int endRow) {
+		return boardMapper.selectAllListPaged(boardVO, startRow, endRow);
+	}
 	
 	@Override
 	public List<BoardVO> selectAllList(BoardVO boardVO) {
 		return boardMapper.selectAllList(boardVO);
 	}
-
+	
 	@Override
 	public BoardVO selectBoard(int boardNo) {
+		boardMapper.updateCount(boardNo);
 		return boardMapper.selectBoard(boardNo);
 	}
 
@@ -45,9 +51,5 @@ public class BoardServiceImpl implements BoardService{
 	public int addFiles(FilesVO filesVO) {
 		return boardMapper.addFiles(filesVO);
 	}
-
-	
-	
-	
 	
 }

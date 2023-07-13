@@ -3,7 +3,33 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.groo.bear.board.mapper.BoardMapper">
-	<select id="selectAllList" resultType="BoardVO" parameterType="BoardVO">
+	<select id="selectAllListPaged" resultType="BoardVO">
+    SELECT * FROM (
+        SELECT ROW_NUMBER() OVER (ORDER BY b.board_no DESC) as RNUM, a.*
+        FROM (
+            SELECT * 
+            FROM BOARD b JOIN (SELECT *
+                                FROM  user_info i JOIN users u
+                                ON i.emp_no = u.emp_no) a
+            ON b.id = a.id
+            <where>
+                BOARD_TYPE = #{boardType}
+                <if test="boardVO.title != null and !boardVO.title.equals('')">
+                    AND b.title LIKE '%${title}%'
+                </if>
+                <if test="boardVO.name != null and !boardVO.name.equals('')">
+                    AND a.name LIKE '%${name}%'
+                </if>
+                <if test="boardVO.content != null and !boardVO.content.equals('')">
+                    AND b.content LIKE '%${content}%'
+                </if>
+            </where>
+            ORDER BY b.board_no DESC
+        ) a
+    )
+    WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+</select>
+<select id="selectAllList" resultType="BoardVO" parameterType="BoardVO">
 	    SELECT * 
 	    FROM BOARD b JOIN (SELECT *
 	                        FROM  user_info i JOIN users u

@@ -2,13 +2,18 @@ package com.groo.bear.board.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.groo.bear.board.service.BoardVO;
-import com.groo.bear.files.FilesVO;
+import com.groo.bear.files.domain.FilesVO;
 
 
 public interface BoardMapper {
 	//게시글 전체조회
 	public List<BoardVO> selectAllList(BoardVO boardVO);
+	
+	//페이징
+	public List<BoardVO> selectAllListPaged(@Param("boardVO") BoardVO boardVO, @Param("startRow") int startRow, @Param("endRow") int endRow);
 	
 	//게시글 단건조회
 	public BoardVO selectBoard(int boardNo);

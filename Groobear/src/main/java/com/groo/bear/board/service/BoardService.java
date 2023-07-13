@@ -2,12 +2,14 @@ package com.groo.bear.board.service;
 
 import java.util.List;
 
-import com.groo.bear.files.FilesVO;
+import com.groo.bear.files.domain.FilesVO;
 
 public interface BoardService {
+	//전체조회 페이징
+	public List<BoardVO> selectAllListPaged(BoardVO boardVO, int startRow, int endRow);
+	
 	//전체조회
 	public List<BoardVO> selectAllList(BoardVO boardVO);
-	
 	//게시글 단건조회
 	public BoardVO selectBoard(int boardNo);
 	

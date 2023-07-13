@@ -58,7 +58,7 @@
         게시글을 정말로 삭제하시겠습니까?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button id="firstCancel" type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
         <button type="button" class="btn btn-danger" id="deleteButton">삭제</button>
       </div>
     </div>
@@ -98,7 +98,7 @@
         게시글 삭제에 실패했습니다.
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+        <button id="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
       </div>
     </div>
   </div>
@@ -109,26 +109,31 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <script th:inline="javascript">
-    var $jq = jQuery.noConflict();
     $jq(document).ready(function() {
-        $jq('#deleteButton').click(function() {
-            let boardNo = /*[[${board.boardNo}]]*/;
-            console.log(boardNo)
-            $jq.ajax({
-                url: 'boardDelete/' + boardNo, // 실제 삭제를 처리하는 서버 URL입니다.
-                type: 'DELETE',
-                success: function(result) {
-                    // 삭제 성공 시 처리 로직
-                    $jq('#successModal').modal('show'); // 성공 모달 표시
-                },
-                error: function(xhr, status, error) {
-                    // 삭제 실패 시 처리 로직
-                    $jq('#errorModalBody').text("게시글 삭제에 실패했습니다: " + error);
-                    $jq('#errorModal').modal('show'); // 에러 모달 표시
-                }
-            });
+    $jq('#deleteButton').click(function() {
+        let boardNo = /*[[${board.boardNo}]]*/
+        console.log(boardNo)
+        $jq.ajax({
+            url: 'boardDelete/' + boardNo, // 실제 삭제를 처리하는 서버 URL입니다.
+            type: 'DELETE',
+            success: function(result) {
+                // 삭제 성공 시 처리 로직
+                $jq('#successModal').modal('show'); // 성공 모달 표시
+                $jq('#closeModal').on('click', function() {
+                  $jq('#successModal').modal('hide');
+                })
+            },
+            error: function(xhr, status, error) {
+                // 삭제 실패 시 처리 로직
+                $jq('#errorModalBody').text("게시글 삭제에 실패했습니다: " + error);
+                $jq('#errorModal').modal('show'); // 에러 모달 표시
+            }
         });
+
+        // 삭제 요청이 시작되었으므로 삭제 확인 모달을 숨깁니다.
+        $jq('#deletePostModal').modal('hide');
     });
+});
     </script>
 
 </div>
