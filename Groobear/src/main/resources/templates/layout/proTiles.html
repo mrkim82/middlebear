@@ -35,6 +35,7 @@
 		  width: 100%; /* Full width */
 		  height: 100%; /* Full height */
 		  overflow: auto; /* Enable scroll if needed */
+		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 		  display: none;
 		}
 		
@@ -240,7 +241,6 @@
 		let creFolder = document.getElementById('createFolder');
 		let uFolderName = document.getElementById('updateFolderName');
 		let dFolder = document.getElementById('deleteFolder');
-		let modalBack;
 		
 		//취소 공통
 		let modals = [modal1, modal2];
@@ -251,7 +251,6 @@
 		//그룹 생성 모달창 띄우기
 		popupBtn.addEventListener("click",function(e) { 
 		  e.preventDefault();
-		  console.log(this);
 		  modal1.style.display = 'block';
 		});
 
@@ -273,15 +272,27 @@
 			if(event.keyCode == 27){
 				closeModal(modal, folderInput);
 				modal3.style.display = "none";
+				
+				//modal4처리
+				let dgm = document.querySelector('[data-group-modal]');
+				let dgmC = dgm != null ? dgm.remove() : dgm; 
+				
 			}
 		  });
 
 		  window.addEventListener('click', function(event) {
+		      let dgm = document.querySelector('[data-group-modal]');
+		      let dgmC = document.querySelectorAll('[data-group-modal]');
+		      let moreVert = event.target.parentElement.getElementsByClassName('moreVertIcons')[0];
+		      
 		    if (event.target === modal) {
-		    	console.log('뭘까' + event.target);
-		    	console.log(event.target);
 		        closeModal(modal, folderInput);
+		    } else if (event.target === moreVert && dgmC.length == 2) {
+		    	dgm.remove()
+		    } else if (event.target !== moreVert && dgmC.length == 1) {
+		    	dgm.remove()
 		    }
+		    
 		  });
 		  
 		}
@@ -291,21 +302,6 @@
 		  input.value = '';
 		}
 		
-		//모달4
-		window.addEventListener('keydown', function(e) {
-			if(event.keyCode == 27){
-				document.getElementById('groupModal' + modalDeleteNum).remove();
-			}
-		});
-		
-		window.addEventListener('click', function(event) {
-			//console.log(event.target);
-			let modal4 = document.getElementById('groupModal' + modalDeleteNum);
-			modalBack = document.getElementById(modalFolderCreate4);
-		    if (event.target === modalBack) {
-		    	modal4.remove();
-		    }
-		});
 		
 		//시작
 		
@@ -326,7 +322,6 @@
 	    function checkGroupFolderName() {
 			let formData = new FormData();
 			formData.append('gN', folderC1.value);
-			console.log(formData.get('gN'));
 			
 			if(folderC1.value == '') {
 	    		alert('폴더 이름은 공백을 허용하지 않습니다!');
@@ -344,7 +339,6 @@
 				.then(res => {
 					let rC = res.result;
 					let latelyGroupNum = res.pGN;
-					console.log(rC)
 					if(rC == '성공') {
 						//동적 폴더 생성
 						createFolder(latelyGroupNum);				
@@ -420,13 +414,12 @@
 				
 				let groupNameChange = document.getElementById('groupNameChange' + groupNo);
 				let groupDelte = document.getElementById('groupDelte' + groupNo);
-				modalDeleteNum = groupNo;
 				
 				//프로젝트 수정창 띄우기(모달2)
 				groupNameChange.addEventListener("click", function(e) {
 					e.preventDefault();
 					//상태 모달창 삭제
-					document.getElementById('groupModal' + groupNo).remove();
+					document.querySelector('[data-group-modal]').remove();
 					
 					modal2.style.display = 'block';
 					
@@ -441,7 +434,7 @@
 				groupDelte.addEventListener("click", function(e) {
 					e.preventDefault();
 					//상태 모달창 삭제
-					document.getElementById('groupModal' + groupNo).remove();
+					document.querySelector('[data-group-modal]').remove();
 					
 					modal3.style.display = 'block';
 					
@@ -463,7 +456,6 @@
 						.then(response => response.json())
 						.then(res => {
 							let rC = res.result;
-							console.log(document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].parentNode);
 						
 							if(rC == '성공') {
 								document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].parentNode.remove();
@@ -523,7 +515,7 @@
 
 			// 모달 창 생성
 			let modal4 = document.createElement('div');
-			modal4.id = 'groupModal' + groupNum;
+			modal4.dataset.groupModal = groupNum;
 			modal4.style.maxWidth = '100%';
 			modal4.style.width = '68px';
 			modal4.style.height = '58px';
@@ -580,13 +572,8 @@
 			// 버튼을 모달 창에 추가
 			modal4.appendChild(button1);
 			modal4.appendChild(button2);
-
-			let modalBackC = document.createElement('div');
-			modalBackC.id = 'modalFolderCreate4';
-			modalBackC.appendChild(modal4);
 			
-			document.body.appendChild(modalBackC);
-
+			document.body.appendChild(modal4);
 		}
 		
     /*]]>*/
