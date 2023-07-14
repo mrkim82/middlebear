@@ -8,6 +8,8 @@ public class Criteria {
 	private int page;
 	private int perPageNum;
 	
+	
+	
 	public int getPageNum() {
 		return(this.page-1)*perPageNum;
 	}
@@ -39,6 +41,8 @@ public class Criteria {
 		}
 		
 	}
+	
+	
 	
 	@Override
 	public String toString() {
