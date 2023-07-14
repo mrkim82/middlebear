@@ -6,21 +6,34 @@
 
 	<!-- 전체조회 -->
 
-  <!-- <select id="selectAllCar" parameterType="CarVO"
+	<!-- <select id="selectAllCar" parameterType="CarVO" resultType="CarVO"> 
+		select u.emp_no, d.dept_name, ui.name, c.car_no, u.phone, c.car_date from 
+		users u, departments d, user_info ui, car c where d.dept_no = ui.dept_no 
+		and ui.emp_no = u.emp_no and u.id = c.id <if test="name != null and !name.equals('')"> 
+		and name LIKE '%${name}%' </if> <if test="carNo != null and !carNo.equals('')"> 
+		and car_no LIKE '%${carNo}%' </if> <if test="deptName != null and !deptName.equals('')"> 
+		and dept_name LIKE '%'||upper('${deptName}')||'%' </if> order by emp_no </select> -->
+
+	<select id="selectAllCar" parameterType="CarVO"
 		resultType="CarVO">
-		select u.emp_no,
-		d.dept_name,
-		ui.name,
-		c.car_no,
-		u.phone,
-		c.car_date
-		from users u,
-		departments d,
-		user_info ui,
-		car c
-		where d.dept_no = ui.dept_no
-		and ui.emp_no = u.emp_no
-		and u.id = c.id
+		SELECT * 
+            FROM (
+              SELECT t.*, ROWNUM AS rn
+              FROM (
+				select u.emp_no,
+					   d.dept_name,
+						ui.name,
+						c.car_no,
+						u.phone,
+						c.car_date
+				from users u,
+						departments d,
+						user_info ui,
+						car c
+				where d.dept_no = ui.dept_no
+						and ui.emp_no = u.emp_no
+						and u.id = c.id
+
 		<if test="name != null and !name.equals('')">
 			and name LIKE '%${name}%'
 		</if>
@@ -31,49 +44,12 @@
 			and dept_name LIKE '%'||upper('${deptName}')||'%'
 		</if>
 		order by emp_no
-	</select>    -->
-	
- <select id="selectAllCar" parameterType="CarVO"
-		resultType="CarVO">
-SELECT * FROM (
-	SELECT A.*, ROWNUM AS RN
-	FROM (
-		select u.emp_no,
-				d.dept_name,
-				ui.name,
-				c.car_no,
-				u.phone,
-				c.car_date
-			from users u,
-				departments d,
-				user_info ui,
-				car c
-			where	d.dept_no = ui.dept_no
-				and ui.emp_no = u.emp_no
-				and u.id = c.id
-				
-			<if test="name != null and !name.equals('')">
-				and name LIKE '%${name}%'
-			</if>
-			<if test="carNo != null and !carNo.equals('')">
-				and car_no LIKE '%${carNo}%'
-			</if>
-			<if test="deptName != null and !deptName.equals('')">
-				and dept_name LIKE '%'||upper('${deptName}')||'%'
-			</if>
-			
-			
-		order by emp_no
-	) A
-		<![CDATA[
-	 		where ROWNUM <= ( #{startPage} * #{perPageNum} )  
-	)
-	 		where RN > ( (#{startPage} -1) * #{perPageNum} ) 
-		]]> 
-
-
-
-</select> 
+		) t
+            )
+            <![CDATA[
+            WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+            ]]>
+	</select>
 
 
 	<!-- 개인차량 조회 -->
@@ -91,10 +67,12 @@ SELECT * FROM (
 		departments d,
 		user_info ui,
 		car c
-		where d.dept_no = ui.dept_no
+		where
+		d.dept_no = ui.dept_no
 		and ui.emp_no = u.emp_no
 		and u.id = c.id
-		and u.id = #{id}
+		and u.id
+		= #{id}
 	</select>
 
 
@@ -108,7 +86,8 @@ SELECT * FROM (
 		c.car_no,
 		u.phone,
 		c.car_no
-		from users u,
+		from
+		users u,
 		departments d,
 		user_info ui,
 		car c
@@ -128,25 +107,28 @@ SELECT * FROM (
 		</where>
 	</select>
 
-	<select id="carList" resultType="hashmap"
-		parameterType="hashmap">
-        <![CDATA[
-            SELECT * 
-            FROM (
-              SELECT t.*, ROWNUM AS rn
-              FROM (
-                SELECT * 
-                FROM car
-                ORDER BY NUM DESC
-              ) t
-            )
-            WHERE rn > #{pageStart} AND rn <= #{pageStart} + #{perPageNum}
-        ]]>
-	</select>
-	
+
+
 	<select id="carListCnt" resultType="int">
-		SELECT count(*)
-		FROM car
+		select count(*)
+				from users u,
+						departments d,
+						user_info ui,
+						car c
+				where d.dept_no = ui.dept_no
+						and ui.emp_no = u.emp_no
+						and u.id = c.id
+		<where>
+			<if test="name != null and !name.equals('')">
+				and name LIKE '%${name}%'
+			</if>
+			<if test="carNo != null and !carNo.equals('')">
+				and car_no LIKE '%${carNo}%'
+			</if>
+			<if test="deptName != null and !deptName.equals('')">
+				and dept_name LIKE '%'||upper('${deptName}')||'%'
+			</if>
+		</where>
 	</select>
 
 

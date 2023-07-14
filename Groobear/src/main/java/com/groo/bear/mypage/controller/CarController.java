@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +38,7 @@ public class CarController {
 	
 	//개인 차량 페이지 조회
 	@GetMapping("carList")
-	public String carList(HttpServletRequest request, Model model, Criteria cri, Pageable pageable)throws Exception {
+	public String carList(HttpServletRequest request, Model model, Criteria cri,@PageableDefault(page=0,size=10) Pageable pageable)throws Exception {
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
 		System.out.println(id);
