@@ -1,5 +1,7 @@
 package com.groo.bear.mail.mapper;
 
-public interface MailMapper {
+import com.groo.bear.mail.service.MailVO;
 
+public interface MailMapper {
+	public int sendMail(MailVO mailVO);
 }
