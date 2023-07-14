@@ -36,7 +36,7 @@ public class CarServiceImpl implements CarService {
 	public int carListCnt() throws Exception {
 		return carMapper.carListCnt();
 	}
-
+	
 	@Override
 	public List<Map<String, Object>> selectAllCar(Criteria cri) throws Exception {
 		return carMapper.selectAllCar(cri);
