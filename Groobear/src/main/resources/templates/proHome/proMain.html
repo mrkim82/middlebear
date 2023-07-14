@@ -28,7 +28,8 @@
 			</thead>
 			<tbody id="YesStar">
 				<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}"
-					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}">
+					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
+					style="cursor:pointer">
 					<td th:text="${pro.proColor}"></td>
 					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
 					<td th:text="${pro.proName}"></td>
@@ -48,7 +49,8 @@
 			</thead>
 			<tbody id="NoStar">
 				<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'N'}"
-					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}">
+					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
+					style="cursor:pointer">
 					<td th:text="${pro.proColor}"></td>
 					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
 					<td th:text="${pro.proName}"></td>
@@ -62,28 +64,34 @@
 		let starCheck = document.querySelectorAll(".starCheck");
 
 		starCheck.forEach(sC => {
-			sC.addEventListener("click", changeStar);
-		})
-	
+			
+			sC.addEventListener("click", function(event) {
+				event.stopPropagation();
+				changeStar();
+			});
+			
+		});
+		
 		function changeStar() {
-			let dpMN = this.parentNode.getAttribute("data-pMN");
-			let starC = this.parentNode.getAttribute("data-starC");
+			let dpMN = event.target.parentNode.getAttribute("data-pMN");
+			let starC = event.target.parentNode.getAttribute("data-starC");
+			let trTag = event.target.parentNode;
+			console.log(trTag);
 			
 			let formData = new FormData();
 	        formData.append('pMN', dpMN);
 	        formData.append('starC', starC);
 
-			fetch("proUpdate", {
+			fetch("/proUpdate", {
 				method: 'POST',
 				body : formData
 			})
 			.then(response => response.json())
 			.then(res => {
 				let rC = res.result;
-				let headData = this.parentNode;
 				
 				if (rC == '등록' || rC == '취소') {
-					changeProOne(rC, headData);
+					changeProOne(rC, trTag);
 					
 				} else {
 					alert('요청이 취소 되었습니다.');
@@ -93,20 +101,18 @@
 		}
 	
 		//즐겨찾기 변경
-		function changeProOne(rC, headData) {
-			console.log(rC);
-			console.log(headData);
-			let yStar = document.getElementById('YesStar');
-			let nStar = document.getElementById('NoStar');
-			
+		function changeProOne(rC, trTag) {
+
 			if (rC == '등록') {
-				yStar.appendChild(headData);
-				headData.setAttribute('data-starc', 'Y');
-				headData.getElementsByClassName('starCheck')[0].textContent = 'Y';
+				let yStar = document.getElementById('YesStar');
+				yStar.appendChild(trTag);
+				trTag.setAttribute('data-starc', 'Y');
+				trTag.getElementsByClassName('starCheck')[0].textContent = 'Y';
 			} else {
-				nStar.appendChild(headData);
-				headData.setAttribute('data-starc', 'N');
-				headData.getElementsByClassName('starCheck')[0].textContent = 'N';
+				let nStar = document.getElementById('NoStar');
+				nStar.appendChild(trTag);
+				trTag.setAttribute('data-starc', 'N');
+				trTag.getElementsByClassName('starCheck')[0].textContent = 'N';
 			}
 
 		}
@@ -115,7 +121,30 @@
 		function chagepartiSelect() {
 			let partiSelectId = document.getElementById('partiSelect').value;
 			console.log(partiSelectId);
-			
+		}
+	</script>
+
+	<!-- 프로젝트 홈에서 상세 페이지 이동 -->
+	<script>
+		let trDetailsY = document.querySelectorAll('#YesStar tr');
+		let trDetailsN = document.querySelectorAll('#NoStar tr');
+
+		trDetailsY.forEach(trDetailY => {
+			let homeTabNum = trDetailY.dataset.hometab;
+			trDetailY.addEventListener('click', function() {
+				projectDetail(homeTabNum)
+			});
+		});
+
+		trDetailsN.forEach(trDetailN => {
+			let homeTabNum = trDetailN.dataset.hometab;
+			trDetailN.addEventListener('click', function() {
+				projectDetail(homeTabNum)
+			});
+		});
+
+		function projectDetail(homeTNum) {
+			location.href="/proPostMain/" + homeTNum;
 		}
 	</script>
 </body>

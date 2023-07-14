@@ -26,6 +26,19 @@
 		  display: none;
 		}
 		
+		#modalFolderCreate4{
+		  position: fixed; /* Stay in place */
+		  z-index: 1; /* Sit on top */
+		  padding-top: 100px; /* Location of the box */
+		  left: 0;
+		  top: 0;
+		  width: 100%; /* Full width */
+		  height: 100%; /* Full height */
+		  overflow: auto; /* Enable scroll if needed */
+		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+		  display: none;
+		}
+		
 		#modalBody, #modalBody2, #modalBody3{
 		  width: 500px;
 		  height: 300px;
@@ -149,7 +162,7 @@
 					        <!-- 프로젝트 그룹 리스트 -->
 					        <ul id="proGroup">
 					        	<th:block th:each="proG : ${projectGroupList}">
-						        	<li><a th:attr="data-gN=${proG.groupNo}"
+						        	<li><a th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
 						        		th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
 						        		[[${proG.groupName}]]<span class='material-icons moreVertIcons' style='display : none;'>more_vert</span></a>
 						        	</li>
@@ -238,7 +251,6 @@
 		//그룹 생성 모달창 띄우기
 		popupBtn.addEventListener("click",function(e) { 
 		  e.preventDefault();
-		  console.log(this);
 		  modal1.style.display = 'block';
 		});
 
@@ -248,20 +260,41 @@
 		  let cancelBtn = cancelBtns[i];
 		  let folderInput = folderInputs[i];
 
-		  closeBtn.onclick = function() {
+		  closeBtn.addEventListener('click', function() {
 		    closeModal(modal, folderInput);
-		  };
+		  });
 
-		  cancelBtn.onclick = function() {
+		  cancelBtn.addEventListener('click', function() {
 		    closeModal(modal, folderInput);
-		  };
+		  });
+		  
+		  window.addEventListener('keydown', function(e) {
+			if(event.keyCode == 27){
+				closeModal(modal, folderInput);
+				modal3.style.display = "none";
+				
+				//modal4처리
+				let dgm = document.querySelector('[data-group-modal]');
+				let dgmC = dgm != null ? dgm.remove() : dgm; 
+				
+			}
+		  });
 
-		  window.onclick = function(event) {
-			  console.log(modal);
+		  window.addEventListener('click', function(event) {
+		      let dgm = document.querySelector('[data-group-modal]');
+		      let dgmC = document.querySelectorAll('[data-group-modal]');
+		      let moreVert = event.target.parentElement.getElementsByClassName('moreVertIcons')[0];
+		      
 		    if (event.target === modal) {
-		      closeModal(modal, folderInput);
+		        closeModal(modal, folderInput);
+		    } else if (event.target === moreVert && dgmC.length == 2) {
+		    	dgm.remove()
+		    } else if (event.target !== moreVert && dgmC.length == 1) {
+		    	dgm.remove()
 		    }
-		  };
+		    
+		  });
+		  
 		}
 
 		function closeModal(modal, input) {
@@ -306,7 +339,6 @@
 				.then(res => {
 					let rC = res.result;
 					let latelyGroupNum = res.pGN;
-				
 					if(rC == '성공') {
 						//동적 폴더 생성
 						createFolder(latelyGroupNum);				
@@ -331,6 +363,7 @@
 				
 				aC.setAttribute('href', 'proGroupD/'+ lGN);
 				aC.setAttribute('data-gN', lGN);
+				aC.setAttribute('data-fName', folderC1.value);
 				aC.textContent = folderC1.value;
 				
 				aC.append(spanC);
@@ -377,6 +410,8 @@
 				
 				//그룹no값 가져오기
 				let groupNo = event.target.parentNode.dataset.gn;
+				let groupName = event.target.parentNode.dataset.fname;
+				
 				//그룹 모달창 생성(모달4)
 				miniModal(event.target);
 				
@@ -386,8 +421,11 @@
 				//프로젝트 수정창 띄우기(모달2)
 				groupNameChange.addEventListener("click", function(e) {
 					e.preventDefault();
+					
+					//인풋상자 값 넣어주기
+					folderC2.value = groupName;
 					//상태 모달창 삭제
-					document.getElementById('groupModal' + groupNo).remove();
+					document.querySelector('[data-group-modal]').remove();
 					
 					modal2.style.display = 'block';
 					
@@ -402,7 +440,7 @@
 				groupDelte.addEventListener("click", function(e) {
 					e.preventDefault();
 					//상태 모달창 삭제
-					document.getElementById('groupModal' + groupNo).remove();
+					document.querySelector('[data-group-modal]').remove();
 					
 					modal3.style.display = 'block';
 					
@@ -424,7 +462,6 @@
 						.then(response => response.json())
 						.then(res => {
 							let rC = res.result;
-							console.log(document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].parentNode);
 						
 							if(rC == '성공') {
 								document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].parentNode.remove();
@@ -450,6 +487,7 @@
 	    		alert('폴더 이름은 최대 30자 까지 가능합니다!');
 	    		return;
 	    	} else {
+	    		console.log('gn몇개 드가?'+groupNo);
 	    		fetch("/proGroupNameC", {
     			  method: 'PUT',
     			  headers: {
@@ -483,7 +521,7 @@
 
 			// 모달 창 생성
 			let modal4 = document.createElement('div');
-			modal4.id = 'groupModal' + groupNum;
+			modal4.dataset.groupModal = groupNum;
 			modal4.style.maxWidth = '100%';
 			modal4.style.width = '68px';
 			modal4.style.height = '58px';
@@ -540,62 +578,9 @@
 			// 버튼을 모달 창에 추가
 			modal4.appendChild(button1);
 			modal4.appendChild(button2);
-
+			
 			document.body.appendChild(modal4);
-
 		}
-    	
-		
-		//변수 정리
-		
-	
-    	/* popupBtn.onclick = function(e) {
-			e.preventDefault();
-			modal1.style.display = 'block';
-	    }
-	    
-	    closeBtn1.onclick = function() {
-	      modal1.style.display = 'none';
-	      folderC1.value='';
-	    }
-
-	    cancelBtn1.onclick = function() {
-	      modal1.style.display = 'none';
-	      folderC1.value='';
-	    }
-	
-	    window.onclick = function(event) {
-	      if (event.target == modal1) {
-	        modal1.style.display = "none";
-	        folderC1.value='';
-	      } else if (event.target == modal2) {
-	        modal2.style.display = "none";
-	        folderC2.value='';
-	      } else if (event.target == modal3) {
-	        modal3.style.display = "none";
-	        folderC3.value='';
-	      } 
-	    }
-	    
-	    closeBtn2.onclick = function() {
-	      modal2.style.display = 'none';
-	      folderC2.value='';
-	    }
-
-	    cancelBtn2.onclick = function() {
-	      modal2.style.display = 'none';
-	      folderC2.value='';
-	    }
-	
-	    
-	    closeBtn3.onclick = function() {
-	      modal3.style.display = 'none';
-	      folder3.value='';
-	    }
-	
-	     */
-		
-		
 		
     /*]]>*/
     </script>

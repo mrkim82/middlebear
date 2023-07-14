@@ -14,5 +14,6 @@ public class ProGroupVO {
 	private String proStarCheck;
 	private String proHideCheck;
 	private int proNo;
+	private int homeTab;
 	
 }
