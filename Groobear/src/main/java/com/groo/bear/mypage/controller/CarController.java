@@ -14,10 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-<<<<<<< HEAD
-import com.groo.bear.mypage.paging.Criteria;
-=======
->>>>>>> branch 'master' of https://github.com/mrkim82/groobear.git
 import com.groo.bear.mypage.service.CarService;
 import com.groo.bear.mypage.service.CarVO;
 import com.groo.bear.mypage.service.UserService;
