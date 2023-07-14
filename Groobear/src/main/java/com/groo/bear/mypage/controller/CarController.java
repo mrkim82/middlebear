@@ -39,14 +39,24 @@ public class CarController {
 	
 	//개인 차량 페이지 조회
 	@GetMapping("carList")
-	public String carList(HttpServletRequest request, Model model) {
+	public String carList(HttpServletRequest request, Model model, Criteria cri)throws Exception {
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
 		System.out.println(id);
 		String empG = userService.checkGrade(id).getEmpGrade();
 		System.out.println(empG);
+		
+		int carListCnt = carService.carListCnt();
+		
+		Paging paging = new Paging();
+        paging.setCri(cri);
+        paging.setTotalCount(carListCnt);    
+        
+ 		
 		if(empG.equals("A")) {
 			model.addAttribute("carList",carService.getAllCarList());
+			 model.addAttribute("paging", paging);    
+		        System.out.println(paging);
 			return "car/carList";
 		}else {
 			model.addAttribute("carPList",carService.getMyCarList(id));
@@ -62,24 +72,25 @@ public class CarController {
 	      return carService.getAllCarList(carVO);
 	   }
 	
-	@RequestMapping(value="/carList")
-	public String carList(Criteria cri, Model model) throws Exception{
-		
-		int carListCnt = carService.carListCnt();
-	        
-	        // 페이징 객체
-	        Paging paging = new Paging();
-	        paging.setCri(cri);
-	        paging.setTotalCount(carListCnt);    
-	        
-	        List<Map<String, Object>> list = carService.carList(cri);
-	        
-	        model.addAttribute("list", list);    
-	        model.addAttribute("paging", paging);    
-		
-		
-		return "carList";
-	}
+//	@RequestMapping("carList")
+//	public String carList(Criteria cri, Model model) throws Exception{
+//		
+//		int carListCnt = carService.carListCnt();
+//	        
+//	        // 페이징 객체
+//	        Paging paging = new Paging();
+//	        paging.setCri(cri);
+//	        paging.setTotalCount(carListCnt);    
+//	        
+//	        List<Map<String, Object>> list = carService.carList(cri);
+//	        
+//	        model.addAttribute("list", list);
+//	        System.out.println(list);
+//	        model.addAttribute("paging", paging);    
+//	        System.out.println(paging);
+//		
+//		return "carList";
+//	}
 	
 	//개인차량 등록 
 	
