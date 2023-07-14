@@ -127,19 +127,7 @@ SELECT * FROM (
 			</if>
 		</where>
 	</select>
-<<<<<<< HEAD
 
-	<!-- <select id="carList" resultType="hashmap"
-		parameterType="hashmap">
-        <![CDATA[
-            SELECT * 
-            FROM car
-            ORDER BY NUM DESC
-            LIMIT #{startPage}, #{perPageNum}
-        ]]>
-	</select> -->
-	
-=======
 	<select id="carList" resultType="hashmap"
 		parameterType="hashmap">
         <![CDATA[
@@ -155,7 +143,7 @@ SELECT * FROM (
             WHERE rn > #{pageStart} AND rn <= #{pageStart} + #{perPageNum}
         ]]>
 	</select>
->>>>>>> branch 'master' of https://github.com/mrkim82/groobear.git
+	
 	<select id="carListCnt" resultType="int">
 		SELECT count(*)
 		FROM car
