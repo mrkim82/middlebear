@@ -90,9 +90,15 @@
 		parameterType="hashmap">
         <![CDATA[
             SELECT * 
-            FROM car
-            ORDER BY NUM DESC
-            LIMIT #{pageStart}, #{perPageNum}
+            FROM (
+              SELECT t.*, ROWNUM AS rn
+              FROM (
+                SELECT * 
+                FROM car
+                ORDER BY NUM DESC
+              ) t
+            )
+            WHERE rn > #{pageStart} AND rn <= #{pageStart} + #{perPageNum}
         ]]>
 	</select>
 	<select id="carListCnt" resultType="int">

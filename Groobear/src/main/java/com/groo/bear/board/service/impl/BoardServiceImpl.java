@@ -1,6 +1,7 @@
 package com.groo.bear.board.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.board.mapper.BoardMapper;
 import com.groo.bear.board.service.BoardService;
 import com.groo.bear.board.service.BoardVO;
-import com.groo.bear.files.domain.FilesVO;
+import com.groo.bear.paging.Criteria;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -16,15 +17,6 @@ public class BoardServiceImpl implements BoardService{
 	@Autowired
 	BoardMapper boardMapper;
 
-	@Override
-	public List<BoardVO> selectAllListPaged(BoardVO boardVO, int startRow, int endRow) {
-		return boardMapper.selectAllListPaged(boardVO, startRow, endRow);
-	}
-	
-	@Override
-	public List<BoardVO> selectAllList(BoardVO boardVO) {
-		return boardMapper.selectAllList(boardVO);
-	}
 	
 	@Override
 	public BoardVO selectBoard(int boardNo) {
@@ -47,9 +39,19 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.deleteBoard(boardNo);
 	}
 
+	/*
+	 * @Override public int addFiles(FilesVO filesVO) { return
+	 * boardMapper.addFiles(filesVO); }
+	 */
+
 	@Override
-	public int addFiles(FilesVO filesVO) {
-		return boardMapper.addFiles(filesVO);
+	public int boardListCnt(Criteria cri, BoardVO boardVO){
+        return boardMapper.boardListCnt(cri, boardVO);
 	}
+	@Override
+	 public List<BoardVO> selectAllList(Criteria cri, BoardVO boardVO){
+	        return boardMapper.selectAllList(cri, boardVO);
+	}
+
 	
 }

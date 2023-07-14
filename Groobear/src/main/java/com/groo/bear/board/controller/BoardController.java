@@ -1,17 +1,27 @@
 package com.groo.bear.board.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.groo.bear.board.service.BoardService;
 import com.groo.bear.board.service.BoardVO;
+import com.groo.bear.paging.Criteria;
+import com.groo.bear.paging.Paging;
 
 @Controller
 public class BoardController {
@@ -19,27 +29,25 @@ public class BoardController {
 	@Autowired
 	BoardService boardService;
 	
-//	@GetMapping("boardList")
-//	public String boardList(Model model, @ModelAttribute BoardVO boardVO, Pageable pageable) {
-//		Page<BoardVO> page = boardService.selectAllListPaged(boardVO, pageable);
-//		model.addAttribute("boardList", page.getContent());
-//		model.addAttribute("page", page);
-//		model.addAttribute("boardVO", boardVO);
-//		return "board/boardList";
-//	}
-	
-	@GetMapping("boardList")
-	public String boardList(Model model, @ModelAttribute BoardVO boardVO) {
-		model.addAttribute("boardList", boardService.selectAllList(boardVO));
+	@GetMapping("/boardList")
+	public String getboardList(Criteria cri, Model model, BoardVO boardVO) {
+		// 전체 글 개수
+        int boardListCnt = boardService.boardListCnt(cri, boardVO);
+        
+        // 페이징 객체
+        Paging paging = new Paging();
+        paging.setCri(cri);
+        paging.setTotalCount(boardListCnt);
+		
+		model.addAttribute("boardList", boardService.selectAllList(cri, boardVO));
+		model.addAttribute("paging", paging);
+		
 		return "board/boardList";
 	}
-	
-	@PostMapping("searchList")
-	@ResponseBody
-	public List<BoardVO> searchList(@RequestBody BoardVO boardVO) {
-		System.out.println(boardVO);
-		return boardService.selectAllList(boardVO);
-	}
+//	@GetMapping("/uploadAjax")
+//	public void uploadAjax() {
+//		log.info("upload ajax");
+//	}
 	
 	@GetMapping("boardInfo")
 	public String getBoard(Model model, @RequestParam int boardNo) {
@@ -47,9 +55,11 @@ public class BoardController {
 		return "board/boardInfo";
 	}
 	
+	//등록 페이지
 	@GetMapping("boardInsert")
-	public String boardInsertForm(Model model) {
-		model.addAttribute("board", new BoardVO());
+	public String boardInsertForm(Model model, BoardVO vo) {
+		System.out.println(vo);
+		model.addAttribute("board", vo);
 		return "board/boardInsert";
 	}
 	
@@ -66,11 +76,11 @@ public class BoardController {
 	    return "board/boardUpdate";
 	}
 
-	@PostMapping("boardUpdate/{boardNo}")
-	public String boardUpdate(@PathVariable("boardNo") int boardNo, @ModelAttribute BoardVO boardVO, Model model) {
-		boardVO.setBoardNo(boardNo);
+	@PostMapping("boardUpdate")
+	public String boardUpdate(BoardVO boardVO, Model model) {
+		System.out.println(boardVO);
 		boardService.updateBoard(boardVO);
-		return "redirect:/boardInfo?boardNo=" + boardNo;
+		return "redirect:/boardInfo?boardNo=" + boardVO.getBoardNo();
 	}
 	
 	@DeleteMapping("boardDelete/{boardNo}")
@@ -80,4 +90,21 @@ public class BoardController {
 	    boardService.deleteBoard(boardNo);
 	    return "게시글이 삭제되었습니다.";
 	}
+	
+	/*
+	 * @RequestMapping(value="boardList") public String boardList(Criteria cri,
+	 * Model model) throws Exception {
+	 * 
+	 * // 전체 글 개수 int boardListCnt = boardService.boardListCnt();
+	 * 
+	 * // 페이징 객체 Paging paging = new Paging(); paging.setCri(cri);
+	 * paging.setTotalCount(boardListCnt);
+	 * 
+	 * List<Map<String, Object>> list = boardService.boardList(cri);
+	 * 
+	 * model.addAttribute("list", list); model.addAttribute("paging", paging);
+	 * 
+	 * return "board/boardList"; }
+	 */
+	
 }
