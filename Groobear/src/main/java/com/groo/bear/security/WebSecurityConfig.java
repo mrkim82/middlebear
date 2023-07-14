@@ -36,7 +36,7 @@ public class WebSecurityConfig {
 			//.antMatchers("/status", "images/**", "/js/", "auth/join").permitAll()
 			//.antMatchers("/", "/main").permitAll()
 			//.antMatchers("/emp/**").hasRole("ADMIN")
-			.anyRequest().authenticated()
+			.anyRequest().permitAll()
 			.and()
 			.formLogin()
 			.successHandler(authenticationSuccessHandler())

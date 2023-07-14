@@ -1,12 +1,14 @@
-package com.groo.bear.mypage.paging;
+package com.groo.bear.paging;
 
 import lombok.Data;
 
 @Data
 public class Criteria {
 
-	private int page;
-	private int perPageNum;
+	private int page; //현재페이지번호
+	private int perPageNum; //페이지당 게시물 개수
+	private String keyword;
+	private String type;
 	
 	public int getPageNum() {
 		return(this.page-1)*perPageNum;

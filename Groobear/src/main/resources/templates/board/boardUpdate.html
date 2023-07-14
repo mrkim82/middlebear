@@ -33,7 +33,7 @@
                 </tr>
             </table>
             <button type="submit" >저장</button>
-            <button type="button" onclick="location.href='boardList?boardType=N'">목록으로</button>
+            <button type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|">목록으로</button>
         </form>
     </div>
     
