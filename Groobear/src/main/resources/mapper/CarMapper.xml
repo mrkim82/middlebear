@@ -85,7 +85,6 @@
 			</if>
 		</where>
 	</select>
-
 	<select id="carList" resultType="hashmap"
 		parameterType="hashmap">
         <![CDATA[

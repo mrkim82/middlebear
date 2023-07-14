@@ -38,8 +38,8 @@ public class CarServiceImpl implements CarService {
 	}
 
 	@Override
-	public List<Map<String, Object>> carList(Criteria cri) throws Exception {
-		return carMapper.carList(cri);
+	public List<Map<String, Object>> selectAllCar(Criteria cri) throws Exception {
+		return carMapper.selectAllCar(cri);
 	}
 
 	

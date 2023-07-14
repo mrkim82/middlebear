@@ -15,6 +15,6 @@ public interface CarService {
 	
 	//페이징
 	public int carListCnt() throws Exception;
-	public List<Map<String, Object>> carList(Criteria cri) throws Exception;
+	public List<Map<String, Object>> selectAllCar(Criteria cri) throws Exception;
 	
 }

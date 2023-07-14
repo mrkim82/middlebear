@@ -43,6 +43,9 @@ public interface ProMapper {
 	
 	//프로젝트 그룹 삭제
 	public int deleteGroup(int groupNo);
+	
+	//필터
+	
 //	
 //	// 단건조회
 //	public EmpVO selectEmpInfo(EmpVO empVO);
