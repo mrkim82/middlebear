@@ -1,13 +1,14 @@
 package com.groo.bear.board.service;
 
 import java.util.List;
+import java.util.Map;
 
-import com.groo.bear.files.FilesVO;
+import com.groo.bear.paging.Criteria;
 
 public interface BoardService {
-	//전체조회
-	public List<BoardVO> selectAllList(BoardVO boardVO);
 	
+	//전체조회
+	public List<BoardVO> selectAllList(Criteria cri,BoardVO boardVO);
 	//게시글 단건조회
 	public BoardVO selectBoard(int boardNo);
 	
@@ -21,6 +22,12 @@ public interface BoardService {
 	public int deleteBoard(int boardNo);
 	
 	//첨부파일
-	public int addFiles(FilesVO filesVO);
+	//public int addFiles(FilesVO filesVO);
+	
+	//페이징
+	public int boardListCnt(Criteria cri, BoardVO boardVO);
+ 
+    
+
 
 }
