@@ -40,17 +40,17 @@
 		</table>
 	</div>
 	<div>
-		<ul class="paging">
-    		<th:if test="${paging.prev}">
-        		<span><a href='<c:url value="/carList?page=${paging.startPage-1}"/>'>이전</a></span>
-    		</th:if>
-    		<th:forEach begin="${paging.startPage}" end="${paging.endPage}" var="num">
-        		<span><a href='<c:url value="/carList?page=${num}"/>'>${num}</a></span>
-    		</th:forEach>
-    		<th:if test="${paging.next && paging.endPage>0}">
-        		<span><a href='<c:url value="/carList?page=${paging.endPage+1}"/>'>다음</a></span>
-    		</th:if>
-		</ul>
+		<div class="paging">
+    		<div th:if="${paging.prev}">
+        		<span><a th:href="@{/carList(page=${paging.startPage-1})}">이전</a></span>
+    		</div>
+    		<div th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+        		<span><a th:href="@{/carList(page=${num})}" th:text="${num}"></a></span>
+    		</div>
+    		<div th:if="${paging.next && paging.endPage > 0}">
+        		<span><a th:href="@{/carList(page=${paging.endPage+1})}">다음</a></span>
+    		</div>
+		</div>
 	</div>
 
 <script>

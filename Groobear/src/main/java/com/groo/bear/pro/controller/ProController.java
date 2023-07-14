@@ -28,7 +28,7 @@ public class ProController {
 	@Autowired
 	ProService proService;
 	
-	//공통 데이터 전달
+	//공통 데이터(사이드바) 전달
 	private Model proData(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		
@@ -58,13 +58,29 @@ public class ProController {
 		return "proHome/proMain";
 	}
 	
+	//프로젝트 메인 페이지 카테고리 및 정렬
+	@GetMapping("proMainO")
+	public String proMainPageOrder(Model model, HttpServletRequest request,
+			@RequestParam("projcetMasterId") String projcetMasterId, @RequestParam("orderBy") String orderBy) {
+		HttpSession session = request.getSession();
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		param.put("id", (String)session.getAttribute("Id"));
+		param.put("pid", projcetMasterId);//기본값 참여중or관리자 프로젝트 구분
+		param.put("oBy", orderBy);//정렬 기본값
+		
+		model.addAttribute("projectMainList", proService.readProject(param));
+		proData(model, request);
+		
+		return "proHome/proMain";
+	}
+	
+	
 	//프로젝트 메인 페이지 즐찾 보기
 	@GetMapping("proMainS")
 	public String proMainPageS(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProjectStar((String)session.getAttribute("Id")));
-//		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
-//		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
 		proData(model, request);
 		return "proHome/proMainStar";
 	}
@@ -74,10 +90,7 @@ public class ProController {
 	public String proMainPageH(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("projectMainList", proService.readProjectHide((String)session.getAttribute("Id")));
-//		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
-//		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
 		proData(model, request);
-		System.out.println(model);
 		return "proHome/proMainSub";
 	}
 	
@@ -97,6 +110,7 @@ public class ProController {
 		String id = (String)session.getAttribute("Id");
 		model.addAttribute("projectMainList", proService.readProjectGroupDetail(groupNo, id));
 		proData(model, request);
+		System.out.println(model);
 		return "proHome/proMainSub";
 	}
 	
@@ -120,7 +134,7 @@ public class ProController {
 		
 		map.put("result", res);
 		map.put("pGN", proGroupNo);
-		
+		System.out.println(map);
 		return map;
 	}
 	
@@ -141,6 +155,8 @@ public class ProController {
 		}
 		
 		map.put("result", res);
+		System.out.println(vo);
+		
 		return map;
 	}
 	
@@ -161,6 +177,7 @@ public class ProController {
 		}
 		
 		map.put("result", res);
+		System.out.println(map);
 		return map;
 	}
 	
@@ -191,7 +208,6 @@ public class ProController {
 		param.put("v_id", (String)session.getAttribute("Id"));
 		
 		proService.insertPro(param);
-		System.out.println("param 결과 : " + param.toString());
 		return "redirect:proMain";
 	}
 	
@@ -213,7 +229,8 @@ public class ProController {
 		}
 		
 		map.put("result", res);
-		
+		System.out.println(map);
 		return map;
 	}
+	
 }

@@ -1,11 +1,11 @@
-package com.groo.bear.mypage.paging;
+package com.groo.bear.paging;
 
 import lombok.Data;
 
 @Data
 public class Paging {
 
-	private int totalCount;
+	private int totalCount; //전체게시물 갯수
 	private int displayPageNum = 10;
 	
 	private int startPage;

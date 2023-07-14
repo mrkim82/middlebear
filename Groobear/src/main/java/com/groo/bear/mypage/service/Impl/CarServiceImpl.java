@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.groo.bear.mypage.mapper.CarMapper;
-import com.groo.bear.mypage.paging.Criteria;
 import com.groo.bear.mypage.service.CarService;
 import com.groo.bear.mypage.service.CarVO;
+import com.groo.bear.paging.Criteria;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -36,10 +36,10 @@ public class CarServiceImpl implements CarService {
 	public int carListCnt() throws Exception {
 		return carMapper.carListCnt();
 	}
-
+	
 	@Override
-	public List<Map<String, Object>> carList(Criteria cri) throws Exception {
-		return carMapper.carList(cri);
+	public List<Map<String, Object>> selectAllCar(Criteria cri) throws Exception {
+		return carMapper.selectAllCar(cri);
 	}
 
 	
