@@ -15,7 +15,7 @@ public interface CarMapper {
 	public List<CarVO> getMyCar(String id);	
 	
 	//페이징
-	public List<Map<String, Object>> carList(Criteria cri) throws Exception;
+	public List<Map<String, Object>> selectAllCar(Criteria cri) throws Exception;
 	 
 	public int carListCnt() throws Exception;
 
