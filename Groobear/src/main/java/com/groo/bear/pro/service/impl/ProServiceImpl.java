@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.pro.mapper.ProMapper;
 import com.groo.bear.pro.service.ProGroupVO;
 import com.groo.bear.pro.service.ProService;
+import com.groo.bear.pro.service.ProUsersVO;
 import com.groo.bear.pro.service.ProVO;
 
 @Service
@@ -85,6 +86,22 @@ public class ProServiceImpl implements ProService {
 	public int deleteGroup(int groupNo) {
 		return proMapper.deleteGroup(groupNo);
 	}
+
+	@Override
+	public ProUsersVO readOrder(String id) {
+		return proMapper.readOrder(id);
+	}
+
+	@Override
+	public int updateProjectFilter(String proRange) {
+		return proMapper.updateProjectFilter(proRange);
+	}
+
+	@Override
+	public int updateProjectOrder(String proRange, String id) {
+		return proMapper.updateProjectOrder(proRange, id);
+	}
+
 
 
 

@@ -19,4 +19,9 @@ public class ProPostServiceImpl implements ProPostService {
 		return ppm.readTopMenu(proMemNo);
 	}
 
+	@Override
+	public int readTopMenuCount(int proMemNo) {
+		return ppm.readTopMenuCount(proMemNo);
+	}
+
 }

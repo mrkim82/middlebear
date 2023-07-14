@@ -1,61 +1,91 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layout/proTiles}"
->
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/proTiles}">
 <head>
 <meta charset="UTF-8">
 <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<style>
+.square {
+	width: 30px;
+	height: 30px;
+	background-color: #000;
+}
+
+.star {
+	width: 22px;
+	height: 22px;
+}
+
+.filled-star {
+	color: yellow;
+}
+
+.empty-star {
+	color: transparent;
+}
+</style>
 </head>
 <body layout:fragment="content">
 	<div>
-		<h2>내 프로젝트</h2>
-		<select class="form-select" aria-label="Default select example"
-				name="parti" onchange="chagepartiSelect()"
-				id="partiSelect">
-		  <option selected value="">내가 참여중인 프로젝트</option>
-		  <option th:value="${session.Id}">내가 관리자인 프로젝트</option>
+		<h2>내 프로젝트<span class="star empty-star">&#9733;</span></h2>
+		<select class="form-select" name="parti" onchange="chagepartiSelect()" id="partiSelect">
+			<option selected value="">내가 참여중인 프로젝트</option>
+			<option th:value="${session.Id}">내가 관리자인 프로젝트</option>
 		</select>
+		<select class="form-select" name="parti" onchange="chageorderSelect()" id="orderSelect">
+			<option selected value="p.pro_no DESC">최신 순(글/댓글)</option>
+			<option value="p.pro_no ASC">내가 작성한 순(글/댓글)X</option>
+			<option value="1 DESC">오름차순(ㄱ~ㅎ)</option>
+			<option value="1 ASC">내림차순(ㅎ~ㄱ)</option>
+		</select>
+		
 	</div>
 	<div>
 		<table class="table table-hover">
 			<thead>
-				<th:block th:if="${projectMainList.?[proStarCheck == 'Y'].size() > 0}">
+				<th:block
+					th:if="${projectMainList.?[proStarCheck == 'Y'].size() > 0}">
 					<tr>
 						<th scope="col">즐겨찾기</th>
 					</tr>
 				</th:block>
 			</thead>
 			<tbody id="YesStar">
-				<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'Y'}"
+				<tr th:each="pro:${projectMainList}"
+					th:if="${pro.proStarCheck == 'Y'}"
 					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
-					style="cursor:pointer">
-					<td th:text="${pro.proColor}"></td>
-					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
+					style="cursor: pointer">
+					<td><div class="square"
+							th:style="'background-color: ' + ${pro.proColor}"></div></td>
+					<td th:utext="'&#9733;'" class="star filled-star starCheck"></td>
 					<td th:text="${pro.proName}"></td>
-					<td th:each="parti:${projectPartiList}" th:if="${parti.proNo == pro.proNo}"
-						th:text="${parti.count} + '명'"></td>
+					<td th:each="parti:${projectPartiList}"
+						th:if="${parti.proNo == pro.proNo}" th:text="${parti.count} + '명'"></td>
 				</tr>
-				
+
 			</tbody>
 		</table>
 		<table class="table table-hover">
 			<thead>
-				<th:block th:if="${projectMainList.?[proStarCheck == 'N'].size() > 0}">
+				<th:block
+					th:if="${projectMainList.?[proStarCheck == 'N'].size() > 0}">
 					<tr>
 						<th scope="col">참여중</th>
 					</tr>
 				</th:block>
 			</thead>
 			<tbody id="NoStar">
-				<tr th:each="pro:${projectMainList}" th:if="${pro.proStarCheck == 'N'}"
+				<tr th:each="pro:${projectMainList}"
+					th:if="${pro.proStarCheck == 'N'}"
 					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
-					style="cursor:pointer">
-					<td th:text="${pro.proColor}"></td>
-					<td th:text="${pro.proStarCheck}" class="starCheck"></td>
+					style="cursor: pointer">
+					<td><div class="square"
+							th:style="'background-color: ' + ${pro.proColor}"></div></td>
+					<td th:utext="'&#9734;'" class="star empty-star starCheck"></td>
 					<td th:text="${pro.proName}"></td>
-					<td th:each="parti:${projectPartiList}" th:if="${parti.proNo == pro.proNo}"
-						th:text="${parti.count} + '명'"></td>
+					<td th:each="parti:${projectPartiList}"
+						th:if="${parti.proNo == pro.proNo}" th:text="${parti.count} + '명'"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -97,7 +127,7 @@
 					alert('요청이 취소 되었습니다.');
 				}
 				
-			})
+			});
 		}
 	
 		//즐겨찾기 변경
@@ -107,44 +137,104 @@
 				let yStar = document.getElementById('YesStar');
 				yStar.appendChild(trTag);
 				trTag.setAttribute('data-starc', 'Y');
-				trTag.getElementsByClassName('starCheck')[0].textContent = 'Y';
+				trTag.getElementsByClassName('starCheck')[0].innerHTML = '&#9733;';;
 			} else {
 				let nStar = document.getElementById('NoStar');
 				nStar.appendChild(trTag);
 				trTag.setAttribute('data-starc', 'N');
-				trTag.getElementsByClassName('starCheck')[0].textContent = 'N';
+				trTag.getElementsByClassName('starCheck')[0].innerHTML = '&#9734;';
 			}
 
 		}
 		
-		//프로젝트 master여부
+		
+	</script>
+	
+	<!-- 프로젝트 필터 -->
+	<script>
 		function chagepartiSelect() {
 			let partiSelectId = document.getElementById('partiSelect').value;
 			console.log(partiSelectId);
+			
+			fetch("/proMainO", {
+				method: 'POST',
+				headers: {
+    			    'Content-Type': 'application/json'
+    			  },
+	   			body: JSON.stringify({
+	   				'proPartiFilter': partiSelectId
+	   			})
+			})
+			.then(response => response.json())
+			.then(res => {
+				let rC = res.result;
+					console.log(res);
+				if (rC == '성공') {
+					alert('요청 성공');
+				} else {
+					alert('요청 실패');
+				}
+				
+			});
 		}
 	</script>
+	
+	<!-- 프로젝트 정렬 -->
+	<script>
+		function chageorderSelect() {
+			let proRange = document.getElementById('orderSelect').value;
+			console.log(proRange);
+			
+			fetch("/proMainO", {
+				method: 'POST',
+				headers: {
+    			    'Content-Type': 'application/json'
+    			  },
+	   			body: JSON.stringify({
+	   				'proRange': proRange
+	   			})
+			})
+			.then(response => response.json())
+			.then(res => {
+				let rC = res.result;
+					console.log(res);
+				/* if (rC == '성공') {
+					alert('요청 성공');
+				} else {
+					alert('요청 실패');
+				} */
+				location.reload();
+			});
+		}
+	</script>
+	
 
 	<!-- 프로젝트 홈에서 상세 페이지 이동 -->
 	<script>
 		let trDetailsY = document.querySelectorAll('#YesStar tr');
 		let trDetailsN = document.querySelectorAll('#NoStar tr');
-
+		
 		trDetailsY.forEach(trDetailY => {
 			let homeTabNum = trDetailY.dataset.hometab;
+			let pmn = trDetailY.dataset.pmn;
 			trDetailY.addEventListener('click', function() {
-				projectDetail(homeTabNum)
+				projectDetail(homeTabNum, pmn)
 			});
 		});
 
 		trDetailsN.forEach(trDetailN => {
 			let homeTabNum = trDetailN.dataset.hometab;
+			let pmn = trDetailN.dataset.pmn;
 			trDetailN.addEventListener('click', function() {
-				projectDetail(homeTabNum)
+				projectDetail(homeTabNum, pmn)
 			});
 		});
 
-		function projectDetail(homeTNum) {
-			location.href="/proPostMain/" + homeTNum;
+		function projectDetail(homeTNum, proMemNo) {
+			console.log(proMemNo);
+			console.log(homeTNum);
+			
+			location.href="proPostMain/" + proMemNo + "?homeTab=" + homeTNum;
 		}
 	</script>
 </body>

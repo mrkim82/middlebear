@@ -23,16 +23,24 @@
 	<!-- 프로젝트 조회 -->
 	<!-- 나중에 orderby 알림순 추가 -->
 	<select id="readProject" resultType="ProVO" parameterType="hashMap">
-		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no, m.home_tab
-		FROM pro p, pro_mem m
+		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no, m.home_tab, u.pro_range, u.pro_parti_filter
+		FROM pro p, pro_mem m, users u
 		WHERE m.id = #{id}
 		AND p.pro_no = m.pro_no
+		AND p.id = u.id
 		AND m.pro_hide_check = 'N'
 		AND m.pro_parti_check = 'Y'
-		<if test="pid != null and pid != ''">
-		 	AND p.id = #{pid}
+		<if test="proPartiFilter != null and proPartiFilter != ''">
+		 	AND p.id = #{proPartiFilter}
 	 	</if>
-		ORDER BY p.pro_no ${oBy}
+		ORDER BY ${proRange}
+	</select>
+	
+	<!-- 정렬 조회 -->
+	<select id="readOrder" resultType="ProUsersVO">
+		SELECT pro_range, pro_parti_filter
+		FROM users
+		WHERE id = #{id}
 	</select>
 	
 	<!-- 프로젝트 참가자 -->
@@ -153,5 +161,19 @@
 		DELETE FROM pro_group
 		WHERE group_no = #{groupNo}
 	</delete>
+	
+	<!-- 프로젝트 필터 수정 -->
+	<update id="updateProjectFilter" parameterType="ProUsersVO">
+		UPDATE users
+		SET pro_parti_filter = #{id}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 프로젝트 정렬 수정 -->
+	<update id="updateProjectOrder" parameterType="ProUsersVO">
+		UPDATE users
+		SET pro_range = #{proRange}
+		WHERE id = #{id}
+	</update>
 	
 </mapper>

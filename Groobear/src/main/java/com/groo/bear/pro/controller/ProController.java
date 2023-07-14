@@ -1,6 +1,7 @@
 package com.groo.bear.pro.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProGroupVO;
 import com.groo.bear.pro.service.ProService;
+import com.groo.bear.pro.service.ProUsersVO;
 import com.groo.bear.pro.service.ProVO;
 
 @Controller
@@ -44,35 +46,60 @@ public class ProController {
 		HttpSession session = request.getSession();
 		Map<String, Object> param = new HashMap<String, Object>();
 		
-		String projcetMasterId = "";//기본값 참여중or관리자 프로젝트 구분
-		String orderBy = "DESC";//정렬 기본값
+		String id = (String)session.getAttribute("Id");
+		ProUsersVO vo = proService.readOrder(id);
 		
-		
-		param.put("id", (String)session.getAttribute("Id"));
-		param.put("pid", projcetMasterId);
-		param.put("oBy", orderBy);
+		param.put("id", id);
+		param.put("proPartiFilter", vo.getProPartiFilter());//기본값 참여중or관리자 프로젝트 구분
+		param.put("proRange", vo.getProRange());//정렬 기본값
 		
 		model.addAttribute("projectMainList", proService.readProject(param));
 		proData(model, request);
-		
 		return "proHome/proMain";
-	}
+	};
 	
 	//프로젝트 메인 페이지 카테고리 및 정렬
-	@GetMapping("proMainO")
-	public String proMainPageOrder(Model model, HttpServletRequest request,
-			@RequestParam("projcetMasterId") String projcetMasterId, @RequestParam("orderBy") String orderBy) {
+	@PostMapping("proMainO")
+	@ResponseBody
+	public Map<String, Object> proMainPageOrder(Model model, HttpServletRequest request, @RequestBody ProUsersVO vo) {
 		HttpSession session = request.getSession();
 		Map<String, Object> param = new HashMap<String, Object>();
+		Map <String, Object> map = new HashMap<>();
+		String res;
+		String id = (String)session.getAttribute("Id");
+		String newProPartiFilter = vo.getProPartiFilter();//필터 신규값
+		String newProRange = vo.getProRange();//신규 정렬값
+		ProUsersVO vo2 = proService.readOrder(id);//기본 데이터 저장 값 
+		int result = 0;
 		
-		param.put("id", (String)session.getAttribute("Id"));
-		param.put("pid", projcetMasterId);//기본값 참여중or관리자 프로젝트 구분
-		param.put("oBy", orderBy);//정렬 기본값
+		param.put("id", id);
+		
+		//정렬 변경시
+		if(newProPartiFilter == null) {
+			param.put("proRange", newProRange);//정렬 기본값
+			param.put("proPartiFilter", vo2.getProPartiFilter());
+			result = proService.updateProjectOrder(newProRange, id);
+		//필터 변경시
+		} else if (newProRange == null) {
+			param.put("proRange", vo2.getProRange());//정렬 기본값
+			param.put("proPartiFilter", newProPartiFilter);//기본값 참여중or관리자 프로젝트 구분
+			result = proService.updateProjectFilter(id);
+		} else {
+			System.out.println("오류다!!!");
+		}
 		
 		model.addAttribute("projectMainList", proService.readProject(param));
 		proData(model, request);
 		
-		return "proHome/proMain";
+		if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+		
+		map.put("result", res);
+		return map;
 	}
 	
 	
