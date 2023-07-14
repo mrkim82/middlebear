@@ -71,7 +71,8 @@ public class ProController {
 		String newProRange = vo.getProRange();//신규 정렬값
 		ProUsersVO vo2 = proService.readOrder(id);//기본 데이터 저장 값 
 		int result = 0;
-		
+		System.out.println("필터 : " + newProPartiFilter);
+		System.out.println("정렬 : " + newProRange);
 		param.put("id", id);
 		
 		//정렬 변경시
@@ -79,14 +80,20 @@ public class ProController {
 			param.put("proRange", newProRange);//정렬 기본값
 			param.put("proPartiFilter", vo2.getProPartiFilter());
 			result = proService.updateProjectOrder(newProRange, id);
+			System.out.println("정렬임");
 		//필터 변경시
-		} else if (newProRange == null) {
+		} else if (newProRange == null || newProRange == "") {
+			newProPartiFilter = newProPartiFilter != "" ? newProPartiFilter : "";
+			System.out.println(newProPartiFilter);
+			System.out.println("필터임");
 			param.put("proRange", vo2.getProRange());//정렬 기본값
 			param.put("proPartiFilter", newProPartiFilter);//기본값 참여중or관리자 프로젝트 구분
 			result = proService.updateProjectFilter(id);
 		} else {
 			System.out.println("오류다!!!");
 		}
+		
+		System.out.println(param);
 		
 		model.addAttribute("projectMainList", proService.readProject(param));
 		proData(model, request);

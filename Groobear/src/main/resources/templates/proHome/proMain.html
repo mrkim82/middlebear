@@ -30,7 +30,8 @@
 	<div>
 		<h2>내 프로젝트<span class="star empty-star">&#9733;</span></h2>
 		<select class="form-select" name="parti" onchange="chagepartiSelect()" id="partiSelect">
-			<option selected value="">내가 참여중인 프로젝트</option>
+			<option selected value="">미분류</option>
+			<option value="">내가 참여중인 프로젝트</option>
 			<option th:value="${session.Id}">내가 관리자인 프로젝트</option>
 		</select>
 		<select class="form-select" name="parti" onchange="chageorderSelect()" id="orderSelect">
@@ -168,13 +169,13 @@
 			.then(response => response.json())
 			.then(res => {
 				let rC = res.result;
-					console.log(res);
-				if (rC == '성공') {
+					console.log('ss'+rC);
+				/* if (rC == '성공') {
 					alert('요청 성공');
 				} else {
 					alert('요청 실패');
-				}
-				
+				} */
+				//location.reload();
 			});
 		}
 	</script>
