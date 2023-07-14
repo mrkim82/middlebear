@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.groo.bear.mypage.paging.Criteria;
-import com.groo.bear.mypage.paging.Paging;
 import com.groo.bear.mypage.service.CarService;
 import com.groo.bear.mypage.service.CarVO;
 import com.groo.bear.mypage.service.UserService;
+import com.groo.bear.paging.Criteria;
+import com.groo.bear.paging.Paging;
 
 @Controller
 public class CarController {

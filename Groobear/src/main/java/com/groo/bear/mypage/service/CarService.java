@@ -3,7 +3,7 @@ package com.groo.bear.mypage.service;
 import java.util.List;
 import java.util.Map;
 
-import com.groo.bear.mypage.paging.Criteria;
+import com.groo.bear.paging.Criteria;
 
 public interface CarService {
 
