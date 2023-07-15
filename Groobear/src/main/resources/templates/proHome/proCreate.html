@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layout/proTiles}"
->
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/proTiles}">
 <head>
 <meta charset="UTF-8">
 <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 <style>
-	th {
-		text-align: left;
-	}
+th {
+	text-align: left;
+}
 </style>
 </head>
 <body layout:fragment="content">
 	<div>
-		<form th:action="@{/proCreate}" method="POST" th:object="${proVO}">
+		<form th:action="@{/proCreate}" method="POST" th:object="${proVO}"
+			onsubmit="return blankSearch()">
 			<div>
 				<label for="proName">프로젝트 이름</label> <input type="text" id="proName"
 					th:field="*{proName}">
@@ -28,86 +28,88 @@
 
 				<div th:each="index : ${#numbers.sequence(1, 5)}">
 					<input type="radio" th:id="'proDefTab' + ${index}" name="proDefTab"
-						th:value="${index}" th:checked="${index == 1}">
-						<label th:for="'proDefTab' + ${index}">
-						<span th:switch="${index}">
-							<span th:case="1">피드</span>
-							<span th:case="2">업무</span>
-							<span th:case="3">간트차트</span>
-							<span th:case="4">캘린더</span>
-							<span th:case="5">파일</span>
-						</span>
+						th:value="${index}" th:checked="${index == 1}"> <label
+						th:for="'proDefTab' + ${index}"> <span
+						th:switch="${index}"> <span th:case="1">피드</span> <span
+							th:case="2">업무</span> <span th:case="3">간트차트</span> <span
+							th:case="4">캘린더</span> <span th:case="5">파일</span>
+					</span>
 					</label>
 				</div>
-				
+
 			</div>
-			
+
 			<div>
 				<div>권한 설정</div>
-				
+
 				<table>
-						<tr>
-							<th colspan="2" >게시글</th>
-						</tr>
-						<tr>
-							<td>작성 권한</td>
-							<td>
-								<select name="postWriteAuth">
-									<option th:value="1">전체</option>
-									<option th:value="2">프로젝트 관리자만</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>수정 권한</td>
-							<td>
-								<select name="postUpdateAuth">
-									<option th:value="1">전체</option>
-									<option th:value="2" selected>프로젝트 관리자 + 작성자만</option>
-									<option th:value="3">작성자만</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>조회 권한</td>
-							<td>
-								<select name="postViewAuth">
-									<option th:value="1">전체</option>
-									<option th:value="2">프로젝트 관리자 + 작성자만</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th colspan="2">댓글</th>
-						</tr>
-						<tr>
-							<td>작성 권한</td>
-							<td>
-								<select name="comWriteAuth">
-									<option th:value="1">전체</option>
-									<option th:value="2">프로젝트 관리자만</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th colspan="2">파일</th>
-						</tr>
-						<tr>
-							<td>조회/다운로드 권한</td>
-							<td>
-								<select name="fileAuth">
-									<option th:value="1">전체</option>
-									<option th:value="2">프로젝트 관리자 + 작성자만</option>
-								</select>
-							</td>
-						</tr>
+					<tr>
+						<th colspan="2">게시글</th>
+					</tr>
+					<tr>
+						<td>작성 권한</td>
+						<td><select name="postWriteAuth">
+								<option th:value="1">전체</option>
+								<option th:value="2">프로젝트 관리자만</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>수정 권한</td>
+						<td><select name="postUpdateAuth">
+								<option th:value="1">전체</option>
+								<option th:value="2" selected>프로젝트 관리자 + 작성자만</option>
+								<option th:value="3">작성자만</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>조회 권한</td>
+						<td><select name="postViewAuth">
+								<option th:value="1">전체</option>
+								<option th:value="2">프로젝트 관리자 + 작성자만</option>
+						</select></td>
+					</tr>
+					<tr>
+						<th colspan="2">댓글</th>
+					</tr>
+					<tr>
+						<td>작성 권한</td>
+						<td><select name="comWriteAuth">
+								<option th:value="1">전체</option>
+								<option th:value="2">프로젝트 관리자만</option>
+						</select></td>
+					</tr>
+					<tr>
+						<th colspan="2">파일</th>
+					</tr>
+					<tr>
+						<td>조회/다운로드 권한</td>
+						<td><select name="fileAuth">
+								<option th:value="1">전체</option>
+								<option th:value="2">프로젝트 관리자 + 작성자만</option>
+						</select></td>
+					</tr>
 				</table>
 			</div>
 			<div>
 				<button type="submit">등록</button>
 				<button type="button" th:onclick="|location.href='@{/proMain}'|">돌아가기</button>
 			</div>
+			<!-- 제목 빈값 거르기 -->
+			<script>
+				function blankSearch() {
+					let proName = document.getElementById('proName').value;
+					console.log(proName);
+					if (proName === '') {
+						// 프로젝트 이름이 빈 값이거나 null인 경우
+						alert('프로젝트 이름을 입력해주세요.');
+						return false; // 폼 제출을 막음
+					}
+
+					return true; // 폼 제출을 허용
+				}
+			</script>
 		</form>
 	</div>
 </body>
+
 </html>

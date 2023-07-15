@@ -328,6 +328,7 @@ details {
 	    function checkGroupFolderName() {
 			let formData = new FormData();
 			formData.append('gN', folderC1.value);
+			//console.log(formData.get('gN'));
 			
 			if(folderC1.value == '') {
 	    		alert('폴더 이름은 공백을 허용하지 않습니다!');
@@ -344,6 +345,8 @@ details {
 				.then(res => {
 					let rC = res.result;
 					let latelyGroupNum = res.pGN;
+					console.log(rC);
+					console.log(res);
 					if(rC == '성공') {
 						//동적 폴더 생성
 						createFolder(latelyGroupNum);				

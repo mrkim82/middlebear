@@ -30,7 +30,7 @@
 		AND p.id = u.id
 		AND m.pro_hide_check = 'N'
 		AND m.pro_parti_check = 'Y'
-		<if test="proPartiFilter != null and !proPartiFilter.equals('')">
+		<if test="proPartiFilter != '' and proPartiFilter != null">
 		 	AND p.id = #{proPartiFilter}
 	 	</if>
 		ORDER BY ${proRange}
@@ -165,7 +165,7 @@
 	<!-- 프로젝트 필터 수정 -->
 	<update id="updateProjectFilter" parameterType="ProUsersVO">
 		UPDATE users
-		SET pro_parti_filter = #{id}
+		SET pro_parti_filter = #{proPartiFilter}
 		WHERE id = #{id}
 	</update>
 	

@@ -49,7 +49,7 @@ public interface ProMapper {
 	public int deleteGroup(int groupNo);
 	
 	//프로젝트 필터 수정
-	public int updateProjectFilter(String id);
+	public int updateProjectFilter(String proPartiFilter, String id);
 	
 	//프로젝트 정렬 수정
 	public int updateProjectOrder(String proRange, String id);

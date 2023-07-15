@@ -52,8 +52,10 @@ public class ProController {
 		param.put("id", id);
 		param.put("proPartiFilter", vo.getProPartiFilter());//기본값 참여중or관리자 프로젝트 구분
 		param.put("proRange", vo.getProRange());//정렬 기본값
-		
+		System.out.println(param);
 		model.addAttribute("projectMainList", proService.readProject(param));
+		model.addAttribute("userProjectFilter", vo);
+		System.out.println(model);
 		proData(model, request);
 		return "proHome/proMain";
 	};
@@ -69,33 +71,37 @@ public class ProController {
 		String id = (String)session.getAttribute("Id");
 		String newProPartiFilter = vo.getProPartiFilter();//필터 신규값
 		String newProRange = vo.getProRange();//신규 정렬값
-		ProUsersVO vo2 = proService.readOrder(id);//기본 데이터 저장 값 
+		ProUsersVO vo2 = proService.readOrder(id);//기본 데이터 저장 값
+		String oldProPartiFilter = vo2.getProPartiFilter();
+		String oldProRange = vo2.getProRange();
 		int result = 0;
-		System.out.println("필터 : " + newProPartiFilter);
-		System.out.println("정렬 : " + newProRange);
+		//System.out.println("필터 : " + newProPartiFilter);
+		//System.out.println("정렬 : " + newProRange);
+		
 		param.put("id", id);
+		
+		//oldProPartiFilter = oldProPartiFilter == null ? "" : oldProPartiFilter;
 		
 		//정렬 변경시
 		if(newProPartiFilter == null) {
 			param.put("proRange", newProRange);//정렬 기본값
-			param.put("proPartiFilter", vo2.getProPartiFilter());
+			param.put("proPartiFilter", oldProPartiFilter);
 			result = proService.updateProjectOrder(newProRange, id);
-			System.out.println("정렬임");
+			//System.out.println("정렬임");
 		//필터 변경시
 		} else if (newProRange == null || newProRange == "") {
-			newProPartiFilter = newProPartiFilter != "" ? newProPartiFilter : "";
-			System.out.println(newProPartiFilter);
-			System.out.println("필터임");
-			param.put("proRange", vo2.getProRange());//정렬 기본값
+			//newProPartiFilter = newProPartiFilter != "" ? newProPartiFilter : "";
+			//System.out.println(newProPartiFilter);
+			//System.out.println("필터임");
+			param.put("proRange", oldProRange);//정렬 기본값
 			param.put("proPartiFilter", newProPartiFilter);//기본값 참여중or관리자 프로젝트 구분
-			result = proService.updateProjectFilter(id);
+			result = proService.updateProjectFilter(newProPartiFilter, id);
 		} else {
 			System.out.println("오류다!!!");
 		}
 		
-		System.out.println(param);
-		
 		model.addAttribute("projectMainList", proService.readProject(param));
+		model.addAttribute("userProjectFilter", vo2);
 		proData(model, request);
 		
 		if(result > 0) {
@@ -263,7 +269,6 @@ public class ProController {
 		}
 		
 		map.put("result", res);
-		System.out.println(map);
 		return map;
 	}
 	

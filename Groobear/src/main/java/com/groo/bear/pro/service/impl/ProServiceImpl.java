@@ -93,8 +93,8 @@ public class ProServiceImpl implements ProService {
 	}
 
 	@Override
-	public int updateProjectFilter(String proRange) {
-		return proMapper.updateProjectFilter(proRange);
+	public int updateProjectFilter(String proPartiFilter, String proRange) {
+		return proMapper.updateProjectFilter(proPartiFilter, proRange);
 	}
 
 	@Override

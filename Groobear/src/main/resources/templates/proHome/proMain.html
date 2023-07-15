@@ -30,15 +30,20 @@
 	<div>
 		<h2>내 프로젝트<span class="star empty-star">&#9733;</span></h2>
 		<select class="form-select" name="parti" onchange="chagepartiSelect()" id="partiSelect">
-			<option selected value="">미분류</option>
-			<option value="">내가 참여중인 프로젝트</option>
-			<option th:value="${session.Id}">내가 관리자인 프로젝트</option>
+			<option th:selected="${userProjectFilter.proPartiFilter == null}"
+					value="">내가 참여중인 프로젝트</option>
+			<option th:selected="${userProjectFilter.proPartiFilter == session.Id}"
+					th:value="${session.Id}">내가 관리자인 프로젝트</option>
 		</select>
 		<select class="form-select" name="parti" onchange="chageorderSelect()" id="orderSelect">
-			<option selected value="p.pro_no DESC">최신 순(글/댓글)</option>
-			<option value="p.pro_no ASC">내가 작성한 순(글/댓글)X</option>
-			<option value="1 DESC">오름차순(ㄱ~ㅎ)</option>
-			<option value="1 ASC">내림차순(ㅎ~ㄱ)</option>
+			<option th:selected="${userProjectFilter.proRange == 'p.pro_no DESC'}"
+					value="p.pro_no DESC">최신 순(글/댓글)</option>
+			<option th:selected="${userProjectFilter.proRange == 'p.pro_no ASC'}"
+					value="p.pro_no ASC">내가 작성한 순(글/댓글)X</option>
+			<option th:selected="${userProjectFilter.proRange == '1 DESC'}"
+					value="1 DESC">오름차순(ㄱ~ㅎ)</option>
+			<option th:selected="${userProjectFilter.proRange == '1 ASC'}"
+					value="1 ASC">내림차순(ㅎ~ㄱ)</option>
 		</select>
 		
 	</div>
@@ -122,8 +127,9 @@
 				let rC = res.result;
 				
 				if (rC == '등록' || rC == '취소') {
-					changeProOne(rC, trTag);
-					
+					//동적 교체는 취소되었습니다
+					//changeProOne(rC, trTag);
+					location.reload();
 				} else {
 					alert('요청이 취소 되었습니다.');
 				}
@@ -168,14 +174,12 @@
 			})
 			.then(response => response.json())
 			.then(res => {
-				let rC = res.result;
-					console.log('ss'+rC);
-				/* if (rC == '성공') {
-					alert('요청 성공');
+				
+				if (res.result == '성공') {
+					location.reload();
 				} else {
 					alert('요청 실패');
-				} */
-				//location.reload();
+				}
 			});
 		}
 	</script>
@@ -199,12 +203,11 @@
 			.then(res => {
 				let rC = res.result;
 					console.log(res);
-				/* if (rC == '성공') {
-					alert('요청 성공');
+				if (rC == '성공') {
+					location.reload();
 				} else {
 					alert('요청 실패');
-				} */
-				location.reload();
+				}
 			});
 		}
 	</script>
