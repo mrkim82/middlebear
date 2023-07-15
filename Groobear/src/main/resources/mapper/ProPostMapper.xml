@@ -6,7 +6,7 @@
 	
 	<!-- 상단메뉴바 조회 -->
 	<select id="readTopMenu" resultType="proPostVO">
-		SELECT m.pro_color, m.pro_star_check, m.home_tab, p.pro_name, p.pro_content
+		SELECT m.pro_color, m.pro_star_check, m.home_tab, p.pro_name, p.pro_content, p.pro_no
 		FROM pro_mem m JOIN pro p
 		ON m.pro_no = p.pro_no
 		WHERE p.pro_no = #{proNo}

@@ -6,7 +6,6 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
 <link
 	href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
 	rel="stylesheet">
@@ -87,7 +86,15 @@ details {
 	background-color: #000;
 	margin-left: 30px;
 }
+
+.bottomLine {
+	border-bottom: 3px solid red;
+}
 </style>
+
+<!-- <script src="../proPost/proPostJs/proPostDetail.js"></script>
+<script type="text/javascript" src="../proPost/proPostJs/proPostJs/proPostWorkButtonToggle.js" defer></script> -->
+
 </head>
 <body>
 	<div>
@@ -236,18 +243,27 @@ details {
 			<div class="horizontal-bar2">
 				
 				<nav class="nav">
-				  <a class="nav-link" href="/proPostMain/">업무</a>
-				  <a class="nav-link" href="#">피드</a>
-				  <a class="nav-link" href="#">간트차트</a>
-				  <a class="nav-link" href="#">캘린더</a>
-				  <a class="nav-link" href="#">파일</a>
-				  <a class="nav-link" href="#">알림</a>
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=1)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '1'} ? 'bottomLine' : ''">업무</a>
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=2)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '2'} ? 'bottomLine' : ''">피드</a>
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=3)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '3'} ? 'bottomLine' : ''">간트차트</a>
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=4)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '4'} ? 'bottomLine' : ''">캘린더</a>
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=5)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '5'} ? 'bottomLine' : ''">파일</a>
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=6)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '6'} ? 'bottomLine' : ''">알림</a>
+					<!-- 주소를 가져오는 방식 -->
+					<!-- <th:block th:text="${#strings.substringAfter((#strings.substringAfter(#request.requestURI, '/')), '/')}"></th:block>
+					<p th:text="${#request.requestURI}"></p>
+					<th:block th:text="${#strings.substringAfter(#request.getQueryString(), '=')}"></th:block> -->
 				</nav>
 				
 			</div>
 			<div>
 				<div layout:fragment="content"></div>
-				<p th:text="${projectTopBar.homeTab}"></p>
 			</div>
 		</div>
 
