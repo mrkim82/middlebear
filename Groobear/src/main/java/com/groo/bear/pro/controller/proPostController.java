@@ -48,7 +48,6 @@ public class proPostController {
 		
 		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));
 		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(id, proNo));
-		System.out.println("sss"+model);
 		switch (homeTab) {
 		//피드
 		case 1 :

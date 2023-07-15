@@ -144,7 +144,7 @@ p {
 									</div>
 									<!-- 담당자 추가 -->
 									<div>
-										<p>담당자 추가</p>
+										<p>담당자 추가(Ctrl을 누르면 중복 처리 가능)</p>
 										<select class="form-select" multiple name="workMember" size=5>
 											<option value="option1">빨강</option>
 											<option value="option2">주황</option>
@@ -262,7 +262,7 @@ p {
 									</div>
 									<!-- 참석자 -->
 									<div>
-										<p>참석자 추가</p>
+										<p>참석자 추가(Ctrl을 누르면 중복 처리 가능)</p>
 										<select class="form-select" multiple name="workMember" size=5>
 											<option value="option1">빨강</option>
 											<option value="option2">주황</option>
@@ -287,7 +287,7 @@ p {
 						</div>
 					</div>
 
-					<!-- 할 일 -->
+					<!-- 4.할 일 작성 -->
 					<div class="modal fade modal-dialog-scrollable" id="modal4" tabindex="-1" role="dialog"
 						aria-labelledby="modal4Label" aria-hidden="true">
 						<div class="modal-dialog" role="document">
@@ -320,11 +320,22 @@ p {
 									</div>
 									<!-- 할 일 입력 -->
 									<div>
-										
+										<input type="text" placeholder="할 일 추가">
+										<div>
+											<input type="datetime-local">
+											<select class="form-select" name="todoMember">
+												<option value="option1">빨강</option>
+												<option value="option2">주황</option>
+												<option value="option3">노랑</option>
+												<option value="option4">초록</option>
+												<option value="option5">파랑</option>
+												<option value="option6">남색</option>
+												<option value="option7">보라</option>
+											</select>
+										</div>
 									</div>
 									<!-- 할 일 추가 -->
 									<div>
-
 									</div>
 								</div>
 								<button type="button" class="btn btn-primary">등록</button>
@@ -369,6 +380,8 @@ p {
 									</div>
 									<!-- 투표내용 -->
 									<div>
+										<input type="text" placeholder="항목 추가">
+										<input type="text" placeholder="항목 추가">
 
 									</div>
 									<!-- 투표 항목 추가 -->
@@ -376,6 +389,10 @@ p {
 
 									</div>
 									<!-- 투표 마감일 -->
+									<div>
+										<p>투표 마감일</p>
+										<input type="datetime-local" id="endVoteDate">
+									</div>
 									<!--  -->
 								</div>
 								<button type="button" class="btn btn-primary">등록</button>
@@ -448,6 +465,7 @@ p {
 		    button.classList.add(filledClassName);
 		  }
 		}
+		
 	</script>
 	
 	<!-- 시간 단위 조정 -->
@@ -476,5 +494,6 @@ p {
 	<script
 		th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
 		
+	<script src="../proPost/proPostJs/proPostDetail.js"></script>
 </body>
 </html>
