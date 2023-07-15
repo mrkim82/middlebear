@@ -60,7 +60,7 @@
 			<tbody id="YesStar">
 				<tr th:each="pro:${projectMainList}"
 					th:if="${pro.proStarCheck == 'Y'}"
-					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
+					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}, data-proNo=${pro.proNo}"
 					style="cursor: pointer">
 					<td><div class="square"
 							th:style="'background-color: ' + ${pro.proColor}"></div></td>
@@ -84,7 +84,7 @@
 			<tbody id="NoStar">
 				<tr th:each="pro:${projectMainList}"
 					th:if="${pro.proStarCheck == 'N'}"
-					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
+					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}, data-proNo=${pro.proNo}"
 					style="cursor: pointer">
 					<td><div class="square"
 							th:style="'background-color: ' + ${pro.proColor}"></div></td>
@@ -220,25 +220,25 @@
 		
 		trDetailsY.forEach(trDetailY => {
 			let homeTabNum = trDetailY.dataset.hometab;
-			let pmn = trDetailY.dataset.pmn;
+			let pn = trDetailY.dataset.prono;
 			trDetailY.addEventListener('click', function() {
-				projectDetail(homeTabNum, pmn)
+				projectDetail(homeTabNum, pn)
 			});
 		});
 
 		trDetailsN.forEach(trDetailN => {
 			let homeTabNum = trDetailN.dataset.hometab;
-			let pmn = trDetailN.dataset.pmn;
+			let pn = trDetailN.dataset.prono;
 			trDetailN.addEventListener('click', function() {
-				projectDetail(homeTabNum, pmn)
+				projectDetail(homeTabNum, pn)
 			});
 		});
 
-		function projectDetail(homeTNum, proMemNo) {
-			console.log(proMemNo);
+		function projectDetail(homeTNum, proNo) {
+			console.log(proNo);
 			console.log(homeTNum);
 			
-			location.href="proPostMain/" + proMemNo + "?homeTab=" + homeTNum;
+			location.href="proPostMain/" + proNo + "?homeTab=" + homeTNum;
 		}
 	</script>
 </body>

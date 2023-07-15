@@ -313,6 +313,8 @@ details {
 		
 	    //클릭 후 그룹 폴더 만들기(모달1)
 	    creFolder.onclick = function() {
+			console.log(pGCUp);
+			
 	    	if(pGCUp >= 10) {
 	    		alert('프로젝트 폴더는 최대 10개 생성 할 수 있습니다.');
 	    		folderC1.value = '';
@@ -326,9 +328,6 @@ details {
 	    
 	    //폴더명 확인
 	    function checkGroupFolderName() {
-			let formData = new FormData();
-			formData.append('gN', folderC1.value);
-			//console.log(formData.get('gN'));
 			
 			if(folderC1.value == '') {
 	    		alert('폴더 이름은 공백을 허용하지 않습니다!');
@@ -337,9 +336,13 @@ details {
 	    		alert('폴더 이름은 최대 30자 까지 가능합니다!');
 	    		return;
 	    	} else {
+				let formData = new FormData();
+				formData.append('gN', folderC1.value);
+				console.log(formData.get('gN'));
 	    		//db정보 삽입
 				fetch("/proGroupC", {
 					method: 'POST',
+					body : formData
 				})
 				.then(response => response.json())
 				.then(res => {
@@ -437,10 +440,10 @@ details {
 					
 					modal2.style.display = 'block';
 					
-					//디비 수정
-					uFolderName.addEventListener('click', function() {
-						groupNameChangeDb(groupNo);
-					});
+					//디비 수정, 중복값 막기 위해 onclick 사용
+					uFolderName.onclick = function() {
+				        groupNameChangeDb(groupNo);
+				    };
 					
 			    });
 				
@@ -462,23 +465,22 @@ details {
 				      modal3.style.display = 'none';
 				    }
 					
-					dFolder.addEventListener("click", function() {
-						
-						fetch("/FolderGroupD/" + groupNo, {
-							method: 'DELETE'
-						})
-						.then(response => response.json())
-						.then(res => {
-							let rC = res.result;
-						
-							if(rC == '성공') {
-								document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].parentNode.remove();
-								modal3.style.display = 'none';
-							} else {
-								alert('요청이 취소 되었습니다.');
-							}
-						});
-					});
+					dFolder.onclick = function() {
+					    fetch("/FolderGroupD/" + groupNo, {
+					        method: 'DELETE'
+					    })
+					    .then(response => response.json())
+					    .then(res => {
+					        let rC = res.result;
+
+					        if (rC == '성공') {
+					            document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].parentNode.remove();
+					            modal3.style.display = 'none';
+					        } else {
+					            alert('요청이 취소 되었습니다.');
+					        }
+					    });
+					};
 					
 			    });
 				
@@ -509,10 +511,10 @@ details {
 				.then(response => response.json())
 				.then(res => {
 					let rC = res.result;
-				
 					if(rC == '성공') {
 						modal2.style.display = 'none';
 						document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].childNodes[0].textContent = folderC2.value;
+						document.getElementById('folderContent2').innerText = folderC2.value;
 					} else {
 						alert('요청이 취소 되었습니다.');
 					}

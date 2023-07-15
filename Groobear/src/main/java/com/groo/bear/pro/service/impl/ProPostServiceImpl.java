@@ -1,7 +1,5 @@
 package com.groo.bear.pro.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +13,13 @@ public class ProPostServiceImpl implements ProPostService {
 	ProPostMapper ppm;
 	
 	@Override
-	public List<ProPostVO> readTopMenu(int proMemNo) {
-		return ppm.readTopMenu(proMemNo);
+	public ProPostVO readTopMenu(int proNo, String id) {
+		return ppm.readTopMenu(proNo, id);
 	}
 
 	@Override
-	public int readTopMenuCount(int proMemNo) {
-		return ppm.readTopMenuCount(proMemNo);
+	public int readTopMenuCount(String id, int proNo) {
+		return ppm.readTopMenuCount(id, proNo);
 	}
 
 }

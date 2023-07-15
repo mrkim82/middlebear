@@ -37,26 +37,28 @@ public class proPostController {
 		return model;
 	}
 	
-	@GetMapping("proPostMain/{proMemNo}")
-	public String proPostPage(Model model, HttpServletRequest request, @PathVariable int proMemNo, ProPostVO vo) {
+	@GetMapping("proPostMain/{proNo}")
+	public String proPostPage(Model model, HttpServletRequest request, @PathVariable int proNo, ProPostVO vo) {
+		HttpSession session = request.getSession();
 		String pagePath ="";
 		int homeTab = Integer.parseInt(vo.getHomeTab());
+		String id = (String)session.getAttribute("Id");
 		
 		proData2(model, request);
 		
-		model.addAttribute("projectTopBar", proPostService.readTopMenu(proMemNo));
-		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(proMemNo));
-		System.out.println("오류"+model);
+		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));
+		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(id, proNo));
+		System.out.println("sss"+model);
 		switch (homeTab) {
 		//피드
 		case 1 :
 			
-			pagePath = "proPost/proPostDetail";
+			pagePath = "proPost/proPostTask";
 			break;
 		//업무
 		case 2 :
 			
-			pagePath = "proPost/proPostTask";
+			pagePath = "proPost/proPostDetail";
 			break;
 		//간트차트
 		case 3 :
