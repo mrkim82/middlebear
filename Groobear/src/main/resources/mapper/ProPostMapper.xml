@@ -5,31 +5,47 @@
 <mapper namespace="com.groo.bear.pro.mapper.ProPostMapper">
 	
 	<!-- 상단메뉴바 조회 -->
-	<select id="readTopMenu" resultType="ProPostVO">
-		SELECT m.pro_color, m.pro_star_check, m.home_tab, p.pro_name, p.pro_content
+	<select id="readTopMenu" resultType="proPostVO">
+		SELECT m.pro_color, m.pro_star_check, m.home_tab, p.pro_name, p.pro_content, p.pro_no
 		FROM pro_mem m JOIN pro p
 		ON m.pro_no = p.pro_no
-		WHERE m.pro_mem_no = #{proMemNo}
+		WHERE p.pro_no = #{proNo}
+		AND m.id = #{id}
 	</select>
 	
-	<!-- 프로젝트 즐겨찾기 등록
-	<update id="updateStarY" parameterType="int">
-		UPDATE pro_mem
-		SET pro_star_check = 'Y'
-		WHERE pro_mem_no = #{proMemNo}
-	</update>
+	<!-- 상단메뉴바 인원수 조회 -->
+	<select id="readTopMenuCount" resultType="int">
+		SELECT COUNT(m1.pro_mem_no) AS count
+		FROM pro_mem m1 INNER JOIN (SELECT pro_no FROM pro_mem WHERE id = #{id}) m2
+		ON m1.pro_no = m2.pro_no
+		WHERE pro_parti_check = 'Y'
+		AND m1.pro_no = #{proNo}
+		GROUP BY m1.pro_no
+	</select>
 	
-	프로젝트 그룹 생성
-	<insert id="createProjectGroup" parameterType="String">
-		INSERT INTO pro_group
-		VALUES((SELECT NVL(MAX(group_no), 0) + 1
-		        FROM pro_group), #{groupName}, #{id})
-	</insert>
+	<!-- 프로젝트 참가자 조회 -->
+	<select id="readProjectParti" resultType="ProPostUserVO">
+		SELECT i.name, m.id
+		FROM pro_mem m JOIN users u
+		ON(m.id = u.id)
+		JOIN user_info i
+		ON(u.emp_no = i.emp_no)
+		WHERE m.pro_no = #{proNo}
+		ORDER BY i.name
+	</select>
 	
-	프로젝트 그룹 삭제
-	<delete id="deleteGroup" parameterType="int">
-		DELETE FROM pro_group
-		WHERE group_no = #{groupNo}
-	</delete> -->
+	<!-- 글 생성(1번) -->
+	<select id="createPostWriting" statementType="CALLABLE" parameterType="ProPostWritingVO">
+		{call cre_pro_writing(
+				#{v_pro_no, 		  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_id, 	  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_post_title,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_post_date,  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_post_top_seq, mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_writing_content,	  mode=IN, jdbcType=CHAR, 	   javaType=String}
+			)
+		}
+	</select>
+	
 	
 </mapper>
