@@ -35,17 +35,14 @@
 	</select>
 	
 	<!-- 글 생성(1번) -->
-	<select id="createPostWriting" statementType="CALLABLE" parameterType="hashMap">
-		{call cre_project(
-				#{v_pro_name, 		  mode=IN, jdbcType=VARCHAR,   javaType=String},
-				#{v_pro_content, 	  mode=IN, jdbcType=VARCHAR,   javaType=String},
-				#{v_pro_def_tab,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
-				#{v_post_write_auth,  mode=IN, jdbcType=CHAR, 	   javaType=String},
-				#{v_post_update_auth, mode=IN, jdbcType=CHAR, 	   javaType=String},
-				#{v_post_view_auth,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
-				#{v_com_write_auth,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
-				#{v_file_auth, 		  mode=IN, jdbcType=CHAR, 	   javaType=String},
-				#{v_id, 			  mode=IN, jdbcType=VARCHAR,   javaType=String}
+	<select id="createPostWriting" statementType="CALLABLE" parameterType="ProPostWritingVO">
+		{call cre_pro_writing(
+				#{v_pro_no, 		  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_id, 	  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_post_title,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_post_date,  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_post_top_seq, mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_writing_content,	  mode=IN, jdbcType=CHAR, 	   javaType=String}
 			)
 		}
 	</select>
