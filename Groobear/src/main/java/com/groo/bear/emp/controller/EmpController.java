@@ -47,10 +47,10 @@ public class EmpController {
 		return "redirect:/";
 	}
 	
-	
-	
-	
-	
+	@GetMapping("checkSms")
+	public String checkSms() {
+		return "sendSms";
+	}
 	
 	
 	

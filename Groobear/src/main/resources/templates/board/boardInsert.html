@@ -26,18 +26,19 @@
                 	<td style="display:none;"><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
                	</tr>
                	<tr>
-               		<td><input type="text" id="boardType" name="boardType" th:value="${board.boardType}"></td>
+               		<td><input type="hidden" id="boardType" name="boardType" th:value="${board.boardType}"></td>
                	</tr>
             </table>
             <button type="submit" >게시글 등록</button>
-            <button id="listlist" type="button" onclick="boardListGo()" >목록으로</button>
+            <button id="listlist" type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|" >목록으로</button>
         </form>
-    <script th:inline="javascript">
+    <!-- <script th:inline="javascript">
     	function boardListGo() {
             let bT = /*[[${board.boardType}]]*/
+            console.log()
             window.location.href ='boardList?boardType=' + bT
         }
-    </script>
+    </script> -->
     </div>
 </body>
 </html>

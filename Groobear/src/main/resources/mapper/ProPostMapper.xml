@@ -47,24 +47,4 @@
 		}
 	</select>
 	
-	<!-- 프로젝트 즐겨찾기 등록
-	<update id="updateStarY" parameterType="int">
-		UPDATE pro_mem
-		SET pro_star_check = 'Y'
-		WHERE pro_mem_no = #{proMemNo}
-	</update>
-	
-	프로젝트 그룹 생성
-	<insert id="createProjectGroup" parameterType="String">
-		INSERT INTO pro_group
-		VALUES((SELECT NVL(MAX(group_no), 0) + 1
-		        FROM pro_group), #{groupName}, #{id})
-	</insert>
-	
-	프로젝트 그룹 삭제
-	<delete id="deleteGroup" parameterType="int">
-		DELETE FROM pro_group
-		WHERE group_no = #{groupNo}
-	</delete> -->
-	
 </mapper>

@@ -3,5 +3,40 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.groo.bear.mail.mapper.MailMapper">
+	<!-- 메일발송 -->
+	<insert id="sendMail" statementType="CALLABLE" parameterType="MailVO">
+		 {call cre_mailsend(sysdate,
+		 					sysdate,
+		 		<choose>
+					<when test="deleteDate != null">
+							#{deleteDate},
+					</when>
+					<otherwise>
+							'',
+					</otherwise>
+				</choose>
+		 					'N',
+		 					'S',
+		 					#{id},
+		 					#{title},
+		 					#{content},
+		 					#{sender},
+		 					#{receiver},
+		 		<choose>
+				<when test="referrer != null and !referrer.equals('')">
+		 					#{referrer}
+		 		</when>
+		 		<otherwise>
+		 					''
+		 		</otherwise>
+		 		</choose>
+		 					)}
+	</insert>
+	<!-- 받은메일함 -->
 	
+	<!-- 보낸메일함 -->
+	
+	<!-- 메일삭제 -->
+	<!-- 완전삭제 -->
+	<!-- 지운메일함 -->
 </mapper>

@@ -3,7 +3,7 @@ package com.groo.bear.mypage.service;
 import java.util.List;
 import java.util.Map;
 
-import com.groo.bear.mypage.paging.Criteria;
+import com.groo.bear.paging.Criteria;
 
 public interface CarService {
 
@@ -15,6 +15,6 @@ public interface CarService {
 	
 	//페이징
 	public int carListCnt() throws Exception;
-	public List<Map<String, Object>> carList(Criteria cri) throws Exception;
+	public List<Map<String, Object>> selectAllCar(Criteria cri) throws Exception;
 	
 }
