@@ -35,7 +35,7 @@
 	</select>
 	
 	<!-- 글 생성(1번) -->
-	<select id="createPro" statementType="CALLABLE" parameterType="hashMap">
+	<select id="createPostWriting" statementType="CALLABLE" parameterType="hashMap">
 		{call cre_project(
 				#{v_pro_name, 		  mode=IN, jdbcType=VARCHAR,   javaType=String},
 				#{v_pro_content, 	  mode=IN, jdbcType=VARCHAR,   javaType=String},
