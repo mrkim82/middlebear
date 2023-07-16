@@ -146,13 +146,12 @@ p {
 									<div>
 										<p>담당자 추가(Ctrl을 누르면 중복 처리 가능)</p>
 										<select class="form-select" multiple name="workMember" size=5>
-											<option value="option1">빨강</option>
-											<option value="option2">주황</option>
-											<option value="option3">노랑</option>
-											<option value="option4">초록</option>
-											<option value="option5">파랑</option>
-											<option value="option6">남색</option>
-											<option value="option7">보라</option>
+											<th:block th:each="member : ${projectPartiMember}">
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id != session.Id}"></option>
+											</th:block>
 										</select>
 									</div>
 									<!-- 항목 추가입력 -->
@@ -264,13 +263,12 @@ p {
 									<div>
 										<p>참석자 추가(Ctrl을 누르면 중복 처리 가능)</p>
 										<select class="form-select" multiple name="workMember" size=5>
-											<option value="option1">빨강</option>
-											<option value="option2">주황</option>
-											<option value="option3">노랑</option>
-											<option value="option4">초록</option>
-											<option value="option5">파랑</option>
-											<option value="option6">남색</option>
-											<option value="option7">보라</option>
+											<th:block th:each="member : ${projectPartiMember}">
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id != session.Id}"></option>
+											</th:block>
 										</select>
 									</div>
 									<!-- 장소 -->
@@ -324,13 +322,12 @@ p {
 										<div>
 											<input type="datetime-local">
 											<select class="form-select" name="todoMember">
-												<option value="option1">빨강</option>
-												<option value="option2">주황</option>
-												<option value="option3">노랑</option>
-												<option value="option4">초록</option>
-												<option value="option5">파랑</option>
-												<option value="option6">남색</option>
-												<option value="option7">보라</option>
+												<th:block th:each="member : ${projectPartiMember}">
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id != session.Id}"></option>
+												</th:block>
 											</select>
 										</div>
 									</div>
@@ -420,6 +417,11 @@ p {
 		<!-- 글 조회 공간 -->
 		<div></div>
 	</div>
+	
+	
+	
+	
+	
 	
 	<!-- 버튼 상태 변경 -->	
 	<script>

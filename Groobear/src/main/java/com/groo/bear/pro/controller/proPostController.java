@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProPostService;
+import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProVO;
@@ -38,7 +39,7 @@ public class proPostController {
 	}
 	
 	@GetMapping("proPostMain/{proNo}")
-	public String proPostPage(Model model, HttpServletRequest request, @PathVariable int proNo, ProPostVO vo) {
+	public String proPostPage(Model model, HttpServletRequest request, @PathVariable int proNo, ProPostVO vo, ProPostUserVO vo2) {
 		HttpSession session = request.getSession();
 		String pagePath ="";
 		int homeTab = Integer.parseInt(vo.getHomeTab());
@@ -46,8 +47,10 @@ public class proPostController {
 		
 		proData2(model, request);
 		
-		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));
+		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));//메뉴 상단바 조회
 		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(id, proNo));
+		model.addAttribute("projectPartiMember", proPostService.readProjectParti(vo2));//회원 정보 전체 조회
+		
 		switch (homeTab) {
 		//피드
 		case 1 :

@@ -23,6 +23,33 @@
 		GROUP BY m1.pro_no
 	</select>
 	
+	<!-- 프로젝트 참가자 조회 -->
+	<select id="readProjectParti" resultType="ProPostUserVO">
+		SELECT i.name, m.id
+		FROM pro_mem m JOIN users u
+		ON(m.id = u.id)
+		JOIN user_info i
+		ON(u.emp_no = i.emp_no)
+		WHERE m.pro_no = #{proNo}
+		ORDER BY i.name
+	</select>
+	
+	<!-- 글 생성(1번) -->
+	<select id="createPro" statementType="CALLABLE" parameterType="hashMap">
+		{call cre_project(
+				#{v_pro_name, 		  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_pro_content, 	  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_pro_def_tab,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_post_write_auth,  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_post_update_auth, mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_post_view_auth,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_com_write_auth,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_file_auth, 		  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_id, 			  mode=IN, jdbcType=VARCHAR,   javaType=String}
+			)
+		}
+	</select>
+	
 	<!-- 프로젝트 즐겨찾기 등록
 	<update id="updateStarY" parameterType="int">
 		UPDATE pro_mem
