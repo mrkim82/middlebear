@@ -21,7 +21,7 @@ public class SecurityVO implements UserDetails{
 	private String id;
 	private String password;
 	private String email;
-	private int phone;
+	private String phone;
 	private String addr;
 	//List<String> empGrade;
 	private String empGrade;
