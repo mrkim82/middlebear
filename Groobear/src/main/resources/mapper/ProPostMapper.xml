@@ -37,14 +37,39 @@
 	<!-- 글 생성(1번) -->
 	<select id="createPostWriting" statementType="CALLABLE" parameterType="ProPostWritingVO">
 		{call cre_pro_writing(
-				#{v_pro_no, 		  mode=IN, jdbcType=VARCHAR,   javaType=String},
-				#{v_id, 	  mode=IN, jdbcType=VARCHAR,   javaType=String},
-				#{v_post_title,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
-				#{v_post_date,  mode=IN, jdbcType=CHAR, 	   javaType=String},
-				#{v_post_top_seq, mode=IN, jdbcType=CHAR, 	   javaType=String},
-				#{v_writing_content,	  mode=IN, jdbcType=CHAR, 	   javaType=String}
+				#{proNo, 		   mode=IN,  jdbcType=INTEGER,  javaType=int},
+				#{id, 	           mode=IN,  jdbcType=VARCHAR,  javaType=String},
+				#{postTitle,	   mode=IN,  jdbcType=VARCHAR,  javaType=String},
+				#{writingContent,  mode=IN,  jdbcType=VARCHAR,  javaType=String}
 			)
 		}
+	</select>
+	
+	<!-- 업무 생성(2번) -->
+	<select id="createPostWork" statementType="CALLABLE" parameterType="ProPostWorkVO">
+		{call cre_pro_work(
+				#{proNo, 		   mode=IN,  jdbcType=INTEGER,  javaType=int},
+				#{id, 	           mode=IN,  jdbcType=VARCHAR,  javaType=String},
+				#{postTitle,	   mode=IN,  jdbcType=VARCHAR,  javaType=String},
+				#{workGroupNo,  mode=IN,  jdbcType=INTEGER,  javaType=int},
+				#{workStatus,  mode=IN,  jdbcType=CHAR,  javaType=String},
+				#{workPri,  mode=IN,  jdbcType=CHAR,  javaType=String},
+				#{workStartDay,  mode=IN,  jdbcType=DATE,  javaType=date},
+				#{workStartTime,  mode=IN,  jdbcType=DATE,  javaType=date},
+				#{workEndDay,  mode=IN,  jdbcType=DATE,  javaType=DATE},
+				#{workEndTime,  mode=IN,  jdbcType=DATE,  javaType=DATE},
+				#{workContent,  mode=IN,  jdbcType=VARCHAR,  javaType=String},
+				#{workPersonArr,  mode=IN,  jdbcType=VARCHAR,  javaType=String}
+			)
+		}
+	</select>
+	
+	<!-- 업무 그룹 조회 -->
+	<select id="readWritingWorkGroup" parameterType="ProPostWorkGroupVO">
+		SELECT work_group_no, work_group_name, work_group_seq, pro_no
+		FROM work_group
+		WHERE pro_no = #{proNo}
+		ORDER BY work_group_name
 	</select>
 	
 </mapper>

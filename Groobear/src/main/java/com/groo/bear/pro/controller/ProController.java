@@ -217,7 +217,6 @@ public class ProController {
 		}
 		
 		map.put("result", res);
-		System.out.println(map);
 		return map;
 	}
 	
