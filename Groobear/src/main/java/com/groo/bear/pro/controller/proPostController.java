@@ -120,7 +120,11 @@ public class proPostController {
 		Map <String, Object> map = new HashMap<>();
 		String res = "";
 		
+		if(vo.getWorkPersonArr().isEmpty()) {
+			vo.setWorkPersonArr(null);
+		}
 		vo.setId((String)session.getAttribute("Id"));
+		System.out.println("시간!"+vo);
 		
 		proPostService.createPostWork(vo);
 		

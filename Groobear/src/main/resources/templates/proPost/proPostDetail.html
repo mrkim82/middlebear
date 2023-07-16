@@ -145,10 +145,13 @@ p {
 									<!-- 담당자 추가 -->
 									<div>
 										<p>담당자 추가(Ctrl을 누르면 중복 처리 가능)</p>
-										<select class="form-select" multiple name="workMember" size=5 id="workPostPeople">
+										<select class="form-select" multiple name="workMember" size=5 id="workPostPerson"
+												onchange="workPostPeople(this)">
 											<th:block th:each="member : ${projectPartiMember}">
-													<option th:text="${member.name}" th:value="${member.id}"
-													th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+													<!-- <option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id == session.Id}" style="background-color: #eee;"></option> -->
+													<option th:text="${member.name} +'(나)'" th:value="${member.id}"
+													th:if="${member.id == session.Id}"></option>
 													<option th:text="${member.name}" th:value="${member.id}"
 													th:if="${member.id != session.Id}"></option>
 											</th:block>
@@ -171,7 +174,7 @@ p {
 										  	<!-- 마감일 추가 -->
 										  	<div>
 										  		<p>마감일</p>
-										  		<input type="datetime-local"  id="EndWorkDate">
+										  		<input type="datetime-local"  id="endWorkDate">
 										  	</div>
 										  	<!-- 우선순위 추가 -->
 										  	<div>
@@ -260,6 +263,7 @@ p {
 										<p>시작일</p>
 										<input type="datetime-local" id="startSchDate">
 									</div>
+									
 									<!-- 마감일 -->
 									<div>
 										<p>마감일</p>
@@ -270,8 +274,10 @@ p {
 										<p>참석자 추가(Ctrl을 누르면 중복 처리 가능)</p>
 										<select class="form-select" multiple name="workMember" size=5>
 											<th:block th:each="member : ${projectPartiMember}">
+													<!-- <option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id == session.Id}" style="background-color: #eee;"></option> -->
 													<option th:text="${member.name}" th:value="${member.id}"
-													th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+													th:if="${member.id == session.Id}"></option>
 													<option th:text="${member.name}" th:value="${member.id}"
 													th:if="${member.id != session.Id}"></option>
 											</th:block>
@@ -435,6 +441,7 @@ p {
 		
 		function toggleButtonStyle(button) {
 			console.log(selectedButton);
+			
 		  if (selectedButton !== button) {
 		    if (selectedButton) {
 		      resetButtonStyle(selectedButton);
@@ -520,7 +527,22 @@ p {
 	
 	<!-- 업무 작성 -->
 	<script>
+		//담당자 값 가져오기
+		let workPersonArr = [];
+		function workPostPeople(e) {
+			workPersonArr = [];
+	
+			for(let i=0; i < e.options.length; i++) {
+				let option = e.options[i];
+				if(option.selected) {
+					workPersonArr.push(option.value);
+				}
+			};
+			
+			return workPersonArr;
+		}
 		
+		//등록 버튼 클릭
 		createWorkButton.addEventListener('click', function () {
 			//제목 빈값 검사
 			let titles = document.getElementsByClassName('postTitle');
@@ -542,44 +564,37 @@ p {
 			let lastIndex = url.lastIndexOf('/');
 			let projectNo = url.substring(lastIndex + 1);
 			
-			console.log(titles[1].value);
-			console.log(workPostGroup.value);
-			let workStatus = checkBox();
-			console.log(workStatus);
-			console.log(workPostPri.value);
+			/* console.log(titles[1].value);
+			console.log('업무그룹',workPostGroup.value);
+			console.log('업무상태',selectedButton.dataset.workTypeStatus);
+			console.log('우선순위',workPostPri.value);
 			console.log(startWorkDate.value);
 			console.log(endWorkDate.value);
-			console.log(workWritingContent.value);
-			console.log(workPostPeople.value);
-			
-			/* fetch("/postCreateWriting", {
+			console.log('내용',workWritingContent.value);
+			console.log('참여자', workPersonArr); */
+			fetch("/postCreateWork", {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-	   				'postTitle': titles[0].value,
-	   				'writingContent': writingContent.value,
-	   				'proNo': projectNo
+	   				'proNo': projectNo,
+	   				'postTitle': titles[1].value,
+	   				'workGroupNo': workPostGroup.value,
+	   				'workStatus': selectedButton.dataset.workTypeStatus,
+	   				'workPri': workPostPri.value,
+	   				'workStartDay': startWorkDate.value,
+	   				'workStartTime': startWorkDate.value,
+	   				'workEndDay': endWorkDate.value,
+	   				'workEndTime': endWorkDate.value,
+	   				'workContent': workWritingContent.value,
+	   				'workPersonArr': workPersonArr
 	   			})
 			})
 			.then(response => response.json())
-			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2"); */
+			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
 			
 		});
-
-		function checkBox() {
-			let buttons = document.querySelectorAll('#workPostStatus button');
-			let buttonValue = 0;
-			
-			buttons.forEach(button => {
-				if(button.classList.contains('active')) {
-					buttonValue = button.dataset.worktypestatus;
-				}
-			})
-			
-		  return buttonValue;
-		}
 	</script>
 
 	
