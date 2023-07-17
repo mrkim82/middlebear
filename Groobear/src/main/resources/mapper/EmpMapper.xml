@@ -4,11 +4,11 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.groo.bear.emp.mapper.EmpMapper">
 
-<!-- 로그인 -->
-	<select id="login" parameterType="EmpVO" resultType="EmpVO">
+<!-- 사원정보조회 -->
+	<select id="getEmpInfo" parameterType="EmpVO" resultType="EmpVO">
       select *
       from user_info a join users b 
       on a.emp_no = b.emp_no
-      where b.id=#{id} and b.password=#{password}
+      where a.name=#{name} and b.phone=#{phone}
     </select>
 </mapper>

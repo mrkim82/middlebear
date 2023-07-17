@@ -1,4 +1,4 @@
-package com.groo.bear.file;
+package com.groo.bear.files.controller;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -34,7 +34,7 @@ public class UploadController {
 		
 	}
 	
-	@PostMapping("uploadAjaxAction")
+	@PostMapping("/uploadAjaxAction")
 	@ResponseBody
 	public void uploadAjaxPost(MultipartFile[] uploadFile) {
 		log.info("update ajax post ......");

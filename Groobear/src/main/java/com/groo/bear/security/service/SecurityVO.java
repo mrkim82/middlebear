@@ -31,12 +31,6 @@ public class SecurityVO implements UserDetails{
 	private String empStatus;
 	private String profileNote;
 	
-	/*
-	 * @Override public Collection<? extends GrantedAuthority> getAuthorities() {
-	 * Collection<SimpleGrantedAuthority> roles = new
-	 * ArrayList<SimpleGrantedAuthority>(); for(String role : empGrade) {
-	 * roles.add(new SimpleGrantedAuthority(role)); } return roles; }
-	 */
 	@Override
 	public String getUsername() {
 		return id;

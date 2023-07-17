@@ -6,7 +6,7 @@ public class EncriptTest {
 	@Test
 	public void test() {
 		BCryptPasswordEncoder scpwd = new BCryptPasswordEncoder(); 
-		String password = scpwd.encode("1111"); 
+		String password = scpwd.encode("gogo"); 
 		System.out.println(password);
 	}
 }

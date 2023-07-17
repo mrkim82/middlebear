@@ -14,8 +14,8 @@ public class EmpServiceImpl implements EmpService {
 	EmpMapper empMapper;
 	
 	@Override
-	public EmpVO login(EmpVO vo) {
-		return empMapper.login(vo);
+	public EmpVO getEmpInfo(EmpVO vo) {	
+		return empMapper.getEmpInfo(vo);
 	}
 
 }

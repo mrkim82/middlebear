@@ -6,16 +6,8 @@
 
 	<!-- 전체조회 -->
 
-	<!-- <select id="selectAllCar" parameterType="CarVO" resultType="CarVO"> 
-		select u.emp_no, d.dept_name, ui.name, c.car_no, u.phone, c.car_date from 
-		users u, departments d, user_info ui, car c where d.dept_no = ui.dept_no 
-		and ui.emp_no = u.emp_no and u.id = c.id <if test="name != null and !name.equals('')"> 
-		and name LIKE '%${name}%' </if> <if test="carNo != null and !carNo.equals('')"> 
-		and car_no LIKE '%${carNo}%' </if> <if test="deptName != null and !deptName.equals('')"> 
-		and dept_name LIKE '%'||upper('${deptName}')||'%' </if> order by emp_no </select> -->
 
-	<select id="selectAllCar" parameterType="CarVO"
-		resultType="CarVO">
+	<select id="selectAllCar" parameterType="CarVO" resultType="CarVO">
 		SELECT * 
             FROM (
               SELECT t.*, ROWNUM AS rn
@@ -35,19 +27,20 @@
 						and u.id = c.id
 
 		<if test="name != null and !name.equals('')">
-			and name LIKE '%${name}%'
+			and ui.name LIKE '%${name}%'
 		</if>
 		<if test="carNo != null and !carNo.equals('')">
-			and car_no LIKE '%${carNo}%'
+			and c.car_no LIKE '%${carNo}%'
 		</if>
 		<if test="deptName != null and !deptName.equals('')">
-			and dept_name LIKE '%'||upper('${deptName}')||'%'
+			and d.dept_name LIKE '%'||upper('${deptName}')||'%'
 		</if>
-		order by emp_no
+		order by u.emp_no
 		) t
             )
             <![CDATA[
-            WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+            WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 
+				  rn <= #{cri.page} * #{cri.perPageNum}
             ]]>
 	</select>
 
@@ -55,60 +48,49 @@
 	<!-- 개인차량 조회 -->
 	<select id="getMyCar" parameterType="String" resultType="CarVO">
 		select
-		u.emp_no,
-		d.dept_name,
-		ui.name,
-		c.car_no,
-		u.phone,`
-		c.car_date,
-		ui.rank,
-		u.emp_grade
-		from users u,
-		departments d,
-		user_info ui,
-		car c
+			u.emp_no,
+			d.dept_name,
+			ui.name,
+			c.car_no,
+			c.car_type,
+			u.phone,
+			c.car_date,
+			ui.rank,
+			u.emp_grade,
+			u.id
+		from 
+			users u,
+			departments d,
+			user_info ui,
+			car c
 		where
-		d.dept_no = ui.dept_no
-		and ui.emp_no = u.emp_no
-		and u.id = c.id
-		and u.id
-		= #{id}
-	</select>
-
-
-
-
-	<!-- 부분조회 -->
-	<select id="selectCar" parameterType="CarVO" resultType="CarVO">
-		select u.emp_no,
-		d.dept_name,
-		ui.name,
-		c.car_no,
-		u.phone,
-		c.car_no
-		from
-		users u,
-		departments d,
-		user_info ui,
-		car c
-		<where>
 			d.dept_no = ui.dept_no
 			and ui.emp_no = u.emp_no
 			and u.id = c.id
-			<if test="name != null and name != ''">
-				and ui.name = #{name}
-			</if>
-			<if test="deptName != null and deptName != ''">
-				and d.dept_name = #{deptName}
-			</if>
-			<if test="carNo != null and carNo != ''">
-				and c.car_no = #{carNo}
-			</if>
-		</where>
+			and u.id = #{id}
+	</select>
+
+	<select id="getCarInfo" parameterType="String" resultType="CarVO">
+		select
+			u.emp_no,
+			d.dept_name,
+			ui.name,
+			u.phone,
+			ui.rank,
+			u.emp_grade,
+			u.id
+		from 
+			users u,
+			departments d,
+			user_info ui
+		where
+			d.dept_no = ui.dept_no
+			and ui.emp_no = u.emp_no
+			and u.id = #{id}
 	</select>
 
 
-
+	<!-- 페이징  -->
 	<select id="carListCnt" resultType="int">
 		select count(*)
 				from users u,
@@ -118,21 +100,41 @@
 				where d.dept_no = ui.dept_no
 						and ui.emp_no = u.emp_no
 						and u.id = c.id
-		<where>
-			<if test="name != null and !name.equals('')">
-				and name LIKE '%${name}%'
+				<if test="name != null and name != ''">
+				and ui.name = #{name}
 			</if>
-			<if test="carNo != null and !carNo.equals('')">
-				and car_no LIKE '%${carNo}%'
+			<if test="deptName != null and deptName != ''">
+				and d.dept_name = #{deptName}
 			</if>
-			<if test="deptName != null and !deptName.equals('')">
-				and dept_name LIKE '%'||upper('${deptName}')||'%'
+			<if test="carNo != null and carNo != ''">
+				and c.car_no = #{carNo}
 			</if>
-		</where>
 	</select>
 
+	<!-- 추가 --> 
+	<insert id="insertCar" parameterType="CarVO">
+		insert into car (
+			car_no,
+			car_type,
+			id)
+		values (
+			#{carNo},
+			#{carType},
+			#{id})		
+		
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="updateCar" parameterType="CarVO">
+		update car set car_type = #{carType} 
+		where car_no = #{carNo}
+	</update>
 
 
+	<delete id="deleteCar" parameterType="String">
+		delete from car 
+		where car_no = #{carNo}
+	</delete>
 
 
 
