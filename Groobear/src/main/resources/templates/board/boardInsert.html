@@ -36,10 +36,6 @@
             <button type="submit" >게시글 등록</button>
             <button id="listlist" type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|" >목록으로</button>
         </form>
-        
-        
-        
-        
     <!-- <script th:inline="javascript">
     	function boardListGo() {
             let bT = /*[[${board.boardType}]]*/
@@ -126,6 +122,9 @@
             }
         })
     }
+    $(".uploadResult").on("click", "button", function(e) {
+        console.log("delete file");
+    });
     
 </script>
 </div>
