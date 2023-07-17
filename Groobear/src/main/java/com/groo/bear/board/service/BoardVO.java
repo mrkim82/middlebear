@@ -1,8 +1,11 @@
 package com.groo.bear.board.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.groo.bear.files.domain.FilesVO;
 
 import lombok.Data;
 
@@ -29,4 +32,5 @@ public class BoardVO {
 	private Date updateDate;
 	private int count;
 	
+	private List<FilesVO> attchList;
 }
