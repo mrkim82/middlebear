@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.groo.bear.pro.service.ProGroupVO;
+import com.groo.bear.pro.service.ProUsersVO;
 import com.groo.bear.pro.service.ProVO;
 
 public interface ProMapper {
@@ -15,6 +16,9 @@ public interface ProMapper {
 	public List<ProVO> readProjectHide(String id);
 	public List<ProVO> readProjectStar(String id);
 	public List<ProVO> readProjectNoGroup(String id);
+	
+	//유저 정렬, 필터 조회
+	public ProUsersVO readOrder(String id);
 	
 	//프로젝트 참가자수 조회
 	public List<ProVO> readProjectParti(String id);
@@ -44,10 +48,9 @@ public interface ProMapper {
 	//프로젝트 그룹 삭제
 	public int deleteGroup(int groupNo);
 	
-	//필터
+	//프로젝트 필터 수정
+	public int updateProjectFilter(String proPartiFilter, String id);
 	
-//	
-//	// 단건조회
-//	public EmpVO selectEmpInfo(EmpVO empVO);
-//	
+	//프로젝트 정렬 수정
+	public int updateProjectOrder(String proRange, String id);
 }

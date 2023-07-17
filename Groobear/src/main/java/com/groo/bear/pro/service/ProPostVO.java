@@ -35,4 +35,6 @@ public class ProPostVO {
 	private String workUpdate;
 	//private String ProPartiDay;
 	
+	private int count;
+	
 }

@@ -6,7 +6,6 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
 <link
 	href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
 	rel="stylesheet">
@@ -27,6 +26,18 @@
 	overflow: auto; /* Enable scroll if needed */
 	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 	display: none;
+}
+
+.horizontal-bar {
+	height: 80px;
+	width: 100%;
+	background-color: rgb(104, 192, 86);
+}
+
+.horizontal-bar2 {
+	height: 40px;
+	width: 100%;
+	background-color: rgb(50, 100, 86);
 }
 
 #modalFolderCreate4 {
@@ -69,10 +80,23 @@ details {
 	transition: 0.3s;
 }
 
+.square {
+	width: 50px;
+	height: 50px;
+	background-color: #000;
+	margin-left: 30px;
+}
+
+.bottomLine {
+	border-bottom: 3px solid red;
+}
 </style>
+
 </head>
 <body>
 	<div>
+
+		<!-- 상단 header -->
 		<header class="blog-header lh-1 py-3">
 			<div
 				class="row flex-nowrap justify-content-between align-items-center">
@@ -102,6 +126,7 @@ details {
 		</header>
 	</div>
 
+	<!-- 상단 nav -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor01" aria-controls="navbarColor01"
@@ -134,56 +159,118 @@ details {
 	</nav>
 
 	<!-- 사이드바 -->
+
+	<div class="container-fluid" style="padding: 0;">
+		<div class="float-start">
+			<div class="sidebar" style="padding: 0;">
+				<!-- 사이드바 내용 -->
+				<table>
+					<tbody>
+						<tr>
+							<td style="vertical-align: top">
+								<div class="row">
+									<div class="sidebar col-4">
+										<a href="/proCreate"><span class="material-icons">add_box</span>
+											새 프로젝트 생성</a> <a href="/proMain"><span class="material-icons">home</span>
+											내 프로젝트</a> <a href="/proMainS"><span class="material-icons">star</span>
+											즐겨찾기</a> <a href="#"><span class="material-icons">mail</span>
+											미확인(x)</a> <a href="/proMainG"><span class="material-icons">drafts</span>
+											미분류</a> <a href="/proMainH"><span class="material-icons">visibility_off</span>
+											숨김</a>
+										<details>
+											<summary>모아보기</summary>
+											<ul>
+												<li>전체업무</li>
+												<li>북마크</li>
+												<li>나를 언급</li>
+												<li>내 게시물</li>
+											</ul>
+										</details>
+										<details id="groupFolderList" open>
+											<summary>
+												프로젝트 폴더<span id="popupProjectBtn" class="material-icons">add</span>
+											</summary>
+											<!-- 프로젝트 그룹 리스트 -->
+											<ul id="proGroup">
+												<th:block th:each="proG : ${projectGroupList}">
+													<li><a
+														th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
+														th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
+															[[${proG.groupName}]]<span
+															class='material-icons moreVertIcons'
+															style='display: none;'>more_vert</span>
+													</a></li>
+												</th:block>
+											</ul>
+										</details>
+
+									</div>
+
+
+
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+
+		<!-- 프로젝트 우측 컨텐츠 -->
+		<div class="col">
+			<!-- 프로젝트 최 상단 바 -->
+			<div class="horizontal-bar">
+				<div>
+					<ul class="nav">
+						<li>
+							<!-- 스타일을 동적으로 적용하는 네모 -->
+							<div class="square"
+								th:style="'background-color: ' + ${projectTopBar.proColor}"></div>
+						</li>
+						<li class="nav-item"><span class='material-icons'
+							style="cursor: pointer;">more_vert</span></li>
+						<li class="nav-item" th:text="${projectTopBar.proName}"></li>
+						<li class="nav-item" th:text="${projectTopBar.proContent}"
+							th:style="'margin-left:30px;'"></li>
+					</ul>
+				</div>
+			</div>
+			<!-- 프로젝트 탭 -->
+			<div class="horizontal-bar2">
+				
+				<nav class="nav">
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=1)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '1'} ? 'bottomLine' : ''">업무</a>
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=2)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '2'} ? 'bottomLine' : ''">피드</a>
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=3)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '3'} ? 'bottomLine' : ''">간트차트</a>
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=4)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '4'} ? 'bottomLine' : ''">캘린더</a>
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=5)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '5'} ? 'bottomLine' : ''">파일</a>
+				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=6)}"
+				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '6'} ? 'bottomLine' : ''">알림</a>
+					<!-- 주소를 가져오는 방식 -->
+					<!-- <th:block th:text="${#strings.substringAfter((#strings.substringAfter(#request.requestURI, '/')), '/')}"></th:block>
+					<p th:text="${#request.requestURI}"></p>
+					<th:block th:text="${#strings.substringAfter(#request.getQueryString(), '=')}"></th:block> -->
+				</nav>
+				
+			</div>
+			<div>
+				<div layout:fragment="content"></div>
+			</div>
+		</div>
+
+
+
+	</div>
+
+
 	<div>
-		<table>
-			<tbody>
-				<tr>
-					<td style="vertical-align: top" class="col-4">
-						<div class="sidebar">
-							<a href="/proCreate"><span class="material-icons">add_box</span>
-								새 프로젝트 생성</a> <a href="/proMain"><span class="material-icons">home</span>
-								내 프로젝트</a> <a href="/proMainS"><span class="material-icons">star</span>
-								즐겨찾기</a> <a href="#"><span class="material-icons">mail</span>
-								미확인(x)</a> <a href="/proMainG"><span class="material-icons">drafts</span>
-								미분류</a> <a href="/proMainH"><span class="material-icons">visibility_off</span>
-								숨김</a>
-							<details>
-								<summary>모아보기</summary>
-								<ul>
-									<li>전체업무</li>
-									<li>북마크</li>
-									<li>나를 언급</li>
-									<li>내 게시물</li>
-								</ul>
-							</details>
-							<details id="groupFolderList" open>
-								<summary>
-									프로젝트 폴더<span id="popupProjectBtn" class="material-icons">add</span>
-								</summary>
-								<!-- 프로젝트 그룹 리스트 -->
-								<ul id="proGroup">
-									<th:block th:each="proG : ${projectGroupList}">
-										<li><a
-											th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
-											th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
-												[[${proG.groupName}]]<span
-												class='material-icons moreVertIcons' style='display: none;'>more_vert</span>
-										</a></li>
-									</th:block>
-								</ul>
-							</details>
 
-						</div>
-
-					</td>
-					<td class="col-8">
-						<div>
-							<div layout:fragment="content"></div>
-						</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
 
 
 		<!-- modal창 -->
@@ -224,7 +311,13 @@ details {
 			</div>
 		</div>
 
+
 	</div>
+
+
+
+
+
 	<script th:inline="javascript">
     /*<![CDATA[*/
 		//그룹 갯수 체크
@@ -313,8 +406,6 @@ details {
 		
 	    //클릭 후 그룹 폴더 만들기(모달1)
 	    creFolder.onclick = function() {
-			console.log(pGCUp);
-			
 	    	if(pGCUp >= 10) {
 	    		alert('프로젝트 폴더는 최대 10개 생성 할 수 있습니다.');
 	    		folderC1.value = '';
@@ -328,6 +419,8 @@ details {
 	    
 	    //폴더명 확인
 	    function checkGroupFolderName() {
+			let formData = new FormData();
+			formData.append('gN', folderC1.value);
 			
 			if(folderC1.value == '') {
 	    		alert('폴더 이름은 공백을 허용하지 않습니다!');
@@ -336,9 +429,6 @@ details {
 	    		alert('폴더 이름은 최대 30자 까지 가능합니다!');
 	    		return;
 	    	} else {
-				let formData = new FormData();
-				formData.append('gN', folderC1.value);
-				console.log(formData.get('gN'));
 	    		//db정보 삽입
 				fetch("/proGroupC", {
 					method: 'POST',
@@ -348,8 +438,6 @@ details {
 				.then(res => {
 					let rC = res.result;
 					let latelyGroupNum = res.pGN;
-					console.log(rC);
-					console.log(res);
 					if(rC == '성공') {
 						//동적 폴더 생성
 						createFolder(latelyGroupNum);				
@@ -440,10 +528,10 @@ details {
 					
 					modal2.style.display = 'block';
 					
-					//디비 수정, 중복값 막기 위해 onclick 사용
-					uFolderName.onclick = function() {
-				        groupNameChangeDb(groupNo);
-				    };
+					//디비 수정
+					uFolderName.addEventListener('click', function() {
+						groupNameChangeDb(groupNo);
+					});
 					
 			    });
 				
@@ -465,22 +553,23 @@ details {
 				      modal3.style.display = 'none';
 				    }
 					
-					dFolder.onclick = function() {
-					    fetch("/FolderGroupD/" + groupNo, {
-					        method: 'DELETE'
-					    })
-					    .then(response => response.json())
-					    .then(res => {
-					        let rC = res.result;
-
-					        if (rC == '성공') {
-					            document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].parentNode.remove();
-					            modal3.style.display = 'none';
-					        } else {
-					            alert('요청이 취소 되었습니다.');
-					        }
-					    });
-					};
+					dFolder.addEventListener("click", function() {
+						
+						fetch("/FolderGroupD/" + groupNo, {
+							method: 'DELETE'
+						})
+						.then(response => response.json())
+						.then(res => {
+							let rC = res.result;
+						
+							if(rC == '성공') {
+								document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].parentNode.remove();
+								modal3.style.display = 'none';
+							} else {
+								alert('요청이 취소 되었습니다.');
+							}
+						});
+					});
 					
 			    });
 				
@@ -511,10 +600,10 @@ details {
 				.then(response => response.json())
 				.then(res => {
 					let rC = res.result;
+				
 					if(rC == '성공') {
 						modal2.style.display = 'none';
 						document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].childNodes[0].textContent = folderC2.value;
-						document.getElementById('folderContent2').innerText = folderC2.value;
 					} else {
 						alert('요청이 취소 되었습니다.');
 					}
@@ -594,5 +683,6 @@ details {
 		
     /*]]>*/
     </script>
+    
 </body>
 </html>
