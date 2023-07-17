@@ -37,7 +37,7 @@ public class WebSecurityConfig {
 			.csrf().disable()
 			.authorizeHttpRequests()
 			//.antMatchers("/status", "images/**", "/js/", "auth/join").permitAll()
-			.antMatchers("/forgotId", "/forgotPw").permitAll()
+			//.antMatchers("/forgotId", "/forgotPw").permitAll()
 			//.antMatchers("/emp/**").hasRole("ADMIN")
 			.anyRequest().permitAll()
 			.and()
