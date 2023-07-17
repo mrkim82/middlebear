@@ -2,6 +2,10 @@ package com.groo.bear.pro.service;
 
 import java.util.List;
 
+import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
+import com.groo.bear.pro.service.postvo.ProPostWorkVO;
+import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+
 public interface ProPostService {
 	//상단메뉴바
 	// 상단메뉴바 조회
@@ -12,4 +16,12 @@ public interface ProPostService {
 	
 	// 프로젝트 참가자 정보
 	public List<ProPostUserVO> readProjectParti(ProPostUserVO vo);
+	
+	//글 작성
+	public void createPostWriting(ProPostWritingVO vo);
+	
+	//업무 작성
+	public void createPostWork(ProPostWorkVO vo);
+	//업무 그룹조회
+	public List<ProPostWorkGroupVO> readWritingWorkGroup(int proNo);
 }
