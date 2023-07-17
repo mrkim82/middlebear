@@ -55,8 +55,8 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public List<ProPostCommentVO> readPostWritingComment(int proPostNo) {
-		return ppm.readPostWritingComment(proPostNo);
+	public List<ProPostCommentVO> readPostWritingComment(int proNo) {
+		return ppm.readPostWritingComment(proNo);
 	}
 
 	@Override
@@ -67,6 +67,11 @@ public class ProPostServiceImpl implements ProPostService {
 	@Override
 	public int deletePostComment(int comNo) {
 		return ppm.deletePostComment(comNo);
+	}
+
+	@Override
+	public int updatePostComment(ProPostCommentVO vo) {
+		return ppm.updatePostComment(vo);
 	}
 
 }

@@ -90,16 +90,24 @@
 		JOIN user_info d
 		ON(c.emp_no = d.emp_no)
 		WHERE post_type = #{postType}
+		ORDER BY a.pro_post_no DESC
 	</select>
 	
 	<!-- 글 댓글 조회(임시) -->
 	<select id="readPostWritingComment" resultType="ProPostCommentVO">
-		SELECT a.com_no, a.com_content, TO_CHAR(a.com_date, 'yyyy/MM/dd HH24:mi') AS comDate, c.name, b.profile_img, a.id
+		SELECT a.com_no, a.com_content, TO_CHAR(a.com_date, 'yyyy/MM/dd HH24:mi') AS comDate,
+			   c.name, b.profile_img, a.id, p.pro_post_no
 		FROM com a JOIN users b
 		ON(a.id=b.id)
 		JOIN user_info c
 		ON(b.emp_no = c.emp_no)
-		WHERE pro_post_no = #{proPostNo}
+		JOIN pro_post p
+		ON(a.pro_post_no = p.pro_post_no)
+		WHERE a.com_no IN (SELECT com_no
+		                  FROM com
+		                  WHERE pro_post_no IN (SELECT pro_post_no
+		                                        FROM pro_post
+		                                        WHERE pro_no = #{proNo}))
 	</select>
 	
 	<!-- 댓글 작성 -->
@@ -117,5 +125,12 @@
 	<delete id="deletePostComment" parameterType="int">
 		DELETE FROM com
 		WHERE com_no = #{comNo}
-	</delete>	
+	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id="updatePostComment" parameterType="ProPostCommentVO">
+		UPDATE com
+		SET com_content = #{comContent}
+		WHERE com_no = #{comNo}
+	</update>
 </mapper>

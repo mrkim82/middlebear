@@ -15,9 +15,9 @@ public class ProPostWritingVO {
 	
 	
 	//글 조회(임시)
-	private String proPostNo;
+	private int proPostNo;
 	private String postType;
-	private String writingNo;
+	private int writingNo;
 	private String name;
 	private String profileImg;
 	

@@ -22,6 +22,9 @@ textarea {
 p {
 	margin: 0px;
 }
+.spanCursor {
+	cursor: pointer
+}
 </style>
 	
 </head>
@@ -29,7 +32,7 @@ p {
 	<!-- 중앙 + 참여자 -->
 	<div>
 		<!-- 중앙 -->
-		<div style="overflow-y: auto; width: 680px;">
+		<div style="overflow-y: auto; width: 680px; height: 700px;" class="float-start">
 			<div>피드</div>
 			<!-- 업무리포트(총 업무수)(차트) -->
 			<div>
@@ -416,9 +419,12 @@ p {
 
 			<!-- 미확인 알림(후순위) -->
 			<div>
+			
 			</div>
 			<!-- 상단고정(후순위) 업무 이후 -->
-			<div></div>
+			<div>
+			
+			</div>
 			
 			<!-- 게시물 공간 -->
 			<div>
@@ -440,37 +446,41 @@ p {
 									<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
 								</p>
 								<a class="btn btn-link" data-toggle="collapse" href="#moreContent" role="button" aria-expanded="false" aria-controls="moreContent">더보기</a>
-						</div>
-						<div class="card-footer">
+							</div>
+							<div class="card-footer">
 							<!-- 북마크, 댓글수 -->
-							<div></div>
-							<div class="row">
-								<div class="col-md-6">
-									<h6>댓글</h6>
-									<ul class="list-unstyled">
-										<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}">
-											<span th:utext="${com.profileImg}"></span>
-											<span th:text="${com.name}"></span>
-											<span th:text="${com.comDate}"></span>
-											<span th:text="${com.comContent}"></span>
-											<th:block th:if="${com.id == session.Id}">
-												<span onclick="UpdateWritingComment()" style="cursor: pointer" th:text="수정"></span>
-												<span onclick="deleteWritingComment()" style="cursor: pointer" th:text="X"></span>
-											</th:block>
-										</li>
-									</ul>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<input type="text" class="form-control" placeholder="댓글 작성">
+								<div></div>
+								<div class="row">
+									<div class="col-md-6">
+										<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
+										<h6 th:text="댓글"></h6>
+										<ul class="list-unstyled">
+											<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+												th:if="${wt.proPostNo == com.proPostNo}">
+												<span th:utext="${com.profileImg}"></span>
+												<span th:text="${com.name}"></span>
+												<span th:text="${com.comDate}"></span>
+												<span th:text="${com.comContent}"></span>
+												<th:block th:if="${com.id == session.Id}">
+													<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+													<span></span>
+													<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+												</th:block>
+											</li>
+										</ul>
 									</div>
-									<button type="button" class="btn btn-primary" onclick="createCommentButton()" th:data-post-writing-no="${wt.proPostNo}">댓글 등록</button>
+									<div class="col-md-6">
+										<div class="form-group">
+											<input type="text" class="form-control" placeholder="댓글 작성">
+										</div>
+										<button type="button" class="btn btn-primary" onclick="createCommentButton()" th:data-post-writing-no="${wt.proPostNo}">댓글 등록</button>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+					</th:block>
 				</div>
-				</th:block>
 				<!-- 2. 업무 -->
 			
 				<!-- 3.일정 -->
@@ -508,7 +518,7 @@ p {
 		<!-- 참여자공간 -->
 		<div>
 			
-			<div class="container">
+			<div class="container float-start" style="width: 250px;">
 				<div class="row">
 					<div class="col-md-3">
 						<!-- 왼쪽 사이드바 영역 -->
@@ -539,6 +549,7 @@ p {
 				</div>
 			</div>
 
+
 		</div>
 	</div>
 	<div>
@@ -546,7 +557,6 @@ p {
 		<div></div>
 	</div>
 	
-</div>
 	
 	
 	
@@ -556,7 +566,6 @@ p {
 		let selectedButton = workTypeButtonToggle;
 		
 		function toggleButtonStyle(button) {
-			console.log(selectedButton);
 			
 		  if (selectedButton !== button) {
 		    if (selectedButton) {
@@ -585,7 +594,7 @@ p {
 		//버튼 초기화
 		function resetButtonStyle(button) {
 		  let className = button.classList.item(1);
-		  console.log(className);
+		  //console.log(className);
 		  if (className.startsWith('btn-outline')) {
 		    let outlineClassName = className.replace('btn-outline', 'btn');
 		    button.classList.remove(className);
@@ -749,8 +758,7 @@ p {
 	<script>
 		function deleteWritingComment() {
 			let targetButton = event.target;
-			console.log(targetButton);
-			console.log(targetButton.parentNode.dataset.postCode);
+			//console.log(targetButton.parentNode.dataset.postCode);
 			
 			let url = window.location.pathname;
 			let lastIndex = url.lastIndexOf('/');
@@ -766,7 +774,9 @@ p {
 	   			})
 			})
 			.then(response => response.json())
-			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+			.then(res => {
+				targetButton.parentNode.remove()
+			});
 		}
 	</script>
 	
@@ -775,33 +785,81 @@ p {
 		function UpdateWritingComment() {
 			let targetButton = event.target;
 			let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
-			let oldCom = targetButton.parentNode.childNodes[7];//기존 댓글
 			
-			//값 초기화
-			oldCom.textContent = '';
-			//targetButton.textContent = '';
+			let oldCom = targetButton.parentNode.childNodes[7].textContent;//기존 댓글
+			let oldDate = targetButton.parentNode.childNodes[5].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
 			
-			targetButton.parentNode.childNodes[7].innerHTML = 
-					'<input type="text" placeholder="댓글 수정">
-					<span id="ooo">수정</span>
-					<span id="xxx">취소</span>';
+			//초기화
+			targetButton.parentNode.childNodes[5].textContent = '';//날짜 초기화
+			targetButton.parentNode.childNodes[7].textContent = '';//댓글 초기화
+			targetButton.parentNode.childNodes[9].textContent = '';//수정 초기화
+			targetButton.parentNode.childNodes[13].textContent = '';//X 초기화
 			
-			let url = window.location.pathname;
-			let lastIndex = url.lastIndexOf('/');
-			let projectNo = url.substring(lastIndex + 1);
+			if(document.getElementById('newComment') != null) {
+				let nC = document.getElementById('newComment').parentNode.parentNode;
+				nC.childNodes[5].textContent = document.getElementById('newComment').dataset.comDate;
+				nC.childNodes[7].textContent = document.getElementById('newComment').value;
+				nC.childNodes[9].textContent = '수정';
+				nC.childNodes[11].textContent = '';
+				nC.childNodes[13].textContent = 'X';
+			}
 			
-			/* fetch("/", {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-	   				'comNo': targetButton.parentNode.dataset.postCode
-	   			})
-			})
-			.then(response => response.json())
-			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2"); */
+			targetButton.parentNode.childNodes[11].innerHTML = 
+					'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
+					+'<span id="ooo" class="spanCursor">수정</span>'
+					+'<span id="xxx" class="spanCursor">취소</span>';
+			
+			// 취소버튼
+			document.getElementById('xxx').addEventListener('click', function() {
+				targetButton.parentNode.childNodes[5].textContent = oldDate;
+				targetButton.parentNode.childNodes[7].textContent = oldCom;
+				targetButton.parentNode.childNodes[9].textContent = '수정';
+				targetButton.parentNode.childNodes[13].textContent = 'X';
+				targetButton.parentNode.childNodes[11].textContent = '';
+			});
+			
+			// 수정버튼
+			document.getElementById('ooo').addEventListener('click', function() {
+				let newCom = document.getElementById('newComment');
+				if(newCom.value == '') {
+					newCom.focus();
+					alert('댓글을 수정하세요');
+				} else {
+					
+					fetch("/postUpdateComment", {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							'comContent' : newCom.value,
+			   				'comNo': comNo
+			   			})
+					})
+					.then(response => response.json())
+					.then(res => {
+						
+						if(res.result == '성공') {
+							targetButton.parentNode.childNodes[5].textContent = oldDate;
+							targetButton.parentNode.childNodes[7].textContent = newCom.value;
+							targetButton.parentNode.childNodes[9].textContent = '수정';
+							targetButton.parentNode.childNodes[13].textContent = 'X';
+							targetButton.parentNode.childNodes[11].textContent = ''
+							
+							let url = window.location.pathname;
+							let lastIndex = url.lastIndexOf('/');
+							let projectNo = url.substring(lastIndex + 1);
+							
+							location.href="/proPostMain/" + projectNo + "?homeTab=2"
+						} else {
+							alert('댓글 수정 실패');
+						}
+					});
+				}
+			});
+			
 		}
+		
 	</script>
 	
 	<!-- 시간 단위 조정 -->

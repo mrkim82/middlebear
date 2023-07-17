@@ -12,9 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.groo.bear.pro.service.ProGroupVO;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
@@ -66,7 +68,7 @@ public class proPostController {
 		case 2 :
 			//글 조회(임시)
 			model.addAttribute("projectWritingDetais", proPostService.readPostWriting(2));
-			model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(2));
+			model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(proNo));
 			pagePath = "proPost/proPostDetail";
 			break;
 		//간트차트
@@ -146,6 +148,27 @@ public class proPostController {
 		
 		proPostService.createPostComment(vo);
 		System.out.println("왜안옴"+vo);
+		if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+		
+		map.put("result", res);
+		
+		return map;
+	}
+	
+	//댓글 수정
+	@PutMapping("postUpdateComment")
+	@ResponseBody
+	public Map<String, Object> proGroupUpdate(@RequestBody ProPostCommentVO vo) {
+		Map <String, Object> map = new HashMap<>();
+		String res;
+		
+		int result = proPostService.updatePostComment(vo);
+		
 		if(result > 0) {
 			res = "성공";
 			

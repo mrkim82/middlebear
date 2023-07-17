@@ -23,16 +23,19 @@ public interface ProPostService {
 	// 글 조회
 	public List<ProPostWritingVO> readPostWriting(int postType);
 	// 글 댓글 조회
-	public List<ProPostCommentVO> readPostWritingComment(int proPostNo);
+	public List<ProPostCommentVO> readPostWritingComment(int proNo);
 	
 	//업무 작성
 	public void createPostWork(ProPostWorkVO vo);
 	//업무 그룹조회
 	public List<ProPostWorkGroupVO> readWritingWorkGroup(int proNo);
 	
+	//댓글
 	// 댓글 작성
 	public int createPostComment(ProPostCommentVO vo);
 	// 댓글 삭제
 	public int deletePostComment(int comNo);
+	// 댓글 수정
+	public int updatePostComment(ProPostCommentVO vo);
 	
 }
