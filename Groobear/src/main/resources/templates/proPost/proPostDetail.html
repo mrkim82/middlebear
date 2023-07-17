@@ -87,13 +87,13 @@ p {
 								</div>
 								<div class="modal-body">
 									<div>
-										<input type="text" placeholder="제목을 입력하세요.">
+										<input type="text" placeholder="제목을 입력하세요." class="postTitle">
 									</div>
 									<div>
-										<textarea placeholder="내용을 입력하세요."></textarea>
+										<textarea placeholder="내용을 입력하세요." id="writingContent"></textarea>
 									</div>
 								</div>
-								<button type="button" class="btn btn-primary">등록</button>
+								<button type="button" class="btn btn-primary" id="createWritingButton">등록</button>
 							</div>
 						</div>
 					</div>
@@ -127,10 +127,10 @@ p {
 								</div>
 								<div class="modal-body">
 									<div>
-										<input type="text" placeholder="제목을 입력하세요.">
+										<input type="text" placeholder="제목을 입력하세요." class="postTitle">
 									</div>
 									<!-- 업무상태 -->
-									<div>
+									<div id="workPostStatus">
 										<button type="button" class="btn btn-primary" id="workTypeButtonToggle"
 												data-work-type-status="1" onclick="toggleButtonStyle(this)">요청</button>
 										<button type="button" class="btn btn-outline-warning"
@@ -145,10 +145,13 @@ p {
 									<!-- 담당자 추가 -->
 									<div>
 										<p>담당자 추가(Ctrl을 누르면 중복 처리 가능)</p>
-										<select class="form-select" multiple name="workMember" size=5>
+										<select class="form-select" multiple name="workMember" size=5 id="workPostPerson"
+												onchange="workPostPeople(this)">
 											<th:block th:each="member : ${projectPartiMember}">
-													<option th:text="${member.name}" th:value="${member.id}"
-													th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+													<!-- <option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id == session.Id}" style="background-color: #eee;"></option> -->
+													<option th:text="${member.name} +'(나)'" th:value="${member.id}"
+													th:if="${member.id == session.Id}"></option>
 													<option th:text="${member.name}" th:value="${member.id}"
 													th:if="${member.id != session.Id}"></option>
 											</th:block>
@@ -171,12 +174,12 @@ p {
 										  	<!-- 마감일 추가 -->
 										  	<div>
 										  		<p>마감일</p>
-										  		<input type="datetime-local"  id="EndWorkDate">
+										  		<input type="datetime-local"  id="endWorkDate">
 										  	</div>
 										  	<!-- 우선순위 추가 -->
 										  	<div>
 													<p>우선순위</p>
-													<select class="custom-select" name="workPri" id="">
+													<select class="custom-select" name="workPri" id="workPostPri">
 														<option value="">없음</option>
 														<option value="1">낮음</option>
 														<option value="2">보통</option>
@@ -187,6 +190,12 @@ p {
 										  	<!-- 그룹 추가 -->
 										  	<div>
 										  	
+										  	<p>업무 그룹</p>
+											<select class="form-select" name="workGroup" id="workPostGroup">
+												<th:block th:each="group : ${projectWritingWorkGroup}">
+														<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}" selected></option>
+												</th:block>
+											</select>
 										  	</div>
 										  </div>
 										</div>
@@ -194,7 +203,7 @@ p {
 									
 									<!-- 내용입력 -->
 									<div>
-										<textarea placeholder="내용을 입력하세요."></textarea>
+										<textarea placeholder="내용을 입력하세요." id="workWritingContent"></textarea>
 									</div>
 
 									<!-- 하위업무 -->
@@ -213,7 +222,7 @@ p {
 										</div>
 									</div>
 								</div>
-									<button type="button" class="btn btn-primary">등록</button>
+									<button type="button" class="btn btn-primary" id="createWorkButton">등록</button>
 							</div>
 						</div>
 					</div>
@@ -247,13 +256,14 @@ p {
 								</div>
 								<div class="modal-body">
 									<div>
-										<input type="text" placeholder="제목을 입력하세요.">
+										<input type="text" placeholder="제목을 입력하세요." class="postTitle">
 									</div>
 									<!-- 시작일 -->
 									<div>
 										<p>시작일</p>
 										<input type="datetime-local" id="startSchDate">
 									</div>
+									
 									<!-- 마감일 -->
 									<div>
 										<p>마감일</p>
@@ -264,8 +274,10 @@ p {
 										<p>참석자 추가(Ctrl을 누르면 중복 처리 가능)</p>
 										<select class="form-select" multiple name="workMember" size=5>
 											<th:block th:each="member : ${projectPartiMember}">
+													<!-- <option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id == session.Id}" style="background-color: #eee;"></option> -->
 													<option th:text="${member.name}" th:value="${member.id}"
-													th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+													th:if="${member.id == session.Id}"></option>
 													<option th:text="${member.name}" th:value="${member.id}"
 													th:if="${member.id != session.Id}"></option>
 											</th:block>
@@ -314,7 +326,7 @@ p {
 								</div>
 								<div class="modal-body">
 									<div>
-										<input type="text" placeholder="제목을 입력하세요.">
+										<input type="text" placeholder="제목을 입력하세요." class="postTitle">
 									</div>
 									<!-- 할 일 입력 -->
 									<div>
@@ -369,7 +381,7 @@ p {
 								</div>
 								<div class="modal-body">
 									<div>
-										<input type="text" placeholder="제목을 입력하세요.">
+										<input type="text" placeholder="제목을 입력하세요." class="postTitle">
 									</div>
 									<!-- 투표 설명 -->
 									<div>
@@ -408,10 +420,114 @@ p {
 			<!-- 상단고정(후순위) 업무 이후 -->
 			<div></div>
 			<!-- 게시물 공간 -->
-			<div></div>
+			<div>
+			
+				<!-- 1.글 -->
+				<div class="container">
+					<div class="card">
+						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
+						<div class="card-header">
+							게시글 제목
+						</div>
+						<div class="card-body">
+							<p>게시글 내용이 여기에 들어갑니다.</p>
+							<div class="collapse" id="moreContent">
+								<p>
+									추가적인 일정 내용이 여기에 들어갑니다.
+								</p>
+								<a class="btn btn-link" data-toggle="collapse" href="#moreContent" role="button" aria-expanded="false" aria-controls="moreContent">더보기</a>
+						</div>
+						<div class="card-footer">
+							<!-- 북마크, 댓글수 -->
+							<div></div>
+							<div class="row">
+								<div class="col-md-6">
+									<h6>댓글</h6>
+									<ul class="list-unstyled">
+										<li>댓글 1</li>
+										<li>댓글 2</li>
+										<li>댓글 3</li>
+									</ul>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<input type="text" class="form-control" placeholder="댓글 작성">
+									</div>
+									<button type="submit" class="btn btn-primary">작성</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 2. 업무 -->
+			
+				<!-- 3.일정 -->
+			
+				<!-- 4.할 일 -->
+			
+				<!-- 5.투표 -->
+				<div class="container">
+					<div class="card mb-3">
+						<div class="row no-gutters">
+							<div class="col-md-4">
+								<img src="이미지 주소" class="card-img" alt="게시물 이미지">
+							</div>
+							<div class="col-md-8">
+								<div class="card-body">
+									<h5 class="card-title">게시물 제목</h5>
+									<p class="card-text">게시물 내용이 여기에 들어갑니다.</p>
+									<p class="card-text"><small class="text-muted">작성일자</small></p>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer">
+							<div class="d-flex justify-content-between align-items-center">
+								<div>
+									<span class="badge badge-primary">카테고리1</span>
+									<span class="badge badge-primary">카테고리2</span>
+								</div>
+								<a href="#" class="btn btn-sm btn-primary">더보기</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<!-- 참여자공간 -->
-		<div></div>
+		<div>
+			
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3">
+						<!-- 왼쪽 사이드바 영역 -->
+						<div class="sidebar">
+							<ul class="list-unstyled">
+								<li>
+									<!-- 이미지 -->
+									<img src="이미지 URL" alt="이미지" class="img-fluid">
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-9">
+						<!-- 오른쪽 콘텐츠 영역 -->
+						<div class="content">
+							<ul class="list-unstyled">
+								<li>
+									<!-- 이름 -->
+									<h4>사용자 이름</h4>
+								</li>
+								<li>
+									<!-- 메시지 아이콘 -->
+									<i class="fas fa-envelope"></i>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
 	</div>
 	<div>
 		<!-- 글 조회 공간 -->
@@ -429,6 +545,7 @@ p {
 		
 		function toggleButtonStyle(button) {
 			console.log(selectedButton);
+			
 		  if (selectedButton !== button) {
 		    if (selectedButton) {
 		      resetButtonStyle(selectedButton);
@@ -469,6 +586,121 @@ p {
 		}
 		
 	</script>
+	
+	<!-- 글 작성 -->
+	<script>
+		
+		createWritingButton.addEventListener('click', function () {
+			//제목 빈값 검사
+			let titles = document.getElementsByClassName('postTitle');
+			if(titles[0].value == '') {
+				titles[0].focus();
+				alert('제목을 입력하세요');
+				return;
+			}
+			
+			//내용 빈값 검사
+			if(writingContent.value == '') {
+				alert('내용을 입력하세요');
+				writingContent.focus();
+				return;
+			}
+			
+			//프로젝트 넘버 찾기(주소)
+			let url = window.location.pathname;
+			let lastIndex = url.lastIndexOf('/');
+			let projectNo = url.substring(lastIndex + 1);
+			
+			fetch("/postCreateWriting", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+	   				'postTitle': titles[0].value,
+	   				'writingContent': writingContent.value,
+	   				'proNo': projectNo
+	   			})
+			})
+			.then(response => response.json())
+			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+			
+		});
+
+	</script>
+	
+	<!-- 업무 작성 -->
+	<script>
+		//담당자 값 가져오기
+		let workPersonArr = [];
+		function workPostPeople(e) {
+			workPersonArr = [];
+	
+			for(let i=0; i < e.options.length; i++) {
+				let option = e.options[i];
+				if(option.selected) {
+					workPersonArr.push(option.value);
+				}
+			};
+			
+			return workPersonArr;
+		}
+		
+		//등록 버튼 클릭
+		createWorkButton.addEventListener('click', function () {
+			//제목 빈값 검사
+			let titles = document.getElementsByClassName('postTitle');
+			if(titles[1].value == '') {
+				titles[1].focus();
+				alert('제목을 입력하세요');
+				return;
+			}
+			
+			//내용 빈값 검사
+			if(workWritingContent.value == '') {
+				alert('내용을 입력하세요');
+				workWritingContent.focus();
+				return;
+			}
+			
+			//프로젝트 넘버 찾기(주소)
+			let url = window.location.pathname;
+			let lastIndex = url.lastIndexOf('/');
+			let projectNo = url.substring(lastIndex + 1);
+			
+			/* console.log(titles[1].value);
+			console.log('업무그룹',workPostGroup.value);
+			console.log('업무상태',selectedButton.dataset.workTypeStatus);
+			console.log('우선순위',workPostPri.value);
+			console.log(startWorkDate.value);
+			console.log(endWorkDate.value);
+			console.log('내용',workWritingContent.value);
+			console.log('참여자', workPersonArr); */
+			fetch("/postCreateWork", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+	   				'proNo': projectNo,
+	   				'postTitle': titles[1].value,
+	   				'workGroupNo': workPostGroup.value,
+	   				'workStatus': selectedButton.dataset.workTypeStatus,
+	   				'workPri': workPostPri.value,
+	   				'workStartDay': startWorkDate.value,
+	   				'workStartTime': startWorkDate.value,
+	   				'workEndDay': endWorkDate.value,
+	   				'workEndTime': endWorkDate.value,
+	   				'workContent': workWritingContent.value,
+	   				'workPersonArr': workPersonArr
+	   			})
+			})
+			.then(response => response.json())
+			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+			
+		});
+	</script>
+
 	
 	<!-- 시간 단위 조정 -->
 	<!-- <script>
