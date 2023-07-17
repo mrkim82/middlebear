@@ -129,9 +129,9 @@ public class MailServiceImpl implements MailService{
 		return 0;
 	}
 	@Override
-	public List<MailVO> receiveMail() {
+	public List<MailVO> receiveMail(String email) {
 		//받은메일함 조회페이지
-		return null;
+		return mailMapper.receiveMail(email);
 	}
 	@Override
 	public List<MailVO> sendingMail(String email) {
@@ -139,9 +139,9 @@ public class MailServiceImpl implements MailService{
 		return mailMapper.sendingMail(email);
 	}
 	@Override
-	public List<MailVO> deletedMail() {
+	public List<MailVO> deletedMail(MailVO mailVO) {
 		//지운메일함 조회페이지
-		return null;
+		return mailMapper.deletedMail(mailVO);
 	}
 	@Override
 	public int deleteMail(int mailNo) {

@@ -17,9 +17,9 @@
 		<tbody id="MailBody">
 			<tr th:each="mail : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
 				<td><input type="checkbox"></td>
-				<td>[[${mail.mailNo}]]</td>
-				<td>[[${mail.title}]]</td>
 				<td>[[${mail.receiver}]]</td>
+				<td>[[${mail.title}]]</td>
+				<td>[[${mail.content}]]</td>
 				<td th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
 			</tr>
 		</tbody>
