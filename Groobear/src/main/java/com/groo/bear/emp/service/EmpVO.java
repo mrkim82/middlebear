@@ -16,7 +16,7 @@ public class EmpVO {
 	private String id;
 	private String password;
 	private String email;
-	private int phone;
+	private String phone;
 	private String addr;
 	private String empGrade;
 	private Date empDate;

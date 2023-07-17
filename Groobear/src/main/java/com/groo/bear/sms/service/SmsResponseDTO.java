@@ -16,9 +16,4 @@ public class SmsResponseDTO {
 	private LocalDateTime requestTime;
 	private String statusCode;
 	private String statusName;
-	private String smsConfirmNum;
-	
-	public SmsResponseDTO(String smsConfirmNum) {
-		this.smsConfirmNum = smsConfirmNum;
-	}
 }
