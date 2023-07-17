@@ -32,8 +32,7 @@ p {
 	<!-- 중앙 + 참여자 -->
 	<div>
 		<!-- 중앙 -->
-		<div style="overflow-y: auto; width: 680px; height: 700px;" class="float-start">
-			<div>피드</div>
+		<div style="overflow-y: auto; width: 680px; height: 676px;" class="float-start">
 			<!-- 업무리포트(총 업무수)(차트) -->
 			<div>
 				<table>
@@ -43,7 +42,7 @@ p {
 			<!-- 글 생성 nav -->
 			<div>
 				<ul class="nav justify-content-center"
-					style="background-color: #faf9f9">
+					style="background-color: #faf9f9; margin: 10px">
 					<li class="nav-item" data-post-code="1"><a class="nav-link"
 						data-toggle="modal" data-target="#modal1" href="#"><span>글</span></a></li>
 					<li class="nav-item" data-post-code="2"><a class="nav-link"
@@ -163,7 +162,8 @@ p {
 									<!-- 항목 추가입력 -->
 									<div>
 										<p>
-										  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+										  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+										  			aria-expanded="false" aria-controls="collapseExample">
 										    + 항목추가입력
 										  </button>
 										</p>
@@ -429,59 +429,209 @@ p {
 			<!-- 게시물 공간 -->
 			<div>
 			
-				<!-- 1.글 -->
 				<div class="container">
-					<th:block th:each="wt : ${projectWritingDetais}">
-					<div class="card">
-						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
-						<div class="card-header" th:text="${wt.postTitle}">
-							<!-- 글 제목 -->
-						</div>
-						<div class="card-body">
-							<p th:text="${wt.writingContent}">
-								<!-- 게시글 내용이 여기에 들어갑니다. -->
-							</p>
-							<div class="collapse" id="moreContent">
-								<p>
-									<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
-								</p>
-								<a class="btn btn-link" data-toggle="collapse" href="#moreContent" role="button" aria-expanded="false" aria-controls="moreContent">더보기</a>
-							</div>
-							<div class="card-footer">
-							<!-- 북마크, 댓글수 -->
-								<div></div>
-								<div class="row">
-									<div class="col-md-6">
-										<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
-										<h6 th:text="댓글"></h6>
-										<ul class="list-unstyled">
-											<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
-												th:if="${wt.proPostNo == com.proPostNo}">
-												<span th:utext="${com.profileImg}"></span>
-												<span th:text="${com.name}"></span>
-												<span th:text="${com.comDate}"></span>
-												<span th:text="${com.comContent}"></span>
-												<th:block th:if="${com.id == session.Id}">
-													<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
-													<span></span>
-													<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+					<th:block th:each="allPost : ${readFeedPost}">
+						
+						<!-- 1.업무 -->
+						<th:block th:if="${allPost.postType == '1'}">
+							<div class="card">
+								<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
+								<div>
+							        <span th:text="${allPost.profileImg}"></span>
+							        <span th:text="${allPost.name}"></span>
+							        <span th:text="${allPost.postDate}"></span>
+							    </div>
+								<div class="card-header" th:text="${allPost.postTitle}">
+									<!-- 글 제목 -->
+								</div>
+								<div id="workPostStatus2">
+								    <button type="button" class="btn"
+								    		th:classappend="${allPost.workStatus == '1' ? 'btn-primary' : 'btn-outline-primary'}"
+								            data-work-type-status="1" onclick="toggleButtonStyle(this)">요청</button>
+								    <button type="button" class="btn"
+								    		th:classappend="${allPost.workStatus == '2' ? 'btn-warning' : 'btn-outline-warning'}"
+								            data-work-type-status="2" onclick="toggleButtonStyle(this)">진행</button>
+								    <button type="button" class="btn"
+								    		th:classappend="${allPost.workStatus == '3' ? 'btn-danger' : 'btn-outline-danger'}"
+								            data-work-type-status="3" onclick="toggleButtonStyle(this)">피드백</button>
+								    <button type="button" class="btn"
+								    		th:classappend="${allPost.workStatus == '4' ? 'btn-success' : 'btn-outline-success'}"
+								            data-work-type-status="4" onclick="toggleButtonStyle(this)">완료</button>
+								    <button type="button" class="btn"
+								    		th:classappend="${allPost.workStatus == '5' ? 'btn-secondary' : 'btn-outline-secondary'}"
+								            data-work-type-status="5" onclick="toggleButtonStyle(this)">보류</button>
+								</div>
+								<div class="card-body">
+									<!-- 추가 항목 -->
+									<div>
+										<p>
+										  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+										  			aria-expanded="false" aria-controls="collapseExample">
+										    + 항목추가입력
+										  </button>
+										</p>
+										<div class="collapse" id="collapseExample">
+										  <div class="card card-body">
+										  	<!-- 시작일 추가 -->
+										  	<div>
+										  		<p>시작일</p>
+													<input type="datetime-local" id="startWorkDate" th:value="${#dates.format(allPost.workStartDay, 'yyyy-MM-dd HH:mm')}">
+										  	</div>
+										  	<!-- 마감일 추가 -->
+										  	<div>
+										  		<p>마감일</p>
+										  		<input type="datetime-local"  id="endWorkDate" min="2023-07-17T00:00" th:value="${#dates.format(allPost.workStartTime, 'yyyy-MM-dd HH:mm')}">
+										  	</div>
+										  	<!-- 우선순위 추가 -->
+										  	<div>
+													<p>우선순위</p>
+													<select class="custom-select" name="workPri" id="workPostPri">
+														<option value="">없음</option>
+														<option value="1" th:selected="${allPost.workStatus == '1'}">낮음</option>
+														<option value="2" th:selected="${allPost.workStatus == '2'}">보통</option>
+													    <option value="3" th:selected="${allPost.workStatus == '3'}">높음</option>
+													    <option value="4" th:selected="${allPost.workStatus == '4'}">긴급</option>
+													</select>
+										  	</div>
+										  	<!-- 그룹 추가 -->
+										  	<div>
+										  	
+										  	<p>업무 그룹</p>
+											<select class="form-select" name="workGroup" id="workPostGroup">
+												<th:block th:each="group : ${projectWritingWorkGroup}">
+														<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}"
+																th:selected="${allPost.workGroupNo == group.workGroupNo}"></option>
 												</th:block>
-											</li>
-										</ul>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<input type="text" class="form-control" placeholder="댓글 작성">
+											</select>
+										  	</div>
+										  </div>
 										</div>
-										<button type="button" class="btn btn-primary" onclick="createCommentButton()" th:data-post-writing-no="${wt.proPostNo}">댓글 등록</button>
+									</div>
+									<!-- 항목추가 종료 -->
+									<p th:text="${allPost.workContent}">
+										<!-- 게시글 내용이 여기에 들어갑니다. -->
+									</p>
+									<div class="collapse" id="moreContent">
+										<p>
+											<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
+										</p>
+										<a class="btn btn-link" data-toggle="collapse" href="#moreContent" role="button"
+											aria-expanded="false" aria-controls="moreContent">더보기</a>
+									</div>
+									<div class="card-footer">
+										<!-- 하위업무 -->
+										<div>
+											<!-- 하위업무 수 -->
+											<div>
+												<p>ㄴ하위업무</p>
+											</div>
+											<!-- 하위업무 동적 생성 -->
+											<div>
+												<button type="button">+ 하위업무 추가</button>
+											</div>
+											<!-- 하위업무 입력란 -->
+											<div>
+												
+											</div>
+										</div>
+										<!-- 북마크, 댓글수 -->
+										<div>
+										
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
+												<h6 th:text="댓글"></h6>
+												<ul class="list-unstyled">
+													<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+														th:if="${allPost.proPostNo == com.proPostNo}">
+														<span th:utext="${com.profileImg}"></span>
+														<span th:text="${com.name}"></span>
+														<span th:text="${com.comDate}"></span>
+														<span th:text="${com.comContent}"></span>
+														<th:block th:if="${com.id == session.Id}">
+															<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+															<span></span>
+															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+														</th:block>
+													</li>
+												</ul>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="댓글 작성">
+												</div>
+												<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+														th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-					</th:block>
-				</div>
-				<!-- 2. 업무 -->
+						</th:block>
+						
+						<!-- 2.글 -->
+						<th:block th:if="${allPost.postType == '2'}">
+							<div class="card">
+								<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
+								<div>
+							        <span th:text="${allPost.profileImg}"></span>
+							        <span th:text="${allPost.name}"></span>
+							        <span th:text="${allPost.postDate}"></span>
+							    </div>
+								<div class="card-header" th:text="${allPost.postTitle}">
+									<!-- 글 제목 -->
+								</div>
+								<div class="card-body">
+									<p th:text="${allPost.writingContent}">
+										<!-- 게시글 내용이 여기에 들어갑니다. -->
+									</p>
+									<div class="collapse" id="moreContent">
+										<p>
+											<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
+										</p>
+										<a class="btn btn-link" data-toggle="collapse" href="#moreContent" role="button"
+											aria-expanded="false" aria-controls="moreContent">더보기</a>
+									</div>
+									<div class="card-footer">
+										<!-- 북마크, 댓글수 -->
+										<div>
+										
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
+												<h6 th:text="댓글"></h6>
+												<ul class="list-unstyled">
+													<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+														th:if="${allPost.proPostNo == com.proPostNo}">
+														<span th:utext="${com.profileImg}"></span>
+														<span th:text="${com.name}"></span>
+														<span th:text="${com.comDate}"></span>
+														<span th:text="${com.comContent}"></span>
+														<th:block th:if="${com.id == session.Id}">
+															<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+															<span></span>
+															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+														</th:block>
+													</li>
+												</ul>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="댓글 작성">
+												</div>
+												<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+														th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 2종료 -->
+						</th:block>
+					
+
 			
 				<!-- 3.일정 -->
 			
@@ -513,6 +663,10 @@ p {
 						</div>
 					</div>
 				</div> -->
+
+				<!-- 포스트 종료 -->
+			</th:block>
+		</div>
 			</div>
 		</div>
 		<!-- 참여자공간 -->

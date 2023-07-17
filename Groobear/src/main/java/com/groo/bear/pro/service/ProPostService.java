@@ -3,6 +3,7 @@ package com.groo.bear.pro.service;
 import java.util.List;
 
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
+import com.groo.bear.pro.service.postvo.ProPostFeedVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
@@ -18,6 +19,9 @@ public interface ProPostService {
 	// 프로젝트 참가자 정보
 	public List<ProPostUserVO> readProjectParti(ProPostUserVO vo);
 	
+	// 게시글 조회
+	public List<ProPostFeedVO> readFeedPost(int proNo);
+		
 	// 글 작성
 	public void createPostWriting(ProPostWritingVO vo);
 	// 글 조회

@@ -60,7 +60,8 @@
 				#{workEndTime,    mode=IN,  jdbcType=DATE},
 				#{workContent,    mode=IN,  jdbcType=VARCHAR}
 			    <if test="workPersonArr != null">
-			        , #{workPersonArr, mode=IN, jdbcType=ARRAY, typeHandler=com.groo.bear.pro.mapper.ArrayTypeHandler}
+			        , #{workPersonArr, mode=IN}
+			        <!-- , #{workPersonArr, mode=IN, jdbcType=ARRAY, typeHandler=com.groo.bear.pro.mapper.ArrayTypeHandler} -->
 				</if>
 				<if test="workPersonArr == null">
 				    , null
@@ -76,6 +77,36 @@
 		FROM work_group
 		WHERE pro_no = #{proNo}
 		ORDER BY work_group_name
+	</select>
+	
+	<!-- 피드 글 조회 -->
+	<select id="readFeedPost" parameterType="int" resultType="ProPostFeedVO">
+		SELECT a.pro_post_no, a.post_type, a. post_title, TO_CHAR(a.post_date, 'YYYY-MM-DD HH24:MI') AS postDate, a.id, j.profile_img, k.name,
+		        b.writing_no, b.writing_content,
+		        c.work_no, c.work_status, c.work_pri,
+		        c.work_start_day, c.work_start_time, c.work_end_day, c.work_end_time,
+		        c.lr_work_seq, c.work_content,
+		        f.sch_no, f.sch_start_day, f.sch_start_time, f.sch_end_day, f.sch_end_time,
+		        f.sch_place, f.sch_content,
+		        i.vote_no, i.vote_content, i.vote_end_day, i.vote_end_check, e.work_group_no
+		FROM pro_post a
+		LEFT JOIN pro_writing b
+		ON(a.pro_post_no = b.pro_post_no)
+		LEFT JOIN pro_work c
+		ON(a.pro_post_no = c.pro_post_no)
+		LEFT JOIN work_group e
+		ON(c.work_group_no = e.work_group_no)
+		LEFT JOIN pro_sch f
+		ON(a.pro_post_no = f.pro_post_no)
+		LEFT JOIN vote i
+		ON(a.pro_post_no = i.pro_post_no)
+		INNER JOIN users j
+		ON(a.id = j.id)
+		INNER JOIN user_info k
+		ON(j.emp_no = k.emp_no)
+		WHERE (f.personal_sch = 'N' or f.personal_sch IS NULL)
+		AND a.pro_no = #{proNo}
+		ORDER BY pro_post_no DESC
 	</select>
 	
 	<!-- 글 조회(임시) -->

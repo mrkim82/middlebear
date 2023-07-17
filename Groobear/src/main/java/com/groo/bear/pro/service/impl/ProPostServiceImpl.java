@@ -10,6 +10,7 @@ import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
+import com.groo.bear.pro.service.postvo.ProPostFeedVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
@@ -72,6 +73,11 @@ public class ProPostServiceImpl implements ProPostService {
 	@Override
 	public int updatePostComment(ProPostCommentVO vo) {
 		return ppm.updatePostComment(vo);
+	}
+
+	@Override
+	public List<ProPostFeedVO> readFeedPost(int proNo) {
+		return ppm.readFeedPost(proNo);
 	}
 
 }

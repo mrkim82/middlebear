@@ -67,8 +67,9 @@ public class proPostController {
 		//업무
 		case 2 :
 			//글 조회(임시)
-			model.addAttribute("projectWritingDetais", proPostService.readPostWriting(2));
+			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo));
 			model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(proNo));
+			System.out.println("게시글"+model.getAttribute("readFeedPost"));
 			pagePath = "proPost/proPostDetail";
 			break;
 		//간트차트
@@ -108,7 +109,6 @@ public class proPostController {
 		HttpSession session = request.getSession();
 		Map <String, Object> map = new HashMap<>();
 		String res = "";
-		
 		vo.setId((String)session.getAttribute("Id"));
 		
 		proPostService.createPostWriting(vo);
@@ -124,7 +124,9 @@ public class proPostController {
 		HttpSession session = request.getSession();
 		Map <String, Object> map = new HashMap<>();
 		String res = "";
-		
+		if(vo.getWorkPersonArr().length == 0) {
+			vo.setWorkPersonArr(null);
+		}
 		vo.setId((String)session.getAttribute("Id"));
 		System.out.println("시간!"+vo);
 		
