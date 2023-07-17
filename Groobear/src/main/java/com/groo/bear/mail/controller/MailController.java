@@ -108,7 +108,7 @@ public class MailController {
             // 메일 콘텐츠 설정
             message.setContent(mParts);
 
-            // MIME 타입 설정
+            // MIME 타입 설정 html속성 메일발송시 적용시킬때 사용하는 구문들
             MailcapCommandMap MailcapCmdMap = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
             MailcapCmdMap.addMailcap("text/html;; x-java-content-handler=com.sun.mail.handlers.text_html");
             MailcapCmdMap.addMailcap("text/xml;; x-java-content-handler=com.sun.mail.handlers.text_xml");

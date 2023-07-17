@@ -17,4 +17,10 @@ public class MailServiceImpl implements MailService{
 	public int sendMail(MailVO mailVO) {
 		return mailMapper.sendMail(mailVO);
 	}
+
+	//여기서 스케줄링 걸어줘야됨
+	@Override
+	public void SchedulMail(MailVO mailVO) {
+		
+	}
 }
