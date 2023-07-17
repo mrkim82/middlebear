@@ -1,7 +1,5 @@
 package com.groo.bear.board.controller;
 
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +18,6 @@ import com.groo.bear.board.service.BoardService;
 import com.groo.bear.board.service.BoardVO;
 import com.groo.bear.paging.Criteria;
 import com.groo.bear.paging.Paging;
-import lombok.extern.log4j.Log4j2;
 
 @Controller
 public class BoardController {

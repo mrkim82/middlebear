@@ -24,9 +24,6 @@ public interface BoardMapper {
 	//게시글 삭제
 	public int deleteBoard(int boardNo);
 	
-	//첨부파일
-	//public int addFiles(FilesVO filesVO);
-	
 	//조회수 증가
 	public int updateCount(int boardNo);
 }
