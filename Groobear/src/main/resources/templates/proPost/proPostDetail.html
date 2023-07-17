@@ -419,21 +419,25 @@ p {
 			</div>
 			<!-- 상단고정(후순위) 업무 이후 -->
 			<div></div>
+			
 			<!-- 게시물 공간 -->
 			<div>
 			
 				<!-- 1.글 -->
 				<div class="container">
+					<th:block th:each="wt : ${projectWritingDetais}">
 					<div class="card">
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
-						<div class="card-header">
-							게시글 제목
+						<div class="card-header" th:text="${wt.postTitle}">
+							<!-- 글 제목 -->
 						</div>
 						<div class="card-body">
-							<p>게시글 내용이 여기에 들어갑니다.</p>
+							<p th:text="${wt.writingContent}">
+								<!-- 게시글 내용이 여기에 들어갑니다. -->
+							</p>
 							<div class="collapse" id="moreContent">
 								<p>
-									추가적인 일정 내용이 여기에 들어갑니다.
+									<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
 								</p>
 								<a class="btn btn-link" data-toggle="collapse" href="#moreContent" role="button" aria-expanded="false" aria-controls="moreContent">더보기</a>
 						</div>
@@ -444,21 +448,29 @@ p {
 								<div class="col-md-6">
 									<h6>댓글</h6>
 									<ul class="list-unstyled">
-										<li>댓글 1</li>
-										<li>댓글 2</li>
-										<li>댓글 3</li>
+										<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}">
+											<span th:utext="${com.profileImg}"></span>
+											<span th:text="${com.name}"></span>
+											<span th:text="${com.comDate}"></span>
+											<span th:text="${com.comContent}"></span>
+											<th:block th:if="${com.id == session.Id}">
+												<span onclick="UpdateWritingComment()" style="cursor: pointer" th:text="수정"></span>
+												<span onclick="deleteWritingComment()" style="cursor: pointer" th:text="X"></span>
+											</th:block>
+										</li>
 									</ul>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<input type="text" class="form-control" placeholder="댓글 작성">
 									</div>
-									<button type="submit" class="btn btn-primary">작성</button>
+									<button type="button" class="btn btn-primary" onclick="createCommentButton()" th:data-post-writing-no="${wt.proPostNo}">댓글 등록</button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				</th:block>
 				<!-- 2. 업무 -->
 			
 				<!-- 3.일정 -->
@@ -466,7 +478,7 @@ p {
 				<!-- 4.할 일 -->
 			
 				<!-- 5.투표 -->
-				<div class="container">
+				<!-- <div class="container">
 					<div class="card mb-3">
 						<div class="row no-gutters">
 							<div class="col-md-4">
@@ -490,7 +502,7 @@ p {
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<!-- 참여자공간 -->
@@ -534,7 +546,7 @@ p {
 		<div></div>
 	</div>
 	
-	
+</div>
 	
 	
 	
@@ -696,11 +708,101 @@ p {
 	   			})
 			})
 			.then(response => response.json())
-			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+			//.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
 			
 		});
 	</script>
-
+	
+	<!-- 댓글 등록 -->
+	<script>
+		function createCommentButton() {
+			let targetButton = event.target;//버튼 동적 확인
+			let com = targetButton.parentNode.children[0].children[0]; //텍스트값 찾기
+			if(com.value == '') {
+				com.focus();
+				alert('댓글을 입력하세요');
+				return;
+			}
+			
+			let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
+			
+			let url = window.location.pathname;
+			let lastIndex = url.lastIndexOf('/');
+			let projectNo = url.substring(lastIndex + 1);
+			
+			fetch("/postCreateComment", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+	   				'proPostNo': writingNo,
+	   				'comContent': com.value
+	   			})
+			})
+			.then(response => response.json())
+			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+		}
+	</script>
+	
+	<!-- 댓글 삭제  -->
+	<script>
+		function deleteWritingComment() {
+			let targetButton = event.target;
+			console.log(targetButton);
+			console.log(targetButton.parentNode.dataset.postCode);
+			
+			let url = window.location.pathname;
+			let lastIndex = url.lastIndexOf('/');
+			let projectNo = url.substring(lastIndex + 1);
+			
+			fetch("/postDeleteComment", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+	   				'comNo': targetButton.parentNode.dataset.postCode
+	   			})
+			})
+			.then(response => response.json())
+			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+		}
+	</script>
+	
+	<!-- 댓글 수정  -->
+	<script>
+		function UpdateWritingComment() {
+			let targetButton = event.target;
+			let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
+			let oldCom = targetButton.parentNode.childNodes[7];//기존 댓글
+			
+			//값 초기화
+			oldCom.textContent = '';
+			//targetButton.textContent = '';
+			
+			targetButton.parentNode.childNodes[7].innerHTML = 
+					'<input type="text" placeholder="댓글 수정">
+					<span id="ooo">수정</span>
+					<span id="xxx">취소</span>';
+			
+			let url = window.location.pathname;
+			let lastIndex = url.lastIndexOf('/');
+			let projectNo = url.substring(lastIndex + 1);
+			
+			/* fetch("/", {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+	   				'comNo': targetButton.parentNode.dataset.postCode
+	   			})
+			})
+			.then(response => response.json())
+			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2"); */
+		}
+	</script>
 	
 	<!-- 시간 단위 조정 -->
 	<!-- <script>

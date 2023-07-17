@@ -59,10 +59,10 @@
 				#{workEndDay,     mode=IN,  jdbcType=DATE},
 				#{workEndTime,    mode=IN,  jdbcType=DATE},
 				#{workContent,    mode=IN,  jdbcType=VARCHAR}
-			    <if test="workPersonArr != null and !workPersonArr.isEmpty()">
-			        , #{workPersonArr, mode=IN, jdbcType=ARRAY, javaType=java.util.List, typeHandler=com.groo.bear.pro.mapper.StringListTypeHandler}
+			    <if test="workPersonArr != null">
+			        , #{workPersonArr, mode=IN, jdbcType=ARRAY, typeHandler=com.groo.bear.pro.mapper.ArrayTypeHandler}
 				</if>
-				<if test="workPersonArr == null or workPersonArr.isEmpty()">
+				<if test="workPersonArr == null">
 				    , null
 				</if>
 			)
@@ -78,4 +78,44 @@
 		ORDER BY work_group_name
 	</select>
 	
+	<!-- 글 조회(임시) -->
+	<select id="readPostWriting" resultType="ProPostWritingVO">
+		SELECT a.pro_post_no, a.post_type, a. post_title, a.post_date, a.id,
+			   b.writing_no, b.writing_content, d.name, c.profile_img
+		FROM pro_post a
+		LEFT JOIN pro_writing b
+		ON(a.pro_post_no = b.pro_post_no)
+		JOIN users c
+		ON(a.id=c.id)
+		JOIN user_info d
+		ON(c.emp_no = d.emp_no)
+		WHERE post_type = #{postType}
+	</select>
+	
+	<!-- 글 댓글 조회(임시) -->
+	<select id="readPostWritingComment" resultType="ProPostCommentVO">
+		SELECT a.com_no, a.com_content, TO_CHAR(a.com_date, 'yyyy/MM/dd HH24:mi') AS comDate, c.name, b.profile_img, a.id
+		FROM com a JOIN users b
+		ON(a.id=b.id)
+		JOIN user_info c
+		ON(b.emp_no = c.emp_no)
+		WHERE pro_post_no = #{proPostNo}
+	</select>
+	
+	<!-- 댓글 작성 -->
+	<insert id="createPostComment" parameterType="ProPostCommentVO">
+		INSERT INTO com(com_no, pro_post_no, com_content, id)
+		VALUES ((SELECT NVL(MAX(com_no), 0) +1
+		         FROM com),
+		         #{proPostNo},
+		         #{comContent},
+		         #{id}
+		)
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deletePostComment" parameterType="int">
+		DELETE FROM com
+		WHERE com_no = #{comNo}
+	</delete>	
 </mapper>

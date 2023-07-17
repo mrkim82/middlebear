@@ -19,6 +19,7 @@ import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
 import com.groo.bear.pro.service.ProService;
+import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 
@@ -63,7 +64,9 @@ public class proPostController {
 			break;
 		//업무
 		case 2 :
-			
+			//글 조회(임시)
+			model.addAttribute("projectWritingDetais", proPostService.readPostWriting(2));
+			model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(2));
 			pagePath = "proPost/proPostDetail";
 			break;
 		//간트차트
@@ -120,9 +123,6 @@ public class proPostController {
 		Map <String, Object> map = new HashMap<>();
 		String res = "";
 		
-		if(vo.getWorkPersonArr().isEmpty()) {
-			vo.setWorkPersonArr(null);
-		}
 		vo.setId((String)session.getAttribute("Id"));
 		System.out.println("시간!"+vo);
 		
@@ -132,4 +132,49 @@ public class proPostController {
 		return map;
 	}
 	
+	//댓글 작성
+	@PostMapping("postCreateComment")
+	@ResponseBody
+	public Map<String, Object> createPostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
+		System.out.println("왜안옴"+vo);
+		HttpSession session = request.getSession();
+		Map <String, Object> map = new HashMap<>();
+		String res = "";
+		int result = 0;
+		
+		vo.setId((String)session.getAttribute("Id"));
+		
+		proPostService.createPostComment(vo);
+		System.out.println("왜안옴"+vo);
+		if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+		
+		map.put("result", res);
+		
+		return map;
+	}
+	
+	//댓글 삭제
+	@PostMapping("postDeleteComment")
+	@ResponseBody
+	public Map<String, Object> deletePostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
+		Map <String, Object> map = new HashMap<>();
+		String res = "";
+		int result = proPostService.deletePostComment(vo.getComNo());
+		
+		if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+		
+		map.put("result", res);
+		System.out.println(vo);
+		return map;
+	}
 }

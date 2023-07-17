@@ -9,6 +9,7 @@ import com.groo.bear.pro.mapper.ProPostMapper;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
+import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
@@ -46,6 +47,26 @@ public class ProPostServiceImpl implements ProPostService {
 	@Override
 	public List<ProPostWorkGroupVO> readWritingWorkGroup(int proNo) {
 		return ppm.readWritingWorkGroup(proNo);
+	}
+
+	@Override
+	public List<ProPostWritingVO> readPostWriting(int postType) {
+		return ppm.readPostWriting(postType);
+	}
+
+	@Override
+	public List<ProPostCommentVO> readPostWritingComment(int proPostNo) {
+		return ppm.readPostWritingComment(proPostNo);
+	}
+
+	@Override
+	public int createPostComment(ProPostCommentVO vo) {
+		return ppm.createPostComment(vo);
+	}
+
+	@Override
+	public int deletePostComment(int comNo) {
+		return ppm.deletePostComment(comNo);
 	}
 
 }
