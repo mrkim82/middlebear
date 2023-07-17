@@ -20,8 +20,6 @@ public class CarVO {
 	private int empNo;
 	private String rank;
 	private String empGrade;
-	private int startPage;
-	private int perPageNum;
 	
 	
 	

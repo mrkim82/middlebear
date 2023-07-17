@@ -29,7 +29,7 @@
 				</tr> 
 			</thead>
 			<tbody>
-				<tr th:each="car, es:${carList}">
+				<tr th:if="${carList != null}" th:each="car, stat:${carList}">
 					<td>[[${car.empNo}]]</td>
 					<td>[[${car.deptName}]]</td>
 					<td>[[${car.name}]]</td>
