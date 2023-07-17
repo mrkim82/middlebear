@@ -1,7 +1,6 @@
 package com.groo.bear.board.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import com.groo.bear.board.service.BoardVO;
 import com.groo.bear.paging.Criteria;
