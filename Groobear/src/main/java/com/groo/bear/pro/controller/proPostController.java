@@ -1,5 +1,8 @@
 package com.groo.bear.pro.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -8,11 +11,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
 import com.groo.bear.pro.service.ProService;
+import com.groo.bear.pro.service.postvo.ProPostWorkVO;
+import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 
 @Controller
 public class proPostController {
@@ -45,6 +53,7 @@ public class proPostController {
 		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));//메뉴 상단바 조회
 		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(id, proNo));
 		model.addAttribute("projectPartiMember", proPostService.readProjectParti(vo2));//회원 정보 전체 조회
+		model.addAttribute("projectWritingWorkGroup", proPostService.readWritingWorkGroup(proNo));//작성용 업무 그룹 조회
 		
 		switch (homeTab) {
 		//피드
@@ -85,6 +94,42 @@ public class proPostController {
 		
 		
 		return pagePath;
+	}
+	
+	//글 생성
+	@PostMapping("postCreateWriting")
+	@ResponseBody
+	public Map<String, Object> postCreateWriting(HttpServletRequest request, @RequestBody ProPostWritingVO vo) {
+		HttpSession session = request.getSession();
+		Map <String, Object> map = new HashMap<>();
+		String res = "";
+		
+		vo.setId((String)session.getAttribute("Id"));
+		
+		proPostService.createPostWriting(vo);
+		
+		map.put("result", res);
+		return map;
+	}
+	
+	//업무 생성
+	@PostMapping("postCreateWork")
+	@ResponseBody
+	public Map<String, Object> postCreateWork(HttpServletRequest request, @RequestBody ProPostWorkVO vo) {
+		HttpSession session = request.getSession();
+		Map <String, Object> map = new HashMap<>();
+		String res = "";
+		
+		if(vo.getWorkPersonArr().isEmpty()) {
+			vo.setWorkPersonArr(null);
+		}
+		vo.setId((String)session.getAttribute("Id"));
+		System.out.println("시간!"+vo);
+		
+		proPostService.createPostWork(vo);
+		
+		map.put("result", res);
+		return map;
 	}
 	
 }

@@ -9,6 +9,9 @@ import com.groo.bear.pro.mapper.ProPostMapper;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
+import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
+import com.groo.bear.pro.service.postvo.ProPostWorkVO;
+import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 
 @Service
 public class ProPostServiceImpl implements ProPostService {
@@ -28,6 +31,21 @@ public class ProPostServiceImpl implements ProPostService {
 	@Override
 	public List<ProPostUserVO> readProjectParti(ProPostUserVO vo) {
 		return ppm.readProjectParti(vo);
+	}
+
+	@Override
+	public void createPostWriting(ProPostWritingVO vo) {
+		ppm.createPostWriting(vo);
+	}
+
+	@Override
+	public void createPostWork(ProPostWorkVO vo) {
+		ppm.createPostWork(vo);
+	}
+
+	@Override
+	public List<ProPostWorkGroupVO> readWritingWorkGroup(int proNo) {
+		return ppm.readWritingWorkGroup(proNo);
 	}
 
 }
