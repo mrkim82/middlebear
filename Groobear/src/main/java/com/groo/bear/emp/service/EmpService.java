@@ -1,5 +1,6 @@
 package com.groo.bear.emp.service;
 
 public interface EmpService {
-	public EmpVO login(EmpVO vo);
+	//사원정보조회
+	public EmpVO getEmpInfo(EmpVO vo);
 }

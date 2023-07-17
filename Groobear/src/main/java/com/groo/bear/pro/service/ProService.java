@@ -13,6 +13,9 @@ public interface ProService {
 	public List<ProVO> readProjectStar(String id);
 	public List<ProVO> readProjectNoGroup(String id);
 	
+	//유저 정렬, 필터 조회
+	public ProUsersVO readOrder(String id);
+		
 	//프로젝트 참가자수 조회
 	public List<ProVO> readProjectParti(String id);
 		
@@ -40,5 +43,11 @@ public interface ProService {
 	
 	//프로젝트 그룹 삭제
 	public int deleteGroup(int groupNo);
+	
+	//프로젝트 필터 수정
+	public int updateProjectFilter(String proPartiFilter, String proRange);
+	
+	//프로젝트 정렬 수정
+	public int updateProjectOrder(String proRange, String id);
 	
 }

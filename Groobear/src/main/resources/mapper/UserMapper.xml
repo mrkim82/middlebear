@@ -6,7 +6,7 @@
 	
 	<!-- 전체조회 -->
 	
-	<select id="checkGrade" parameterType="String" resultType="EmpVO">
+	<select id="checkGrade" parameterType="String" resultType="SecurityVO">
 	
 		select emp_grade 
 		from users

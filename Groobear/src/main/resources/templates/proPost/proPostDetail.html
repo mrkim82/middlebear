@@ -1,17 +1,501 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layout/proTiles}"
->
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/proPostTiles}">
 <head>
 <meta charset="UTF-8">
 <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<style>
+textarea {
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 200px;
+  width: 100%;
+  resize: vertical; /* 세로 조정 가능 */
+}
+p {
+	margin: 0px;
+}
+</style>
+	
 </head>
-<body layout:fragment="content">
-	<div>피드</div>
+<body layout:fragment="content" style="background-color: #eee">
+	<!-- 중앙 + 참여자 -->
 	<div>
-		<table>
-		</table>
+		<!-- 중앙 -->
+		<div style="overflow-y: auto; width: 680px;">
+			<div>피드</div>
+			<!-- 업무리포트(총 업무수)(차트) -->
+			<div>
+				<table>
+
+				</table>
+			</div>
+			<!-- 글 생성 nav -->
+			<div>
+				<ul class="nav justify-content-center"
+					style="background-color: #faf9f9">
+					<li class="nav-item" data-post-code="1"><a class="nav-link"
+						data-toggle="modal" data-target="#modal1" href="#"><span>글</span></a></li>
+					<li class="nav-item" data-post-code="2"><a class="nav-link"
+						data-toggle="modal" data-target="#modal2" href="#"><span>업무</span></a></li>
+					<li class="nav-item" data-post-code="3"><a class="nav-link"
+						data-toggle="modal" data-target="#modal3" href="#"><span>일정</span></a></li>
+					<li class="nav-item" data-post-code="4"><a class="nav-link"
+						data-toggle="modal" data-target="#modal4" href="#"><span>할
+								일</span></a></li>
+					<li class="nav-item" data-post-code="5"><a class="nav-link"
+						data-toggle="modal" data-target="#modal5" href="#"><span>투표</span></a></li>
+				</ul>
+
+				<!-- 모달 공간 -->
+				<div>
+				<div class="container">
+
+					<!-- 1. 글 작성-->
+					<div class="modal fade modal-dialog-scrollable" id="modal1" tabindex="-1" role="dialog"
+						aria-labelledby="modal1Label" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="modal1Label">글</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<!-- 태그 선택 -->
+								<div>
+									<ul class="nav justify-content-center">
+										<li class="nav-item" data-post-code="1"><a class="nav-link"
+											href="#"><span>글</span></a></li>
+										<li class="nav-item" data-post-code="2"><a class="nav-link"
+											data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
+										<li class="nav-item" data-post-code="3"><a class="nav-link"
+											data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
+										<li class="nav-item" data-post-code="4"><a class="nav-link"
+											data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
+										<li class="nav-item" data-post-code="5"><a class="nav-link"
+											data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+									</ul>
+								</div>
+								<div class="modal-body">
+									<div>
+										<input type="text" placeholder="제목을 입력하세요.">
+									</div>
+									<div>
+										<textarea placeholder="내용을 입력하세요."></textarea>
+									</div>
+								</div>
+								<button type="button" class="btn btn-primary">등록</button>
+							</div>
+						</div>
+					</div>
+					
+					<!-- 2.업무 작성 -->
+					<div class="modal fade modal-dialog-scrollable" id="modal2" tabindex="-1" role="dialog"
+						aria-labelledby="modal2Label" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="modal2Label">업무</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<!-- 태그 선택 -->
+								<div>
+									<ul class="nav justify-content-center">
+										<li class="nav-item" data-post-code="1"><a class="nav-link"
+											data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
+										<li class="nav-item" data-post-code="2"><a class="nav-link"
+											href="#"><span>업무</span></a></li>
+										<li class="nav-item" data-post-code="3"><a class="nav-link"
+											data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
+										<li class="nav-item" data-post-code="4"><a class="nav-link"
+											data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
+										<li class="nav-item" data-post-code="5"><a class="nav-link"
+											data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+									</ul>
+								</div>
+								<div class="modal-body">
+									<div>
+										<input type="text" placeholder="제목을 입력하세요.">
+									</div>
+									<!-- 업무상태 -->
+									<div>
+										<button type="button" class="btn btn-primary" id="workTypeButtonToggle"
+												data-work-type-status="1" onclick="toggleButtonStyle(this)">요청</button>
+										<button type="button" class="btn btn-outline-warning"
+												data-work-type-status="2" onclick="toggleButtonStyle(this)">진행</button>
+										<button type="button" class="btn btn-outline-danger"
+												data-work-type-status="3" onclick="toggleButtonStyle(this)">피드백</button>
+										<button type="button" class="btn btn-outline-success"
+												data-work-type-status="4" onclick="toggleButtonStyle(this)">완료</button>
+										<button type="button" class="btn btn-outline-secondary"
+												data-work-type-status="5" onclick="toggleButtonStyle(this)">보류</button>
+									</div>
+									<!-- 담당자 추가 -->
+									<div>
+										<p>담당자 추가(Ctrl을 누르면 중복 처리 가능)</p>
+										<select class="form-select" multiple name="workMember" size=5>
+											<th:block th:each="member : ${projectPartiMember}">
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id != session.Id}"></option>
+											</th:block>
+										</select>
+									</div>
+									<!-- 항목 추가입력 -->
+									<div>
+										<p>
+										  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+										    + 항목추가입력
+										  </button>
+										</p>
+										<div class="collapse" id="collapseExample">
+										  <div class="card card-body">
+										  	<!-- 시작일 추가 -->
+										  	<div>
+										  		<p>시작일</p>
+													<input type="datetime-local" id="startWorkDate">
+										  	</div>
+										  	<!-- 마감일 추가 -->
+										  	<div>
+										  		<p>마감일</p>
+										  		<input type="datetime-local"  id="EndWorkDate">
+										  	</div>
+										  	<!-- 우선순위 추가 -->
+										  	<div>
+													<p>우선순위</p>
+													<select class="custom-select" name="workPri" id="">
+														<option value="">없음</option>
+														<option value="1">낮음</option>
+														<option value="2">보통</option>
+														<option value="3">높음</option>
+														<option value="4">긴급</option>
+													</select>
+										  	</div>
+										  	<!-- 그룹 추가 -->
+										  	<div>
+										  	
+										  	</div>
+										  </div>
+										</div>
+									</div>
+									
+									<!-- 내용입력 -->
+									<div>
+										<textarea placeholder="내용을 입력하세요."></textarea>
+									</div>
+
+									<!-- 하위업무 -->
+									<div>
+										<!-- 하위업무 수 -->
+										<div>
+											<p>ㄴ하위업무</p>
+										</div>
+										<!-- 하위업무 동적 생성 -->
+										<div>
+											<button type="button">+ 하위업무 추가</button>
+										</div>
+										<!-- 하위업무 입력란 -->
+										<div>
+											
+										</div>
+									</div>
+								</div>
+									<button type="button" class="btn btn-primary">등록</button>
+							</div>
+						</div>
+					</div>
+					
+					<!-- 3.일정 작성 -->
+					<div class="modal fade modal-dialog-scrollable" id="modal3" tabindex="-1" role="dialog"
+						aria-labelledby="modal3Label" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="modal3Label">일정</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<!-- 태그 선택 -->
+								<div>
+									<ul class="nav justify-content-center">
+										<li class="nav-item" data-post-code="1"><a class="nav-link"
+											data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
+										<li class="nav-item" data-post-code="2"><a class="nav-link"
+											data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
+										<li class="nav-item" data-post-code="3"><a class="nav-link"
+											href="#"><span>일정</span></a></li>
+										<li class="nav-item" data-post-code="4"><a class="nav-link"
+											data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
+										<li class="nav-item" data-post-code="5"><a class="nav-link"
+											data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+									</ul>
+								</div>
+								<div class="modal-body">
+									<div>
+										<input type="text" placeholder="제목을 입력하세요.">
+									</div>
+									<!-- 시작일 -->
+									<div>
+										<p>시작일</p>
+										<input type="datetime-local" id="startSchDate">
+									</div>
+									<!-- 마감일 -->
+									<div>
+										<p>마감일</p>
+										<input type="datetime-local" id="endSchDate">
+									</div>
+									<!-- 참석자 -->
+									<div>
+										<p>참석자 추가(Ctrl을 누르면 중복 처리 가능)</p>
+										<select class="form-select" multiple name="workMember" size=5>
+											<th:block th:each="member : ${projectPartiMember}">
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id != session.Id}"></option>
+											</th:block>
+										</select>
+									</div>
+									<!-- 장소 -->
+									<div>
+										<input type="text">
+									</div>
+									<!-- 내용 -->
+									<div>
+										<textarea placeholder="내용을 입력하세요."></textarea>
+									</div>
+								</div>
+									<button type="button" class="btn btn-primary">등록</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- 4.할 일 작성 -->
+					<div class="modal fade modal-dialog-scrollable" id="modal4" tabindex="-1" role="dialog"
+						aria-labelledby="modal4Label" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="modal4Label">할 일</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<!-- 태그 선택 -->
+								<div>
+									<ul class="nav justify-content-center">
+										<li class="nav-item" data-post-code="1"><a class="nav-link"
+											data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
+										<li class="nav-item" data-post-code="2"><a class="nav-link"
+											data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
+										<li class="nav-item" data-post-code="3"><a class="nav-link"
+											data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
+										<li class="nav-item" data-post-code="4"><a class="nav-link"
+											href="#"><span>할일</span></a></li>
+										<li class="nav-item" data-post-code="5"><a class="nav-link"
+											data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+									</ul>
+								</div>
+								<div class="modal-body">
+									<div>
+										<input type="text" placeholder="제목을 입력하세요.">
+									</div>
+									<!-- 할 일 입력 -->
+									<div>
+										<input type="text" placeholder="할 일 추가">
+										<div>
+											<input type="datetime-local">
+											<select class="form-select" name="todoMember">
+												<th:block th:each="member : ${projectPartiMember}">
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+													<option th:text="${member.name}" th:value="${member.id}"
+													th:if="${member.id != session.Id}"></option>
+												</th:block>
+											</select>
+										</div>
+									</div>
+									<!-- 할 일 추가 -->
+									<div>
+									</div>
+								</div>
+								<button type="button" class="btn btn-primary">등록</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- 투표 -->
+					<div class="modal fade modal-dialog-scrollable" id="modal5" tabindex="-1" role="dialog"
+						aria-labelledby="modal5Label" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="modal5Label">투표</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<!-- 태그 선택 -->
+								<div>
+									<ul class="nav justify-content-center">
+										<li class="nav-item" data-post-code="1"><a class="nav-link"
+											data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
+										<li class="nav-item" data-post-code="2"><a class="nav-link"
+											data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
+										<li class="nav-item" data-post-code="3"><a class="nav-link"
+											data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
+										<li class="nav-item" data-post-code="4"><a class="nav-link"
+											data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
+										<li class="nav-item" data-post-code="5"><a class="nav-link"
+											href="#"><span>투표</span></a></li>
+									</ul>
+								</div>
+								<div class="modal-body">
+									<div>
+										<input type="text" placeholder="제목을 입력하세요.">
+									</div>
+									<!-- 투표 설명 -->
+									<div>
+										<input type="text" placeholder="투표에 관한 설명 입력(옵션)">
+									</div>
+									<!-- 투표내용 -->
+									<div>
+										<input type="text" placeholder="항목 추가">
+										<input type="text" placeholder="항목 추가">
+
+									</div>
+									<!-- 투표 항목 추가 -->
+									<div>
+
+									</div>
+									<!-- 투표 마감일 -->
+									<div>
+										<p>투표 마감일</p>
+										<input type="datetime-local" id="endVoteDate">
+									</div>
+									<!--  -->
+								</div>
+								<button type="button" class="btn btn-primary">등록</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				</div>
+
+			</div>
+
+			<!-- 미확인 알림(후순위) -->
+			<div>
+			</div>
+			<!-- 상단고정(후순위) 업무 이후 -->
+			<div></div>
+			<!-- 게시물 공간 -->
+			<div></div>
+		</div>
+		<!-- 참여자공간 -->
+		<div></div>
 	</div>
+	<div>
+		<!-- 글 조회 공간 -->
+		<div></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	<!-- 버튼 상태 변경 -->	
+	<script>
+		let selectedButton = workTypeButtonToggle;
+		
+		function toggleButtonStyle(button) {
+			console.log(selectedButton);
+		  if (selectedButton !== button) {
+		    if (selectedButton) {
+		      resetButtonStyle(selectedButton);
+		    }
+		    
+		    let className = button.classList.item(1);
+		
+		    if (className.startsWith('btn-outline')) {
+		      let filledClassName = className.replace('btn-outline', 'btn');
+		      button.classList.remove(className);
+		      button.classList.add(filledClassName);
+		    } else {
+		      let outlineClassName = className.replace('btn', 'btn-outline');
+		      button.classList.remove(className);
+		      button.classList.add(outlineClassName);
+		    }
+		
+		    selectedButton = button;
+		  } else {
+		    resetButtonStyle(button);
+		    selectedButton = null;
+		  }
+		}
+		
+		//버튼 초기화
+		function resetButtonStyle(button) {
+		  let className = button.classList.item(1);
+		  console.log(className);
+		  if (className.startsWith('btn-outline')) {
+		    let outlineClassName = className.replace('btn-outline', 'btn');
+		    button.classList.remove(className);
+		    button.classList.add(outlineClassName);
+		  } else {
+		    let filledClassName = className.replace('btn', 'btn-outline');
+		    button.classList.remove(className);
+		    button.classList.add(filledClassName);
+		  }
+		}
+		
+	</script>
+	
+	<!-- 시간 단위 조정 -->
+	<!-- <script>
+		// 10분 간격으로 선택할 수 있도록 설정
+		var startDateInput = document.getElementById('startDate');
+		startDateInput.addEventListener('input', function() {
+		  // 현재 선택된 날짜와 시간을 가져옴
+		  var selectedDate = new Date(startDateInput.value);
+		  // 분 단위를 가져옴
+		  var minutes = selectedDate.getMinutes();
+		  
+		  // 분 단위를 10분 간격으로 반올림
+		  var roundedMinutes = Math.round(minutes / 10) * 10;
+		  
+		  // 선택된 날짜와 시간을 조정하여 10분 간격으로 설정
+		  selectedDate.setMinutes(roundedMinutes);
+		  
+		  // 조정된 값을 다시 입력 요소에 설정
+		  startDateInput.value = selectedDate.toISOString().slice(0, 16);
+		});
+	</script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+	<script
+		th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js}"></script>
+	<script
+		th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+		
+	<script src="../proPost/proPostJs/proPostDetail.js"></script>
 </body>
 </html>
