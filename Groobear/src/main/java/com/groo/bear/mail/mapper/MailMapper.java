@@ -12,11 +12,11 @@ public interface MailMapper {
 	//메일 전체조회 발송 후 update
 	public int mailSetUpdate(int mailNo);
 	//받은메일함 조회
-	public List<MailVO> receiveMail();
+	public List<MailVO> receiveMail(String email);
 	//보낸메일함 조회
 	public List<MailVO> sendingMail(String email);
 	//지운메일함 조회
-	public List<MailVO> deletedMail();
+	public List<MailVO> deletedMail(MailVO mailVO);
 	//메일삭제(update)
 	public int deleteMail(int mailNo);
 	//메일 완전삭제(delete)

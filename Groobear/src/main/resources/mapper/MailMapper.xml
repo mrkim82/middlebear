@@ -55,8 +55,8 @@
 		AND b.mail_no = c.mail_no
 		AND a.mail_set = 'Y'
 		AND a.mail_type = 'S'
-		AND c.receiver = #{userId}
-		ORDER BY a.mail_no desc
+		AND c.receiver = #{email}
+		ORDER BY read_check ,a.mail_no desc
 	</select>
 	<!-- 보낸메일함 조인부분은 건들필요없음 -->
 	<select id="sendingMail" resultType="MailVO" parameterType="String">
@@ -75,10 +75,10 @@
 		FROM mail a, mail_details b, mail_personnel c
 		WHERE a.mail_no = b.mail_no 
 		AND b.mail_no = c.mail_no
-		AND a.delete_date >  '01/01/01'
-		AND a.mail_type = 'D'
-		AND c.receiver = #{receiver}
-		OR c.sender = #{sender}
+		AND (a.delete_date >  '01/01/01'
+		AND a.mail_type = 'D')
+		AND (c.sender = #{sender}
+		OR c.receiver = #{receiver})
 		ORDER BY delete_date
 	</select>
 	<!-- 메일삭제 -->

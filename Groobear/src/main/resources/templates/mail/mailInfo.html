@@ -8,24 +8,27 @@
 <body layout:fragment="content">
 	<table>
         <tr>
-            <td>제목:</td>
+            <td>제목</td>
             <td><input type="text" th:value="${mail.title}" readonly/></td>
         </tr>
         <tr>
-            <td>내용:</td>
-            <td><textarea th:text="${mail.content}" readonly></textarea></td>
+            <td>보낸사람</td>
+            <td><input type="text" th:value="${mail.sender}" readonly /></td>
         </tr>
         <tr>
-            <td>첨부파일 : </td>
-            <!-- <td><a th:href="@{/files/} + ${board.attachment}" th:text="${board.attachment}">file.txt</a></td> -->
+            <td>받는사람</td>
+            <td><input type="text" th:value="${mail.receiver}" readonly /></td>
         </tr>
         <tr>
-            <td>작성자:</td>
-            <td><input type="text" th:value="${mail.id}" readonly /></td>
-        </tr>
-        <tr>
-            <td>작성일:</td>
+            <td>작성일</td>
             <td><input th:value="${#dates.format(mail.sendDate, 'yyyy.MM.dd')}" readonly /></td>
+        </tr>
+        <tr>
+            <td>내용</td>
+            <td><textarea th:text="${mail.content}" style="width:600px; height:800px;" readonly></textarea></td>
+        </tr>
+        <tr>
+            <td>첨부파일  아직 못함</td>
         </tr>
     </table>
 </body>
