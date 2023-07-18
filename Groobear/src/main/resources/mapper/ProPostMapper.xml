@@ -5,7 +5,7 @@
 <mapper namespace="com.groo.bear.pro.mapper.ProPostMapper">
 	
 	<!-- 상단메뉴바 조회 -->
-	<select id="readTopMenu" resultType="proPostVO">
+	<select id="readTopMenu" resultType="ProPostVO">
 		SELECT m.pro_color, m.pro_star_check, m.home_tab, p.pro_name, p.pro_content, p.pro_no
 		FROM pro_mem m JOIN pro p
 		ON m.pro_no = p.pro_no
@@ -109,7 +109,7 @@
 		ORDER BY pro_post_no DESC
 	</select>
 	
-	<!-- 글 조회(임시) -->
+	<!-- 글 조회(임시)
 	<select id="readPostWriting" resultType="ProPostWritingVO">
 		SELECT a.pro_post_no, a.post_type, a. post_title, a.post_date, a.id,
 			   b.writing_no, b.writing_content, d.name, c.profile_img
@@ -122,7 +122,7 @@
 		ON(c.emp_no = d.emp_no)
 		WHERE post_type = #{postType}
 		ORDER BY a.pro_post_no DESC
-	</select>
+	</select> -->
 	
 	<!-- 글 댓글 조회(임시) -->
 	<select id="readPostWritingComment" resultType="ProPostCommentVO">
@@ -164,4 +164,14 @@
 		SET com_content = #{comContent}
 		WHERE com_no = #{comNo}
 	</update>
+	
+	<!-- 게시글 조회 업무 상태 변경 -->
+	<update id="updateWorkPostStatus" parameterType="ProPostWorkVO">
+		UPDATE pro_work
+		SET work_status = #{workStatus}
+		WHERE work_no = #{workNo}
+	</update>
+	
+	
+	
 </mapper>

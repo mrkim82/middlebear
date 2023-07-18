@@ -80,4 +80,9 @@ public class ProPostServiceImpl implements ProPostService {
 		return ppm.readFeedPost(proNo);
 	}
 
+	@Override
+	public int updateWorkPostStatus(ProPostWorkVO vo) {
+		return ppm.updateWorkPostStatus(vo);
+	}
+
 }

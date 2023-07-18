@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.pro.mapper.ProPostSchMapper">
+	
+	<!-- 프로젝트 일정 참여자 조회 -->
+	<select id="readSchparti" resultType="ProPostSchVO">
+		SELECT s.sch_no, s.pro_post_no, p.parti_check, p.id, i.name
+		FROM pro_sch s JOIN sch_parti p
+		ON(s.sch_no = p.sch_no)
+		JOIN users u
+		ON(p.id = u.id)
+		JOIN user_info i
+		ON(u.emp_no = i.emp_no)
+		WHERE p.id = #{id}
+		AND s.sch_no IN (SELECT sch_no
+		                 FROM sch_parti
+		                 WHERE id = #{id})
+		AND s.personal_sch = 'N'
+		ORDER BY 1 DESC
+	</select>
+	
+	
+</mapper>

@@ -24,5 +24,6 @@ public class ProPostWorkVO {
 	@DateTimeFormat(pattern = "HH:mm")
 	private Date workEndTime;
 	private String workContent;
+	private int workNo;
 	private String[] workPersonArr;
 }

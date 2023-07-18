@@ -202,4 +202,24 @@ public class proPostController {
 		System.out.println(vo);
 		return map;
 	}
+	
+	//댓글 수정
+	@PutMapping("updateWorkPostStatus")
+	@ResponseBody
+	public Map<String, Object> updateWorkPostStatus(@RequestBody ProPostWorkVO vo) {
+		Map <String, Object> map = new HashMap<>();
+		String res;
+		
+		int result = proPostService.updateWorkPostStatus(vo);
+		
+		if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+		System.out.println(vo);
+		map.put("result", res);
+		return map;
+	}
 }

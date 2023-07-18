@@ -44,4 +44,7 @@ public interface ProPostMapper {
 	// 댓글 수정
 	public int updatePostComment(ProPostCommentVO vo);
 	
+	//게시글 조회 업무 상태 변경
+	public int updateWorkPostStatus(ProPostWorkVO vo);
+	
 }
