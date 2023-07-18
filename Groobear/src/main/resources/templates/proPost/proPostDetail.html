@@ -658,7 +658,8 @@ p {
 			
 				<!-- 3.일정 -->
 				<th:block th:if="${allPost.postType == '3'}">
-					<div class="card" style="margin-bottom: 15px; background-color: #fff;">
+					<div class="card" style="margin-bottom: 15px; background-color: #fff;"
+						 th:attr="data-feed-post-sch-no=${allPost.proPostNo}, data-feed-sch-no=${allPost.schNo}">
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
 						<div>
 									<span th:text="${allPost.profileImg}"></span>
@@ -681,17 +682,17 @@ p {
 								<!-- 게시글 내용이 여기에 들어갑니다. -->
 							</th:block>
 							<!-- 참석 여부 버튼 -->
-							<th:block th:each="rparti : ${readSchparti}">
-								<div th:attr="data-feed-sch-type=${allPost.workStatus}" style="text-align: center;">
+							<th:block th:each="rparti : ${readSchparti}" th:if="${rparti.schNo == allPost.schNo}">
+								<div th:attr="data-feed-sch-type=${rparti.partiCheck}" style="text-align: center;">
 									<button type="button" class="btn"
-										th:classappend="${allPost.workStatus == '1' ? 'btn-success' : 'btn-outline-success'}"
-										data-work-type-status="Y" onclick="toggleFeedSchButtonStyle(this)">참석</button>
+										th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
+										data-sch-type-status="Y" onclick="toggleFeedSchButtonStyle(this)">참석</button>
 									<button type="button" class="btn"
-										th:classappend="${allPost.workStatus == '2' ? 'btn-danger' : 'btn-outline-danger'}"
-										data-work-type-status="N" onclick="toggleFeedSchButtonStyle(this)">불참</button>
+										th:classappend="${rparti.partiCheck == 'N' ? 'btn-danger' : 'btn-outline-danger'}"
+										data-sch-type-status="N" onclick="toggleFeedSchButtonStyle(this)">불참</button>
 									<button type="button" class="btn"
-										th:classappend="${allPost.workStatus == '3' ? 'btn-secondary' : 'btn-outline-secondary'}"
-										data-work-type-status="A" onclick="toggleFeedSchButtonStyle(this)">미정</button>
+										th:classappend="${rparti.partiCheck == 'A' ? 'btn-secondary' : 'btn-outline-secondary'}"
+										data-sch-type-status="A" onclick="toggleFeedSchButtonStyle(this)">미정</button>
 								</div>
 							</th:block>
 							<div class="card-footer">
@@ -956,74 +957,67 @@ p {
 		let selectedSchButton = new Map();
 
 		function toggleFeedSchButtonStyle(button) {
-			console.log(button);
-		}
-
-		function ss(button) {
-			let postWorkNo = button.closest('.card').dataset.feedPostNo;// 글 번호
-			let workNo = button.closest('.card').dataset.feedWorkNo;
-			//let newStatus = button.parentNode.dataset.feedWorkType;//신규 선택 버튼 번호
-			let newStatus = button.dataset.workTypeStatus;
-			let oldStatusNo = selectedFeedButton.get(postWorkNo);//선택했던 기존 버튼 번호 null or 존재
+			let postSchNo = button.closest('.card').dataset.feedPostSchNo;// 글 번호(map용)
+			let schNo = button.closest('.card').dataset.feedSchNo;//sch 고유번호, update용
+			let newStatus = button.dataset.schTypeStatus;//선택한 번호
+			let oldSchStatusNo = selectedSchButton.get(postSchNo);//선택했던 기존 버튼 번호 null or 존재
 
 			//기존 상태 버튼 찾기
-			let oldButton;
-			if(oldStatusNo == null) {//선택했던 기존 버튼이 없다면
-				let firstButtonStatusNo = button.parentNode.dataset.feedWorkType;//최초 버튼 찾기
-				oldButton = button.closest(".card").querySelector('[data-work-type-status="' + firstButtonStatusNo + '" ]');//최초 버튼 상태 찾기
+			let oldSchButton;
+			if(oldSchStatusNo == null) {//선택했던 기존 버튼이 없다면
+				let firstButtonSchStatusNo = button.parentNode.dataset.feedSchType;//최초 버튼 찾기
+				oldSchButton = button.closest(".card").querySelector('[data-sch-type-status="' + firstButtonSchStatusNo + '" ]');//최초 버튼 상태 찾기
 			} else {//선택했던 기존 버튼이 있다면
-				oldButton = button.closest(".card").querySelector('[data-work-type-status="' + oldStatusNo + '" ]');//구 버튼 상태를 찾기
+				oldSchButton = button.closest(".card").querySelector('[data-sch-type-status="' + oldSchStatusNo + '" ]');//구 버튼 상태를 찾기
 			}
 
-			selectedFeedButton.set(postWorkNo, newStatus);//신규 번호 삽입
+			selectedSchButton.set(postSchNo, newStatus);//신규 번호 삽입
 			
-			console.log('신규번호?',newStatus);//새 번호 찾기
-			//console.log('기존번호?',oldStatusNo);//새 번호 찾기
-			console.log('업무번호',workNo);
-			//console.log(oldButton);
-			//console.log(button);
-
+			console.log('신규상태',newStatus);//새 번호 찾기
+			console.log('고유번호',schNo);
 			
-			
-			fetch("/updateWorkPostStatus", {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							'workStatus' : newStatus,
-			   				'workNo': workNo
-			   			})
-					})
-					.then(response => response.json())
-					.then(res => {
-						console.log(res);
-						if(res.result == '성공') {
-							
-							  if (oldButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
-							    if (oldButton) {
-							      resetButtonStyle(oldButton);
-							    }
-							    
-							    let className = button.classList.item(1);
-							
-							    if (className.startsWith('btn-outline')) {
-							      let filledClassName = className.replace('btn-outline', 'btn');
-							      button.classList.remove(className);
-							      button.classList.add(filledClassName);
-							    } else {
-							      let outlineClassName = className.replace('btn', 'btn-outline');
-							      button.classList.remove(className);
-							      button.classList.add(outlineClassName);
-							    }
-							
-							    oldButton = button;
-							  }
-							
-						} else {
-							alert('상태 수정 실패');
+			fetch("/updateSchPartiCheck", {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					'partiCheck' : newStatus,
+	   				'schNo': schNo
+	   			})
+			})
+			.then(response => response.json())
+			.then(res => {
+				console.log(res);
+				if(res.result == '성공') {
+					
+					  if (oldSchButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
+					    if (oldSchButton) {
+					      resetButtonStyle(oldSchButton);
+					    }
+					    
+					    let className = button.classList.item(1);
+					
+					    if (className.startsWith('btn-outline')) {
+					      let filledClassName = className.replace('btn-outline', 'btn');
+					      button.classList.remove(className);
+					      button.classList.add(filledClassName);
+					    } else {
+					      let outlineClassName = className.replace('btn', 'btn-outline');
+					      button.classList.remove(className);
+					      button.classList.add(outlineClassName);
+					    }
+					
+					    oldSchButton = button;
+					  } else {
+							resetButtonStyle(button);
+							selectedButton = null;
 						}
-					});
+					
+				} else {
+					alert('상태 수정 실패');
+				}
+			});
 			
 		}
 		

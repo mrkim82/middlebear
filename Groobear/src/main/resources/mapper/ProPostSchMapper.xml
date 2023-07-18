@@ -20,6 +20,13 @@
 		AND s.personal_sch = 'N'
 		ORDER BY 1 DESC
 	</select>
-	
+
+	<!-- 참여여부 변경 -->
+	<update id="updateSchPartiCheck" parameterType="ProPostSchVO">
+		UPDATE sch_parti
+		SET parti_check = #{partiCheck}
+		WHERE sch_no = #{schNo}
+		AND id = #{id}
+	</update>	
 	
 </mapper>
