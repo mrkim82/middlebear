@@ -6,21 +6,24 @@
 <title>Insert title here</title>
 </head>
 <body layout:fragment="content">
-<table>
-	<thead>
-		<tr>
-			<th><input type="checkbox"></th>
-			<th>삭제</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td><input type="checkbox"></td>
-			<td>보낸메일 체크</td>
-			<td>제목 : </td>
-			<td>받는사람 :</td>
-		</tr>
-	</tbody>
-</table>
+<div>
+	<table>
+		<thead>
+			<tr>
+				<th><input type="checkbox"></th>
+				<th>삭제</th>
+			</tr>
+		</thead>
+		<tbody id="MailBody">
+			<tr th:each="mail : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+				<td><input type="checkbox"></td>
+				<td>[[${mail.receiver}]]</td>
+				<td>[[${mail.title}]]</td>
+				<td>[[${mail.content}]]</td>
+				<td th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 </body>
 </html>

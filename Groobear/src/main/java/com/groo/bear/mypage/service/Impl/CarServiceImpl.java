@@ -1,7 +1,6 @@
 package com.groo.bear.mypage.service.Impl;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +16,6 @@ public class CarServiceImpl implements CarService {
 	@Autowired
 	CarMapper carMapper;
 
-	@Override
-	public List<CarVO> getAllCarList() {
-		return carMapper.selectAllCar();
-	}
 
 	@Override
 	public List<CarVO> getMyCarList(String id) {
@@ -28,20 +23,38 @@ public class CarServiceImpl implements CarService {
 	}
 
 	@Override
-	public List<CarVO> getAllCarList(CarVO carVO) {
-		return carMapper.selectAllCar(carVO);
+	public List<CarVO> getAllCarList(Criteria cri, CarVO carVO) {
+		return carMapper.selectAllCar(cri, carVO);
 	}
 
 	@Override
-	public int carListCnt() throws Exception {
-		return carMapper.carListCnt();
+	public List<CarVO> getMyCarInfo(String id) {
+		return carMapper.getCarInfo(id);
 	}
 	
 	@Override
-	public List<Map<String, Object>> selectAllCar(Criteria cri) throws Exception {
-		return carMapper.selectAllCar(cri);
+	public int carCnt(Criteria cri, CarVO carVO){
+		return carMapper.carListCnt(cri, carVO);
 	}
 
+	@Override
+	public int addCar(CarVO carVO) {
+		return carMapper.insertCar(carVO);
+	}
+
+	@Override
+	public int carUpdate(CarVO carVO) {
+		return carMapper.updateCar(carVO);
+	}
+
+	@Override
+	public int carDelete(String carNo) {
+		return carMapper.deleteCar(carNo);
+	}
+
+	
+
+	
 	
 	
 	

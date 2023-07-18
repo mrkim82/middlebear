@@ -6,12 +6,14 @@ import lombok.Data;
 
 @Data
 public class MailVO {
+	private int mailNo;
 	private Date sendDate;
 	private Date receiveDate;
 	private Date deleteDate; 
 	private String readCheck;
 	private String mailType;
 	private String id;
+	private String mailSet;
 	private String title;
 	private String content;
 	private String sender;

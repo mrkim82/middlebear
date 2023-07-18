@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/boardTiles}">
+<head>
+<meta charset="UTF-8">
+<title>메일 단건 상세조회 페이지</title>
+</head>
+<body layout:fragment="content">
+	<table>
+        <tr>
+            <td>제목</td>
+            <td><input type="text" th:value="${mail.title}" readonly/></td>
+        </tr>
+        <tr>
+            <td>보낸사람</td>
+            <td><input type="text" th:value="${mail.sender}" readonly /></td>
+        </tr>
+        <tr>
+            <td>받는사람</td>
+            <td><input type="text" th:value="${mail.receiver}" readonly /></td>
+        </tr>
+        <tr>
+            <td>작성일</td>
+            <td><input th:value="${#dates.format(mail.sendDate, 'yyyy.MM.dd')}" readonly /></td>
+        </tr>
+        <tr>
+            <td>내용</td>
+            <td><textarea th:text="${mail.content}" style="width:600px; height:800px;" readonly></textarea></td>
+        </tr>
+        <tr>
+            <td>첨부파일  아직 못함</td>
+        </tr>
+    </table>
+</body>
+</html>
