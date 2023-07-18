@@ -38,6 +38,9 @@ public class proPostController {
 	@Autowired
 	ProPostSchService proPostSchService;
 	
+	@Autowired
+	ProPostSchService ppss;
+	
 	//공통 데이터(사이드바) 전달
 	private Model proData2(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
@@ -74,6 +77,7 @@ public class proPostController {
 			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo));
 			model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(proNo));
 			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
+			model.addAttribute("readPartiList", ppss.readPartiList(proNo));
 			//System.out.println("게시글"+model.getAttribute("readFeedPost"));
 			pagePath = "proPost/proPostDetail";
 			break;

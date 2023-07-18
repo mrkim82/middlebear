@@ -6,7 +6,7 @@
 	
 	<!-- 프로젝트 일정 참여자 조회 -->
 	<select id="readSchparti" resultType="ProPostSchVO">
-		SELECT s.sch_no, s.pro_post_no, p.parti_check, p.id, i.name
+		SELECT s.sch_no, s.pro_post_no, p.parti_check, p.id, i.name, u.profile_img
 		FROM pro_sch s JOIN sch_parti p
 		ON(s.sch_no = p.sch_no)
 		JOIN users u
@@ -27,6 +27,21 @@
 		SET parti_check = #{partiCheck}
 		WHERE sch_no = #{schNo}
 		AND id = #{id}
-	</update>	
+	</update>
+	
+	<!-- 참석자 현황 -->
+	<select id="readPartiList" resultType="ProPostSchVO">
+		SELECT a.sch_no, a.parti_check, b.pro_post_no, i.name
+		FROM sch_parti a JOIN pro_sch b
+		ON(a.sch_no = b.sch_no)
+		JOIN pro_post c
+		ON(b.pro_post_no = c.pro_post_no)
+		JOIN users u
+		ON(a.id = u.id)
+		JOIN user_info i
+		ON(u.emp_no = i.emp_no)
+		WHERE pro_no = #{proNo}
+		ORDER BY sch_no, name
+	</select>
 	
 </mapper>

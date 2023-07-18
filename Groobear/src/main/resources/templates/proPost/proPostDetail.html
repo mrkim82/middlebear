@@ -669,17 +669,28 @@ p {
 						<div class="card-header" th:text="${allPost.postTitle}">
 							<!-- 글 제목 -->
 						</div>
+						<th:block th:text="'시작' + ${allPost.schStartTime}"></th:block>
+						<th:block th:text="'종료' + ${allPost.schEndTime}"></th:block>
 						<div class="card-body">
 							<!-- 참석자 존 -->
 							<div>
+								<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}">
 
+									<div th:text="${rpl.name}"></div>
+									<th:block th:switch="${rpl.partiCheck}">
+										<span th:case="Y">참석</span>
+										<span th:case="N">불참</span>
+										<span th:case="A">미정</span>
+									</th:block>
+								</th:block>
+								<div>참석자 변경</div>
 							</div>
 							<!-- 장소 -->
 							<div>
 								<th:block th:if="${allPost.schPlace != null}" th:text="'장소 : ' + ${allPost.schPlace}"></th:block>
 							</div>
 							<th:block th:text="${allPost.schContent}">
-								<!-- 게시글 내용이 여기에 들어갑니다. -->
+								<!-- 내용이 여기에 들어갑니다. -->
 							</th:block>
 							<!-- 참석 여부 버튼 -->
 							<th:block th:each="rparti : ${readSchparti}" th:if="${rparti.schNo == allPost.schNo}">
@@ -973,8 +984,8 @@ p {
 
 			selectedSchButton.set(postSchNo, newStatus);//신규 번호 삽입
 			
-			console.log('신규상태',newStatus);//새 번호 찾기
-			console.log('고유번호',schNo);
+			//console.log('신규상태',newStatus);//새 번호 찾기
+			//console.log('고유번호',schNo);
 			
 			fetch("/updateSchPartiCheck", {
 				method: 'PUT',
@@ -991,28 +1002,30 @@ p {
 				console.log(res);
 				if(res.result == '성공') {
 					
-					  if (oldSchButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
-					    if (oldSchButton) {
-					      resetButtonStyle(oldSchButton);
-					    }
-					    
-					    let className = button.classList.item(1);
-					
-					    if (className.startsWith('btn-outline')) {
-					      let filledClassName = className.replace('btn-outline', 'btn');
-					      button.classList.remove(className);
-					      button.classList.add(filledClassName);
-					    } else {
-					      let outlineClassName = className.replace('btn', 'btn-outline');
-					      button.classList.remove(className);
-					      button.classList.add(outlineClassName);
-					    }
-					
-					    oldSchButton = button;
-					  } else {
-							resetButtonStyle(button);
-							selectedButton = null;
+					if (oldSchButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
+						if (oldSchButton) {
+							resetButtonStyle(oldSchButton);
 						}
+						
+						let className = button.classList.item(1);
+				
+						if (className.startsWith('btn-outline')) {
+							let filledClassName = className.replace('btn-outline', 'btn');
+							button.classList.remove(className);
+							button.classList.add(filledClassName);
+						} else {
+							let outlineClassName = className.replace('btn', 'btn-outline');
+							button.classList.remove(className);
+							button.classList.add(outlineClassName);
+						}
+				
+						oldSchButton = button;
+					}
+					/* else {//버튼취소하는기능
+						resetButtonStyle(button);
+						selectedSchButton.set(postSchNo, null);
+						newStatus = 'B';
+					} */
 					
 				} else {
 					alert('상태 수정 실패');

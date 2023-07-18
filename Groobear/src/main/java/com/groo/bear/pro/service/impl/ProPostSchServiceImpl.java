@@ -24,4 +24,9 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 		return ppsm.updateSchPartiCheck(vo);
 	}
 
+	@Override
+	public List<ProPostSchVO> readPartiList(int proNo) {
+		return ppsm.readPartiList(proNo);
+	}
+
 }

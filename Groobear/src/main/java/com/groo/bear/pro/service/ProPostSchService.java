@@ -10,4 +10,7 @@ public interface ProPostSchService {
 	
 	//참석여부 변경
 	public int updateSchPartiCheck(ProPostSchVO vo);
+	
+	//참석자 현황
+	public List<ProPostSchVO> readPartiList(int proNo);
 }
