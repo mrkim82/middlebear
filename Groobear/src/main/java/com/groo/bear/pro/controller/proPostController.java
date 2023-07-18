@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProGroupVO;
+import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
@@ -33,6 +34,9 @@ public class proPostController {
 	
 	@Autowired
 	ProPostService proPostService;
+	
+	@Autowired
+	ProPostSchService proPostSchService;
 	
 	//공통 데이터(사이드바) 전달
 	private Model proData2(Model model, HttpServletRequest request) {
@@ -69,7 +73,8 @@ public class proPostController {
 			//글 조회(임시)
 			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo));
 			model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(proNo));
-			System.out.println("게시글"+model.getAttribute("readFeedPost"));
+			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
+			//System.out.println("게시글"+model.getAttribute("readFeedPost"));
 			pagePath = "proPost/proPostDetail";
 			break;
 		//간트차트
