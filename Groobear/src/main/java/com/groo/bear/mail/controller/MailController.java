@@ -21,7 +21,10 @@ public class MailController {
 	
 	//받은메일함
 	@GetMapping("mail/receiveMail")
-	public String receiveMailForm() {
+	public String receiveMailForm(Model model, MailVO mailVO, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String email = (String) session.getAttribute("Email");
+		model.addAttribute("mailList",mailService.receiveMail(email));
 		//메일 지우기
 		return "mail/receiveMail";
 	}
@@ -55,7 +58,12 @@ public class MailController {
 	}
 	//지운메일함 폼
 	@GetMapping("mail/deleteMail")
-	public String deleteMailForm() {
+	public String deleteMailForm(Model model, MailVO mailVO, HttpServletRequest request) {
+		System.out.println("dm = "+mailVO);
+		HttpSession session = request.getSession();
+		mailVO.setSender((String) session.getAttribute("Email"));
+		mailVO.setReceiver((String) session.getAttribute("Email"));
+		model.addAttribute("mailList",mailService.deletedMail(mailVO));
 		return "mail/deleteMail";
 	}
 	//지운메일함 기능
