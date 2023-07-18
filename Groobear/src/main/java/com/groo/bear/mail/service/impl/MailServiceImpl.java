@@ -25,8 +25,6 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.mail.mapper.MailMapper;
 import com.groo.bear.mail.service.MailService;
 import com.groo.bear.mail.service.MailVO;
-import com.groo.bear.mail.service.PagingVO;
-import com.groo.bear.paging.Criteria;
 
 @Service
 public class MailServiceImpl implements MailService{
@@ -141,56 +139,23 @@ public class MailServiceImpl implements MailService{
 		return mailMapper.sendingMail(email);
 	}
 	@Override
-	public List<MailVO> deletedMail(Criteria cri,MailVO mailVO) {
+	public List<MailVO> deletedMail(MailVO mailVO) {
 		//지운메일함 조회페이지
-		return mailMapper.deletedMail(cri, mailVO);
+		return mailMapper.deletedMail(mailVO);
 	}
 	@Override
 	public int deleteMail(int mailNo) {
 		//메일지우기(update)
-		return mailMapper.deleteMail(mailNo);
+		return 1;
 	}
 	@Override
 	public int realDeleteMail(int mailNo) {
 		//메일지우기(delete)
-		return mailMapper.realDeleteMail(mailNo);
+		return 1;
 	}
 	@Override
 	public MailVO mailInfo(int mailNo) {
 		//메일 상세조회페이지
 		return mailMapper.mailInfo(mailNo);
 	}
-	@Override
-	public int countSendMail(String sender) {
-		// 보낸메일 총 갯수
-		System.out.println("sendmail count = "+mailMapper.countSendMail(sender));
-		return mailMapper.countSendMail(sender);
-	}
-	@Override
-	public int countReceiveMail(String receiver) {
-		// 받은메일 총 갯수
-		System.out.println("receiver = "+mailMapper.countReceiveMail(receiver));
-		return mailMapper.countReceiveMail(receiver);
-	}
-	@Override
-	public int countDeleteMail(MailVO mailVO) {
-		// 지운메일 총 갯수
-		return mailMapper.countDeleteMail(mailVO);
-	}
-	@Override
-	public List<MailVO> sendMailSearch(PagingVO vo) {
-		// 페이징 처리 보낸메일
-		return mailMapper.sendMailSearch(vo);
-	}
-	@Override
-	public List<MailVO> receiveMailSearch(PagingVO vo) {
-		// 페이징 처리 받은메일
-		return mailMapper.receiveMailSearch(vo);
-	}
-	@Override
-	public List<MailVO> deleteMailSearch(PagingVO vo) {
-		// 페이징 처리 지운메일
-		return mailMapper.deleteMailSearch(vo);
-	}
-	
 }

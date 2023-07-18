@@ -80,5 +80,13 @@ public class Paging {
 	public void setCri(Criteria cri) {
 		this.cri = cri;
 	}
-
+	
+	@Override
+	public String toString() {
+		return "PageMaker[totalCount="+totalCount+",startPage="+startPage+",endPage="+endPage
+									  +",prev="+prev+",next="+next+",displayPageNum="+displayPageNum+",cri="+cri+"]";
+	}
+	
+	
+	
 }
