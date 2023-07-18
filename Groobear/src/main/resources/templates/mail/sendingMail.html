@@ -15,9 +15,8 @@
 			</tr>
 		</thead>
 		<tbody id="MailBody">
-			<tr th:each="mail : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+			<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
 				<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
-				<td style="display:none"><input type="text" class="mailNo" style="display:none" th:value="${mail.mailNo}"></td>
 				<td>[[${mail.mailNo}]]</td>
 				<td>[[${mail.receiver}]]</td>
 				<td>[[${mail.title}]]</td>
@@ -26,7 +25,23 @@
 			</tr>
 		</tbody>
 	</table>
+	<ul class="paging" th:if="${paging.endPage != 0}">
+        <li th:if="${paging.prev}">
+            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+        </li>
+        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+        </li>
+        <li th:if="${paging.next and paging.endPage > 0}">
+            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+        </li>
+    </ul>
+	
 	<script>
+	function goPage(p){
+		location.href="sendingMail?page="+p;
+			
+	}
 		var allCheck = document.querySelector(".allCheck");
 		var list = document.querySelectorAll(".check");
 		let delList = [];

@@ -26,6 +26,22 @@
 			</tr>
 		</tbody>
 	</table>
+	<div style="display: block; text-align: center;">		
+		<div th:if="${paging.startPage != 1 }">
+			<a th:href="|receiveMail?nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}|">&lt;</a>
+		</div>
+		<th:block th:each="p : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+				<th:if th:test="${p == paging.nowPage }">
+					<b>[[${p}]]</b>
+				</th:if>
+				<div th:if="${p != paging.nowPage }">
+					<a th:href="|receiveMail?nowPage=${p }&cntPerPage=${paging.cntPerPage}|" th:text="${p}"></a>
+				</div>
+		</th:block>
+		<div th:if="${paging.endPage != paging.lastPage}">
+			<a th:href="@{receiveMail(nowPage=${paging.endPage+1 },cntPerPage=${paging.cntPerPage})}">&gt;</a>
+		</div>
+	</div>
 	<script>
 		var allCheck = document.querySelector(".allCheck");
 		var list = document.querySelectorAll(".check");
