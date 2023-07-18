@@ -1,7 +1,6 @@
 package com.groo.bear.board.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.groo.bear.paging.Criteria;
 
@@ -26,8 +25,18 @@ public interface BoardService {
 	
 	//페이징
 	public int boardListCnt(Criteria cri, BoardVO boardVO);
- 
-    
+	//댓글
+	//댓글 전체조회
+	public List<BoardVO> readBoardComment(int boardNo);
+	
+	//댓글 생성
+	public int createBoardComment(BoardVO boardVO);
+	
+	//댓글 삭제
+	public int deleteBoardComment(int comNo);
+	
+	//댓글 수정
+	public int updateBoardComment(BoardVO boardVO);
 
 
 }

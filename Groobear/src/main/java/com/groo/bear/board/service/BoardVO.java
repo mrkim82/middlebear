@@ -33,4 +33,16 @@ public class BoardVO {
 	private int count;
 	
 	private List<FilesVO> attchList;
+	
+	
+//	COM_NO      NOT NULL NUMBER(5)     
+//	PRO_POST_NO          NUMBER(5)     
+//	COM_CONTENT          VARCHAR2(300) 
+//	COM_DATE    NOT NULL DATE          
+//	BOARD_NO             NUMBER(5)     
+//	ID                   VARCHAR2(30)
+	private int comNo;
+	private String profileImg;
+	private String comContent;
+	private String comDate;
 }

@@ -74,25 +74,6 @@
 	   		  
 	   )
 	</insert>
-	<!-- 파일 insert -->
-<!-- 	<insert id="addFiles" parameterType="FilesVO">
-		INSERT INTO FILES 
-						   ( FILE_NO
-						   , ORIGIN_FILE_NAME
-						   , CHANGE_FILE_NAME
-						   , FILE_SIZE
-						   , FILE_DATE
-						   , BOARD_NO
-						   )
-						   VALUES 
-						   ( #{fileNo}
-						   , #{originFileName}
-						   , #{changeFileName}
-						   , #{fileSize}
-						   , sysdate
-						   , #{boardNo}
-						   )
-	</insert> -->
 	
 	<!-- 조회수 증가 -->
 	<update id="updateCount" parameterType="BoardVO" >
@@ -119,5 +100,42 @@
 		WHERE BOARD_NO = #{boardNo}
 	</delete>
 	
-
+	<!-- 댓글 -->
+	<select id="readBoardComment" resultType="BoardVO">
+      SELECT a.com_no, a.com_content, TO_CHAR(a.com_date, 'yyyy/MM/dd HH24:mi') AS com_Date,
+            c.name, u.profile_img, a.id, b.board_no
+      FROM com a JOIN users u
+      ON(a.id=u.id)
+      JOIN user_info c
+      ON(u.emp_no = c.emp_no)
+      JOIN board b
+      ON(a.board_no = b.board_no)
+      WHERE b.board_no = #{boardNo}
+   </select>
+	
+	<insert id="createBoardComment" parameterType="BoardVO">
+		INSERT INTO 
+				com
+				(com_no, board_no, com_content, id)
+		VALUES (
+				(SELECT NVL(MAX(com_no), 0) +1
+		         FROM com),
+		         #{boardNo},
+		         #{comContent},
+		         #{id}
+		)
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteBoardComment" parameterType="int">
+		DELETE FROM com
+		WHERE com_no = #{comNo}
+	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateBoardComment" parameterType="BoardVO">
+		UPDATE com
+		SET com_content = #{comContent}
+		WHERE com_no = #{comNo}
+	</update>
 </mapper>

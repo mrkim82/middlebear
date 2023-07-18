@@ -25,6 +25,19 @@ public interface BoardMapper {
 	
 	//조회수 증가
 	public int updateCount(int boardNo);
+	
+	//댓글
+	//댓글 조회
+	public List<BoardVO> readBoardComment(int boardNo);
+	
+	//댓글 생성
+	public int createBoardComment(BoardVO boardVO);
+	
+	//댓글 삭제
+	public int deleteBoardComment(int comNo);
+	
+	//댓글 수정
+	public int updateBoardComment(BoardVO boardVO);
 }
 
 

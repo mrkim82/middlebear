@@ -39,11 +39,6 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.deleteBoard(boardNo);
 	}
 
-	/*
-	 * @Override public int addFiles(FilesVO filesVO) { return
-	 * boardMapper.addFiles(filesVO); }
-	 */
-
 	@Override
 	public int boardListCnt(Criteria cri, BoardVO boardVO){
         return boardMapper.boardListCnt(cri, boardVO);
@@ -53,5 +48,25 @@ public class BoardServiceImpl implements BoardService{
 	        return boardMapper.selectAllList(cri, boardVO);
 	}
 
+	@Override
+	public int createBoardComment(BoardVO boardVO) {
+		return boardMapper.createBoardComment(boardVO);
+	}
+
+	@Override
+	public int deleteBoardComment(int comNo) {
+		return boardMapper.deleteBoardComment(comNo);
+	}
+
+	@Override
+	public int updateBoardComment(BoardVO boardVO) {
+		return boardMapper.updateBoardComment(boardVO);
+	}
+
+	@Override
+	public List<BoardVO> readBoardComment(int boardNo) {
+		return boardMapper.readBoardComment(boardNo);
+	}
+	
 	
 }

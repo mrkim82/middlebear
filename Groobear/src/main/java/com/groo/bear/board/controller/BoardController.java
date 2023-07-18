@@ -27,6 +27,7 @@ public class BoardController {
 	
 	@GetMapping("/boardList")
 	public String getboardList(Criteria cri, Model model, BoardVO boardVO) {
+		System.out.println(cri);
 		// 전체 글 개수
         int boardListCnt = boardService.boardListCnt(cri, boardVO);
         
@@ -48,6 +49,9 @@ public class BoardController {
 	@GetMapping("boardInfo")
 	public String getBoard(Model model, @RequestParam int boardNo) {
 		model.addAttribute("board", boardService.selectBoard(boardNo));
+		model.addAttribute("boardCom", boardService.readBoardComment(boardNo));
+		System.out.println(model.getAttribute("boardCom"));
+		System.out.println("오류"+model);
 		return "board/boardInfo";
 	}
 	
@@ -87,20 +91,6 @@ public class BoardController {
 	    return "게시글이 삭제되었습니다.";
 	}
 	
-	/*
-	 * @RequestMapping(value="boardList") public String boardList(Criteria cri,
-	 * Model model) throws Exception {
-	 * 
-	 * // 전체 글 개수 int boardListCnt = boardService.boardListCnt();
-	 * 
-	 * // 페이징 객체 Paging paging = new Paging(); paging.setCri(cri);
-	 * paging.setTotalCount(boardListCnt);
-	 * 
-	 * List<Map<String, Object>> list = boardService.boardList(cri);
-	 * 
-	 * model.addAttribute("list", list); model.addAttribute("paging", paging);
-	 * 
-	 * return "board/boardList"; }
-	 */
+	
 	
 }

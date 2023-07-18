@@ -1,5 +1,7 @@
 package com.groo.bear.files.domain;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -14,12 +16,12 @@ public class FilesVO {
 //	BOARD_NO                  NUMBER(5)    
 //	PRO_FILE_NO               NUMBER(5)
 	
-	private String uuid;
-	private String uploadPath;
-	private String fileName;
-	private boolean image;
-	
-	private int boardNo;
+	private String uuid; //file_no
+	private String uploadPath; //경로
+	private String fileName; //file_name
+	private boolean image; //image
+	private Date fileDate; //file_date default sysdate
+	private int boardNo; 
 	private int mailNo;
 	private int proFileNo;
 }
