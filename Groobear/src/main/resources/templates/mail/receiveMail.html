@@ -51,9 +51,9 @@
 				for(let i=0; i< list.length; i++){
 					list[i].checked = true;
 					console.log(list[i].value);
-					console.log('parent',list[i].parentElement.parentElement.children[1].children[0].value)
+					console.log('parent',list[i].parentElement.parentElement.children[1].textContent)
 					if(list[i].checked = true){
-						delList.push(list[i].parentElement.parentElement.children[1].children[0].value)
+						delList.push(list[i].parentElement.parentElement.children[1].textContent)
 					}
 					console.log(delList);
 				}
@@ -67,7 +67,7 @@
 		}
 		function checkBoxClick(){
 			console.log(event.target); //event는 전역객체
-			let mailNo = event.target.parentElement.parentElement.children[1].children[0].value;
+			let mailNo = event.target.parentElement.parentElement.children[2].textContent;
 			console.log('mailNo = ',mailNo)
 			if(event.target.checked){
 				console.log('체크됨2');
