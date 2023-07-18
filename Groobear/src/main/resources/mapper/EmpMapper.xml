@@ -4,11 +4,23 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.groo.bear.emp.mapper.EmpMapper">
 
-<!-- 사원정보조회 -->
+	<!-- 사원정보조회 -->
 	<select id="getEmpInfo" parameterType="EmpVO" resultType="EmpVO">
       select *
       from user_info a join users b 
       on a.emp_no = b.emp_no
-      where a.name=#{name} and b.phone=#{phone}
+      <where>
+			<if test="name != null and !name.equals('')">
+				a.name=#{name} and b.phone=#{phone}
+			</if>
+			<if test="id != null and !id.equals('')">
+				b.id=#{id} and b.phone=#{phone}
+			</if>
+	  </where>
     </select>
+    <!-- 비밀번호 변경 -->
+    <update id="changePw" parameterType="EmpVO">
+    	update users set password = #{password} where id = #{id}
+    </update>
+    
 </mapper>
