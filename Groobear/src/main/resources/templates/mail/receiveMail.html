@@ -10,13 +10,15 @@
 	<table>
 		<thead>
 			<tr>
-				<th><input type="checkbox"></th>
-				<th>삭제</th>
+				<th><input type="checkbox" class="allCheck"></th>
+				<th><button type="button" class="del">삭제</button></th>
 			</tr>
 		</thead>
 		<tbody id="MailBody">
 			<tr th:each="mail : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
-				<td><input type="checkbox"></td>
+				<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
+				<td style="display:none"><input type="text" class="mailNo" style="display:none" th:value="${mail.mailNo}"></td>
+				<td>[[${mail.mailNo}]]</td>
 				<td>[[${mail.receiver}]]</td>
 				<td>[[${mail.title}]]</td>
 				<td>[[${mail.content}]]</td>
@@ -24,6 +26,88 @@
 			</tr>
 		</tbody>
 	</table>
+	<div style="display: block; text-align: center;">		
+		<div th:if="${paging.startPage != 1 }">
+			<a th:href="|receiveMail?nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}|">&lt;</a>
+		</div>
+		<th:block th:each="p : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+				<th:if th:test="${p == paging.nowPage }">
+					<b>[[${p}]]</b>
+				</th:if>
+				<div th:if="${p != paging.nowPage }">
+					<a th:href="|receiveMail?nowPage=${p }&cntPerPage=${paging.cntPerPage}|" th:text="${p}"></a>
+				</div>
+		</th:block>
+		<div th:if="${paging.endPage != paging.lastPage}">
+			<a th:href="@{receiveMail(nowPage=${paging.endPage+1 },cntPerPage=${paging.cntPerPage})}">&gt;</a>
+		</div>
+	</div>
+	<script>
+		var allCheck = document.querySelector(".allCheck");
+		var list = document.querySelectorAll(".check");
+		let delList = [];
+		allCheck.onclick = (e) => {
+			event.stopPropagation()
+			//console.log(e.target);
+			if(allCheck.checked){
+				for(let i=0; i< list.length; i++){
+					list[i].checked = true;
+					console.log(list[i].value);
+					console.log('parent',list[i].parentElement.parentElement.children[1].children[0].value)
+					if(list[i].checked = true){
+						delList.push(list[i].parentElement.parentElement.children[1].children[0].value)
+					}
+					console.log(delList);
+				}
+			}else{
+				for(let i=0; i< list.length; i++){
+					list[i].checked = false;
+					delList.pop();
+					console.log(delList);
+				}
+			}
+		}
+		function checkBoxClick(){
+			console.log(event.target); //event는 전역객체
+			let mailNo = event.target.parentElement.parentElement.children[1].children[0].value;
+			console.log('mailNo = ',mailNo)
+			if(event.target.checked){
+				console.log('체크됨2');
+				delList.push(mailNo);
+				console.log('checked에서 delList = ',delList);
+			}else{
+				console.log('한번더 체크되서 풀림');
+				delList.pop(mailNo);
+				console.log('uncheck에서 delList = ',delList);
+			}
+			console.log('전체점검 delList = ',delList);
+		}
+		var del = document.querySelector(".del");
+		
+		del.onclick = () =>{
+			for(let i=0; i< list.length; i++){
+				if(list[i].checked){
+					list[i].parentElement.parentElement.remove();
+				}
+			}
+			console.log(delList);
+			$.ajax({
+			    url : "delete",                    // 전송 URL
+			    type : 'POST',
+			    contentType : 'application/json',
+			    data :JSON.stringify( delList ),
+			    //Ajax 성공시 호출 
+			    success : function(data){
+			        console.log("컨트롤에서 받은거 : " + data);
+			        alert("삭제"+data+"건 되었습니다.");
+			    },
+			    //Ajax 실패시 호출
+			    error : function(e){
+			        console.log("에러 = "+e);
+			    }
+			});
+		}
+	</script>
 </div>
 </body>
 </html>
