@@ -33,13 +33,27 @@ public class Criteria {
 
 	public void setPerPageNum(int perPageNum) {
 		int cnt = this.perPageNum;
-		if(perPageNum != cnt) {
-			this.perPageNum = perPageNum;
-		}else {
-			this.perPageNum = cnt;
-		}
-		System.out.println(this.perPageNum);
 		
-	}	
+		if(perPageNum != cnt) {
+			this.perPageNum = cnt;
+		}else {
+			this.perPageNum = perPageNum;
+		}
+		
+	}
+	
+	@Override
+	public String toString() {
+		return "Criteria [page="+page+",perPageNum="+perPageNum+"]";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
