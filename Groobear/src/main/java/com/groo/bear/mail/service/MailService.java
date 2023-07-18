@@ -2,6 +2,8 @@ package com.groo.bear.mail.service;
 
 import java.util.List;
 
+import com.groo.bear.paging.Criteria;
+
 public interface MailService {
 	//메일 전송(발송)
 	public int sendMail(MailVO mailVO);
@@ -15,11 +17,23 @@ public interface MailService {
 	//보낸메일함 조회
 	public List<MailVO> sendingMail(String email);
 	//지운메일함 조회
-	public List<MailVO> deletedMail(MailVO mailVO);
+	public List<MailVO> deletedMail(Criteria cri, MailVO mailVO);
 	//메일삭제(update)
 	public int deleteMail(int mailNo);
 	//메일 완전삭제(delete)
 	public int realDeleteMail(int mailNo);
 	//메일 상세조회
 	public MailVO mailInfo(int mailNo);
+	// 보낸메일 총 갯수
+	public int countSendMail(String sender);
+	// 받은메일 총 갯수
+	public int countReceiveMail(String receiver);
+	// 지운메일 총 갯수
+	public int countDeleteMail(MailVO mailVO);
+	// 페이징 처리 보낸메일
+	public List<MailVO> sendMailSearch(PagingVO vo);
+	// 페이징 처리 보낸메일
+	public List<MailVO> receiveMailSearch(PagingVO vo);
+	// 페이징 처리 보낸메일
+	public List<MailVO> deleteMailSearch(PagingVO vo);
 }

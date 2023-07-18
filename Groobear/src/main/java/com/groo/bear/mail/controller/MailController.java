@@ -1,5 +1,8 @@
 package com.groo.bear.mail.controller;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -8,10 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.mail.service.MailService;
 import com.groo.bear.mail.service.MailVO;
+import com.groo.bear.paging.Criteria;
+import com.groo.bear.paging.Paging;
 
 @Controller
 public class MailController {
@@ -21,11 +28,24 @@ public class MailController {
 	
 	//받은메일함
 	@GetMapping("mail/receiveMail")
-	public String receiveMailForm(Model model, MailVO mailVO, HttpServletRequest request) {
+	public String receiveMailForm(Model model, MailVO mailVO, HttpServletRequest request,  @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("Email");
 		model.addAttribute("mailList",mailService.receiveMail(email));
-		//메일 지우기
+		System.out.println("receiver는 ? "+session.getAttribute("Email"));
+		int total = mailService.countReceiveMail((String)session.getAttribute("Email"));
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "5";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "5";
+		}
+		//vo = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+//		System.out.println(vo);
+//		model.addAttribute("paging", vo);
 		return "mail/receiveMail";
 	}
 	//메일작성폼
@@ -49,30 +69,62 @@ public class MailController {
 	}
 	//보낸메일함
 	@GetMapping("mail/sendingMail")
-	public String sendingMailForm(Model model, MailVO mailVO, HttpServletRequest request) {
+	public String sendingMailForm(Model model, MailVO mailVO, HttpServletRequest request,  @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("Email");
 		model.addAttribute("mailList",mailService.sendingMail(email));
-		//메일 지우기
+		System.out.println("receiver는 ? "+session.getAttribute("Email"));
 		return "mail/sendingMail";
 	}
 	//지운메일함 폼
 	@GetMapping("mail/deleteMail")
-	public String deleteMailForm(Model model, MailVO mailVO, HttpServletRequest request) {
-		System.out.println("dm = "+mailVO);
+	public String deleteMailForm(Criteria cri, Model model, MailVO mailVO, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		mailVO.setSender((String) session.getAttribute("Email"));
 		mailVO.setReceiver((String) session.getAttribute("Email"));
-		model.addAttribute("mailList",mailService.deletedMail(mailVO));
+		String D = "D";
+		mailVO.setMailType(D);
+		cri.setPerPageNum(2);
+		Paging paging = new Paging();
+        paging.setCri(cri);
+        paging.setTotalCount(mailService.countDeleteMail(mailVO));
+		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
+		model.addAttribute("paging", paging);
 		return "mail/deleteMail";
 	}
-	//지운메일함 기능
-	
+	//보낸메일,받은메일에서 삭제시 update문으로 delete_date,mail_type설정
+	@PostMapping("mail/delete")
+	@ResponseBody
+	public int deleteMail(@RequestBody List<Integer> delList) {
+		//update하는곳
+		int count=0;
+	    for (int i = 0 ; i < delList.size() ; i++) { 
+	        mailService.deleteMail(delList.get(i));
+	        System.out.println("mailNO : "+delList.get(i));
+	        System.out.println("mailNo : "+mailService.deleteMail(delList.get(i)));
+	        count++;
+	    }
+		return count;
+	}
 	//메일 상세조회
 	@GetMapping("mailInfo")
 	public String mailInfo(@RequestParam int mailNo, Model model) {
 		model.addAttribute("mail",mailService.mailInfo(mailNo));
 		return "mail/mailInfo";
 	}
-	
+	//지운메일함에서 삭제시 완전삭제(db에서 delete)
+	@PostMapping("mail/realdelete")
+	@ResponseBody
+	public int realDeleteMail(@RequestBody List<Integer> delList) {
+		//update하는곳
+		int count=0;
+	    for (int i = 0 ; i < delList.size() ; i++) { 
+	    	System.out.println("mailNo : "+mailService.deleteMail(delList.get(i)));
+	        mailService.realDeleteMail(delList.get(i));
+	        System.out.println("mailNO : "+delList.get(i));
+	        count++;
+	    }
+		return count;
+	}
 }
