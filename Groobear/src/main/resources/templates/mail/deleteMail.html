@@ -1,26 +1,55 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- layout:decorate="~{layout/tiles}">
+ layout:decorate="~{layout/mailTiles}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body layout:fragment="content">
-<table>
-	<thead>
-		<tr>
-			<th><input type="checkbox"></th>
-			<th>삭제</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td><input type="checkbox"></td>
-			<td>보낸사람</td>
-			<td>제목입니다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</td>
-			<td>2023/07/10 15시30분22초</td>
-		</tr>
-	</tbody>
-</table>
+<div>
+	<table>
+		<thead>
+			<tr>
+				<th><input type="checkbox" class="allCheck"></th>
+				<th><button type="button" class="del">삭제</button></th>
+			</tr>
+		</thead>
+		<tbody id="MailBody">
+			<tr th:each="mail : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+				<td><input type="checkbox" class="check"></td>
+				<td>[[${mail.sender}]]</td>
+				<td>[[${mail.content}]]</td>
+				<td th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+			</tr>
+		</tbody>
+	</table>
+	<script>
+		var allCheck = document.querySelector(".allCheck");
+		var list = document.querySelectorAll(".check");
+		
+		allCheck.onclick = (e) => {
+			console.log(e.target);
+			if(allCheck.checked){
+				for(let i=0; i< list.length; i++){
+					list[i].checked = true;
+					//console.log(list[i]);
+				}
+			}else{
+				for(let i=0; i< list.length; i++){
+					list[i].checked = false;
+				}
+			}
+		}
+		var del = document.querySelector(".del");
+		
+		del.onclick = () =>{
+			for(let i=0; i< list.length; i++){
+				if(list[i].checked){
+					list[i].parentElement.parentElement.remove();
+				}
+			}
+		}
+	</script>
+</div>
 </body>
 </html>
