@@ -167,10 +167,10 @@ public class MailServiceImpl implements MailService{
 		return mailMapper.countSendMail(sender);
 	}
 	@Override
-	public int countReceiveMail(String receiver) {
+	public int countReceiveMail(String receiver, String referrer) {
 		// 받은메일 총 갯수
-		System.out.println("receiver = "+mailMapper.countReceiveMail(receiver));
-		return mailMapper.countReceiveMail(receiver);
+		System.out.println("receiver = "+mailMapper.countReceiveMail(receiver,referrer));
+		return mailMapper.countReceiveMail(receiver,referrer);
 	}
 	@Override
 	public int countDeleteMail(MailVO mailVO) {

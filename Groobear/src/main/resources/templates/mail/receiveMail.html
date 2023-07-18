@@ -15,34 +15,32 @@
 			</tr>
 		</thead>
 		<tbody id="MailBody">
-			<tr th:each="mail : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+			<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
 				<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
-				<td style="display:none"><input type="text" class="mailNo" style="display:none" th:value="${mail.mailNo}"></td>
 				<td>[[${mail.mailNo}]]</td>
-				<td>[[${mail.receiver}]]</td>
-				<td>[[${mail.title}]]</td>
+				<td>[[${mail.sender}]]</td>
 				<td>[[${mail.content}]]</td>
 				<td th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
 			</tr>
 		</tbody>
 	</table>
-	<div style="display: block; text-align: center;">		
-		<div th:if="${paging.startPage != 1 }">
-			<a th:href="|receiveMail?nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}|">&lt;</a>
-		</div>
-		<th:block th:each="p : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-				<th:if th:test="${p == paging.nowPage }">
-					<b>[[${p}]]</b>
-				</th:if>
-				<div th:if="${p != paging.nowPage }">
-					<a th:href="|receiveMail?nowPage=${p }&cntPerPage=${paging.cntPerPage}|" th:text="${p}"></a>
-				</div>
-		</th:block>
-		<div th:if="${paging.endPage != paging.lastPage}">
-			<a th:href="@{receiveMail(nowPage=${paging.endPage+1 },cntPerPage=${paging.cntPerPage})}">&gt;</a>
-		</div>
-	</div>
+	<ul class="paging" th:if="${paging.endPage != 0}">
+        <li th:if="${paging.prev}">
+            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+        </li>
+        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+        </li>
+        <li th:if="${paging.next and paging.endPage > 0}">
+            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+        </li>
+    </ul>
+	
 	<script>
+	function goPage(p){
+		location.href="deleteMail?page="+p;
+			
+	}
 		var allCheck = document.querySelector(".allCheck");
 		var list = document.querySelectorAll(".check");
 		let delList = [];
@@ -92,7 +90,7 @@
 			}
 			console.log(delList);
 			$.ajax({
-			    url : "delete",                    // 전송 URL
+			    url : "realdelete",  // 전송 URL
 			    type : 'POST',
 			    contentType : 'application/json',
 			    data :JSON.stringify( delList ),

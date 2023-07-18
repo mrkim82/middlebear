@@ -85,16 +85,17 @@
 					ORDER BY d.mail_no desc) e
 				<where> 
                     e.mail_type = #{mailVO.mailType}
-                    <if test="mailVO.receiver != null AND mailVO.sender == null">
-                    AND e.receiver = #{mailVO.receiver}
+                    <if test="mailVO.receiver != null and mailVO.sender == null">
+                    AND (e.receiver = #{mailVO.receiver}
+                     OR e.referrer = #{mailVO.referrer})
                     </if>
                     <!-- sender값이 들어오면 휴지통임 -->
-					<if test="mailVO.sender != null AND mailVO.receiver == null">
+					<if test="mailVO.sender != null and mailVO.receiver == null">
 					AND e.sender = #{mailVO.sender}
 					</if>
-					<if test="mailVO.receiver != null AND mailVO.sender != null">
-					AND e.receiver = #{mailVO.receiver}
-					 OR e.sender = #{mailVO.sender}
+					<if test="mailVO.receiver != null and mailVO.sender != null">
+					AND (e.receiver = #{mailVO.receiver}
+					 OR e.sender = #{mailVO.sender})
 					</if>
                     <if test="mailVO.deleteDate != null">
                     AND e.delete_date = #{mailVO.deleteDate}
@@ -106,7 +107,7 @@
             WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
             ]]>
 	</select>
-	<!-- 메일 갯수 출력 -->
+	<!-- 지운메일 갯수 출력 -->
 	<select id="countDeleteMail" resultType="int">
 		SELECT COUNT(*) FROM mail a, mail_personnel b
 			WHERE a.mail_no = b.mail_no
@@ -129,7 +130,8 @@
 		SELECT COUNT(*) FROM mail a, mail_personnel b
 			WHERE a.mail_no = b.mail_no
             AND a.mail_type = 'S'
-            AND b.receiver = #{receiver}
+            AND (b.receiver = #{receiver}
+             OR b.referrer = #{referrer})
 	</select>
 	
 	<!-- 메일삭제 -->

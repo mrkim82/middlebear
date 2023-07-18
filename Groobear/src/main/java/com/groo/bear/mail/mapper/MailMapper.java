@@ -28,7 +28,7 @@ public interface MailMapper {
 	// 보낸메일 총 갯수
 	public int countSendMail(String sender);
 	// 받은메일 총 갯수
-	public int countReceiveMail(String receiver);
+	public int countReceiveMail(String receiver, String referrer);
 	// 지운메일 총 갯수
 	public int countDeleteMail(MailVO mailVO);
 	// 페이징 처리 보낸메일
