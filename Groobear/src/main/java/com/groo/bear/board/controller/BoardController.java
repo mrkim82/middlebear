@@ -13,13 +13,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.groo.bear.board.service.BoardService;
 import com.groo.bear.board.service.BoardVO;
 import com.groo.bear.paging.Criteria;
 import com.groo.bear.paging.Paging;
 
+import lombok.extern.log4j.Log4j2;
+
 @Controller
+@Log4j2
 public class BoardController {
 	
 	@Autowired
@@ -50,8 +54,6 @@ public class BoardController {
 	public String getBoard(Model model, @RequestParam int boardNo) {
 		model.addAttribute("board", boardService.selectBoard(boardNo));
 		model.addAttribute("boardCom", boardService.readBoardComment(boardNo));
-		System.out.println(model.getAttribute("boardCom"));
-		System.out.println("오류"+model);
 		return "board/boardInfo";
 	}
 	
@@ -64,7 +66,16 @@ public class BoardController {
 	}
 	
 	@PostMapping("boardInsert")
-	public String boardInsert(@ModelAttribute BoardVO boardVO, Model model) {
+	public String boardInsert(@ModelAttribute BoardVO boardVO, Model model, RedirectAttributes rttr) {
+		log.info("에러잡기===============================");
+		log.info("register : " + boardVO);
+		
+		if(boardVO.getAttachList() != null) {
+			System.out.println(boardVO.getAttachList());
+			boardVO.getAttachList().forEach(attach -> log.info(attach));
+		}
+		
+		log.info("===============================");
 		boardService.insertBoard(boardVO);
 		return "redirect:/boardList?boardType=" + boardVO.getBoardType();
 	}

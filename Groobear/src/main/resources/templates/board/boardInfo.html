@@ -10,15 +10,14 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
 	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
 	crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.7.0.js"
-	integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
-	crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="fileBoard.js"></script>
 <title>게시글 단건조회</title>
 </head>
 <body>
 	<div layout:fragment="content">
 		<h2>게시글 단건조회</h2>
-
+		
 		<table>
 			<thead>
 			<tr>
@@ -33,6 +32,10 @@
 				<td>첨부파일 :</td>
 				<td><a th:href="@{/files/} + ${board.attachment}" th:text="${board.attachment}">file.txt</a></td>
 			</tr> -->
+			<tr class="uploadResult">
+				<td>첨부파일</td>
+				<td></td>
+			</tr>
 			<tr>
 				<td>작성자:</td>
 				<td><input type="text" th:value="${board.name}" readonly /></td>
@@ -47,8 +50,11 @@
 				<td style="display: none"><input type="text" id="boardType"
 					name="boardType" th:value="${board.boardType}"></td>
 			</tr>
+			<tr>
+				<td>댓글작성</td>
+			</tr>
 			</thead>
-			<tbody>
+			<tbody th:if="${boardCom != null}">
 				<tr th:each="com : ${boardCom}" th:data-post-code="${com.comNo}">
 					<td th:utext="${com.profileImg}"></td>
 					<td th:text="${com.comContent}"></td>
@@ -61,13 +67,15 @@
 						</th:block>
 					</td>
 				</tr>
+				
 			</tbody>
+
 		</table>
 		<div class="form-group">
 			<input type="text" class="form-control" placeholder="댓글 작성">
 		</div>
 		<button type="button" class="btn btn-primary" onclick="createCommentButton()"
-							th:data-post-writing-no="${boardCom[0].boardNo}">댓글 등록</button>
+							th:data-post-writing-no="${board.boardNo}">댓글 등록</button>
 		<!-- <div>
 			<div class="row">
 				<div class="col-md-6">
@@ -265,9 +273,9 @@
 			
 			//초기화
 			//targetButton.parentNode.childNodes[5].textContent = '';//날짜 초기화
-			targetButton.parentNode.parentNode.childNodes[3].textContent = '';//댓글 초기화
-			targetButton.parentNode.parentNode.childNodes[9].childNodes[1].textContent = '';//수정 초기화
-			targetButton.parentNode.parentNode.childNodes[9].childNodes[3].textContent = '';//X 초기화
+			//targetButton.parentNode.parentNode.childNodes[3].textContent = '';//댓글 초기화
+			//targetButton.parentNode.parentNode.childNodes[9].childNodes[1].textContent = '';//수정 초기화
+			//targetButton.parentNode.parentNode.childNodes[9].childNodes[3].textContent = '';//X 초기화
 			
 			if(document.getElementById('newComment') != null) {
 				let nC = document.getElementById('newComment').parentNode.parentNode;

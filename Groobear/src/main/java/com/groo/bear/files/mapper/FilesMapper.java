@@ -10,5 +10,5 @@ public interface FilesMapper {
 	
 	public int delete(String uuid);
 	
-	public List<FilesVO> findNo(BoardVO boardNo); //특정 게시물의 번호로 첨부파일을 찾는 작업
+	public List<FilesVO> findByBno(int boardNo); //특정 게시물의 번호로 첨부파일을 찾는 작업
 }

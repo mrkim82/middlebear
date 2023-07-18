@@ -16,12 +16,13 @@ public class FilesVO {
 //	BOARD_NO                  NUMBER(5)    
 //	PRO_FILE_NO               NUMBER(5)
 	
-	private String uuid; //file_no
-	private String uploadPath; //경로
-	private String fileName; //file_name
-	private boolean image; //image
+	private String uuid; // 첨부파일 보관
+	private String uploadPath; //파일이 업로드된 경로
+	private String fileName; //파일이름
+	private boolean fileType; // 이미지 파일 여부
 	private Date fileDate; //file_date default sysdate
 	private int boardNo; 
 	private int mailNo;
 	private int proFileNo;
+	
 }

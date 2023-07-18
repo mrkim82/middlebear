@@ -100,7 +100,7 @@ public class UploadController {
 				
 				//check image type file
 				if(checkImageType(saveFile)) {
-					filesVO.setImage(true);
+					//filesVO.setImage(true);
 					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
 					
 					Thumbnailator.createThumbnail(new FileInputStream(saveFile), thumbnail, 100, 100);

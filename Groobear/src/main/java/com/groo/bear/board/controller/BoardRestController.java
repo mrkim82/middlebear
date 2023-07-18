@@ -33,7 +33,6 @@ public class BoardRestController {
 		boardVO.setId((String)session.getAttribute("Id"));
 		
 		boardService.createBoardComment(boardVO);
-		System.out.println("왜안옴"+boardVO);
 		if(result > 0) {
 			res = "성공";
 			

@@ -38,6 +38,7 @@ public interface BoardMapper {
 	
 	//댓글 수정
 	public int updateBoardComment(BoardVO boardVO);
+	
 }
 
 
