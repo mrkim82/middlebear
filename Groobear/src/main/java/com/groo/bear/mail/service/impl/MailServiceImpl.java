@@ -146,12 +146,12 @@ public class MailServiceImpl implements MailService{
 	@Override
 	public int deleteMail(int mailNo) {
 		//메일지우기(update)
-		return 1;
+		return mailMapper.deleteMail(mailNo);
 	}
 	@Override
 	public int realDeleteMail(int mailNo) {
 		//메일지우기(delete)
-		return 1;
+		return mailMapper.realDeleteMail(mailNo);
 	}
 	@Override
 	public MailVO mailInfo(int mailNo) {
