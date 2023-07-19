@@ -23,7 +23,7 @@
 		GROUP BY m1.pro_no
 	</select>
 	
-	<!-- 프로젝트 참가자 조회 -->
+	<!-- 프로젝트 참가자 조회 --><!-- 일정 참가자 반복문 -->
 	<select id="readProjectParti" resultType="ProPostUserVO">
 		SELECT i.name, m.id, u.profile_img, i.rank, d.dept_name
 		FROM pro_mem m JOIN users u

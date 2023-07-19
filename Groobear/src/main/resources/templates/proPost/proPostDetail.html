@@ -699,6 +699,7 @@ p {
 													<h1 class="modal-title fs-5" id="exampleModalLabel">참석자 변경</h1>
 													<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 												</div>
+												<!-- 내용 -->
 												<div class="modal-body">
 													<ul>
 														<li style="border-bottom: 1px solid gray; list-style-type: none;">
@@ -713,9 +714,11 @@ p {
 															<li style="list-style-type: none">
 																<nav class="nav">
 																		<input type="checkbox" th:id="'schPartiList' + ${member.id}">
+																			   <!-- th:selected="${rpl.id == member.id}"> -->
 																		<label th:for="'schPartiList' + ${member.id}">
 																			<a class="nav-link" th:utext="${member.profileImg}"></a>
 																			<a class="nav-link" th:text="${member.name}"></a>
+																			<a class="nav-link"  th:text="${readPartiList[1]}"></a>
 																		</label>
 																</nav>
 															</li>
