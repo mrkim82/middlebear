@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- layout:decorate="~{layout/tiles}">
+ layout:decorate="~{layout/mailTiles}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body layout:fragment="content">
-<table>
-	<thead>
-		<tr>
-			<th><input type="checkbox"></th>
-			<th>삭제</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td><input type="checkbox"></td>
-			<td>보낸사람</td>
-			<td>제목입니다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</td>
-			<td>읽은여부</td>
-			<td>2023/07/10 15시30분22초</td>
-		</tr>
-	</tbody>
-</table>
+<div>
+	<table>
+		<thead>
+			<tr>
+				<th><input type="checkbox"></th>
+				<th>삭제</th>
+			</tr>
+		</thead>
+		<tbody id="MailBody">
+			<tr th:each="mail : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+				<td><input type="checkbox"></td>
+				<td>[[${mail.receiver}]]</td>
+				<td>[[${mail.title}]]</td>
+				<td>[[${mail.content}]]</td>
+				<td th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 </body>
 </html>
