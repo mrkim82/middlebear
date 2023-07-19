@@ -56,7 +56,6 @@
 		AND a.mail_set = 'Y'
 		AND a.mail_type = 'S'
 		AND c.receiver = #{email}
-		ORDER BY a.mail_no desc
 		ORDER BY read_check ,a.mail_no desc
 	</select>
 	<!-- 보낸메일함 조인부분은 건들필요없음 -->
