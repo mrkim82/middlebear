@@ -34,6 +34,9 @@ p {
 	color: gray;
 	text-decoration:line-through;
 }
+[type="checkbox"] {
+	margin-right: 15px;
+}
 </style>
 	
 </head>
@@ -51,7 +54,7 @@ p {
 			<!-- 글 생성 nav -->
 			<div>
 				<ul class="nav justify-content-center"
-					style="background-color: #faf9f9; margin: 10px">
+					style="background-color: #faf9f9; margin: 10px;color: silver;">
 					<li class="nav-item" data-post-code="1"><a class="nav-link"
 						data-toggle="modal" data-target="#modal1" href="#"><span>글</span></a></li>
 					<li class="nav-item" data-post-code="2"><a class="nav-link"
@@ -576,7 +579,7 @@ p {
 														<span th:text="${com.comContent}"></span>
 														<th:block th:if="${com.id == session.Id}">
 															<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
-															<span></span>
+															<span></span><!-- 지우면 안됨!!!!!!! -->
 															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
 														</th:block>
 													</li>
@@ -675,15 +678,62 @@ p {
 							<!-- 참석자 존 -->
 							<div>
 								<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}">
-
-									<div th:text="${rpl.name}"></div>
+									<div th:text="${rpl.name}" th:data-sch-user-id="${rpl.id == session.Id ? rpl.id : ''}"></div>
 									<th:block th:switch="${rpl.partiCheck}">
-										<span th:case="Y">참석</span>
-										<span th:case="N">불참</span>
-										<span th:case="A">미정</span>
+										<span th:case="Y" style="color: green;">참석</span>
+										<span th:case="N" style="color: red;">불참</span>
+										<span th:case="A" style="color: gray;">미정</span>
 									</th:block>
 								</th:block>
-								<div>참석자 변경</div>
+								<!-- 참석자 리스트 버튼 -->
+								<div>
+									<button type="button" class="btn btn-light" data-toggle="modal" th:data-target="'#schPartiListModal' + ${allPost.proPostNo}">
+													참석자 변경
+									</button>
+									<!-- 참석자 리스트 Modal -->
+									<div class="modal fade" th:id="'schPartiListModal' + ${allPost.proPostNo}" tabindex="-1"
+											 aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h1 class="modal-title fs-5" id="exampleModalLabel">참석자 변경</h1>
+													<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body">
+													<ul>
+														<li style="border-bottom: 1px solid gray; list-style-type: none;">
+															<div>
+																<input type="checkbox" value="selectAll2" id="selectAll"
+																	onclick='' /><label for="selectAll" style="cursor: pointer;">전체선택</label>
+																	<input type="text" placeholder="참석자명 검색">
+															</div>
+														</li>
+														<!-- 참가자 목록 -->
+														<th:block th:each="member : ${projectPartiMember}">
+															<li style="list-style-type: none">
+																<nav class="nav">
+																		<input type="checkbox" th:id="'schPartiList' + ${member.id}">
+																		<label th:for="'schPartiList' + ${member.id}">
+																			<a class="nav-link" th:utext="${member.profileImg}"></a>
+																			<a class="nav-link" th:text="${member.name}"></a>
+																		</label>
+																</nav>
+															</li>
+														</th:block>
+													</ul>
+												</div>
+												<div class="modal-body">
+													진짜?
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+													<button type="button" class="btn btn-primary">확인</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 모달 끝 -->
+								</div>
 							</div>
 							<!-- 장소 -->
 							<div>
@@ -790,7 +840,7 @@ p {
 							<ul class="list-unstyled">
 								<li>
 									<!-- 이미지 -->
-									<img src="이미지 URL" alt="이미지" class="img-fluid">
+									<img src="" alt="이미지" class="img-fluid">
 								</li>
 							</ul>
 						</div>
@@ -1027,6 +1077,8 @@ p {
 						newStatus = 'B';
 					} */
 					
+					changeSchStatus(button, newStatus);
+					
 				} else {
 					alert('상태 수정 실패');
 				}
@@ -1047,6 +1099,21 @@ p {
 		    button.classList.remove(className);
 		    button.classList.add(filledClassName);
 		  }
+		}
+		
+		//글자 바꾸기
+		function changeSchStatus(button, newStatus) {
+			let schPartiChange = button.closest(".card").querySelector('[data-sch-user-id]').parentNode.childNodes[3];//상태창 위치
+			if(newStatus == 'Y') {
+				schPartiChange.textContent ='참석';
+				console.log(schPartiChange.style.color = 'green');
+			} else if(newStatus == 'N') {
+				schPartiChange.textContent ='불참';
+				console.log(schPartiChange.style.color = 'red');
+			} else if(newStatus == 'A') {
+				schPartiChange.textContent ='미정';
+				console.log(schPartiChange.style.color = 'gray');
+			}
 		}
 	</script>
 
@@ -1305,6 +1372,13 @@ p {
 		
 	</script>
 	
+	<!-- 참석자 창 띄우기 -->
+	<script>
+		function openSchPartiList() {
+			console.log(event.target);
+		}
+
+	</script>
 	<!-- 시간 단위 조정 -->
 	<!-- <script>
 		// 10분 간격으로 선택할 수 있도록 설정

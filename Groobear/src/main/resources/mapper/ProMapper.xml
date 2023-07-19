@@ -43,7 +43,7 @@
 		WHERE id = #{id}
 	</select>
 	
-	<!-- 프로젝트 참가자 -->
+	<!-- 프로젝트 참가자 수 -->
 	<select id="readProjectParti" resultType="ProVO">
 		SELECT m1.pro_no, COUNT(m1.pro_mem_no) AS count
 		FROM pro_mem m1 INNER JOIN (SELECT pro_no FROM pro_mem WHERE id = #{id}) m2

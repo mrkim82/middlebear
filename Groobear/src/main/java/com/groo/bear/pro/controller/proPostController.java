@@ -21,6 +21,7 @@ import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
 import com.groo.bear.pro.service.ProService;
+import com.groo.bear.pro.service.PublicCodeColorService;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
@@ -40,12 +41,15 @@ public class proPostController {
 	@Autowired
 	ProPostSchService ppss;
 	
+	@Autowired
+	PublicCodeColorService pccs;//공통 색상
+	
 	//공통 데이터(사이드바) 전달
 	private Model proData2(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		
 		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
-		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
+		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));//프로젝트 참가자 수
 		
 		return model;
 	}
@@ -61,9 +65,9 @@ public class proPostController {
 		
 		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));//메뉴 상단바 조회
 		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(id, proNo));
-		model.addAttribute("projectPartiMember", proPostService.readProjectParti(vo2));//회원 정보 전체 조회
+		model.addAttribute("projectPartiMember", proPostService.readProjectParti(vo2));//해당 프로젝트 회원 정보 전체 조회
 		model.addAttribute("projectWritingWorkGroup", proPostService.readWritingWorkGroup(proNo));//작성용 업무 그룹 조회
-		
+		model.addAttribute("readPublicCodeColorAll", pccs.readPublicCodeColorAll());//공통 색상 전체
 		switch (homeTab) {
 		//피드
 		case 1 :

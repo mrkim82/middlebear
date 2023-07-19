@@ -31,7 +31,7 @@
 	
 	<!-- 참석자 현황 -->
 	<select id="readPartiList" resultType="ProPostSchVO">
-		SELECT a.sch_no, a.parti_check, b.pro_post_no, i.name
+		SELECT a.sch_no, a.parti_check, b.pro_post_no, i.name, a.id
 		FROM sch_parti a JOIN pro_sch b
 		ON(a.sch_no = b.sch_no)
 		JOIN pro_post c
