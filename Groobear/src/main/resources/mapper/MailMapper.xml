@@ -70,17 +70,7 @@
 		ORDER BY a.mail_no desc
 	</select>
 	<!-- 지운메일함 -->
-	<select id="deletedMail" parameterType="MailVO">
-		SELECT a.mail_no, a.send_date, a.receive_date, a.delete_date, a.read_check, a.mail_type, a.id,a.mail_set,b.title,b.content,c.sender,c.receiver,c.referrer
-		FROM mail a, mail_details b, mail_personnel c
-		WHERE a.mail_no = b.mail_no 
-		AND b.mail_no = c.mail_no
-		AND (a.delete_date >  '01/01/01'
-		AND a.mail_type = 'D')
-		AND (c.sender = #{sender}
-		OR c.receiver = #{receiver})
-		ORDER BY delete_date
-	</select>
+	
 	<select id="deletedMail" resultType="MailVO">
         SELECT * 
             FROM (SELECT g.*, ROWNUM AS rn FROM (
