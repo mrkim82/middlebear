@@ -710,15 +710,21 @@ p {
 															</div>
 														</li>
 														<!-- 참가자 목록 -->
+														<!-- <th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}"> -->
 														<th:block th:each="member : ${projectPartiMember}">
 															<li style="list-style-type: none">
 																<nav class="nav">
-																		<input type="checkbox" th:id="'schPartiList' + ${member.id}">
-																			   <!-- th:selected="${rpl.id == member.id}"> -->
+																		<input type="checkbox" th:id="'schPartiList' + ${member.id}"
+																			   th:each="rpl : ${readPartiList}"
+																			   th:checked="${rpl.id == member.id}"
+																			   th:if="${rpl.id == member.id && rpl.schNo == allPost.schNo}">
+																		<input type="checkbox" th:id="'schPartiList' + ${member.id}"
+																			   th:each="rpl : ${readPartiList}"
+																			   th:checked="${rpl.id == member.id}"
+																			   th:if="${(rpl.id == member.id && rpl.schNo == allPost.schNo) || (rpl.id != member.id && rpl.schNo == allPost.schNo)}">
 																		<label th:for="'schPartiList' + ${member.id}">
 																			<a class="nav-link" th:utext="${member.profileImg}"></a>
 																			<a class="nav-link" th:text="${member.name}"></a>
-																			<a class="nav-link"  th:text="${readPartiList[1]}"></a>
 																		</label>
 																</nav>
 															</li>
