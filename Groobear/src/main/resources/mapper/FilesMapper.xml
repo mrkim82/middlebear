@@ -4,17 +4,31 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="com.groo.bear.files.mapper.FilesMapper">
   	
-  	<insert id="insert">
-  		insert into tbl_attach 
-  		VALUES (#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{boardNo})
+  	<insert id="insert" parameterType="FilesVO">
+  		insert into files (
+  						    UUID
+  						   ,UPLOAD_PATH
+  						   ,FILE_NAME
+  						   ,FILE_TYPE
+  						   ,FILE_DATE
+  						   ,BOARD_NO
+  							)
+  				VALUES 
+  						  (
+  						    #{uuid}
+  						    ,#{uploadPath}
+  						    ,#{fileName}
+  						    ,#{fileType}
+  						    ,sysdate
+  						    ,#{boardNo})
   	</insert>
   	
   	<delete id="delete">
-  		delete from tbl_attach where uuid = #{uuid}
+  		delete from files where uuid = #{uuid}
   	</delete>
   	
   	<select id="findByBno" resultType="FilesVO">
-  		select * from tbl_attach where board_no = {boardNo}
+  		select * from files where board_no = #{boardNo}
   	</select>
   	
   </mapper>

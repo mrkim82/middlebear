@@ -2,7 +2,6 @@ package com.groo.bear.files.mapper;
 
 import java.util.List;
 
-import com.groo.bear.board.service.BoardVO;
 import com.groo.bear.files.domain.FilesVO;
 
 public interface FilesMapper {

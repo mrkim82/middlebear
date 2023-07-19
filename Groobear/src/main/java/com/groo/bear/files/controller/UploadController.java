@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.groo.bear.files.domain.AttachFileDTO;
 import com.groo.bear.files.domain.FilesVO;
 
 import lombok.extern.log4j.Log4j2;
@@ -56,8 +57,8 @@ public class UploadController {
 	
 	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<List<FilesVO>> uploadAjaxPost(MultipartFile[] uploadFile) {
-		List<FilesVO> list = new ArrayList<>();
+	public ResponseEntity<List<AttachFileDTO>> uploadAjaxPost(MultipartFile[] uploadFile) {
+		List<AttachFileDTO> list = new ArrayList<>();
 		
 		log.info("update ajax post ......");
 		
@@ -76,7 +77,7 @@ public class UploadController {
 		 		
 		for(MultipartFile multipartFile : uploadFile) {
 			
-			FilesVO filesVO = new FilesVO();
+			AttachFileDTO attachFileDTO = new AttachFileDTO();
 			
 //			log.info("--------------------------------------");
 //			log.info("Upload File Name : " + multipartFile.getOriginalFilename());
@@ -87,7 +88,7 @@ public class UploadController {
 			//IE has file path
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
 			log.info("only file name: " + uploadFileName);
-			filesVO.setFileName(uploadFileName);
+			attachFileDTO.setFileName(uploadFileName);
 			
 			UUID uuid = UUID.randomUUID();
 			uploadFileName = uuid.toString() + "_" + uploadFileName;
@@ -95,19 +96,19 @@ public class UploadController {
 			try {
 				File saveFile = new File(uploadPath, uploadFileName);
 				multipartFile.transferTo(saveFile);
-				filesVO.setUuid(uuid.toString());
-				filesVO.setUploadPath(uploadFolderPath);
+				attachFileDTO.setUuid(uuid.toString());
+				attachFileDTO.setUploadPath(uploadFolderPath);
 				
 				//check image type file
 				if(checkImageType(saveFile)) {
-					//filesVO.setImage(true);
+					attachFileDTO.setImage(true);
 					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
 					
 					Thumbnailator.createThumbnail(new FileInputStream(saveFile), thumbnail, 100, 100);
 					thumbnail.close();
 				}
 				//add to List
-				list.add(filesVO);
+				list.add(attachFileDTO);
 				
 			} catch (Exception e) {
 				//log.error(e.getMessage());

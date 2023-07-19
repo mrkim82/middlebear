@@ -45,10 +45,6 @@ public class BoardController {
 		
 		return "board/boardList";
 	}
-//	@GetMapping("/uploadAjax")
-//	public void uploadAjax() {
-//		log.info("upload ajax");
-//	}
 	
 	@GetMapping("boardInfo")
 	public String getBoard(Model model, @RequestParam int boardNo) {
@@ -67,16 +63,17 @@ public class BoardController {
 	
 	@PostMapping("boardInsert")
 	public String boardInsert(@ModelAttribute BoardVO boardVO, Model model, RedirectAttributes rttr) {
-		log.info("에러잡기===============================");
+		log.info("===============================");
 		log.info("register : " + boardVO);
+		boardService.insertBoard(boardVO);
 		
-		if(boardVO.getAttachList() != null) {
-			System.out.println(boardVO.getAttachList());
-			boardVO.getAttachList().forEach(attach -> log.info(attach));
-		}
+//		if(boardVO.getAttachList() != null) {
+//			System.out.println(boardVO.getAttachList());
+//			boardVO.getAttachList().forEach(attach -> log.info(attach));
+//		}
 		
 		log.info("===============================");
-		boardService.insertBoard(boardVO);
+		//rttr.addFlashAttribute("result", boardVO.getBoardNo());
 		return "redirect:/boardList?boardType=" + boardVO.getBoardType();
 	}
 	
@@ -101,7 +98,5 @@ public class BoardController {
 	    boardService.deleteBoard(boardNo);
 	    return "게시글이 삭제되었습니다.";
 	}
-	
-	
 	
 }

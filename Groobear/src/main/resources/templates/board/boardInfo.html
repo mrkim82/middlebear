@@ -13,6 +13,58 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="fileBoard.js"></script>
 <title>게시글 단건조회</title>
+<style>
+	.uploadResult {
+		width : 100%;
+		background-color : gray;
+	}
+	
+	.uploadResult ul{
+		display : flex;
+		flex-flow : row;
+		justify-content : center;
+		align-items : center;
+	}
+	
+	.uploadResult ul li{
+		list-style : none;
+		padding : 10px;
+		align-content : center;
+		text-align : center;
+	}
+	
+	.uploadResult ul li img {
+		width : 100px;
+	}
+	
+	.uploadResult ul li span {
+		color : white;
+	}
+	
+	.bigPictureWrapper{
+		position : absolute;
+		display : none;
+		justify-content : center;
+		align-items : center;
+		top : 0%;
+		width : 100%;
+		height : 100%;
+		background-color : gray;
+		z-index : 100;
+		background : rgba(255, 255, 255, 0.5);
+	}
+	
+	.bigPicture {
+		position : relative;
+		display : flex;
+		justify-content : center;
+		align-items : center;
+	}
+	
+	.bigPicture img {
+		width : 600px;
+	}
+	</style>
 </head>
 <body>
 	<div layout:fragment="content">
@@ -28,14 +80,6 @@
 				<td>내용:</td>
 				<td><textarea th:text="${board.content}" readonly></textarea></td>
 			</tr>
-			<!-- <tr>
-				<td>첨부파일 :</td>
-				<td><a th:href="@{/files/} + ${board.attachment}" th:text="${board.attachment}">file.txt</a></td>
-			</tr> -->
-			<tr class="uploadResult">
-				<td>첨부파일</td>
-				<td></td>
-			</tr>
 			<tr>
 				<td>작성자:</td>
 				<td><input type="text" th:value="${board.name}" readonly /></td>
@@ -50,6 +94,7 @@
 				<td style="display: none"><input type="text" id="boardType"
 					name="boardType" th:value="${board.boardType}"></td>
 			</tr>
+			<!-- 댓글 -->
 			<tr>
 				<td>댓글작성</td>
 			</tr>
@@ -71,43 +116,37 @@
 			</tbody>
 
 		</table>
+		<div class="bigPictureWrapper">
+			<div class="bigPicture">
+			</div>
+		</div>
+
+		<div class = "row">
+			<div class = "col-lg-12">
+				<div class = "panel-heading">Files</div>
+				<!-- /.panel-heading -->
+				<div class = "panel-body">
+					<div class = 'uploadResult'>
+						<ul>
+						</ul>
+					</div>
+				</div>
+				<!-- end panel body -->
+			</div>
+			<!-- end panel -->
+		</div>
+		<!-- /.row -->
 		<div class="form-group">
 			<input type="text" class="form-control" placeholder="댓글 작성">
 		</div>
 		<button type="button" class="btn btn-primary" onclick="createCommentButton()"
 							th:data-post-writing-no="${board.boardNo}">댓글 등록</button>
-		<!-- <div>
-			<div class="row">
-				<div class="col-md-6">
-					<h6 th:text="댓글"></h6>
-					<ul class="list-unstyled">
-						<li th:each="com : ${boardCom}"
-							th:data-post-code="${com.comNo}">
-							<span th:utext="${com.profileImg}"></span> <span th:text="${com.name}"></span>
-							<span th:text="${com.comDate}"></span> 
-							<span th:text="${com.comContent}"></span> 
-							<th:block th:if="${com.id == session.Id}">
-								<span onclick="UpdateWritingComment()" class="spanCursor"
-									style="color: red">수정</span>
-								<span></span>
-								<span onclick="deleteWritingComment()" class="spanCursor">X</span>
-							</th:block></li>
-					</ul>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="댓글 작성">
-					</div>
-					<button type="button" class="btn btn-primary"
-						onclick="createCommentButton()"
-						th:data-post-writing-no="${boardCom[0].boardNo}">댓글 등록</button>
-				</div>
-			</div>
-		</div> -->
+		
 		<a th:href="@{/boardUpdate/{boardNo}(boardNo=${board.boardNo})}"><button
 				type="button">수정</button></a>
 		<button type="button"
 			th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|">목록으로</button>
+
 		<!-- Button trigger modal -->
 		<button type="button" class="btn btn-danger" data-toggle="modal"
 			data-target="#deletePostModal">게시물 삭제</button>
@@ -185,30 +224,35 @@
 
 		<script th:inline="javascript">
 			$(document).ready(function() {
-			$('#deleteButton').click(function() {
-			let boardNo = /*[[${board.boardNo}]]*/
-			console.log(boardNo)
-			$.ajax({
-					url : 'boardDelete/'+ boardNo, // 실제 삭제를 처리하는 서버 URL입니다.
-					type : 'DELETE',
-					success : function(result) {// 삭제 성공 시 처리 로직
-					$('#successModal').modal('show'); // 성공 모달 표시
-					$('#closeModal').on('click', function() {
-						$('#successModal').modal('hide');
-						})},
-					error : function(xhr, status, error) {
-					// 삭제 실패 시 처리 로직
-					$('#errorModalBody').text("게시글 삭제에 실패했습니다: "+ error);
-					$('#errorModal').modal('show'); // 에러 모달 표시
-					}
-			});
-			// 삭제 요청이 시작되었으므로 삭제 확인 모달을 숨깁니다.
-			$('#deletePostModal')
-					.modal('hide');
-	});
-});
-			
-		</script>
+				$('#deleteButton').click(function() {
+					let boardNo = /*[[${board.boardNo}]]*/
+					console.log(boardNo)
+					$.ajax({
+							url : 'boardDelete/'+ boardNo, // 실제 삭제를 처리하는 서버 URL입니다.
+							type : 'DELETE',
+							success : function(result) {// 삭제 성공 시 처리 로직
+							$('#successModal').modal('show'); // 성공 모달 표시
+							$('#closeModal').on('click', function() {
+								$('#successModal').modal('hide');
+								})},
+							error : function(xhr, status, error) {
+							// 삭제 실패 시 처리 로직
+							$('#errorModalBody').text("게시글 삭제에 실패했습니다: "+ error);
+							$('#errorModal').modal('show'); // 에러 모달 표시
+							}
+					});
+					// 삭제 요청이 시작되었으므로 삭제 확인 모달을 숨깁니다.
+					$('#deletePostModal')
+							.modal('hide');
+				});
+				(function() {
+				//var boardNo = '<th:utext value="${board.boardNo}"/>';
+				$.getJSON(`/getAttachList?boardNo=[[${board.boardNo}]]`, function(arr) {
+					console.log(arr);
+				}); // end getjson
+			})(); // end function
+		});
+	</script>
 	<!-- 댓글 등록 -->
 	<script>
 		function createCommentButton() {
@@ -269,13 +313,6 @@
 			let comNo = targetButton.parentNode.parentNode.dataset.postCode;//댓글 번호
 			
 			let oldCom = targetButton.parentNode.parentNode.childNodes[3].textContent;//기존 댓글
-			//let oldDate = targetButton.parentNode.parentNode.childNodes[5].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
-			
-			//초기화
-			//targetButton.parentNode.childNodes[5].textContent = '';//날짜 초기화
-			//targetButton.parentNode.parentNode.childNodes[3].textContent = '';//댓글 초기화
-			//targetButton.parentNode.parentNode.childNodes[9].childNodes[1].textContent = '';//수정 초기화
-			//targetButton.parentNode.parentNode.childNodes[9].childNodes[3].textContent = '';//X 초기화
 			
 			if(document.getElementById('newComment') != null) {
 				let nC = document.getElementById('newComment').parentNode.parentNode;
@@ -284,11 +321,6 @@
 				nC.childNodes[9].childNodes[1].innerHTML = '';
 				console.log('ss',nC.childNodes[9].childNodes[1].innerHTML = '수정')
 				console.log(nC.childNodes[9].childNodes[3].innerHTML = 'X')
-				
-				//nC.childNodes[9].childNodes[1].textContent = '수정';
-				//nC.childNodes[9].childNodes[1].childNodes[1].remove();
-				//nC.childNodes[9].childNodes[3].textContent = 'X';
-				//nC.childNodes[9].childNodes[3].childNodes[1].remove();
 			}
 			
 			targetButton.parentNode.parentNode.childNodes[3].innerHTML = '<input type="text" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'

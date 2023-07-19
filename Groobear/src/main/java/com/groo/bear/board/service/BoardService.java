@@ -2,6 +2,7 @@ package com.groo.bear.board.service;
 
 import java.util.List;
 
+import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.paging.Criteria;
 
 public interface BoardService {
@@ -38,5 +39,7 @@ public interface BoardService {
 	//댓글 수정
 	public int updateBoardComment(BoardVO boardVO);
 
-
+	//첨부파일 조회
+	public List<FilesVO> getAttachList(int boardNo);
+	
 }
