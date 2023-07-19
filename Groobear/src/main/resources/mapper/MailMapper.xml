@@ -70,7 +70,6 @@
 		ORDER BY a.mail_no desc
 	</select>
 	<!-- 지운메일함 -->
-	
 	<select id="deletedMail" resultType="MailVO">
         SELECT * 
             FROM (SELECT g.*, ROWNUM AS rn FROM (
@@ -84,13 +83,12 @@
 				 FROM mail a JOIN mail_details b ON a.mail_no = b.mail_no) c
 					ON c.mail_no = d.mail_no
 					ORDER BY d.mail_no desc) e
-				<where> 
+				<where>
                     e.mail_type = #{mailVO.mailType}
                     <if test="mailVO.receiver != null and mailVO.sender == null">
                     AND (e.receiver = #{mailVO.receiver}
                      OR e.referrer = #{mailVO.referrer})
                     </if>
-                    <!-- sender값이 들어오면 휴지통임 -->
 					<if test="mailVO.sender != null and mailVO.receiver == null">
 					AND e.sender = #{mailVO.sender}
 					</if>
@@ -154,4 +152,5 @@
 		AND b.mail_no = c.mail_no
 		AND a.mail_no = #{mailNo}
 	</select>
+	
 </mapper>

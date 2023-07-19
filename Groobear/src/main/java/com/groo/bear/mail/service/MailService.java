@@ -17,7 +17,7 @@ public interface MailService {
 	//보낸메일함 조회
 	public List<MailVO> sendingMail(String email);
 	//지운메일함 조회
-	public List<MailVO> deletedMail(Criteria cri,MailVO mailVO);
+	public List<MailVO> deletedMail(Criteria cri, MailVO mailVO);
 	//메일삭제(update)
 	public int deleteMail(int mailNo);
 	//메일 완전삭제(delete)

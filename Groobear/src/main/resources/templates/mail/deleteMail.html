@@ -15,20 +15,38 @@
 			</tr>
 		</thead>
 		<tbody id="MailBody">
-			<tr th:each="mail : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
-				<td><input type="checkbox" class="check"></td>
+			<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+				<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
+				<td>[[${mail.mailNo}]]</td>
 				<td>[[${mail.sender}]]</td>
 				<td>[[${mail.content}]]</td>
 				<td th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
 			</tr>
 		</tbody>
 	</table>
+	<ul class="paging" th:if="${paging.endPage != 0}">
+        <li th:if="${paging.prev}">
+            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+        </li>
+        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+        </li>
+        <li th:if="${paging.next and paging.endPage > 0}">
+            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+        </li>
+    </ul>
+	
 	<script>
+	function goPage(p){
+		location.href="deleteMail?page="+p;
+			
+	}
 		var allCheck = document.querySelector(".allCheck");
 		var list = document.querySelectorAll(".check");
-		
+		let delList = [];
 		allCheck.onclick = (e) => {
-			console.log(e.target);
+			event.stopPropagation()
+			//console.log(e.target);
 			if(allCheck.checked){
 				for(let i=0; i< list.length; i++){
 					list[i].checked = true;
@@ -42,6 +60,8 @@
 			}else{
 				for(let i=0; i< list.length; i++){
 					list[i].checked = false;
+					delList.pop();
+					console.log(delList);
 				}
 			}
 		}
@@ -68,6 +88,22 @@
 					list[i].parentElement.parentElement.remove();
 				}
 			}
+			console.log(delList);
+			$.ajax({
+			    url : "realdelete",  // 전송 URL
+			    type : 'POST',
+			    contentType : 'application/json',
+			    data :JSON.stringify( delList ),
+			    //Ajax 성공시 호출 
+			    success : function(data){
+			        console.log("컨트롤에서 받은거 : " + data);
+			        alert("삭제"+data+"건 되었습니다.");
+			    },
+			    //Ajax 실패시 호출
+			    error : function(e){
+			        console.log("에러 = "+e);
+			    }
+			});
 		}
 	</script>
 </div>

@@ -10,13 +10,14 @@
 	<table>
 		<thead>
 			<tr>
-				<th><input type="checkbox"></th>
-				<th>삭제</th>
+				<th><input type="checkbox" class="allCheck"></th>
+				<th><button type="button" class="del">삭제</button></th>
 			</tr>
 		</thead>
 		<tbody id="MailBody">
-			<tr th:each="mail : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
-				<td><input type="checkbox"></td>
+			<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+				<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
+				<td>[[${mail.mailNo}]]</td>
 				<td>[[${mail.receiver}]]</td>
 				<td>[[${mail.title}]]</td>
 				<td>[[${mail.content}]]</td>
