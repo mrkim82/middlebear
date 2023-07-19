@@ -32,13 +32,33 @@
 			if(allCheck.checked){
 				for(let i=0; i< list.length; i++){
 					list[i].checked = true;
-					//console.log(list[i]);
+					console.log(list[i].value);
+					console.log('parent',list[i].parentElement.parentElement.children[1].textContent)
+					if(list[i].checked = true){
+						delList.push(list[i].parentElement.parentElement.children[1].textContent)
+					}
+					console.log(delList);
 				}
 			}else{
 				for(let i=0; i< list.length; i++){
 					list[i].checked = false;
 				}
 			}
+		}
+		function checkBoxClick(){
+			console.log(event.target); //event는 전역객체
+			let mailNo = event.target.parentElement.parentElement.children[1].textContent;
+			console.log('mailNo = ',mailNo)
+			if(event.target.checked){
+				console.log('체크됨2');
+				delList.push(mailNo);
+				console.log('checked에서 delList = ',delList);
+			}else{
+				console.log('한번더 체크되서 풀림');
+				delList.pop(mailNo);
+				console.log('uncheck에서 delList = ',delList);
+			}
+			console.log('전체점검 delList = ',delList);
 		}
 		var del = document.querySelector(".del");
 		

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.groo.bear.mail.service.MailService;
 import com.groo.bear.mail.service.MailVO;
+import com.groo.bear.paging.Criteria;
+import com.groo.bear.paging.Paging;
 
 @Controller
 public class MailController {
@@ -21,11 +23,24 @@ public class MailController {
 	
 	//받은메일함
 	@GetMapping("mail/receiveMail")
-	public String receiveMailForm(Model model, MailVO mailVO, HttpServletRequest request) {
+	public String receiveMailForm(Criteria cri ,Model model, MailVO mailVO, HttpServletRequest request,  @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("Email");
 		model.addAttribute("mailList",mailService.receiveMail(email));
-		//메일 지우기
+		System.out.println("receiver는 ? "+session.getAttribute("Email"));
+		
+		mailVO.setSender((String) session.getAttribute("Email"));
+		mailVO.setReferrer((String) session.getAttribute("Email"));
+		String S = "S";
+		mailVO.setMailType(S);
+		cri.setPerPageNum(2); //페이징 2개로 끊어서 보려고 임시로 적어둔것
+		Paging paging = new Paging();
+        paging.setCri(cri);
+        System.out.println(mailVO);
+        paging.setTotalCount(mailService.countReceiveMail((String) session.getAttribute("Email"),(String) session.getAttribute("Email")));
+		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
+		model.addAttribute("paging", paging);
 		return "mail/receiveMail";
 	}
 	//메일작성폼
@@ -49,21 +64,32 @@ public class MailController {
 	}
 	//보낸메일함
 	@GetMapping("mail/sendingMail")
-	public String sendingMailForm(Model model, MailVO mailVO, HttpServletRequest request) {
+	public String sendingMailForm(Criteria cri, Model model, MailVO mailVO, HttpServletRequest request,  @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("Email");
 		model.addAttribute("mailList",mailService.sendingMail(email));
-		//메일 지우기
+		System.out.println("receiver는 ? "+session.getAttribute("Email"));
+		
+		mailVO.setSender((String) session.getAttribute("Email"));
+		String S = "S";
+		mailVO.setMailType(S);
+		cri.setPerPageNum(2);
+		Paging paging = new Paging();
+        paging.setCri(cri);
+        paging.setTotalCount(mailService.countSendMail((String) session.getAttribute("Email")));
+		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
+		model.addAttribute("paging", paging);
 		return "mail/sendingMail";
 	}
 	//지운메일함 폼
 	@GetMapping("mail/deleteMail")
-	public String deleteMailForm(Model model, MailVO mailVO, HttpServletRequest request) {
+	public String deleteMailForm(Criteria cri,Model model, MailVO mailVO, HttpServletRequest request) {
 		System.out.println("dm = "+mailVO);
 		HttpSession session = request.getSession();
 		mailVO.setSender((String) session.getAttribute("Email"));
 		mailVO.setReceiver((String) session.getAttribute("Email"));
-		model.addAttribute("mailList",mailService.deletedMail(mailVO));
+		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
 		return "mail/deleteMail";
 	}
 	//지운메일함 기능
