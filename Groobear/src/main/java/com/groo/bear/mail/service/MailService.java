@@ -30,10 +30,4 @@ public interface MailService {
 	public int countReceiveMail(String receiver, String referrer);
 	// 지운메일 총 갯수
 	public int countDeleteMail(MailVO mailVO);
-	// 페이징 처리 보낸메일
-	public List<MailVO> sendMailSearch(PagingVO vo);
-	// 페이징 처리 보낸메일
-	public List<MailVO> receiveMailSearch(PagingVO vo);
-	// 페이징 처리 보낸메일
-	public List<MailVO> deleteMailSearch(PagingVO vo);
 }

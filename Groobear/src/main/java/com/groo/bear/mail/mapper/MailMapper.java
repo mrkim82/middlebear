@@ -3,7 +3,6 @@ package com.groo.bear.mail.mapper;
 import java.util.List;
 
 import com.groo.bear.mail.service.MailVO;
-import com.groo.bear.mail.service.PagingVO;
 import com.groo.bear.paging.Criteria;
 
 public interface MailMapper {
@@ -31,10 +30,4 @@ public interface MailMapper {
 	public int countReceiveMail(String receiver, String referrer);
 	// 지운메일 총 갯수
 	public int countDeleteMail(MailVO mailVO);
-	// 페이징 처리 보낸메일
-	public List<MailVO> sendMailSearch(PagingVO vo);
-	// 페이징 처리 받은메일
-	public List<MailVO> receiveMailSearch(PagingVO vo);
-	// 페이징 처리 지운메일
-	public List<MailVO> deleteMailSearch(PagingVO vo);
 }

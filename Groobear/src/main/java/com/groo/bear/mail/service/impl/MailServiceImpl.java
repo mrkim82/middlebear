@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.mail.mapper.MailMapper;
 import com.groo.bear.mail.service.MailService;
 import com.groo.bear.mail.service.MailVO;
-import com.groo.bear.mail.service.PagingVO;
 import com.groo.bear.paging.Criteria;
 
 @Service
@@ -176,21 +175,6 @@ public class MailServiceImpl implements MailService{
 	public int countDeleteMail(MailVO mailVO) {
 		// 지운메일 총 갯수
 		return mailMapper.countDeleteMail(mailVO);
-	}
-	@Override
-	public List<MailVO> sendMailSearch(PagingVO vo) {
-		// 페이징 처리 보낸메일
-		return mailMapper.sendMailSearch(vo);
-	}
-	@Override
-	public List<MailVO> receiveMailSearch(PagingVO vo) {
-		// 페이징 처리 받은메일
-		return mailMapper.receiveMailSearch(vo);
-	}
-	@Override
-	public List<MailVO> deleteMailSearch(PagingVO vo) {
-		// 페이징 처리 지운메일
-		return mailMapper.deleteMailSearch(vo);
 	}
 	
 }
