@@ -79,7 +79,7 @@ public class BoardController {
 //		}
 		
 		log.info("===============================");
-		//rttr.addFlashAttribute("result", boardVO.getBoardNo());
+		rttr.addFlashAttribute("result", boardVO.getBoardNo());
 		return "redirect:/boardList?boardType=" + boardVO.getBoardType();
 	}
 	
