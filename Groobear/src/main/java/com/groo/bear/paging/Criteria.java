@@ -1,5 +1,7 @@
 package com.groo.bear.paging;
 
+import org.springframework.web.util.UriComponentsBuilder;
+
 import lombok.Data;
 
 @Data
@@ -42,4 +44,14 @@ public class Criteria {
 		
 
 	
+	public String getListLink() {
+		Paging paging = new Paging();
+		UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
+				.queryParam("pageNum", this.perPageNum)
+				.queryParam("amount", paging.getTotalCount())
+				.queryParam("type", this.getType())
+				.queryParam("keyword", this.getKeyword());
+		
+		return builder.toUriString();
+	}
 }
