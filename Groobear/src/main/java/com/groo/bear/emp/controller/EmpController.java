@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,23 +50,42 @@ public class EmpController {
 	@PostMapping("checkSms")
 	@ResponseBody
 	public SmsResponseDTO sendSms(@RequestBody MessageDTO messageDto) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
-		
 		SmsResponseDTO response = smsService.sendSms(messageDto);
-		System.out.println("SMS 정보");
-		System.out.println(response);
 		return response;
 	}
 	
-	// 사원정보조회(이름 & 전화번호를 이용한 정보 일치여부 비교)
+	// 사원정보조회(이름 & 전화번호 / 아이디 & 전화번호를 이용한 정보 일치여부 비교)
 	@PostMapping("checkEmp")
 	@ResponseBody
 	public EmpVO checkEmp(@RequestBody EmpVO vo) {
-		System.out.println("EMP 이름, 전화번호");
-		System.out.println(vo.getName()+" / "+vo.getPhone());
 		vo = empService.getEmpInfo(vo);
-		System.out.println("EMP 조회 정보");
-		System.out.println(vo);
 		return vo;
 	}
-		
+	
+	// 비밀번호 변경 화면 이동
+	@GetMapping("changePw")
+	public String changePwForm(@RequestParam String id, Model model) {
+		System.out.println(id);
+		model.addAttribute("empInfo", id);
+		return "main/changePw";
+	}
+	
+	// 비밀번호 변경 & 암호화
+	@PostMapping("changePw")
+	@ResponseBody
+	public String changePw(@RequestBody EmpVO vo) {
+		BCryptPasswordEncoder scpwd = new BCryptPasswordEncoder(); 
+		System.out.println("기존 비밀번호 : "+vo.getPassword());
+		String password = scpwd.encode(vo.getPassword());
+		System.out.println("암호화 비밀번호 : "+password);
+		vo.setPassword(password);
+		String result = "";
+		if(empService.changePw(vo) > 0) {
+			result = "success";
+			return result;
+		} else {
+			result = "fail";
+			return result;
+		}
+	}
 }

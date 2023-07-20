@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/paymentTiles}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body layout:fragment="content">
+	<div>
+		<form>
+			<table>
+				<tbody>
+					<tr>
+						<td><input type="text" value="문서번호"></td>
+					</tr>
+					<tr>
+						<td><input type="text" value="기안자: 이름 부서 직급"></td>
+					</tr>
+					<tr>
+						<td><button type="button" onclick="payuser()">결재자선택</button></td>
+					</tr>
+					<tr>
+						<td><input type="text" value="작성일자"></td>
+					</tr>
+					<tr>
+						<td><select id="payType" onchange="paychange()">
+							<option value="" selected>결재문서종류</option>
+							<option value="1">운행일지</option>
+							<option value="2">연차계</option>
+							<option value="3">품의서</option>
+						</select></td>
+					</tr>
+					<tbody id="payNum1" style="display:none">
+						<tr><td><input type="text" id="carDate" value="sysdate"></td></tr>
+						<tr><td>행선지 : <input type="text" id="carAddr" value="addr"></td></tr>
+						<tr><td>운행전키로수 <input type="text" id="km1" value="1km"></td>
+							<td>운행후키로수 <input type="text" id="km2" value="2km"></td>
+						</tr>
+						<tr><td>운행전 <button type="button" id="carfiles1">파일첨부</button></td></tr>
+						<tr><td>운행후 <button type="button" id="carfiles2">파일첨부</button></td></tr>
+						<tr><td><button type="submit">결재</button></td></tr>
+					</tbody>
+					<tbody id="payNum2" style="display:none">
+						<tr><td><input type="text" id="off" value="날짜선택(필수)"></td></tr>
+						<tr><td><input type="text" id="offtitle" value="제목(필수)"></td></tr>
+						<tr><td><input type="text" id="offcontent" value="내용(필수)"></td></tr>
+						<tr><td><button type="button" id="offfiles">첨부파일(선택)</button></td></tr>
+						<tr><td><textarea id="offcomment" style="width:400px; height:200px">코멘트(선택)</textarea></td></tr>
+						<tr><td><button type="submit">결재</button></td></tr>
+					</tbody>
+					<tbody id="payNum3" style="display:none">
+						<tr><td><input type="text" id="robintitle" value="제목(필수)"></td></tr>
+						<tr><td><input type="text" id="robincontent" value="내용(필수)"></td></tr>
+						<tr><td><button type="button" id="robinofffiles">첨부파일(선택)</button></td></tr>
+						<tr><td><textarea id="robincomment" style="width:400px; height:200px">코멘트(선택)</textarea></td></tr>
+						<tr><td><button type="submit">결재</button></td></tr>
+					</tbody>
+				</tbody>
+			</table>
+		</form>
+	</div>
+	<script>
+		function paychange(){
+			var selectPay = document.getElementById('payType');
+			var payNum1 = document.getElementById('payNum1');
+			var payNum2 = document.getElementById('payNum2');
+			var payNum3 = document.getElementById('payNum3');
+			console.log(selectPay.value);
+			if(selectPay.value == '1'){
+				console.log('1번맞음');
+				payNum2.style.display = 'none';
+				payNum3.style.display = 'none';
+				payNum1.style.display = 'block';
+			}else if(selectPay.value == '2'){
+				payNum1.style.display = 'none';
+				payNum3.style.display = 'none';
+				payNum2.style.display = 'block';
+			}else if(selectPay.value == '3'){
+				payNum1.style.display = 'none';
+				payNum2.style.display = 'none';
+				payNum3.style.display = 'block';
+			}
+		}
+		function payuser(){
+			let openPayuser = window.open("/pay/paymentEmp","paymentEmp","width=700, height=500, resizable = no");
+		}
+	</script>
+</body>
+</html>

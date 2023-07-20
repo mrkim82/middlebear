@@ -1,27 +1,111 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- layout:decorate="~{layout/tiles}">
+ layout:decorate="~{layout/mailTiles}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body layout:fragment="content">
-<table>
-	<thead>
-		<tr>
-			<th><input type="checkbox"></th>
-			<th>삭제</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td><input type="checkbox"></td>
-			<td>보낸사람</td>
-			<td>제목입니다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</td>
-			<td>읽은여부</td>
-			<td>2023/07/10 15시30분22초</td>
-		</tr>
-	</tbody>
-</table>
+<div>
+	<table>
+		<thead>
+			<tr>
+				<th><input type="checkbox" class="allCheck"></th>
+				<th><button type="button" class="del">삭제</button></th>
+			</tr>
+		</thead>
+		<tbody id="MailBody">
+			<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+				<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
+				<td>[[${mail.mailNo}]]</td>
+				<td>[[${mail.sender}]]</td>
+				<td>[[${mail.content}]]</td>
+				<td th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+			</tr>
+		</tbody>
+	</table>
+	<ul class="paging" th:if="${paging.endPage != 0}">
+        <li th:if="${paging.prev}">
+            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+        </li>
+        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+        </li>
+        <li th:if="${paging.next and paging.endPage > 0}">
+            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+        </li>
+    </ul>
+	
+	<script>
+	function goPage(p){
+		location.href="deleteMail?page="+p;
+			
+	}
+		var allCheck = document.querySelector(".allCheck");
+		var list = document.querySelectorAll(".check");
+		let delList = [];
+		allCheck.onclick = (e) => {
+			event.stopPropagation()
+			//console.log(e.target);
+			if(allCheck.checked){
+				for(let i=0; i< list.length; i++){
+					list[i].checked = true;
+					console.log(list[i].value);
+					console.log('parent',list[i].parentElement.parentElement.children[1].textContent)
+					if(list[i].checked = true){
+						delList.push(list[i].parentElement.parentElement.children[1].textContent)
+					}
+					console.log(delList);
+				}
+			}else{
+				for(let i=0; i< list.length; i++){
+					list[i].checked = false;
+					delList.pop();
+					console.log(delList);
+				}
+			}
+		}
+		function checkBoxClick(){
+			console.log(event.target); //event는 전역객체
+			let mailNo = event.target.parentElement.parentElement.children[2].textContent;
+			console.log('mailNo = ',mailNo)
+			if(event.target.checked){
+				console.log('체크됨2');
+				delList.push(mailNo);
+				console.log('checked에서 delList = ',delList);
+			}else{
+				console.log('한번더 체크되서 풀림');
+				delList.pop(mailNo);
+				console.log('uncheck에서 delList = ',delList);
+			}
+			console.log('전체점검 delList = ',delList);
+		}
+		var del = document.querySelector(".del");
+		
+		del.onclick = () =>{
+			for(let i=0; i< list.length; i++){
+				if(list[i].checked){
+					list[i].parentElement.parentElement.remove();
+				}
+			}
+			console.log(delList);
+			$.ajax({
+			    url : "realdelete",  // 전송 URL
+			    type : 'POST',
+			    contentType : 'application/json',
+			    data :JSON.stringify( delList ),
+			    //Ajax 성공시 호출 
+			    success : function(data){
+			        console.log("컨트롤에서 받은거 : " + data);
+			        alert("삭제"+data+"건 되었습니다.");
+			    },
+			    //Ajax 실패시 호출
+			    error : function(e){
+			        console.log("에러 = "+e);
+			    }
+			});
+		}
+	</script>
+</div>
 </body>
 </html>
