@@ -9,15 +9,19 @@
 <body>
 <div layout:fragment="content">
 	<div>
-		<select id="car_select">
-			<option value="">선택</option>
-			<option value="name">이름</option>
-			<option value="deptName">부서</option>
-			<option value="carNo">차량번호</option>
-		</select>		
-		<input type="text" id="keyword">
-		<button id="searchBtn">검색</button>
-		
+		<div>
+		<form name="searchForm" action="carList">
+			<input type="hidden" name="page" value="1"/>
+			<select name="type">
+				<option value='' selected>선택</option>
+				<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
+				<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
+				<option value='carNo' th:selected="${criteria.type == 'carNo'}">차량번호</option>
+			</select>		
+			<input type="text" name="keyword" th:value="${criteria.keyword}"/>
+			<button type="submit" id="searchBtn">검색</button>
+		</form>
+	</div>
 		<table>
 			<thead>
 				<tr>
@@ -38,23 +42,32 @@
 				</tr>
 			</tbody>
 		</table>
+		
 	</div>
 	<div>
-		<div class="paging">
-    		<div th:if="${paging.prev}">
-        		<span><a th:href="@{/carList(page=${paging.startPage-1})}">이전</a></span>
-    		</div>
-    		<div th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-        		<span><a th:href="@{/carList(page=${num})}" th:text="${num}"></a></span>
-    		</div>
-    		<div th:if="${paging.next && paging.endPage > 0}">
-        		<span><a th:href="@{/carList(page=${paging.endPage+1})}">다음</a></span>
-    		</div>
-		</div>
+		<ul class="paging" th:if="${paging.endPage != 0}">
+	        <li th:if="${paging.prev}">
+	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+	        </li>
+	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+	            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+	        </li>
+	        <li th:if="${paging.next and paging.endPage > 0}">
+	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+	        </li>
+    	</ul>
 	</div>
+	
+<script th:inline="javascript">
+function goPage(p){
+	searchForm.page.value = p;
+	searchForm.submit();
+}
 
-<script>
-	const headers = ['empNo','deptName','name','carNo','phone'];
+
+
+
+/* 	const headers = ['empNo','deptName','name','carNo','phone'];
 
 	document.querySelector('#searchBtn').addEventListener('click',searchCarInfo);
 	document.querySelector('#keyword').addEventListener('keyup',function(e){
@@ -122,7 +135,7 @@
 			location.reload();
 		}
 	}
-
+ */
   
 </script>
 </div>
