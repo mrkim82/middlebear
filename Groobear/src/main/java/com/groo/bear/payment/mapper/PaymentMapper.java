@@ -10,6 +10,8 @@ public interface PaymentMapper {
 	public List<EmpVO> payEmpList();
 	//결재문서 페이지
 	public int paymentDoc(PaymentVO payVO);
-	//기안자 정보
-	public EmpVO payEmpInfo();
+	//기안자 id,emp_no,emp_name,dept_name 받아오는 거
+	public EmpVO payEmpInfo(String id);
+	//결재문서 작성시 db에서 결재문서 번호 가져와야됨 그래야 최초의 화면에서 문서번호 뽑아줄수있음
+	
 }

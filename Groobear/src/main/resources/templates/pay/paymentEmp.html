@@ -13,8 +13,8 @@
 	    	</tr>
     	</thead>
     	<tbody id="EmpBody">
-    		<tr th:each="emp : ${payEmpList}" >
-    			<td  onmousedown="empInfo(this);">
+    		<tr th:each="emp : ${payEmpList}"   onmousedown="empInfo(this);">
+    			<td>
 	    			[[${emp.name}]] | [[${emp.rank}]] | [[${emp.deptName}]]
 	    			<div style="display:none">[[${emp.Id}]]</div>
 	    			<div style="display:none">[[${emp.name}]]</div>
@@ -25,7 +25,7 @@
     	</tbody>
     	
     </table>
-    <table style="display:inline-block">
+    <table>
     	<tbody>
     		<tr>
     			<td><button type="button" id="payUser" onclick="paySet()">결재자</button></td>
@@ -37,32 +37,53 @@
     			<td><button type="button" id="payDelete" onclick="userDel()">제외</button></td>
     		</tr>
     		<tr>
-    			<td><button type="button" id="payCheck" onclick="userSet()">확인</button></td>
+    			<td><button type="submit" id="payCheck" onclick="userSet()">확인</button></td>
     		</tr>
     	</tbody>
     </table>
-    <table style="width:200px; height:200px; display:inline-block;">
+    <table style="width:300px; height:200px; display:inline-block;">
     	<thead>
     		<tr>
-	    		<th><font size="3" color="gray">결재자</font></th>
+	    		<th><font size="3" color="gray">기안자</font></th>
 	    	</tr>
     	</thead>
-    	<tbody id="payUserList">
-    		<tr><td>박대리 | 사원 | 메일팀</td></tr>
-    		<tr><td>김영환 | 사원 | 메일팀</td></tr>
-    		<tr><td>테스터 | 사원 | 메일팀</td></tr>
+    	<tbody id="drafterlist">
+    		<tr>
+    			<td>[[${userInfo.Id}]]</td>
+    			<td>[[${userInfo.name}]]</td>
+    			<td>[[${userInfo.rank}]]</td>
+    			<td>[[${userInfo.deptName}]]</td>
+    		</tr>
     	</tbody>
     </table>
-    <table style="width:200px; height:200px;">
+    <table style="width:300px; height:200px; display:inline-block;">
+    	<thead>
+    		<tr>
+	    		<th><font size="3" color="gray">결재자1</font></th>
+	    	</tr>
+    	</thead>
+    	<tbody id="payUserList1" onmousedown="empInfo(this);">
+    		
+    	</tbody>
+    </table>
+    <table style="width:300px; height:200px; display:inline-block;">
+    	<thead>
+    		<tr>
+	    		<th><font size="3" color="gray">결재자2</font></th>
+	    	</tr>
+    	</thead>
+    	<tbody id="payUserList2" onmousedown="empInfo(this);">
+    	
+    	</tbody>
+    </table>
+    <table style="width:300px; height:200px;">
     	<thead>
     		<tr>
 	    		<th><font size="3" color="gray">참조자</font></th>
 	    	</tr>
     	</thead>
-    	<tbody id="referrerList">
-    		<tr><td>박대리 | 사원 | 메일팀</td></tr>
-    		<tr><td>김영환 | 사원 | 메일팀</td></tr>
-    		<tr><td>테스터 | 사원 | 메일팀</td></tr>
+    	<tbody id="referrerList" onmousedown="empInfo(this);">
+    		
     	</tbody>
     </table>
     <input type="button" value="창닫기" onclick="window.close()">
@@ -71,65 +92,64 @@
     	var empRank = '';
     	var empDept = '';
     	var empId = '';
-    	const payUserList = [];
-    	const referrerList = [];
-    	
+    	/* var Me = document.getElementById('EmpBody').children[0].children[0].children[0];
+    	console.log(Me.value); */
+    	const drafter = document.getElementById('drafterlist').children[0].children[0].textContent;
+    	console.log('drafter = ',drafter);
+    	var payUser1 = ''; //ajax전송용 결재자1 id저장
+    	var payUser2 = ''; //ajax전송용 결재자2 id저장
+    	const referrerList = []; //ajax전송용 참조자 id저장
+    	var payUserNR1 = ''; //userSet()에서 사용할 결재자1이름과 직급
+    	var payUserNR2 = ''; //userSet()에서 사용할 결재자2이름과 직급
+    	var referrerNR = '';
     	function empInfo(e){
     		console.log(e.children[0].textContent);
-    		empName = e.children[1].textContent;
-			empRank = e.children[2].textContent;
-			empDept = e.children[3].textContent;
-			empId = e.children[0].textContent;
-			console.log('empId = ',empName);
+    		empName = e.children[0].children[0].textContent;
+			empRank = e.children[0].children[2].textContent;
+			empDept = e.children[0].children[3].textContent;
+			empId = e.children[0].children[0].textContent;
+			console.log('empName = ',empName);
 			console.log('empRank = ',empRank);
 			console.log('empDept = ',empDept);
 			console.log('empId = ',empId);
-			
     	}
     	function paySet(){
     		//push pop 사용해야됨 이미 있는 유저정보는 추가할필요없음
     		console.log('paySet 클릭');
     		let trTag = document.createElement('tr');
     		let tdTag = document.createElement('td');
-    		console.log('payUserList = ',payUserList);
-       		let payuser = document.getElementById('payUserList');
-       		let divTag = document.createElement('div');
-       		divTag.style.display = 'none';
-    		if(payUserList.length === 0){
-    			console.log('값 없음');
-    			console.log(payUserList);
-        		tdTag.append(empName + ' | ');
-        		tdTag.append(empRank+' | ');
-        		tdTag.append(empDept);
-        		divTag.append(empId);
-        		trTag.append(divTag);
-        		trTag.append(tdTag);
-        		payuser.append(trTag);
-        		payUserList.push(empId);
-    		}else{
-    			console.log('값 있음 조건비교')
-    			if(payUserList.length !== 3){
-	    			for(var i=0; i<payUserList.length; i++){
-	        			if(payUserList[i] === empId){
-	        				console.log('이미 결재자 명단에 있는 유저입니다.');
-	        			}else{
-	        				console.log('조회중입니다.');
-	        				if(i === payUserList.length-1){
-		        				console.log(payUserList);
-		        	    		tdTag.append(empName + ' | '+empRank+' | '+empDept);
-		                		divTag.append(empId);
-		                		trTag.append(divTag);
-		        	    		trTag.append(tdTag);
-		        	    		payuser.append(trTag);
-		        	    		payUserList.push(empId);
-	        				}
-	        			}
-	        		}
-    			}else{
-    				alert('결재자는 이미 3명입니다. 추가가 불가능합니다.')
-    			}
-    		}
-    		console.log(payUserList);
+    		let payUserList1 = document.getElementById('payUserList1'); //html tbody
+    		let payUserList2 = document.getElementById('payUserList2'); //html tbody
+        		/* drafter = 기안자, payUser1 = 결재자1 payUser2 = 결재자2 */
+        	if(drafter !== empId){
+	    		if(payUser1 === ""){
+	    			console.log('기안자만 있음');
+	        		tdTag.append(empName + ' | ');
+	        		tdTag.append(empRank+' | ');
+	        		tdTag.append(empDept);
+	        		trTag.append(tdTag);
+	        		payUserList1.append(trTag); //화면단에 tr태그 append
+	        		payUser1 = empId; //따로 저장해두는 값
+	        		payUserNR1 = empName+' '+empRank; //결재문서창에서 보여줄 결재자1 이름직급
+	        		console.log('payUserNR1 = ',payUserNR1);
+	    		}else if(payUser1 === empId){
+	    			alert('결재자1에 이미 등록한 사원입니다. 결재자2에 등록이 불가능합니다.');
+	    		}else if(payUser1 !== empId && !payUser2){
+	    			console.log('결재자1은 있고 2는 없음');
+	    			tdTag.append(empName + ' | '+empRank+' | '+empDept);
+		    		trTag.append(tdTag);
+		    		payUserList2.append(trTag); //화면단에 tr태그 append
+		    		payUser2 = empId; //따로 저장해두는 값
+		    		payUserNR2 = empName+' '+empRank; //결재문서창에서 보여줄 결재자2 이름직급
+		    		console.log('payUserNR2 = ',payUserNR2);
+	    		}else if(payUser2 === empId){
+	    			alert('결재자2에 이미 등록한 사원입니다. 더이상 결재자 등록이 불가능합니다.')
+	    		}else if(payUser1 !== "" && payUser2 !== ""){
+	    			alert('결재자1 결재자2 모두 설정한 상태입니다.');
+	    		}
+        	}else{
+        		alert('기안자는 결재자1, 결재자2에 등록 할 수 없습니다.');
+        	}
     	}
     	function refSet(){
     		//push pop 사용해야됨 이미 있는 유저정보는 추가할필요없음
@@ -137,33 +157,49 @@
     		let trTag = document.createElement('tr');
     		let tdTag = document.createElement('td');
     		let referrer = document.getElementById('referrerList');
+    		console.log('payUser1 = ',payUser1);
+    		console.log('payUser2 = ',payUser2);
+    		console.log('empId = ',empId);
+    		console.log('drafter = ',drafter);
     		//여기에 숨겨둘 td태그 하나 만들어서 거기에 empId값 하나 추가. 해당 id로 referrerList값 제거할거임
-    		if(referrerList.length === 0){
-    			console.log('값 없음');
-        		tdTag.append(empName + ' | '+empRank+' | '+empDept);
-        		trTag.append(tdTag);
-        		referrer.append(trTag);
-        		referrerList.push(empId);
-    		}else{
-    			console.log('값 있음 조건비교')
-    			if(referrerList.length !== 3){
-	    			for(var i=0; i<referrerList.length; i++){
-	        			if(referrerList[i] === empId){
-	        				console.log('이미 참조자 명단에 있는 유저입니다.');
-	        			}else{
-	        				console.log('조회중입니다.');
-	        				if(i === referrerList.length-1){
-		        				console.log(referrerList);
-		        	    		tdTag.append(empName + ' | '+empRank+' | '+empDept);
-		        	    		trTag.append(tdTag);
-		        	    		referrer.append(trTag);
-		        	    		referrerList.push(empId);
-	        				}
-	        			}
-	        		}
+    		if(drafter !== empId){
+    			if(empId !== payUser1 && empId !== payUser2){
+		    		if(referrerList.length === 0){
+		    			console.log('값 없음');
+		        		tdTag.append(empName + ' | '+empRank+' | '+empDept);
+		        		trTag.append(tdTag);
+		        		referrer.append(trTag);
+		        		referrerList.push(empId);
+		        		referrerNR = empName+' '+empRank; //결재창에서 보여줄 참조자 이름직급
+		    		}else{
+		    			console.log('값 있음 조건비교')
+		    			if(referrerList.length !== 3){
+			    			for(var i=0; i<referrerList.length; i++){
+			    				console.log(i,'위치에 있는 참조자 = ',referrerList[i],'이고 몇번째 ?',i)
+			        			if(referrerList[i] === empId){
+			        				console.log(referrerList[i]);
+			        				alert('이미 참조자명단에 있는 사원입니다.');
+			        			}else{
+			        				console.log('조회중입니다.');
+			        				console.log('현재 있는 참조자 리스트 = ',referrerList);
+			        	    		tdTag.append(empName + ' | '+empRank+' | '+empDept);
+			        	    		trTag.append(tdTag);
+			        	    		referrer.append(trTag);
+			        	    		referrerList.push(empId);
+			        	    		referrerNR = referrerNR+', '+empName+' '+empRank; //결재창에서 보여줄 참조자 이름직급
+			        	    		console.log('referrerNR = ',referrerNR);
+			        	    		break;
+			        			}
+			        		}
+		    			}else{
+		    				alert('참조자는 이미 3명입니다. 추가가 불가능합니다.')
+		    			}
+		    		}
     			}else{
-    				alert('참조자는 이미 3명입니다. 추가가 불가능합니다.')
+    				alert('h2');
     			}
+    		}else{
+    			alert('기안자는 참조자에 등록 할 수 없습니다.');
     		}
     		console.log(referrerList);
     	}
@@ -173,6 +209,31 @@
     	}
     	function userSet(){
     		console.log('userSet 클릭')
+    		if(payUser1 === ''){
+    			console.log('결재자1이 없습니다. 등록해주세요');
+    			alert('결재자1이 없습니다. 등록해주세요.');
+    			opener.document.getElementById('payUserList1').textContent = '';
+    		}else {
+    			//여기서 ajax통신으로 위에서 결정한 값을 보내줘야함.
+    			//기안자 값 설정,전송
+    			alert('값 전송');
+    			let drafterName = document.getElementById('drafterlist').children[0].children[1].textContent; //전송할 기안자 이름
+    			let drafterRank = document.getElementById('drafterlist').children[0].children[2].textContent; //전송할 기안자 직급
+    			let drafterId = document.getElementById('drafterlist').children[0].children[0].textContent; //혹시몰라서 가지고있는 기안자 Id
+    			let parentDrafter = drafterName+' '+drafterRank; 
+    			console.log('기안자 이름직급',parentDrafter);
+    			//결재자1,2,참조자 값 다른함수에서 설정한거 불러옴
+    			console.log('결재자1 이름직급 ',payUserNR1);
+    			console.log('결재자2 이름직급 ',payUserNR2);
+    			console.log('참조자 이름직급 ',referrerNR);
+    			opener.document.getElementById('drafter').textContent = parentDrafter;
+    			//결재자1,2,참조자 값 전송
+    			//payUserList1 payUserList2 referrerList
+    			opener.document.getElementById('payUserList1').textContent = payUserNR1;
+    			opener.document.getElementById('payUserList2').textContent = payUserNR2;
+    			opener.document.getElementById('referrerList').textContent = referrerNR;
+    			window.close();
+    		}
     	}
     </script>
 </body>
