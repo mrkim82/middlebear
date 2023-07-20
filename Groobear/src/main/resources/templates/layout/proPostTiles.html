@@ -31,13 +31,13 @@
 .horizontal-bar {
 	height: 80px;
 	width: 100%;
-	background-color: rgb(104, 192, 86);
+	background-color: rgb(32, 196, 202);
 }
 
 .horizontal-bar2 {
 	height: 40px;
 	width: 100%;
-	background-color: rgb(50, 100, 86);
+	background-color: rgb(41, 189, 195);
 }
 
 #modalFolderCreate4 {
@@ -85,6 +85,7 @@ details {
 	height: 50px;
 	background-color: #000;
 	margin-left: 30px;
+	border-radius: 10px;
 }
 
 .bottomLine {
@@ -225,8 +226,41 @@ details {
 					<ul class="nav">
 						<li>
 							<!-- 스타일을 동적으로 적용하는 네모 -->
-							<div class="square"
-								th:style="'background-color: ' + ${projectTopBar.proColor}"></div>
+							<button type="button" class="btn btn-primary square" data-toggle="modal"
+									th:style="'background-color: ' + ${projectTopBar.proColor}"
+									data-target="#squareStyle"></button>
+									
+									<!-- Modal -->
+									<div class="modal fade" id="squareStyle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									  <div class="modal-dialog">
+									    <div class="modal-content">
+									      <div class="modal-header">
+									        <h5 class="modal-title" id="squareStyleLabel">프로젝트 색상</h5>
+									        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+									      </div>
+									      <div class="modal-body">
+									      	
+									      	<ul class="nav justify-content-center">
+											  <li class="nav-item" th:each="colors : ${readPublicCodeColorAll}">
+											    <!-- <a class="nav-link" href="#"></a> -->
+											    <button type="button" class="btn btn-primary square nav-link"
+														th:style="'background-color: ' + ${colors.codeName}"
+														th:data-color-code="${colors.codeName}" onclick="saveColor()"></button>
+											  </li>
+											</ul>
+									      	
+									      </div>
+									      <div class="modal-footer">
+									        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+									        <button type="button" class="btn btn-primary" onclick="changeColor()">확인</button>
+									      </div>
+									    </div>
+									  </div>
+									</div>
+									<!-- Modal끝 -->
+									
 						</li>
 						<li class="nav-item"><span class='material-icons'
 							style="cursor: pointer;">more_vert</span></li>
@@ -682,6 +716,44 @@ details {
 		}
 		
     /*]]>*/
+    </script>
+
+    <script>
+    	let newColor;
+   		let url = window.location.pathname;
+		let lastIndex = url.lastIndexOf('/');
+		let projectNo = url.substring(lastIndex + 1);//프로젝트 번호
+    	
+    	//클릭시 색상 정보 저장
+    	function saveColor() {
+    		newColor = event.target.dataset.colorCode;
+    		console.log(event.target)
+    	}
+    	
+    	function changeColor() {
+    		console.log(newColor);
+    		fetch("/updateProMemColor", {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					'proColor' : newColor,
+	   				'proNo': projectNo
+	   			})
+			})
+			.then(response => response.json())
+			.then(res => {
+				console.log(res);
+				if(res.result == '성공') {
+					$('#squareStyle').modal('hide');//모달창 닫기
+					document.getElementsByClassName('square')[0].style.backgroundColor = newColor;//색상변환
+				} else {
+					alert('실패');
+				}
+				
+			});
+    	}
     </script>
     
 </body>

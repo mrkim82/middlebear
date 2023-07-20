@@ -32,5 +32,12 @@ public class BoardVO {
 	private Date updateDate;
 	private int count;
 	
-	private List<FilesVO> attchList;
+	private List<FilesVO> attachList;
+	
+	private int comNo;
+	private String profileImg;
+	private String comContent;
+	private String comDate;
+	
+	
 }

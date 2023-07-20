@@ -102,6 +102,18 @@ public class ProServiceImpl implements ProService {
 		return proMapper.updateProjectOrder(proRange, id);
 	}
 
+	@Override
+	public boolean createProGroup(String id) {
+		int result = proMapper.createProGroup(id);
+		boolean res;
+		if(result == 3) {
+			res = true;
+		} else {
+			res = false;
+		}
+		return res;
+	}
+
 
 
 

@@ -12,4 +12,13 @@ public class ProPostWritingVO {
 	private Date postDate;
 	private int postTopSeq;
 	private String writingContent;
+	
+	
+	//글 조회(임시)
+	private int proPostNo;
+	private String postType;
+	private int writingNo;
+	private String name;
+	private String profileImg;
+	
 }

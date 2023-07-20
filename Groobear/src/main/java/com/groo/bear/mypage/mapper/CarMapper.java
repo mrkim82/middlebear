@@ -9,12 +9,14 @@ public interface CarMapper {
 
 	//차량 전체조회
 	public List<CarVO> selectAllCar(Criteria cri,CarVO carVO);
+	//페이징
+	public int carListCnt(Criteria cri, CarVO carVO);
+	
 	//내차량 조회
 	public List<CarVO> getMyCar(String id);	
 	public List<CarVO> getCarInfo(String id);
 	
-	//페이징
-	public int carListCnt(Criteria cri, CarVO carVO);
+	
 
 	//추가
 	public int insertCar(CarVO carVO); 
