@@ -26,21 +26,21 @@
 						and ui.emp_no = u.emp_no
 						and u.id = c.id
 
-		<if test="name != null and !name.equals('')">
-			and ui.name LIKE '%${name}%'
-		</if>
-		<if test="carNo != null and !carNo.equals('')">
-			and c.car_no LIKE '%${carNo}%'
-		</if>
-		<if test="deptName != null and !deptName.equals('')">
-			and d.dept_name LIKE '%'||upper('${deptName}')||'%'
-		</if>
+			<if test="cri.type != null and cri.type.equals('name')">
+				and ui.name LIKE '%${cri.keyword}%'
+			</if>
+			<if test="cri.type != null and cri.type.equals('carNo')">
+				and c.car_no LIKE '%${cri.keyword}%'
+			</if><if test="cri.type != null and cri.type.equals('deptName')">
+				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
+			</if>
+			
 		order by u.emp_no
 		) t
             )
             <![CDATA[
-            WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 
-				  rn <= #{cri.page} * #{cri.perPageNum}
+            WHERE rn >= (#{cri.page}-1) * 10 +1 
+			and rn <= #{cri.page} * 10
             ]]>
 	</select>
 
@@ -93,21 +93,22 @@
 	<!-- 페이징  -->
 	<select id="carListCnt" resultType="int">
 		select count(*)
-				from users u,
-						departments d,
-						user_info ui,
-						car c
-				where d.dept_no = ui.dept_no
-						and ui.emp_no = u.emp_no
-						and u.id = c.id
-				<if test="name != null and name != ''">
-				and ui.name = #{name}
+			from users u,
+					departments d,
+					user_info ui,
+					car c
+			where d.dept_no = ui.dept_no
+					and ui.emp_no = u.emp_no
+					and u.id = c.id
+					
+			<if test="cri.type != null and cri.type.equals('name')">
+				and ui.name LIKE '%${cri.keyword}%'
 			</if>
-			<if test="deptName != null and deptName != ''">
-				and d.dept_name = #{deptName}
+			<if test="cri.type != null and cri.type.equals('carNo')">
+				and c.car_no LIKE '%${cri.keyword}%'
 			</if>
-			<if test="carNo != null and carNo != ''">
-				and c.car_no = #{carNo}
+			<if test="cri.type != null and cri.type.equals('deptName')">
+				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
 			</if>
 	</select>
 
@@ -126,8 +127,8 @@
 	
 	<!-- 수정 -->
 	<update id="updateCar" parameterType="CarVO">
-		update car set car_type = #{carType} 
-		where car_no = #{carNo}
+		update car set car_no = #{carNo}, car_type = #{carType} 
+		where car_no = #{oldCarNo}
 	</update>
 
 

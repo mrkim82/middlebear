@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.payment.mapper.PaymentMapper">
+	<!-- 결재자 리스트, 정보 -->
+	<select id="payEmpList" resultType="EmpVO">
+		SELECT * FROM users u, user_info i, departments d
+		WHERE u.emp_no = i.emp_no 
+		AND i.dept_no = d.dept_no
+	</select>
+</mapper>

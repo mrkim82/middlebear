@@ -1,7 +1,6 @@
 package com.groo.bear.board.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import com.groo.bear.board.service.BoardVO;
 import com.groo.bear.paging.Criteria;
@@ -26,6 +25,25 @@ public interface BoardMapper {
 	
 	//조회수 증가
 	public int updateCount(int boardNo);
+	
+	//댓글
+	//댓글 조회
+	public List<BoardVO> readBoardComment(int boardNo);
+	
+	//댓글 생성
+	public int createBoardComment(BoardVO boardVO);
+	
+	//댓글 삭제
+	public int deleteBoardComment(int comNo);
+	
+	//댓글 수정
+	public int updateBoardComment(BoardVO boardVO);
+	
+	//첨부파일 할 때 게시판 번호를 알기위함 -> 시퀀스로 했기 때문에.
+	public int boardNoSequence();
+	
+	//서버측 게시물 수정과 첨부파일 처리
+	public boolean modify(BoardVO boardVO);
 }
 
 

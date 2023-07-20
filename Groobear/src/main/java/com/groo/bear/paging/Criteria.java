@@ -1,5 +1,7 @@
 package com.groo.bear.paging;
 
+import org.springframework.web.util.UriComponentsBuilder;
+
 import lombok.Data;
 
 @Data
@@ -33,27 +35,22 @@ public class Criteria {
 
 	public void setPerPageNum(int perPageNum) {
 		int cnt = this.perPageNum;
-		
 		if(perPageNum != cnt) {
-			this.perPageNum = cnt;
-		}else {
 			this.perPageNum = perPageNum;
+		}else {
+			this.perPageNum = cnt;
 		}
+	}
 		
+
+	public String getListLink() {
+		Paging paging = new Paging();
+		UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
+				.queryParam("pageNum", this.perPageNum)
+				.queryParam("amount", paging.getTotalCount())
+				.queryParam("type", this.getType())
+				.queryParam("keyword", this.getKeyword());
+		
+		return builder.toUriString();
 	}
-	
-	@Override
-	public String toString() {
-		return "Criteria [page="+page+",perPageNum="+perPageNum+"]";
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
