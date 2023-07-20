@@ -175,6 +175,4 @@
 		WHERE work_no = #{workNo}
 	</update>
 	
-	
-	
 </mapper>
