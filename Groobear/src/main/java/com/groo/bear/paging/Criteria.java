@@ -43,7 +43,6 @@ public class Criteria {
 	}
 		
 
-	
 	public String getListLink() {
 		Paging paging = new Paging();
 		UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
