@@ -716,7 +716,7 @@ p {
 															</li>
 															<!-- 참가자 목록 -->
 															<!-- <th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}"> -->
-															<th:block th:each="member, i : ${projectPartiMember}">
+															<th:block th:each="member : ${projectPartiMember}">
 																<li style="list-style-type: none">
 																	<nav class="nav">
 																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
@@ -728,8 +728,8 @@ p {
 																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
 																					th:each="rpl, j : ${readPartiList}"
 																					th:checked="${rpl.id == member.id}"
-																					th:if="${rpl.id != member.id && rpl.schNo == allPost.schNo && i.count == 1 && j.count == 1}"
-																					th:data-sch-status="${rpl.partiCheck}"
+																					th:if="${rpl.id != member.id && rpl.schNo == allPost.schNo && j.count == 1}"
+																					data-sch-status="A"
 																					th:data-sch-list-id="${member.id}">
 																			<label th:for="'schPartiList' + ${member.id}">
 																				<a class="nav-link" th:utext="${member.profileImg}"></a>
@@ -1406,7 +1406,7 @@ p {
 			inputValues.forEach(inputValue => {
 				updateObj.schNo = schPlNo;
 				updateObj.partiCheck = inputValue.dataset.schStatus;
-				updateObj.name = inputValue.dataset.schListId;
+				updateObj.id = inputValue.dataset.schListId;
 				updatePartiList.push(updateObj);
 				updateObj = {};
 		    });
@@ -1424,42 +1424,40 @@ p {
 				},
 				body : JSON.stringify(schPlNo)
 			})
+			.then(response => response.text())
+			.then(data => {
+			    console.log(data);
+			})
+			.catch(error => {
+			    console.error('Error:', error);
+			});
+					
+			//기존 & 추가 인원 추가
+			fetch("/insertPartiMemberAll", {
+				method: 'POST',
+				headers : {
+					'Content-Type': 'application/json'
+				},
+				body : JSON.stringify(formData)
+			})
 			.then(response => response.json())
 			.then(res => {
 				let rC = res.result;
 				
-				if(rC == '성공') {
-					
-					//전체 삭제 성공시 선택인원 추가
-					fetch("/insertPartiMemberAll", {
-						method: 'POST',
-						headers : {
-							'Content-Type': 'application/json'
-						},
-						body : JSON.stringify(formData)
-					})
-					.then(response => response.json())
-					.then(res => {
-						let rC = res.result;
-						
-						if(rC == -1) {
-							alert('값이 들어가지 않음');
-						} else if (rC >= 1) {
-							console.log(rC + '명 업데이트');
-							const currentURL = window.location.href;
-							window.location.href = currentURL;
-						} else if (rC == 0) {
-							console.log('0명');
-						} else {
-							alert('알 수 없는 접근')
-						}
-					});
-					
+				if(rC == -1) {
+					alert('값이 들어가지 않음');
+				} else if (rC >= 1) {
+					console.log(rC + '명 업데이트');
+					const currentURL = window.location.href;
+					window.location.href = currentURL;
+				} else if (rC == 0) {
+					console.log('0명');
 				} else {
-					alert('변경 실패')
+					alert('알 수 없는 접근')
 				}
-				
 			});
+					
+				
 			
 			
 		}

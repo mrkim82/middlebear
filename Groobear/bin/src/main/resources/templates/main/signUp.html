@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Groobear Sign Up</title>
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <style>
+    body {
+      min-height: 100vh;
+      background: -webkit-gradient(linear, left bottom, right top, from(#92b5db), to(#1d466c));
+      background: -webkit-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+      background: -moz-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+      background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+      background: linear-gradient(to top right, #92b5db 0%, #1d466c 100%);
+    }
+
+    .input-form {
+      max-width: 680px;
+
+      margin-top: 80px;
+      padding: 32px;
+
+      background: #fff;
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      border-radius: 10px;
+      -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+      -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+    }
+    /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1050; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+    
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%; /* Could be more or less, depending on screen size */ 
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="input-form-backgroud row">
+      <div class="input-form col-md-12 mx-auto">
+        <h4 class="mb-3">Groobear Sign Up</h4>
+        <form class="validation-form" novalidate>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="name">이름</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="name" name="name" minlength="1" maxlength="5" 
+                oninput="removeName()" placeholder="이름" value="" required>
+                <div class="input-group-append">
+                  <button class="btn btn-primary" onclick="openPopUp()" type="button">조회</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="empNo">사번</label>
+              <input type="text" class="form-control" id="empNo" name="empNo" placeholder="이름 선택 시 자동 입력" value="" readonly>
+            </div>
+          </div>
+		  
+		  <div class="mb-3" style="width:400px;">
+              <label for="deptName">부서</label>
+              <input type="text" class="form-control" id="deptName" name="deptName" placeholder="이름 선택 시 자동 입력" value="" readonly>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <label for="id">아이디</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="id" name="id" oninput="characterCheck(this); removeId();"
+                minlength="4" maxlength="15" placeholder="아이디" value="" required>
+                <div class="input-group-append">
+                <input type="text" class="form-control" id="bear" value="@bear.com" readonly>
+                </div>
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="button" id="checkId">중복검사</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="password">비밀번호</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password" oninput="checkPw1()"
+                minlength="8" maxlength="20" placeholder="password" value="" required>
+              </div>
+              <a id="Pw"></a>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="checkPassword">비밀번호 확인</label>
+              <input type="password" class="form-control" id="checkPassword" name="checkPassword" oninput="checkPw2()"
+              placeholder="password check" value="" required>
+              <a id="rePw"></a>
+            </div>
+          </div>
+            
+          <div class="mb-3">
+            <label for="email">이메일</label>
+            <input type="email" class="form-control" id="email" name="email" 
+            oninput="checkEmail()" placeholder="you@example.com" required>
+            <a id="checkEmail"></a>
+          </div>
+		  
+		  <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="phone">연락처</label>
+              <div class="input-group">
+                <input type="text" class="form-control phoneNumber" minlength="13" maxlength="13"
+           		 id="phone" name="phone" placeholder="010-0000-0000" required>
+                <div class="input-group-append">
+                	<button class="btn btn-primary" type="button" id="smsbtn1">인증번호 발급</button>
+                </div>
+              </div>
+               <a id="checkPhone"></a>
+            </div>
+            <div class="col-md-6 mb-3">
+            <label for="phone">연락처 인증</label>
+              <div class="input-group">
+                <input type="text" class="form-control" minlength="6" maxlength="6"
+           		 id="smsnum" name="smsnum" placeholder="인증번호 6자리" required>
+                <div class="input-group-append">
+                	<button class="btn btn-primary" type="button" id="smsbtn2">인증번호 확인</button>
+                </div>
+              </div>
+              <a id="checkSms"></a>
+            </div>
+          </div>
+		  
+          <div class="mb-3">
+            <label for="address">주소</label>
+            <input type="text" class="form-control" id="addr1" placeholder="서울특별시 강남구">
+          </div>
+
+          <div class="mb-3">
+            <label for="address2">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
+            <input type="text" class="form-control" id="addr2" placeholder="상세주소를 입력해주세요.">
+          </div>
+          
+          <hr class="mb-4">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="aggrement" required>
+            <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
+          </div>
+          <div class="mb-4"></div>
+          <button class="btn btn-primary btn-lg btn-block" id="finalBtn" type="button">가입 완료</button>
+        </form>
+      </div>
+    </div>
+    <footer class="my-3 text-center text-small">
+      <p class="mb-1">&copy; 2023 Groobear</p>
+    </footer>
+  </div>
+  <script src="https://code.jquery.com/jquery-latest.js"></script> 
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
+                <p><br /></p>
+            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
+                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
+                     닫기
+                </span>
+            </div>
+      </div>
+    </div>
+    <script type="text/javascript">  
+
+    window.addEventListener('load', () => {
+      const forms = document.getElementsByClassName('validation-form');
+      Array.prototype.filter.call(forms, (form) => {
+        form.addEventListener('submit', function (event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const inputs = form.querySelectorAll('input, select, textarea');
+            for (const input of inputs) {
+              if (!input.checkValidity()) {
+                input.classList.add('is-invalid');
+              }
+            }
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+    
+    //아이디 중복체크
+    let checkId = '';
+    $('#checkId').on('click', function(){
+    	let id = $('#id').val() + $('#bear').val();
+    	checkId = $('#id').val();
+    	if(checkId.length > 3){
+	    	$.ajax({
+	    	    url: "checkId", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+	    	    data: {id},  // HTTP 요청과 함께 서버로 보낼 데이터
+	    	    method: "GET",   // HTTP 요청 메소드(GET, POST 등)
+			    success: function(data) {
+			      if(data == 'X'){
+			    	  $('#spantext').text('이미 존재하는 아이디입니다.');
+			    	  $('#id').val('');
+			          $('#myModal').show();
+			      }else if(data == 'O'){
+			    	  $('#spantext').text('사용가능한 아이디 입니다.');
+			          $('#myModal').show();
+			          $('#checkId').addClass('checked');  
+			      }
+			    },
+			    error: function(err) {
+			      console.log(err);
+			    }
+	    	})
+    	} else{
+    		$('#id').focus();
+    		$('#spantext').text('아이디를 4~15자로 작성바랍니다.');
+	        $('#myModal').show();
+    	}
+    })
+    
+ 	// 아이디 수정 시 중복체크 초기화
+    function removeId(){
+    	if($('#id').val()!=checkId){
+    		$('#checkId').removeClass('checked');
+    	}
+    }
+    
+    // 팝업창
+    let checkPop = '';
+    let openWin;
+	
+    function openPopUp() {
+    	let name = $('#name').val();
+    	if(name == ''){
+    		$('#spantext').text('이름을 입력해주세요.')	;
+            $('#myModal').show();
+    	} else{
+    		checkPop = name;
+    		// window.name = "부모창 이름"; 
+            window.name = "signUp";   
+            // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+            openWin = window.open("/signUpInfo?name="+name, "signUpInfo", "width=570, height=350, resizable = no, scrollbars = no");    	
+    	}   
+    }
+    
+    // 이름 수정 시 사번/부서이름 초기화
+    function removeName(){
+    	if($('#name').val()!=checkPop){
+    		$('#empNo').val('');
+    		$('#deptName').val('');
+    	}
+    }
+    
+ 	// 전화번호 - 클래스
+    $(document).on("keyup", ".phoneNumber", function() { 
+  		$(this).val( $(this).val().replace(/[^0-9]/g, "").replace(/(^02|^0505|^1[0-9]{3}|^0[0-9]{2})([0-9]+)?([0-9]{4})$/,"$1-$2-$3").replace("--", "-") );
+  	});
+   
+ 	// 숫자만 입력 가능
+ 	$('#smsnum').on('keyup', function () {
+    	$(this).val($(this).val().replace(/[^0-9]/g, ""));
+	});
+ 	
+  	//모달 Close 기능
+    function close_pop(flag) {
+        $('#myModal').hide();
+   };  
+   
+   // 한글만 입력 가능
+   $("#name").keyup(function (event) {
+       regexp = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
+       v = $(this).val();
+       if (regexp.test(v)) {
+           $(this).val(v.replace(regexp, ''));
+       }
+   });
+   
+   // 한글 입력 방지
+   $("#id").keyup(function(event){ 
+		if (!(event.keyCode >=37 && event.keyCode<=40)) { 
+			var inputVal = $(this).val(); 
+			var check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; 
+			if(check.test(inputVal)){ 
+				$(this).val(inputVal.replace(check, '')); 
+			} 
+		} 
+	});
+   
+   $("#email").keyup(function(event){ 
+		if (!(event.keyCode >=37 && event.keyCode<=40)) { 
+			var inputVal = $(this).val(); 
+			var check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; 
+			if(check.test(inputVal)){ 
+				$(this).val(inputVal.replace(check, '')); 
+			} 
+		} 
+	});
+   
+   // 특수문자 입력 방지
+   function characterCheck(obj){
+	   var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi; 
+	   // 허용할 특수문자는 여기서 삭제하면 됨
+	   // 지금은 띄어쓰기도 특수문자 처리됨 참고
+	   if( regExp.test(obj.value) ){
+	   	obj.value = obj.value.substring( 0 , obj.value.length - 1 ); // 입력한 특수문자 한자리 지움
+	   	}
+	   }
+   
+   //이메일 조건
+   function checkEmail(){
+	   let email = $('#email').val();
+	   if(!email.endsWith(".com") || !email.match("@") || email==''){
+		  $('#checkEmail').text('잘못된 이메일 양식입니다.');
+	   }else{
+		  $('#checkEmail').text('이메일이 정상적으로 입력되었습니다.');
+	   }
+   }
+   
+   // 비밀번호 조건
+   function checkPw1() {
+       let id = $('#id').val() + $('#bear').val();
+       let pw = $("#password").val();
+       let number = pw.search(/[0-9]/g);
+       let english = pw.search(/[a-z]/ig);
+       let spece = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+       let reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+
+       if (pw.length < 8 || pw.length > 20) {
+           $('#Pw').text("8자리 ~ 20자리 이내로 입력해주세요.");
+           return false;
+
+       } else if (pw.search(/\s/) != -1) {
+     	  $('#Pw').text("비밀번호는 공백 없이 입력해주세요.");
+           return false;
+
+       } else if (number < 0 || english < 0 || spece < 0) {
+     	  $('#Pw').text("영문,숫자,특수문자를 혼합하여 입력해주세요.");
+           return false;
+
+       } else if ((number < 0 && english < 0) || (english < 0 && spece < 0) || (spece < 0 && number < 0)) {
+     	  $('#Pw').text("영문,숫자, 특수문자 중 2가지 이상을 혼합하여 입력해주세요.");
+           return false;
+
+       } else if (/(\w)\1\1\1/.test(pw)) {
+     	  $('#Pw').text('같은 문자를 4번 이상 사용하실 수 없습니다.');
+           return false;
+
+       } else if (pw.search(id) > -1 || pw.search(id.split('@', 1)[0]) > -1 || pw.search(id.split('@', 2)[1]) > -1) {
+     	  $('#Pw').text("비밀번호에 아이디가 포함되었습니다.");
+           return false;
+       } else {
+     	  $('#Pw').text("비밀번호가 정상적으로 입력되었습니다.");
+           return true;
+       }
+
+       if (false === reg.test(pw)) {
+     	  $('#Pw').text('비밀번호는 8자 이상이어야 하며, 숫자/대문자/소문자/특수문자를 모두 포함해야 합니다.');
+           return false;
+       } else {
+     	  $('#Pw').text("비밀번호가 정상적으로 입력되었습니다.");
+           return true;
+       }
+   }
+   
+   // 비밀번호 확인 조건
+   function checkPw2(){
+  	 if($("#password").val().length > 7){
+  		 if($("#password").val()==$("#checkPassword").val()){
+  			 $('#rePw').text("비밀번호가 일치합니다.");	 
+  		 } else{
+  			 $('#rePw').text("비밀번호가 일치하지 않습니다.");	 
+  		 }
+  	 }
+   }
+   
+	// SMS 인증번호 발송
+   let checkNum='';
+  $('#smsbtn1').on('click', function(){
+	  if($("#phone").val().startsWith('010')==true && $("#phone").val().length == 13){
+		  checkNum = '';
+		  let smsPhone = $('#phone').val().replace(/-/g,'');
+		  let phone = $('#phone').val();
+		  for(let i = 0 ; i < 6 ; i++){
+				let ranNum = Math.floor((Math.random() * 10));
+				checkNum += String(ranNum);
+			}
+		  $.ajax({
+		   	    url: "checkPhone", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+		   	    data: {phone},  // HTTP 요청과 함께 서버로 보낼 데이터
+		   	    method: "GET",   // HTTP 요청 메소드(GET, POST 등)
+				    success: function(data) {
+				      if(data == 'X'){
+				    	  $('#phone').val('');		    	  
+				    	  $('#checkPhone').text('이미 등록된 연락처입니다.');
+				      }else if(data == 'O'){
+				    	  $.ajax({
+				  		    url: "checkSms",
+				  		    method: "POST",
+				  		    contentType:"application/json; charset=utf-8",
+				  		    data: JSON.stringify({
+				  		      to: smsPhone,
+				  		      content: "[Groobear] 인증번호는 [" + checkNum + "] 입니다."
+				  		    }),
+				  		    success: function(data) {
+				  		      console.log(checkNum);
+				  		   		$('#checkPhone').text('인증번호 전송완료');
+				                $('#smsbtn1').addClass('checked');
+				  		    },
+				  		    error: function(err) {
+				  		      console.log(err);
+				  		    }
+				  		  });
+				  	  }
+				    },
+				    error: function(err) {
+				      console.log(err);
+				    }
+		   	})
+	  }else{
+          $('#phone').val('');
+          $('#checkPhone').text('연락처 양식이 잘못되었습니다.');
+	  }
+  })
+   
+	// 인증번호 확인
+ 	$('#smsbtn2').on('click', function(){
+ 		if($('#smsbtn1').hasClass("checked") == true){
+			if($('#smsnum').val() == checkNum){
+				$('#smsbtn2').text('인증완료');
+				$('#checkSms').text('인증번호 정상 인증완료')	;
+	            $('#smsbtn2').addClass('checked');
+			} else if($('#smsnum').val().length != 6){
+				$('#smsnum').val('');
+				$('#checkSms').text('인증번호 6자리 입력바랍니다.');
+				$('#smsbtn2').removeClass('checked');
+			} else{
+				$('#smsnum').val('');
+				$('#checkSms').text('인증번호가 일치하지 않습니다.');
+				$('#smsbtn2').removeClass('checked');
+			}
+	   }else {
+		   $('#checkSms').text('인증번호 발급 진행바랍니다.');
+	   }
+ 	})
+ 	
+ 	//개인정보동의
+ 	$('#aggrement').on('click',function(){
+ 		$('#aggrement').toggleClass('checked')
+ 	})
+ 	
+ 	// 가입완료 버튼 조건
+ 	$('#finalBtn').on('click', function(){
+ 		if($('#name').val() == '' || $('#empNo').val() == '' || $('#deptName').val() == ''){
+ 			$('#name').focus();
+ 			$('#spantext').text('이름 입력 후 조회하여 인사정보 등록바랍니다.');
+            $('#myModal').show();
+ 		}else if($('#checkId').hasClass('checked')==false){
+ 			$('#id').focus();
+ 			$('#spantext').text('아이디 입력 후 중복체크 진행바랍니다.');
+            $('#myModal').show();
+ 		}else if($('#Pw').text()!='비밀번호가 정상적으로 입력되었습니다.' || $('#rePw').text()!='비밀번호가 일치합니다.'){
+ 			$('#password').focus();
+ 			$('#spantext').text('비밀번호를 양식에 맞춰 입력 후 비밀번호 확인 진행바랍니다.');
+            $('#myModal').show();
+ 		}else if($('#checkEmail').text()!='이메일이 정상적으로 입력되었습니다.'){
+ 			$('#email').focus();
+ 			$('#spantext').text('이메일을 양식에 맞춰 입력 후 진행바랍니다.');
+            $('#myModal').show();
+ 		}else if($('#smsbtn1').hasClass('checked')==false || $('#smsbtn2').hasClass('checked')==false){
+ 			$('#phone').focus();
+ 			$('#spantext').text('연락처 입력 후 인증 진행바랍니다.');
+            $('#myModal').show();
+ 		}else if($('#aggrement').hasClass('checked')==false){
+ 			$('#aggrement').focus();
+ 			$('#spantext').text('개인정보 수집 동의 후 진행바랍니다.');
+            $('#myModal').show();
+ 		}else{
+			let id = $('#id').val() + $('#bear').val();
+			let password = $('#password').val();
+			let email = $('#email').val();
+			let phone = $('#phone').val();
+			let addr = $('#addr1').val() + $('#addr2').val();
+			let empNo = $('#empNo').val();
+			$.ajax({
+  			    url: "empSignUp",
+  			    method: "POST",
+  			    contentType:"application/json; charset=utf-8",
+  			    data: JSON.stringify({
+  			      id: id,
+  			      password: password,
+  			      email: email,
+  			      phone: phone,
+  			      addr: addr,
+  			      empNo: empNo
+  			    }),
+  			    success: function(data) {
+  			    	if(data == "success"){
+  			    		$('#spantext').text('회원가입 완료');
+			    		$('#closeModal').text('로그인 화면');
+			    		$('#goLogin').attr('onclick', "location.href='/'")
+			    		$('#myModal').show();	
+  			    	} else{
+  			    		$('#spantext').text('가입 오류 발생');
+  			    		$('#myModal').show();
+  			    	}	
+  			    },
+  			    error: function(err) {
+						console.log(err);
+  			    }
+  			});
+ 		}
+ 	})
+  </script>
+</body>
+
+</html>

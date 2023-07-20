@@ -57,22 +57,10 @@ public class ProPostSchController {
 	
 	//참석자 전체 삭제
 	@PostMapping("deletePartiMemberAll")
-	public Map<String, String> deletePartiMemberAll(HttpServletRequest request, @RequestBody int schPlNo) {
-		Map <String, String> map = new HashMap<>();
-		System.out.println("값확인"+schPlNo);
-		int result = ppss.deletePartiMemberAll(schPlNo);
-		String res;
-		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		System.out.println("삭제"+ppss);
-		System.out.println("삭제no"+schPlNo);
-		map.put("result", res);
-		return map;
+	public String deletePartiMemberAll(HttpServletRequest request, @RequestBody int schPlNo) {
+		System.out.println("삭제 값확인"+schPlNo);
+		ppss.deletePartiMemberAll(schPlNo);
+		return "삭제";
 	}
 	
 	

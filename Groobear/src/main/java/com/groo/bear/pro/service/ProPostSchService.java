@@ -15,7 +15,7 @@ public interface ProPostSchService {
 	public List<ProPostSchVO> readPartiList(int proNo);
 	
 	// 참석자 전체 삭제
-	public int deletePartiMemberAll(int schNo);
+	public void deletePartiMemberAll(int schNo);
 	
 	//참석자 추가
 	public boolean insertPartiMember(ProPostSchVO vo);
