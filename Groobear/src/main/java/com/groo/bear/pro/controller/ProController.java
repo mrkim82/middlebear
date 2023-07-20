@@ -115,6 +115,7 @@ public class ProController {
 		return map;
 	}
 	
+	
 	//프로젝트 메인 페이지 즐찾 보기
 	@GetMapping("proMainS")
 	public String proMainPageS(Model model, HttpServletRequest request) {
@@ -216,7 +217,6 @@ public class ProController {
 		}
 		
 		map.put("result", res);
-		System.out.println(map);
 		return map;
 	}
 	

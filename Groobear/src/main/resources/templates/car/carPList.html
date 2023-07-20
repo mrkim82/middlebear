@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href="modal6/css/ionicons.min.css">
 		<link rel="stylesheet" href="modal6/css/flaticon.css">
 		<link rel="stylesheet" href="modal6/css/style.css">
+		<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -68,8 +69,12 @@
 				      		<h3 class="mb-4">Change Car Info</h3>
 				      		<form action="carUpdate" method="post" class="signup-form">
 					      		<div class="form-group mb-3">
-					      			<label class="label">Car Number</label>
-					      			<input name="carNo" id="infoCarNo" type="text" value="" class="form-control" readonly>
+					      			<label class="label">Old Car Number</label>
+					      			<input name="oldCarNo" id="infoCarNo" type="text" value="" class="form-control" readOnly>
+					      		</div>
+					      		<div class="form-group mb-3">
+					      			<label class="label">New Car Number</label>
+					      			<input name="carNo" id="newCarNo" type="text" value=" " class="form-control">
 					      		</div>
 				            <div class="form-group mb-3">
 				            	<label class="label">Car Type</label>
@@ -83,7 +88,7 @@
 				            </div>
 				            <div class="form-group" style="margin-left:30px;">
 				            	<button type="submit" style="width:150px; margin:0px 5px;" class="btn btn-primary rounded submit px-3">수정</button>
-				            	<button type="button" th:onclick="deleteCar()" style="width:150px; margin:0px 5px;" class="btn btn-primary rounded">삭제</button>
+				            	<button type="button" id="deleteBtn" style="width:150px; margin:0px 5px;" class="btn btn-primary rounded">삭제</button>
 				            </div>
 						</form>
 				      	</div>
@@ -115,24 +120,36 @@
 			document.querySelector('#infoCarType').value = carType;
 		}
 		
-		function deleteCar(){
+		
+		document.querySelector('#deleteBtn').addEventListener('click',function(){
+			
+		
 			let carNo = document.querySelector('#infoCarNo').value;
+			
+			let carInfo = {
+					 'carNo' : carNo
+			}
 			
 			fetch("carDelete",{
 				method:'POST',
 				headers:{
 					'Content-Type' : 'application/json'	
 				},
-				body:JSON.stringify({carNo:carNo})
+				body:JSON.stringify(carInfo)
 			})
 			.then(response => response.json())
 			.then(data => {
-				console.log('성공')
+				console.log(data)
+				if(data == 'true'){
+					location.href="carList"
+				}else{
+					location.href="carList"
+				}
 			})
 			.catch(err =>{
 				console.log(err);
 			})
-		}
+	})
 	 
 	</script>
 

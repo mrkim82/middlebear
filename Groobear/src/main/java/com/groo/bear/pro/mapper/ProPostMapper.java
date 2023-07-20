@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
+import com.groo.bear.pro.service.postvo.ProPostCommentVO;
+import com.groo.bear.pro.service.postvo.ProPostFeedVO;
+import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
+import com.groo.bear.pro.service.postvo.ProPostWorkVO;
+import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 
 public interface ProPostMapper {
 	//상단메뉴바
@@ -15,4 +20,31 @@ public interface ProPostMapper {
 	
 	// 프로젝트 참가자 정보
 	public List<ProPostUserVO> readProjectParti(ProPostUserVO vo);
+	
+	// 게시글 조회
+	public List<ProPostFeedVO> readFeedPost(int proNo);
+	
+	// 글 작성
+	public void createPostWriting(ProPostWritingVO vo);
+	// 글 조회
+	public List<ProPostWritingVO> readPostWriting(int postType);
+	// 글 댓글 조회
+	public List<ProPostCommentVO> readPostWritingComment(int proNo);
+	
+	// 업무 작성
+	public void createPostWork(ProPostWorkVO vo);
+	//업무 그룹조회
+	public List<ProPostWorkGroupVO> readWritingWorkGroup(int proNo);
+	
+	//댓글
+	// 댓글 작성
+	public int createPostComment(ProPostCommentVO vo);
+	// 댓글 삭제
+	public int deletePostComment(int comNo);
+	// 댓글 수정
+	public int updatePostComment(ProPostCommentVO vo);
+	
+	//게시글 조회 업무 상태 변경
+	public int updateWorkPostStatus(ProPostWorkVO vo);
+	
 }
