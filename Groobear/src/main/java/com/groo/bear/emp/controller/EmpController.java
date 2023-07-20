@@ -88,4 +88,58 @@ public class EmpController {
 			return result;
 		}
 	}
+	
+	// 인사정보 조회(이름을 이용한 인사정보 조회/회원가입)
+	@GetMapping("signUpInfo")
+	public String searchEmpInfo(@RequestParam String name, Model model) {
+		model.addAttribute("empInfo", empService.searchEmpInfo(name));
+		return "main/signUpInfo";
+	}
+	
+	// 회원가입 아이디 중복체크
+	@ResponseBody
+	@GetMapping("checkId")
+	public String checkId(@RequestParam String id) {
+		System.out.println(id);
+		String result = "";
+		if(empService.checkId(id)>0) {
+			result = "X";
+		}else {
+			result = "O";
+		}
+		return result;
+	}
+	
+	// 회원가입 연락처 중복체크
+	@ResponseBody
+	@GetMapping("checkPhone")
+	public String checkPhone(@RequestParam String phone) {
+		System.out.println(phone);
+		String result = "";
+		if(empService.checkPhone(phone)>0) {
+			result = "X";
+		}else {
+			result = "O";
+		}
+		return result;
+	}
+	
+	// 회원가입
+	@PostMapping("empSignUp")
+	@ResponseBody
+	public String signUp(@RequestBody EmpVO vo) {
+		BCryptPasswordEncoder scpwd = new BCryptPasswordEncoder(); 
+		System.out.println("기존 비밀번호 : "+vo.getPassword());
+		String password = scpwd.encode(vo.getPassword());
+		System.out.println("암호화 비밀번호 : "+password);
+		vo.setPassword(password);
+		String result = "";
+		if(empService.signUp(vo) > 0) {
+			result = "success";
+			return result;
+		} else {
+			result = "fail";
+			return result;
+		}
+	}
 }

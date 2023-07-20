@@ -18,9 +18,40 @@
 			</if>
 	  </where>
     </select>
+    
     <!-- 비밀번호 변경 -->
     <update id="changePw" parameterType="EmpVO">
     	update users set password = #{password} where id = #{id}
     </update>
     
+    <!-- 회원가입 인사정보 조회 -->
+    <select id="searchEmpInfo" parameterType="String" resultType="EmpVO">
+    	select a.id, b.emp_no, b.name, b.pno, b.dept_name
+    	from users a right outer join (select *
+ 						   	from user_info u join departments d
+					    	on u.dept_no = d.dept_no
+					    	where u.name = #{name}
+					    	) b
+		on a.emp_no = b.emp_no
+    </select>
+    
+    <!-- 아이디 중복체크 -->
+    <select id="checkId" parameterType="String" resultType="int">
+    	select count(*)
+    	from users
+    	where id = #{id}
+    </select>
+    
+    <!-- 연락처 중복체크 -->
+    <select id="checkPhone" parameterType="String" resultType="int">
+    	select count(*)
+    	from users
+    	where phone = #{phone}
+    </select>
+    
+    <!-- 회원가입 -->
+    <insert id="signUp" parameterType="EmpVO">
+    	insert into users 
+    	values(#{id}, #{password}, #{email}, #{phone}, #{addr}, 'C', sysdate, null, null, 'O', null, #{empNo}, '1 DESC', null)
+    </insert>
 </mapper>
