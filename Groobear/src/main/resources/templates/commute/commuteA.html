@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	  layout:decorate="~{layout/myPageATiles}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div layout:fragment="content">
+	<div>
+		<form name="searchForm" action="commuteList">
+			<input type="hidden" name="page" value="1"/>
+			<select name="type">
+				<option value='' selected>선택</option>
+				<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
+				<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
+				<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
+			</select>		
+			<input type="text" name="keyword" th:value="${criteria.keyword}"/>
+			<button type="submit" id="searchBtn">검색</button>
+		</form>
+	</div>
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th>사번</th>
+					<th>부서</th>
+					<th>이름</th>
+					<th>출근</th>
+					<th>퇴근</th>
+					<th>근무시간</th>
+					<th>연장근무시간</th>
+					<th>연차수량</th>
+				</tr> 
+			</thead>
+			<tbody>
+				<tr class="cml" th:if="${commuteList != null}" th:each="comm, stat:${commuteList}">
+					<td>[[${comm.empNo}]]</td>
+					<td>[[${comm.deptName}]]</td>
+					<td>[[${comm.name}]]</td>
+					<td>[[${#dates.format(comm.workStart,'HH:mm')}]]</td>
+					<td>[[${#dates.format(comm.workEnd,'HH:mm')}]]</td>
+					<td class="wt">[[${comm.workTime}]]</td>
+					<td class="owt">[[${comm.overWorkTime}]]</td>
+					<td>[[${comm.offCount}]]</td>
+				</tr>
+			</tbody>
+		</table>
+		
+	</div>
+	<div>
+		<ul class="paging" th:if="${paging.endPage != 0}">
+	        <li th:if="${paging.prev}">
+	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+	        </li>
+	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+	            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+	        </li>
+	        <li th:if="${paging.next and paging.endPage > 0}">
+	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+	        </li>
+    	</ul>
+	</div>
+	
+<script th:inline="javascript">
+function goPage(p){
+	searchForm.page.value = p;
+	searchForm.submit();
+}
+
+for(let i = 0 ; i < document.querySelectorAll('.cml').length;i++){
+		
+
+	var number = document.querySelectorAll('.wt')[i].textContent;
+	console.log(number);
+	
+	var hours = Math.floor(number/60);
+	if(hours < 10){
+		hours = '0'+hours;
+	}
+	console.log(hours);
+	var minutes = number%60;
+	if(minutes < 10){
+		minutes = '0'+minutes;
+	}
+	console.log(minutes)
+	
+	var cal = 
+		hours + ':' + minutes;
+	
+	document.querySelectorAll('.wt')[i].textContent = cal;	
+
+	
+	var number2 = document.querySelectorAll('.owt')[i].textContent;
+	console.log(number2);
+	
+	var hours2 = Math.floor(number2/60);
+	if(hours2 < 10){
+		hours2 = '0'+hours2;
+	}
+	console.log(hours);
+	var minutes2 = number2%60;
+	if(minutes2 < 10){
+		minutes2 = '0'+minutes2;
+	}
+	console.log(minutes2)
+	
+	var cal2 = 
+		hours2 + ':' + minutes2;
+	
+	document.querySelectorAll('.owt')[i].textContent = cal2;
+	
+}
+	
+	
+	
+	
+</script>
+
+</div>
+
+
+</body>
+</html>

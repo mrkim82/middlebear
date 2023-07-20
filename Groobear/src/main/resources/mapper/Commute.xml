@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.mypage.mapper.CommuteMapper">
+
+	<!-- 전체조회 -->
+	
+	
+	
+	<select id="selectAllCommute" parameterType="CommuteVO" resultType="CommuteVO">
+		SELECT * 
+            FROM (
+              SELECT t.*, ROWNUM AS rn
+              FROM (
+				select  u.emp_no,
+					    d.dept_name,
+						ui.name,
+                        cm.work_start,
+                        cm.work_end,   
+                        NVL(to_number(trunc((work_end - work_start)*24*60)) ,0)as work_time,
+                        NVL(cm.over_work_time,0) as over_work_time,
+                        o.off_count
+				from users u,
+						departments d,
+						user_info ui,
+                        commute cm,
+                        off o
+				where d.dept_no = ui.dept_no
+						and ui.emp_no = u.emp_no
+                        and u.id = cm.id
+                        and cm.id = o.id
+			<if test="cri.type != null and cri.type.equals('name')">
+				and ui.name LIKE '%${cri.keyword}%'
+			</if>
+			<if test="cri.type != null and cri.type.equals('empNo')">
+				and u.emp_no LIKE '%${cri.keyword}%'
+			</if><if test="cri.type != null and cri.type.equals('deptName')">
+				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
+			</if>
+		order by u.emp_no
+		) t
+            )
+            <![CDATA[
+            WHERE rn >= (#{cri.page}-1) * 10 +1 
+			and rn <= #{cri.page} * 10
+            ]]>
+	</select>
+
+	<!-- 페이징  -->
+	<select id="commuteListCnt" resultType="int">
+		select count(*)
+			from users u,
+						departments d,
+						user_info ui,
+                        commute cm,
+                        off o
+				where d.dept_no = ui.dept_no
+						and ui.emp_no = u.emp_no
+                        and u.id = cm.id
+                        and cm.id = o.id
+			<if test="cri.type != null and cri.type.equals('name')">
+				and ui.name LIKE '%${cri.keyword}%'
+			</if>
+			<if test="cri.type != null and cri.type.equals('empNo')">
+				and u.emp_no LIKE '%${cri.keyword}%'
+			</if><if test="cri.type != null and cri.type.equals('deptName')">
+				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
+			</if>
+	</select>
+	
+	<insert id="workStart" parameterType="CommuteVO">
+		insert into commute(day,work_start,work_end,over_work_start,over_work_end,over_work_time,id)
+		values(sysdate,sysdate,null,null,null,null,#{id})
+	</insert>
+	
+	<update id="workEnd" parameterType="CommuteVO">
+		update commute 
+		set work_end = sysdate
+		where id = #{id} and to_char(day,'yyyy-MM-DD') = to_char(sysdate,'yyyy-MM-DD')
+	</update>
+
+	<update id="overWorkStart" parameterType="CommuteVO">
+		<if test="commuteVO.workEnd == null and commuteVO.workEnd.equals('')">
+			update commute set over_work_start = sysdate , work_end = sysdate
+			where id = #{id} and to_char(day,'yyyy-MM-DD') = TO_char(SYSDATE,'yyyy-MM-DD')
+		</if>
+		<if test="commuteVO.workEnd != null and !commuteVO.workEnd.equals('')">
+			update commute set over_work_start = sysdate
+			where id = #{id} and to_char(day,'yyyy-MM-DD') = to_char(sysdate,'yyyy-MM-DD')
+		</if>
+	</update>
+
+	<update id="overWorkEnd" parameterType="CommuteVO">
+		update commute 
+		set over_work_end = sysdate, over_work_time = NVL(to_number(trunc((over_work_end - over_work_start)*24*60)) ,0)
+		where id = #{id}
+	</update>
+
+
+
+
+
+
+</mapper>
