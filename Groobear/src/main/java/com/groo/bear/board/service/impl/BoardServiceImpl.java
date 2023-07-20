@@ -1,7 +1,8 @@
 package com.groo.bear.board.service.impl;
 
 import java.util.List;
-import java.util.Map;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,9 +10,15 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.board.mapper.BoardMapper;
 import com.groo.bear.board.service.BoardService;
 import com.groo.bear.board.service.BoardVO;
+import com.groo.bear.files.domain.FilesVO;
+import com.groo.bear.files.mapper.FilesMapper;
 import com.groo.bear.paging.Criteria;
 
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
+
 @Service
+@Log4j2
 public class BoardServiceImpl implements BoardService{
 	
 	@Autowired
@@ -23,10 +30,27 @@ public class BoardServiceImpl implements BoardService{
 		boardMapper.updateCount(boardNo);
 		return boardMapper.selectBoard(boardNo);
 	}
-
+	
+	@Transactional
 	@Override
 	public int insertBoard(BoardVO boardVO) {
-		return boardMapper.insertBoard(boardVO);
+	    log.info("register......" + boardVO);
+	    int boardNo = boardMapper.boardNoSequence();
+	    boardVO.setBoardNo(boardNo);
+	    
+	    // Get the next boardNo from the sequence
+	    // Set the boardNo in the boardVO object
+	    boardVO.setBoardNo(boardNo);
+
+	    if(boardVO.getAttachList() == null || boardVO.getAttachList().size() <= 0) {
+	        return 0;
+	    }
+	    boardVO.getAttachList().forEach(attach -> {
+	        // Use the boardNo for the attach object
+	        attach.setBoardNo(boardNo);
+	        attachMapper.insert(attach);
+	    });
+	    return boardMapper.insertBoard(boardVO);
 	}
 
 	@Override
@@ -39,11 +63,6 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.deleteBoard(boardNo);
 	}
 
-	/*
-	 * @Override public int addFiles(FilesVO filesVO) { return
-	 * boardMapper.addFiles(filesVO); }
-	 */
-
 	@Override
 	public int boardListCnt(Criteria cri, BoardVO boardVO){
         return boardMapper.boardListCnt(cri, boardVO);
@@ -53,5 +72,64 @@ public class BoardServiceImpl implements BoardService{
 	        return boardMapper.selectAllList(cri, boardVO);
 	}
 
+	@Override
+	public int createBoardComment(BoardVO boardVO) {
+		return boardMapper.createBoardComment(boardVO);
+	}
+
+	@Override
+	public int deleteBoardComment(int comNo) {
+		return boardMapper.deleteBoardComment(comNo);
+	}
+	
+	@Override
+	public int updateBoardComment(BoardVO boardVO) {
+		return boardMapper.updateBoardComment(boardVO);
+	}
+
+	@Override
+	public List<BoardVO> readBoardComment(int boardNo) {
+		return boardMapper.readBoardComment(boardNo);
+	}
+	
+	@Setter(onMethod_= @Autowired)
+	private BoardMapper mapper;
+	
+	@Setter(onMethod_= @Autowired)
+	private FilesMapper attachMapper;
+
+	@Override
+	public List<FilesVO> getAttachList(int boardNo) {
+		log.info("get Attach list by boardNo" + boardNo);
+		return attachMapper.findByBno(boardNo);
+	}
+	//첨부파일 폴더 진짜 삭제
+	@Transactional
+	@Override
+	public boolean remove(int boardNo) {
+		log.info("remove .... " + boardNo);
+		attachMapper.deleteAll(boardNo);
+		return mapper.deleteBoard(boardNo) == 1;
+	}
+	
+	@Transactional
+	@Override
+	public boolean modify(BoardVO boardVO) {
+		
+		log.info("modify................." + boardVO);
+		
+		attachMapper.deleteAll(boardVO.getBoardNo());
+		
+		boolean modifyResult = boardMapper.updateBoard(boardVO) == 1;
+		
+		if(modifyResult && boardVO.getAttachList() != null && boardVO.getAttachList().size() > 0) {
+			boardVO.getAttachList().forEach(attach -> {
+				attach.setBoardNo(boardVO.getBoardNo());
+				attachMapper.insert(attach);
+			});
+		}
+		
+		return modifyResult;
+	}
 	
 }
