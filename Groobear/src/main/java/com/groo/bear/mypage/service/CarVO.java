@@ -10,6 +10,7 @@ import lombok.Data;
 public class CarVO {
 
 	private String carNo;
+	private String oldCarNo;
 	private String carType;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date carDate;

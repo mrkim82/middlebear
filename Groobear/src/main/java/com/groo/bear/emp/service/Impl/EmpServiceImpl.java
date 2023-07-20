@@ -18,4 +18,9 @@ public class EmpServiceImpl implements EmpService {
 		return empMapper.getEmpInfo(vo);
 	}
 
+	@Override
+	public int changePw(EmpVO vo) {
+		return empMapper.changePw(vo);
+	}
+
 }

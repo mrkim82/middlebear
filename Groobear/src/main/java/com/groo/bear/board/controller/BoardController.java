@@ -36,17 +36,17 @@ public class BoardController {
 	@Autowired
 	BoardService boardService;
 	
-	@GetMapping("/boardList")
-	public String getboardList(Criteria cri, Model model, BoardVO boardVO) {
-		System.out.println(cri);
-		// 전체 글 개수
+   @GetMapping("/boardList")
+   public String getboardList(Criteria cri, Model model, BoardVO boardVO) {
+      // 전체 글 개수
         int boardListCnt = boardService.boardListCnt(cri, boardVO);
         
         // 페이징 객체
         Paging paging = new Paging();
         paging.setCri(cri);
         paging.setTotalCount(boardListCnt);
-		
+
+	
 		model.addAttribute("boardList", boardService.selectAllList(cri, boardVO));
 		model.addAttribute("paging", paging);
 		
@@ -139,3 +139,5 @@ public class BoardController {
 		return "redirect:/boardList"+ cri.getListLink();
 	}
 }
+
+

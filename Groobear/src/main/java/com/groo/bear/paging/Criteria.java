@@ -35,14 +35,14 @@ public class Criteria {
 
 	public void setPerPageNum(int perPageNum) {
 		int cnt = this.perPageNum;
-		
 		if(perPageNum != cnt) {
-			this.perPageNum = cnt;
-		}else {
 			this.perPageNum = perPageNum;
+		}else {
+			this.perPageNum = cnt;
 		}
-		
 	}
+		
+
 	
 	public String getListLink() {
 		Paging paging = new Paging();
@@ -54,5 +54,4 @@ public class Criteria {
 		
 		return builder.toUriString();
 	}
-
 }
