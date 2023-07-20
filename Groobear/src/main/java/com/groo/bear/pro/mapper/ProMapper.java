@@ -53,4 +53,7 @@ public interface ProMapper {
 	
 	//프로젝트 정렬 수정
 	public int updateProjectOrder(String proRange, String id);
+	
+	//회원 가입시 프로젝트 그룹 생성
+	public int createProGroup(String id);
 }

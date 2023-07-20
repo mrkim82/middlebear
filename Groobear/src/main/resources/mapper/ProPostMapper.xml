@@ -23,14 +23,17 @@
 		GROUP BY m1.pro_no
 	</select>
 	
-	<!-- 프로젝트 참가자 조회 -->
+	<!-- 프로젝트 참가자 조회 --><!-- 일정 참가자 반복문 -->
 	<select id="readProjectParti" resultType="ProPostUserVO">
-		SELECT i.name, m.id
+		SELECT i.name, m.id, u.profile_img, i.rank, d.dept_name
 		FROM pro_mem m JOIN users u
 		ON(m.id = u.id)
 		JOIN user_info i
 		ON(u.emp_no = i.emp_no)
+		JOIN departments d
+		ON(i.dept_no = d.dept_no)
 		WHERE m.pro_no = #{proNo}
+		AND m.pro_parti_check = 'Y'
 		ORDER BY i.name
 	</select>
 	

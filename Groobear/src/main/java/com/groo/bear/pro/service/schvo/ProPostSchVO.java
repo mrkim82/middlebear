@@ -9,4 +9,7 @@ public class ProPostSchVO {
 	private String partiCheck;
 	private String id;
 	private String name;
+	private String profileImg;
+	
+	private int proNo;
 }
