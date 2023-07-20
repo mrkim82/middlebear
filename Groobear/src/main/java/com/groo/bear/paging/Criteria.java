@@ -42,11 +42,6 @@ public class Criteria {
 		
 	}
 	
-	@Override
-	public String toString() {
-		return "Criteria [page="+page+",perPageNum="+perPageNum+"]";
-	}
-	
 	
 	
 	

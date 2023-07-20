@@ -7,24 +7,22 @@ import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Data;
 
 @Data
-public class CarVO {
+public class OffVO {
 
-	private String carNo;
-	private String oldCarNo;
-	private String carType;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date carDate;
+	private Date useDay;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date returnDay;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private int offCount;
 	private String id;
-	private String deptName;
-	private String phone;
+	
+	
+	private String offStatus;
 	private String name;
 	private int empNo;
 	private String rank;
 	private String empGrade;
-	
-	
-	
-	
 	
 	
 }
