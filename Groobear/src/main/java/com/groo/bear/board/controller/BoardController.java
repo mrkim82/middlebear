@@ -1,6 +1,11 @@
 package com.groo.bear.board.controller;
 
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -17,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.groo.bear.board.service.BoardService;
 import com.groo.bear.board.service.BoardVO;
+import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.paging.Criteria;
 import com.groo.bear.paging.Paging;
 
@@ -83,10 +89,9 @@ public class BoardController {
 	    model.addAttribute("board", board);
 	    return "board/boardUpdate";
 	}
-
+	//게시글수정
 	@PostMapping("boardUpdate")
 	public String boardUpdate(BoardVO boardVO, Model model) {
-		System.out.println(boardVO);
 		boardService.updateBoard(boardVO);
 		return "redirect:/boardInfo?boardNo=" + boardVO.getBoardNo();
 	}
@@ -99,4 +104,37 @@ public class BoardController {
 	    return "게시글이 삭제되었습니다.";
 	}
 	
+	private void deleteFiles(List<FilesVO> attachList) {
+		if(attachList == null || attachList.size() == 0) {
+			return;
+		}
+		log.info("delete attach files ......");
+		log.info(attachList);
+		
+		attachList.forEach(attach -> {
+			try {
+				Path file = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\" + attach.getUuid()+"_"+attach.getFileName());
+				Files.deleteIfExists(file);
+				if(Files.probeContentType(file).startsWith("image")) {
+					Path thumbNail = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\s_" + attach.getUuid()+"_"+attach.getFileName());
+					Files.delete(thumbNail);
+				}
+			} catch(Exception e) {
+				log.error("delete file error" + e.getMessage());
+			} //end catch
+		}); //end foreachd
+	}
+	//RequestBody -> 화면에서 객체 타입을 받을 때, RequestParam -> 화면에서 하나의 타입을 받을 때 
+	@PostMapping("/remove")
+	public String remove(@RequestParam("boardNo") int boardNo, Criteria cri, RedirectAttributes rttr) {
+		log.info("remove ............. " + boardNo);
+		List<FilesVO> attachList = boardService.getAttachList(boardNo);
+		if(boardService.remove(boardNo)) {
+			//delete Attach Files
+			deleteFiles(attachList);
+			
+			rttr.addFlashAttribute("result", "success");
+		}
+		return "redirect:/boardList"+ cri.getListLink();
+	}
 }

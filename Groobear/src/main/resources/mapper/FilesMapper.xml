@@ -31,4 +31,7 @@
   		select * from files where board_no = #{boardNo}
   	</select>
   	
+  	<delete id="deleteAll">
+  		delete files where board_no = #{boardNo}
+  	</delete>
   </mapper>

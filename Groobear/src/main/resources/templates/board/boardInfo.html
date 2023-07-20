@@ -224,34 +224,83 @@
 
 		<script th:inline="javascript">
 			$(document).ready(function() {
-				$('#deleteButton').click(function() {
-					let boardNo = /*[[${board.boardNo}]]*/
-					console.log(boardNo)
-					$.ajax({
-							url : 'boardDelete/'+ boardNo, // 실제 삭제를 처리하는 서버 URL입니다.
-							type : 'DELETE',
-							success : function(result) {// 삭제 성공 시 처리 로직
-							$('#successModal').modal('show'); // 성공 모달 표시
-							$('#closeModal').on('click', function() {
-								$('#successModal').modal('hide');
-								})},
-							error : function(xhr, status, error) {
-							// 삭제 실패 시 처리 로직
-							$('#errorModalBody').text("게시글 삭제에 실패했습니다: "+ error);
-							$('#errorModal').modal('show'); // 에러 모달 표시
-							}
-					});
-					// 삭제 요청이 시작되었으므로 삭제 확인 모달을 숨깁니다.
-					$('#deletePostModal')
-							.modal('hide');
-				});
-				(function() {
-				//var boardNo = '<th:utext value="${board.boardNo}"/>';
-				$.getJSON(`/getAttachList?boardNo=[[${board.boardNo}]]`, function(arr) {
-					console.log(arr);
-				}); // end getjson
-			})(); // end function
-		});
+    $('#deleteButton').click(function() {
+        let boardNo = /*[[${board.boardNo}]]*/
+        console.log(boardNo)
+        $.ajax({
+            url : '/boardDelete/'+ boardNo,
+            type : 'DELETE',
+            success : function(result) {
+                $('#successModal').modal('show');
+                $('#closeModal').on('click', function() {
+                    $('#successModal').modal('hide');
+                })
+            },
+            error : function(xhr, status, error) {
+                $('#errorModalBody').text("게시글 삭제에 실패했습니다: "+ error);
+                $('#errorModal').modal('show');
+            }
+        });
+
+        $('#deletePostModal').modal('hide');
+    });
+
+    $.getJSON(`/getAttachList?boardNo=[[${board.boardNo}]]`, function(arr) {
+        var str = "";
+        $(arr).each(function(i, attach){
+            
+            if(attach.fileType){
+                var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
+                
+                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
+                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+                str += "<img src='/display?fileName=" + fileCallPath + "'>";
+                str += "</div>";
+                str += "</li>";
+            } else {
+                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
+                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+                str += "<span>" + attach.fileName + "</span><br/>";
+                str += "<img src='img/attach.png/'>";
+                str += "</div>";
+                str += "</li>";
+            }
+        });
+        
+        $(".uploadResult ul").html(str);
+    });
+		$(".uploadResult").on("click","li", function(e){
+	      
+		    console.log("view image");
+		    
+		    var liObj = $(this);
+		    
+		    var path = encodeURIComponent(liObj.data("path")+"/" + liObj.data("uuid")+"_" + liObj.data("filename"));
+		    
+		    if(liObj.data("type")){
+		      showImage(path.replace(new RegExp(/\\/g),"/"));
+		    }else {
+		      //download 
+		      self.location ="/download?fileName="+path
+		    }
+		  });
+		  function showImage(fileCallPath){
+			    
+		    alert(fileCallPath);
+		    
+		    $(".bigPictureWrapper").css("display","flex").show();
+		    
+		    $(".bigPicture")
+		    .html("<img src='/display?fileName="+fileCallPath+"' >")
+		    .animate({width:'100%', height: '100%'}, 1000);
+		  }
+		  $(".bigPictureWrapper").on("click", function(e){
+		    $(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
+		    setTimeout(function(){
+		      $('.bigPictureWrapper').hide();
+		    }, 1000);
+		  });
+});
 	</script>
 	<!-- 댓글 등록 -->
 	<script>

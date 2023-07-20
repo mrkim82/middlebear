@@ -42,4 +42,9 @@ public interface BoardService {
 	//첨부파일 조회
 	public List<FilesVO> getAttachList(int boardNo);
 	
+	//첨부파일 폴더안 파일 삭제 처리
+	public boolean remove(int boardNo);
+	
+	//서버 측 게시물 수정과 첨부파일 처리
+	public boolean modify(BoardVO boardVO);
 }

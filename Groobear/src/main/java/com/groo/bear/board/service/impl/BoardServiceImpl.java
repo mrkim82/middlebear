@@ -81,7 +81,7 @@ public class BoardServiceImpl implements BoardService{
 	public int deleteBoardComment(int comNo) {
 		return boardMapper.deleteBoardComment(comNo);
 	}
-
+	
 	@Override
 	public int updateBoardComment(BoardVO boardVO) {
 		return boardMapper.updateBoardComment(boardVO);
@@ -103,6 +103,33 @@ public class BoardServiceImpl implements BoardService{
 		log.info("get Attach list by boardNo" + boardNo);
 		return attachMapper.findByBno(boardNo);
 	}
+	//첨부파일 폴더 진짜 삭제
+	@Transactional
+	@Override
+	public boolean remove(int boardNo) {
+		log.info("remove .... " + boardNo);
+		attachMapper.deleteAll(boardNo);
+		return mapper.deleteBoard(boardNo) == 1;
+	}
 	
+	@Transactional
+	@Override
+	public boolean modify(BoardVO boardVO) {
+		
+		log.info("modify................." + boardVO);
+		
+		attachMapper.deleteAll(boardVO.getBoardNo());
+		
+		boolean modifyResult = boardMapper.updateBoard(boardVO) == 1;
+		
+		if(modifyResult && boardVO.getAttachList() != null && boardVO.getAttachList().size() > 0) {
+			boardVO.getAttachList().forEach(attach -> {
+				attach.setBoardNo(boardVO.getBoardNo());
+				attachMapper.insert(attach);
+			});
+		}
+		
+		return modifyResult;
+	}
 	
 }
