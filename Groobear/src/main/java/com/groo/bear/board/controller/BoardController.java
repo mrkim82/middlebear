@@ -31,6 +31,11 @@ import lombok.extern.log4j.Log4j2;
 @Controller
 @Log4j2
 public class BoardController {
+	
+	//ㄴㅁㅇㅁㄴㅁㅇㄴ
+	@Autowired
+	BoardService boardService;
+	
    @GetMapping("/boardList")
    public String getboardList(Criteria cri, Model model, BoardVO boardVO) {
       // 전체 글 개수
@@ -134,5 +139,5 @@ public class BoardController {
 		return "redirect:/boardList"+ cri.getListLink();
 	}
 }
-}
+
 

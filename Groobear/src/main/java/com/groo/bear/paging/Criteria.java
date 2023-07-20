@@ -40,7 +40,7 @@ public class Criteria {
 		}else {
 			this.perPageNum = cnt;
 		}
-		System.out.println(this.perPageNum);
+	}
 		
 
 	
