@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.pro.mapper.ProTodoNVoteMapper">
+	
+	<!-- 프로젝트 일정 참여자 조회 -->
+	<select id="readTodoList" resultType="ProPostTodoVO">
+		SELECT a.todo_no, a.pro_post_no, a.todo_content, a.todo_end, a.todo_check, a.id, d.name
+		FROM todo a JOIN pro_post b
+		ON(a.pro_post_no = b.pro_post_no)
+		JOIN users c
+		ON(a.id = c.id)
+		JOIN user_info d
+		ON(c.emp_no = d.emp_no)
+		WHERE b.pro_no = #{proNo}
+	</select>
+
+	<update id="updateTotoStatus" parameterType="ProPostTodoVO">
+		UPDATE todo
+		SET todo_check = #{todoCheck}
+		WHERE todo_no = #{todoNo}
+	</update>
+	
+</mapper>

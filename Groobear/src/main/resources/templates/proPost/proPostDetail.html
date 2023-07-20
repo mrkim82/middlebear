@@ -466,7 +466,7 @@ p {
 							        <span th:text="${allPost.postDate}"></span>
 							        <span th:text="업무번호 + ${allPost.workNo}"></span>
 							    </div>
-								<div class="card-header" th:text="${allPost.postTitle}">
+								<div class="card-header" th:text="'업무 : ' + ${allPost.postTitle}">
 									<!-- 글 제목 -->
 								</div>
 								<div class="workFeedPostStatus" th:attr="data-feed-work-type=${allPost.workStatus}" style="text-align: center;">
@@ -608,7 +608,7 @@ p {
 							        <span th:text="${allPost.name}"></span>
 							        <span th:text="${allPost.postDate}"></span>
 							    </div>
-								<div class="card-header" th:text="${allPost.postTitle}">
+								<div class="card-header" th:text="'글 : ' + ${allPost.postTitle}">
 									<!-- 글 제목 -->
 								</div>
 								<div class="card-body">
@@ -670,7 +670,7 @@ p {
 									<span th:text="${allPost.name}"></span>
 									<span th:text="${allPost.postDate}"></span>
 							</div>
-						<div class="card-header" th:text="${allPost.postTitle}">
+						<div class="card-header" th:text="'일정 : ' + ${allPost.postTitle}">
 							<!-- 글 제목 -->
 						</div>
 						<th:block th:text="'시작' + ${allPost.schStartTime}"></th:block>
@@ -682,16 +682,19 @@ p {
 									<div th:text="${rpl.name}" th:data-sch-user-id="${rpl.id == session.Id ? rpl.id : ''}"
 									 	 th:data-sch-list-id="${rpl.id}"></div>
 									<th:block th:switch="${rpl.partiCheck}">
-										<span th:case="Y" style="color: green;">참석</span>
-										<span th:case="N" style="color: red;">불참</span>
-										<span th:case="A" style="color: gray;">미정</span>
+										<nav class="nav">
+											<span th:case="Y" style="color: green;">참석</span>
+											<span th:case="N" style="color: red;">불참</span>
+											<span th:case="A" style="color: gray;">미정</span>
+										</nav>
 									</th:block>
 								</th:block>
 								</div>
 								<!-- 참석자 리스트 버튼 -->
 								<div>
 								
-									<button type="button" class="btn btn-light" data-toggle="modal" th:data-target="'#schPartiListModal' + ${allPost.proPostNo}">
+									<button type="button" class="btn btn-light" data-toggle="modal" th:data-target="'#schPartiListModal' + ${allPost.proPostNo}"
+											th:if="${allPost.schEndTime <= #dates.format(currentTime, 'yyyy-MM-ddTHH:mm')}">
 													참석자 변경
 									</button>
 									<!-- 참석자 리스트 Modal -->
@@ -761,7 +764,7 @@ p {
 								<!-- 내용이 여기에 들어갑니다. -->
 							</th:block>
 							<!-- 참석 여부 버튼 -->
-							<th:block th:each="rparti : ${readSchparti}" th:if="${rparti.schNo == allPost.schNo}">
+							<th:block th:each="rparti : ${readSchparti}" th:if="${rparti.schNo == allPost.schNo and allPost.schEndTime &lt;= #dates.format(currentTime, 'yyyy-MM-ddTHH:mm')}">
 								<div th:attr="data-feed-sch-type=${rparti.partiCheck}" style="text-align: center;">
 									<button type="button" class="btn"
 										th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
@@ -814,7 +817,79 @@ p {
 
 
 				<!-- 4.할 일 -->
-			
+				<th:block th:if="${allPost.postType == '4'}">
+					<div class="card" style="margin-bottom: 15px; background-color: #fff;"
+						 th:data-feed-post-todo-no="${allPost.proPostNo}">
+						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
+						<div>
+					        <span th:text="${allPost.profileImg}"></span>
+					        <span th:text="${allPost.name}"></span>
+					        <span th:text="${allPost.postDate}"></span>
+					    </div>
+						<div class="card-header" th:text="'할 일 : ' + ${allPost.postTitle}">
+							<!-- 글 제목 -->
+						</div>
+						<div class="card-body">
+							<!-- 진척도 바 -->
+							<div>
+								<div class="progress">
+									<div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+								<th:block th:with="totalItems=${#lists.size(readTodoList)}, completedItems=${#lists.countMatches(readTodoList, 'todoCheck != null')}">
+									<div class="progress-bar bg-info" role="progressbar" th:text="${totalItems}" aria-valuemin="0" aria-valuemax="100"></div>
+							</th:block>
+							</div>
+							<!-- 할 일 체크 공간 -->
+							<div>
+								<ul class="list-group">
+								  <li class="list-group-item" th:each="rt : ${readTodoList}" th:if="${rt.proPostNo == allPost.proPostNo}">
+								    <input class="form-check-input me-1" type="checkbox"
+								    	   th:data-todo-no="${rt.todoNo}"
+								    	   th:checked="${rt.todoCheck == 'Y'}" style="cursor: pointer;"
+										   th:onclick="changeTodoStatus()">
+								    	   <!-- th:value="${rt.todoNo}" th:id="'firstCheckboxStretched' + ${rt.todoNo}" -->
+								   	<span th:text="${rt.todoContent}"></span>
+										<span th:text="${#dates.format(rt.todoEnd, 'MM/dd')}"  th:style="${rt.todoEnd >= #dates.format(currentTime, 'MM/dd') ? 'color: red' : ''}"></span>
+										<span th:text="'담당자' + ${rt.name}"></span>
+								  </li>
+								</ul>
+							</div>
+							<div class="card-footer">
+								
+								<!-- 북마크, 댓글수 -->
+								<div class="row">
+									<div class="col-md-8">
+										<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
+										<h6 th:text="댓글"></h6>
+										<ul class="list-unstyled">
+											<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+												th:if="${allPost.proPostNo == com.proPostNo}">
+												<span th:utext="${com.profileImg}"></span>
+												<span th:text="${com.name}"></span>
+												<span th:text="${com.comDate}"></span>
+												<span th:text="${com.comContent}"></span>
+												<th:block th:if="${com.id == session.Id}">
+													<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+													<span></span>
+													<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+												</th:block>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<input type="text" class="form-control" placeholder="댓글 작성">
+										</div>
+										<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+												th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 4종료 -->
+				</th:block>
+				
 				<!-- 5.투표 -->
 				<!-- <div class="container">
 					<div class="card mb-3">
@@ -1456,9 +1531,6 @@ p {
 					alert('알 수 없는 접근')
 				}
 			});
-					
-				
-			
 			
 		}
 	</script>
@@ -1482,6 +1554,57 @@ p {
 		  startDateInput.value = selectedDate.toISOString().slice(0, 16);
 		});
 	</script> -->
+	
+	<!-- toto 버튼 상태 변경 -->
+	<script>
+		function changeTodoStatus() {
+			let todoNo = event.target.dataset.todoNo;
+			let checkedYN = event.target.checked ? 'Y' : 'N';
+			let totalInputExp = event.target.parentNode.parentNode;
+			
+			fetch("/updateTotoStatus", {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					'todoNo' : todoNo,
+	   				'todoCheck': checkedYN
+	   			})
+			})
+			.then(response => response.json())
+			.then(res => {
+				let totalInput = totalInputExp.querySelectorAll('input').length;//총 input 수
+				let countInput = 0;
+				
+				let inputs = totalInputExp.querySelectorAll('input');
+				inputs.forEach(input => {
+					input.checked ? countInput++ : 0;
+				});
+				let per = countInput / totalInput * 100;
+				console.log(totalInputExp.closest('.card-body').children[0].children[0].children[0].style.width = per + '%');
+			})
+			.catch(error => {
+				console.error('Error: ',error);
+			});
+			
+		}
+	</script>
+
+
+	<!-- 현재시간 구하기 -->
+	<script th:inline="javascript">
+    	let today = new Date();
+    	/* console.log(today)
+    	let month = today.getMonth() + 1;  // 월
+		let date = today.getDate();  // 날짜
+		let day = today.getDay();  // 요일
+		let hours = today.getHours(); // 시
+		let minutes = today.getMinutes();  // 분 */
+		console.log(today.toLocaleString());
+		let currentTime = today.toLocaleString();
+		//#dates.format(currentTime, 'yyyy-MM-ddTHH:mm')포맷 사용
+	</script>
 	
 	<script
 		th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js}"></script>

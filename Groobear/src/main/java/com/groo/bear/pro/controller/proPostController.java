@@ -1,6 +1,7 @@
 package com.groo.bear.pro.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.groo.bear.pro.mapper.ProTodoNVoteMapper;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
@@ -25,6 +27,7 @@ import com.groo.bear.pro.service.PublicCodeColorService;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 
 @Controller
 public class proPostController {
@@ -43,6 +46,9 @@ public class proPostController {
 	
 	@Autowired
 	PublicCodeColorService pccs;//공통 색상
+	
+	@Autowired
+	ProTodoNVoteMapper todoNVote;
 	
 	//공통 데이터(사이드바) 전달
 	private Model proData2(Model model, HttpServletRequest request) {
@@ -68,6 +74,7 @@ public class proPostController {
 		model.addAttribute("projectPartiMember", proPostService.readProjectParti(vo2));//해당 프로젝트 회원 정보 전체 조회
 		model.addAttribute("projectWritingWorkGroup", proPostService.readWritingWorkGroup(proNo));//작성용 업무 그룹 조회
 		model.addAttribute("readPublicCodeColorAll", pccs.readPublicCodeColorAll());//공통 색상 전체
+		
 		switch (homeTab) {
 		//피드
 		case 1 :
@@ -81,6 +88,8 @@ public class proPostController {
 			model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(proNo));
 			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
 			model.addAttribute("readPartiList", ppss.readPartiList(proNo));
+			model.addAttribute("readTodoList", todoNVote.readTodoList(proNo));//할 일 조회
+			
 			//System.out.println("게시글"+model.getAttribute("readFeedPost"));
 			pagePath = "proPost/proPostDetail";
 			break;
@@ -234,4 +243,5 @@ public class proPostController {
 		map.put("result", res);
 		return map;
 	}
+	
 }

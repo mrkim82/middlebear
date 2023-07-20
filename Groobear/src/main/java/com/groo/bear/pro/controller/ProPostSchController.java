@@ -39,7 +39,6 @@ public class ProPostSchController {
 		}
 		
 		map.put("result", res);
-		System.out.println(vo);
 		return map;
 	}
 	
@@ -47,10 +46,9 @@ public class ProPostSchController {
 	@PostMapping("insertPartiMemberAll")
 	public Map<String, Integer> insertPartiMemberAll(HttpServletRequest request, @RequestBody List<ProPostSchVO> list) {
 		Map <String, Integer> map = new HashMap<>();
-		System.out.println("값확인"+list);
+		
 		int result = ppss.insertPartiMemberAll(list);
-		System.out.println("추가"+result);
-		System.out.println("추가vo"+list);
+		
 		map.put("result", result);
 		return map;
 	}
@@ -58,7 +56,6 @@ public class ProPostSchController {
 	//참석자 전체 삭제
 	@PostMapping("deletePartiMemberAll")
 	public String deletePartiMemberAll(HttpServletRequest request, @RequestBody int schPlNo) {
-		System.out.println("삭제 값확인"+schPlNo);
 		ppss.deletePartiMemberAll(schPlNo);
 		return "삭제";
 	}
