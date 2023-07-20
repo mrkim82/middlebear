@@ -41,5 +41,5 @@ public class Criteria {
 		System.out.println(this.perPageNum);
 		
 
-	
+	}
 }
