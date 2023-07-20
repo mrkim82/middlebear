@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <style>
 textarea {
   background-color: #f1f1f1;
@@ -691,56 +692,58 @@ p {
 													참석자 변경
 									</button>
 									<!-- 참석자 리스트 Modal -->
-									<div class="modal fade" th:id="'schPartiListModal' + ${allPost.proPostNo}" tabindex="-1"
-											 aria-labelledby="exampleModalLabel" aria-hidden="true">
-										<div class="modal-dialog modal-dialog-centered">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h1 class="modal-title fs-5" id="exampleModalLabel">참석자 변경</h1>
-													<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-												</div>
-												<!-- 내용 -->
-												<div class="modal-body">
-													<ul>
-														<li style="border-bottom: 1px solid gray; list-style-type: none;">
-															<div>
-																<input type="checkbox" value="selectAll2" id="selectAll"
-																	onclick='' /><label for="selectAll" style="cursor: pointer;">전체선택</label>
-																	<input type="text" placeholder="참석자명 검색">
-															</div>
-														</li>
-														<!-- 참가자 목록 -->
-														<!-- <th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}"> -->
-														<th:block th:each="member : ${projectPartiMember}">
-															<li style="list-style-type: none">
-																<nav class="nav">
-																		<input type="checkbox" th:id="'schPartiList' + ${member.id}"
-																			   th:each="rpl : ${readPartiList}"
-																			   th:checked="${rpl.id == member.id}"
-																			   th:if="${rpl.id == member.id && rpl.schNo == allPost.schNo}">
-																		<input type="checkbox" th:id="'schPartiList' + ${member.id}"
-																			   th:each="rpl : ${readPartiList}"
-																			   th:checked="${rpl.id == member.id}"
-																			   th:if="${(rpl.id == member.id && rpl.schNo == allPost.schNo) || (rpl.id != member.id && rpl.schNo == allPost.schNo)}">
-																		<label th:for="'schPartiList' + ${member.id}">
-																			<a class="nav-link" th:utext="${member.profileImg}"></a>
-																			<a class="nav-link" th:text="${member.name}"></a>
-																		</label>
-																</nav>
+									<form>
+										<div class="modal fade" th:id="'schPartiListModal' + ${allPost.proPostNo}" tabindex="-1"
+												aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog modal-dialog-centered">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h1 class="modal-title fs-5" id="exampleModalLabel">참석자 변경</h1>
+														<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<!-- 내용 -->
+													<div class="modal-body">
+														<ul>
+															<li style="border-bottom: 1px solid gray; list-style-type: none;">
+																<div>
+																	<input type="checkbox" value="selectAll2" id="selectAll"
+																		onclick='' /><label for="selectAll" style="cursor: pointer;">전체선택</label>
+																		<input type="text" placeholder="참석자명 검색">
+																</div>
 															</li>
-														</th:block>
-													</ul>
-												</div>
-												<div class="modal-body">
-													진짜?
-												</div>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-													<button type="button" class="btn btn-primary">확인</button>
+															<!-- 참가자 목록 -->
+															<!-- <th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}"> -->
+															<th:block th:each="member, i : ${projectPartiMember}">
+																<li style="list-style-type: none">
+																	<nav class="nav">
+																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
+																					th:each="rpl : ${readPartiList}"
+																					th:checked="${rpl.id == member.id}"
+																					th:if="${rpl.id == member.id && rpl.schNo == allPost.schNo}">
+																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
+																					th:each="rpl, j : ${readPartiList}"
+																					th:checked="${rpl.id == member.id}"
+																					th:if="${rpl.id != member.id && rpl.schNo == allPost.schNo && i.count == 1 && j.count == 1}">
+																			<label th:for="'schPartiList' + ${member.id}">
+																				<a class="nav-link" th:utext="${member.profileImg}"></a>
+																				<a class="nav-link" th:text="${member.name}"></a>
+																			</label>
+																	</nav>
+																</li>
+															</th:block>
+														</ul>
+													</div>
+													<div class="modal-body">
+														진짜?
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+														<button type="button" class="btn btn-primary" onclick="changeSchParti()">확인</button>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
+									</form>
 									<!-- 모달 끝 -->
 								</div>
 							</div>
@@ -1388,6 +1391,16 @@ p {
 		}
 
 	</script>
+
+	<script>
+		function changeSchParti() {
+			let inputValues = event.target.closest('.modal-content').children[1].children[0].querySelectorAll('li');
+			console.log(inputValues);
+			inputValues.forEach(inputValue => {
+		        console.log(inputValue.checked);
+		    });
+		}
+	</script>
 	<!-- 시간 단위 조정 -->
 	<!-- <script>
 		// 10분 간격으로 선택할 수 있도록 설정
@@ -1408,12 +1421,12 @@ p {
 		  startDateInput.value = selectedDate.toISOString().slice(0, 16);
 		});
 	</script> -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+	
 	<script
 		th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js}"></script>
 	<script
 		th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
-		
+	
 	<!-- <script src="../proPost/proPostJs/proPostDetail.js"></script> -->
 </body>
 </html>

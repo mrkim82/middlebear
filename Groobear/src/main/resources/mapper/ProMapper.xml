@@ -176,4 +176,19 @@
 		WHERE id = #{id}
 	</update>
 	
+	<!-- 회원 가입시 프로젝트 그룹 생성 -->
+	<insert id="createProGroup" parameterType="String">
+		INSERT ALL
+		INTO pro_group(group_no, group_name, id)
+		VALUES((SELECT NVL(MAX(group_no), 0) + 1
+		        FROM pro_group), '기본 그룹3', #{id})
+		INTO pro_group(group_no, group_name, id)
+		VALUES((SELECT NVL(MAX(group_no), 0) + 2
+		        FROM pro_group), '기본 그룹2', #{id})
+		INTO pro_group(group_no, group_name, id)
+		VALUES((SELECT NVL(MAX(group_no), 0) + 3
+		        FROM pro_group), '기본 그룹', #{id})
+		SELECT * FROM DUAL;
+	</insert>
+	
 </mapper>
