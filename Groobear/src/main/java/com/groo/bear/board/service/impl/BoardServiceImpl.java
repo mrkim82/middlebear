@@ -82,10 +82,7 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.deleteBoardComment(comNo);
 	}
 	
-	@Override
-	public int updateBoardComment(BoardVO boardVO) {
-		return boardMapper.updateBoardComment(boardVO);
-	}
+	
 
 	@Override
 	public List<BoardVO> readBoardComment(int boardNo) {
@@ -112,6 +109,11 @@ public class BoardServiceImpl implements BoardService{
 		return mapper.deleteBoard(boardNo) == 1;
 	}
 	
+	
+	@Override
+	public int updateBoardComment(BoardVO boardVO) {
+		return boardMapper.updateBoardComment(boardVO);
+	}
 	@Transactional
 	@Override
 	public boolean modify(BoardVO boardVO) {

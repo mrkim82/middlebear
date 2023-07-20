@@ -6,6 +6,20 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+ul {
+	list-style:none;
+}
+
+li {
+	float: left;
+	padding: 10px;
+}
+a { 
+	text-decoration:none ;
+	color: black;
+}
+</style>
 </head>
 
 <body>
@@ -52,6 +66,7 @@
 
 	</div>
 	</div>
+	<div>
 		<button type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
 		<!-- <button type="button" id="write" th:onclick="goWrite()">글쓰기</button> -->
 		<form name="searchForm" action="boardList">
@@ -66,15 +81,49 @@
 		<input type="text" name="keyword" th:value="${criteria.keyword}"/>
 		<button type="submit" id="searchBtn">검색</button>
 		<button type="button" id="resetBtn" onclick="formInit()">초기화</button>
+	</div>
 		</form>
+		<!-- 모달띄우기 -->
+		<div class="modal fade" id="deletePostModal" tabindex="-1"
+			role="dialog" aria-labelledby="deletePostModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="deletePostModalLabel">게시글 삭제</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">게시글을 정말로 삭제하시겠습니까?</div>
+					<div class="modal-footer">
+						<button id="firstCancel" type="button" class="btn btn-secondary"
+							data-dismiss="modal">취소</button>
+						<button type="button" class="btn btn-danger" id="deleteButton">삭제</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		
 <script th:inline="javascript">
-function goWrite() {
+	//input 태그 안에 빈 값인데 검색 버튼을 눌렀을 때 실행하는 함수.
+	function noValue() {
+		
+	}
+	var inputTag = document.querySelector('input[name="keyword"]')
+	if(document.querySelector('select option').value == '') {
+		novale();
+	} else {
+		
+	}
 	
-	let bT = /*[[${boardVO.boardType}]]*/
-     console.log(bT)
-     window.location.href ='/boardInsert?boardType=' + bT
-}
+// function goWrite() {
+	
+// 	let bT = /*[[${boardVO.boardType}]]*/
+//      console.log(bT)
+//      window.location.href ='/boardInsert?boardType=' + bT
+// }
 function goPage(p) {
 	//event.preventDefault();
 	searchForm.page.value=p

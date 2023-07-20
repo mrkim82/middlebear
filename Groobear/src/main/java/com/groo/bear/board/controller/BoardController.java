@@ -93,6 +93,7 @@ public class BoardController {
 	//게시글수정
 	@PostMapping("boardUpdate")
 	public String boardUpdate(BoardVO boardVO, Model model) {
+		boardService.modify(boardVO);
 		boardService.updateBoard(boardVO);
 		return "redirect:/boardInfo?boardNo=" + boardVO.getBoardNo();
 	}

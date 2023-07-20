@@ -213,17 +213,20 @@
         var formObj = $("form");
         $('button').on("click", function(e) {
         e.preventDefault();
+        var str = "";
+            
+            $(".uploadResult ul li").each(function(i, obj){
+                console.log(obj)
+                var jobj = $(obj);
+                str += "<input type = 'hidden' name = 'attachList["+i+"].fileName' value = '" + jobj.data("filename")+"'>";
+                str += "<input type = 'hidden' name = 'attachList["+i+"].uuid' value = '" + jobj.data("uuid") + "'>";
+                str += "<input type = 'hidden' name = 'attachList["+i+"].uploadPath' value = '" + jobj.data("path") + "'>";
+                str += "<input type = 'hidden' name = 'attachList["+i+"].fileType' value = '" + jobj.data("type") + "'>";
+                console.log(str)
+            });
 
-        var operation = $(this).data("oper");
-        console.log(operation);
-        // if(operation === 'remove') {
-        //     formObj.attr("action", `/boardDelete?=[[${board.boardNo}]]`);
-        // } else if(operation === 'list') {
-        //     //move to list
-        //     window.location.href="/boardList";
-        //     return;
-        // }
-        // formObj.submit();
+            formObj.append(str).submit();
+        
     })
 		
 		$.getJSON(`/getAttachList?boardNo=[[${board.boardNo}]]`, function(arr){
