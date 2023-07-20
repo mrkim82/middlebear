@@ -188,7 +188,7 @@
 		INTO pro_group(group_no, group_name, id)
 		VALUES((SELECT NVL(MAX(group_no), 0) + 3
 		        FROM pro_group), '기본 그룹', #{id})
-		SELECT * FROM DUAL;
+		SELECT * FROM DUAL
 	</insert>
 	
 </mapper>

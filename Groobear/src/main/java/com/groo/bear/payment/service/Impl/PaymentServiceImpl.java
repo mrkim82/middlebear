@@ -25,5 +25,10 @@ public class PaymentServiceImpl implements PaymentService{
 	public int paymentDoc(PaymentVO payVO) {
 		return 0;
 	}
+
+	@Override
+	public EmpVO payEmpInfo() {
+		return paymentMapper.payEmpInfo();
+	}
 	
 }

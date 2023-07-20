@@ -22,6 +22,9 @@ import org.springframework.web.client.RestClientException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.groo.bear.emp.service.EmpService;
 import com.groo.bear.emp.service.EmpVO;
+import com.groo.bear.mypage.service.OffService;
+import com.groo.bear.mypage.service.OffVO;
+import com.groo.bear.pro.service.ProService;
 import com.groo.bear.sms.service.MessageDTO;
 import com.groo.bear.sms.service.SmsResponseDTO;
 import com.groo.bear.sms.service.SmsService;
@@ -33,6 +36,12 @@ import lombok.RequiredArgsConstructor;
 public class EmpController {
 	@Autowired
 	EmpService empService;
+	
+	@Autowired
+	OffService offService;
+	
+	@Autowired
+	ProService proService;
 	
 	private final SmsService smsService;
 	
@@ -133,8 +142,13 @@ public class EmpController {
 		String password = scpwd.encode(vo.getPassword());
 		System.out.println("암호화 비밀번호 : "+password);
 		vo.setPassword(password);
+		OffVO offvo = new OffVO();
+		offvo.setId(vo.getId());
+		
 		String result = "";
 		if(empService.signUp(vo) > 0) {
+			offService.firstSetOff(offvo);
+			proService.createProGroup(vo.getId());
 			result = "success";
 			return result;
 		} else {

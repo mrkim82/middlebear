@@ -1,5 +1,8 @@
 package com.groo.bear.payment.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +18,12 @@ public class PaymentController {
 	
 	//결재자 사원 받아와서 모달창에 뿌려주는 controller
 	@GetMapping("pay/paymentEmp")
-	public String payEmpList(Model model) {
+	public String payEmpList(Model model,HttpServletRequest request) {
 		model.addAttribute("payEmpList",paymentService.payEmpList());
+		HttpSession session = request.getSession();
+		System.out.println("session = "+session);
+		model.addAttribute("userInfo",paymentService.payEmpInfo());
+		
 		return "pay/paymentEmp";
 	}
 	//결재문서 페이지

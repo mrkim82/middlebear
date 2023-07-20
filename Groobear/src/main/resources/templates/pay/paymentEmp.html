@@ -108,22 +108,26 @@
         		payUserList.push(empId);
     		}else{
     			console.log('값 있음 조건비교')
-    			for(var i=0; i<payUserList.length; i++){
-        			if(payUserList[i] === empId){
-        				console.log('이미 결재자 명단에 있는 유저입니다.');
-        			}else{
-        				console.log('조회중입니다.');
-        				if(i === payUserList.length-1){
-	        				console.log(payUserList);
-	        	    		tdTag.append(empName + ' | '+empRank+' | '+empDept);
-	                		divTag.append(empId);
-	                		trTag.append(divTag);
-	        	    		trTag.append(tdTag);
-	        	    		payuser.append(trTag);
-	        	    		payUserList.push(empId);
-        				}
-        			}
-        		}
+    			if(payUserList.length !== 3){
+	    			for(var i=0; i<payUserList.length; i++){
+	        			if(payUserList[i] === empId){
+	        				console.log('이미 결재자 명단에 있는 유저입니다.');
+	        			}else{
+	        				console.log('조회중입니다.');
+	        				if(i === payUserList.length-1){
+		        				console.log(payUserList);
+		        	    		tdTag.append(empName + ' | '+empRank+' | '+empDept);
+		                		divTag.append(empId);
+		                		trTag.append(divTag);
+		        	    		trTag.append(tdTag);
+		        	    		payuser.append(trTag);
+		        	    		payUserList.push(empId);
+	        				}
+	        			}
+	        		}
+    			}else{
+    				alert('결재자는 이미 3명입니다. 추가가 불가능합니다.')
+    			}
     		}
     		console.log(payUserList);
     	}
@@ -142,20 +146,24 @@
         		referrerList.push(empId);
     		}else{
     			console.log('값 있음 조건비교')
-    			for(var i=0; i<referrerList.length; i++){
-        			if(referrerList[i] === empId){
-        				console.log('이미 결재자 명단에 있는 유저입니다.');
-        			}else{
-        				console.log('조회중입니다.');
-        				if(i === referrerList.length-1){
-	        				console.log(referrerList);
-	        	    		tdTag.append(empName + ' | '+empRank+' | '+empDept);
-	        	    		trTag.append(tdTag);
-	        	    		referrer.append(trTag);
-	        	    		referrerList.push(empId);
-        				}
-        			}
-        		}
+    			if(referrerList.length !== 3){
+	    			for(var i=0; i<referrerList.length; i++){
+	        			if(referrerList[i] === empId){
+	        				console.log('이미 참조자 명단에 있는 유저입니다.');
+	        			}else{
+	        				console.log('조회중입니다.');
+	        				if(i === referrerList.length-1){
+		        				console.log(referrerList);
+		        	    		tdTag.append(empName + ' | '+empRank+' | '+empDept);
+		        	    		trTag.append(tdTag);
+		        	    		referrer.append(trTag);
+		        	    		referrerList.push(empId);
+	        				}
+	        			}
+	        		}
+    			}else{
+    				alert('참조자는 이미 3명입니다. 추가가 불가능합니다.')
+    			}
     		}
     		console.log(referrerList);
     	}
