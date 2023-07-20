@@ -43,7 +43,7 @@ body {
         .modal {
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
+            z-index: 1050; /* Sit on top */
             left: 0;
             top: 0;
             width: 100%; /* Full width */
@@ -155,6 +155,7 @@ body {
     	   $('#smsbtn2').on('click', function(){
     		   if($('#smsbtn1').hasClass("smsChecked") == true){
 					if($('#smsnum').val() == checkNum){
+						$('#smsbtn2').text('인증완료');
 						$('#spantext').text('인증번호 정상 인증완료')	;
 		                $('#myModal').show();
 		                $('#smsbtn2').addClass('smsChecked');
