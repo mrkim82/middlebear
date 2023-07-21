@@ -84,7 +84,7 @@
                     <td style="display:none;"><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
                 </tr>
             </table>
-            <button type="submit">저장</button>
+            <button type="submit" data-oper="">저장</button>
             <button type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|">목록으로</button>
         </form>
         <div class='bigPictureWrapper'>
@@ -118,6 +118,7 @@
     </div>
     <!-- /.row -->
 </div>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script>
   $(document).ready(function() {
 	(function(){
@@ -214,6 +215,7 @@
         $('button').on("click", function(e) {
         e.preventDefault();
         var str = "";
+
             
             $(".uploadResult ul li").each(function(i, obj){
                 console.log(obj)
@@ -226,7 +228,6 @@
             });
 
             formObj.append(str).submit();
-        
     })
 		
 		$.getJSON(`/getAttachList?boardNo=[[${board.boardNo}]]`, function(arr){
@@ -261,8 +262,7 @@
 			});
 			
 			$(".uploadResult ul").html(str);
-		});
-	})();
+		})();
     $(".uploadResult").on("click", "button", function(e){
         console.log("delete file");
         
@@ -272,8 +272,7 @@
         }
     });
 });
-    </script>
-
+</script>
 </div>
 </body>
 </html>
