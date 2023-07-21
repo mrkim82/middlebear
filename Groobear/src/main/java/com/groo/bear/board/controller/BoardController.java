@@ -60,13 +60,6 @@ public class BoardController {
 		return "board/boardInfo";
 	}
    
-//   @GetMapping("/boardInfo")
-//	public String getBoard(Model model, @PathVariable("boardNo") int boardNo) {
-//		model.addAttribute("board", boardService.selectBoard(boardNo));
-//		model.addAttribute("boardCom", boardService.readBoardComment(boardNo));
-//		return "board/boardInfo";
-//	}
-   
 	
 	//등록 페이지
 	@GetMapping("boardInsert")
