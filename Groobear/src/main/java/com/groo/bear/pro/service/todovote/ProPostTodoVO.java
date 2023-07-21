@@ -16,4 +16,5 @@ public class ProPostTodoVO {
 	
 	private int proNo;
 	
+	
 }

@@ -692,9 +692,8 @@ p {
 								</div>
 								<!-- 참석자 리스트 버튼 -->
 								<div>
-								
 									<button type="button" class="btn btn-light" data-toggle="modal" th:data-target="'#schPartiListModal' + ${allPost.proPostNo}"
-											th:if="${allPost.schEndTime <= #dates.format(currentTime, 'yyyy-MM-ddTHH:mm')}">
+											th:if="${#dates.format(allPost.schEndTime) >= #dates.format(#calendars.createNow())}">
 													참석자 변경
 									</button>
 									<!-- 참석자 리스트 Modal -->
@@ -764,7 +763,7 @@ p {
 								<!-- 내용이 여기에 들어갑니다. -->
 							</th:block>
 							<!-- 참석 여부 버튼 -->
-							<th:block th:each="rparti : ${readSchparti}" th:if="${rparti.schNo == allPost.schNo and allPost.schEndTime &lt;= #dates.format(currentTime, 'yyyy-MM-ddTHH:mm')}">
+							<th:block th:each="rparti : ${readSchparti}" th:if="${rparti.schNo == allPost.schNo and #dates.format(allPost.schEndTime) >= #dates.format(#calendars.createNow())}">
 								<div th:attr="data-feed-sch-type=${rparti.partiCheck}" style="text-align: center;">
 									<button type="button" class="btn"
 										th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
@@ -833,11 +832,10 @@ p {
 							<!-- 진척도 바 -->
 							<div>
 								<div class="progress">
-									<div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuemin="0" aria-valuemax="100"></div>
+									<th:block th:each="prog : ${readAllTodoListPer}" th:if="${prog.proPostNo == allPost.proPostNo}">
+										<div class="progress-bar bg-info" role="progressbar" th:style="'width: ' + ${prog.per} + '%'" aria-valuemin="0" aria-valuemax="100"></div>
+									<th:block>
 								</div>
-								<th:block th:with="totalItems=${#lists.size(readTodoList)}, completedItems=${#lists.countMatches(readTodoList, 'todoCheck != null')}">
-									<div class="progress-bar bg-info" role="progressbar" th:text="${totalItems}" aria-valuemin="0" aria-valuemax="100"></div>
-							</th:block>
 							</div>
 							<!-- 할 일 체크 공간 -->
 							<div>
@@ -891,6 +889,82 @@ p {
 				</th:block>
 				
 				<!-- 5.투표 -->
+				<th:block th:if="${allPost.postType == '5'}">
+					<div class="card" style="margin-bottom: 15px; background-color: #fff;"
+						 th:data-feed-post-vote-no="${allPost.voteNo}">
+						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
+						<div>
+					        <span th:text="${allPost.profileImg}"></span>
+					        <span th:text="${allPost.name}"></span>
+					        <span th:text="${allPost.postDate}"></span>
+					    </div>
+					    <div>
+						    <th:block th:if="${#dates.format(allPost.voteEndDay) >= #dates.format(#calendars.createNow())} and ${allPost.voteEndCheck == 'N'}">
+						        <button type="button" class="btn btn-outline-danger">진행중</button>
+						    </th:block>
+						    <th:block th:if="${#dates.format(allPost.voteEndDay) < #dates.format(#calendars.createNow())}">
+						        <button type="button" class="btn btn-outline-secondary">투표 종료</button>
+						    </th:block>
+					    </div>
+					    	<div class="card-header" th:text="'투표 : ' + ${allPost.postTitle} + ' 투표 마감일 ' + ${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd')} + '까지'">
+					    
+								<!-- 글 제목 -->
+							</div>
+						<div class="card-body">
+							<!-- 투표 설명 -->
+							<div th:text="'투표 설명 : ' + ${allPost.voteContent}"></div>
+							
+							<!-- 투표창 -->
+							<ul class="list-group">
+							  <li class="list-group-item" th:each="vtCheck : ${readVoteListCheck}" th:if="${vtCheck.voteNo == allPost.voteNo}">
+							  	<span th:utext="${vtCheck.voteDetailImg}" th:data-vote-detail-img="${vtCheck.voteDetailImg}"></span>
+							    <input class="form-check-input me-1" type="checkbox"
+							    	   th:data-vote-detail-no="${vtCheck.voteDetailNo}"
+							    	   th:text="${vtCheck.voteDetailContent}"
+									   th:onclick="changeTodoStatus()">
+							    	   <!-- th:checked="${rt.todoCheck == 'Y'}" style="cursor: pointer;" -->
+							    	   <!-- th:data-vote-detail-no="${vote.voteDetailNo}" -->
+							  </li>
+							</ul>
+							
+							<!-- 하단 -->
+							<div class="card-footer">
+								
+								<!-- 북마크, 댓글수 -->
+								<div class="row">
+									<div class="col-md-8">
+										<h6 th:text="댓글"></h6>
+										<ul class="list-unstyled">
+											<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+												th:if="${allPost.proPostNo == com.proPostNo}">
+												<span th:utext="${com.profileImg}"></span>
+												<span th:text="${com.name}"></span>
+												<span th:text="${com.comDate}"></span>
+												<span th:text="${com.comContent}"></span>
+												<th:block th:if="${com.id == session.Id}">
+													<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+													<span></span>
+													<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+												</th:block>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<input type="text" class="form-control" placeholder="댓글 작성">
+										</div>
+										<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+												th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 5종료 -->
+				</th:block>
+				
+				
+				
 				<!-- <div class="container">
 					<div class="card mb-3">
 						<div class="row no-gutters">
@@ -945,6 +1019,7 @@ p {
 								<li>
 									<!-- 이름 -->
 									<h4>사용자 이름</h4>
+									<th:block th:text="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH:mm')}"></th:block>
 								</li>
 								<li>
 									<!-- 메시지 아이콘 -->
@@ -1576,13 +1651,16 @@ p {
 			.then(res => {
 				let totalInput = totalInputExp.querySelectorAll('input').length;//총 input 수
 				let countInput = 0;
-				
 				let inputs = totalInputExp.querySelectorAll('input');
 				inputs.forEach(input => {
 					input.checked ? countInput++ : 0;
 				});
 				let per = countInput / totalInput * 100;
-				console.log(totalInputExp.closest('.card-body').children[0].children[0].children[0].style.width = per + '%');
+				//console.log(per)
+				
+				//퍼센트 변경
+				totalInputExp.closest('.card-body').children[0].children[0].children[0].style.width = per + '%';
+				
 			})
 			.catch(error => {
 				console.error('Error: ',error);
@@ -1593,17 +1671,19 @@ p {
 
 
 	<!-- 현재시간 구하기 -->
-	<script th:inline="javascript">
-    	let today = new Date();
-    	/* console.log(today)
-    	let month = today.getMonth() + 1;  // 월
-		let date = today.getDate();  // 날짜
-		let day = today.getDay();  // 요일
-		let hours = today.getHours(); // 시
-		let minutes = today.getMinutes();  // 분 */
-		console.log(today.toLocaleString());
-		let currentTime = today.toLocaleString();
-		//#dates.format(currentTime, 'yyyy-MM-ddTHH:mm')포맷 사용
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+	    	let today = new Date();
+	    	/* console.log(today)
+	    	let month = today.getMonth() + 1;  // 월
+			let date = today.getDate();  // 날짜
+			let day = today.getDay();  // 요일
+			let hours = today.getHours(); // 시
+			let minutes = today.getMinutes();  // 분 */
+			let currentTime = today.toLocaleString();
+			//console.log(currentTime)
+			//#dates.format(currentTime, 'yyyy-MM-ddTHH:mm')포맷 사용
+		/*]]>*/
 	</script>
 	
 	<script

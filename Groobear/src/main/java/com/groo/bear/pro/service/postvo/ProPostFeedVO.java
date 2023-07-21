@@ -31,13 +31,13 @@ public class ProPostFeedVO {
     private Date workStartDay;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date workStartTime;
-    private String workEndDay;
-    private String workEndTime;
-    private String schStartDay;
-    private String schStartTime;
-    private String schEndDay;
-    private String schEndTime;
-    private String voteEndDay;
+    private Date workEndDay;
+    private Date workEndTime;
+    private Date schStartDay;
+    private Date schStartTime;
+    private Date schEndDay;
+    private Date schEndTime;
+    private Date voteEndDay;
     
     private int workGroupNo;
     

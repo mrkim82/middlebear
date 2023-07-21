@@ -23,6 +23,7 @@ import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
 import com.groo.bear.pro.service.ProService;
+import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.PublicCodeColorService;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
@@ -48,7 +49,7 @@ public class proPostController {
 	PublicCodeColorService pccs;//공통 색상
 	
 	@Autowired
-	ProTodoNVoteMapper todoNVote;
+	ProTodoNVoteService todoNVote;
 	
 	//공통 데이터(사이드바) 전달
 	private Model proData2(Model model, HttpServletRequest request) {
@@ -88,7 +89,14 @@ public class proPostController {
 			model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(proNo));
 			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
 			model.addAttribute("readPartiList", ppss.readPartiList(proNo));
+			//할 일
 			model.addAttribute("readTodoList", todoNVote.readTodoList(proNo));//할 일 조회
+			model.addAttribute("readAllTodoListPer", todoNVote.readAllTodoListPer(proNo));//할 일 퍼센트 조회
+			
+			//투표
+			model.addAttribute("readVoteList", todoNVote.readVoteList(proNo));//투표 조회
+			model.addAttribute("readVoteListCheck", todoNVote.readVoteListCheck(proNo));//투표 내용
+			model.addAttribute("readVoteListParti", todoNVote.readVoteListParti(proNo));//투표 인원
 			
 			//System.out.println("게시글"+model.getAttribute("readFeedPost"));
 			pagePath = "proPost/proPostDetail";
