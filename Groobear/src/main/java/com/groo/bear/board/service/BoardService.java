@@ -47,4 +47,6 @@ public interface BoardService {
 	
 	//서버 측 게시물 수정과 첨부파일 처리
 	public boolean modify(BoardVO boardVO);
+	
+	
 }

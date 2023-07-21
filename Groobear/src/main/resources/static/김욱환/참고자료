@@ -1,0 +1,8 @@
+// function goWrite() {
+	
+// 	let bT = /*[[${boardVO.boardType}]]*/
+//      console.log(bT)
+//      window.location.href ='/boardInsert?boardType=' + bT
+// }
+
+$('select[name="type"]).val()
