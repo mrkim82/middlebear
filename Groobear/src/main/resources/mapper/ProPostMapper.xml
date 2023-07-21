@@ -175,4 +175,18 @@
 		WHERE work_no = #{workNo}
 	</update>
 	
+	<!-- 차트 조회 -->
+	<select id="readPostChart" parameterType="ProPostChartVO">
+		SELECT work_status, 100 * COUNT(work_status)/(SELECT COUNT(work_status)
+		                                        FROM pro_work a
+		                                        JOIN pro_post b
+		                                        ON(a.pro_post_no = b.pro_post_no)
+		                                        WHERE b.pro_no = #{proNo}) AS count
+		FROM pro_work a
+		JOIN pro_post b
+		ON(a.pro_post_no = b.pro_post_no)
+		WHERE b.pro_no = #{proNo}
+		GROUP BY work_status
+	</select>
+	
 </mapper>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
+import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostFeedVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
@@ -46,5 +47,8 @@ public interface ProPostMapper {
 	
 	//게시글 조회 업무 상태 변경
 	public int updateWorkPostStatus(ProPostWorkVO vo);
+	
+	//차트조회
+	public List<ProPostChartVO> readPostChart(int proNo);
 	
 }

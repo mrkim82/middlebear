@@ -1,5 +1,6 @@
 package com.groo.bear.pro.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import com.groo.bear.pro.mapper.ProPostMapper;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProPostVO;
+import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostFeedVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
@@ -83,6 +85,30 @@ public class ProPostServiceImpl implements ProPostService {
 	@Override
 	public int updateWorkPostStatus(ProPostWorkVO vo) {
 		return ppm.updateWorkPostStatus(vo);
+	}
+
+	@Override
+	public List<ProPostChartVO> readPostChart(int proNo) {
+		List<ProPostChartVO> list = ppm.readPostChart(proNo);
+	    List<ProPostChartVO> updatedList = new ArrayList<>();
+
+	    for (int i = 1; i <= 5; i++) {
+	        boolean found = false;
+	        for (ProPostChartVO proPostChartVO : list) {
+	            if (Integer.parseInt(proPostChartVO.getWorkStatus()) == i) {
+	                found = true;
+	                updatedList.add(proPostChartVO);
+	                break;
+	            }
+	        }
+	        if (!found) {
+	            ProPostChartVO emptyVO = new ProPostChartVO();
+	            emptyVO.setWorkStatus(String.valueOf(i));
+	            emptyVO.setCount(0); // 나머지 값은 0으로 설정
+	            updatedList.add(emptyVO);
+	        }
+	    }
+	    return updatedList;
 	}
 
 }

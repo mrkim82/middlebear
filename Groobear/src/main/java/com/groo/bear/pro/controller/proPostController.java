@@ -1,5 +1,6 @@
 package com.groo.bear.pro.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.h2.util.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.groo.bear.pro.mapper.ProTodoNVoteMapper;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
@@ -25,6 +29,7 @@ import com.groo.bear.pro.service.ProPostVO;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.PublicCodeColorService;
+import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
@@ -252,4 +257,13 @@ public class proPostController {
 		return map;
 	}
 	
+	//차트 조회
+	@PostMapping("googleChart")
+	@ResponseBody
+	public List<ProPostChartVO> readGoogleChart(@RequestBody int proNo) {
+	    // 프로젝트 번호를 기반으로 데이터 조회
+	    List<ProPostChartVO> chartDataList = proPostService.readPostChart(proNo);
+	    System.out.println(chartDataList);
+	    return chartDataList;
+	}
 }

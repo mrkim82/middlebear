@@ -39,7 +39,64 @@ p {
 	margin-right: 15px;
 }
 </style>
-	
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load("current", {packages:["corechart"]});
+  google.charts.setOnLoadCallback(drawChart);
+  //데이터 불러오기
+  function drawChart() {
+    let url = window.location.pathname;
+    let lastIndex = url.lastIndexOf('/');
+    let projectNo = url.substring(lastIndex + 1);
+
+    fetch("/googleChart", {
+        method: 'POST',
+        headers : {
+            'Content-Type': 'application/json'
+        },
+        body : JSON.stringify(projectNo)
+    })
+    .then(response => response.json())
+    .then(res => {
+        console.log(res);
+
+        var chartData = new google.visualization.DataTable();
+        chartData.addColumn('string', 'workStatus');
+        chartData.addColumn('number', 'count');
+
+        res.forEach(item => {
+            // workStatus 값에 따라 이름을 변경
+            let workStatusName = '';
+            
+            if (item.workStatus === '1') {
+                workStatusName = '요청';
+            } else if (item.workStatus === '2') {
+                workStatusName = '진행';
+            } else if (item.workStatus === '3') {
+                workStatusName = '피드백';
+            } else if (item.workStatus === '4') {
+                workStatusName = '완료';
+            } else if (item.workStatus === '5') {
+                workStatusName = '보류';
+            } 
+
+            chartData.addRow([workStatusName, parseInt(item.count)]);
+        });
+
+        var options = {
+            title: '업무 리포트',
+            pieHole: 0.8,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(chartData, options);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>	
+
 </head>
 <body layout:fragment="content" style="background-color: #eee">
 	<!-- 중앙 + 참여자 -->
@@ -48,9 +105,7 @@ p {
 		<div style="overflow-y: auto; width: 680px; height: 676px;" class="float-start">
 			<!-- 업무리포트(총 업무수)(차트) -->
 			<div>
-				<table>
-
-				</table>
+				<div id="donutchart" style="width: 500px; height: 178px;"></div>
 			</div>
 			<!-- 글 생성 nav -->
 			<div>
