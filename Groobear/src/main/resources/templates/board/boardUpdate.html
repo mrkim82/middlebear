@@ -211,12 +211,11 @@
     
     uploadUL.append(str);
   }
-  var formObj = $("form");
-        $("button[type='submit']").on("click", function(e){
-            e.preventDefault();
-            console.log("modify submit clicked");
-            
-            var str = "";
+        var formObj = $("form");
+        $('button').on("click", function(e) {
+        e.preventDefault();
+        var str = "";
+
             
             $(".uploadResult ul li").each(function(i, obj){
                 console.log(obj)
@@ -229,8 +228,6 @@
             });
 
             formObj.append(str).submit();
-        });
-    
     })
 		
 		$.getJSON(`/getAttachList?boardNo=[[${board.boardNo}]]`, function(arr){

@@ -9,4 +9,6 @@ public interface PaymentService {
 	public List<EmpVO> payEmpList();
 	//결재문서 페이지
 	public int paymentDoc(PaymentVO payVO);
+	//기안자 정보
+	public EmpVO payEmpInfo();
 }

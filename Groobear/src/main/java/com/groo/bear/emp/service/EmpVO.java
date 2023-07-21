@@ -24,4 +24,6 @@ public class EmpVO {
 	private String profileImg;
 	private String empStatus;
 	private String profileNote;
+	private String proRange;
+	private String proPartiFilter;
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProGroupVO;
+import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProUsersVO;
 import com.groo.bear.pro.service.ProVO;

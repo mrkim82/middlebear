@@ -142,4 +142,5 @@
 		SET com_content = #{comContent}
 		WHERE com_no = #{comNo}
 	</update>
+	
 </mapper>

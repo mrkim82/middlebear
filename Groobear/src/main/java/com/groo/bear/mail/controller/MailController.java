@@ -39,7 +39,7 @@ public class MailController {
 		mailVO.setReferrer((String) session.getAttribute("Email"));
 		String S = "S";
 		mailVO.setMailType(S);
-		cri.setPerPageNum(2); //페이징 2개로 끊어서 보려고 임시로 적어둔것
+		//cri.setPerPageNum(2); //페이징 2개로 끊어서 보려고 임시로 적어둔것
 		Paging paging = new Paging();
         paging.setCri(cri);
         System.out.println(mailVO);
@@ -80,7 +80,6 @@ public class MailController {
 		mailVO.setSender(email);
 		String S = "S";
 		mailVO.setMailType(S);
-		cri.setPerPageNum(2);
 		Paging paging = new Paging();
         paging.setCri(cri);
         paging.setTotalCount(mailService.countSendMail(email));
@@ -98,7 +97,6 @@ public class MailController {
 		mailVO.setReceiver((String) session.getAttribute("Email"));
 		String D = "D";
 		mailVO.setMailType(D);
-		cri.setPerPageNum(2);
 		Paging paging = new Paging();
         paging.setCri(cri);
         paging.setTotalCount(mailService.countDeleteMail(mailVO));

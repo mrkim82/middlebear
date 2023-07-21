@@ -43,7 +43,7 @@ body {
         .modal {
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
+            z-index: 1050; /* Sit on top */
             left: 0;
             top: 0;
             width: 100%; /* Full width */
@@ -71,7 +71,7 @@ body {
 				<h4 class="mb-3">Groobear Search ID</h4>
 					<form class="validation-form">
 						<div class="mb-3" style="width:320px;">
-							<label for="name">이름</label> <input type="text"
+							<label for="name">이름</label> <input type="text" minlength="1" maxlength="5" 
 								class="form-control" id="name" name="name" placeholder="이름" value="" required>
 						</div>
 						<div class="mb-3" style="width:320px;">
@@ -82,7 +82,7 @@ body {
 						<div class="mb-3" style="width:320px;">
 							<label for="phone">인증번호</label> <input type="text" minlength="6" maxlength="6"
 								class="form-control" id="smsnum" name="smsnum" placeholder="인증번호 6자리" required>
-								<button type="button" id="smsbtn2">인증번호 확인</button>
+								<button type="button" id="smsbtn2" value="">인증번호 확인</button>
 						</div>
 					<div class="mb-4"></div>
 					<button id="findBtn" class="btn btn-primary btn-lg" style="width:300px; display:inline;" type="button">조회하기</button>
@@ -154,6 +154,7 @@ body {
     	   $('#smsbtn2').on('click', function(){
     		   if($('#smsbtn1').hasClass("smsChecked") == true){
 					if($('#smsnum').val() == checkNum){
+						$('#smsbtn2').text('인증완료');
 						$('#spantext').text('인증번호 정상 인증완료')	;
 		                $('#myModal').show();
 		                $('#smsbtn2').addClass('smsChecked');
