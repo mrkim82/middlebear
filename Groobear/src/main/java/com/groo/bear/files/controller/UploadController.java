@@ -37,7 +37,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 @Controller
 @Log4j2
 public class UploadController {
-	
+	//첨부파일 업로드 페이지
 	@GetMapping("/uploadAjax")
 	public String uploadAjax() {
 		log.info("upload ajax");

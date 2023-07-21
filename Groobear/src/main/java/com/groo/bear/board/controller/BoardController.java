@@ -32,7 +32,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class BoardController {
 	
-	//ㄴㅁㅇㅁㄴㅁㅇㄴ
 	@Autowired
 	BoardService boardService;
 	
@@ -81,7 +80,7 @@ public class BoardController {
 		}
 		
 		log.info("===============================");
-		rttr.addFlashAttribute("result", boardVO.getBoardNo());
+		//rttr.addFlashAttribute("result", boardVO.getBoardNo());
 		return "redirect:/boardList?boardType=" + boardVO.getBoardType();
 	}
 	
