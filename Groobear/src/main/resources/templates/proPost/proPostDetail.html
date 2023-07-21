@@ -58,7 +58,7 @@ p {
     })
     .then(response => response.json())
     .then(res => {
-        console.log(res);
+        //console.log(res);
 
         var chartData = new google.visualization.DataTable();
         chartData.addColumn('string', 'workStatus');
@@ -90,6 +90,7 @@ p {
 
         var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
         chart.draw(chartData, options);
+        
     })
     .catch(error => {
         console.error('Error:', error);
@@ -1174,8 +1175,6 @@ p {
 			console.log('업무번호',workNo);
 			//console.log(oldButton);
 			//console.log(button);
-
-			
 			
 			fetch("/updateWorkPostStatus", {
 						method: 'PUT',
@@ -1211,7 +1210,10 @@ p {
 							
 							    oldButton = button;
 							  }
-							
+							  
+							  //차트 재호출
+							  google.charts.setOnLoadCallback(drawChart);
+							  
 						} else {
 							alert('상태 수정 실패');
 						}
