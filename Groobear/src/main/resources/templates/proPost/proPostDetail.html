@@ -44,7 +44,7 @@ p {
   google.charts.load("current", {packages:["corechart"]});
   google.charts.setOnLoadCallback(drawChart);
   //데이터 불러오기
-  function drawChart() {
+function drawChart() {
     let url = window.location.pathname;
     let lastIndex = url.lastIndexOf('/');
     let projectNo = url.substring(lastIndex + 1);
@@ -58,26 +58,24 @@ p {
     })
     .then(response => response.json())
     .then(res => {
-        //console.log(res);
-
         var chartData = new google.visualization.DataTable();
         chartData.addColumn('string', 'workStatus');
         chartData.addColumn('number', 'count');
-
+		console.log(res);
         res.forEach(item => {
             // workStatus 값에 따라 이름을 변경
             let workStatusName = '';
             
             if (item.workStatus === '1') {
-                workStatusName = '요청';
+                workStatusName = '요청' + item.count + '%';
             } else if (item.workStatus === '2') {
-                workStatusName = '진행';
+                workStatusName = '진행' + item.count + '%';
             } else if (item.workStatus === '3') {
-                workStatusName = '피드백';
+                workStatusName = '피드백' + item.count + '%';
             } else if (item.workStatus === '4') {
-                workStatusName = '완료';
+                workStatusName = '완료' + item.count + '%';
             } else if (item.workStatus === '5') {
-                workStatusName = '보류';
+                workStatusName = '보류' + item.count + '%';
             } 
 
             chartData.addRow([workStatusName, parseInt(item.count)]);
@@ -86,11 +84,24 @@ p {
         var options = {
             title: '업무 리포트',
             pieHole: 0.8,
+            legend: {
+                textStyle: {
+                    fontSize: 14 // 폰트 크기를 12px로 설정
+                },
+                //position: 'bottom'//중앙정렬
+            },
+            series: {
+                0: { color: '#2780e3' },
+                1: { color: '#ff7518' },
+                2: { color: '#ff0039' },
+                3: { color: '#3fb618' },
+                4: { color: '#373a3c' }
+            },
+            
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
         chart.draw(chartData, options);
-        
     })
     .catch(error => {
         console.error('Error:', error);
@@ -105,9 +116,7 @@ p {
 		<!-- 중앙 -->
 		<div style="overflow-y: auto; width: 680px; height: 676px;" class="float-start">
 			<!-- 업무리포트(총 업무수)(차트) -->
-			<div>
-				<div id="donutchart" style="width: 500px; height: 178px;"></div>
-			</div>
+			<div id="donutchart" style="width: 643px; height: 178px;"></div>
 			<!-- 글 생성 nav -->
 			<div>
 				<ul class="nav justify-content-center"

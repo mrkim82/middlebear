@@ -6,12 +6,305 @@
 <head>
 <meta charset="UTF-8">
 <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+  <!--
+    - import JQuery
+    -->
+    <script th:inline="javascript" type="text/javascript" th:src="@{/lib/jquery-3.6.1.min.js}"></script>
+    <!--
+    - import Toast UI Grid JS & Pagination
+    - 그리드 내의 페이징을 사기 위해는 먼저 페이징을 import 해야합니다.
+    - reference: https://github.com/nhn/tui.grid/issues/891
+    -->
+    <script th:inline="javascript" type="text/javascript" th:src="@{/lib/tui-pagination.js}"></script>
+    <script th:inline="javascript" type="text/javascript" th:src="@{/lib/tui-grid.js}"></script>
+
+    <!-- import Toast UI Grid CSS & Pagination -->
+    <link th:inline="css" th:href="@{/css/tui-pagination.css}" rel="stylesheet"/>
+    <link th:inline="css" th:href="@{/css/tui-grid.css}" rel="stylesheet"/>
+
+
+    <!-- IN-line JS 영역-->
+    <script th:inline="javascript" type="text/javascript">
+
+        $(document).ready(async () => {
+            // 2. HTML이 수행된 뒤 함수를 호출한다.
+            await gridLoad();
+        });
+
+
+        /**
+         *
+         * @return void
+         */
+        const gridLoad = () => {
+            // 3. 그리드 생성
+            const Grid = tui.Grid;
+
+            /**
+             * [선택] 그리드 테마 적용하기 (clean, stripe, default)
+             *
+             * @reference https://nhn.github.io/tui.grid/latest/tutorial-example07-themes
+             * @reference https://seokbong.tistory.com/14
+             */
+            Grid.applyTheme('stripe');
+
+            /**
+             * [선택] Grid Confirm 메시지
+             */
+            Grid.setLanguage('en', {
+                display: {
+                    noData: '데이터가 존재하지 않습니다.',
+                    loadingData: '데이터가 로딩중입니다.',
+                    resizeHandleGuide: 'You can change the width of the column by mouse drag, ' +
+                        'and initialize the width by double-clicking.'
+                },
+                net: {
+                    confirmCreate: 'Are you sure you want to create {{count}} data?',
+                    confirmUpdate: 'Are you sure you want to update {{count}} data?',
+                    confirmDelete: 'Are you sure you want to delete {{count}} data?',
+                    confirmModify: 'Are you sure you want to modify {{count}} data?',
+                    noDataToCreate: '등록 하려는 데이터가 존재하지 않습니다. ',
+                    noDataToUpdate: '수정 하려는 데이터가 존재하지 않습니다. ',
+                    noDataToDelete: 'No data to delete.',
+                    noDataToModify: '수정 할 데이터가 존재하지 않습니다. ',
+                    failResponse: 'An error occurred while requesting data.\nPlease try again.'
+                }
+            }); // set Korean
+            const grid = new Grid({
+                // ================================== 공통 옵션 적용 ==============================
+                el: document.getElementById('grid'),    // [필수] Container element
+                data: [
+                    {
+                        "userId": "adjh54",
+                        "userNm": "Lee",
+                        "userMail": "adjh54@gmail.com",
+                        "userGender": "man",
+                        "userAge": 20,
+                        "userHobby": "H1",
+                        "userSq": 1,
+                    },
+                    {
+                        "userId": "ckask123",
+                        "userNm": "jong",
+                        "userMail": "ckask@gmail.com",
+                        "userGender": "woman",
+                        "userAge": 22,
+                        "userHobby": "H3",
+                        "userSq": 2,
+
+                    },
+                    {
+                        "userId": "hahahoho",
+                        "userNm": "ha",
+                        "userMail": "hahahoho@gmail.com",
+                        "userGender": "man",
+                        "userAge": 23,
+                        "userHobby": "H4",
+                        "userSq": 3,
+
+                    },
+                ],              // [선택] 그리드 데이터 조회
+
+                /**
+                 * [선택] 순번 기능
+                 * @reference : http://nhn.github.io/tui.grid/latest/tutorial-example11-row-headers
+                 */
+                rowHeaders: [{
+                    type: 'rowNum',
+                    header: "순번",
+                    width: 50,
+                }],
+
+                /**
+                 * [선택] Pagination 처리
+                 * https://github.com/nhn/tui.grid/blob/master/packages/toast-ui.grid/docs/ko/infinite-scroll.md
+                 */
+                pageOptions: {
+                    perPage: 10,
+                    useClient: true,
+                },
+
+
+                // ================================== 컬럼 옵션 적용 ==============================
+                columns: [
+                    // [Column-1] 사용자 아이디
+                    {
+                        header: '사용자 아이디',            // [필수] 컬럼 이름
+                        name: 'userId',                 // [필수] 컬럼 매핑 이름 값
+                        sortable: true,                 // [선택] 컬럼의 정렬 여부
+                        resizable: true,                // [선택] 컬럼의 리사이즈 여부 옵션
+                        editor: 'text',                 // [선택] 수정 옵션
+                        // [선택] 필터 옵션
+                        filter: {
+                            type: 'text',
+                            showApplyBtn: true,
+                            showClearBtn: true
+                        },
+                        ////^[a-z|A-Z]*$/
+                        // [선택] 유효성 검증 옵션
+                        validation: {
+                            required: true,
+                            dataType: 'string',
+                            regExp: /^[a-z|A-Z||0-9 ]*$/, //    [정규식] 영문 숫자에 대한 조합만 가능
+                        },
+                    },
+                    // [Column-2] 사용자 이름
+                    {
+                        header: '사용자 이름',             // [필수] 컬럼 이름
+                        name: 'userNm',                 // [필수] 컬럼 매핑 이름 값
+                        sortable: true,                 // [선택] 컬럼의 정렬 여부
+                        resizable: true,                // [선택] 컬럼의 리사이즈 여부 옵션
+                        editor: 'text',                 // [선택] 수정 옵션
+                        // [선택] 필터 옵션
+                        filter: {
+                            type: 'text',
+                            showApplyBtn: true,
+                            showClearBtn: true
+                        },
+                        // [선택] 유효성 검증 옵션
+                        validation: {
+                            required: true,
+                            dataType: 'string',
+                            regExp: /^[a-z|A-Z|ㄱ-ㅎ|가-힣|0-9 ]*$/, // [정규식] 특수문자를 제외한 공백포함 사용 가능
+                        },
+                    },
+                    // [Column-3] 사용자 이메일
+                    {
+                        header: '사용자 이메일',            // [필수] 컬럼 이름
+                        name: 'userMail',               // [필수] 컬럼 매핑 이름 값
+                        sortable: true,                 // [선택] 컬럼의 정렬 여부
+                        resizable: true,                // [선택] 컬럼의 리사이즈 여부 옵션
+                        editor: 'text',                 // [선택] 수정 옵션
+                        // [선택] 필터 옵션
+                        filter: {
+                            type: 'text',
+                            showApplyBtn: true,
+                            showClearBtn: true
+                        },
+                        // [선택] 유효성 검증 옵션
+                        validation: {
+                            unique: true,               // [선택] 유일성 체크 확인 옵션
+                            required: true,
+                            dataType: 'string',
+                            regExp: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+                        },
+                    },
+
+
+                    // [Column-4] 사용자 나이
+                    {
+                        header: '사용자 나이',            // [필수] 컬럼 이름
+                        name: 'userAge',               // [필수] 컬럼 매핑 이름 값
+                        sortable: true,                // [선택] 컬럼의 정렬 여부
+                        resizable: true,               // [선택] 컬럼의 리사이즈 여부 옵션
+                        editor: 'text',                // [선택] 수정 옵션
+                        align: 'center',               // [선택] 텍스트 정렬 옵션
+                        // [선택] 필터 옵션
+                        filter: {
+                            type: 'text',
+                            showApplyBtn: true,
+                            showClearBtn: true
+                        },
+                        // [선택] 유효성 검증 옵션
+                        validation: {
+                            unique: true,               // [선택] 유일성 체크 확인 옵션
+                            dataType: 'number',         // [선택] 데이터 타입 체크 옵션
+                            required: true,             // [선택] 필수 여부 체크 옵션
+                            min: 1,                     // [선택] 최소값
+                            max: 100,                   // [선택] 최대값
+                        }
+                    },
+                    // [Column-5] 사용 여부
+                    {
+                        header: '사용자 성별',             // [필수] 컬럼 이름
+                        name: 'userGender',             // [필수] 컬럼 매핑 이름 값
+                        sortable: true,                 // [선택] 컬럼의 정렬 여부
+                        resizable: true,                // [선택] 컬럼의 리사이즈 여부 옵션
+                        align: 'center',                // [선택] 텍스트 정렬 옵션
+                        filter: 'select',               // [선택] 필터 옵션
+                        formatter: 'listItemText',      // [선택] select box 옵션
+                        editor: {
+                            type: 'radio',
+                            options: {
+                                listItems:
+                                    [
+                                        {text: '남성', value: "man"},
+                                        {text: '여성', value: "woman"},
+                                    ]
+                            },
+                        },
+                    },
+
+                    // [Column-5] 사용자 취미
+                    {
+                        header: '사용자 취미',            // [필수] 컬럼 이름
+                        name: 'userHobby',             // [필수] 컬럼 매핑 이름 값
+                        align: 'center',               // [선택] 텍스트 정렬 옵션
+                        sortable: true,                // [선택] 컬럼의 정렬 여부
+                        resizable: true,               // [선택] 컬럼의 리사이즈 여부 옵션
+                        formatter: 'listItemText',     // [선택] 값을 기반으로 select box 옵션
+                        // [Option] 필터 옵션
+                        filter: {
+                            type: 'select',
+                            showApplyBtn: true,
+                            showClearBtn: true
+                        },
+                        // [Option] select 옵션
+                        editor: {
+                            type: 'select',
+                            options: {
+                                listItems: [
+                                    {text: "독서", value: "H1"},
+                                    {text: "복싱", value: "H2"},
+                                    {text: "스킨스쿠버", value: "H3"},
+                                    {text: "탁구", value: "H4"},
+                                ]
+                            }
+                        },
+                    },
+                    // [Column-5] 사용자 시퀀스 - Hidden
+                    {
+                        header: '사용자 시퀀스',            // [필수] 컬럼 이름
+                        name: 'userSq',                 // [필수] 컬럼 매핑 이름 값
+                        hidden: true,                   // [선택] 숨김 여부
+                    },
+                ],
+                /**
+                 * [Option] 최종 요약 데이터 출력 : max, min, sum, avg
+                 * @reference : https://nhn.github.io/tui.grid/3.9.0/tutorial-example09-using-summary
+                 */
+                summary: {
+                    height: 40,
+                    position: 'bottom', // or 'top'
+                    columnContent: {
+                        userHobby: {
+                            template: (valueMap) => {
+                                return `사용자 합계 : ${valueMap.cnt}`
+                            }
+                        }
+                    }
+                },
+            });
+        };
+
+
+    </script>
 </head>
-<body layout:fragment="content">
-	<div>캘린더</div>
-	<div>
-		<table>
-		</table>
-	</div>
+
+<body style="background-color: gray">
+<div>
+    <div>
+        <!--타이틀-->
+        <h1 style="margin-bottom: 50px; margin-top: 50px; text-align: center">사용자 리스트</h1>
+
+        <!-- 테이블 추가 이벤트 -->
+        <div class="btn-wrapper" style="margin-bottom: 10px;">
+
+        </div>
+        <!-- Toast Grid Load -->
+        <div id="grid"></div>
+
+    </div>
+</div>
 </body>
 </html>
