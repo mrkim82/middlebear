@@ -7,29 +7,49 @@
 </head>
 <body layout:fragment="content">
 	<div>
-		<form>
+		<form style="width:1000px; height:2000px">
 			<table style="float:right">
 				<thead>
-					<tr>
-						<td>기안자</td>
-						<td>결재자1</td>
-						<td>결재자2</td>
+					<tr style="display:inline-block">
+						<td style="width:130px">기안자</td>
+						<td style="width:130px">결재자1</td>
+						<td style="width:100px">결재자2</td>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
+					<tr style="display:inline-block">
 						<td style="width:130px; height:100px; background-color:aquamarine">기안자사인1</td>
+					</tr>
+					<tr style="display:inline-block">
 						<td style="width:130px; height:100px; background-color:MediumOrchid">결재자사인1</td>
+					</tr>
+					<tr style="display:inline-block">
 						<td style="width:130px; height:100px; background-color:DeepSkyBlue">결재자사인2</td>
 					</tr>
-					<tr>
-						<td id="drafter"></td>
-						<td id="payUserList1"></td>
-						<td id="payUserList2"></td>
+					<tr id="drafter">
+						<td></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+					</tr>
+					<tr id="payUserList1">
+						<td></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+					</tr>
+					<tr id="payUserList2">
+						<td></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
 					</tr>
 				</tbody>
 			</table>
-			<table>
+			<table style="float:left">
 				<tbody>
 					<tr>
 						<td><input type="text" value="문서번호"></td>
@@ -38,10 +58,24 @@
 						<td id="drafter">[[${userInfo.name}]] [[${userInfo.rank}]] [[${userInfo.deptName}]]</td>
 					</tr>
 					<tr>
-						<td><button type="button" onclick="payUserSelect()">결재자선택</button></td>
+						<td><button id="childClick" type="button" onclick="payUserSelect();paySend();">결재자선택</button></td>
 					</tr>
-					<tr>
-						<td id="referrerList"></td>
+					<tr id="referrerList">
+						<td style="width:150px"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="width:150px"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="width:150px"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
 					</tr>
 					<tr>
 						<td><input type="text" value="작성일자"></td>
@@ -84,12 +118,17 @@
 		</form>
 	</div>
 	<script>
+	let openPayuser;
+	let payUserList1 = document.getElementById('payUserList1').textContent;
+	let payUserList2 = document.getElementById('payUserList2').textContent;
+	let referrerList = document.getElementById('referrerList').textContent;
 		function paychange(){
 			var selectPay = document.getElementById('payType');
 			var payNum1 = document.getElementById('payNum1');
 			var payNum2 = document.getElementById('payNum2');
 			var payNum3 = document.getElementById('payNum3');
 			console.log(selectPay.value);
+			
 			if(selectPay.value == '1'){
 				console.log('1번맞음');
 				payNum2.style.display = 'none';
@@ -105,21 +144,19 @@
 				payNum3.style.display = 'block';
 			}
 		}
+		
 		function payUserSelect(){
 			//부모에서 자식으로 넘겨줄 값들
 			let drafter = document.getElementById('drafter').textContent;
-			let payUserList1 = document.getElementById('payUserList1').textContent;
-			let payUserList2 = document.getElementById('payUserList2').textContent;
-			let referrerList = document.getElementById('referrerList').textContent;
-			
-			//넘겨줄때 tr td생성?하고 append하고? tr에 함수 넣어주고?			
-			let trTag = document.createElement('tr');
-			let tdTag = document.createElement('td');
-			//payUserList1 은 그냥 보내주고
-			//if조건에 payUserList2는 있는지 없는지 체크하고 있으면 보내주고
-			//referrerList 는 있으면 보내주고 이거아마 paymentEmp에서 세개다 나눠서 올려야될듯?
 			//자식창 키는거
-			let openPayuser = window.open("/pay/paymentEmp","paymentEmp","width=700, height=500, resizable = no");
+			openPayuser = window.open("/pay/paymentEmp","paymentEmp","width=700, height=500, resizable = no");
+			
+		}
+		function paySend(){
+			if(payUserList1 !== ""){
+				console.log('if조건 null이면 실행')
+				console.log(payUserList1);
+			}
 		}
 	</script>
 </body>
