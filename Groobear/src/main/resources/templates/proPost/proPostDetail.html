@@ -3,8 +3,6 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/proPostTiles}">
 <head>
-<meta charset="UTF-8">
-<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <style>
 textarea {
@@ -40,6 +38,8 @@ p {
 }
 </style>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<!-- 차트 -->
 <script type="text/javascript">
   google.charts.load("current", {packages:["corechart"]});
   google.charts.setOnLoadCallback(drawChart);
@@ -273,8 +273,8 @@ function drawChart() {
 										  	
 										  	<p>업무 그룹</p>
 											<select class="form-select" name="workGroup" id="workPostGroup">
-												<th:block th:each="group : ${projectWritingWorkGroup}">
-														<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}" selected></option>
+												<th:block th:each="group : ${readWorkGroup}">
+														<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}" th:selected="${group.workGroupSeq == 1}"></option>
 												</th:block>
 											</select>
 										  	</div>
@@ -569,12 +569,12 @@ function drawChart() {
 										  	<!-- 시작일 추가 -->
 										  	<div>
 										  		<p>시작일</p>
-													<input type="datetime-local" id="startWorkDate" th:value="${#dates.format(allPost.workStartDay, 'yyyy-MM-dd HH:mm')}">
+													<input type="datetime-local" id="startWorkDate2" th:value="${#dates.format(allPost.workStartDay, 'yyyy-MM-dd HH:mm')}">
 										  	</div>
 										  	<!-- 마감일 추가 -->
 										  	<div>
 										  		<p>마감일</p>
-										  		<input type="datetime-local"  id="endWorkDate" min="2023-07-17T00:00" th:value="${#dates.format(allPost.workStartTime, 'yyyy-MM-dd HH:mm')}">
+										  		<input type="datetime-local"  id="endWorkDate2" min="2023-07-17T00:00" th:value="${#dates.format(allPost.workStartTime, 'yyyy-MM-dd HH:mm')}">
 										  	</div>
 										  	<!-- 우선순위 추가 -->
 										  	<div>
@@ -591,8 +591,8 @@ function drawChart() {
 										  	<div>
 										  	
 										  	<p>업무 그룹</p>
-											<select class="form-select" name="workGroup" id="workPostGroup">
-												<th:block th:each="group : ${projectWritingWorkGroup}">
+											<select class="form-select" name="workGroup" id="workPostGroup2">
+												<th:block th:each="group : ${readWorkGroup}">
 														<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}"
 																th:selected="${allPost.workGroupNo == group.workGroupNo}"></option>
 												</th:block>
@@ -1436,14 +1436,14 @@ function drawChart() {
 			let lastIndex = url.lastIndexOf('/');
 			let projectNo = url.substring(lastIndex + 1);
 			
-			/* console.log(titles[1].value);
+			console.log(titles[1].value);
 			console.log('업무그룹',workPostGroup.value);
 			console.log('업무상태',selectedButton.dataset.workTypeStatus);
 			console.log('우선순위',workPostPri.value);
 			console.log(startWorkDate.value);
 			console.log(endWorkDate.value);
 			console.log('내용',workWritingContent.value);
-			console.log('참여자', workPersonArr); */
+			console.log('참여자', workPersonArr);
 			fetch("/postCreateWork", {
 				method: 'POST',
 				headers: {
@@ -1696,7 +1696,7 @@ function drawChart() {
 		});
 	</script> -->
 	
-	<!-- toto 버튼 상태 변경 -->
+	<!-- todo 버튼 상태 변경 -->
 	<script>
 		function changeTodoStatus() {
 			let todoNo = event.target.dataset.todoNo;

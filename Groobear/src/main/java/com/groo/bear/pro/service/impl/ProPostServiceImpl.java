@@ -9,11 +9,10 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.pro.mapper.ProPostMapper;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
-import com.groo.bear.pro.service.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostFeedVO;
-import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
+import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 
@@ -45,11 +44,6 @@ public class ProPostServiceImpl implements ProPostService {
 	@Override
 	public void createPostWork(ProPostWorkVO vo) {
 		ppm.createPostWork(vo);
-	}
-
-	@Override
-	public List<ProPostWorkGroupVO> readWritingWorkGroup(int proNo) {
-		return ppm.readWritingWorkGroup(proNo);
 	}
 
 	@Override

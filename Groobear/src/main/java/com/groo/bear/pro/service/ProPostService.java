@@ -5,7 +5,7 @@ import java.util.List;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostFeedVO;
-import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
+import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 
@@ -32,8 +32,6 @@ public interface ProPostService {
 	
 	//업무 작성
 	public void createPostWork(ProPostWorkVO vo);
-	//업무 그룹조회
-	public List<ProPostWorkGroupVO> readWritingWorkGroup(int proNo);
 	
 	//댓글
 	// 댓글 작성

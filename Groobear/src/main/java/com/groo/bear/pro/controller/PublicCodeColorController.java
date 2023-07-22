@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.groo.bear.pro.service.ProGroupVO;
-import com.groo.bear.pro.service.PublicCodeColorService;
-import com.groo.bear.pro.service.PublicCodeColorVO;
+import com.groo.bear.pro.service.PublicCodeService;
+import com.groo.bear.pro.service.PublicCodeVO;
 
 @RestController
 public class PublicCodeColorController {
 	
 	@Autowired
-	PublicCodeColorService pccs;
+	PublicCodeService pccs;
 	
 	//프로젝트 멤버 색상 수정
 	@PutMapping("updateProMemColor")

@@ -73,15 +73,6 @@
 		}
 	</insert>
 	
-	
-	<!-- 업무 그룹 조회 -->
-	<select id="readWritingWorkGroup" parameterType="ProPostWorkGroupVO">
-		SELECT work_group_no, work_group_name, work_group_seq, pro_no
-		FROM work_group
-		WHERE pro_no = #{proNo}
-		ORDER BY work_group_name
-	</select>
-	
 	<!-- 피드 글 조회 -->
 	<select id="readFeedPost" parameterType="int" resultType="ProPostFeedVO">
 		SELECT a.pro_post_no, a.post_type, a. post_title, TO_CHAR(a.post_date, 'YYYY-MM-DD HH24:MI') AS postDate, a.id, j.profile_img, k.name,

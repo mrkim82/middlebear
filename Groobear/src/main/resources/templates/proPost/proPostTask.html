@@ -3,15 +3,130 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layout/proPostTiles}"
 >
-<head>
-<meta charset="UTF-8">
-<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
-</head>
-<body layout:fragment="content">
-	<div>할 일(업무)</div>
-	<div>
-		<table>
-		</table>
-	</div>
-</body>
+<th:block layout:fragment="content">
+<style>
+#workTableHead th {
+    position: sticky;
+    top: 0px;
+    background-color: gray !important;
+}
+table#workTable th:first-child,
+table#workTable td:first-child { position: sticky; left: 0; }
+
+tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
+</style>
+
+<!-- 테이블 크기 -->
+<div class="float-start table-responsive" style="width: 1600px; margin-left: 10px;" >
+
+<table class="table table-bordered table-hover" id="workTable">
+  <thead id="workTableHead">
+    <tr>
+      <th scope="col" th:each="pCode : ${readPublicCodeWorkAll}" th:text="${pCode.codeName}"></th>
+    </tr>
+  </thead>
+  <tbody>
+  	<!-- 그룹 있는 곳 -->
+  	<th:block th:each="taskG : ${readWorkGroup}" th:unless="${taskG.workGroupSeq == 1}">
+  		<tr>
+  			<td th:text="${taskG.workGroupName}" th:data-work-group-no="${taskG.workGroupNo}"
+  				style="background-color: #b6b3b3" th:colspan="${#lists.size(readPublicCodeWorkAll)}"></td>
+  		</tr>
+	    <tr th:each="task : ${readTaskAllList}" th:if="${task.workGroupNo == taskG.workGroupNo}"
+	    	th:data-pro-post-no="${task.proPostNo}" th:data-work-no="${task.workNo}">
+	      <td th:text="${task.postTitle}">업무명</td>
+	      
+	      <th:block th:switch="${task.workStatus}">
+	      	<td th:case="1"><button type="button" class="btn btn-primary" data-work-type-status="1">요청</button></td>
+	      	<td th:case="2"><button type="button" class="btn btn-warning" data-work-type-status="2">진행</button></td>
+	      	<td th:case="3"><button type="button" class="btn btn-danger" data-work-type-status="3">피드백</button></td>
+	      	<td th:case="4"><button type="button" class="btn btn-success" data-work-type-status="4">완료</button></td>
+	      	<td th:case="5"><button type="button" class="btn btn-secondary" data-work-type-status="5">보류</button></td>
+	      </th:block>
+	      
+	      <th:block th:switch="${task.workPri}">
+	      	<td th:case="1" th:text="낮음">낮음</td>
+	      	<td th:case="2" th:text="보통">보통</td>
+	      	<td th:case="3" th:text="높음">높음</td>
+	      	<td th:case="4" th:text="긴급">긴급</td>
+	      	<td th:case="*" th:text="'-'">우선순위</td>
+	      </th:block>
+	      <td>담당자</td>
+	      <td th:text="${task.workStartTime != null} ? ${#dates.format(task.workStartTime, 'yyyy-MM-dd')} : '-'">
+	      	  시작일</td>
+	      <!-- 마감일 -->
+		      <th:block th:if="${task.workEndTime == null}">
+				<td>-</td>
+		      </th:block>
+		      <th:block th:if="${task.workEndTime != null}">
+				<td th:if="${#dates.format(task.workEndTime) > #dates.format(#calendars.createNow())}"
+					th:text="${#dates.format(task.workEndTime, 'yyyy-MM-dd')}">마감일</td>
+				<td th:if="${#dates.format(task.workEndTime) < #dates.format(#calendars.createNow())}"
+					th:text="${#dates.format(task.workEndTime, 'MM/dd HH:mm')}"
+					style="color: red;">마감일, 24시 전</td>
+	      	  </th:block>
+		  <!-- 마감일 종료 -->
+	      <td th:text="${#dates.format(task.postDate, 'yyyy-MM-dd')}">등록일</td>
+	      <td th:text="${task.workNo}">업무번호</td>
+	      <td th:text="${task.name}">작성자</td>
+	      <td th:text="${#dates.format(task.workUpdateDay, 'yyyy-MM-dd')}">수정일</td>
+	    </tr>
+    </th:block>
+    
+    <!-- 그룹 미지정 -->
+  	<th:block th:each="taskG : ${readWorkGroup}" th:if="${taskG.workGroupSeq == 1}">
+  		<tr>
+  			<td th:text="${taskG.workGroupName}" th:data-work-group-no="${taskG.workGroupNo}"></td>
+  		</tr>
+	    <tr th:each="task : ${readTaskAllList}" th:if="${task.workGroupNo == taskG.workGroupNo}"
+	    	th:data-pro-post-no="${task.proPostNo}" th:data-work-no="${task.workNo}">
+	      <td th:text="${task.postTitle}">업무명</td>
+	      
+	      <th:block th:switch="${task.workStatus}">
+	      	<td th:case="1" th:text="요청">요청</td>
+	      	<td th:case="2" th:text="진행">진행</td>
+	      	<td th:case="3" th:text="피드백">피드백</td>
+	      	<td th:case="4" th:text="완료">완료</td>
+	      	<td th:case="5" th:text="보류">보류</td>
+	      </th:block>
+	      
+	      <th:block th:switch="${task.workPri}">
+	      	<td th:case="1" th:text="낮음">낮음</td>
+	      	<td th:case="2" th:text="보통">보통</td>
+	      	<td th:case="3" th:text="높음">높음</td>
+	      	<td th:case="4" th:text="긴급">긴급</td>
+	      	<td th:case="*" th:text="'-'">우선순위</td>
+	      </th:block>
+	      <td>담당자</td>
+	      <td th:text="${task.workStartTime != null} ? ${#dates.format(task.workStartTime, 'yyyy-MM-dd')} : '-'">
+	      	  시작일</td>
+	      <!-- 마감일 -->
+		      <th:block th:if="${task.workEndTime == null}">
+				<td>-</td>
+		      </th:block>
+		      <th:block th:if="${task.workEndTime != null}">
+				<td th:if="${#dates.format(task.workEndTime) > #dates.format(#calendars.createNow())}"
+					th:text="${#dates.format(task.workEndTime, 'yyyy-MM-dd')}">마감일</td>
+				<td th:if="${#dates.format(task.workEndTime) < #dates.format(#calendars.createNow())}"
+					th:text="${#dates.format(task.workEndTime, 'MM/dd HH:mm')}"
+					th:attr="style='color: red;'">마감일, 24시 전</td>
+	      	  </th:block>
+		  <!-- 마감일 종료 -->
+	      <td th:text="${#dates.format(task.postDate, 'yyyy-MM-dd')}">등록일</td>
+	      <td th:text="${task.workNo}">업무번호</td>
+	      <td th:text="${task.name}">작성자</td>
+	      <td th:text="${#dates.format(task.workUpdateDay, 'yyyy-MM-dd')}">수정일</td>
+	    </tr>
+    </th:block>
+    
+    
+    
+  </tbody>
+</table>
+	
+	
+	
+	
+</div>
+</th:block>
 </html>

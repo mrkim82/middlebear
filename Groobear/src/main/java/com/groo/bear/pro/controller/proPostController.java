@@ -1,6 +1,5 @@
 package com.groo.bear.pro.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.h2.util.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,21 +17,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.groo.bear.pro.mapper.ProTodoNVoteMapper;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
+import com.groo.bear.pro.service.ProPostTaskService;
 import com.groo.bear.pro.service.ProPostUserVO;
-import com.groo.bear.pro.service.ProPostVO;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProTodoNVoteService;
-import com.groo.bear.pro.service.PublicCodeColorService;
+import com.groo.bear.pro.service.PublicCodeService;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
+import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
-import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 
 @Controller
 public class proPostController {
@@ -51,10 +46,13 @@ public class proPostController {
 	ProPostSchService ppss;
 	
 	@Autowired
-	PublicCodeColorService pccs;//공통 색상
+	PublicCodeService publicC;//공통 코드
 	
 	@Autowired
-	ProTodoNVoteService todoNVote;
+	ProTodoNVoteService todoNVote;//할 일, 투표
+	
+	@Autowired
+	ProPostTaskService taskS;//프로젝트(업무)
 	
 	//공통 데이터(사이드바) 전달
 	private Model proData2(Model model, HttpServletRequest request) {
@@ -78,13 +76,15 @@ public class proPostController {
 		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));//메뉴 상단바 조회
 		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(id, proNo));
 		model.addAttribute("projectPartiMember", proPostService.readProjectParti(vo2));//해당 프로젝트 회원 정보 전체 조회
-		model.addAttribute("projectWritingWorkGroup", proPostService.readWritingWorkGroup(proNo));//작성용 업무 그룹 조회
-		model.addAttribute("readPublicCodeColorAll", pccs.readPublicCodeColorAll());//공통 색상 전체
+		model.addAttribute("readWorkGroup", taskS.readWorkGroup(proNo));//업무 그룹 조회
+		model.addAttribute("readPublicCodeColorAll", publicC.readPublicCodeColorAll());//공통 색상 전체
 		
 		switch (homeTab) {
 		//피드
 		case 1 :
-			
+			model.addAttribute("readTaskAllList", taskS.readTaskAllList(proNo));//업무 전체 조회
+			model.addAttribute("readTaskWorkPerson", taskS.readTaskWorkPerson(proNo));//업무 담당자 조회
+			model.addAttribute("readPublicCodeWorkAll", publicC.readPublicCodeWorkAll());
 			pagePath = "proPost/proPostTask";
 			break;
 		//업무
@@ -263,7 +263,6 @@ public class proPostController {
 	public List<ProPostChartVO> readGoogleChart(@RequestBody int proNo) {
 	    // 프로젝트 번호를 기반으로 데이터 조회
 	    List<ProPostChartVO> chartDataList = proPostService.readPostChart(proNo);
-	    System.out.println(chartDataList);
 	    return chartDataList;
 	}
 }
