@@ -65,18 +65,18 @@ public class proPostController {
 	}
 	
 	@GetMapping("proPostMain/{proNo}")
-	public String proPostPage(Model model, HttpServletRequest request, @PathVariable int proNo, ProPostVO vo, ProPostUserVO vo2) {
+	public String proPostPage(Model model, HttpServletRequest request, @PathVariable int proNo, ProPostVO vo) {
 		HttpSession session = request.getSession();
 		String pagePath ="";
 		int homeTab = Integer.parseInt(vo.getHomeTab());
 		String id = (String)session.getAttribute("Id");
-		
 		proData2(model, request);
 		
 		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));//메뉴 상단바 조회
 		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(id, proNo));
-		model.addAttribute("projectPartiMember", proPostService.readProjectParti(vo2));//해당 프로젝트 회원 정보 전체 조회
+		model.addAttribute("projectPartiMember", proPostService.readProjectParti(proNo));//해당 프로젝트 회원 정보 전체 조회
 		model.addAttribute("readWorkGroup", taskS.readWorkGroup(proNo));//업무 그룹 조회
+		model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(proNo));//댓글
 		model.addAttribute("readPublicCodeColorAll", publicC.readPublicCodeColorAll());//공통 색상 전체
 		
 		switch (homeTab) {
@@ -84,14 +84,17 @@ public class proPostController {
 		case 1 :
 			model.addAttribute("readTaskAllList", taskS.readTaskAllList(proNo));//업무 전체 조회
 			model.addAttribute("readTaskWorkPerson", taskS.readTaskWorkPerson(proNo));//업무 담당자 조회
-			model.addAttribute("readPublicCodeWorkAll", publicC.readPublicCodeWorkAll());
+			model.addAttribute("readPublicCodeWorkAll", publicC.readPublicCodeWorkAll());//공통 업무 조회
+			model.addAttribute("readWorkDetail", taskS.readWorkDetail(proNo));//업무 단건 조회
+			model.addAttribute("readWorkView", taskS.readWorkView(proNo, id));//멤버 업무 조회 설정
+			
+			//System.out.println("게시글"+model.getAttribute("readWorkView"));
 			pagePath = "proPost/proPostTask";
 			break;
 		//업무
 		case 2 :
 			//글 조회(임시)
 			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo));
-			model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(proNo));
 			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
 			model.addAttribute("readPartiList", ppss.readPartiList(proNo));
 			//할 일
@@ -162,7 +165,6 @@ public class proPostController {
 			vo.setWorkPersonArr(null);
 		}
 		vo.setId((String)session.getAttribute("Id"));
-		System.out.println("시간!"+vo);
 		
 		proPostService.createPostWork(vo);
 		
@@ -183,7 +185,6 @@ public class proPostController {
 		vo.setId((String)session.getAttribute("Id"));
 		
 		proPostService.createPostComment(vo);
-		System.out.println("왜안옴"+vo);
 		if(result > 0) {
 			res = "성공";
 			
@@ -233,7 +234,6 @@ public class proPostController {
 		}
 		
 		map.put("result", res);
-		System.out.println(vo);
 		return map;
 	}
 	
@@ -252,7 +252,6 @@ public class proPostController {
 		} else {
 			res = "취소";
 		}
-		System.out.println(vo);
 		map.put("result", res);
 		return map;
 	}

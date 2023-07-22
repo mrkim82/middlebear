@@ -24,7 +24,7 @@
 	</select>
 	
 	<!-- 프로젝트 참가자 조회 --><!-- 일정 참가자 반복문 -->
-	<select id="readProjectParti" resultType="ProPostUserVO">
+	<select id="readProjectParti" parameterType="ProPostUserVO">
 		SELECT i.name, m.id, u.profile_img, i.rank, d.dept_name
 		FROM pro_mem m JOIN users u
 		ON(m.id = u.id)
@@ -133,6 +133,7 @@
 		                  WHERE pro_post_no IN (SELECT pro_post_no
 		                                        FROM pro_post
 		                                        WHERE pro_no = #{proNo}))
+		ORDER BY a.com_no
 	</select>
 	
 	<!-- 댓글 작성 -->

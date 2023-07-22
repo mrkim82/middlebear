@@ -110,7 +110,7 @@ function drawChart() {
 </script>	
 
 </head>
-<body layout:fragment="content" style="background-color: #eee">
+<body layout:fragment="content" style="background-color: #fbfbfb">
 	<!-- 중앙 + 참여자 -->
 	<div>
 		<!-- 중앙 -->
@@ -574,7 +574,7 @@ function drawChart() {
 										  	<!-- 마감일 추가 -->
 										  	<div>
 										  		<p>마감일</p>
-										  		<input type="datetime-local"  id="endWorkDate2" min="2023-07-17T00:00" th:value="${#dates.format(allPost.workStartTime, 'yyyy-MM-dd HH:mm')}">
+										  		<input type="datetime-local"  id="endWorkDate2" th:min="${#dates.format(#calendars.createNow())}" th:value="${#dates.format(allPost.workStartTime, 'yyyy-MM-dd HH:mm')}">
 										  	</div>
 										  	<!-- 우선순위 추가 -->
 										  	<div>

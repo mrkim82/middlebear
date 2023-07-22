@@ -19,7 +19,7 @@ public interface ProPostMapper {
 	public int readTopMenuCount(String id, int proNo);
 	
 	// 프로젝트 참가자 정보
-	public List<ProPostUserVO> readProjectParti(ProPostUserVO vo);
+	public List<ProPostUserVO> readProjectParti(int proNo);
 	
 	// 게시글 조회
 	public List<ProPostFeedVO> readFeedPost(int proNo);

@@ -32,8 +32,8 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public List<ProPostUserVO> readProjectParti(ProPostUserVO vo) {
-		return ppm.readProjectParti(vo);
+	public List<ProPostUserVO> readProjectParti(int proNo) {
+		return ppm.readProjectParti(proNo);
 	}
 
 	@Override
