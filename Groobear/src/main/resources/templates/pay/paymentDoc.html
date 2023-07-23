@@ -60,6 +60,9 @@
 					<tr>
 						<td><button id="childClick" type="button" onclick="payUserSelect();">결재자선택</button></td>
 					</tr>
+					<tr>
+						<td><button id="referrerClick" type="button" onclick="referrerSelect();">참조자선택</button></td>
+					</tr>
 					<tr id="referrerList">
 						<td style="width:150px"></td>
 						<td style="display:none"></td>
@@ -118,10 +121,11 @@
 		</form>
 	</div>
 	<script>
-	let openPayuser;
-	let payUserList1 = document.getElementById('payUserList1').textContent;
-	let payUserList2 = document.getElementById('payUserList2').textContent;
-	let referrerList = document.getElementById('referrerList').textContent;
+		let openPayuser;
+		let openReferreruser;
+		let payUserList1 = document.getElementById('payUserList1').textContent;
+		let payUserList2 = document.getElementById('payUserList2').textContent;
+		let referrerList = document.getElementById('referrerList').textContent;
 		function paychange(){
 			var selectPay = document.getElementById('payType');
 			var payNum1 = document.getElementById('payNum1');
@@ -144,13 +148,12 @@
 				payNum3.style.display = 'block';
 			}
 		}
-		
+		function referrerSelect(){
+			openReferreruser = window.open("/pay/referrerEmp","referrerEmp","width=700, height=500, resizable = no");
+		}
 		function payUserSelect(){
-			//부모에서 자식으로 넘겨줄 값들
-			let drafter = document.getElementById('drafter').textContent;
 			//자식창 키는거
 			openPayuser = window.open("/pay/paymentEmp","paymentEmp","width=700, height=500, resizable = no");
-			
 		}
 	</script>
 </body>

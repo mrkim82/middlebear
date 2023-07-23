@@ -29,6 +29,18 @@ public class PaymentController {
 		
 		return "pay/paymentEmp";
 	}
+	//참조자 사원 받아와서 모달창에 뿌려주는 controller
+	@GetMapping("pay/referrerEmp")
+	public String referrerEmp(Model model, HttpServletRequest request) {
+		model.addAttribute("payEmpList",paymentService.payEmpList());
+		HttpSession session = request.getSession();
+		System.out.println("session = "+session);
+		String id = (String) session.getAttribute("Id");
+		System.out.println("id = "+id);
+		System.out.println("기안자 : "+paymentService.payEmpInfo(id));
+		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
+		return "pay/referrerEmp";
+	}
 	//결재문서 페이지
 	@GetMapping("pay/paymentDoc")
 	public String paymentDocForm(Model model,HttpServletRequest request) {
