@@ -117,6 +117,7 @@
     	var referrerNR = '';
     	var payUserList1 = document.getElementById('payUserList1'); //html tbody
 		var payUserList2 = document.getElementById('payUserList2'); //html tbody
+		var referrer = document.getElementById('referrerList'); 	//html tbody
     	function empInfo(e){
     		console.log(e.children[0].textContent);
 			empId = e.children[0].children[0].textContent;
@@ -133,16 +134,25 @@
     		console.log('paySet 클릭');
     		let trTag = document.createElement('tr');
     		let tdTag = document.createElement('td');
-    		
+    		trTag.setAttribute("onmousedown","empInfo(this);");
         		/* drafter = 기안자, payUser1 = 결재자1 payUser2 = 결재자2 */
         	if(drafter !== empId){
 	    		if(payUser1 === ""){
 	    			console.log('기안자만 있음');
-	        		tdTag.append(empName + ' ');
-	        		tdTag.append(empRank+' ');
-	        		tdTag.append(empDept);
-	        		trTag.append(tdTag);
-	        		payUserList1.append(trTag); //화면단에 tr태그 append
+	    			var str = '';
+		    		str += empName+" "+empRank+" "+empDept
+		    		str += "<div style='display:none'>"+empId+"</div>"
+		    	    str += "<div style='display:none'>"+empName+"</div>"
+		    	    str += "<div style='display:none'>"+empRank+"</div>"
+		    	    str += "<div style='display:none'>"+empDept+"</div>"
+		    	    tdTag.innerHTML += str;
+		    	    trTag.append(tdTag);
+		    		payUserList1.append(trTag);
+	        		//tdTag.append(empName + ' ');
+	        		//tdTag.append(empRank+' ');
+	        		//tdTag.append(empDept);
+	        		//trTag.append(tdTag);
+	        		//payUserList1.append(trTag); //화면단에 tr태그 append
 	        		payUser1 = empId; //따로 저장해두는 값
 	        		payUserName1 = empName;
 	            	payUserRank1 = empRank;
@@ -153,9 +163,15 @@
 	    			alert('결재자1에 이미 등록한 사원입니다. 결재자2에 등록이 불가능합니다.');
 	    		}else if(payUser1 !== empId && !payUser2){
 	    			console.log('결재자1은 있고 2는 없음');
-	    			tdTag.append(empName + ' '+empRank+' '+empDept);
-		    		trTag.append(tdTag);
-		    		payUserList2.append(trTag); //화면단에 tr태그 append
+	    			var str = '';
+	    			str += empName+" "+empRank+" "+empDept
+		    		str += "<div style='display:none'>"+empId+"</div>"
+		    	    str += "<div style='display:none'>"+empName+"</div>"
+		    	    str += "<div style='display:none'>"+empRank+"</div>"
+		    	    str += "<div style='display:none'>"+empDept+"</div>"
+		    	    tdTag.innerHTML += str;
+		    	    trTag.append(tdTag);
+		    		payUserList2.append(trTag);
 		    		payUser2 = empId; //따로 저장해두는 값
 		    		payUserName2 = empName;
 		        	payUserRank2 = empRank;
@@ -174,9 +190,10 @@
     	function refSet(){
     		//push pop 사용해야됨 이미 있는 유저정보는 추가할필요없음
     		console.log('refSet 클릭');
+    		var str = '';
     		let trTag = document.createElement('tr');
     		let tdTag = document.createElement('td');
-    		let referrer = document.getElementById('referrerList');
+    		trTag.setAttribute("onmousedown","empInfo(this);");
     		console.log('payUser1 = ',payUser1);
     		console.log('payUser2 = ',payUser2);
     		console.log('empId = ',empId);
@@ -186,9 +203,18 @@
     			if(empId !== payUser1 && empId !== payUser2){
 		    		if(referrerList.length === 0){
 		    			console.log('값 없음');
-		        		tdTag.append(empName + ' '+empRank+' '+empDept);
-		        		trTag.append(tdTag);
-		        		referrer.append(trTag);
+		    			str = '';
+		    			str += "<td>"
+		        		str += empName+" "+empRank+" "+empDept
+			    		str += "<div style='display:none'>"+empId+"</div>"
+			    	    str += "<div style='display:none'>"+empName+"</div>"
+			    	    str += "<div style='display:none'>"+empRank+"</div>"
+			    	    str += "<div style='display:none'>"+empDept+"</div>"
+			    	    str += "</td>"
+			    	    //tdTag.innerHTML += str;
+			    	    //trTag.append(tdTag);
+			    	    trTag.innerHTML += str;
+			    		referrer.append(trTag);
 		        		referrerList.push(empId);
 		        		referrerInfo.push(empId); //id 이름 직급 부서
 		        		referrerInfo.push(empName);
@@ -206,9 +232,18 @@
 			        			}else{
 			        				console.log('조회중입니다.');
 			        				console.log('현재 있는 참조자 리스트 = ',referrerList);
-			        	    		tdTag.append(empName + ' | '+empRank+' | '+empDept);
-			        	    		trTag.append(tdTag);
-			        	    		referrer.append(trTag);
+			        				str = '';
+			        				str += "<td>"
+			        	    		str += empName+" "+empRank+" "+empDept
+						    		str += "<div style='display:none'>"+empId+"</div>"
+						    	    str += "<div style='display:none'>"+empName+"</div>"
+						    	    str += "<div style='display:none'>"+empRank+"</div>"
+						    	    str += "<div style='display:none'>"+empDept+"</div>"
+						    	    str += "</td>"
+						    	    //tdTag.innerHTML += str;
+						    	    //trTag.append(tdTag);
+						    	    trTag.innerHTML += str;
+						    		referrer.append(trTag);
 			        	    		referrerList.push(empId);
 			        	    		referrerInfo.push(empId); //id 이름 직급 부서
 					        		referrerInfo.push(empName);
@@ -234,7 +269,28 @@
     	}
     	function userDel(){
     		console.log('userDel 클릭');
-    		
+    		console.log('payUser1 = ',payUser1);
+    		console.log('payUser2 = ',payUser2);
+    		console.log('referrer = ',referrerList);
+    		console.log('empId = ',empId);
+    		if(payUser1 === empId){
+				console.log(payUser1,' = ',empId,' 데이터 동일');
+    			payUserList1.children[0].remove();
+    			payUser1 = '';
+    		}else if(payUser2 === empId){
+				payUserList2.children[0].remove();
+				payUser2 = '';
+			}
+    		console.log('referrerList = ',referrerList);
+    		for(let i=0; i<referrerList.length; i++){
+				console.log('referrerList 몇번째? ',i);
+				if(referrerList[i] === empId){
+					console.log(referrerList[i],' =  ',empId);
+					referrer.children[0].children[0].remove();
+					referrerList.pop(empId);
+					console.log(referrerList);
+				}
+			}
     	}
     	function userSet(){
     		if(payUser1 === ''){
@@ -335,6 +391,7 @@
     	    tdTag.innerHTML += str;
     	    trTag.append(tdTag);
     		payUserList1.append(trTag);
+			payUser1 = payUserList1.children[0].children[0].children[0].textContent;
     	}
     	if(window.opener.document.getElementById("payUserList2").children[0].textContent !== ""){
     		let trTag = document.createElement('tr');
@@ -356,17 +413,16 @@
     	    tdTag.innerHTML += str;
     	    trTag.append(tdTag);
     		payUserList2.append(trTag);
+    		payUser2 = payUserList2.children[0].children[0].children[0].textContent;
     	}
     	if(window.opener.document.getElementById('referrerList').children[0].textContent !== ""){
     		let trTag = document.createElement('tr');
     		let tdTag = document.createElement('td');
     		let referrerListShow = document.getElementById('referrerList');
-    		let referrerList = [];
     		let referrerInfo = [];
-    		console.log('referrer1번');
+    		var str = '';
     		if(window.opener.document.getElementById("referrerList").children[0].textContent !== "" && window.opener.document.getElementById("referrerList").children[5].textContent !== ""
     				&& window.opener.document.getElementById("referrerList").children[10].textContent !== ""){
-    			console.log('referrer2번');
     			referrerList.push(window.opener.document.getElementById("referrerList").children[0].textContent);
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[1].textContent);
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[2].textContent);
@@ -382,9 +438,26 @@
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[12].textContent);
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[13].textContent);
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[14].textContent);
-    			console.log('referrer3번');
-    		}else if(window.opener.document.getElementById("referrerList").children[0].textContent !== "" &&
-    				window.opener.document.getElementById("referrerList").children[5].textContent !== ""){
+    			trTag.setAttribute("onmousedown","empInfo(this);");
+	    		str += referrerInfo[1]+" "+referrerInfo[2]+" "+referrerInfo[3];
+	    	    str += "<div style='display:none'>"+referrerInfo[0]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[1]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[2]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[3]+"</div>"
+	    	    str += referrerInfo[4]+" "+referrerInfo[6]+" "+referrerInfo[7];
+	    	    str += "<div style='display:none'>"+referrerInfo[4]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[5]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[6]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[7]+"</div>"
+	    	    str += referrerInfo[9]+" "+referrerInfo[10]+" "+referrerInfo[11];
+	    	    str += "<div style='display:none'>"+referrerInfo[8]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[9]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[10]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[11]+"</div>"
+	    	    tdTag.innerHTML += str;
+	    	    trTag.append(tdTag);
+	    	    referrerListShow.append(trTag);
+    		}else if(window.opener.document.getElementById("referrerList").children[0].textContent !== "" && window.opener.document.getElementById("referrerList").children[5].textContent !== ""){
     			console.log('referrer4번');
 	    		referrerList.push(window.opener.document.getElementById("referrerList").children[0].textContent);
 	    		referrerInfo.push(window.opener.document.getElementById("referrerList").children[1].textContent);
@@ -396,44 +469,38 @@
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[7].textContent);
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[8].textContent);
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[9].textContent);
-    			console.log('referrer5번');
+    			trTag.setAttribute("onmousedown","empInfo(this);");
+	    		str += referrerInfo[1]+" "+referrerInfo[2]+" "+referrerInfo[3];
+	    	    str += "<div style='display:none'>"+referrerInfo[0]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[1]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[2]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[3]+"</div>"
+	    	    str += referrerInfo[4]+" "+referrerInfo[6]+" "+referrerInfo[7];
+	    	    str += "<div style='display:none'>"+referrerInfo[4]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[5]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[6]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[7]+"</div>"
+	    	    tdTag.innerHTML += str;
+	    	    trTag.append(tdTag);
+	    	    referrerListShow.append(trTag);
     		}else if(window.opener.document.getElementById("referrerList").children[0].textContent !== ""){
-    			console.log('referrer6번');
     			referrerList.push(window.opener.document.getElementById("referrerList").children[0].textContent);
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[1].textContent);
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[2].textContent);
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[3].textContent);
     			referrerInfo.push(window.opener.document.getElementById("referrerList").children[4].textContent);
-    			console.log('referrer7번');
-    		}
-    		console.log('referrerif조건밖임');
-    		console.log(referrerList);
-    		
-    		var str = '';
-    		if(referrerList.length>2){
-    			console.log('referrer div태그 생성1번');
+    			trTag.setAttribute("onmousedown","empInfo(this);");
 	    		str += referrerInfo[1]+" "+referrerInfo[2]+" "+referrerInfo[3];
-	    	    str += "<br><div style='display:none'>"+referrerInfo[0]+"</div>"
+	    	    str += "<div style='display:none'>"+referrerInfo[0]+"</div>"
 	    	    str += "<div style='display:none'>"+referrerInfo[1]+"</div>"
 	    	    str += "<div style='display:none'>"+referrerInfo[2]+"</div>"
 	    	    str += "<div style='display:none'>"+referrerInfo[3]+"</div>"
-	    	    str += referrerInfo[4]+" "+referrerInfo[6]+" "+referrerInfo[7];
-	    	    str += "<br><div style='display:none'>"+referrerInfo[4]+"</div>"
-	    	    str += "<div style='display:none'>"+referrerInfo[5]+"</div>"
-	    	    str += "<div style='display:none'>"+referrerInfo[6]+"</div>"
-	    	    str += "<div style='display:none'>"+referrerInfo[7]+"</div>"
-	    	    str += referrerInfo[9]+" "+referrerInfo[10]+" "+referrerInfo[11];
-	    	    str += "<br><div style='display:none'>"+referrerInfo[8]+"</div>"
-	    	    str += "<div style='display:none'>"+referrerInfo[9]+"</div>"
-	    	    str += "<div style='display:none'>"+referrerInfo[10]+"</div>"
-	    	    str += "<div style='display:none'>"+referrerInfo[11]+"</div>"
-	    	    console.log('referrer div태그 생성2번');
-	    	    tdTag.innerHTML += str;
+    			tdTag.innerHTML += str;
 	    	    console.log('referrer div태그 생성3번');
 	    	    trTag.append(tdTag);
 	    	    referrerListShow.append(trTag);
     		}
-			}
+		}
     </script>
 </body>
 </html>

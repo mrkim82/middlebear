@@ -58,7 +58,7 @@
 						<td id="drafter">[[${userInfo.name}]] [[${userInfo.rank}]] [[${userInfo.deptName}]]</td>
 					</tr>
 					<tr>
-						<td><button id="childClick" type="button" onclick="payUserSelect();paySend();">결재자선택</button></td>
+						<td><button id="childClick" type="button" onclick="payUserSelect();">결재자선택</button></td>
 					</tr>
 					<tr id="referrerList">
 						<td style="width:150px"></td>
@@ -151,12 +151,6 @@
 			//자식창 키는거
 			openPayuser = window.open("/pay/paymentEmp","paymentEmp","width=700, height=500, resizable = no");
 			
-		}
-		function paySend(){
-			if(payUserList1 !== ""){
-				console.log('if조건 null이면 실행')
-				console.log(payUserList1);
-			}
 		}
 	</script>
 </body>
