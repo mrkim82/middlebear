@@ -13,8 +13,8 @@
     top: 0px;
     background-color: gray !important;
 }
-table#workTable th:first-child,
-table#workTable td:first-child { position: sticky; left: 0; }
+table#workTable th:first-child { position: sticky; top: 0; }
+//table#workTable td:first-child { position: sticky; left: 0; }
 
 tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 
@@ -52,6 +52,7 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 }
 </style>
 </head>
+
 <th:block layout:fragment="content">
 
 <!-- 보기 항목 설정 -->
@@ -71,12 +72,12 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
       <div class="modal-body">
         <h4>항목 설정</h4>
         <h6>조회할 항목을 선택할 수 있습니다.</h6>
-       	<!-- 개인 업무 보기 설정 -->
+       	<!-- 개인 업무 보기 설정(modal) -->
         <ul id="workViewCheck">
         	<li><div class="form-check form-switch">
 			  <input class="form-check-input" type="checkbox" role="switch" id="workNameCheckbox"
 			  		 th:checked="${readWorkView.workName == 'Y'}" th:text="업무명"
-			  		 data-work-view="workName">
+			  		 data-work-view="workName" disabled>
 			  <label class="form-check-label" for="workNameCheckbox"></label>
 			</div></li>
         	<li><div class="form-check form-switch">
@@ -143,72 +144,133 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
   </div>
 </div>
 <!-- 테이블 크기 -->
-<div class="float-start table-responsive" style="width: 1600px; margin-left: 10px;" >
+<div class="float-start table-responsive" style="width: 1600px; margin-left: 10px; height: 630px" >
 
 <table class="table table-bordered table-hover" id="workTable">
 
   <!-- 테이블 제목 -->
   <thead id="workTableHead">
     <tr>
-      <th scope="col" th:each="pCode : ${readPublicCodeWorkAll}" th:text="${pCode.codeName}"></th>
+      <th scope="col" th:style="${readWorkView.workName == 'N'} ? 'display: none;' : ''">업무명</th>
+      <th scope="col" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workStatus">상태</th>
+      <th scope="col" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workPri">우선순위</th>
+      <th scope="col" th:style="${readWorkView.workManager == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workManager">담당자</th>
+      <th scope="col" th:style="${readWorkView.workStartDay == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workStartDay">시작일</th>
+      <th scope="col" th:style="${readWorkView.workEndDay == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workEndDay">마감일</th>
+      <th scope="col" th:style="${readWorkView.workDate == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workDate">등록일</th>
+      <th scope="col" th:style="${readWorkView.workNum == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workNum">업무번호</th>
+      <th scope="col" th:style="${readWorkView.workWriter == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workWriter">작성자</th>
+      <th scope="col" th:style="${readWorkView.workUpdateDay == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workUpdateDay">수정일</th>
     </tr>
   </thead>
+	
   <tbody>
   
   	<th:block th:each="taskG : ${readWorkGroup}">
+  		<!-- 업무 그룹 표시 -->
   		<tr>
   			<td th:text="${taskG.workGroupName}" th:data-work-group-no="${taskG.workGroupNo}"
-  				style="background-color: #b6b3b3" colspan="10"></td>
+  				style="background-color: #b6b3b3"></td>
   		</tr>
+  		
 	    <tr th:each="task : ${readTaskAllList}" th:if="${task.workGroupNo == taskG.workGroupNo}"
 	    	th:data-pro-post-no="${task.proPostNo}" th:data-work-no="${task.workNo}">
+	    	
+  		  <!-- 업무명 -->
 	      <td th:text="'    ' + ${task.postTitle}" th:data-modal="'modal' + ${task.proPostNo}"
-	      	  class="sideWork">업무명</td>
+	      	  class="sideWork" th:style="${readWorkView.workName == 'N' ? 'display: none;' : ''}">업무명</td>
+  		  <!-- 업무명 종료 -->
+  		  
 	      <!-- 업무 상태 -->
 	      <th:block th:switch="${task.workStatus}">
-	      	<td th:case="1"><button type="button" class="btn btn-primary" data-work-type-status="1" data-trigger="focus"
+	      	<td th:case="1" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''">
+	      		<button type="button" class="btn btn-primary" data-work-type-status="1" data-trigger="focus"
 	      		data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom popover"
-	      		th:data-target-status=${task.workNo}>요청</button></td>
-	      	<td th:case="2"><button type="button" class="btn btn-warning" data-work-type-status="2" data-trigger="focus"
+	      		th:data-target-status=${task.workNo} data-work-column="workStatus">요청</button></td>
+	      	<td th:case="2" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''">
+	      		<button type="button" class="btn btn-warning" data-work-type-status="2" data-trigger="focus"
 	      		data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom popover"
-	      		th:data-target-status=${task.workNo}>진행</button></td>
-	      	<td th:case="3"><button type="button" class="btn btn-danger" data-work-type-status="3" data-trigger="focus"
+	      		th:data-target-status=${task.workNo} data-work-column="workStatus">진행</button></td>
+	      	<td th:case="3" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''">
+	      		<button type="button" class="btn btn-danger" data-work-type-status="3" data-trigger="focus"
 	      		data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom popover"
-	      		th:data-target-status=${task.workNo}>피드백</button></td>
-	      	<td th:case="4"><button type="button" class="btn btn-success" data-work-type-status="4" data-trigger="focus"
+	      		th:data-target-status=${task.workNo} data-work-column="workStatus">피드백</button></td>
+	      	<td th:case="4" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''">
+	      		<button type="button" class="btn btn-success" data-work-type-status="4" data-trigger="focus"
 	      		data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom popover"
-	      		th:data-target-status=${task.workNo}>완료</button></td>
-	      	<td th:case="5"><button type="button" class="btn btn-secondary" data-work-type-status="5" data-trigger="focus"
+	      		th:data-target-status=${task.workNo} data-work-column="workStatus">완료</button></td>
+	      	<td th:case="5" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''">
+	      		<button type="button" class="btn btn-secondary" data-work-type-status="5" data-trigger="focus"
 	      		data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom popover"
-	      		th:data-target-status=${task.workNo}>보류</button></td>
+	      		th:data-target-status=${task.workNo} data-work-column="workStatus">보류</button></td>
 	      </th:block>
+	      <!-- 업무 상태 종료-->
 	      
+	      <!-- 우선순위 -->
 	      <th:block th:switch="${task.workPri}">
-	      	<td th:case="1" th:text="낮음">낮음</td>
-	      	<td th:case="2" th:text="보통">보통</td>
-	      	<td th:case="3" th:text="높음">높음</td>
-	      	<td th:case="4" th:text="긴급">긴급</td>
-	      	<td th:case="*" th:text="'-'">우선순위</td>
+	      	<td th:case="1" th:text="낮음" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+	      		data-work-column="workPri">낮음</td>
+	      	<td th:case="2" th:text="보통" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+	      		data-work-column="workPri">보통</td>
+	      	<td th:case="3" th:text="높음" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+	      		data-work-column="workPri">높음</td>
+	      	<td th:case="4" th:text="긴급" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+	      		data-work-column="workPri">긴급</td>
+	      	<td th:case="*" th:text="'-'" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+	      		data-work-column="workPri">우선순위</td>
 	      </th:block>
-	      <td>담당자</td>
-	      <td th:text="${task.workStartTime != null} ? ${#dates.format(task.workStartTime, 'yyyy-MM-dd')} : '-'">
+	      <!-- 우선순위 종료-->
+	      
+	      <!-- 담당자 -->
+	      <td th:style="${readWorkView.workManager == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workManager">담당자</td>
+	      <!-- 담당자 종료-->
+	      
+	      <!-- 시작일 -->
+	      <td th:text="${task.workStartTime != null} ? ${#dates.format(task.workStartTime, 'yyyy-MM-dd')} : '-'"
+	      	  th:style="${readWorkView.workStartDay == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workStartDay">
 	      	  시작일</td>
+	      <!-- 시작일 종료-->
+	      
 	      <!-- 마감일 -->
-		      <th:block th:if="${task.workEndTime == null}">
-				<td>-</td>
-		      </th:block>
-		      <th:block th:if="${task.workEndTime != null}">
-				<td th:if="${#dates.format(task.workEndTime) > #dates.format(afterOneDay)}"
-					th:text="${#dates.format(task.workEndTime, 'yyyy-MM-dd')}">마감일</td>
-				<td th:if="${#dates.format(task.workEndTime) <= #dates.format(afterOneDay)}"
-					th:text="${#dates.format(task.workEndTime, 'MM/dd, HH:mm')}"
-					style="color: red;">마감일, 24시 전</td>
-	      	  </th:block>
+	      <th:block th:if="${task.workEndTime == null}">
+			<td th:style="${readWorkView.workEndDay == 'N'} ? 'display: none;' : ''"
+				data-work-column="workEndDay">-</td>
+	      </th:block>
+	      <th:block th:if="${task.workEndTime != null}">
+			<td th:if="${#dates.format(task.workEndTime) > #dates.format(afterOneDay)}"
+				th:text="${#dates.format(task.workEndTime, 'yyyy-MM-dd')}"
+				th:style="${readWorkView.workEndDay == 'N'} ? 'display: none;' : ''"
+				data-work-column="workEndDay">마감일</td>
+			<td th:if="${#dates.format(task.workEndTime) <= #dates.format(afterOneDay)}"
+				th:text="${#dates.format(task.workEndTime, 'MM/dd, HH:mm')}"
+				th:style="'color: red; display: ' + (${readWorkView.workEndDay == 'N'} ? 'none;' : 'block;')"
+				data-work-column="workEndDay">마감일, 24시 전</td>
+      	  </th:block>
 		  <!-- 마감일 종료 -->
-	      <td th:text="${#dates.format(task.postDate, 'yyyy-MM-dd')}">등록일</td>
-	      <td th:text="${task.workNo}">업무번호</td>
-	      <td th:text="${task.name}">작성자</td>
-	      <td th:text="${#dates.format(task.workUpdateDay, 'yyyy-MM-dd')}">수정일</td>
+		  
+	      <td th:text="${#dates.format(task.postDate, 'yyyy-MM-dd')}"
+	      	  th:style="${readWorkView.workDate == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workDate">등록일</td>
+	      <td th:text="${task.workNo}"
+	      	  th:style="${readWorkView.workNum == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workNum">업무번호</td>
+	      <td th:text="${task.name}"
+	      	  th:style="${readWorkView.workWriter == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workWriter">작성자</td>
+	      <td th:text="${#dates.format(task.workUpdateDay, 'yyyy-MM-dd')}"
+	      	  th:style="${readWorkView.workUpdateDay == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workUpdateDay">수정일</td>
 	    </tr>
 	    
     </th:block>
@@ -466,12 +528,12 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 	function changeMainStatus(newStatus, workNo, className) {
 		let MainButton = document.querySelector('[data-target-status="' + workNo + '" ]');
 		let filledClassName = className.replace('btn-outline', 'btn');
-		console.log(MainButton);
-		console.log(filledClassName);
+		//console.log(MainButton);
+		//console.log(filledClassName);
 		MainButton.className = '';
 		MainButton.dataset.workTypeStatus= newStatus;
 		MainButton.classList.add('btn', filledClassName);
-		console.log(MainButton);
+		//console.log(MainButton);
 		switch (newStatus) {
 		  case '1':
 			  MainButton.innerText = '요청';
@@ -687,12 +749,13 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 		checkeds.forEach(check => {
 			let dName = check.dataset.workView;
 			checkedObj[dName] = 'Y';
+			changeColums.push(dName);
 		});
 		
 		//프로젝트 번호 넣기(postTile에 해당 번호 있습니다)
 		checkedObj['proNo'] = projectNo;
 		
-		console.log(checkedObj);
+		//console.log(checkedObj);
 
 		fetch("/updateWorkView", {
 			method: 'PUT',
@@ -703,7 +766,23 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 		})
 		.then(response => response.json())
 		.then(res => {
-			console.log(res)
+			//console.log(res);
+			//console.log(changeColums);
+
+			let columns = document.querySelectorAll('[data-work-column]');
+
+			columns.forEach((column) => {
+			  column.style.display = 'none';
+			});
+
+			changeColums.forEach(colum => {
+				let targetColumns = document.querySelectorAll('[data-work-column="' + colum + '" ]');
+				targetColumns.forEach((targetColumn) => {
+				    targetColumn.style.display = '';
+				});
+			});
+
+
 		})
 		.catch(error => {
 			console.error('Error: ',error);

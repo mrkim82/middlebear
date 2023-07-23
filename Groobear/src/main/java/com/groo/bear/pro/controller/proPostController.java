@@ -1,7 +1,5 @@
 package com.groo.bear.pro.controller;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -85,18 +83,17 @@ public class proPostController {
 		model.addAttribute("cTime" , new Date());//현재시간
 		model.addAttribute("beforeOneDay" , beforeOneDay());
 		model.addAttribute("afterOneDay" , afterOneDay());
-		System.out.println("게시글"+model.getAttribute("beforeOneDay"));
+		//System.out.println("게시글"+model.getAttribute("beforeOneDay"));
 		
 		switch (homeTab) {
 		//피드
 		case 1 :
 			model.addAttribute("readTaskAllList", taskS.readTaskAllList(proNo));//업무 전체 조회
 			model.addAttribute("readTaskWorkPerson", taskS.readTaskWorkPerson(proNo));//업무 담당자 조회
-			model.addAttribute("readPublicCodeWorkAll", publicC.readPublicCodeWorkAll());//공통 업무 조회
 			model.addAttribute("readWorkDetail", taskS.readWorkDetail(proNo));//업무 단건 조회
 			model.addAttribute("readWorkView", taskS.readWorkView(proNo, id));//멤버 업무 조회 설정
 			
-			System.out.println("게시글"+model.getAttribute("readTaskAllList"));
+			//System.out.println("게시글"+model.getAttribute("readTaskAllList"));
 			//System.out.println("게시글"+model.getAttribute("readWorkView"));
 			pagePath = "proPost/proPostTask";
 			break;
@@ -126,7 +123,7 @@ public class proPostController {
 		//캘린더
 		case 4 :
 			
-			pagePath = "proPost/proPostSchd";
+			pagePath = "proPost/fullcal/examples/background-events";
 			break;
 		//파일
 		case 5 :

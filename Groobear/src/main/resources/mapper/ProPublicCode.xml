@@ -21,11 +21,4 @@
 		                    AND id = #{id})
 	</update>
 	
-	<!-- 업무 th 조회 -->
-	<select id="readPublicCodeWorkAll" resultType="PublicCodeVO">
-		SELECT code, code_name
-		FROM public_code_auth
-		WHERE group_code = 'E'
-	</select>
-	
 </mapper>

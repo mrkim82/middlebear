@@ -26,9 +26,4 @@ public class PublicCodeServiceImpl implements PublicCodeService {
 		return pccm.updateProMemColor(vo);
 	}
 
-	@Override
-	public List<PublicCodeVO> readPublicCodeWorkAll() {
-		return pccm.readPublicCodeWorkAll();
-	}
-
 }
