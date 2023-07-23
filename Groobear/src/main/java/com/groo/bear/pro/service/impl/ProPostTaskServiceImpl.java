@@ -1,6 +1,7 @@
 package com.groo.bear.pro.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,32 @@ public class ProPostTaskServiceImpl implements ProPostTaskService {
 	@Override
 	public ProWorkViewVO readWorkView(int proNo, String id) {
 		return task.readWorkView(proNo, id);
+	}
+
+	@Override
+	public String updateWorkView(ProWorkViewVO vo) {
+		vo.setWorkName(Optional.ofNullable(vo.getWorkName()).orElse("N"));
+	    vo.setWorkStatus(Optional.ofNullable(vo.getWorkStatus()).orElse("N"));
+	    vo.setWorkPri(Optional.ofNullable(vo.getWorkPri()).orElse("N"));
+	    vo.setWorkManager(Optional.ofNullable(vo.getWorkManager()).orElse("N"));
+	    vo.setWorkStartDay(Optional.ofNullable(vo.getWorkStartDay()).orElse("N"));
+	    vo.setWorkEndDay(Optional.ofNullable(vo.getWorkEndDay()).orElse("N"));
+	    vo.setWorkDate(Optional.ofNullable(vo.getWorkDate()).orElse("N"));
+	    vo.setWorkNum(Optional.ofNullable(vo.getWorkNum()).orElse("N"));
+	    vo.setWorkWriter(Optional.ofNullable(vo.getWorkWriter()).orElse("N"));
+	    vo.setWorkUpdateDay(Optional.ofNullable(vo.getWorkUpdateDay()).orElse("N"));
+	    
+	    String res;
+	    int result = task.updateWorkView(vo);
+	    
+	    if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+	    
+		return res;
 	}
 
 }

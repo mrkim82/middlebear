@@ -23,4 +23,7 @@ public interface ProPostTaskService {
 	
 	//멤버별 업무 조회 설정
 	public ProWorkViewVO readWorkView(int proNo, String id);
+	
+	//멤버별 업무 조회 변경
+	public String updateWorkView(ProWorkViewVO vo);
 }

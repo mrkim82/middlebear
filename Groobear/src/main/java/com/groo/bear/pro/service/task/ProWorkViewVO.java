@@ -14,4 +14,7 @@ public class ProWorkViewVO {
 	private String workNum;
 	private String workWriter;
 	private String workUpdateDay;
+	
+	private int proNo;
+	private String id;
 }

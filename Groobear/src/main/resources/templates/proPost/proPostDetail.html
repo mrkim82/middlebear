@@ -1436,14 +1436,14 @@ function drawChart() {
 			let lastIndex = url.lastIndexOf('/');
 			let projectNo = url.substring(lastIndex + 1);
 			
-			console.log(titles[1].value);
-			console.log('업무그룹',workPostGroup.value);
-			console.log('업무상태',selectedButton.dataset.workTypeStatus);
-			console.log('우선순위',workPostPri.value);
-			console.log(startWorkDate.value);
-			console.log(endWorkDate.value);
-			console.log('내용',workWritingContent.value);
-			console.log('참여자', workPersonArr);
+			// console.log(titles[1].value);
+			// console.log('업무그룹',workPostGroup.value);
+			// console.log('업무상태',selectedButton.dataset.workTypeStatus);
+			// console.log('우선순위',workPostPri.value);
+			// console.log(startWorkDate.value);
+			// console.log(endWorkDate.value);
+			// console.log('내용',workWritingContent.value);
+			// console.log('참여자', workPersonArr);
 			fetch("/postCreateWork", {
 				method: 'POST',
 				headers: {

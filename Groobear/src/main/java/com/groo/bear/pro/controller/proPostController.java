@@ -29,6 +29,7 @@ import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.task.ProWorkViewVO;
 
 @Controller
 public class proPostController {
@@ -176,24 +177,12 @@ public class proPostController {
 	@PostMapping("postCreateComment")
 	@ResponseBody
 	public Map<String, Object> createPostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
-		System.out.println("왜안옴"+vo);
 		HttpSession session = request.getSession();
 		Map <String, Object> map = new HashMap<>();
-		String res = "";
-		int result = 0;
 		
 		vo.setId((String)session.getAttribute("Id"));
 		
-		proPostService.createPostComment(vo);
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		
-		map.put("result", res);
-		
+		map.put("result", proPostService.createPostComment(vo));
 		return map;
 	}
 	
@@ -202,19 +191,8 @@ public class proPostController {
 	@ResponseBody
 	public Map<String, Object> proGroupUpdate(@RequestBody ProPostCommentVO vo) {
 		Map <String, Object> map = new HashMap<>();
-		String res;
 		
-		int result = proPostService.updatePostComment(vo);
-		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		
-		map.put("result", res);
-		
+		map.put("result", proPostService.updatePostComment(vo));
 		return map;
 	}
 	
@@ -223,36 +201,18 @@ public class proPostController {
 	@ResponseBody
 	public Map<String, Object> deletePostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
 		Map <String, Object> map = new HashMap<>();
-		String res = "";
-		int result = proPostService.deletePostComment(vo.getComNo());
 		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		
-		map.put("result", res);
+		map.put("result", proPostService.deletePostComment(vo.getComNo()));
 		return map;
 	}
 	
-	//댓글 수정
+	//업무 상태 수정
 	@PutMapping("updateWorkPostStatus")
 	@ResponseBody
 	public Map<String, Object> updateWorkPostStatus(@RequestBody ProPostWorkVO vo) {
 		Map <String, Object> map = new HashMap<>();
-		String res;
 		
-		int result = proPostService.updateWorkPostStatus(vo);
-		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		map.put("result", res);
+		map.put("result", proPostService.updateWorkPostStatus(vo));
 		return map;
 	}
 	
@@ -263,5 +223,19 @@ public class proPostController {
 	    // 프로젝트 번호를 기반으로 데이터 조회
 	    List<ProPostChartVO> chartDataList = proPostService.readPostChart(proNo);
 	    return chartDataList;
+	}
+	
+	//멤버별 업무 조회 변경
+	@PutMapping("updateWorkView")
+	@ResponseBody
+	private Map<String, Object> updateWorkView(HttpServletRequest request, @RequestBody ProWorkViewVO vo) {
+		Map <String, Object> map = new HashMap<>();
+		HttpSession session = request.getSession();
+		vo.setId((String)session.getAttribute("Id"));
+		
+		String res = taskS.updateWorkView(vo);
+		
+		map.put("result", res);
+		return map;
 	}
 }

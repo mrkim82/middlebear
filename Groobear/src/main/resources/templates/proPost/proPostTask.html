@@ -75,52 +75,62 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
         <ul id="workViewCheck">
         	<li><div class="form-check form-switch">
 			  <input class="form-check-input" type="checkbox" role="switch" id="workNameCheckbox"
-			  		 th:checked="${readWorkView.workName == 'Y'}" th:text="업무명">
+			  		 th:checked="${readWorkView.workName == 'Y'}" th:text="업무명"
+			  		 data-work-view="workName">
 			  <label class="form-check-label" for="workNameCheckbox"></label>
 			</div></li>
         	<li><div class="form-check form-switch">
 			  <input class="form-check-input" type="checkbox" role="switch" id="workStatusCheckbox"
-			  		 th:checked="${readWorkView.workStatus == 'Y'}" th:text="상태">
+			  		 th:checked="${readWorkView.workStatus == 'Y'}" th:text="상태"
+			  		 data-work-view="workStatus">
 			  <label class="form-check-label" for="workStatusCheckbox"></label>
 			</div></li>
         	<li><div class="form-check form-switch">
 			  <input class="form-check-input" type="checkbox" role="switch" id="workPrikCheckbox"
-			  		 th:checked="${readWorkView.workPri == 'Y'}" th:text="우선순위">
+			  		 th:checked="${readWorkView.workPri == 'Y'}" th:text="우선순위"
+			  		 data-work-view="workPri">
 			  <label class="form-check-label" for="workPrikCheckbox"></label>
 			</div></li>
         	<li><div class="form-check form-switch">
 			  <input class="form-check-input" type="checkbox" role="switch" id="workManagerCheckbox"
-			  		 th:checked="${readWorkView.workManager == 'Y'}" th:text="담당자">
+			  		 th:checked="${readWorkView.workManager == 'Y'}" th:text="담당자"
+			  		 data-work-view="workManager">
 			  <label class="form-check-label" for="workManagerCheckbox"></label>
 			</div></li>
         	<li><div class="form-check form-switch">
 			  <input class="form-check-input" type="checkbox" role="switch" id="workStartDayCheckbox"
-			  		 th:checked="${readWorkView.workStartDay == 'Y'}" th:text="시작일">
+			  		 th:checked="${readWorkView.workStartDay == 'Y'}" th:text="시작일"
+			  		 data-work-view="workStartDay">
 			  <label class="form-check-label" for="workStartDayCheckbox"></label>
 			</div></li>
         	<li><div class="form-check form-switch">
 			  <input class="form-check-input" type="checkbox" role="switch" id="workEndDayCheckbox"
-			  		 th:checked="${readWorkView.workEndDay == 'Y'}" th:text="마감일">
+			  		 th:checked="${readWorkView.workEndDay == 'Y'}" th:text="마감일"
+			  		 data-work-view="workEndDay">
 			  <label class="form-check-label" for="workEndDayCheckbox"></label>
 			</div></li>
         	<li><div class="form-check form-switch">
 			  <input class="form-check-input" type="checkbox" role="switch" id="workDateCheckbox"
-			  		 th:checked="${readWorkView.workDate == 'Y'}" th:text="등록일">
+			  		 th:checked="${readWorkView.workDate == 'Y'}" th:text="등록일"
+			  		 data-work-view="workDate">
 			  <label class="form-check-label" for="workDateCheckbox"></label>
 			</div></li>
         	<li><div class="form-check form-switch">
 			  <input class="form-check-input" type="checkbox" role="switch" id="workNumCheckbox"
-			  		 th:checked="${readWorkView.workNum == 'Y'}" th:text="업무번호">
+			  		 th:checked="${readWorkView.workNum == 'Y'}" th:text="업무번호"
+			  		 data-work-view="workNum">
 			  <label class="form-check-label" for="workNumCheckbox"></label>
 			</div></li>
         	<li><div class="form-check form-switch">
 			  <input class="form-check-input" type="checkbox" role="switch" id="workWriterCheckbox"
-			  		 th:checked="${readWorkView.workWriter == 'Y'}" th:text="작성자">
+			  		 th:checked="${readWorkView.workWriter == 'Y'}" th:text="작성자"
+			  		 data-work-view="workWriter">
 			  <label class="form-check-label" for="workWriter"></label>
 			</div></li>
         	<li><div class="form-check form-switch">
 			  <input class="form-check-input" type="checkbox" role="switch" id="workUpdateDayCheckbox"
-			  		 th:checked="${readWorkView.workUpdateDay == 'Y'}" th:text="수정일">
+			  		 th:checked="${readWorkView.workUpdateDay == 'Y'}" th:text="수정일"
+			  		 data-work-view="workUpdateDay">
 			  <label class="form-check-label" for="workUpdateDayCheckbox"></label>
 			</div></li>
         </ul>
@@ -145,7 +155,6 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
   </thead>
   <tbody>
   
-  	<!-- 그룹 있는 곳 -->
   	<th:block th:each="taskG : ${readWorkGroup}">
   		<tr>
   			<td th:text="${taskG.workGroupName}" th:data-work-group-no="${taskG.workGroupNo}"
@@ -512,9 +521,9 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 		
 		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
 		
-		let url = window.location.pathname;
+		/* let url = window.location.pathname;
 		let lastIndex = url.lastIndexOf('/');
-		let projectNo = url.substring(lastIndex + 1);
+		let projectNo = url.substring(lastIndex + 1); */
 		
 		fetch("/postCreateComment", {
 			method: 'POST',
@@ -667,14 +676,38 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 		
 	}
 </script>
+
+<!-- 멤버별 업무 보기 설정 -->
 <script>
 	function subWorkView() {
 		let checkeds = document.getElementById('workViewCheck').querySelectorAll('li>div>input:checked');
-		let checkedList = [];
-		checkeds.forEach((check, index) => {
-			checkedList[index] = check;
+		let checkedObj= {};
+		let changeColums = [];
+		
+		checkeds.forEach(check => {
+			let dName = check.dataset.workView;
+			checkedObj[dName] = 'Y';
+		});
+		
+		//프로젝트 번호 넣기(postTile에 해당 번호 있습니다)
+		checkedObj['proNo'] = projectNo;
+		
+		console.log(checkedObj);
+
+		fetch("/updateWorkView", {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(checkedObj)
 		})
-		console.log(checkedList)
+		.then(response => response.json())
+		.then(res => {
+			console.log(res)
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
 	}
 </script>
 </th:block>

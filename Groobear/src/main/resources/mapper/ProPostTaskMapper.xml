@@ -78,6 +78,20 @@
 		AND a.id = #{id}
 		ORDER BY 1 DESC
 	</select>
-
+	
+	<!-- 멤버별 업무 조회 변경 -->
+	<update id="updateWorkView" parameterType="ProWorkViewVO">
+		UPDATE pro_mem
+		SET work_name = #{workName}, work_status = #{workStatus},
+			work_pri = #{workPri}, work_manager = #{workManager},
+		    work_start_day = #{workStartDay}, work_end_day = #{workEndDay}, work_date = #{workDate},
+		    work_num = #{workNum}, work_writer = #{workWriter}, work_update_day = #{workUpdateDay}
+		WHERE pro_mem_no = (SELECT b.pro_mem_no
+                    FROM pro a JOIN
+                    pro_mem b
+                    ON(a.pro_no = b.pro_no)
+                    WHERE a.pro_no = #{proNo}
+                    AND b.id = #{id})
+	</update>
 	
 </mapper>
