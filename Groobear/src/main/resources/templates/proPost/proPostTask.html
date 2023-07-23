@@ -198,9 +198,9 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 				<td>-</td>
 		      </th:block>
 		      <th:block th:if="${task.workEndTime != null}">
-				<td th:if="${#dates.format(task.workEndTime) > #dates.format(#calendars.createNow())}"
+				<td th:if="${#dates.format(task.workEndTime) > #dates.format(afterOneDay)}"
 					th:text="${#dates.format(task.workEndTime, 'yyyy-MM-dd')}">마감일</td>
-				<td th:if="${#dates.format(task.workEndTime) < #dates.format(#calendars.createNow())}"
+				<td th:if="${#dates.format(task.workEndTime) <= #dates.format(afterOneDay)}"
 					th:text="${#dates.format(task.workEndTime, 'MM/dd, HH:mm')}"
 					style="color: red;">마감일, 24시 전</td>
 	      	  </th:block>

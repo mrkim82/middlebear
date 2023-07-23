@@ -1,5 +1,9 @@
 package com.groo.bear.pro.controller;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostTaskService;
-import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.PublicCodeService;
@@ -44,7 +47,7 @@ public class proPostController {
 	ProPostSchService proPostSchService;
 	
 	@Autowired
-	ProPostSchService ppss;
+	ProPostSchService Sch;
 	
 	@Autowired
 	PublicCodeService publicC;//공통 코드
@@ -79,6 +82,10 @@ public class proPostController {
 		model.addAttribute("readWorkGroup", taskS.readWorkGroup(proNo));//업무 그룹 조회
 		model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(proNo));//댓글
 		model.addAttribute("readPublicCodeColorAll", publicC.readPublicCodeColorAll());//공통 색상 전체
+		model.addAttribute("cTime" , new Date());//현재시간
+		model.addAttribute("beforeOneDay" , beforeOneDay());
+		model.addAttribute("afterOneDay" , afterOneDay());
+		System.out.println("게시글"+model.getAttribute("beforeOneDay"));
 		
 		switch (homeTab) {
 		//피드
@@ -89,6 +96,7 @@ public class proPostController {
 			model.addAttribute("readWorkDetail", taskS.readWorkDetail(proNo));//업무 단건 조회
 			model.addAttribute("readWorkView", taskS.readWorkView(proNo, id));//멤버 업무 조회 설정
 			
+			System.out.println("게시글"+model.getAttribute("readTaskAllList"));
 			//System.out.println("게시글"+model.getAttribute("readWorkView"));
 			pagePath = "proPost/proPostTask";
 			break;
@@ -97,7 +105,7 @@ public class proPostController {
 			//글 조회(임시)
 			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo));
 			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
-			model.addAttribute("readPartiList", ppss.readPartiList(proNo));
+			model.addAttribute("readPartiList", Sch.readPartiList(proNo));
 			//할 일
 			model.addAttribute("readTodoList", todoNVote.readTodoList(proNo));//할 일 조회
 			model.addAttribute("readAllTodoListPer", todoNVote.readAllTodoListPer(proNo));//할 일 퍼센트 조회
@@ -138,6 +146,30 @@ public class proPostController {
 		
 		
 		return pagePath;
+	}
+	
+	//하루 전계산
+	private  Date beforeOneDay() {
+        Date currentDate = new Date();
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        Date oneDayBefore = calendar.getTime();
+        
+		return oneDayBefore;
+	}
+	
+	//하루 후계산
+	private  Date afterOneDay() {
+		Date currentDate = new Date();
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(currentDate);
+		calendar.add(Calendar.DAY_OF_MONTH, 1);
+		Date oneDayAfter = calendar.getTime();
+		
+		return oneDayAfter;
 	}
 	
 	//글 생성
