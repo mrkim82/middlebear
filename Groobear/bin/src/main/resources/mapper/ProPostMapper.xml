@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.pro.mapper.ProPostMapper">
+	
+	<!-- 상단메뉴바 조회 -->
+	<select id="readTopMenu" resultType="ProPostVO">
+		SELECT m.pro_color, m.pro_star_check, m.home_tab, p.pro_name, p.pro_content, p.pro_no
+		FROM pro_mem m JOIN pro p
+		ON m.pro_no = p.pro_no
+		WHERE p.pro_no = #{proNo}
+		AND m.id = #{id}
+	</select>
+	
+	<!-- 상단메뉴바 인원수 조회 -->
+	<select id="readTopMenuCount" resultType="int">
+		SELECT COUNT(m1.pro_mem_no) AS count
+		FROM pro_mem m1 INNER JOIN (SELECT pro_no FROM pro_mem WHERE id = #{id}) m2
+		ON m1.pro_no = m2.pro_no
+		WHERE pro_parti_check = 'Y'
+		AND m1.pro_no = #{proNo}
+		GROUP BY m1.pro_no
+	</select>
+	
+	<!-- 프로젝트 참가자 조회 --><!-- 일정 참가자 반복문 -->
+	<select id="readProjectParti" resultType="ProPostUserVO">
+		SELECT i.name, m.id, u.profile_img, i.rank, d.dept_name
+		FROM pro_mem m JOIN users u
+		ON(m.id = u.id)
+		JOIN user_info i
+		ON(u.emp_no = i.emp_no)
+		JOIN departments d
+		ON(i.dept_no = d.dept_no)
+		WHERE m.pro_no = #{proNo}
+		AND m.pro_parti_check = 'Y'
+		ORDER BY i.name
+	</select>
+	
+	<!-- 글 생성(1번) -->
+	<select id="createPostWriting" statementType="CALLABLE" parameterType="ProPostWritingVO">
+		{call cre_pro_writing(
+				#{proNo, 		   mode=IN,  jdbcType=INTEGER,  javaType=INTEGER},
+				#{id, 	           mode=IN,  jdbcType=VARCHAR,  javaType=String},
+				#{postTitle,	   mode=IN,  jdbcType=VARCHAR,  javaType=String},
+				#{writingContent,  mode=IN,  jdbcType=VARCHAR,  javaType=String}
+			)
+		}
+	</select>
+	
+	<!-- 업무 생성(2번) -->
+	<insert id="createPostWork" statementType="CALLABLE" parameterType="ProPostWorkVO">
+		{call cre_pro_work(
+				#{proNo, 		  mode=IN,  jdbcType=INTEGER},
+				#{id, 	          mode=IN,  jdbcType=VARCHAR},
+				#{postTitle,	  mode=IN,  jdbcType=VARCHAR},
+				#{workGroupNo,    mode=IN,  jdbcType=INTEGER},
+				#{workStatus,     mode=IN,  jdbcType=CHAR},
+				#{workPri,        mode=IN,  jdbcType=CHAR},
+				#{workStartDay,   mode=IN,  jdbcType=DATE},
+				#{workStartTime,  mode=IN,  jdbcType=DATE},
+				#{workEndDay,     mode=IN,  jdbcType=DATE},
+				#{workEndTime,    mode=IN,  jdbcType=DATE},
+				#{workContent,    mode=IN,  jdbcType=VARCHAR}
+			    <if test="workPersonArr != null">
+			        , #{workPersonArr, mode=IN}
+			        <!-- , #{workPersonArr, mode=IN, jdbcType=ARRAY, typeHandler=com.groo.bear.pro.mapper.ArrayTypeHandler} -->
+				</if>
+				<if test="workPersonArr == null">
+				    , null
+				</if>
+			)
+		}
+	</insert>
+	
+	
+	<!-- 업무 그룹 조회 -->
+	<select id="readWritingWorkGroup" parameterType="ProPostWorkGroupVO">
+		SELECT work_group_no, work_group_name, work_group_seq, pro_no
+		FROM work_group
+		WHERE pro_no = #{proNo}
+		ORDER BY work_group_name
+	</select>
+	
+	<!-- 피드 글 조회 -->
+	<select id="readFeedPost" parameterType="int" resultType="ProPostFeedVO">
+		SELECT a.pro_post_no, a.post_type, a. post_title, TO_CHAR(a.post_date, 'YYYY-MM-DD HH24:MI') AS postDate, a.id, j.profile_img, k.name,
+		        b.writing_no, b.writing_content,
+		        c.work_no, c.work_status, c.work_pri,
+		        c.work_start_day, c.work_start_time, c.work_end_day, c.work_end_time,
+		        c.lr_work_seq, c.work_content,
+		        f.sch_no, f.sch_start_day, f.sch_start_time, f.sch_end_day, f.sch_end_time,
+		        f.sch_place, f.sch_content,
+		        i.vote_no, i.vote_content, i.vote_end_day, i.vote_end_check, e.work_group_no
+		FROM pro_post a
+		LEFT JOIN pro_writing b
+		ON(a.pro_post_no = b.pro_post_no)
+		LEFT JOIN pro_work c
+		ON(a.pro_post_no = c.pro_post_no)
+		LEFT JOIN work_group e
+		ON(c.work_group_no = e.work_group_no)
+		LEFT JOIN pro_sch f
+		ON(a.pro_post_no = f.pro_post_no)
+		LEFT JOIN vote i
+		ON(a.pro_post_no = i.pro_post_no)
+		INNER JOIN users j
+		ON(a.id = j.id)
+		INNER JOIN user_info k
+		ON(j.emp_no = k.emp_no)
+		WHERE (f.personal_sch = 'N' or f.personal_sch IS NULL)
+		AND a.pro_no = #{proNo}
+		ORDER BY pro_post_no DESC
+	</select>
+	
+	<!-- 글 조회(임시)
+	<select id="readPostWriting" resultType="ProPostWritingVO">
+		SELECT a.pro_post_no, a.post_type, a. post_title, a.post_date, a.id,
+			   b.writing_no, b.writing_content, d.name, c.profile_img
+		FROM pro_post a
+		LEFT JOIN pro_writing b
+		ON(a.pro_post_no = b.pro_post_no)
+		JOIN users c
+		ON(a.id=c.id)
+		JOIN user_info d
+		ON(c.emp_no = d.emp_no)
+		WHERE post_type = #{postType}
+		ORDER BY a.pro_post_no DESC
+	</select> -->
+	
+	<!-- 글 댓글 조회(임시) -->
+	<select id="readPostWritingComment" resultType="ProPostCommentVO">
+		SELECT a.com_no, a.com_content, TO_CHAR(a.com_date, 'yyyy/MM/dd HH24:mi') AS comDate,
+			   c.name, b.profile_img, a.id, p.pro_post_no
+		FROM com a JOIN users b
+		ON(a.id=b.id)
+		JOIN user_info c
+		ON(b.emp_no = c.emp_no)
+		JOIN pro_post p
+		ON(a.pro_post_no = p.pro_post_no)
+		WHERE a.com_no IN (SELECT com_no
+		                  FROM com
+		                  WHERE pro_post_no IN (SELECT pro_post_no
+		                                        FROM pro_post
+		                                        WHERE pro_no = #{proNo}))
+	</select>
+	
+	<!-- 댓글 작성 -->
+	<insert id="createPostComment" parameterType="ProPostCommentVO">
+		INSERT INTO com(com_no, pro_post_no, com_content, id)
+		VALUES ((SELECT NVL(MAX(com_no), 0) +1
+		         FROM com),
+		         #{proPostNo},
+		         #{comContent},
+		         #{id}
+		)
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deletePostComment" parameterType="int">
+		DELETE FROM com
+		WHERE com_no = #{comNo}
+	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id="updatePostComment" parameterType="ProPostCommentVO">
+		UPDATE com
+		SET com_content = #{comContent}
+		WHERE com_no = #{comNo}
+	</update>
+	
+	<!-- 게시글 조회 업무 상태 변경 -->
+	<update id="updateWorkPostStatus" parameterType="ProPostWorkVO">
+		UPDATE pro_work
+		SET work_status = #{workStatus}
+		WHERE work_no = #{workNo}
+	</update>
+	
+	
+	
+</mapper>
