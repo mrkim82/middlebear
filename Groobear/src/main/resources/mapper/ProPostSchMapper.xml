@@ -6,18 +6,27 @@
 	
 	<!-- 프로젝트 일정 참여자 조회 -->
 	<select id="readSchparti" resultType="ProPostSchVO">
-		SELECT s.sch_no, s.pro_post_no, p.parti_check, p.id, i.name, u.profile_img
-		FROM pro_sch s JOIN sch_parti p
-		ON(s.sch_no = p.sch_no)
+		SELECT s.sch_no, 
+		       s.pro_post_no, 
+		       p.parti_check, 
+		       p.id, 
+		       i.name, 
+		       u.profile_img
+		
+		FROM pro_sch s 
+		JOIN sch_parti p
+		  ON(s.sch_no = p.sch_no)
 		JOIN users u
-		ON(p.id = u.id)
+		  ON(p.id = u.id)
 		JOIN user_info i
-		ON(u.emp_no = i.emp_no)
+		  ON(u.emp_no = i.emp_no)
+		
 		WHERE p.id = #{id}
 		AND s.sch_no IN (SELECT sch_no
 		                 FROM sch_parti
 		                 WHERE id = #{id})
 		AND s.personal_sch = 'N'
+		
 		ORDER BY 1 DESC
 	</select>
 
@@ -55,5 +64,59 @@
 		INSERT INTO sch_parti(sch_no, parti_check, id)
 		VALUES(#{schNo}, #{partiCheck}, #{id})
 	</insert>
+	
+	<!-- 캘린더 화면 조회 -->
+	<select id="readWorkSchView" resultType="ProPostWorkSchVO">
+		SELECT '[' ||
+		        CASE WHEN b.work_status = '1' THEN '요청'
+		             WHEN b.work_status = '2' THEN '진행'
+		             WHEN b.work_status = '3' THEN '피드백'
+		             WHEN b.work_status = '4' THEN '완료'
+		             WHEN b.work_status = '5' THEN '보류'
+		        END || '] ' || a.post_title AS title,
+		        
+		        b.work_start_time AS "start",
+		        b.work_end_time AS end
+		        
+		FROM pro_post a
+		JOIN pro_work b
+		ON(a.pro_post_no = b.pro_post_no)
+		WHERE a.pro_no = #{proNo}
+		
+		UNION ALL
+		
+		SELECT '일정 : ' || a.post_title AS title,
+				b.sch_start_time AS "start",
+				b.sch_end_time AS end
+		FROM pro_post a
+		JOIN pro_sch b
+		ON(a.pro_post_no = b.pro_post_no)
+		WHERE (b.personal_sch IS NULL OR b.personal_sch = 'N')
+		AND a.pro_no = #{proNo}
+	</select>
+	
+	
+	<!-- 캘린더 화면 조회 -->
+	<select id="readPersonalSch" resultType="ProPostWorkSchVO">
+		SELECT '일정(프로젝트) : ' || c.post_title AS title,
+		       b.sch_start_time AS "start",
+		       b.sch_end_time AS end
+		FROM sch_parti a
+		JOIN pro_sch b
+		ON(a.sch_no = b.sch_no)
+		JOIN pro_post c
+		ON(b.pro_post_no = c.pro_post_no)
+		WHERE a.id = #{id}
+		AND b.personal_sch = 'N'
+		UNION ALL
+		SELECT '개인 일정 : ' || a.post_title AS title,
+		b.sch_start_time AS "start",
+		b.sch_end_time AS end
+		FROM pro_post a
+		JOIN pro_sch b
+		ON(a.pro_post_no = b.pro_post_no)
+		WHERE a.id = #{id}
+		AND b.personal_sch = 'Y'
+	</select>
 	
 </mapper>
