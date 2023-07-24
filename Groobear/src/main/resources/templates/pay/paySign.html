@@ -6,7 +6,7 @@
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
-  <!-- 서명 공간 -->
+  <!-- 서명 공간 byte배열로 저장 -->
   <div style="width:300px; height:300px;">
     <canvas id="canvas" style="border:1px solid black"></canvas>
   </div>
@@ -80,18 +80,62 @@
           canvas.on("mouseup", draw);
           canvas.on("mouseout", draw);
           // save 버튼을 누르면 imageupload.php로 base64코드를 보내서 이미지로 변환합니다.
+          
+          var formData = new FormData();
+      		var inputFile = $("input[name='uploadFile']");
+      		var signImg = canvas[0].toDataURL(userId,"/png");
+      		for (var i = 0; i < signImg.length; i++) {
+      			if (!checkExtension(signImg[i].name, signImg[i].size)) {
+      				return false;
+      			}
+      			formData.append("uploadFile", signImg[i]);
+      		}
+      		$.ajax({
+      			url: "/uploadAjaxAction",
+      			processData: false,
+      			contentType: false,
+      			data: formData,
+      			type: "POST",
+      			dataType: "json",
+      			success: function(result) {
+      				showUploadedFile(result);
+      				$(".uploadDiv").html(cloneObj.html());
+      			},
+      			error: function(error) {
+      				console.log(error);
+      			}
+      		});
           $("#save").on("click", function(){
+        	  var formData = new FormData();
+        		var inputFile = $("input[name='uploadFile']");
+        		var signImg = canvas[0].toDataURL(userId,"/png");
+        		for (var i = 0; i < signImg.length; i++) {
+        			if (!checkExtension(signImg[i].name, signImg[i].size)) {
+        				return false;
+        			}
+        			formData.append("uploadFile", signImg[i]);
+        		}
+        		$.ajax({
+        			url: "/uploadAjaxAction",
+        			processData: false,
+        			contentType: false,
+        			data: formData,
+        			type: "POST",
+        			dataType: "json",
+        			success: function(result) {
+        				showUploadedFile(result);
+        				$(".uploadDiv").html(cloneObj.html());
+        			},
+        			error: function(error) {
+        				console.log(error);
+        			}
+        		});
             // a 태그를 만들어서 다운로드를 만듭니다.
-            var link = document.createElement('a'); 
+            //var link = document.createElement('a'); 
             // base64데이터 링크 달기
-            link.href = canvas[0].toDataURL(userId,"/png"); 
-            // 다운로드시 파일명 지정
-            link.download = userId,".png"; 
-            // body에 추가
-            document.body.appendChild(link); 
-            link.click(); 
-            document.body.removeChild(link); 
-            // 다운로드용 a 태그는 다운로드가 끝나면 삭제합니다.
+            //해당 값을 ajax으로 전송하면 됨 formData로 만들어서 해당formData에 담아서 전송
+            //서버에 저장하는거 db에는 파일명만 저장, 서버에 이미지를 업로드
+            //let signImg = canvas[0].toDataURL(userId,"/png"); //byte배열값임
             form.remove();
             window.close();
           });

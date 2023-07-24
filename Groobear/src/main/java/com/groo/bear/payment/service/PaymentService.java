@@ -14,5 +14,6 @@ public interface PaymentService {
 	//결재문서 번호
 	public int paymentNo();
 	//결재문서 데이터삽입
-	//public PaymentVO paymentDoc(PaymentVO payVO);
+	public int paymentLogBook(PaymentVO payVO);
+	
 }

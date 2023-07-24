@@ -36,9 +36,8 @@ public class PaymentServiceImpl implements PaymentService{
 		return paymentMapper.paymentNo();
 	}
 
-	//@Override
-	/*public PaymentVO paymentDoc(PaymentVO payVO) {
-		return "";
-	}*/
-	
+	@Override
+	public int paymentLogBook(PaymentVO payVO) {
+		return paymentMapper.paymentLogBook(payVO);
+	}	
 }

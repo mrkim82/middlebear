@@ -64,4 +64,25 @@
   	<select id="getOldFiles" resultType="FilesVO">
   		select * from files where upload_path = to_char(sysdate -1 , 'yyyy/mm/dd')
   	</select>
+  	<!-- 사원 개인 서명 등록 -->
+  	<insert id="insertSignImg" parameterType="EmpVO">
+  		insert into files (
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,ID
+  							,SIGN_NO)
+  					VALUES
+  							(
+  							#{uuid}
+  							,#{uploadPath}
+  							,#{fileName}
+  							,'1',
+  							,sysdate
+  							,#{id}
+  							,#{empNo}
+  							)
+  	</insert>
   </mapper>

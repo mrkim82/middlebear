@@ -15,5 +15,5 @@ public interface PaymentMapper {
 	//결재문서 작성시 db에서 결재문서 번호 가져와야됨 그래야 최초의 화면에서 문서번호 뽑아줄수있음
 	public int paymentNo();
 	//결재문서 데이터 삽입
-	public PaymentVO paymentDoc(PaymentVO payVO);
+	public int paymentLogBook(PaymentVO payVO);
 }
