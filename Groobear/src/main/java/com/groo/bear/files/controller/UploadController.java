@@ -37,7 +37,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 @Controller
 @Log4j2
 public class UploadController {
-	
+	//첨부파일 업로드 페이지
 	@GetMapping("/uploadAjax")
 	public String uploadAjax() {
 		log.info("upload ajax");
@@ -54,7 +54,7 @@ public class UploadController {
 		return str.replace("-", File.separator);
 		
 	}
-	
+	//produces -> 서버에서 브라우저에게 보낼 때 거르는 것 -> 
 	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<AttachFileDTO>> uploadAjaxPost(MultipartFile[] uploadFile) {

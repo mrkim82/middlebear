@@ -31,7 +31,8 @@
   		select * from files where board_no = #{boardNo}
   	</select>
   	
-  	<delete id="deleteAll">
-  		delete files where board_no = #{boardNo}
-  	</delete>
+  	
+  	<select id="getOldFiles" resultType="FilesVO">
+  		select * from files where upload_path = to_char(sysdate -1 , 'yyyy/mm/dd')
+  	</select>
   </mapper>
