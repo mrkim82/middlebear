@@ -35,12 +35,12 @@ public class UserController {
 			return "mypage/myPageMainP";
 		}
 	}
-	
+	// 마이페이지 입장 전 패스워드 확인 페이지 이동
 	@GetMapping("myPageCheckPassword")
 	public String myPageCheckPassword() {
 		return "mypage/myPageCheckPw";
 	}
-	
+	// 회원정보 페이지 이동(암호확인)
 	@GetMapping("myPageInfo")
 	public String myPageChangeInfo(@RequestParam String password, HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
@@ -48,8 +48,7 @@ public class UserController {
 		EmpVO vo = new EmpVO();
 		BCryptPasswordEncoder scpwd = new BCryptPasswordEncoder(); 
 		vo.setId(id);
-		EmpVO checkVo = new EmpVO();
-		checkVo = (EmpVO) userService.checkScPw(id);
+		EmpVO checkVo = userService.checkScPw(id);
 		if(scpwd.matches(password, checkVo.getPassword())) {
 			vo.setPassword(checkVo.getPassword());
 			model.addAttribute("userInfo", userService.checkMypage(vo));
@@ -65,9 +64,7 @@ public class UserController {
 	@PostMapping("changeUserInfo")
 	@ResponseBody
 	public String changeUser(@RequestBody EmpVO vo) {
-		System.out.println(vo.getId());
 		userService.deleteProfImg(vo.getId());
-		System.out.println(vo);
 		if(vo.getUuid() != null && vo.getUuid() != "") {
 			userService.insertProfImg(vo);
 		}
