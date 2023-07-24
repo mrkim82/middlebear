@@ -123,7 +123,7 @@ public class proPostController {
 		//캘린더
 		case 4 :
 			
-			pagePath = "proPost/fullcal/examples/background-events";
+			pagePath = "proPost/proPostSchd";
 			break;
 		//파일
 		case 5 :
