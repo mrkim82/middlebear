@@ -1,5 +1,6 @@
 package com.groo.bear.pro.controller;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -140,7 +141,6 @@ public class proPostController {
 			break;
 		}
 		
-		
 		return pagePath;
 	}
 	
@@ -184,42 +184,34 @@ public class proPostController {
 	@ResponseBody
 	public Map<String, Object> createPostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
 		HttpSession session = request.getSession();
-		Map <String, Object> map = new HashMap<>();
-		
 		vo.setId((String)session.getAttribute("Id"));
 		
-		map.put("result", proPostService.createPostComment(vo));
-		return map;
+		int result = proPostService.createPostComment(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//댓글 수정
 	@PutMapping("postUpdateComment")
 	@ResponseBody
 	public Map<String, Object> proGroupUpdate(@RequestBody ProPostCommentVO vo) {
-		Map <String, Object> map = new HashMap<>();
-		
-		map.put("result", proPostService.updatePostComment(vo));
-		return map;
+		int result = proPostService.updatePostComment(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//댓글 삭제
 	@PostMapping("postDeleteComment")
 	@ResponseBody
 	public Map<String, Object> deletePostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
-		Map <String, Object> map = new HashMap<>();
-		
-		map.put("result", proPostService.deletePostComment(vo.getComNo()));
-		return map;
+		int result = proPostService.deletePostComment(vo.getComNo());
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//업무 상태 수정
 	@PutMapping("updateWorkPostStatus")
 	@ResponseBody
 	public Map<String, Object> updateWorkPostStatus(@RequestBody ProPostWorkVO vo) {
-		Map <String, Object> map = new HashMap<>();
-		
-		map.put("result", proPostService.updateWorkPostStatus(vo));
-		return map;
+		int result = proPostService.updateWorkPostStatus(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//차트 조회
@@ -234,11 +226,10 @@ public class proPostController {
 	@PutMapping("updateWorkView")
 	@ResponseBody
 	private Map<String, Object> updateWorkView(HttpServletRequest request, @RequestBody ProWorkViewVO vo) {
-		Map <String, Object> map = new HashMap<>();
 		HttpSession session = request.getSession();
 		vo.setId((String)session.getAttribute("Id"));
 		
-		map.put("result", taskS.updateWorkView(vo));
-		return map;
+		int result = taskS.updateWorkView(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 }

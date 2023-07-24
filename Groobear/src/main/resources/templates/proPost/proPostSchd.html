@@ -17,6 +17,38 @@
 p {
 	margin: 40px 10px;
 }
+.custom-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 670px;
+    background-color: #f8f9fa;
+    box-shadow: -1px 0px 3px rgba(0, 0, 0, 0.2);
+    transform: translateX(100%);
+    transition: transform 0.3s;
+}
+
+.show-modal {
+    transform: translateX(0);
+    z-index: 9999;
+}
+
+.modal-header {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.modal-body {
+    padding: 10px;
+}
+
+.modal-footer {
+    padding: 10px;
+    background-color: #f8f9fa;
+    text-align: right;
+}
 </style>
 <!-- 캘린더 스타일 종료 -->
 
@@ -24,6 +56,154 @@ p {
 	<p>캘린더</p>
 	<div id='calendar'></div>
 	
+<!-- Custom Modal(업무) -->
+<div class="custom-modal" th:each="taskD : ${readWorkDetail}" th:id="'modal' + ${taskD.proPostNo}"
+	 th:data-feed-post-no="${taskD.proPostNo}" th:data-feed-work-no="${taskD.workNo}">
+    <div class="modal-header">
+        <h6 class="modal-title"
+        	th:utext="${taskD.profileImg} + ${taskD.name} + ${#dates.format(taskD.postDate, 'yyyy-MM-dd HH:mm')}"></h6>
+        <button type="button" class="close closeModalButton" aria-label="Close">
+        	<span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-header">
+        <h5 class="modal-title" th:text="'제목 : ' + ${taskD.postTitle}"></h5>
+    </div>
+    <div class="modal-body">
+    	<div class="workFeedPostStatus" th:attr="data-feed-work-type=${taskD.workStatus}" style="text-align: center;">
+		    <button type="button" class="btn"
+		    		th:classappend="${taskD.workStatus == '1' ? 'btn-primary' : 'btn-outline-primary'}"
+		            data-work-type-status="1" onclick="toggleFeedButtonStyle(this)">요청</button>
+		    <button type="button" class="btn"
+		    		th:classappend="${taskD.workStatus == '2' ? 'btn-warning' : 'btn-outline-warning'}"
+		            data-work-type-status="2" onclick="toggleFeedButtonStyle(this)">진행</button>
+		    <button type="button" class="btn"
+		    		th:classappend="${taskD.workStatus == '3' ? 'btn-danger' : 'btn-outline-danger'}"
+		            data-work-type-status="3" onclick="toggleFeedButtonStyle(this)">피드백</button>
+		    <button type="button" class="btn"
+		    		th:classappend="${taskD.workStatus == '4' ? 'btn-success' : 'btn-outline-success'}"
+		            data-work-type-status="4" onclick="toggleFeedButtonStyle(this)">완료</button>
+		    <button type="button" class="btn"
+		    		th:classappend="${taskD.workStatus == '5' ? 'btn-secondary' : 'btn-outline-secondary'}"
+		            data-work-type-status="5" onclick="toggleFeedButtonStyle(this)">보류</button>
+		</div>
+		
+		<!-- 추가 항목 -->
+		<div>
+			<p>
+			  <button class="btn btn-primary" type="button" data-toggle="collapse" th:data-target="'#collapseExample' + ${taskD.workNo}"
+			  			aria-expanded="false" aria-controls="collapseExample">
+			    + 항목추가입력
+			  </button>
+			</p>
+			<!-- 하위업무 생성 공간 -->
+			<div>
+
+			</div>
+			<div class="collapse" th:id="'collapseExample' + ${taskD.workNo}">
+			  <div class="card card-body">
+			  	<!-- 시작일 추가 -->
+			  	<div>
+			  		<p>시작일</p>
+						<input type="datetime-local" id="startWorkDate2" th:value="${#dates.format(taskD.workStartDay, 'yyyy-MM-dd HH:mm')}">
+			  	</div>
+			  	<!-- 마감일 추가 -->
+			  	<div>
+			  		<p>마감일</p>
+			  		<input type="datetime-local"  id="endWorkDate2" th:min="${#dates.format(#calendars.createNow())}" th:value="${#dates.format(taskD.workStartTime, 'yyyy-MM-dd HH:mm')}">
+			  	</div>
+			  	<!-- 우선순위 추가 -->
+			  	<div>
+						<p>우선순위</p>
+						<select class="custom-select" name="workPri" id="workPostPri">
+							<option value="">없음</option>
+							<option value="1" th:selected="${taskD.workStatus == '1'}">낮음</option>
+							<option value="2" th:selected="${taskD.workStatus == '2'}">보통</option>
+						    <option value="3" th:selected="${taskD.workStatus == '3'}">높음</option>
+						    <option value="4" th:selected="${taskD.workStatus == '4'}">긴급</option>
+						</select>
+			  	</div>
+			  	<!-- 그룹 추가 -->
+			  	<div>
+			  	
+			  	<p>업무 그룹</p>
+				<select class="form-select" name="workGroup" id="workPostGroup2">
+					<th:block th:each="group : ${readWorkGroup}">
+							<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}"
+									th:selected="${taskD.workGroupNo == group.workGroupNo}"></option>
+					</th:block>
+				</select>
+			  	</div>
+			  </div>
+			</div>
+		</div>
+		<!-- 항목추가 종료 -->
+		<p th:text="${taskD.workContent}">
+			<!-- 게시글 내용이 여기에 들어갑니다. -->
+		</p>
+		<div class="collapse" id="moreContent">
+			<p>
+				<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
+			</p>
+			<a class="btn btn-link" data-toggle="collapse" href="#moreContent" role="button"
+				aria-expanded="false" aria-controls="moreContent">더보기</a>
+		</div>
+		
+		
+    </div>
+    <div class="modal-body">
+    
+        <!-- 하위업무 -->
+		<div>
+			<!-- 하위업무 수 -->
+			<div>
+				<p>ㄴ하위업무</p>
+			</div>
+			<!-- 하위업무 동적 생성 -->
+			<div>
+				<button type="button">+ 하위업무 추가</button>
+			</div>
+			<!-- 하위업무 입력란 -->
+			<div>
+				
+			</div>
+		</div>
+    </div>
+    <div class="modal-body">
+    
+    </div>
+	<!-- 북마크, 댓글수 -->
+	<div>
+	
+	</div>
+    <div class="modal-footer">
+		
+		<div class="col-md-8">
+			<ul class="list-unstyled">
+				<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+					th:if="${taskD.proPostNo == com.proPostNo}">
+					<span th:utext="${com.profileImg}"></span>
+					<span th:text="${com.name}"></span>
+					<span th:text="${com.comDate}"></span>
+					<span th:text="${com.comContent}"></span>
+					<th:block th:if="${com.id == session.Id}">
+						<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+						<span></span><!-- 지우면 안됨!!!!!!! -->
+						<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+					</th:block>
+				</li>
+			</ul>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="댓글 작성">
+			</div>
+			<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+					th:data-post-writing-no="${taskD.proPostNo}">댓글 등록</button>
+		</div>
+		
+    </div>
+</div>
 	
 <!-- 업무, 일정 데이터 가져오기 -->
 <script type="text/javascript" th:inline="javascript">
@@ -43,6 +223,19 @@ p {
   let allEvents = schAllDatas;
   console.log('데이터', allEvents);
   
+  let formattedEvents = allEvents.map(eventData => ({
+    title: eventData.title,
+    start: eventData.start,
+    end: eventData.end,
+    color: eventData.postType == '1' ? 'red' : 'blue',
+    classNames: 'sideWork',
+    extendedProps: {
+        proPostNo: eventData.proPostNo
+    }
+  }));
+
+
+
   var calendar = new FullCalendar.Calendar(calendarEl, {
     headerToolbar: {
       left: 'prev,next today',
@@ -53,9 +246,24 @@ p {
       console.log('이벤트: ' + info.event.title);
       //console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
       //console.log('View: ' + info.view.type);
-
+      console.log(info.event.extendedProps.proPostNo);
       // change the border color just for fun
       //info.el.style.borderColor = 'red';
+      info.jsEvent.preventDefault();
+      if (info.event.url) {
+        window.open(info.event.url);
+      }
+      
+      console.log('event.target',event.target);
+
+
+
+    },
+    dayMaxEventRows: true, // for all non-TimeGrid views
+    views: {
+      timeGrid: {
+        dayMaxEventRows: 3 // adjust to 6 only for timeGridWeek/timeGridDay
+      }
     },
     initialDate: new Date(), // 오늘날짜 넣기
     navLinks: true, // can click day/week names to navigate views.날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
@@ -64,7 +272,7 @@ p {
     selectable: false,// 달력 일자 드래그 설정가능
     //dayMaxEvents: false, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
     //locale: 'ko',
-    events: allEvents
+    events: formattedEvents
     
     
     
@@ -84,6 +292,30 @@ p {
    display: 'background',
    overlap: false,
   } */
+</script>
+
+<!-- Custom JS -->
+<script>
+$(document).ready(function () {
+    var $buttons = $('.sideWork');
+    var $modals = $('.custom-modal');
+    
+    // Event handler for dynamically created buttons
+    $buttons.click(function () {
+        // Get the ID of the corresponding modal
+        var modalId = $(this).data('modal');
+		console.log('sn',$(this))
+		console.log('modalId',modalId)
+        // Show the selected modal and hide others
+        $modals.not('#' + modalId).removeClass('show-modal');
+        $('#' + modalId).toggleClass('show-modal');
+    });
+
+    // Close the custom modal when the close button is clicked
+    $('.closeModalButton').click(function () {
+        $(this).closest('.custom-modal').removeClass('show-modal');
+    });
+});
 </script>
 </th:block>
 </html>

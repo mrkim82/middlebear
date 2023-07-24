@@ -21,18 +21,6 @@ public class ProPostServiceImpl implements ProPostService {
 	@Autowired
 	ProPostMapper ppm;
 	
-	private String tfCheck(int result) {
-		String res = "";
-		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		return res;
-	}
-	
 	@Override
 	public ProPostVO readTopMenu(int proNo, String id) {
 		return ppm.readTopMenu(proNo, id);
@@ -69,30 +57,18 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public String createPostComment(ProPostCommentVO vo) {
-		int result = ppm.createPostComment(vo);
-		
-		String res = tfCheck(result);
-		
-		return res;
+	public int createPostComment(ProPostCommentVO vo) {
+		return ppm.createPostComment(vo);
 	}
 
 	@Override
-	public String deletePostComment(int comNo) {
-		int result = ppm.deletePostComment(comNo);
-		
-		String res = tfCheck(result);
-		
-		return res;
+	public int deletePostComment(int comNo) {
+		return ppm.deletePostComment(comNo);
 	}
 
 	@Override
-	public String updatePostComment(ProPostCommentVO vo) {
-		int result = ppm.updatePostComment(vo);
-		
-		String res = tfCheck(result);
-		
-		return res;
+	public int updatePostComment(ProPostCommentVO vo) {
+		return ppm.updatePostComment(vo);
 	}
 
 	@Override
@@ -101,12 +77,8 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public String updateWorkPostStatus(ProPostWorkVO vo) {
-		int result = ppm.updateWorkPostStatus(vo);
-		
-		String res = tfCheck(result);
-		
-		return res;
+	public int updateWorkPostStatus(ProPostWorkVO vo) {
+		return ppm.updateWorkPostStatus(vo);
 	}
 
 	@Override

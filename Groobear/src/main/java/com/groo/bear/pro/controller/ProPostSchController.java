@@ -34,7 +34,7 @@ public class ProPostSchController {
 		vo.setId((String)session.getAttribute("Id"));
 		int result = ppss.updateSchPartiCheck(vo);
 		
-		return Collections.singletonMap("result", result>0?"성공":"취소");
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//참석자 단건 여러번 추가

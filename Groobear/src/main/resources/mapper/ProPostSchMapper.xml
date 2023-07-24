@@ -76,7 +76,9 @@
 		        END || '] ' || a.post_title AS title,
 		        
 		        b.work_start_time AS "start",
-		        b.work_end_time AS end
+		        b.work_end_time AS end,
+		        a.pro_post_no,
+        		a.post_type
 		        
 		FROM pro_post a
 		JOIN pro_work b
@@ -87,7 +89,10 @@
 		
 		SELECT '일정 : ' || a.post_title AS title,
 				b.sch_start_time AS "start",
-				b.sch_end_time AS end
+				b.sch_end_time AS end,
+				a.pro_post_no,
+				a.post_type
+				
 		FROM pro_post a
 		JOIN pro_sch b
 		ON(a.pro_post_no = b.pro_post_no)

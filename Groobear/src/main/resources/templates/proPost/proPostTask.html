@@ -445,7 +445,8 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
         $buttons.click(function () {
             // Get the ID of the corresponding modal
             var modalId = $(this).data('modal');
-
+			console.log('찾는거',modalId)
+			
             // Show the selected modal and hide others
             $modals.not('#' + modalId).removeClass('show-modal');
             $('#' + modalId).toggleClass('show-modal');

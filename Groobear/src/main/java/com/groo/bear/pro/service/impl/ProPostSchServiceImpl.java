@@ -32,7 +32,7 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 
 	@Override
 	public void deletePartiMemberAll(int schNo) {
-		ppsm.deletePartiMemberAll(schNo);
+		
 	}
 
 	@Override
@@ -43,6 +43,7 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 	@Override
 	public int insertPartiMemberAll(List<ProPostSchVO> vo) {
 		int result = 0;
+		System.out.println("서비스"+vo);
 		
 		if(vo == null) {
 			result = -1;
