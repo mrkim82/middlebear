@@ -22,4 +22,33 @@
 	<select id="paymentNo" resultType="int">
 		SELECT NVL(MAX(pay_no),0)+1 as pay_no FROM payment
 	</select>
+	<!-- 결재문서 insert -->
+	<insert id="paymentInsert" parameterType="paymentVO">
+		INSERT INTO payment(pay_no,issue_date,doc_type,id,approver2,approver3,referrer,pay_status1,public_sign) 
+						VALUES(
+								#{payNo},
+								#{issueDate},
+								#{docType},
+								#{id},
+								#{approver2},
+								#{approver3},
+								<choose>
+								<when test="referrer != null and !referrer.equals('')">
+									#{referrer},
+								</when>
+								<otherwise>
+									..
+								</otherwise>
+								</choose>
+								'Y'
+								<choose>
+								<when test="publicSign != null and !publicSign.equals('')">
+									#{publicSign}
+								</when>
+								<otherwise>
+									..
+								</otherwise>
+								</choose>
+								)
+	</insert>
 </mapper>

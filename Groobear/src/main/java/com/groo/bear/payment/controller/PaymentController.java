@@ -8,9 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.payment.service.PaymentService;
+import com.groo.bear.payment.service.PaymentVO;
 
+//김영환 1.전자결재
 @Controller
 public class PaymentController {
 	@Autowired
@@ -51,7 +55,9 @@ public class PaymentController {
 	}
 	//결재문서 작성
 	@PostMapping("paymentDoc")
-	public String paymentDoc() {
+	@ResponseBody
+	public String paymentDoc(Model model, @RequestBody PaymentVO payVO) {
+		System.out.println(payVO);
 		return "redirect:/main";
 	}
 	//전자서명 페이지
