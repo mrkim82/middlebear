@@ -33,7 +33,7 @@ public class ChatHandler extends TextWebSocketHandler{
 	    }
 
 	    /* Client가 접속 시 호출되는 메서드 */
-	    //클라이언트가 웹 소켓에 연결되었을 때 호출되는 메ㅓ드이다. 연결된 세션을 리스트에 추가한다.
+	    //클라이언트가 웹 소켓에 연결되었을 때 호출되는 메서드이다. 연결된 세션을 리스트에 추가한다.
 	    @Override
 	    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 

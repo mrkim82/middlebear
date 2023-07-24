@@ -18,4 +18,8 @@
 								FROM users
 								WHERE id = #{id})
 	</select>
+	<!-- 문서번호 받아오는 쿼리문 -->
+	<select id="paymentNo" resultType="int">
+		SELECT NVL(MAX(pay_no),0)+1 as pay_no FROM payment
+	</select>
 </mapper>

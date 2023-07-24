@@ -11,4 +11,6 @@ public interface PaymentService {
 	public int paymentDoc(PaymentVO payVO);
 	//기안자 id,emp_no,emp_name,dept_name 받아오는 거
 	public EmpVO payEmpInfo(String id);
+	//결재문서 번호
+	public int paymentNo();
 }

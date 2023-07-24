@@ -72,7 +72,7 @@ a {
 		</thead>
 		<tbody id="bodyWash">
 			<tr th:each="board, stat : ${boardList}" th:attr="onclick='window.location.href=\'/boardInfo?boardNo=' + ${board.boardNo} + '\''">
-				<td th:text="${paging.totalCount - ((paging.cri.page-1) * paging.cri.perPageNum) - stat.index}"></td>
+				<td th:text="${board.btNo}"></td>
 				<td>[[${board.title}]]</td>
 				<td>[[${board.name}]]</td>
 				<td th:text="${#dates.format(board.insertDate, 'yyyy.MM.dd')}"></td>
@@ -115,7 +115,7 @@ a {
 		</th:block>
 		
 		<form name="searchForm" action="boardList">
-		<input type="hidden" name="boardType" th:value="N"/>
+		<input type="hidden" name="boardType" th:value="${boardVO.boardType}"/>
 		<input type="hidden" name="page" value="1"/>
 		<select name="type">
 			<option value='' selected>-- 선택 --</option>

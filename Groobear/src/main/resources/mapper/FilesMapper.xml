@@ -11,7 +11,7 @@
   						   ,FILE_NAME
   						   ,FILE_TYPE
   						   ,FILE_DATE
-  						   ,BOARD_NO
+  						   ,${name}
   							)
   				VALUES 
   						  (
@@ -20,15 +20,20 @@
   						    ,#{fileName}
   						    ,#{fileType}
   						    ,sysdate
-  						    ,#{boardNo})
+  						    ,#{no}
+  						   )
   	</insert>
   	
-  	<delete id="delete">
+  	<delete id="delete" parameterType="String">
   		delete from files where uuid = #{uuid}
   	</delete>
   	
-  	<select id="findByBno" resultType="FilesVO">
-  		select * from files where board_no = #{boardNo}
+  	<delete id="deleteAll">
+  		delete from files where ${name} = #{no}
+  	</delete>
+  	
+  	<select id="findByNo" resultType="FilesVO">
+  		select * from files where ${name} = #{no}
   	</select>
   	
   	<delete id="deleteAll">

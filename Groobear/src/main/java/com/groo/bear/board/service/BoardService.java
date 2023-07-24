@@ -9,23 +9,22 @@ public interface BoardService {
 	
 	//전체조회
 	public List<BoardVO> selectAllList(Criteria cri,BoardVO boardVO);
+	
+	//페이징 건수 조회
+	public int boardListCnt(Criteria cri, BoardVO boardVO);
+	
 	//게시글 단건조회
 	public BoardVO selectBoard(int boardNo);
 	
 	//게시글 등록
 	public int insertBoard(BoardVO boardVO);
 	
-	//게시글 수정
-	public int updateBoard(BoardVO boardVO);
-	
 	//게시글 삭제
 	public int deleteBoard(int boardNo);
 	
-	//첨부파일
-	//public int addFiles(FilesVO filesVO);
+	//서버 측 게시물 수정과 첨부파일 처리
+	public boolean modify(BoardVO boardVO);
 	
-	//페이징
-	public int boardListCnt(Criteria cri, BoardVO boardVO);
 	//댓글
 	//댓글 전체조회
 	public List<BoardVO> readBoardComment(int boardNo);
@@ -45,8 +44,6 @@ public interface BoardService {
 	//첨부파일 폴더안 파일 삭제 처리
 	public boolean remove(int boardNo);
 	
-	//서버 측 게시물 수정과 첨부파일 처리
-	public boolean modify(BoardVO boardVO);
-	
+
 	
 }
