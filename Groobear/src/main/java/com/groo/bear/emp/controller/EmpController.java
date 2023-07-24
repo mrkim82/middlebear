@@ -84,9 +84,7 @@ public class EmpController {
 	@ResponseBody
 	public String changePw(@RequestBody EmpVO vo) {
 		BCryptPasswordEncoder scpwd = new BCryptPasswordEncoder(); 
-		System.out.println("기존 비밀번호 : "+vo.getPassword());
 		String password = scpwd.encode(vo.getPassword());
-		System.out.println("암호화 비밀번호 : "+password);
 		vo.setPassword(password);
 		String result = "";
 		if(empService.changePw(vo) > 0) {

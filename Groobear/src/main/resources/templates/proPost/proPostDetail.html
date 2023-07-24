@@ -134,13 +134,13 @@ function drawChart() {
 						data-toggle="modal" data-target="#modal5" href="#"><span>투표</span></a></li>
 				</ul>
 
-				<!-- 모달 공간 -->
+				<!-- 글 작성 모달 공간 -->
 				<div>
 				<div class="container">
 
 					<!-- 1. 글 작성-->
 					<div class="modal fade modal-dialog-scrollable" id="modal1" tabindex="-1" role="dialog"
-						aria-labelledby="modal1Label" aria-hidden="true">
+						aria-labelledby="modal1Label" aria-hidden="true" style="z-index:-1">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -180,7 +180,7 @@ function drawChart() {
 					
 					<!-- 2.업무 작성 -->
 					<div class="modal fade modal-dialog-scrollable" id="modal2" tabindex="-1" role="dialog"
-						aria-labelledby="modal2Label" aria-hidden="true">
+						aria-labelledby="modal2Label" aria-hidden="true" style="z-index:-1">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -310,7 +310,7 @@ function drawChart() {
 					
 					<!-- 3.일정 작성 -->
 					<div class="modal fade modal-dialog-scrollable" id="modal3" tabindex="-1" role="dialog"
-						aria-labelledby="modal3Label" aria-hidden="true">
+						aria-labelledby="modal3Label" aria-hidden="true" style="z-index:-1">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -380,7 +380,7 @@ function drawChart() {
 
 					<!-- 4.할 일 작성 -->
 					<div class="modal fade modal-dialog-scrollable" id="modal4" tabindex="-1" role="dialog"
-						aria-labelledby="modal4Label" aria-hidden="true">
+						aria-labelledby="modal4Label" aria-hidden="true" style="z-index:-1">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -436,7 +436,7 @@ function drawChart() {
 
 					<!-- 투표 -->
 					<div class="modal fade modal-dialog-scrollable" id="modal5" tabindex="-1" role="dialog"
-						aria-labelledby="modal5Label" aria-hidden="true">
+						aria-labelledby="modal5Label" aria-hidden="true" style="z-index:-1">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -493,6 +493,7 @@ function drawChart() {
 				</div>
 
 				</div>
+				<!-- 글 작성 모달 종료 -->
 
 			</div>
 
@@ -1751,12 +1752,6 @@ function drawChart() {
 			//#dates.format(currentTime, 'yyyy-MM-ddTHH:mm')포맷 사용
 		/*]]>*/
 	</script>
-	
-	<script
-		th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js}"></script>
-	<script
-		th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
-	
 	<!-- <script src="../proPost/proPostJs/proPostDetail.js"></script> -->
 </body>
 </html>

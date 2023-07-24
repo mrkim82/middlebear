@@ -52,6 +52,20 @@
     <!-- 회원가입 -->
     <insert id="signUp" parameterType="EmpVO">
     	insert into users 
-    	values(#{id}, #{password}, #{email}, #{phone}, #{addr}, 'C', sysdate, null, null, 'O', null, #{empNo}, '1 DESC', null, #{addrDetail})
+    	values(#{id},
+    		   #{password},
+    		   #{email}, 
+    		   #{phone}, 
+    		   #{addr}, 
+    		   'C', 
+    		   sysdate, 
+    		   null, 
+    		   null, 
+    		   'O', 
+    		   null, 
+    		   #{empNo}, 
+    		   '1 DESC', 
+    		   null, 
+    		   #{addrDetail})
     </insert>
 </mapper>
