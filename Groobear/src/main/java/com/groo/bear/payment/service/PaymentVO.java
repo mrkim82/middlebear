@@ -2,23 +2,31 @@ package com.groo.bear.payment.service;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
 public class PaymentVO {
 	//전자문서 공용 data
 	private int payNo;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date issueDate;
 	private String docType;
-	private String refferrer;
+	private String id;
 	private String approver2;
 	private String approver3;
+	private String refferrer;
 	private String payStatus1;
 	private String payStatus2;
 	private String payStatus3;
 	private String publicSign;
-	private String id;
 	//운행일지용 data
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date operDate;
 	private String destination;
 	private int befored;
@@ -31,6 +39,10 @@ public class PaymentVO {
 	private String content;
 	private String com;
 	//연차계용 data
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date useDate;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date returnDate;
 }

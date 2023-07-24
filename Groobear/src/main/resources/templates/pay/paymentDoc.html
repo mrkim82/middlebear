@@ -7,7 +7,7 @@
 </head>
 <body layout:fragment="content">
 	<div>
-		<form style="width:1000px; height:2000px" action="paymentDoc" method="post">
+		<form style="width:1200px; height:2000px">
 			<table style="float:right">
 				<thead>
 					<tr style="display:inline-block">
@@ -86,9 +86,9 @@
 					<tr>
 						<td><select id="payType" onchange="paychange()">
 							<option value="" selected>결재문서종류</option>
-							<option value="1">운행일지</option>
-							<option value="2">연차계</option>
-							<option value="3">품의서</option>
+							<option value="a">운행일지</option>
+							<option value="b">연차계</option>
+							<option value="c">품의서</option>
 						</select></td>
 					</tr>
 					<tbody id="payNum1" style="display:none">
@@ -99,8 +99,7 @@
 						</tr>
 						<tr><td>운행전 <button type="button" id="carfiles1">파일첨부</button></td></tr>
 						<tr><td>운행후 <button type="button" id="carfiles2">파일첨부</button></td></tr>
-						<tr><td><button type="submit">결재</button></td></tr>
-						<tr><td><button type="button" id="payNum1Send" onclick="payNum1Check()">데이터체크</button></td></tr>
+						<tr><td><button type="button" onclick="payNumSend1()">결재</button></td></tr>
 					</tbody>
 					<tbody id="payNum2" style="display:none">
 						<tr><td><input type="date" id="off1">(연차시작일)</td></tr>
@@ -109,22 +108,21 @@
 						<tr><td><textarea id="offcontent" style="width:400px; height:200px"></textarea></td></tr>
 						<tr><td><button type="button" id="offfiles">첨부파일(선택)</button></td></tr>
 						<tr><td><textarea id="offcomment" style="width:400px; height:100px"></textarea></td></tr>
-						<tr><td><button type="submit">결재</button></td></tr>
-						<tr><td><button type="button" id="payNum2Send" onclick="payNum2Check()">데이터체크</button></td></tr>
+						<tr><td><button type="button" onclick="payNumSend2()">결재</button></td></tr>
 					</tbody>
 					<tbody id="payNum3" style="display:none">
 						<tr><td><input type="text" id="robintitle" style="width:500px"></td></tr>
 						<tr><td><textarea id="robincontent" style="width:400px; height:200px"></textarea></td></tr>
 						<tr><td><button type="button" id="robinofffiles">첨부파일(선택)</button></td></tr>
 						<tr><td><textarea id="robincomment" style="width:400px; height:100px">코멘트(선택)</textarea></td></tr>
-						<tr><td><button type="submit">결재</button></td></tr>
-						<tr><td><button type="button" id="payNum3Send" onclick="payNum3Check()">데이터체크</button></td></tr>
+						<tr><td><button type="button" onclick="payNumSend3()">결재</button></td></tr>
 					</tbody>
 				</tbody>
 			</table>
 		</form>
 	</div>
-	<script>
+	<script th:inline="javascript">
+	/*<![CDATA[*/
 		let openPayuser;
 		let openReferreruser;
 		let payUserList1 = document.getElementById('payUserList1').children[1].textContent;
@@ -133,6 +131,11 @@
 		let referrer1 = '';
 		let referrer2 = '';
 		let referrer3 = '';
+		let referrer = '';
+		let drafter = /*[[${userInfo.id}]]*/
+		let payNo = /*[[${paymentNo}]]*/
+		console.log('payNo',payNo);
+		console.log('drafter = ',drafter);
 		//select 번호
 		var selectPay = document.getElementById('payType');
 		var payNum1 = document.getElementById('payNum1');
@@ -160,10 +163,10 @@
 		}
 		function paychange(){
 			console.log(selectPay.value);
-			if(selectPay.value == '1'){
-				console.log('1번맞음');
-				payNum2.style.display = 'none';
-				payNum3.style.display = 'none';
+			if(selectPay.value == 'a'){
+				console.log('a맞음');
+				$(payNum2).hide() //.style.display = 'none';
+				$(payNum3).hide() //.style.display = 'none';
 				payNum1.style.display = 'block';
 				off1 = '';
 				off2 = '';
@@ -173,7 +176,7 @@
 				robintitle = '';
 				robincontent = '';
 				robincomment = '';
-			}else if(selectPay.value == '2'){
+			}else if(selectPay.value == 'b'){
 				payNum1.style.display = 'none';
 				payNum3.style.display = 'none';
 				payNum2.style.display = 'block';
@@ -184,7 +187,7 @@
 				robintitle = '';
 				robincontent = '';
 				robincomment = '';
-			}else if(selectPay.value == '3'){
+			}else if(selectPay.value == 'c'){
 				payNum1.style.display = 'none';
 				payNum2.style.display = 'none';
 				payNum3.style.display = 'block';
@@ -210,11 +213,70 @@
 		}
 		//자식창 닫았을때 데이터 저장
 		//운행일지
-		function payNum1Send(){
-			
+		function payNumSend1(){
+			carDate = document.getElementById('carDate').value;
+			carAddr = document.getElementById('carAddr').value;
+			km1 = document.getElementById('km1').value;
+			km2 = document.getElementById('km2').value;
+			console.log(carDate);
+			console.log(carAddr);
+			console.log(km1);
+			console.log(km2);
+			payUserList1 = document.getElementById('payUserList1').children[1].textContent;
+			payUserList2 = document.getElementById('payUserList2').children[1].textContent;
+			if(payUserList1 === ''){
+				alert('결재자1이 없습니다 반드시 등록하세요');
+				return;
+			}
+			if(referrerList.children[11].textContent !== ''){
+				console.log('11번째는 있음');
+				referrer1 = referrerList.children[1].textContent;
+				referrer2 = referrerList.children[6].textContent;
+				referrer3 = referrerList.children[11].textContent;
+				referrer = referrer1,','+referrer2,',',referrer3;
+				console.log('referrer = ',referrer);
+			}else if(referrerList.children[6].textContent !== ''){
+				referrer1 = referrerList.children[1].textContent;
+				referrer2 = referrerList.children[6].textContent;
+				referrer = referrer1,',',referrer2;
+				console.log(referrer);
+			}else if(referrerList.children[1].textContent !== ''){
+				referrer = referrerList.children[1].textContent;
+				console.log(referrer);
+			}else{
+				console.log('참조자 없음 값없음');
+			}
+			console.log('payNo',payNo);
+			console.log('carDate',carDate);
+			console.log('selectPay',selectPay.value);
+			console.log('id',drafter);
+			console.log('approver2',payUserList1);
+			console.log('approver3',payUserList2);
+			console.log('s')
+			fetch("/paymentDoc",{
+				method: 'POST',
+				headers: {
+    			    'Content-Type': 'application/json'
+    			  },
+				body: JSON.stringify({
+					//데이터
+					'payNo' : payNo,
+					'issueDate' : carDate,
+					'docType' : selectPay.value,
+					'id' : drafter,
+					'approver2' : payUserList1,
+					'approver3' : payUserList2,
+				})
+			})
+			.then(response => response.text())
+			.then(res =>{
+				console.log('ok');
+				location.href="/mail/sendingMail";
+			})
+			.catch(err => console.log(err));
 		}
 		//데이터 체크용
-		function payNum1Check(){
+		/* function payNum1Check(){
 			carDate = document.getElementById('carDate').value;
 			carAddr = document.getElementById('carAddr').value;
 			km1 = document.getElementById('km1').value;
@@ -250,13 +312,9 @@
 			}
 			console.log(payUserList1);
 			console.log(payUserList2);
-		}
+		} */
 		//연차계
 		function payNum2Send(){
-			
-		}
-		//데이터체크용
-		function payNum2Check(){
 			off1 = document.getElementById('off1').value;
 			off2 = document.getElementById('off2').value;
 			offtitle = document.getElementById('offtitle').value;
@@ -290,12 +348,43 @@
 			console.log(payUserList1);
 			console.log(payUserList2);
 		}
+		//데이터체크용
+		/* function payNum2Check(){
+			off1 = document.getElementById('off1').value;
+			off2 = document.getElementById('off2').value;
+			offtitle = document.getElementById('offtitle').value;
+			offcontent = document.getElementById('offcontent').value;
+			offcomment = document.getElementById('offcomment').value;
+			payUserList1 = document.getElementById('payUserList1').children[1].textContent;
+			payUserList2 = document.getElementById('payUserList2').children[1].textContent;
+			if(payUserList1 === ''){
+				alert('결재자1이 없습니다 반드시 등록하세요');
+				return;
+			}
+			if(referrerList.children[11].textContent !== ''){
+				console.log('11번째는 있음');
+				referrer1 = referrerList.children[1].textContent;
+				referrer2 = referrerList.children[6].textContent;
+				referrer3 = referrerList.children[11].textContent;
+				console.log(referrer1);
+				console.log(referrer2);
+				console.log(referrer3);
+			}else if(referrerList.children[6].textContent !== ''){
+				referrer1 = referrerList.children[1].textContent;
+				referrer2 = referrerList.children[6].textContent;
+				console.log(referrer1);
+				console.log(referrer2);
+			}else if(referrerList.children[1].textContent !== ''){
+				referrer1 = referrerList.children[1].textContent;
+				console.log(referrer1);
+			}else{
+				console.log('참조자 없음 값없음');
+			}
+			console.log(payUserList1);
+			console.log(payUserList2);
+		} */
 		//품의서
 		function payNum3Send(){
-			
-		}
-		//데이터체크용
-		function payNum3Check(){
 			let robintitle = document.getElementById('robintitle').value;
 			let robincontent = document.getElementById('robincontent').value;
 			let robincomment = document.getElementById('robincomment').value;
@@ -327,6 +416,40 @@
 			console.log(payUserList1);
 			console.log(payUserList2);
 		}
+		//데이터체크용
+		/* function payNum3Check(){
+			let robintitle = document.getElementById('robintitle').value;
+			let robincontent = document.getElementById('robincontent').value;
+			let robincomment = document.getElementById('robincomment').value;
+			payUserList1 = document.getElementById('payUserList1').children[1].textContent;
+			payUserList2 = document.getElementById('payUserList2').children[1].textContent;
+			if(payUserList1 === ''){
+				alert('결재자1이 없습니다 반드시 등록하세요');
+				return;
+			}
+			if(referrerList.children[11].textContent !== ''){
+				console.log('11번째는 있음');
+				referrer1 = referrerList.children[1].textContent;
+				referrer2 = referrerList.children[6].textContent;
+				referrer3 = referrerList.children[11].textContent;
+				console.log(referrer1);
+				console.log(referrer2);
+				console.log(referrer3);
+			}else if(referrerList.children[6].textContent !== ''){
+				referrer1 = referrerList.children[1].textContent;
+				referrer2 = referrerList.children[6].textContent;
+				console.log(referrer1);
+				console.log(referrer2);
+			}else if(referrerList.children[1].textContent !== ''){
+				referrer1 = referrerList.children[1].textContent;
+				console.log(referrer1);
+			}else{
+				console.log('참조자 없음 값없음');
+			}
+			console.log(payUserList1);
+			console.log(payUserList2);
+		} */
+		/*]]>*/
 	</script>
 </body>
 </html>

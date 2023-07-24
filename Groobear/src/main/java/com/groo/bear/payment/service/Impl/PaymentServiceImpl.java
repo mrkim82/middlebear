@@ -22,7 +22,7 @@ public class PaymentServiceImpl implements PaymentService{
 	}
 
 	@Override
-	public int paymentDoc(PaymentVO payVO) {
+	public int paymentDocForm(PaymentVO payVO) {
 		return 0;
 	}
 
@@ -35,5 +35,10 @@ public class PaymentServiceImpl implements PaymentService{
 	public int paymentNo() {
 		return paymentMapper.paymentNo();
 	}
+
+	//@Override
+	/*public PaymentVO paymentDoc(PaymentVO payVO) {
+		return "";
+	}*/
 	
 }
