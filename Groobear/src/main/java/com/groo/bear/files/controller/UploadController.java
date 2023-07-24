@@ -54,7 +54,7 @@ public class UploadController {
 		return str.replace("-", File.separator);
 		
 	}
-	
+	//produces -> 서버에서 브라우저에게 보낼 때 거르는 것 -> 
 	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<AttachFileDTO>> uploadAjaxPost(MultipartFile[] uploadFile) {
