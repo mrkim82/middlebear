@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProPostSchService;
-import com.groo.bear.pro.service.ProUsersVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 
 @Controller

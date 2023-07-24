@@ -4,6 +4,10 @@
 	layout:decorate="~{layout/proPostTiles}">
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script
+		th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js}"></script>
+	<script
+		th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
 <style>
 textarea {
   background-color: #f1f1f1;
@@ -140,7 +144,7 @@ function drawChart() {
 
 					<!-- 1. 글 작성-->
 					<div class="modal fade modal-dialog-scrollable" id="modal1" tabindex="-1" role="dialog"
-						aria-labelledby="modal1Label" aria-hidden="true" style="z-index:-1">
+						aria-labelledby="modal1Label" aria-hidden="true" style="display:none">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -180,7 +184,7 @@ function drawChart() {
 					
 					<!-- 2.업무 작성 -->
 					<div class="modal fade modal-dialog-scrollable" id="modal2" tabindex="-1" role="dialog"
-						aria-labelledby="modal2Label" aria-hidden="true" style="z-index:-1">
+						aria-labelledby="modal2Label" aria-hidden="true" style="display:none">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -310,7 +314,7 @@ function drawChart() {
 					
 					<!-- 3.일정 작성 -->
 					<div class="modal fade modal-dialog-scrollable" id="modal3" tabindex="-1" role="dialog"
-						aria-labelledby="modal3Label" aria-hidden="true" style="z-index:-1">
+						aria-labelledby="modal3Label" aria-hidden="true" style="display:none">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -380,7 +384,7 @@ function drawChart() {
 
 					<!-- 4.할 일 작성 -->
 					<div class="modal fade modal-dialog-scrollable" id="modal4" tabindex="-1" role="dialog"
-						aria-labelledby="modal4Label" aria-hidden="true" style="z-index:-1">
+						aria-labelledby="modal4Label" aria-hidden="true" style="display:none">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -436,7 +440,7 @@ function drawChart() {
 
 					<!-- 투표 -->
 					<div class="modal fade modal-dialog-scrollable" id="modal5" tabindex="-1" role="dialog"
-						aria-labelledby="modal5Label" aria-hidden="true" style="z-index:-1">
+						aria-labelledby="modal5Label" aria-hidden="true" style="display:none">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">

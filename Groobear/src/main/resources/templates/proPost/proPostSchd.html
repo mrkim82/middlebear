@@ -2,104 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layout/proPostTiles}">
+	  
 <th:block layout:fragment="content">
-<script src="/fullcal/dist/index.global.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.7.2/main.js"></script>
-
-<!-- 데이터 가져오기 -->
-<script type="text/javascript" th:inline="javascript">
-	/*<![CDATA[*/
-		
-		let ss = /*[[${readWorkSchView}]]*/;
-		
-	/*]]>*/
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', async function() {
-  var calendarEl = document.getElementById('calendar');
-  
-  //let allEvents = [];
-  console.log('옆집',ss[0])
-  let allEvents = ss;
-  console.log('옆집',allEvents)
-  /* await fetch('/readWorkSchView')
-  .then(resolve => resolve.json())
-  .then(result => {
-	  console.log(result);
-  }) */
-  
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-    },
-    initialDate: new Date(), // 오늘날짜 넣기
-    navLinks: true, // can click day/week names to navigate views.날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
-    businessHours: false, // display business hours
-    editable: false,//수정 가능?
-    selectable: false,// 달력 일자 드래그 설정가능
-    //dayMaxEvents: false, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
-    //locale: 'ko',
-    events: allEvents
-    	/* [
-      {
-        title: 'Business Lunch',
-        start: '2023-01-03T13:00:00',
-        constraint: 'businessHours'
-      },
-      {
-        title: 'Meeting',
-        start: '2023-01-13T11:00:00',
-        constraint: 'availableForMeeting', // defined below
-        color: '#257e4a'
-      },
-      {
-        title: 'Conference',
-        start: '2023-01-18',
-        end: '2023-01-20'
-      },
-      {
-        title: 'Party',
-        start: '2023-01-29T20:00:00'
-      },
-
-      // areas where "Meeting" must be dropped
-      {
-        groupId: 'availableForMeeting',
-        start: '2023-01-11T10:00:00',
-        end: '2023-01-11T16:00:00',
-        display: 'background'
-      },
-      {
-        groupId: 'availableForMeeting',
-        start: '2023-01-13T10:00:00',
-        end: '2023-01-13T16:00:00',
-        display: 'background'
-      },
-
-      // red areas where no events can be dropped
-      {
-        start: '2023-01-24',
-        end: '2023-01-28',
-        overlap: false,
-        display: 'background',
-        color: '#ff9f89'
-      },
-      {
-        start: '2023-01-06',
-        end: '2023-01-08',
-        overlap: false,
-        display: 'background',
-        color: '#ff9f89'
-      }
-    ] */
-  });
-
-  calendar.render();
-});
-</script>
+<!-- 캘린더 스타일 -->
 <style>
 #calendar {
     max-width: 1100px;
@@ -113,10 +18,72 @@ p {
 	margin: 40px 10px;
 }
 </style>
+<!-- 캘린더 스타일 종료 -->
+
 
 	<p>캘린더</p>
 	<div id='calendar'></div>
 	
 	
+<!-- 업무, 일정 데이터 가져오기 -->
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		
+		let schAllDatas = /*[[${readWorkSchView}]]*/;
+		
+	/*]]>*/
+</script>
+
+<!-- 캘린더 생성 -->
+<script>
+// document.addEventListener('DOMContentLoaded', async function() {
+  // await fetch('/readWorkSchView')
+  
+  var calendarEl = document.getElementById('calendar');
+  let allEvents = schAllDatas;
+  console.log('데이터', allEvents);
+  
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+    },
+    eventClick: function(info) {
+      console.log('이벤트: ' + info.event.title);
+      //console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+      //console.log('View: ' + info.view.type);
+
+      // change the border color just for fun
+      //info.el.style.borderColor = 'red';
+    },
+    initialDate: new Date(), // 오늘날짜 넣기
+    navLinks: true, // can click day/week names to navigate views.날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
+    businessHours: false, // display business hours
+    editable: false,//수정 가능?
+    selectable: false,// 달력 일자 드래그 설정가능
+    //dayMaxEvents: false, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
+    //locale: 'ko',
+    events: allEvents
+    
+    
+    
+  });
+  
+  calendar.render();
+  // });
+
+  /* 데이터 양식 
+  {
+  groupId: 'availableForMeeting',
+    title: 'Meeting',
+    start: '2023-01-13T11:00:00',
+    constraint: 'availableForMeeting', // defined below
+    color: '#257e4a',
+     end: '2023-01-20',
+   display: 'background',
+   overlap: false,
+  } */
+</script>
 </th:block>
 </html>
