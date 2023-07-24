@@ -34,4 +34,28 @@
   	<delete id="deleteAll">
   		delete files where board_no = #{boardNo}
   	</delete>
+  	<!-- 프로필 사진 등록 -->
+  	<insert id="insertProfImg" parameterType="EmpVO">
+  		insert into files (
+  						    UUID
+  						   ,UPLOAD_PATH
+  						   ,FILE_NAME
+  						   ,FILE_TYPE
+  						   ,FILE_DATE
+  						   ,ID
+  							)
+  				VALUES 
+  						  (
+  						    #{uuid}
+  						    ,#{uploadPath}
+  						    ,#{fileName}
+  						    ,'1'
+  						    ,sysdate
+  						    ,#{id})
+  	</insert>
+  	
+  	<!-- 프로필 사진 삭제 -->
+  	<delete id="deleteProfImg" parameterType="String">
+  		delete files where id = #{id}
+  	</delete>
   </mapper>

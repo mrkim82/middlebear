@@ -24,5 +24,6 @@ public class FilesVO {
 	private int boardNo; 
 	private int mailNo;
 	private int proFileNo;
+	private String id;
 	
 }

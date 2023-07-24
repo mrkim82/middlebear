@@ -151,14 +151,26 @@
               <a id="checkSms"></a>
             </div>
           </div>
+		  <div class="row">
+			  <div class="col-md-9 mb-3">
+	            <label for="post">우편번호</label>
+	              <div class="input-group">
+	                <input type="text" class="form-control" minlength="5" maxlength="5"
+	           		 id="post" name="post" placeholder="우편번호 찾기 버튼 클릭" readonly>
+	                <div class="input-group-append">
+	                	<button class="btn btn-primary" type="button" id="postBtn" onclick="postCode()">우편번호 찾기</button>
+	                </div>
+	              </div>
+	            </div>
+	      </div>
 		  
           <div class="mb-3">
-            <label for="address">주소</label>
+            <label for="addr1">주소</label>
             <input type="text" class="form-control" id="addr1" placeholder="서울특별시 강남구">
           </div>
 
           <div class="mb-3">
-            <label for="address2">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
+            <label for="addr2">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
             <input type="text" class="form-control" id="addr2" placeholder="상세주소를 입력해주세요.">
           </div>
           
@@ -190,6 +202,8 @@
             </div>
       </div>
     </div>
+    <!-- 우편번호 api 필수-->
+  	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js?autoload=false"></script>
     <script type="text/javascript">  
 
     window.addEventListener('load', () => {
@@ -505,7 +519,8 @@
 			let password = $('#password').val();
 			let email = $('#email').val();
 			let phone = $('#phone').val();
-			let addr = $('#addr1').val() + $('#addr2').val();
+			let addr = $('#addr1').val();
+			let addrDetail = $('#addr2').val();
 			let empNo = $('#empNo').val();
 			$.ajax({
   			    url: "empSignUp",
@@ -517,7 +532,8 @@
   			      email: email,
   			      phone: phone,
   			      addr: addr,
-  			      empNo: empNo
+  			      empNo: empNo,
+  			      addrDetail: addrDetail
   			    }),
   			    success: function(data) {
   			    	if(data == "success"){
@@ -536,6 +552,37 @@
   			});
  		}
  	})
+ 	// 우편번호 찾기 함수
+ 	function postCode() {
+      daum.postcode.load(function () {
+        new daum.Postcode({
+          oncomplete: function (data) {
+            var addr = '';
+            var extraAddr = '';
+            if (data.userSelectedType === 'R') {
+              addr = data.roadAddress;
+            } else {
+              addr = data.jibunAddress;
+            }
+            if (data.userSelectedType === 'R') {
+              if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                extraAddr += data.bname;
+              }
+              if (data.buildingName !== '' && data.apartment === 'Y') {
+                extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+              }
+              if (extraAddr !== '') {
+                extraAddr = ' (' + extraAddr + ')';
+              }
+            }
+            document.getElementById("post").value = data.zonecode;
+            document.getElementById("addr1").value = addr;
+            document.getElementById("addr2").focus();
+          }
+        }).open();
+      });
+    }
+ 	
   </script>
 </body>
 
