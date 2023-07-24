@@ -115,6 +115,7 @@
       JOIN board b
       ON(a.board_no = b.board_no)
       WHERE b.board_no = #{boardNo}
+      and b.board_Type IN ('N', 'K')
    </select>
 	
 	<insert id="createBoardComment" parameterType="BoardVO">

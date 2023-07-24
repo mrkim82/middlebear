@@ -120,7 +120,7 @@
 					name="boardType" th:value="${board.boardType}"></td>
 			</tr>
 			<!-- 댓글 -->
-			<th:block th:if="${(board.boardType == 'A') and (board.boardType =='K')}">
+			<th:block th:if="${(board.boardType == 'N') or (board.boardType =='K')}">
 				<tr>
 					<td>댓글작성</td>
 				</tr>
@@ -139,11 +139,9 @@
 						</th:block>
 					</td>
 				</tr>
-				
 			</tbody>
-
 		</table>
-		<th:block th:if="${(board.boardType == 'A') and (board.boardType =='K')}">
+		<th:block th:if="${(board.boardType == 'N') or (board.boardType =='K')}">
 		<div class="form-group">
 			<input type="text" class="form-control" placeholder="댓글 작성">
 		</div>

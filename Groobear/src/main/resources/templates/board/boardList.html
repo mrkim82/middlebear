@@ -110,7 +110,7 @@ a {
 		<th:block th:if="${(session.EmpGrade == 'A') and (boardVO.boardType == 'C')}">
 			<button type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
 		</th:block>
-		<th:block th:if="${(session.EmpGrade == 'C') and (boardVO.boardType == 'K')}">
+		<th:block th:if="${boardVO.boardType == 'K'}">
 			<button type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
 		</th:block>
 		
