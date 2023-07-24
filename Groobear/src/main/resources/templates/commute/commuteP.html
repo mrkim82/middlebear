@@ -9,21 +9,10 @@
 <body>
 <div layout:fragment="content">
 	<div>
-		<form name="searchForm" action="commuteList">
-			<input type="hidden" name="page" value="1"/>
+		<div>
 			<input type="date" name="startDay" id="startDate" onchange = "">
             <input type="date" name="endDay" id="endDate" onchange = "" >
-			<select name="type">
-				<option value='' selected>선택</option>
-				<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
-				<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
-				<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
-			</select>		
-			<input type="text" name="keyword" th:value="${criteria.keyword}"/>
-			<button type="submit" id="searchBtn">검색</button>
-		</form>
-	</div>
-	<div>
+		</div>
 		<table>
 			<thead>
 				<tr>
@@ -39,7 +28,7 @@
 				</tr> 
 			</thead>
 			<tbody>
-				<tr class="cml" th:if="${commuteList != null}" th:each="comm, stat:${commuteList}">
+				<tr class="cml" th:if="${info != null}" th:each="comm, stat:${info}">
 					<td>[[${#dates.format(comm.day,'MM/dd')}]]</td>
 					<td>[[${comm.empNo}]]</td>
 					<td>[[${comm.deptName}]]</td>
@@ -73,7 +62,6 @@ function goPage(p){
 	searchForm.page.value = p;
 	searchForm.submit();
 }
-
 
 for(let i = 0 ; i < document.querySelectorAll('.cml').length;i++){
 		
@@ -117,22 +105,19 @@ for(let i = 0 ; i < document.querySelectorAll('.cml').length;i++){
 	
 	document.querySelectorAll('.owt')[i].textContent = cal2;
 	
-	
 }
-	
-	
-	var today = new Date();
+var today = new Date();
 
-	var year = today.getFullYear();
-	var month = ('0' + (today.getMonth() + 1)).slice(-2);
-	var day = ('0' + today.getDate()).slice(-2);
-	
-	var dateString = year + '-' + month  + '-' + day;
-	
-	console.log(dateString);
-	
-	document.querySelector('#startDate').value = dateString;
-	document.querySelector('#endDate').value = dateString;
+var year = today.getFullYear();
+var month = ('0' + (today.getMonth() + 1)).slice(-2);
+var day = ('0' + today.getDate()).slice(-2);
+
+var dateString = year + '-' + month  + '-' + day;
+
+console.log(dateString);
+
+document.querySelector('#startDate').value = dateString;
+document.querySelector('#endDate').value = dateString;
 	
 	
 	

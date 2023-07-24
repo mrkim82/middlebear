@@ -21,6 +21,11 @@ public class CommuteVO {
 	@DateTimeFormat(pattern="HH24-MI")
 	private Date overWorkEnd;
 	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date startDay;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date endDay;
+	
 	private int overWorkTime;
 	private String offStatus;
 	private String id;

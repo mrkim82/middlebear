@@ -6,4 +6,7 @@ public interface UserService {
 
 	public EmpVO checkGrade(String id);
 	
+	
+	
+	
 }
