@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.pro.mapper.ProPostSchMapper;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
+import com.groo.bear.pro.service.schvo.ProPostWorkSchVO;
 
 @Service
 public class ProPostSchServiceImpl implements ProPostSchService {
@@ -56,6 +57,11 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public List<ProPostWorkSchVO> readWorkSchView(int proNo) {
+		return ppsm.readWorkSchView(proNo);
 	}
 
 }

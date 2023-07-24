@@ -56,4 +56,19 @@
 		VALUES(#{schNo}, #{partiCheck}, #{id})
 	</insert>
 	
+	<!-- 캘린더 화면 조회 -->
+	<select id="readWorkSchView" resultType="ProPostWorkSchVO">
+		SELECT a.pro_post_no, a.post_type, a.post_title,
+		       b.work_no, b.work_status,
+		       b.work_start_day, b.work_start_time, b.work_end_day, b.work_end_time,
+		       c.sch_no, c.sch_start_day, c.sch_start_time, c.sch_end_day, c.sch_end_time
+		FROM pro_post a
+		LEFT JOIN pro_work b
+		ON(a.pro_post_no = b.pro_post_no)
+		LEFT JOIN pro_sch c
+		ON(a.pro_post_no = c.pro_post_no)
+		WHERE a.pro_no = #{proNo}
+		AND c.personal_sch = 'N'
+	</select>
+	
 </mapper>

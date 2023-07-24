@@ -3,6 +3,7 @@ package com.groo.bear.pro.service;
 import java.util.List;
 
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
+import com.groo.bear.pro.service.schvo.ProPostWorkSchVO;
 
 public interface ProPostSchService {
 	//참석자 조회
@@ -22,4 +23,7 @@ public interface ProPostSchService {
 	
 	//참석자 여러건 추가
 	public int insertPartiMemberAll(List<ProPostSchVO> vo);
+	
+	//캘린더 화면 조회
+	public List<ProPostWorkSchVO> readWorkSchView(int proNo);
 }

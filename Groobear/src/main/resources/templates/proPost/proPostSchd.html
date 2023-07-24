@@ -5,9 +5,15 @@
 <th:block layout:fragment="content">
 <script src="/fullcal/dist/index.global.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.7.2/main.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
+  
+  let allEvents = [];
+
+  /* fetch('readWorkSchView')
+  .then */
 
   var calendar = new FullCalendar.Calendar(calendarEl, {
     headerToolbar: {
@@ -15,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
-    initialDate: '2023-01-12',
+    initialDate: new Date(), // 오늘날짜 넣기
     navLinks: true, // can click day/week names to navigate views
     businessHours: true, // display business hours
     editable: true,

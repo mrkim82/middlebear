@@ -45,7 +45,7 @@ public class proPostController {
 	ProPostSchService proPostSchService;
 	
 	@Autowired
-	ProPostSchService Sch;
+	ProPostSchService Sch;//스케쥴
 	
 	@Autowired
 	PublicCodeService publicC;//공통 코드
@@ -122,7 +122,8 @@ public class proPostController {
 			break;
 		//캘린더
 		case 4 :
-			
+			model.addAttribute("readWorkSchView", Sch.readWorkSchView(proNo));
+			System.out.println("게시글"+model.getAttribute("readWorkSchView"));
 			pagePath = "proPost/proPostSchd";
 			break;
 		//파일
@@ -250,8 +251,7 @@ public class proPostController {
 	@ResponseBody
 	public List<ProPostChartVO> readGoogleChart(@RequestBody int proNo) {
 	    // 프로젝트 번호를 기반으로 데이터 조회
-	    List<ProPostChartVO> chartDataList = proPostService.readPostChart(proNo);
-	    return chartDataList;
+	    return proPostService.readPostChart(proNo);
 	}
 	
 	//멤버별 업무 조회 변경
@@ -262,9 +262,7 @@ public class proPostController {
 		HttpSession session = request.getSession();
 		vo.setId((String)session.getAttribute("Id"));
 		
-		String res = taskS.updateWorkView(vo);
-		
-		map.put("result", res);
+		map.put("result", taskS.updateWorkView(vo));
 		return map;
 	}
 }
