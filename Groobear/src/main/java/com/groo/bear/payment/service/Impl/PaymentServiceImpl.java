@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.groo.bear.emp.service.EmpVO;
+import com.groo.bear.files.mapper.FilesMapper;
 import com.groo.bear.payment.mapper.PaymentMapper;
 import com.groo.bear.payment.service.PaymentService;
 import com.groo.bear.payment.service.PaymentVO;
@@ -15,6 +16,9 @@ public class PaymentServiceImpl implements PaymentService{
 
 	@Autowired
 	PaymentMapper paymentMapper;
+	
+	@Autowired
+	FilesMapper filesMapper;
 	
 	@Override
 	public List<EmpVO> payEmpList() {
@@ -39,5 +43,10 @@ public class PaymentServiceImpl implements PaymentService{
 	@Override
 	public int paymentLogBook(PaymentVO payVO) {
 		return paymentMapper.paymentLogBook(payVO);
+	}
+
+	@Override
+	public int insertSignImg(EmpVO vo) {
+		return filesMapper.insertSignImg(vo);
 	}	
 }

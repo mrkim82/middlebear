@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.groo.bear.emp.service.EmpVO;
 import com.groo.bear.payment.service.PaymentService;
 import com.groo.bear.payment.service.PaymentVO;
 
@@ -30,7 +31,6 @@ public class PaymentController {
 		System.out.println("id = "+id);
 		System.out.println("기안자 : "+paymentService.payEmpInfo(id));
 		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
-		
 		return "pay/paymentEmp";
 	}
 	//참조자 사원 받아와서 모달창에 뿌려주는 controller
@@ -68,11 +68,22 @@ public class PaymentController {
 		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
 		return "pay/paySign";
 	}
+	//개인전자서명 등록
+	@PostMapping("mypaySign")
+	public String mypaySign(Model model,EmpVO empVO, HttpSession session) {
+		System.out.println(empVO);
+		String id = (String) session.getAttribute("Id");
+		empVO = paymentService.payEmpInfo(id);
+		System.out.println(empVO);
+		//paymentService.insertSignImg(empVO);
+		return "";
+	}
 	//전자결재 확인하는 페이지
 	@GetMapping("pay/payPreferences")
 	public String payPreferences(Model model,HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("Id");
+		
 		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
 		return "pay/payPreferences";
 	}

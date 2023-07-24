@@ -15,5 +15,7 @@ public interface PaymentService {
 	public int paymentNo();
 	//결재문서 데이터삽입
 	public int paymentLogBook(PaymentVO payVO);
+	//개인서명 등록
+	public int insertSignImg(EmpVO vo);
 	
 }

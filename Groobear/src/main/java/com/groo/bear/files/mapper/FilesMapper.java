@@ -26,4 +26,7 @@ public interface FilesMapper {
 	
 	//넣다가 삭제한 첨부파일 삭제처리
 	public List<FilesVO> getOldFiles();
+	
+	//개인서명 등록
+	public int insertSignImg(EmpVO vo);
 }
