@@ -51,4 +51,73 @@
 								</choose>
 								)
 	</insert>
+	<!-- 결재문서 운행일지 삽입 -->
+	<insert id="logInsert" parameterType="paymentVO">
+		INSERT INTO payment_logbook(oper_date,destination,befored,afterd,imprest,purpose,pay_no,car_no)
+					VALUES(
+							#{operDate},
+							#{destination},
+							#{befored},
+							#{afterd},
+							#{imprest},
+							#{purpose},
+							#{payNo},
+							#{carNo}
+					)
+	</insert>
+	<!-- 결재문서 연차계 삽입-->
+	<insert id="offInsert" parameterType="paymentVO">
+		INSERT INTO payment_off(title,content,com,use_date,return_date,pay_no)
+					VALUES(
+							#{title},
+							#{content},
+							<choose>
+							<when test="com != null and !com.equals('')">
+							#{com},
+							</when>
+							<otherwise>
+								..
+							</otherwise>
+							</choose>
+							#{useDate},
+							#{returnDate},
+							#{payNo}
+					)
+	</insert>
+	<!-- 결재문서 품의서 삽입-->
+	<insert id="robinInsert" parameterType="paymentVO">
+		INSERT INTO payment_robin(title,content,com,payNo)
+					VALUES(
+							#{title},
+							#{content},
+							<choose>
+							<when test="com != null and !com.equals('')">
+							#{com},
+							</when>
+							<otherwise>
+								..
+							</otherwise>
+							</choose>
+							#{payNo}
+					)
+	</insert>
+	<!-- 결재문서 운행일지 조회-->
+	<select id="logList" resultType="paymentVO">
+		SELECT * FROM payment p, payment_logbook l
+			WHERE p.pay_no = l.pay_no
+			AND p.id = #{id}
+	</select>
+	<!-- 결재문서 연차계 조회-->
+	<select id="offList" resultType="paymentVO">
+		SELECT * FROM payment p, payment_off o
+			WHERE p.pay_no = o.pay_no
+			AND p.id = #{id}
+	</select>
+	<!-- 결재문서 품의서 조회-->
+	<select id="robinList" resultType="paymentVO">
+		SELECT * FROM payment p, payment_robin r
+			WHERE p.pay_no = r.pay_no
+			AND p.id = #{id}
+	</select>
+	<!-- 결재문서 전체 일괄조회-->
 </mapper>

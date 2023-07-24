@@ -171,6 +171,7 @@
 		let referrer = '';
 		let drafter = /*[[${userInfo.id}]]*/
 		let payNo = /*[[${paymentNo}]]*/
+		
 		console.log('payNo',payNo);
 		console.log('drafter = ',drafter);
 		//select 번호
@@ -293,7 +294,7 @@
 			//파일 보내는 ajax 따로써야됨
 			
 			//controller에 전송하는 전자문서 값
-			fetch("/paymentDoc",{
+			fetch("/mypaySign",{
 				method: 'POST',
 				headers: {
     			    'Content-Type': 'application/json'

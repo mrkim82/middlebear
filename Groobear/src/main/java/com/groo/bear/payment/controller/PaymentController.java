@@ -75,7 +75,8 @@ public class PaymentController {
 		String id = (String) session.getAttribute("Id");
 		empVO = paymentService.payEmpInfo(id);
 		System.out.println(empVO);
-		//paymentService.insertSignImg(empVO);
+		paymentService.insertSignImg(empVO);
+		System.out.println(paymentService.insertSignImg(empVO));
 		return "";
 	}
 	//전자결재 확인하는 페이지

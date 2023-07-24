@@ -1,10 +1,12 @@
 package com.groo.bear.payment.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.groo.bear.files.domain.FilesVO;
 
 import lombok.Data;
 
@@ -45,4 +47,11 @@ public class PaymentVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date returnDate;
+	
+	private List<FilesVO> attachList;
+	
+	private int comNo;
+	private String profileImg;
+	private String comContent;
+	private String comDate;
 }

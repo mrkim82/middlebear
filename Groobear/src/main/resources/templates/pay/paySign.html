@@ -90,21 +90,6 @@
       			}
       			formData.append("uploadFile", signImg[i]);
       		}
-      		$.ajax({
-      			url: "/uploadAjaxAction",
-      			processData: false,
-      			contentType: false,
-      			data: formData,
-      			type: "POST",
-      			dataType: "json",
-      			success: function(result) {
-      				showUploadedFile(result);
-      				$(".uploadDiv").html(cloneObj.html());
-      			},
-      			error: function(error) {
-      				console.log(error);
-      			}
-      		});
           $("#save").on("click", function(){
         	  var formData = new FormData();
         		var inputFile = $("input[name='uploadFile']");
