@@ -1,107 +1,216 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+}
 
-<!-- <th:block th:replace="~{/layout/basic :: setContent(~{this :: content})}"> -->
-    <!-- <th:block th:fragment="content"> -->
-    
-        <div class="container">
-            <div class="col-6">
-                <label><b>채팅방</b></label>
-            </div>
-            <div>
-                <div id="msgArea" class="col"></div>
-                <div class="col-6">
-                    <div class="input-group mb-3">
-                        <input type="text" id="msg" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-<!--     </th:block> -->
-<!-- </th:block> -->
-<script th:inline="javascript">
-    $(document).ready(function(){
+.chat_wrap .header {
+	font-size: 14px;
+	padding: 15px 0;
+	background: #35a880;
+	color: white;
+	text-align: center;
+}
 
-    const username = [[${#authentication.principal.username}]];
+.chat_wrap .chat {
+	padding-bottom: 80px;
+}
 
-    $("#disconn").on("click", (e) => {
-        disconnect();
-    })
-    
-    $("#button-send").on("click", (e) => {
-        send();
-    });
+.chat_wrap .chat ul {
+	width: 100%;
+	list-style: none;
+}
 
-    const websocket = new WebSocket("ws://localhost:8081/ws/chat");
+.chat_wrap .chat ul li {
+	width: 100%;
+}
 
-    websocket.onmessage = onMessage;
-    websocket.onopen = onOpen;
-    websocket.onclose = onClose;
+.chat_wrap .chat ul li.left {
+	text-align: left;
+}
 
-    function send(){
+.chat_wrap .chat ul li.right {
+	text-align: right;
+}
 
-        let msg = document.getElementById("msg");
+.chat_wrap .chat ul li>div {
+	font-size: 13px;
+}
 
-        console.log(username + ":" + msg.value);
-        websocket.send(username + ":" + msg.value);
-        msg.value = '';
-    }
-    
-    //채팅창에서 나갔을 때
-    function onClose(evt) {
-        var str = username + ": 님이 방을 나가셨습니다.";
-        websocket.send(str);
-    }
-    
-    //채팅창에 들어왔을 때
-    function onOpen(evt) {
-        var str = username + ": 님이 입장하셨습니다.";
-        websocket.send(str);
-    }
+.chat_wrap .chat ul li>div.sender {
+	margin: 10px 20px 0 20px;
+	font-weight: bold;
+}
 
-    function onMessage(msg) {
-        var data = msg.data;
-        var sessionId = null;
-        //데이터를 보낸 사람
-        var message = null;
-        var arr = data.split(":");
+.chat_wrap .chat ul li>div.message {
+	display: inline-block;
+	word-break: break-all;
+	margin: 5px 20px;
+	max-width: 75%;
+	border: 1px solid #888;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #FCFCFC;
+	color: #555;
+	text-align: left;
+}
 
-        for(var i=0; i<arr.length; i++){
-            console.log('arr[' + i + ']: ' + arr[i]);
-        }
+.chat_wrap .input-div {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background-color: #FFF;
+	text-align: center;
+	border-top: 1px solid #F18C7E;
+	padding: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
 
-        var cur_session = username;
+.chat_wrap .input-div>textarea {
+	flex-grow: 1;
+	height: 60px;
+	border: none;
+	padding: 10px;
+	margin-right: 10px;
+}
 
-        //현재 세션에 로그인 한 사람
-        console.log("cur_session : " + cur_session);
-        sessionId = arr[0];
-        message = arr[1];
+.chat_wrap .input-div>button {
+	width: 100px;
+	height: 60px;
+	background-color: #35a880;
+	color: white;
+	border: none;
+	border-radius: 5px;
+}
 
-        console.log("sessionID : " + sessionId);
-        console.log("cur_session : " + cur_session);
+.format {
+	display: none;
+}
+</style>
+</head>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<body>
+	<div class="chat_wrap">
+		<div class="header">MESSAGE</div>
+		<div class="chat">
+			<ul>
+				<!-- 동적 생성 -->
+			</ul>
+		</div>
+		<div class="input-div">
+			<textarea placeholder="Press Enter for send message."></textarea>
+			<button id="sendMessageBtn">Send</button>
+		</div>
 
-        //로그인 한 클라이언트와 타 클라이언트를 분류하기 위함
-        if(sessionId == cur_session){
-            var str = "<div class='col-6'>";
-            str += "<div class='alert alert-secondary'>";
-            str += "<b>" + sessionId + " : " + message + "</b>";
-            str += "</div></div>";
-            $("#msgArea").append(str);
-        }
-        else{
-            var str = "<div class='col-6'>";
-            str += "<div class='alert alert-warning'>";
-            str += "<b>" + sessionId + " : " + message + "</b>";
-            str += "</div></div>";
-            $("#msgArea").append(str);
-        }
-    }
-    })
-</script>
+		<!-- format -->
+
+		<div class="chat format">
+			<ul>
+				<li>
+					<div class="sender">
+						<span></span>
+					</div>
+					<div class="message">
+						<span></span>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<script>
+		const Chat = (function() {
+			const myName = "blue";
+
+			// init 함수
+			function init() {
+				// enter 키 이벤트
+				$(document).on('keydown', 'div.input-div textarea',
+						function(e) {
+							if (e.keyCode == 13 && !e.shiftKey) {
+								e.preventDefault();
+								const message = $(this).val();
+
+								// 메시지 전송
+								sendAndClear(message);
+							}
+						});
+			}
+
+			// 메세지 태그 생성
+			function createMessageTag(LR_className, senderName, message) {
+				// 형식 가져오기
+				let chatLi = $('div.chat.format ul li').clone();
+
+				// 값 채우기
+				chatLi.addClass(LR_className);
+				chatLi.find('.sender span').text(senderName);
+				chatLi.find('.message span').text(message);
+
+				return chatLi;
+			}
+
+			// 메세지 태그 append
+			function appendMessageTag(LR_className, senderName, message) {
+				const chatLi = createMessageTag(LR_className, senderName,
+						message);
+
+				$('div.chat:not(.format) ul').append(chatLi);
+
+				// 스크롤바 아래 고정
+				$('div.chat').scrollTop($('div.chat').prop('scrollHeight'));
+			}
+
+			// 메세지 전송
+			function sendMessage(message) {
+				// 서버에 전송하는 코드로 후에 대체
+				const data = {
+					"senderName" : "blue",
+					"message" : message
+				};
+
+				// 통신하는 기능이 없으므로 여기서 receive
+				receive(data);
+			}
+
+			// 메세지 입력박스 내용 지우기
+			function clearTextarea() {
+				$('div.input-div textarea').val('');
+			}
+
+			// 메세지 수신
+			function receive(data) {
+				const LR = (data.senderName != myName) ? "left" : "right";
+				appendMessageTag("right", data.senderName, data.message);
+			}
+
+			function sendAndClear(message) {
+				sendMessage(message);
+				clearTextarea();
+			}
+
+			return {
+				'init' : init,
+				'sendAndClear' : sendAndClear
+			};
+		})();
+
+		$(function() {
+			Chat.init();
+
+			// Send 버튼 클릭 이벤트 추가
+			$('#sendMessageBtn').on('click', function() {
+				const message = $('div.input-div textarea').val();
+				Chat.sendAndClear(message);
+			});
+		});
+	</script>
+</body>
 </html>

@@ -30,50 +30,32 @@ public class BoardServiceImpl implements BoardService{
 		boardMapper.updateCount(boardNo);
 		return boardMapper.selectBoard(boardNo);
 	}
-	//첨부파일이 있을 때만 게시글 등록되는 코드.
-//	@Transactional
-//	@Override
-//	public int insertBoard(BoardVO boardVO) {
-//	    log.info("register......" + boardVO);
-//	    int boardNo = boardMapper.boardNoSequence();
-//	    boardVO.setBoardNo(boardNo);
-//	    
-//	    // Get the next boardNo from the sequence
-//	    // Set the boardNo in the boardVO object
-//	    boardVO.setBoardNo(boardNo);
-//
-//	    if(boardVO.getAttachList() == null || boardVO.getAttachList().size() <= 0) {
-//	        return 0;
-//	    }
-//	    boardVO.getAttachList().forEach(attach -> {
-//	        // Use the boardNo for the attach object
-//	        attach.setBoardNo(boardNo);
-//	        attachMapper.insert(attach);
-//	    });
-//	    return boardMapper.insertBoard(boardVO);
-//	}
 	
 	@Transactional
 	@Override
 	public int insertBoard(BoardVO boardVO) {
-	    log.info("register......" + boardVO);
+//	    log.info("register......" + boardVO);
+		//시퀀스 생성
 	    int boardNo = boardMapper.boardNoSequence();
-	    boardVO.setBoardNo(boardNo);
 	    
+	    //게시판 글을 등록
+	    boardVO.setBoardNo(boardNo);
+	    int result = boardMapper.insertBoard(boardVO);
+	    
+	    //첨부파일 등록
+	    List<FilesVO> fileList = boardVO.getAttachList();
 	    // 첨부파일이 있을 경우에만 첨부파일을 등록
-	    if(boardVO.getAttachList() != null && boardVO.getAttachList().size() > 0) {
-	        boardVO.getAttachList().forEach(attach -> {
-	            attach.setBoardNo(boardNo);
+	    if(fileList != null && fileList.size() > 0) {
+	    	fileList.forEach(attach -> {
+	        	attach.setName("board_no");
+	            attach.setNo(boardVO.getBoardNo());
+	            System.out.println(attach);
 	            attachMapper.insert(attach);
 	        });
 	    }
 	    
-	    // 첨부파일의 유무에 상관없이 게시판 글을 등록
-	    return boardMapper.insertBoard(boardVO);
-	}
-	@Override
-	public int updateBoard(BoardVO boardVO) {
-		return boardMapper.updateBoard(boardVO);
+	    // 첨부파일의 유무에 상관없이 
+	    return result;
 	}
 
 	@Override
@@ -99,8 +81,6 @@ public class BoardServiceImpl implements BoardService{
 	public int deleteBoardComment(int comNo) {
 		return boardMapper.deleteBoardComment(comNo);
 	}
-	
-	
 
 	@Override
 	public List<BoardVO> readBoardComment(int boardNo) {
@@ -116,16 +96,18 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<FilesVO> getAttachList(int boardNo) {
 		log.info("get Attach list by boardNo" + boardNo);
-		return attachMapper.findByBno(boardNo);
+		return attachMapper.findByNo("board_no",boardNo);
 	}
 	//첨부파일 폴더 진짜 삭제
 	@Transactional
 	@Override
 	public boolean remove(int boardNo) {
 		log.info("remove .... " + boardNo);
-		attachMapper.deleteAll(boardNo);
+		boardMapper.deleteCommentByBoardId(boardNo);
+		attachMapper.deleteAll("board_no",boardNo);
 		return mapper.deleteBoard(boardNo) == 1;
 	}
+	
 	
 	
 	@Override
@@ -138,13 +120,14 @@ public class BoardServiceImpl implements BoardService{
 		
 		log.info("modify................." + boardVO);
 		
-		attachMapper.deleteAll(boardVO.getBoardNo());
+		attachMapper.deleteAll("board_no", boardVO.getBoardNo());
 		
 		boolean modifyResult = boardMapper.updateBoard(boardVO) == 1;
 		
 		if(modifyResult && boardVO.getAttachList() != null && boardVO.getAttachList().size() > 0) {
 			boardVO.getAttachList().forEach(attach -> {
-				attach.setBoardNo(boardVO.getBoardNo());
+				attach.setName("board_no");
+				attach.setNo(boardVO.getBoardNo());
 				attachMapper.insert(attach);
 			});
 		}
