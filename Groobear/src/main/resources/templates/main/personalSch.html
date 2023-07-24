@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layout/proPostTiles}">
+	  layout:decorate="~{layout/tiles}"
+	  >
 <th:block layout:fragment="content">
 <script src="/fullcal/dist/index.global.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.7.2/main.js"></script>
@@ -10,7 +11,7 @@
 <script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
 		
-		let ss = /*[[${readWorkSchView}]]*/;
+		let ss = /*[[${readPersonalSch}]]*/;
 		
 	/*]]>*/
 </script>
@@ -114,7 +115,7 @@ p {
 }
 </style>
 
-	<p>캘린더</p>
+	<p>개인 캘린더</p>
 	<div id='calendar'></div>
 	
 	

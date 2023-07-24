@@ -1,5 +1,6 @@
 package com.groo.bear.pro.controller;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,22 +26,11 @@ public class PublicCodeColorController {
 	//프로젝트 멤버 색상 수정
 	@PutMapping("updateProMemColor")
 	public Map<String, Object> updateWorkPostStatus(@RequestBody ProGroupVO vo, HttpServletRequest request) {
-		Map <String, Object> map = new HashMap<>();
 		HttpSession session = request.getSession();
-		String res;
-		
 		vo.setId((String)session.getAttribute("Id"));
 		
 		int result = pccs.updateProMemColor(vo);
 		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		map.put("result", res);
-		System.out.println(vo);
-		return map;
+		return Collections.singletonMap("result", result>0?"성공":"취소");
 	}
 }

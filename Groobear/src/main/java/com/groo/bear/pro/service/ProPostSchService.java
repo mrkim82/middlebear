@@ -26,4 +26,9 @@ public interface ProPostSchService {
 	
 	//캘린더 화면 조회
 	public List<ProPostWorkSchVO> readWorkSchView(int proNo);
+	
+	//개인 캘린더
+	// 캘린더 화면 조회
+	public List<ProPostWorkSchVO> readPersonalSch(String id);
+	
 }

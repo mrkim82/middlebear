@@ -1,6 +1,5 @@
 package com.groo.bear.pro.controller;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.groo.bear.comm.DateUtil;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostTaskService;
@@ -75,29 +75,27 @@ public class proPostController {
 		proData2(model, request);
 		
 		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));//메뉴 상단바 조회
-		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(id, proNo));
+		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(id, proNo));//지울예정
 		model.addAttribute("projectPartiMember", proPostService.readProjectParti(proNo));//해당 프로젝트 회원 정보 전체 조회
 		model.addAttribute("readWorkGroup", taskS.readWorkGroup(proNo));//업무 그룹 조회
 		model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(proNo));//댓글
 		model.addAttribute("readPublicCodeColorAll", publicC.readPublicCodeColorAll());//공통 색상 전체
 		model.addAttribute("cTime" , new Date());//현재시간
-		model.addAttribute("beforeOneDay" , beforeOneDay());
-		model.addAttribute("afterOneDay" , afterOneDay());
-		//System.out.println("게시글"+model.getAttribute("beforeOneDay"));
+		model.addAttribute("beforeOneDay" , DateUtil.beforeOneDay());//하루전
+		model.addAttribute("afterOneDay" , DateUtil.afterOneDay());//하루뒤
 		
 		switch (homeTab) {
-		//피드
+		//업무
 		case 1 :
 			model.addAttribute("readTaskAllList", taskS.readTaskAllList(proNo));//업무 전체 조회
 			model.addAttribute("readTaskWorkPerson", taskS.readTaskWorkPerson(proNo));//업무 담당자 조회
 			model.addAttribute("readWorkDetail", taskS.readWorkDetail(proNo));//업무 단건 조회
 			model.addAttribute("readWorkView", taskS.readWorkView(proNo, id));//멤버 업무 조회 설정
 			
-			//System.out.println("게시글"+model.getAttribute("readTaskAllList"));
 			//System.out.println("게시글"+model.getAttribute("readWorkView"));
 			pagePath = "proPost/proPostTask";
 			break;
-		//업무
+		//피드
 		case 2 :
 			//글 조회(임시)
 			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo));
@@ -146,29 +144,7 @@ public class proPostController {
 		return pagePath;
 	}
 	
-	//하루 전계산
-	private  Date beforeOneDay() {
-        Date currentDate = new Date();
-        
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        Date oneDayBefore = calendar.getTime();
-        
-		return oneDayBefore;
-	}
 	
-	//하루 후계산
-	private  Date afterOneDay() {
-		Date currentDate = new Date();
-		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(currentDate);
-		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		Date oneDayAfter = calendar.getTime();
-		
-		return oneDayAfter;
-	}
 	
 	//글 생성
 	@PostMapping("postCreateWriting")

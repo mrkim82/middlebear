@@ -64,4 +64,9 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 		return ppsm.readWorkSchView(proNo);
 	}
 
+	@Override
+	public List<ProPostWorkSchVO> readPersonalSch(String id) {
+		return ppsm.readPersonalSch(id);
+	}
+
 }
