@@ -34,10 +34,7 @@ public class PaymentController {
 	public String referrerEmp(Model model, HttpServletRequest request) {
 		model.addAttribute("payEmpList",paymentService.payEmpList());
 		HttpSession session = request.getSession();
-		System.out.println("session = "+session);
 		String id = (String) session.getAttribute("Id");
-		System.out.println("id = "+id);
-		System.out.println("기안자 : "+paymentService.payEmpInfo(id));
 		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
 		return "pay/referrerEmp";
 	}
@@ -45,8 +42,10 @@ public class PaymentController {
 	@GetMapping("pay/paymentDoc")
 	public String paymentDocForm(Model model,HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		System.out.println("session = "+session);
 		String id = (String) session.getAttribute("Id");
+		int payNo = paymentService.paymentNo();
+		System.out.println(payNo);
+		model.addAttribute("paymentNo",paymentService.paymentNo());
 		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
 		return "pay/paymentDoc";
 	}
@@ -55,5 +54,20 @@ public class PaymentController {
 	public String paymentDoc() {
 		return "redirect:/main";
 	}
-
+	//전자서명 페이지
+	@GetMapping("pay/paySign")
+	public String paySignForm(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("Id");
+		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
+		return "pay/paySign";
+	}
+	//전자결재 확인하는 페이지
+	@GetMapping("pay/payPreferences")
+	public String payPreferences(Model model,HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("Id");
+		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
+		return "pay/payPreferences";
+	}
 }
