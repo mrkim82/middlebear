@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.groo.bear.files.mapper.FilesMapper">
+  	
+  	<insert id="insert" parameterType="FilesVO">
+  		insert into files (
+  						    UUID
+  						   ,UPLOAD_PATH
+  						   ,FILE_NAME
+  						   ,FILE_TYPE
+  						   ,FILE_DATE
+  						   ,BOARD_NO
+  							)
+  				VALUES 
+  						  (
+  						    #{uuid}
+  						    ,#{uploadPath}
+  						    ,#{fileName}
+  						    ,#{fileType}
+  						    ,sysdate
+  						    ,#{boardNo})
+  	</insert>
+  	
+  	<delete id="delete">
+  		delete from files where uuid = #{uuid}
+  	</delete>
+  	
+  	<select id="findByBno" resultType="FilesVO">
+  		select * from files where board_no = #{boardNo}
+  	</select>
+  	
+  	<delete id="deleteAll">
+  		delete files where board_no = #{boardNo}
+  	</delete>
+  </mapper>

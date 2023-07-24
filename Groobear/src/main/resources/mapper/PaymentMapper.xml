@@ -9,4 +9,13 @@
 		WHERE u.emp_no = i.emp_no 
 		AND i.dept_no = d.dept_no
 	</select>
+	<!-- 기안자 정보 Id,emp_no,name,rank,dept_name -->
+	<select id="payEmpInfo" resultType="EmpVO">
+		SELECT u.id,u.emp_no,i.name,i.rank,d.dept_name FROM users u, user_info i, departments d
+			WHERE i.dept_no = d.dept_no
+			AND u.emp_no = i.emp_no
+			AND u.emp_no = (SELECT emp_no 
+								FROM users
+								WHERE id = #{id})
+	</select>
 </mapper>

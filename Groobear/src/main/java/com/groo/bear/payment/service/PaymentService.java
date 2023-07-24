@@ -9,4 +9,6 @@ public interface PaymentService {
 	public List<EmpVO> payEmpList();
 	//결재문서 페이지
 	public int paymentDoc(PaymentVO payVO);
+	//기안자 id,emp_no,emp_name,dept_name 받아오는 거
+	public EmpVO payEmpInfo(String id);
 }

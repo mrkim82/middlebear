@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <style>
 textarea {
   background-color: #f1f1f1;
@@ -34,6 +35,9 @@ p {
 	color: gray;
 	text-decoration:line-through;
 }
+[type="checkbox"] {
+	margin-right: 15px;
+}
 </style>
 	
 </head>
@@ -51,7 +55,7 @@ p {
 			<!-- 글 생성 nav -->
 			<div>
 				<ul class="nav justify-content-center"
-					style="background-color: #faf9f9; margin: 10px">
+					style="background-color: #faf9f9; margin: 10px;color: silver;">
 					<li class="nav-item" data-post-code="1"><a class="nav-link"
 						data-toggle="modal" data-target="#modal1" href="#"><span>글</span></a></li>
 					<li class="nav-item" data-post-code="2"><a class="nav-link"
@@ -486,7 +490,7 @@ p {
 									<!-- 추가 항목 -->
 									<div>
 										<p>
-										  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+										  <button class="btn btn-primary" type="button" data-toggle="collapse" th:data-target="'#collapseExample' + ${allPost.workNo}"
 										  			aria-expanded="false" aria-controls="collapseExample">
 										    + 항목추가입력
 										  </button>
@@ -495,7 +499,7 @@ p {
 										<div>
 
 										</div>
-										<div class="collapse" id="collapseExample">
+										<div class="collapse" th:id="'collapseExample' + ${allPost.workNo}">
 										  <div class="card card-body">
 										  	<!-- 시작일 추가 -->
 										  	<div>
@@ -576,7 +580,7 @@ p {
 														<span th:text="${com.comContent}"></span>
 														<th:block th:if="${com.id == session.Id}">
 															<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
-															<span></span>
+															<span></span><!-- 지우면 안됨!!!!!!! -->
 															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
 														</th:block>
 													</li>
@@ -658,7 +662,8 @@ p {
 			
 				<!-- 3.일정 -->
 				<th:block th:if="${allPost.postType == '3'}">
-					<div class="card" style="margin-bottom: 15px; background-color: #fff;">
+					<div class="card" style="margin-bottom: 15px; background-color: #fff;"
+						 th:attr="data-feed-post-sch-no=${allPost.proPostNo}, data-feed-sch-no=${allPost.schNo}">
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
 						<div>
 									<span th:text="${allPost.profileImg}"></span>
@@ -668,30 +673,107 @@ p {
 						<div class="card-header" th:text="${allPost.postTitle}">
 							<!-- 글 제목 -->
 						</div>
+						<th:block th:text="'시작' + ${allPost.schStartTime}"></th:block>
+						<th:block th:text="'종료' + ${allPost.schEndTime}"></th:block>
 						<div class="card-body">
 							<!-- 참석자 존 -->
 							<div>
-
+								<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}">
+									<div th:text="${rpl.name}" th:data-sch-user-id="${rpl.id == session.Id ? rpl.id : ''}"
+									 	 th:data-sch-list-id="${rpl.id}"></div>
+									<th:block th:switch="${rpl.partiCheck}">
+										<span th:case="Y" style="color: green;">참석</span>
+										<span th:case="N" style="color: red;">불참</span>
+										<span th:case="A" style="color: gray;">미정</span>
+									</th:block>
+								</th:block>
+								</div>
+								<!-- 참석자 리스트 버튼 -->
+								<div>
+								
+									<button type="button" class="btn btn-light" data-toggle="modal" th:data-target="'#schPartiListModal' + ${allPost.proPostNo}">
+													참석자 변경
+									</button>
+									<!-- 참석자 리스트 Modal -->
+									<form>
+										<div class="modal fade" th:id="'schPartiListModal' + ${allPost.proPostNo}" tabindex="-1"
+												aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog modal-dialog-centered">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h1 class="modal-title fs-5" id="exampleModalLabel">참석자 변경</h1>
+														<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<!-- 내용 -->
+													<div class="modal-body">
+														<ul>
+															<li style="border-bottom: 1px solid gray; list-style-type: none;">
+																<div>
+																	<input type="checkbox" value="selectAll2" id="selectAll"
+																		onclick='' /><label for="selectAll" style="cursor: pointer;">전체선택</label>
+																		<input type="text" placeholder="참석자명 검색">
+																</div>
+															</li>
+															<!-- 참가자 목록 -->
+															<!-- <th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}"> -->
+															<th:block th:each="member, i : ${projectPartiMember}">
+																<li style="list-style-type: none">
+																	<nav class="nav">
+																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
+																					th:each="rpl : ${readPartiList}"
+																					th:checked="${rpl.id == member.id}"
+																					th:if="${rpl.id == member.id && rpl.schNo == allPost.schNo}"
+																					th:data-sch-status="${rpl.partiCheck}"
+																					th:data-sch-list-id="${member.id}">
+																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
+																					th:each="rpl, j : ${readPartiList}"
+																					th:checked="${rpl.id == member.id}"
+																					th:if="${rpl.id != member.id && rpl.schNo == allPost.schNo && i.count == 1 && j.count == 1}"
+																					th:data-sch-status="${rpl.partiCheck}"
+																					th:data-sch-list-id="${member.id}">
+																			<label th:for="'schPartiList' + ${member.id}">
+																				<a class="nav-link" th:utext="${member.profileImg}"></a>
+																				<a class="nav-link" th:text="${member.name}"></a>
+																			</label>
+																	</nav>
+																</li>
+															</th:block>
+														</ul>
+													</div>
+													<div class="modal-body">
+														진짜?
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+														<button type="button" class="btn btn-primary" onclick="changeSchParti()">확인</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
+									<!-- 모달 끝 -->
 							</div>
 							<!-- 장소 -->
 							<div>
 								<th:block th:if="${allPost.schPlace != null}" th:text="'장소 : ' + ${allPost.schPlace}"></th:block>
 							</div>
 							<th:block th:text="${allPost.schContent}">
-								<!-- 게시글 내용이 여기에 들어갑니다. -->
+								<!-- 내용이 여기에 들어갑니다. -->
 							</th:block>
 							<!-- 참석 여부 버튼 -->
-							<div style="text-align: center;">
-								<button type="button" class="btn"
-									th:classappend="${allPost.workStatus == '1' ? 'btn-success' : 'btn-outline-success'}"
-									data-work-type-status="4" onclick="toggleFeedSchButtonStyle(this)">참석</button>
-								<button type="button" class="btn"
-									th:classappend="${allPost.workStatus == '2' ? 'btn-danger' : 'btn-outline-danger'}"
-									data-work-type-status="3" onclick="toggleFeedSchButtonStyle(this)">불참</button>
-								<button type="button" class="btn"
-									th:classappend="${allPost.workStatus == '3' ? 'btn-secondary' : 'btn-outline-secondary'}"
-									data-work-type-status="5" onclick="toggleFeedSchButtonStyle(this)">미정</button>
-							</div>
+							<th:block th:each="rparti : ${readSchparti}" th:if="${rparti.schNo == allPost.schNo}">
+								<div th:attr="data-feed-sch-type=${rparti.partiCheck}" style="text-align: center;">
+									<button type="button" class="btn"
+										th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
+										data-sch-type-status="Y" onclick="toggleFeedSchButtonStyle(this)">참석</button>
+									<button type="button" class="btn"
+										th:classappend="${rparti.partiCheck == 'N' ? 'btn-danger' : 'btn-outline-danger'}"
+										data-sch-type-status="N" onclick="toggleFeedSchButtonStyle(this)">불참</button>
+									<button type="button" class="btn"
+										th:classappend="${rparti.partiCheck == 'A' ? 'btn-secondary' : 'btn-outline-secondary'}"
+										data-sch-type-status="A" onclick="toggleFeedSchButtonStyle(this)">미정</button>
+								</div>
+							</th:block>
 							<div class="card-footer">
 								<!-- 북마크, 댓글수 -->
 								<div>
@@ -776,7 +858,7 @@ p {
 							<ul class="list-unstyled">
 								<li>
 									<!-- 이미지 -->
-									<img src="이미지 URL" alt="이미지" class="img-fluid">
+									<img src="" alt="이미지" class="img-fluid">
 								</li>
 							</ul>
 						</div>
@@ -837,8 +919,9 @@ p {
 		
 		    selectedButton = button;
 		  } else {
-		    resetButtonStyle(button);
-		    selectedButton = null;
+				//버튼 초기화
+		    // resetButtonStyle(button);
+		    // selectedButton = null;
 		  }
 		}
 		
@@ -922,18 +1005,12 @@ p {
 							    }
 							
 							    oldButton = button;
-							  } else {
-							    resetButtonStyle(button);
-							    oldButton = null;
 							  }
 							
 						} else {
 							alert('상태 수정 실패');
 						}
 					});
-			
-			
-			
 			
 		}
 		
@@ -954,6 +1031,114 @@ p {
 		
 	</script>
 	
+	<!-- 버튼 상태(일정) 참가 상황 -->
+	<script>
+		let selectedSchButton = new Map();
+
+		function toggleFeedSchButtonStyle(button) {
+			let postSchNo = button.closest('.card').dataset.feedPostSchNo;// 글 번호(map용)
+			let schNo = button.closest('.card').dataset.feedSchNo;//sch 고유번호, update용
+			let newStatus = button.dataset.schTypeStatus;//선택한 번호
+			let oldSchStatusNo = selectedSchButton.get(postSchNo);//선택했던 기존 버튼 번호 null or 존재
+
+			//기존 상태 버튼 찾기
+			let oldSchButton;
+			if(oldSchStatusNo == null) {//선택했던 기존 버튼이 없다면
+				let firstButtonSchStatusNo = button.parentNode.dataset.feedSchType;//최초 버튼 찾기
+				oldSchButton = button.closest(".card").querySelector('[data-sch-type-status="' + firstButtonSchStatusNo + '" ]');//최초 버튼 상태 찾기
+			} else {//선택했던 기존 버튼이 있다면
+				oldSchButton = button.closest(".card").querySelector('[data-sch-type-status="' + oldSchStatusNo + '" ]');//구 버튼 상태를 찾기
+			}
+
+			selectedSchButton.set(postSchNo, newStatus);//신규 번호 삽입
+			
+			//console.log('신규상태',newStatus);//새 번호 찾기
+			//console.log('고유번호',schNo);
+			
+			fetch("/updateSchPartiCheck", {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					'partiCheck' : newStatus,
+	   				'schNo': schNo
+	   			})
+			})
+			.then(response => response.json())
+			.then(res => {
+				console.log(res);
+				if(res.result == '성공') {
+					
+					if (oldSchButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
+						if (oldSchButton) {
+							resetButtonStyle(oldSchButton);
+						}
+						
+						let className = button.classList.item(1);
+				
+						if (className.startsWith('btn-outline')) {
+							let filledClassName = className.replace('btn-outline', 'btn');
+							button.classList.remove(className);
+							button.classList.add(filledClassName);
+						} else {
+							let outlineClassName = className.replace('btn', 'btn-outline');
+							button.classList.remove(className);
+							button.classList.add(outlineClassName);
+						}
+				
+						oldSchButton = button;
+					}
+					/* else {//버튼취소하는기능
+						resetButtonStyle(button);
+						selectedSchButton.set(postSchNo, null);
+						newStatus = 'B';
+					} */
+					
+					changeSchStatus(button, newStatus);
+					
+				} else {
+					alert('상태 수정 실패');
+				}
+			});
+			
+		}
+		
+		//버튼 초기화
+		function resetButtonStyle(button) {
+		  let className = button.classList.item(1);
+		  //console.log(className);
+		  if (className.startsWith('btn-outline')) {
+		    let outlineClassName = className.replace('btn-outline', 'btn');
+		    button.classList.remove(className);
+		    button.classList.add(outlineClassName);
+		  } else {
+		    let filledClassName = className.replace('btn', 'btn-outline');
+		    button.classList.remove(className);
+		    button.classList.add(filledClassName);
+		  }
+		}
+		
+		//글자 바꾸기
+		function changeSchStatus(button, newStatus) {
+			let schPartiChange = button.closest(".card").querySelector('[data-sch-user-id]').nextElementSibling;//상태창 위치
+			console.log('ss',button.closest(".card").querySelector('[data-sch-user-id]'))
+			console.log('sss',schPartiChange)
+			if(newStatus == 'Y') {
+				schPartiChange.textContent ='참석';
+				console.log(schPartiChange.style.color = 'green');
+			} else if(newStatus == 'N') {
+				schPartiChange.textContent ='불참';
+				console.log(schPartiChange.style.color = 'red');
+			} else if(newStatus == 'A') {
+				schPartiChange.textContent ='미정';
+				console.log(schPartiChange.style.color = 'gray');
+			}
+		}
+	</script>
+
+
+
 	<!-- 글 작성 -->
 	<script>
 		
@@ -1207,6 +1392,78 @@ p {
 		
 	</script>
 	
+	<!-- 참석자 선택 처리 -->
+	<script>
+		function changeSchParti() {
+			let inputValues = event.target.closest('.modal-content').children[1].children[0].querySelectorAll('input[type="checkbox"]:checked');
+			let formData = new FormData();
+			let formDataDel = new FormData();
+			let updatePartiList = [];
+			let updateObj = {};
+			
+			let schPlNo = event.target.closest('.card').dataset.feedSchNo;//스케줄 고유번호
+			
+			inputValues.forEach(inputValue => {
+				updateObj.schNo = schPlNo;
+				updateObj.partiCheck = inputValue.dataset.schStatus;
+				updateObj.name = inputValue.dataset.schListId;
+				updatePartiList.push(updateObj);
+				updateObj = {};
+		    });
+			
+			formData = updatePartiList;
+			console.log(formData);
+			
+			//console.log(formDataDel.get('schNo'))
+			
+			//선택인원 삭제
+			fetch("/deletePartiMemberAll", {
+				method: 'POST',
+				headers : {
+					'Content-Type': 'application/json'
+				},
+				body : JSON.stringify(schPlNo)
+			})
+			.then(response => response.json())
+			.then(res => {
+				let rC = res.result;
+				
+				if(rC == '성공') {
+					
+					//전체 삭제 성공시 선택인원 추가
+					fetch("/insertPartiMemberAll", {
+						method: 'POST',
+						headers : {
+							'Content-Type': 'application/json'
+						},
+						body : JSON.stringify(formData)
+					})
+					.then(response => response.json())
+					.then(res => {
+						let rC = res.result;
+						
+						if(rC == -1) {
+							alert('값이 들어가지 않음');
+						} else if (rC >= 1) {
+							console.log(rC + '명 업데이트');
+							const currentURL = window.location.href;
+							window.location.href = currentURL;
+						} else if (rC == 0) {
+							console.log('0명');
+						} else {
+							alert('알 수 없는 접근')
+						}
+					});
+					
+				} else {
+					alert('변경 실패')
+				}
+				
+			});
+			
+			
+		}
+	</script>
 	<!-- 시간 단위 조정 -->
 	<!-- <script>
 		// 10분 간격으로 선택할 수 있도록 설정
@@ -1227,12 +1484,12 @@ p {
 		  startDateInput.value = selectedDate.toISOString().slice(0, 16);
 		});
 	</script> -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+	
 	<script
 		th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js}"></script>
 	<script
 		th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
-		
+	
 	<!-- <script src="../proPost/proPostJs/proPostDetail.js"></script> -->
 </body>
 </html>
