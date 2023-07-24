@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.mypage.mapper.CarMapper">
+
+	<!-- 전체조회 -->
+
+
+	<select id="selectAllCar" parameterType="CarVO" resultType="CarVO">
+		SELECT * 
+            FROM (
+              SELECT t.*, ROWNUM AS rn
+              FROM (
+				select u.emp_no,
+					   d.dept_name,
+						ui.name,
+						c.car_no,
+						u.phone,
+						c.car_date
+				from users u,
+						departments d,
+						user_info ui,
+						car c
+				where d.dept_no = ui.dept_no
+						and ui.emp_no = u.emp_no
+						and u.id = c.id
+
+			<if test="cri.type != null and cri.type.equals('name')">
+				and ui.name LIKE '%${cri.keyword}%'
+			</if>
+			<if test="cri.type != null and cri.type.equals('carNo')">
+				and c.car_no LIKE '%${cri.keyword}%'
+			</if><if test="cri.type != null and cri.type.equals('deptName')">
+				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
+			</if>
+			
+		order by u.emp_no
+		) t
+            )
+            <![CDATA[
+            WHERE rn >= (#{cri.page}-1) * 10 +1 
+			and rn <= #{cri.page} * 10
+            ]]>
+	</select>
+
+
+	<!-- 개인차량 조회 -->
+	<select id="getMyCar" parameterType="String" resultType="CarVO">
+		select
+			u.emp_no,
+			d.dept_name,
+			ui.name,
+			c.car_no,
+			c.car_type,
+			u.phone,
+			c.car_date,
+			ui.rank,
+			u.emp_grade,
+			u.id
+		from 
+			users u,
+			departments d,
+			user_info ui,
+			car c
+		where
+			d.dept_no = ui.dept_no
+			and ui.emp_no = u.emp_no
+			and u.id = c.id
+			and u.id = #{id}
+	</select>
+
+	<select id="getCarInfo" parameterType="String" resultType="CarVO">
+		select
+			u.emp_no,
+			d.dept_name,
+			ui.name,
+			u.phone,
+			ui.rank,
+			u.emp_grade,
+			u.id
+		from 
+			users u,
+			departments d,
+			user_info ui
+		where
+			d.dept_no = ui.dept_no
+			and ui.emp_no = u.emp_no
+			and u.id = #{id}
+	</select>
+
+
+	<!-- 페이징  -->
+	<select id="carListCnt" resultType="int">
+		select count(*)
+			from users u,
+					departments d,
+					user_info ui,
+					car c
+			where d.dept_no = ui.dept_no
+					and ui.emp_no = u.emp_no
+					and u.id = c.id
+					
+			<if test="cri.type != null and cri.type.equals('name')">
+				and ui.name LIKE '%${cri.keyword}%'
+			</if>
+			<if test="cri.type != null and cri.type.equals('carNo')">
+				and c.car_no LIKE '%${cri.keyword}%'
+			</if>
+			<if test="cri.type != null and cri.type.equals('deptName')">
+				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
+			</if>
+	</select>
+
+	<!-- 추가 --> 
+	<insert id="insertCar" parameterType="CarVO">
+		insert into car (
+			car_no,
+			car_type,
+			id)
+		values (
+			#{carNo},
+			#{carType},
+			#{id})		
+		
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="updateCar" parameterType="CarVO">
+		update car set car_no = #{carNo}, car_type = #{carType} 
+		where car_no = #{oldCarNo}
+	</update>
+
+
+	<delete id="deleteCar" parameterType="String">
+		delete from car 
+		where car_no = #{carNo}
+	</delete>
+
+
+
+
+
+
+</mapper>

@@ -44,4 +44,16 @@
 		ORDER BY sch_no, name
 	</select>
 	
+	<!-- 참석자 전체 삭제 -->
+	<delete id="deletePartiMemberAll" parameterType="int">
+		DELETE FROM sch_parti
+		WHERE sch_no = #{schNo}
+	</delete>
+	
+	<!-- 참석자 추가 -->
+	<insert id="insertPartiMember" parameterType="ProPostSchVO">
+		INSERT INTO sch_parti(sch_no, parti_check, id)
+		VALUES(#{schNo}, #{partiCheck}, #{id})
+	</insert>
+	
 </mapper>

@@ -23,4 +23,7 @@ public interface FilesMapper {
 	
 	//프로필사진 삭제
 	public int deleteProfImg(String id);
+	
+	//넣다가 삭제한 첨부파일 삭제처리
+	public List<FilesVO> getOldFiles();
 }

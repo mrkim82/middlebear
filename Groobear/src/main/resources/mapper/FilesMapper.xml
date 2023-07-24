@@ -58,4 +58,8 @@
   	<delete id="deleteProfImg" parameterType="String">
   		delete files where id = #{id}
   	</delete>
+  	
+  	<select id="getOldFiles" resultType="FilesVO">
+  		select * from files where upload_path = to_char(sysdate -1 , 'yyyy/mm/dd')
+  	</select>
   </mapper>

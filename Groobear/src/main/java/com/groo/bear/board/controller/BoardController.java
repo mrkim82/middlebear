@@ -32,7 +32,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class BoardController {
 	
-	//ㄴㅁㅇㅁㄴㅁㅇㄴ
 	@Autowired
 	BoardService boardService;
 	
@@ -53,12 +52,13 @@ public class BoardController {
 		return "board/boardList";
 	}
 	
-	@GetMapping("boardInfo")
+	@GetMapping("/boardInfo")
 	public String getBoard(Model model, @RequestParam int boardNo) {
 		model.addAttribute("board", boardService.selectBoard(boardNo));
 		model.addAttribute("boardCom", boardService.readBoardComment(boardNo));
 		return "board/boardInfo";
 	}
+   
 	
 	//등록 페이지
 	@GetMapping("boardInsert")
@@ -74,13 +74,13 @@ public class BoardController {
 		log.info("register : " + boardVO);
 		boardService.insertBoard(boardVO);
 		
-//		if(boardVO.getAttachList() != null) {
-//			System.out.println(boardVO.getAttachList());
-//			boardVO.getAttachList().forEach(attach -> log.info(attach));
-//		}
+		if(boardVO.getAttachList() != null) {
+			System.out.println(boardVO.getAttachList());
+			boardVO.getAttachList().forEach(attach -> log.info(attach));
+		}
 		
 		log.info("===============================");
-		rttr.addFlashAttribute("result", boardVO.getBoardNo());
+		//rttr.addFlashAttribute("result", boardVO.getBoardNo());
 		return "redirect:/boardList?boardType=" + boardVO.getBoardType();
 	}
 	
@@ -93,6 +93,7 @@ public class BoardController {
 	//게시글수정
 	@PostMapping("boardUpdate")
 	public String boardUpdate(BoardVO boardVO, Model model) {
+		boardService.modify(boardVO);
 		boardService.updateBoard(boardVO);
 		return "redirect:/boardInfo?boardNo=" + boardVO.getBoardNo();
 	}

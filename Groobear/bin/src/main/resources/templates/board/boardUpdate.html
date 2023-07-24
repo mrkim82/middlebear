@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/boardTiles}">
+<head>
+    <meta charset="UTF-8">
+    <title>Update a Board</title>
+<style>
+.uploadResult {
+    width : 100%;
+    background-color : gray;
+}
+
+.uploadResult ul{
+    display : flex;
+    flex-flow : row;
+    justify-content : center;
+    align-items : center;
+}
+
+.uploadResult ul li{
+    list-style : none;
+    padding : 10px;
+    align-content : center;
+    text-align : center;
+}
+
+.uploadResult ul li img {
+    width : 100px;
+}
+
+.uploadResult ul li span {
+    color : white;
+}
+
+.bigPictureWrapper{
+    position : absolute;
+    display : none;
+    justify-content : center;
+    align-items : center;
+    top : 0%;
+    width : 100%;
+    height : 100%;
+    background-color : gray;
+    z-index : 100;
+    background : rgba(255, 255, 255, 0.5);
+}
+
+.bigPicture {
+    position : relative;
+    display : flex;
+    justify-content : center;
+    align-items : center;
+}
+
+.bigPicture img {
+    width : 600px;
+}
+</style>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+</head>
+<body>
+    <!-- 기존의 폼 요소들 -->
+ <div layout:fragment="content">
+        <h2>글 수정</h2>
+        <form th:action="@{/boardUpdate}" method="post">
+            <table>
+                <tr>
+				    <td style="visibility: hidden;">게시글 번호:</td>
+				    <td><input type="hidden" id="boardNo" name="boardNo" th:value="${board.boardNo}" /></td>
+				</tr>
+                <tr>
+                    <td>제목:</td>
+                    <td><input type="text" id="title" name="title" th:value="${board.title}" required /></td>
+                </tr>
+                <tr>
+                    <td>내용:</td>
+                    <td><textarea id="content" name="content" required th:text="${board.content}"></textarea></td>
+                </tr>
+                <tr>
+                    <td style="visibility: hidden;">작성자 ID:</td>
+                    <td><input type="hidden" id="name" name="name" th:value="${session.Name}" readonly /></td>
+                </tr>
+                <tr>
+                    <td style="display:none;"><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
+                </tr>
+            </table>
+            <button type="submit">저장</button>
+            <button type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|">목록으로</button>
+        </form>
+        <div class='bigPictureWrapper'>
+            <div class='bigPicture'>
+            </div>
+          </div>
+          
+    <div class="row">
+        <div class="col-lg-12">
+        <div class="panel panel-default">
+    
+            <div class="panel-heading">Files</div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+      
+            <div class = "form-group uploadDiv">
+            <input type = "file" name = 'uploadFile' multiple="multiple">
+             </div>
+            <div class="panel-body">
+            
+            <div class='uploadResult'> 
+                <ul>
+                </ul>
+            </div>
+            </div>
+            <!--  end panel-body -->
+        </div>
+        <!--  end panel-body -->
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- /.row -->
+</div>
+<script>
+  $(document).ready(function() {
+	(function(){
+
+  var regex = new RegExp("(.*?)\\.(sh|alz)$");//제외하고 싶은 확장자.
+  var maxSize = 5242880; //5MB
+  
+  function checkExtension(fileName, fileSize){
+    
+    if(fileSize >= maxSize){
+      alert("파일 사이즈 초과");
+      return false;
+    }
+    
+    if(regex.test(fileName)){
+      alert("해당 종류의 파일은 업로드할 수 없습니다.");
+      return false;
+    }
+    return true;
+  }
+  
+  $("input[type='file']").change(function(e){
+
+    var formData = new FormData();
+    
+    var inputFile = $("input[name='uploadFile']");
+    
+    var files = inputFile[0].files;
+    
+    for(var i = 0; i < files.length; i++){
+
+      if(!checkExtension(files[i].name, files[i].size) ){
+        return false;
+      }
+      formData.append("uploadFile", files[i]);
+      
+    }
+    
+    $.ajax({
+      url: '/uploadAjaxAction',
+      processData: false, 
+      contentType: false,data: 
+      formData,type: 'POST',
+      dataType:'json',
+        success: function(result){
+          console.log(result); 
+		  showUploadResult(result); //업로드 결과 처리 함수 
+
+      }
+    }); //$.ajax
+    
+  });  
+  
+  function showUploadResult(uploadResultArr){
+	    
+    if(!uploadResultArr || uploadResultArr.length == 0){ return; }
+    
+    var uploadUL = $(".uploadResult ul");
+    
+    var str ="";
+    
+    $(uploadResultArr).each(function(i, obj){
+		
+		if(obj.image){
+			var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+			str += "<li data-path='"+obj.uploadPath+"'";
+			str +=" data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'"
+			str +" ><div>";
+			str += "<span> "+ obj.fileName+"</span>";
+			str += "<button type='button' data-file=\'"+fileCallPath+"\' "
+			str += "data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			str += "<img src='/display?fileName="+fileCallPath+"'>";
+			str += "</div>";
+			str +"</li>";
+		}else{
+			var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);			      
+		    var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+		      
+			str += "<li "
+			str += "data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"' ><div>";
+			str += "<span> "+ obj.fileName+"</span>";
+			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' " 
+			str += "class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			str += "<img src='img/attach.png/'></a>";
+			str += "</div>";
+			str +"</li>";
+		}
+
+    });
+    
+    uploadUL.append(str);
+  }
+        var formObj = $("form");
+        $('button').on("click", function(e) {
+        e.preventDefault();
+
+        var operation = $(this).data("oper");
+        console.log(operation);
+        // if(operation === 'remove') {
+        //     formObj.attr("action", `/boardDelete?=[[${board.boardNo}]]`);
+        // } else if(operation === 'list') {
+        //     //move to list
+        //     window.location.href="/boardList";
+        //     return;
+        // }
+        // formObj.submit();
+    })
+		
+		$.getJSON(`/getAttachList?boardNo=[[${board.boardNo}]]`, function(arr){
+			console.log(arr);
+			var str = "";
+			
+			$(arr).each(function(i, attach){
+				
+				// image type
+				if(attach.fileType){
+					var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
+					
+					str+= "<li data-path = '" + attach.uploadPath + "' data-uuid = '" + attach.uuid + "'data-filename='"
+					+ attach.fileName + "' data-type = '" + attach.fileType + "'><div>";
+					str+= "<span> " + attach.fileName + "</span>";
+					str+= "<button type = 'button' data-file=\'" + fileCallPath + "\' data-type='image'";
+					str+= "class = 'btn btn-warning btn-circle'><i class = 'fa fa-times'></i></button><br>";
+					str+= "<img src = '/display?fileName=" + fileCallPath + "'>";
+					str+= "</div>";
+					str+ "</li>";
+				}else {
+					str += "<li data-path = '" + attach.uploadPath + "' data-uuid = '" + attach.uuid + "'data-filename = '"
+					+ attach.fileName + "'data-type = '" + attach.fileType + "'><div>";
+					str += "data-filename='" + attach.fileName + "' data-type = '" + attach.fileType + "'><div>";
+					str += "<span>" + attach.fileName + "</span><br/>";
+					str+= "<button type = 'button' data-file = \'" + fileCallPath + "\' data-type = 'file'";
+					str+= " class = 'btn btn-warning btn-circle'><i class = 'fa fa-times'></i></button><br>";
+					str += "<img src='img/attach.png/'></a>";
+					str += "</div>";
+					str + "</li>";
+				}
+			});
+			
+			$(".uploadResult ul").html(str);
+		});
+	})();
+    $(".uploadResult").on("click", "button", function(e){
+        console.log("delete file");
+        
+        if(confirm("Remove this file? ")){
+            var targetLi = $(this).closest("li");
+            targetLi.remove();
+        }
+    });
+});
+    </script>
+
+</div>
+</body>
+</html>

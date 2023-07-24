@@ -29,4 +29,33 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 		return ppsm.readPartiList(proNo);
 	}
 
+	@Override
+	public void deletePartiMemberAll(int schNo) {
+		ppsm.deletePartiMemberAll(schNo);
+	}
+
+	@Override
+	public boolean insertPartiMember(ProPostSchVO vo) {
+		return ppsm.insertPartiMember(vo);
+	}
+
+	@Override
+	public int insertPartiMemberAll(List<ProPostSchVO> vo) {
+		int result = 0;
+		
+		if(vo == null) {
+			result = -1;
+		} else {
+			
+			for (ProPostSchVO proPostSchVO : vo) {
+				if(ppsm.insertPartiMember(proPostSchVO)) {
+					result++;
+				}
+			}
+			
+		}
+		
+		return result;
+	}
+
 }

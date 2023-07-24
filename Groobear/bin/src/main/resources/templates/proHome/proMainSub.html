@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/proTiles}"
+>
+<head>
+<meta charset="UTF-8">
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+</head>
+<body layout:fragment="content">
+	<div>
+		<table class="table table-hover" id="goProjectDetail">
+			<tr th:each="pro:${projectMainList}"
+					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
+					style="cursor:pointer">
+				<td th:text="${pro.proColor}"></td>
+				<td th:text="${pro.proStarCheck}" class="starCheck"></td>
+				<td th:text="${pro.proName}"></td>
+				<td th:each="parti:${projectPartiList}" th:if="${parti.proNo == pro.proNo}"
+					th:text="${parti.count} + '명'"></td>
+			</tr>
+		</table>
+	</div>
+	<script>
+		let starCheck = document.querySelectorAll(".starCheck");
+		
+		starCheck.forEach(sC => {
+			
+			sC.addEventListener("click", function(event) {
+				event.stopPropagation();
+				changeStar();
+			});
+			
+		});
+	
+		function changeStar() {
+			let dpMN = event.target.parentNode.getAttribute("data-pMN");
+			let starC = event.target.parentNode.getAttribute("data-starC");
+			let trTag = event.target.parentNode;
+
+			let formData = new FormData();
+	        formData.append('pMN', dpMN);
+	        formData.append('starC', starC);
+			console.log(formData.get('pMN'))
+			console.log(formData.get('starC'))
+			fetch("/proUpdate", {
+				method: 'POST',
+				body : formData
+			})
+			.then(response => response.json())
+			.then(res => {
+				let rC = res.result;
+				console.log(rC)
+				if (rC == '등록' || rC == '취소') {
+					changeProOne(rC, trTag);
+				} else {
+					alert('요청이 취소 되었습니다.');
+				} 
+				
+			})
+		};
+	
+		//즐겨찾기 변경
+		function changeProOne(rC, trTag) {
+			
+			if (rC == '등록') {
+				trTag.setAttribute('data-starc', 'Y');
+				trTag.getElementsByClassName('starCheck')[0].textContent = 'Y';
+			} else {
+				trTag.setAttribute('data-starc', 'N');
+				trTag.getElementsByClassName('starCheck')[0].textContent = 'N';
+			}
+	
+		}
+		
+		//프로젝트 master여부
+		function chagepartiSelect() {
+			let partiSelectId = document.getElementById('partiSelect').value;
+			console.log(partiSelectId);
+			
+		}
+	</script>
+	
+	<!-- 프로젝트 홈에서 상세 페이지 이동 -->
+	<script>
+		let gPList = document.querySelectorAll('#goProjectDetail tr');
+		
+		gPList.forEach(gPDetail => {
+			let homeTabNum = gPDetail.dataset.hometab;
+			gPDetail.addEventListener('click', function() {
+				projectDetail(homeTabNum);
+			});
+		});
+	
+		function projectDetail(homeTNum) {
+			location.href="/proPostMain/" + homeTNum;
+		}
+	</script>
+</body>
+</html>

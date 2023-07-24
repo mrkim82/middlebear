@@ -1,6 +1,7 @@
 package com.groo.bear.mypage.mapper;
 
 import com.groo.bear.emp.service.EmpVO;
+import com.groo.bear.mypage.service.CommuteVO;
 
 public interface UserMapper {
 
@@ -14,4 +15,8 @@ public interface UserMapper {
 	public int updateUsers(EmpVO vo);
 	//마이프로필 확인
 	public EmpVO checkMyProf(String id);
+	
+	
+	
+	
 }

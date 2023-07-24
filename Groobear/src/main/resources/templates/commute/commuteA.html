@@ -11,6 +11,8 @@
 	<div>
 		<form name="searchForm" action="commuteList">
 			<input type="hidden" name="page" value="1"/>
+			<input type="date" name="startDay" id="startDate" onchange = "">
+            <input type="date" name="endDay" id="endDate" onchange = "" >
 			<select name="type">
 				<option value='' selected>선택</option>
 				<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
@@ -25,6 +27,7 @@
 		<table>
 			<thead>
 				<tr>
+					<th>날짜</th>
 					<th>사번</th>
 					<th>부서</th>
 					<th>이름</th>
@@ -37,6 +40,7 @@
 			</thead>
 			<tbody>
 				<tr class="cml" th:if="${commuteList != null}" th:each="comm, stat:${commuteList}">
+					<td>[[${#dates.format(comm.day,'MM/dd')}]]</td>
 					<td>[[${comm.empNo}]]</td>
 					<td>[[${comm.deptName}]]</td>
 					<td>[[${comm.name}]]</td>
@@ -69,6 +73,7 @@ function goPage(p){
 	searchForm.page.value = p;
 	searchForm.submit();
 }
+
 
 for(let i = 0 ; i < document.querySelectorAll('.cml').length;i++){
 		
@@ -112,8 +117,22 @@ for(let i = 0 ; i < document.querySelectorAll('.cml').length;i++){
 	
 	document.querySelectorAll('.owt')[i].textContent = cal2;
 	
+	
 }
 	
+	
+	var today = new Date();
+
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var day = ('0' + today.getDate()).slice(-2);
+	
+	var dateString = year + '-' + month  + '-' + day;
+	
+	console.log(dateString);
+	
+	document.querySelector('#startDate').value = dateString;
+	document.querySelector('#endDate').value = dateString;
 	
 	
 	

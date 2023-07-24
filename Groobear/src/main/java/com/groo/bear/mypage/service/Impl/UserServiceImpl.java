@@ -51,4 +51,9 @@ public class UserServiceImpl implements UserService {
 	public EmpVO checkMyProf(String id) {
 		return userMapper.checkMyProf(id);
 	}
+	
+	
+	
+	
+		
 }	
