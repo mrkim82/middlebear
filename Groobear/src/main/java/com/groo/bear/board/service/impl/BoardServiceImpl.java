@@ -30,6 +30,28 @@ public class BoardServiceImpl implements BoardService{
 		boardMapper.updateCount(boardNo);
 		return boardMapper.selectBoard(boardNo);
 	}
+	//첨부파일이 있을 때만 게시글 등록되는 코드.
+//	@Transactional
+//	@Override
+//	public int insertBoard(BoardVO boardVO) {
+//	    log.info("register......" + boardVO);
+//	    int boardNo = boardMapper.boardNoSequence();
+//	    boardVO.setBoardNo(boardNo);
+//	    
+//	    // Get the next boardNo from the sequence
+//	    // Set the boardNo in the boardVO object
+//	    boardVO.setBoardNo(boardNo);
+//
+//	    if(boardVO.getAttachList() == null || boardVO.getAttachList().size() <= 0) {
+//	        return 0;
+//	    }
+//	    boardVO.getAttachList().forEach(attach -> {
+//	        // Use the boardNo for the attach object
+//	        attach.setBoardNo(boardNo);
+//	        attachMapper.insert(attach);
+//	    });
+//	    return boardMapper.insertBoard(boardVO);
+//	}
 	
 	@Transactional
 	@Override
@@ -38,21 +60,17 @@ public class BoardServiceImpl implements BoardService{
 	    int boardNo = boardMapper.boardNoSequence();
 	    boardVO.setBoardNo(boardNo);
 	    
-	    // Get the next boardNo from the sequence
-	    // Set the boardNo in the boardVO object
-	    boardVO.setBoardNo(boardNo);
-
-	    if(boardVO.getAttachList() == null || boardVO.getAttachList().size() <= 0) {
-	        return 0;
+	    // 첨부파일이 있을 경우에만 첨부파일을 등록
+	    if(boardVO.getAttachList() != null && boardVO.getAttachList().size() > 0) {
+	        boardVO.getAttachList().forEach(attach -> {
+	            attach.setBoardNo(boardNo);
+	            attachMapper.insert(attach);
+	        });
 	    }
-	    boardVO.getAttachList().forEach(attach -> {
-	        // Use the boardNo for the attach object
-	        attach.setBoardNo(boardNo);
-	        attachMapper.insert(attach);
-	    });
+	    
+	    // 첨부파일의 유무에 상관없이 게시판 글을 등록
 	    return boardMapper.insertBoard(boardVO);
 	}
-
 	@Override
 	public int updateBoard(BoardVO boardVO) {
 		return boardMapper.updateBoard(boardVO);
@@ -82,10 +100,7 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.deleteBoardComment(comNo);
 	}
 	
-	@Override
-	public int updateBoardComment(BoardVO boardVO) {
-		return boardMapper.updateBoardComment(boardVO);
-	}
+	
 
 	@Override
 	public List<BoardVO> readBoardComment(int boardNo) {
@@ -112,6 +127,11 @@ public class BoardServiceImpl implements BoardService{
 		return mapper.deleteBoard(boardNo) == 1;
 	}
 	
+	
+	@Override
+	public int updateBoardComment(BoardVO boardVO) {
+		return boardMapper.updateBoardComment(boardVO);
+	}
 	@Transactional
 	@Override
 	public boolean modify(BoardVO boardVO) {

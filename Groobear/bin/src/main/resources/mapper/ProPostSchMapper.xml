@@ -44,6 +44,7 @@
 		ORDER BY sch_no, name
 	</select>
 	
+<<<<<<< HEAD
 	<!-- 참석자 전체 삭제 -->
 	<delete id="deletePartiMemberAll" parameterType="int">
 		DELETE FROM sch_parti
@@ -56,4 +57,6 @@
 		VALUES(#{schNo}, #{partiCheck}, #{id})
 	</insert>
 	
+=======
+>>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
 </mapper>

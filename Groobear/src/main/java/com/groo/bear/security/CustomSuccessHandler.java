@@ -7,11 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import com.groo.bear.security.service.SecurityService;
 import com.groo.bear.security.service.SecurityVO;
 
 
@@ -25,6 +23,9 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler{
 		HttpSession session = request.getSession();
 		SecurityVO vo = (SecurityVO) authentication.getPrincipal();
 		System.out.println(vo.getName());
+
+		
+		
 		if(vo != null) {
 			session.setAttribute("Id", vo.getId());
 			session.setAttribute("Name", vo.getName());
@@ -37,8 +38,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler{
 			session.setAttribute("EmpGrade", vo.getEmpGrade());
 			session.setAttribute("Sign", vo.getSign());
 			session.setAttribute("ProfileImg", vo.getProfileImg());
-			session.setAttribute("ProfileNote", vo.getProfileNote());		
+			session.setAttribute("ProfileNote", vo.getProfileNote());	
+				
 		}
+		
+		
 		response.sendRedirect("/main");
 	}
 }
