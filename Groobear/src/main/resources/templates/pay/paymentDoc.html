@@ -97,8 +97,44 @@
 						<tr><td>운행전키로수 <input type="text" id="km1" value="1km"></td>
 							<td>운행후키로수 <input type="text" id="km2" value="2km"></td>
 						</tr>
-						<tr><td>운행전 <button type="button" id="carfiles1">파일첨부</button></td></tr>
-						<tr><td>운행후 <button type="button" id="carfiles2">파일첨부</button></td></tr>
+						<tr><td>
+							<div class="row">
+					            <div class="col-lg-12">
+					                <div class="panel panel-default">
+					                    <div class="panel-heading">운행전</div>
+					                    <div class="panel-body">
+					                        <div class="form-group uploadDiv">
+					                            <input type="file" name="uploadFile" multiple>
+					                        </div>
+					                        <div class="uploadResult">
+					                            <ul>
+					
+					                            </ul>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+				        </td></tr>
+						<tr><td>
+							<div class="row">
+					            <div class="col-lg-12">
+					                <div class="panel panel-default">
+					                    <div class="panel-heading">운행후</div>
+					                    <div class="panel-body">
+					                        <div class="form-group uploadDiv">
+					                            <input type="file" name="uploadFile2" multiple>
+					                        </div>
+					                        <div class="uploadResult2">
+					                            <ul>
+					
+					                            </ul>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+				        </td></tr>
 						<tr><td><button type="button" onclick="payNumSend1()">결재</button></td></tr>
 					</tbody>
 					<tbody id="payNum2" style="display:none">
