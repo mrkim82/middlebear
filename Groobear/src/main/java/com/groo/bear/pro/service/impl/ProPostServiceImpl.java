@@ -1,5 +1,6 @@
 package com.groo.bear.pro.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,10 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.pro.mapper.ProPostMapper;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostUserVO;
-import com.groo.bear.pro.service.ProPostVO;
+import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostFeedVO;
-import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
+import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 
@@ -31,8 +32,8 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public List<ProPostUserVO> readProjectParti(ProPostUserVO vo) {
-		return ppm.readProjectParti(vo);
+	public List<ProPostUserVO> readProjectParti(int proNo) {
+		return ppm.readProjectParti(proNo);
 	}
 
 	@Override
@@ -46,11 +47,6 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public List<ProPostWorkGroupVO> readWritingWorkGroup(int proNo) {
-		return ppm.readWritingWorkGroup(proNo);
-	}
-
-	@Override
 	public List<ProPostWritingVO> readPostWriting(int postType) {
 		return ppm.readPostWriting(postType);
 	}
@@ -61,18 +57,51 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public int createPostComment(ProPostCommentVO vo) {
-		return ppm.createPostComment(vo);
+	public String createPostComment(ProPostCommentVO vo) {
+		String res = "";
+		
+		int result = ppm.createPostComment(vo);
+		
+		if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+		
+		return res;
 	}
 
 	@Override
-	public int deletePostComment(int comNo) {
-		return ppm.deletePostComment(comNo);
+	public String deletePostComment(int comNo) {
+		String res = "";
+		
+		int result = ppm.deletePostComment(comNo);
+		
+		if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+		
+		return res;
 	}
 
 	@Override
-	public int updatePostComment(ProPostCommentVO vo) {
-		return ppm.updatePostComment(vo);
+	public String updatePostComment(ProPostCommentVO vo) {
+		String res = "";
+		
+		int result = ppm.updatePostComment(vo);
+		
+		if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+		
+		return res;
 	}
 
 	@Override
@@ -81,8 +110,43 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public int updateWorkPostStatus(ProPostWorkVO vo) {
-		return ppm.updateWorkPostStatus(vo);
+	public String updateWorkPostStatus(ProPostWorkVO vo) {
+		String res = "";
+		
+		int result = ppm.updateWorkPostStatus(vo);
+		
+		if(result > 0) {
+			res = "성공";
+			
+		} else {
+			res = "취소";
+		}
+		
+		return res;
+	}
+
+	@Override
+	public List<ProPostChartVO> readPostChart(int proNo) {
+		List<ProPostChartVO> list = ppm.readPostChart(proNo);
+	    List<ProPostChartVO> updatedList = new ArrayList<>();
+
+	    for (int i = 1; i <= 5; i++) {
+	        boolean found = false;
+	        for (ProPostChartVO proPostChartVO : list) {
+	            if (Integer.parseInt(proPostChartVO.getWorkStatus()) == i) {
+	                found = true;
+	                updatedList.add(proPostChartVO);
+	                break;
+	            }
+	        }
+	        if (!found) {
+	            ProPostChartVO emptyVO = new ProPostChartVO();
+	            emptyVO.setWorkStatus(String.valueOf(i));
+	            emptyVO.setCount(0); // 나머지 값은 0으로 설정
+	            updatedList.add(emptyVO);
+	        }
+	    }
+	    return updatedList;
 	}
 
 }

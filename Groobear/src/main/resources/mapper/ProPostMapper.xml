@@ -24,7 +24,7 @@
 	</select>
 	
 	<!-- 프로젝트 참가자 조회 --><!-- 일정 참가자 반복문 -->
-	<select id="readProjectParti" resultType="ProPostUserVO">
+	<select id="readProjectParti" parameterType="ProPostUserVO">
 		SELECT i.name, m.id, u.profile_img, i.rank, d.dept_name
 		FROM pro_mem m JOIN users u
 		ON(m.id = u.id)
@@ -72,15 +72,6 @@
 			)
 		}
 	</insert>
-	
-	
-	<!-- 업무 그룹 조회 -->
-	<select id="readWritingWorkGroup" parameterType="ProPostWorkGroupVO">
-		SELECT work_group_no, work_group_name, work_group_seq, pro_no
-		FROM work_group
-		WHERE pro_no = #{proNo}
-		ORDER BY work_group_name
-	</select>
 	
 	<!-- 피드 글 조회 -->
 	<select id="readFeedPost" parameterType="int" resultType="ProPostFeedVO">
@@ -142,6 +133,7 @@
 		                  WHERE pro_post_no IN (SELECT pro_post_no
 		                                        FROM pro_post
 		                                        WHERE pro_no = #{proNo}))
+		ORDER BY a.com_no
 	</select>
 	
 	<!-- 댓글 작성 -->
@@ -174,5 +166,19 @@
 		SET work_status = #{workStatus}
 		WHERE work_no = #{workNo}
 	</update>
+	
+	<!-- 차트 조회 -->
+	<select id="readPostChart" parameterType="ProPostChartVO">
+		SELECT work_status, 100 * COUNT(work_status)/(SELECT COUNT(work_status)
+		                                        FROM pro_work a
+		                                        JOIN pro_post b
+		                                        ON(a.pro_post_no = b.pro_post_no)
+		                                        WHERE b.pro_no = #{proNo}) AS count
+		FROM pro_work a
+		JOIN pro_post b
+		ON(a.pro_post_no = b.pro_post_no)
+		WHERE b.pro_no = #{proNo}
+		GROUP BY work_status
+	</select>
 	
 </mapper>

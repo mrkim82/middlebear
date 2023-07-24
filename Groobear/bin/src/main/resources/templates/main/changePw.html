@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -207,4 +208,215 @@ body {
      };  
      </script>
 </body>
+=======
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Groobear Forgot Password</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<style>
+body {
+	min-height: 100vh;
+	background: -webkit-gradient(linear, left bottom, right top, from(#92b5db),
+		to(#1d466c));
+	background: -webkit-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+	background: -moz-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+	background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+	background: linear-gradient(to top right, #92b5db 0%, #1d466c 100%);
+}
+
+.input-form {
+	max-width: 680px;
+	margin-top: 80px;
+	padding: 32px;
+	background: #fff;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+	box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+}
+.bir_inline {
+	display: flex;
+	flex-direction: row;
+}
+
+ /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1050; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+    
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%; /* Could be more or less, depending on screen size */                          
+        }
+
+</style>
+</head>
+<body>
+	<div class="container">
+		<div class="input-form-backgroud row">
+			<div class="input-form col-md-12 mx-auto">
+				<h4 class="mb-3">Groobear Change Password</h4>
+					<form class="validation-form">
+						<div class="mb-3" style="width:320px;">
+							<label for="password">변경할 비밀번호</label> <input type="password" oninput="checkPw1()"
+								class="form-control" id="password" name="password" placeholder="8자리 이상 영어,숫자,특수문자 혼합" value="" required>
+							<p id="Pw"></p>
+						</div>
+						<div class="mb-3" style="width:320px;">
+							<label for="checkPassword">비밀번호 확인</label> <input type="password" oninput="checkPw2()"
+								class="form-control" id="checkPassword" name="checkPassword" placeholder="8자리 이상 영어,숫자,특수문자 혼합" value="" required>
+							<p id="rePw"></p>
+						</div>
+					<div class="mb-4"></div>
+					<button id="pwBtn" class="btn btn-primary btn-lg" style="width:300px; display:inline;" type="button">비밀번호 변경</button>
+					<button class="btn btn-primary btn-lg " style="width:300px; display:inline;" type="button" onclick="location.href='/'">돌아가기</button>	
+				</form>
+			</div>
+		</div>
+		<footer class="my-3 text-center text-small">
+			<p class="mb-1">&copy; 2023.07 GrooBear</p>
+		</footer>
+	</div>	
+	<script src="https://code.jquery.com/jquery-latest.js"></script> 
+ 
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
+                <p><br /></p>
+            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
+                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
+                     닫기
+                </span>
+            </div>
+      </div>
+      </div>
+      <script type="text/javascript">
+      jQuery(document).ready(function() {
+    	  $('#pwBtn').on('click', function(){
+    		let id = '[[${empInfo}]]';
+    		if($('#Pw').text() != "비밀번호가 정상적으로 입력되었습니다."){
+  	  			$('#spantext').text('변경할 비밀번호 양식이 잘못되었습니다.')	;
+                $('#myModal').show();
+	  		}else if($('#rePw').text() != "비밀번호가 일치합니다."){
+  	  			$('#spantext').text('비밀번호 확인 진행 부탁드립니다.')	;
+                $('#myModal').show();
+  	  		}else{
+  	  		$.ajax({
+  			    url: "changePw",
+  			    method: "POST",
+  			    contentType:"application/json; charset=utf-8",
+  			    data: JSON.stringify({
+  			      id: id,
+  			      password: $('#password').val()
+  			    }),
+  			    success: function(data) {
+  			    	if(data == "success"){
+  			    		$('#spantext').text('비밀번호 변경 완료');
+			    		$('#closeModal').text('로그인 화면');
+			    		$('#goLogin').attr('onclick', "location.href='/'")
+			    		$('#myModal').show();	
+  			    	} else{
+  			    		$('#spantext').text('일시적 오류 발생');
+  			    		$('#myModal').show();
+  			    	}	
+  			    },
+  			    error: function(err) {
+						console.log(err);
+  			    }
+  			  });
+  	  		}
+  	  	  })   
+      });
+      
+      // 비밀번호 조건
+      function checkPw1() {
+          let id = '[[${empInfo}]]';
+          console.log(id)
+          let pw = $("#password").val();
+          let number = pw.search(/[0-9]/g);
+          let english = pw.search(/[a-z]/ig);
+          let spece = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+          let reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+
+          if (pw.length < 8 || pw.length > 20) {
+              $('#Pw').text("8자리 ~ 20자리 이내로 입력해주세요.");
+              return false;
+
+          } else if (pw.search(/\s/) != -1) {
+        	  $('#Pw').text("비밀번호는 공백 없이 입력해주세요.");
+              return false;
+
+          } else if (number < 0 || english < 0 || spece < 0) {
+        	  $('#Pw').text("영문,숫자,특수문자를 혼합하여 입력해주세요.");
+              return false;
+
+          } else if ((number < 0 && english < 0) || (english < 0 && spece < 0) || (spece < 0 && number < 0)) {
+        	  $('#Pw').text("영문,숫자, 특수문자 중 2가지 이상을 혼합하여 입력해주세요.");
+              return false;
+
+          } else if (/(\w)\1\1\1/.test(pw)) {
+        	  $('#Pw').text('같은 문자를 4번 이상 사용하실 수 없습니다.');
+              return false;
+
+          } else if (pw.search(id) > -1 || pw.search(id.split('@', 1)[0]) > -1 || pw.search(id.split('@', 2)[1]) > -1) {
+        	  $('#Pw').text("비밀번호에 아이디가 포함되었습니다.");
+              return false;
+          } else {
+        	  $('#Pw').text("비밀번호가 정상적으로 입력되었습니다.");
+              return true;
+          }
+
+          if (false === reg.test(pw)) {
+        	  $('#Pw').text('비밀번호는 8자 이상이어야 하며, 숫자/대문자/소문자/특수문자를 모두 포함해야 합니다.');
+              return false;
+          } else {
+        	  $('#Pw').text("비밀번호가 정상적으로 입력되었습니다.");
+              return true;
+          }
+      }
+      
+     // 비밀번호 확인 조건
+     function checkPw2(){
+    	 if($("#password").val().length > 7){
+    		 if($("#password").val()==$("#checkPassword").val()){
+    			 $('#rePw').text("비밀번호가 일치합니다.");	 
+    		 } else{
+    			 $('#rePw').text("비밀번호가 일치하지 않습니다.");	 
+    		 }
+    	 }
+     }
+     
+     //팝업 Close 기능
+      function close_pop(flag) {
+          $('#myModal').hide();
+     };  
+     </script>
+</body>
+>>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
 </html>

@@ -30,8 +30,8 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 	}
 
 	@Override
-	public int deletePartiMemberAll(int schNo) {
-		return ppsm.deletePartiMemberAll(schNo);
+	public void deletePartiMemberAll(int schNo) {
+		ppsm.deletePartiMemberAll(schNo);
 	}
 
 	@Override
