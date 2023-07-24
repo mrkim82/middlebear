@@ -4,7 +4,6 @@ import com.groo.bear.emp.service.EmpVO;
 import com.groo.bear.mypage.service.CommuteVO;
 
 public interface UserMapper {
-
 	
 	public EmpVO checkGrade(String id);
 	//마이페이지 비밀번호 확인
