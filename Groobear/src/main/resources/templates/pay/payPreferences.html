@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/paymentTiles}">
+<head>
+<meta charset="UTF-8">
+<title>payPreferences</title>
+</head>
+<body layout:fragment="content">
+	<!-- 전자서명 이동버튼 -->
+	<div>
+		<label><span>사원번호 </span><span>[[${userInfo.empNo}]]</span></label><br>
+		<label><span>이름 </span><span>[[${userInfo.name}]]</span></label><br>
+		<span id="userInfoId" style="display:none">[[${userInfo.Id}]]</span>
+		<!-- 해당위치에 경로써서 img가져오기 -->
+		<img src="C:\Users\user\Downloads\Kim.png" alt="이미지" /><br>
+		<button type="button" id="paySign" onclick="paySignSet()">개인서명등록</button>
+		<button type="button" id="publicSign" onclick="publicSignSet()">공용서명등록</button>
+	</div>
+	<script>
+		let openPaySign;
+		let userId = document.getElementById('userInfoId').textContent;
+		console.log(userId);
+		//개인서명 등록 모달로 이동
+		function paySignSet(){
+			openPaySign = window.open("/pay/paySign","paymentEmp","width=400, height=450, resizable = no");
+		}
+		//공용서명 등록 버튼 클릭시 db에서 가져온값 자동등록되게 설정
+		function publicSignSet(){
+			
+		}
+	</script>
+</body>
+</html>

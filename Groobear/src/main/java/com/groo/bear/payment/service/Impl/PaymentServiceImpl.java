@@ -30,5 +30,10 @@ public class PaymentServiceImpl implements PaymentService{
 	public EmpVO payEmpInfo(String id) {
 		return paymentMapper.payEmpInfo(id);
 	}
+
+	@Override
+	public int paymentNo() {
+		return paymentMapper.paymentNo();
+	}
 	
 }
