@@ -38,6 +38,7 @@ public class BoardVO {
 	private String profileImg;
 	private String comContent;
 	private String comDate;
+	private int btNo;
 	
 	
 }

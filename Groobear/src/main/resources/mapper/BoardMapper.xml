@@ -35,10 +35,13 @@
             WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
             ]]>
 	</select>
-	<!-- 파일첨부 시 게시글 번호를 알기 위함 -->
+	
+		<!-- 파일첨부 시 게시글 번호를 알기 위함  -->
 	<select id="boardNoSequence" resultType="int">
     	SELECT BOARD_SEQ.NEXTVAL FROM DUAL
 	</select>
+	
+	
 	<!-- 페이징 -->
 	<select id="boardListCnt" resultType="int">
 	        SELECT count(*)
@@ -67,6 +70,7 @@
 	   		  , TITLE
 	   		  , CONTENT
 	   		  , INSERT_DATE
+	   		  , BT_NO
 	   		  
 	   ) VALUES (
 	   			#{id}
@@ -75,6 +79,9 @@
 	   		  , #{title}
 	   		  , #{content}
 	   		  , sysdate
+	   		  , (	SELECT NVL(MAX(bt_no),0) +1
+					FROM   BOARD
+					WHERE BOARD_TYPE = #{boardType})
 	   		  
 	   )
 	</insert>
@@ -143,5 +150,10 @@
 		SET com_content = #{comContent}
 		WHERE com_no = #{comNo}
 	</update>
+	
+	<delete id="deleteCommentByBoardId" parameterType="int">
+		delete from com
+		where board_no = #{boardNo}
+	</delete>
 	
 </mapper>
