@@ -748,7 +748,7 @@ function drawChart() {
 						<div class="card-body">
 							<!-- 참석자 존 -->
 							<div>
-								<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}">
+								<th:block th:each="rpl : ${readPartiZone}" th:if="${rpl.schNo == allPost.schNo}">
 									<div th:text="${rpl.name}" th:data-sch-user-id="${rpl.id == session.Id ? rpl.id : ''}"
 									 	 th:data-sch-list-id="${rpl.id}"></div>
 									<th:block th:switch="${rpl.partiCheck}">
@@ -759,7 +759,8 @@ function drawChart() {
 										</nav>
 									</th:block>
 								</th:block>
-								</div>
+							</div>
+							
 								<!-- 참석자 리스트 버튼 -->
 								<div>
 									<button type="button" class="btn btn-light" data-toggle="modal" th:data-target="'#schPartiListModal' + ${allPost.proPostNo}"
@@ -787,22 +788,22 @@ function drawChart() {
 																</div>
 															</li>
 															<!-- 참가자 목록 -->
-															<!-- <th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}"> -->
 															<th:block th:each="member : ${projectPartiMember}">
 																<li style="list-style-type: none">
 																	<nav class="nav">
-																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
-																					th:each="rpl : ${readPartiList}"
+																	
+																			<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == calD.schNo && rpl.id == member.id && rpl.partiCheck != null}">
+																				<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
 																					th:checked="${rpl.id == member.id}"
-																					th:if="${rpl.id == member.id && rpl.schNo == allPost.schNo}"
 																					th:data-sch-status="${rpl.partiCheck}"
-																					th:data-sch-list-id="${member.id}">
-																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
-																					th:each="rpl, j : ${readPartiList}"
-																					th:checked="${rpl.id == member.id}"
-																					th:if="${rpl.id != member.id && rpl.schNo == allPost.schNo && j.count == 1}"
-																					data-sch-status="A"
-																					th:data-sch-list-id="${member.id}">
+																					th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
+																			</th:block>
+																			<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == calD.schNo && rpl.id == member.id && rpl.partiCheck == null}">
+																				<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
+																					th:data-sch-status="${rpl.partiCheck}"
+																					th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
+																			</th:block>
+																			
 																			<label th:for="'schPartiList' + ${member.id}">
 																				<a class="nav-link" th:utext="${member.profileImg}"></a>
 																				<a class="nav-link" th:text="${member.name}"></a>
@@ -1344,16 +1345,20 @@ function drawChart() {
 		function changeSchStatus(button, newStatus) {
 			let schPartiChange = button.closest(".card").querySelector('[data-sch-user-id]').nextElementSibling;//상태창 위치
 			console.log('ss',button.closest(".card").querySelector('[data-sch-user-id]'))
-			console.log('sss',schPartiChange)
+			console.log('sss',schPartiChange);
+			
 			if(newStatus == 'Y') {
 				schPartiChange.textContent ='참석';
-				console.log(schPartiChange.style.color = 'green');
+				button.closest(".custom-modal").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'Y';
+				schPartiChange.style.color = 'green';
 			} else if(newStatus == 'N') {
 				schPartiChange.textContent ='불참';
-				console.log(schPartiChange.style.color = 'red');
+				button.closest(".custom-modal").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'N';
+				schPartiChange.style.color = 'red';
 			} else if(newStatus == 'A') {
 				schPartiChange.textContent ='미정';
-				console.log(schPartiChange.style.color = 'gray');
+				button.closest(".custom-modal").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'A';
+				schPartiChange.style.color = 'gray';
 			}
 		}
 	</script>
@@ -1626,32 +1631,16 @@ function drawChart() {
 			
 			inputValues.forEach(inputValue => {
 				updateObj.schNo = schPlNo;
-				updateObj.partiCheck = inputValue.dataset.schStatus;
+				updateObj.partiCheck = inputValue.dataset.schStatus == null ? 'A' : inputValue.dataset.schStatus;
 				updateObj.id = inputValue.dataset.schListId;
 				updatePartiList.push(updateObj);
 				updateObj = {};
 		    });
-			
-			formData = updatePartiList;
+			let noSchNo = [{'schNo' : schPlNo}];
+			formData = updatePartiList.length == 0 ? noSchNo : updatePartiList;
 			console.log(formData);
 			
 			//console.log(formDataDel.get('schNo'))
-			
-			//선택인원 삭제
-			fetch("/deletePartiMemberAll", {
-				method: 'POST',
-				headers : {
-					'Content-Type': 'application/json'
-				},
-				body : JSON.stringify(schPlNo)
-			})
-			.then(response => response.text())
-			.then(data => {
-			    console.log(data);
-			})
-			.catch(error => {
-			    console.error('Error:', error);
-			});
 					
 			//기존 & 추가 인원 추가
 			fetch("/insertPartiMemberAll", {
@@ -1666,14 +1655,14 @@ function drawChart() {
 				let rC = res.result;
 				
 				if(rC == -1) {
-					alert('값이 들어가지 않음');
+					console.log('0명');
+					const currentURL = window.location.href;
+					window.location.href = currentURL;
 				} else if (rC >= 1) {
 					console.log(rC + '명 업데이트');
 					const currentURL = window.location.href;
 					window.location.href = currentURL;
-				} else if (rC == 0) {
-					console.log('0명');
-				} else {
+				}else {
 					alert('알 수 없는 접근')
 				}
 			});

@@ -102,6 +102,7 @@ public class proPostController {
 			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo));
 			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
 			model.addAttribute("readPartiList", Sch.readPartiList(proNo));
+			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
 			//할 일
 			model.addAttribute("readTodoList", todoNVote.readTodoList(proNo));//할 일 조회
 			model.addAttribute("readAllTodoListPer", todoNVote.readAllTodoListPer(proNo));//할 일 퍼센트 조회
@@ -121,8 +122,13 @@ public class proPostController {
 			break;
 		//캘린더
 		case 4 :
-			model.addAttribute("readWorkSchView", Sch.readWorkSchView(proNo));
-			System.out.println("게시글"+model.getAttribute("readWorkSchView"));
+			model.addAttribute("readWorkSchView", Sch.readWorkSchView(proNo));//업무, 일정 조회(바)
+			model.addAttribute("readWorkDetail", taskS.readWorkDetail(proNo));//업무 단건 조회
+			model.addAttribute("readCalDetail", Sch.readCalDetail(proNo));
+			model.addAttribute("readPartiList", Sch.readPartiList(proNo));//참석자 조회
+			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
+			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
+			//System.out.println("게시글"+model.getAttribute("readWorkSchView"));
 			pagePath = "proPost/proPostSchd";
 			break;
 		//파일

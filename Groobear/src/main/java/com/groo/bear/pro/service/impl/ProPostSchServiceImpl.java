@@ -9,6 +9,7 @@ import com.groo.bear.pro.mapper.ProPostSchMapper;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.schvo.ProPostWorkSchVO;
+import com.groo.bear.pro.service.schvo.ProSchDetailVO;
 
 @Service
 public class ProPostSchServiceImpl implements ProPostSchService {
@@ -32,7 +33,7 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 
 	@Override
 	public void deletePartiMemberAll(int schNo) {
-		
+		ppsm.deletePartiMemberAll(schNo);
 	}
 
 	@Override
@@ -43,11 +44,11 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 	@Override
 	public int insertPartiMemberAll(List<ProPostSchVO> vo) {
 		int result = 0;
-		System.out.println("서비스"+vo);
+		//System.out.println("서비스"+vo);
 		
-		if(vo == null) {
-			result = -1;
-		} else {
+		if(vo.get(0).getId() != null) {
+			//전체 삭제
+			ppsm.deletePartiMemberAll(vo.get(0).getSchNo());
 			
 			for (ProPostSchVO proPostSchVO : vo) {
 				if(ppsm.insertPartiMember(proPostSchVO)) {
@@ -55,8 +56,11 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 				}
 			}
 			
+		} else {
+			//전체 삭제
+			ppsm.deletePartiMemberAll(vo.get(0).getSchNo());
+			result = -1;
 		}
-		
 		return result;
 	}
 
@@ -68,6 +72,16 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 	@Override
 	public List<ProPostWorkSchVO> readPersonalSch(String id) {
 		return ppsm.readPersonalSch(id);
+	}
+
+	@Override
+	public List<ProSchDetailVO> readCalDetail(int proNo) {
+		return ppsm.readCalDetail(proNo);
+	}
+
+	@Override
+	public List<ProPostSchVO> readPartiZone(int proNo) {
+		return ppsm.readPartiZone(proNo);
 	}
 
 }

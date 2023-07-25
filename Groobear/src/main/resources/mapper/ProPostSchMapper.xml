@@ -40,6 +40,27 @@
 	
 	<!-- 참석자 현황 -->
 	<select id="readPartiList" resultType="ProPostSchVO">
+		with pm as
+		( select p.sch_no, m.id 
+		  from (SELECT * 
+		          FROM pro_mem WHERE pro_no = 1 AND pro_parti_check = 'Y'
+		        ) m,
+		        ( SELECT *
+		        FROM pro_sch a
+		        JOIN pro_post b
+		        ON(a.pro_post_no = b.pro_post_no)
+		        WHERE b.pro_no = #{proNo}
+		        )p 
+		)
+		SELECT pm.sch_no, pm.id, a.parti_check
+		FROM sch_parti a
+		RIGHT OUTER JOIN pro_sch b
+		ON(a.sch_no = b.sch_no)
+		RIGHT OUTER JOIN pm
+		ON(pm.sch_no = a.sch_no AND pm.id = a.id)
+	</select>
+	
+	<select id="readPartiZone" resultType="ProPostSchVO">
 		SELECT a.sch_no, a.parti_check, b.pro_post_no, i.name, a.id
 		FROM sch_parti a JOIN pro_sch b
 		ON(a.sch_no = b.sch_no)
@@ -122,6 +143,33 @@
 		ON(a.pro_post_no = b.pro_post_no)
 		WHERE a.id = #{id}
 		AND b.personal_sch = 'Y'
+	</select>
+	
+	<!-- 캘린더 단건 조회 -->
+	<select id="readCalDetail" resultType="ProSchDetailVO">
+		SELECT a.pro_post_no
+			 , a.post_title
+			 , a.post_date
+			 , a.id
+			 , i.name
+			 , u.profile_img
+			 , b.sch_no
+			 , b.sch_start_time
+			 , b.sch_end_time
+			 , b.sch_place
+			 , b.sch_content
+			 
+		FROM pro_post a
+		JOIN pro_sch b
+		ON(a.pro_post_no = b.pro_post_no)
+		JOIN users u
+		ON(a.id = u.id)
+		JOIN user_info i
+		ON(u.emp_no = i.emp_no)
+		
+		WHERE a.pro_no = #{proNo}
+		AND a.post_type = 3
+		ORDER BY a.pro_post_no
 	</select>
 	
 </mapper>

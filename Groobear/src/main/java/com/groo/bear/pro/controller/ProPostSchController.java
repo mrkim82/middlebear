@@ -43,18 +43,9 @@ public class ProPostSchController {
 	public Map<String, Integer> insertPartiMemberAll(HttpServletRequest request, @RequestBody List<ProPostSchVO> list) {
 		Map <String, Integer> map = new HashMap<>();
 		
-		int result = ppss.insertPartiMemberAll(list);
+		map.put("result", ppss.insertPartiMemberAll(list));//성공 건수 반환
 		
-		map.put("result", result);//성공 건수 반환
 		return map;
-	}
-	
-	//참석자 전체 삭제
-	@PostMapping("deletePartiMemberAll")//지워질 예정
-	@ResponseBody
-	public String deletePartiMemberAll(HttpServletRequest request, @RequestBody int schPlNo) {
-		ppss.deletePartiMemberAll(schPlNo);
-		return "삭제";
 	}
 	
 	//프로젝트 메인 페이지 이동
