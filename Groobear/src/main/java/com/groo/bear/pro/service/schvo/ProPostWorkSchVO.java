@@ -12,6 +12,7 @@ public class ProPostWorkSchVO {
 	
 	private int proPostNo;
 	private String postType;
+	private int proNo;
 	
 	
 }

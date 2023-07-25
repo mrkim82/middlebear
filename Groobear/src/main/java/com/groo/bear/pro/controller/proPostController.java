@@ -124,7 +124,8 @@ public class proPostController {
 		case 4 :
 			model.addAttribute("readWorkSchView", Sch.readWorkSchView(proNo));//업무, 일정 조회(바)
 			model.addAttribute("readWorkDetail", taskS.readWorkDetail(proNo));//업무 단건 조회
-			model.addAttribute("readCalDetail", Sch.readCalDetail(proNo));
+			
+			model.addAttribute("readCalDetail", Sch.readCalDetail(proNo));//일정 단건
 			model.addAttribute("readPartiList", Sch.readPartiList(proNo));//참석자 조회
 			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
 			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));

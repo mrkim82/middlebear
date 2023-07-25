@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProPostSchService;
+import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 
 @Controller
@@ -55,6 +56,7 @@ public class ProPostSchController {
 		String id = (String)session.getAttribute("Id");
 		
 		model.addAttribute("readPersonalSch", ppss.readPersonalSch(id));
+		
 		
 		return "main/personalSch";
 	};

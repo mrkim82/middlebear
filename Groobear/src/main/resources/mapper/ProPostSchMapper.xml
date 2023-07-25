@@ -86,7 +86,7 @@
 		VALUES(#{schNo}, #{partiCheck}, #{id})
 	</insert>
 	
-	<!-- 캘린더 화면 조회 -->
+	<!-- 캘린더(프로젝트) 화면 조회 -->
 	<select id="readWorkSchView" resultType="ProPostWorkSchVO">
 		SELECT '[' ||
 		        CASE WHEN b.work_status = '1' THEN '요청'
@@ -122,11 +122,13 @@
 	</select>
 	
 	
-	<!-- 캘린더 화면 조회 -->
+	<!-- 캘린더(개인) 화면 조회 -->
 	<select id="readPersonalSch" resultType="ProPostWorkSchVO">
 		SELECT '일정(프로젝트) : ' || c.post_title AS title,
 		       b.sch_start_time AS "start",
-		       b.sch_end_time AS end
+		       b.sch_end_time AS end,
+		       c.pro_no,
+			   c.pro_post_no
 		FROM sch_parti a
 		JOIN pro_sch b
 		ON(a.sch_no = b.sch_no)
@@ -134,10 +136,15 @@
 		ON(b.pro_post_no = c.pro_post_no)
 		WHERE a.id = #{id}
 		AND b.personal_sch = 'N'
+		
 		UNION ALL
+		
 		SELECT '개인 일정 : ' || a.post_title AS title,
 		b.sch_start_time AS "start",
-		b.sch_end_time AS end
+		b.sch_end_time AS end,
+		a.pro_no,
+		a.pro_post_no
+		
 		FROM pro_post a
 		JOIN pro_sch b
 		ON(a.pro_post_no = b.pro_post_no)

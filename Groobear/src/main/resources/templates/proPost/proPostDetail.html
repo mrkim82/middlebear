@@ -791,14 +791,14 @@ function drawChart() {
 															<th:block th:each="member : ${projectPartiMember}">
 																<li style="list-style-type: none">
 																	<nav class="nav">
-																	
-																			<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == calD.schNo && rpl.id == member.id && rpl.partiCheck != null}">
+																			
+																			<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck != null}">
 																				<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
 																					th:checked="${rpl.id == member.id}"
 																					th:data-sch-status="${rpl.partiCheck}"
 																					th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
 																			</th:block>
-																			<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == calD.schNo && rpl.id == member.id && rpl.partiCheck == null}">
+																			<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck == null}">
 																				<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
 																					th:data-sch-status="${rpl.partiCheck}"
 																					th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
@@ -1349,15 +1349,15 @@ function drawChart() {
 			
 			if(newStatus == 'Y') {
 				schPartiChange.textContent ='참석';
-				button.closest(".custom-modal").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'Y';
+				button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'Y';
 				schPartiChange.style.color = 'green';
 			} else if(newStatus == 'N') {
 				schPartiChange.textContent ='불참';
-				button.closest(".custom-modal").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'N';
+				button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'N';
 				schPartiChange.style.color = 'red';
 			} else if(newStatus == 'A') {
 				schPartiChange.textContent ='미정';
-				button.closest(".custom-modal").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'A';
+				button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'A';
 				schPartiChange.style.color = 'gray';
 			}
 		}
@@ -1729,22 +1729,15 @@ function drawChart() {
 		}
 	</script>
 
-
-	<!-- 현재시간 구하기 -->
-	<script type="text/javascript" th:inline="javascript">
-		/*<![CDATA[*/
-	    	let today = new Date();
-	    	/* console.log(today)
-	    	let month = today.getMonth() + 1;  // 월
-			let date = today.getDate();  // 날짜
-			let day = today.getDay();  // 요일
-			let hours = today.getHours(); // 시
-			let minutes = today.getMinutes();  // 분 */
-			let currentTime = today.toLocaleString();
-			//console.log(currentTime)
-			//#dates.format(currentTime, 'yyyy-MM-ddTHH:mm')포맷 사용
-		/*]]>*/
-	</script>
+	
+<!-- id값 가져오기 -->
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		
+		let selfId = /*[[${session.Id}]]*/;
+		
+	/*]]>*/
+</script>
 	<!-- <script src="../proPost/proPostJs/proPostDetail.js"></script> -->
 </body>
 </html>
