@@ -21,7 +21,7 @@ public class PaymentVO {
 	private String id;
 	private String approver2;
 	private String approver3;
-	private String refferrer;
+	private String referrer;
 	private String payStatus1;
 	private String payStatus2;
 	private String payStatus3;

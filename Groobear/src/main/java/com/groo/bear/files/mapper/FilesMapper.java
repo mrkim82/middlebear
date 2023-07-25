@@ -29,4 +29,13 @@ public interface FilesMapper {
 	
 	//개인서명 등록
 	public int insertSignImg(EmpVO vo);
+	
+	//개인서명 삭제
+	public int deleteSignImg(int signNo);
+	
+	//개인서명 조회
+	public FilesVO searchSignImg(int empNo);
+	
+	//운행일지 파일등록
+	public int logInsert(FilesVO vo);
 }

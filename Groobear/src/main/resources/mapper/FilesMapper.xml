@@ -72,17 +72,79 @@
   							,FILE_NAME
   							,FILE_TYPE
   							,FILE_DATE
-  							,ID
   							,SIGN_NO)
   					VALUES
   							(
   							#{uuid}
   							,#{uploadPath}
   							,#{fileName}
-  							,'1',
+  							,'1'
   							,sysdate
-  							,#{id}
   							,#{empNo}
   							)
+  	</insert>
+  	<!-- 사원 개인 서명 삭제 -->
+  	<delete id="deleteSignImg" parameterType="int">
+  		delete files where sign_no = #{signNo}
+  	</delete>
+  	<!-- 사원 개인 서명 조회 -->
+  	<select id="searchSignImg" parameterType="int">
+  		select * from files where sign_no = #{empNo}  
+  	</select>
+  	<!-- 운행일지 차량 운행거리사진 등록 -->
+  	<insert id="logInsert" parameterType="FilesVO">
+  		insert into files(
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,PAY_NO
+  							) 
+  					VALUES(
+  							#{uuid}
+  							,#{uploadPath}
+  							,#{fileName}
+  							,'1'
+  							,sysdate
+  							,#{payNo}
+  					)
+  	</insert>
+  	<!-- 연차계 첨부파일 등록 -->
+  	<insert id="offInsert" parameterType="FilesVO">
+  		insert into files(
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,PAY_NO
+  							)
+  					VALUES(
+  							#{uuid}
+  							,#{uploadPath}
+  							,#{fileName}
+  							,'1'
+  							,sysdate
+  							,#{payNo}
+  					)
+  	</insert>
+  	<insert id="robinInsert" parameterType="FilesVO">
+  		insert into files(
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,PAY_NO
+  							)
+  					VALUES(
+  							#{uuid}
+  							,#{uploadPath}
+  							,#{fileName}
+  							,'1'
+  							,sysdate
+  							,#{payNo}
+  					)
   	</insert>
   </mapper>

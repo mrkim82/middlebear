@@ -84,7 +84,6 @@ public class UploadController {
 //			log.info("Upload File Size : " + multipartFile.getSize());
 			
 			String uploadFileName = multipartFile.getOriginalFilename();
-			
 			//IE has file path
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
 			log.info("only file name: " + uploadFileName);
@@ -92,8 +91,9 @@ public class UploadController {
 			
 			UUID uuid = UUID.randomUUID();
 			uploadFileName = uuid.toString() + "_" + uploadFileName;
-			
+			System.out.println(multipartFile.getSize()+"======================");
 			try {
+				
 				File saveFile = new File(uploadPath, uploadFileName);
 				multipartFile.transferTo(saveFile);
 				attachFileDTO.setUuid(uuid.toString());

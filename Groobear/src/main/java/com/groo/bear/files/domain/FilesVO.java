@@ -28,6 +28,6 @@ public class FilesVO {
 	private String name;
 	private int no;
 	private String id;
-
+	private int signNo;
 	
 }

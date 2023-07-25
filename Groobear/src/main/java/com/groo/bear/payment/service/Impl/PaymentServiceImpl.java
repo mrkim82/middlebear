@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.groo.bear.emp.service.EmpVO;
+import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.files.mapper.FilesMapper;
 import com.groo.bear.payment.mapper.PaymentMapper;
 import com.groo.bear.payment.service.PaymentService;
@@ -49,5 +50,35 @@ public class PaymentServiceImpl implements PaymentService{
 	public int insertSignImg(EmpVO vo) {
 		
 		return filesMapper.insertSignImg(vo);
+	}
+
+	@Override
+	public int deleteSignImg(int signNo) {
+		return filesMapper.deleteSignImg(signNo);
+	}
+
+	@Override
+	public FilesVO searchSignImg(int empNo) {
+		return filesMapper.searchSignImg(empNo);
+	}
+
+	@Override
+	public int logInsert(FilesVO vo) {
+		return filesMapper.logInsert(vo);
+	}
+
+	@Override
+	public int logDataInsert(PaymentVO payVO) {
+		return paymentMapper.logDataInsert(payVO);
+	}
+
+	@Override
+	public int offDataInsert(PaymentVO payVO) {
+		return paymentMapper.offDataInsert(payVO);
+	}
+
+	@Override
+	public int robinDataInsert(PaymentVO payVO) {
+		return paymentMapper.robinDataInsert(payVO);
 	}	
 }

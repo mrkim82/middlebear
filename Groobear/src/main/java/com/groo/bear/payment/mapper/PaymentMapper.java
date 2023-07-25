@@ -16,4 +16,10 @@ public interface PaymentMapper {
 	public int paymentNo();
 	//결재문서 데이터 삽입
 	public int paymentLogBook(PaymentVO payVO);
+	//운행일지 데이터삽입
+	public int logDataInsert(PaymentVO payVO);
+	//연차계 데이터삽입
+	public int offDataInsert(PaymentVO payVO);
+	//품의서 데이터삽입
+	public int robinDataInsert(PaymentVO payVO);
 }
