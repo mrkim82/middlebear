@@ -179,4 +179,31 @@
 		ORDER BY a.pro_post_no
 	</select>
 	
+	<!-- 개인 캘린더 상세 조회 -->
+	<select id="readPerCalDetail" resultType="ProSchDetailVO">
+		SELECT a.post_title, a.post_date, a.pro_post_no, a.id,
+		       b.sch_no, b.sch_start_time, b.sch_end_time, b.sch_place,
+		       b.sch_content
+		FROM pro_post a
+		JOIN pro_sch b
+		ON(a.pro_post_no = b.pro_post_no)
+		WHERE a.id = #{id}
+		AND b.personal_sch = 'Y'
+	</select>
+	
+	<!-- 개인 캘린더 댓글 조회 -->
+	<select id="readPerCalCom" resultType="ProPostCommentVO">
+		SELECT a.com_no, a.com_content, a.com_date,
+		       c.name, b.profile_img, a.id, a.pro_post_no
+		FROM com a
+		JOIN users b
+		  ON a.id = b.id
+		JOIN user_info c
+		  ON b.emp_no = c.emp_no
+		JOIN pro_post d
+		  ON a.pro_post_no = d.pro_post_no
+		WHERE a.id = #{id}
+		AND d.pro_no = 7
+	</select>
+	
 </mapper>

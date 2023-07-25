@@ -590,9 +590,9 @@ p {
 			
 			
 			insertComment.insertAdjacentHTML('beforeend', 
-				'<li data-post-code="161">'+
+				'<li data-post-code="' + res.result + '">'+
 					'<span></span>'+
-					'<span>김나리</span>'+
+					'<span>' + selfName + '</span>'+
 					'<span>' + currentTime + '</span>'+
 					'<span>' + com.value + '</span>'+
 					'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
@@ -651,14 +651,14 @@ p {
 		let targetButton = event.target;
 		let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
 		
-		let oldCom = targetButton.parentNode.childNodes[7].textContent;//기존 댓글
-		let oldDate = targetButton.parentNode.childNodes[5].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
+		let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
+		let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
 		
 		//초기화
-		targetButton.parentNode.childNodes[5].textContent = '';//날짜 초기화
-		targetButton.parentNode.childNodes[7].textContent = '';//댓글 초기화
-		targetButton.parentNode.childNodes[9].textContent = '';//수정 초기화
-		targetButton.parentNode.childNodes[13].textContent = '';//X 초기화
+		targetButton.parentNode.children[2].textContent = '';//날짜 초기화
+		targetButton.parentNode.children[3].textContent = '';//댓글 초기화
+		targetButton.parentNode.children[4].textContent = '';//수정 초기화
+		targetButton.parentNode.children[6].textContent = '';//X 초기화
 		
 		if(document.getElementById('newComment') != null) {
 			let nC = document.getElementById('newComment').parentNode.parentNode;
@@ -669,18 +669,18 @@ p {
 			nC.childNodes[13].textContent = 'X';
 		}
 		
-		targetButton.parentNode.childNodes[11].innerHTML = 
+		targetButton.parentNode.children[5].innerHTML = 
 				'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
 				+'<span id="ooo" class="spanCursor">수정</span>'
 				+'<span id="xxx" class="spanCursor">취소</span>';
 		
 		// 취소버튼
 		document.getElementById('xxx').addEventListener('click', function() {
-			targetButton.parentNode.childNodes[5].textContent = oldDate;
-			targetButton.parentNode.childNodes[7].textContent = oldCom;
-			targetButton.parentNode.childNodes[9].textContent = '수정';
-			targetButton.parentNode.childNodes[13].textContent = 'X';
-			targetButton.parentNode.childNodes[11].textContent = '';
+			targetButton.parentNode.children[2].textContent = oldDate;
+			targetButton.parentNode.children[3].textContent = oldCom;
+			targetButton.parentNode.children[4].textContent = '수정';
+			targetButton.parentNode.children[5].textContent = '';
+			targetButton.parentNode.children[6].textContent = 'X';
 		});
 		
 		// 수정버튼
@@ -705,11 +705,11 @@ p {
 				.then(res => {
 					
 					if(res.result == '성공') {
-						targetButton.parentNode.childNodes[5].textContent = oldDate;
-						targetButton.parentNode.childNodes[7].textContent = newCom.value;
-						targetButton.parentNode.childNodes[9].textContent = '수정';
-						targetButton.parentNode.childNodes[13].textContent = 'X';
-						targetButton.parentNode.childNodes[11].textContent = ''
+						targetButton.parentNode.children[2].textContent = oldDate;
+						targetButton.parentNode.children[3].textContent = newCom.value;
+						targetButton.parentNode.children[4].textContent = '수정';
+						targetButton.parentNode.children[6].textContent = 'X';
+						targetButton.parentNode.children[5].textContent = '';
 						
 						let url = window.location.pathname;
 						let lastIndex = url.lastIndexOf('/');
@@ -783,7 +783,7 @@ p {
 	/*<![CDATA[*/
 		
 		let selfId = /*[[${session.Id}]]*/;
-		
+		let selfName = /*[[${session.Name}]]*/;
 	/*]]>*/
 </script>
 

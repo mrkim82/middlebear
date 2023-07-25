@@ -10,4 +10,7 @@ public class ProPostUserVO {
 	private String profileImg;
 	private String rank;
 	private String deptName;
+	private String phone;
+	private String email;
+	private String profile_note;
 }

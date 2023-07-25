@@ -65,7 +65,7 @@ function drawChart() {
         var chartData = new google.visualization.DataTable();
         chartData.addColumn('string', 'workStatus');
         chartData.addColumn('number', 'count');
-		console.log(res);
+		//console.log(res);
         res.forEach(item => {
             // workStatus 값에 따라 이름을 변경
             let workStatusName = '';
@@ -650,7 +650,7 @@ function drawChart() {
 														<span th:text="${com.comContent}"></span>
 														<th:block th:if="${com.id == session.Id}">
 															<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
-															<span></span><!-- 지우면 안됨!!!!!!! -->
+															<span></span>
 															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
 														</th:block>
 													</li>
@@ -1036,31 +1036,6 @@ function drawChart() {
 				
 				
 				
-				<!-- <div class="container">
-					<div class="card mb-3">
-						<div class="row no-gutters">
-							<div class="col-md-4">
-								<img src="이미지 주소" class="card-img" alt="게시물 이미지">
-							</div>
-							<div class="col-md-8">
-								<div class="card-body">
-									<h5 class="card-title">게시물 제목</h5>
-									<p class="card-text">게시물 내용이 여기에 들어갑니다.</p>
-									<p class="card-text"><small class="text-muted">작성일자</small></p>
-								</div>
-							</div>
-						</div>
-						<div class="card-footer">
-							<div class="d-flex justify-content-between align-items-center">
-								<div>
-									<span class="badge badge-primary">카테고리1</span>
-									<span class="badge badge-primary">카테고리2</span>
-								</div>
-								<a href="#" class="btn btn-sm btn-primary">더보기</a>
-							</div>
-						</div>
-					</div>
-				</div> -->
 
 				<!-- 포스트 종료 -->
 			</th:block>
@@ -1069,38 +1044,54 @@ function drawChart() {
 		</div>
 		<!-- 참여자공간 -->
 		<div>
-			
-			<div class="container float-start" style="width: 250px;">
+			<th:block th:text="${session.Id}"></th:block>
+			<div class="card" style="width: 18rem;">
+			  <div class="card-header" th:each="pUser : ${projectPartiMember}"
+			  	   th:text="'프로젝트 관리자 : ' + ${pUser.profileImg} + ${pUser.name}"
+			  	   th:if="${pUser.id == readProAuth.id}"
+			  	   th:data-user-id="${pUser.id}">
+			  	   <span th:if="${session.Id == pUser.id}" th:text="(나)"></span>
+			  </div>
+			  <ul class="list-group list-group-flush">
+			    <li class="list-group-item" th:each="pUser : ${projectPartiMember}"
+			    	th:if="${pUser.id != readProAuth.id}"
+			    	th:text="${pUser.profileImg} + ${pUser.name}"
+			    	th:data-user-id="${pUser.id}">
+			    	<span th:if="${session.Id == pUser.id}" th:text="(나)"></span>
+			    	</li>
+			  </ul>
+			</div>
+			<!-- <div class="container float-start" style="width: 250px;">
 				<div class="row">
 					<div class="col-md-3">
-						<!-- 왼쪽 사이드바 영역 -->
+						왼쪽 사이드바 영역
 						<div class="sidebar">
 							<ul class="list-unstyled">
 								<li>
-									<!-- 이미지 -->
+									이미지
 									<img src="" alt="이미지" class="img-fluid">
 								</li>
 							</ul>
 						</div>
 					</div>
 					<div class="col-md-9">
-						<!-- 오른쪽 콘텐츠 영역 -->
+						오른쪽 콘텐츠 영역
 						<div class="content">
 							<ul class="list-unstyled">
 								<li>
-									<!-- 이름 -->
+									이름
 									<h4>사용자 이름</h4>
 									<th:block th:text="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH:mm')}"></th:block>
 								</li>
 								<li>
-									<!-- 메시지 아이콘 -->
+									메시지 아이콘
 									<i class="fas fa-envelope"></i>
 								</li>
 							</ul>
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 
 		</div>
@@ -1507,7 +1498,40 @@ function drawChart() {
 	   			})
 			})
 			.then(response => response.json())
-			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+			.then(res => {
+				console.log(res)
+				let insertComment = targetButton.closest('.card').getElementsByClassName('list-unstyled')[0];
+				console.log('여기',insertComment)
+				
+				insertComment.insertAdjacentHTML('beforeend', 
+					'<li data-post-code="' + res.result + '">'+
+						'<span></span>'+
+						'<span>' + selfName + '</span>'+
+						'<span>' + currentTime + '</span>'+
+						'<span>' + com.value + '</span>'+
+						'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
+						'<span></span>'+
+						'<span onclick="deleteWritingComment()" class="spanCursor">X</span>'+
+					'</li>'
+				);
+				com.focus();
+				com.value = '';
+				//location.href="/proPostMain/" + projectNo + "?homeTab=2"
+			});
+		}
+		
+		//현재시간 구하기
+		const currentTime = formatDate();
+		
+		function formatDate() {
+		  let date = new Date();
+		  const year = date.getFullYear();
+		  const month = String(date.getMonth() + 1).padStart(2, '0');
+		  const day = String(date.getDate()).padStart(2, '0');
+		  const hours = String(date.getHours()).padStart(2, '0');
+		  const minutes = String(date.getMinutes()).padStart(2, '0');
+		  
+		  return `${year}/${month}/${day} ${hours}:${minutes}`;
 		}
 	</script>
 	
@@ -1543,14 +1567,14 @@ function drawChart() {
 			let targetButton = event.target;
 			let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
 			
-			let oldCom = targetButton.parentNode.childNodes[7].textContent;//기존 댓글
-			let oldDate = targetButton.parentNode.childNodes[5].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
+			let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
+			let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
 			
 			//초기화
-			targetButton.parentNode.childNodes[5].textContent = '';//날짜 초기화
-			targetButton.parentNode.childNodes[7].textContent = '';//댓글 초기화
-			targetButton.parentNode.childNodes[9].textContent = '';//수정 초기화
-			targetButton.parentNode.childNodes[13].textContent = '';//X 초기화
+			targetButton.parentNode.children[2].textContent = '';//날짜 초기화
+			targetButton.parentNode.children[3].textContent = '';//댓글 초기화
+			targetButton.parentNode.children[4].textContent = '';//수정 초기화
+			targetButton.parentNode.children[6].textContent = '';//X 초기화
 			
 			if(document.getElementById('newComment') != null) {
 				let nC = document.getElementById('newComment').parentNode.parentNode;
@@ -1561,18 +1585,19 @@ function drawChart() {
 				nC.childNodes[13].textContent = 'X';
 			}
 			
-			targetButton.parentNode.childNodes[11].innerHTML = 
+			// 댓글 수정 폼 생성
+			targetButton.parentNode.children[5].innerHTML = 
 					'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
 					+'<span id="ooo" class="spanCursor">수정</span>'
 					+'<span id="xxx" class="spanCursor">취소</span>';
-			
+					
 			// 취소버튼
 			document.getElementById('xxx').addEventListener('click', function() {
-				targetButton.parentNode.childNodes[5].textContent = oldDate;
-				targetButton.parentNode.childNodes[7].textContent = oldCom;
-				targetButton.parentNode.childNodes[9].textContent = '수정';
-				targetButton.parentNode.childNodes[13].textContent = 'X';
-				targetButton.parentNode.childNodes[11].textContent = '';
+				targetButton.parentNode.children[2].textContent = oldDate;
+				targetButton.parentNode.children[3].textContent = oldCom;
+				targetButton.parentNode.children[4].textContent = '수정';
+				targetButton.parentNode.children[5].textContent = '';
+				targetButton.parentNode.children[6].textContent = 'X';
 			});
 			
 			// 수정버튼
@@ -1597,11 +1622,11 @@ function drawChart() {
 					.then(res => {
 						
 						if(res.result == '성공') {
-							targetButton.parentNode.childNodes[5].textContent = oldDate;
-							targetButton.parentNode.childNodes[7].textContent = newCom.value;
-							targetButton.parentNode.childNodes[9].textContent = '수정';
-							targetButton.parentNode.childNodes[13].textContent = 'X';
-							targetButton.parentNode.childNodes[11].textContent = ''
+							targetButton.parentNode.children[2].textContent = oldDate;
+							targetButton.parentNode.children[3].textContent = newCom.value;
+							targetButton.parentNode.children[4].textContent = '수정';
+							targetButton.parentNode.children[6].textContent = 'X';
+							targetButton.parentNode.children[5].textContent = '';
 							
 							let url = window.location.pathname;
 							let lastIndex = url.lastIndexOf('/');
@@ -1735,7 +1760,7 @@ function drawChart() {
 	/*<![CDATA[*/
 		
 		let selfId = /*[[${session.Id}]]*/;
-		
+		let selfName = /*[[${session.Name}]]*/;
 	/*]]>*/
 </script>
 	<!-- <script src="../proPost/proPostJs/proPostDetail.js"></script> -->

@@ -84,7 +84,9 @@ public class proPostController {
 		model.addAttribute("cTime" , new Date());//현재시간
 		model.addAttribute("beforeOneDay" , DateUtil.beforeOneDay());//하루전
 		model.addAttribute("afterOneDay" , DateUtil.afterOneDay());//하루뒤
+		model.addAttribute("readProAuth", proService.readProAuth(proNo));//권한 및 프로젝트 마스터 조회
 		
+		System.out.println("게시글"+model.getAttribute("projectPartiMember"));
 		switch (homeTab) {
 		//업무
 		case 1 :
@@ -193,8 +195,8 @@ public class proPostController {
 		HttpSession session = request.getSession();
 		vo.setId((String)session.getAttribute("Id"));
 		
-		int result = proPostService.createPostComment(vo);
-		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+		int comNo = proPostService.createPostComment(vo);
+		return Collections.singletonMap("result", comNo);
 	}
 	
 	//댓글 수정

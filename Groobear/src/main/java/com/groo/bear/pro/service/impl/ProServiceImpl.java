@@ -114,4 +114,9 @@ public class ProServiceImpl implements ProService {
 		return res;
 	}
 
+	@Override
+	public ProVO readProAuth(int proNo) {
+		return proMapper.readProAuth(proNo);
+	}
+
 }

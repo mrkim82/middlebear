@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.groo.bear.pro.mapper.ProPostSchMapper;
 import com.groo.bear.pro.service.ProPostSchService;
+import com.groo.bear.pro.service.schvo.ProPerCalComVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.schvo.ProPostWorkSchVO;
 import com.groo.bear.pro.service.schvo.ProSchDetailVO;
@@ -82,6 +83,16 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 	@Override
 	public List<ProPostSchVO> readPartiZone(int proNo) {
 		return ppsm.readPartiZone(proNo);
+	}
+
+	@Override
+	public List<ProSchDetailVO> readPerCalDetail(String id) {
+		return ppsm.readPerCalDetail(id);
+	}
+
+	@Override
+	public List<ProPerCalComVO> readPerCalCom(String id) {
+		return ppsm.readPerCalCom(id);
 	}
 
 }

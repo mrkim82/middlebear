@@ -198,4 +198,16 @@
 		SELECT * FROM DUAL
 	</insert>
 	
+	<!-- 프로젝트 권한 조회 -->
+	<select id="readProAuth" resultType="proVO">
+		SELECT pro_def_tab
+			 , post_write_auth
+			 , post_update_auth
+			 , post_view_auth
+			 , file_auth
+			 , id
+		FROM pro
+		WHERE pro_no = #{proNo}
+	</select>
+	
 </mapper>

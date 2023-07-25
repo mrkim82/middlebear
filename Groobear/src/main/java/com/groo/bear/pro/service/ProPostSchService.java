@@ -2,6 +2,7 @@ package com.groo.bear.pro.service;
 
 import java.util.List;
 
+import com.groo.bear.pro.service.schvo.ProPerCalComVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.schvo.ProPostWorkSchVO;
 import com.groo.bear.pro.service.schvo.ProSchDetailVO;
@@ -35,5 +36,9 @@ public interface ProPostSchService {
 	//개인 캘린더
 	// 캘린더 화면 조회
 	public List<ProPostWorkSchVO> readPersonalSch(String id);
+	// 개인 캘린더 상세 조회
+	public List<ProSchDetailVO> readPerCalDetail(String id);
+	// 개인 캘린더 댓글 조회
+	public List<ProPerCalComVO> readPerCalCom(String id);
 	
 }

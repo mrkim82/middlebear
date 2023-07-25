@@ -55,47 +55,41 @@ p {
 	<div id='calendar'></div>
 	
 <!-- Custom Modal(일정) -->
-<div class="custom-modal" th:each="calD : ${readCalDetail}" th:id="'modal' + ${calD.proPostNo}"
-	 th:data-feed-post-sch-no="${calD.proPostNo}" th:data-feed-sch-no="${calD.schNo}">
+<div class="custom-modal" th:each="calD : ${readPerCalDetail}" th:id="'modal' + ${calD.proPostNo}"
+	 th:data-feed-post-sch-no="${calD.proPostNo}" th:data-sch-no="${calD.schNo}">
     <div class="modal-header">
-        <h6 class="modal-title"
-        	th:utext="${calD.profileImg} + ${calD.name} + ${#dates.format(calD.postDate, 'yyyy-MM-dd HH:mm')}"></h6>
+        <h6 class="modal-title"></h6>
+        <h5 class="modal-title" th:text="'개인일정 : ' + ${calD.postTitle}"></h5>
+        <h5 th:text="'등록일 : ' + ${#dates.format(calD.postDate, 'yyyy-MM-dd HH:mm')}"></h5>
         <button type="button" class="close closeModalButton" aria-label="Close">
         	<span aria-hidden="true">&times;</span>
         </button>
     </div>
 
-    <div class="modal-header">
-        <h5 class="modal-title" th:text="'일정 : ' + ${calD.postTitle}"></h5>
-    </div>
-		<th:block th:text="'시작' + ${calD.schStartTime}"></th:block>
-		<th:block th:text="'종료' + ${calD.schEndTime}"></th:block>
 
-		
-    <div class="modal-body">
-
-
-    </div>
 
     <div class="modal-body">
-
+		<input type="datetime-local" th:value="${#dates.format(calD.schStartTime, 'yyyy-MM-dd HH:mm')}"></input>
+		<input type="datetime-local" th:value="${#dates.format(calD.schEndTime, 'yyyy-MM-dd HH:mm')}"></input>
+		<th:block th:text="'장소 : ' + ${calD.schPlace}"></th:block>
+    </div>
+    <div class="modal-body">
+		<th:block th:text="'내용 : ' + ${calD.schContent}"></th:block>
     </div>
 	<!-- 북마크, 댓글수 -->
     <div class="modal-footer">
 		
 		<div class="col-md-8">
 			<ul class="list-unstyled">
-				<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
-					th:if="${taskD.proPostNo == com.proPostNo}">
+				<li th:each="com : ${readPerCalCom}" th:data-post-code="${com.comNo}"
+					th:if="${calD.proPostNo == com.proPostNo}">
 					<span th:utext="${com.profileImg}"></span>
 					<span th:text="${com.name}"></span>
-					<span th:text="${com.comDate}"></span>
+					<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 					<span th:text="${com.comContent}"></span>
-					<th:block th:if="${com.id == session.Id}">
-						<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
-						<span></span><!-- 지우면 안됨!!!!!!! -->
-						<span onclick="deleteWritingComment()" class="spanCursor">X</span>
-					</th:block>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+					<span></span><!-- 지우면 안됨!!!!!!! -->
+					<span onclick="deleteWritingComment()" class="spanCursor">X</span>
 				</li>
 			</ul>
 		</div>
@@ -103,14 +97,14 @@ p {
 			<div class="form-group">
 				<input type="text" class="form-control" placeholder="댓글 작성">
 			</div>
-			<button type="button" class="btn btn-primary" onclick="createCommentButton()"
-					th:data-post-writing-no="${taskD.proPostNo}">댓글 등록</button>
+			<button type="button" class="btn btn-primary" onclick="createCommentButton()">댓글 등록</button>
 		</div>
 		
     </div>
 </div>
 	
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js}"></script>
 <script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
 <!-- 데이터 가져오기 -->
 <script type="text/javascript" th:inline="javascript">
@@ -148,41 +142,27 @@ p {
     },
     eventClick: function(info) {
   		let proNo = info.event.extendedProps.proNo;
-        console.log('이벤트(제목): ' + info.event.title);
-        console.log('이벤트(프로젝트 번호): ' + proNo);
+  		let proPostNo = info.event.extendedProps.proPostNo;
         
-        info.jsEvent.preventDefault();
-        if (info.event.url) {
-          window.open(info.event.url);
-        }
-       // console.log('event.target',event.target);
-        //console.log('event.target',event.target.closest('.sideWork'));
 		if(proNo == 7) {//개인용 일정인 경우
 			console.log('개인 일정입니다')
+			
 			var $buttons = $('.sideWork');
 			var $modals = $('.custom-modal');
-			
-			
+        
 			//모달 전체 닫기
-			$modals.not('#modal' + postNo).removeClass('show-modal');
-	
-			$('#modal' + postNo).toggleClass('show-modal');
-			
+			$modals.not('#modal' + proPostNo).removeClass('show-modal');
+
+			$('#modal' + proPostNo).toggleClass('show-modal');
+
 			// X버튼으로 닫기
 			$('.closeModalButton').click(function () {
-				$(this).closest('.custom-modal').removeClass('show-modal');
+					$(this).closest('.custom-modal').removeClass('show-modal');
 			});
+			
 		} else {//프로젝트(일정)인 경우 해당 프로젝트로 보냄
-			location.href="/proPostMain/" + proNo + "?homeTab=4"
+			location.href="/proPostMain/" + proNo + "?homeTab=4";
 		}
-
-
-
-		// X버튼으로 닫기
-		$('.closeModalButton').click(function () {
-				$(this).closest('.custom-modal').removeClass('show-modal');
-		});
-  			
 
       },
       dayMaxEventRows: true,
@@ -213,7 +193,7 @@ p {
 			return;
 		}
 		
-		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
+		let proPostNo = targetButton.closest('.custom-modal').dataset.feedPostSchNo;//글번호 찾기
 		
 		fetch("/postCreateComment", {
 			method: 'POST',
@@ -221,19 +201,17 @@ p {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-   				'proPostNo': writingNo,
+   				'proPostNo': proPostNo,
    				'comContent': com.value
    			})
 		})
 		.then(response => response.json())
 		.then(res => {
 			let insertComment = targetButton.closest('.modal-footer').getElementsByClassName('list-unstyled')[0];
-			
-			
 			insertComment.insertAdjacentHTML('beforeend', 
-				'<li data-post-code="161">'+
+				'<li data-post-code="' + res.result + '">'+
 					'<span></span>'+
-					'<span>김나리</span>'+
+					'<span>' + selfName + '</span>'+
 					'<span>' + currentTime + '</span>'+
 					'<span>' + com.value + '</span>'+
 					'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
@@ -264,11 +242,6 @@ p {
 <script>
 	function deleteWritingComment() {
 		let targetButton = event.target;
-		//console.log(targetButton.parentNode.dataset.postCode);
-		
-		let url = window.location.pathname;
-		let lastIndex = url.lastIndexOf('/');
-		let projectNo = url.substring(lastIndex + 1);
 		
 		fetch("/postDeleteComment", {
 			method: 'POST',
@@ -292,14 +265,14 @@ p {
 		let targetButton = event.target;
 		let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
 		
-		let oldCom = targetButton.parentNode.childNodes[7].textContent;//기존 댓글
-		let oldDate = targetButton.parentNode.childNodes[5].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
+		let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
+		let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
 		
 		//초기화
-		targetButton.parentNode.childNodes[5].textContent = '';//날짜 초기화
-		targetButton.parentNode.childNodes[7].textContent = '';//댓글 초기화
-		targetButton.parentNode.childNodes[9].textContent = '';//수정 초기화
-		targetButton.parentNode.childNodes[13].textContent = '';//X 초기화
+		targetButton.parentNode.children[2].textContent = '';//날짜 초기화
+		targetButton.parentNode.children[3].textContent = '';//댓글 초기화
+		targetButton.parentNode.children[4].textContent = '';//수정 초기화
+		targetButton.parentNode.children[6].textContent = '';//X 초기화
 		
 		if(document.getElementById('newComment') != null) {
 			let nC = document.getElementById('newComment').parentNode.parentNode;
@@ -310,18 +283,18 @@ p {
 			nC.childNodes[13].textContent = 'X';
 		}
 		
-		targetButton.parentNode.childNodes[11].innerHTML = 
+		targetButton.parentNode.children[5].innerHTML = 
 				'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
 				+'<span id="ooo" class="spanCursor">수정</span>'
 				+'<span id="xxx" class="spanCursor">취소</span>';
 		
 		// 취소버튼
 		document.getElementById('xxx').addEventListener('click', function() {
-			targetButton.parentNode.childNodes[5].textContent = oldDate;
-			targetButton.parentNode.childNodes[7].textContent = oldCom;
-			targetButton.parentNode.childNodes[9].textContent = '수정';
-			targetButton.parentNode.childNodes[13].textContent = 'X';
-			targetButton.parentNode.childNodes[11].textContent = '';
+			targetButton.parentNode.children[2].textContent = oldDate;
+			targetButton.parentNode.children[3].textContent = oldCom;
+			targetButton.parentNode.children[4].textContent = '수정';
+			targetButton.parentNode.children[5].textContent = '';
+			targetButton.parentNode.children[6].textContent = 'X';
 		});
 		
 		// 수정버튼
@@ -346,15 +319,11 @@ p {
 				.then(res => {
 					
 					if(res.result == '성공') {
-						targetButton.parentNode.childNodes[5].textContent = oldDate;
-						targetButton.parentNode.childNodes[7].textContent = newCom.value;
-						targetButton.parentNode.childNodes[9].textContent = '수정';
-						targetButton.parentNode.childNodes[13].textContent = 'X';
-						targetButton.parentNode.childNodes[11].textContent = ''
-						
-						let url = window.location.pathname;
-						let lastIndex = url.lastIndexOf('/');
-						let projectNo = url.substring(lastIndex + 1);
+						targetButton.parentNode.children[2].textContent = oldDate;
+						targetButton.parentNode.children[3].textContent = newCom.value;
+						targetButton.parentNode.children[4].textContent = '수정';
+						targetButton.parentNode.children[6].textContent = 'X';
+						targetButton.parentNode.children[5].textContent = '';
 						
 					} else {
 						alert('댓글 수정 실패');
@@ -373,6 +342,7 @@ p {
 	/*<![CDATA[*/
 		
 		let selfId = /*[[${session.Id}]]*/;
+		let selfName = /*[[${session.Name}]]*/;
 		
 	/*]]>*/
 </script>

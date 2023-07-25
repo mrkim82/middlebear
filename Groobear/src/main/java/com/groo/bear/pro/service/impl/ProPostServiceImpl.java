@@ -58,7 +58,8 @@ public class ProPostServiceImpl implements ProPostService {
 
 	@Override
 	public int createPostComment(ProPostCommentVO vo) {
-		return ppm.createPostComment(vo);
+		ppm.createPostComment(vo);
+		return vo.getComNo();
 	}
 
 	@Override

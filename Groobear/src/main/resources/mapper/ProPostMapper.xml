@@ -25,8 +25,16 @@
 	
 	<!-- 프로젝트 참가자 조회 --><!-- 일정 참가자 반복문 -->
 	<select id="readProjectParti" parameterType="ProPostUserVO">
-		SELECT i.name, m.id, u.profile_img, i.rank, d.dept_name
-		FROM pro_mem m JOIN users u
+		SELECT i.name
+		     , u.email
+		     , u.phone
+		     , u.profile_note
+		     , m.id
+		     , u.profile_img
+		     , i.rank
+		     , d.dept_name
+		FROM pro_mem m
+		JOIN users u
 		ON(m.id = u.id)
 		JOIN user_info i
 		ON(u.emp_no = i.emp_no)
@@ -120,7 +128,7 @@
 	
 	<!-- 글 댓글 조회(임시) -->
 	<select id="readPostWritingComment" resultType="ProPostCommentVO">
-		SELECT a.com_no, a.com_content, TO_CHAR(a.com_date, 'yyyy/MM/dd HH24:mi') AS comDate,
+		SELECT a.com_no, a.com_content, a.com_date,
 			   c.name, b.profile_img, a.id, p.pro_post_no
 		FROM com a JOIN users b
 		ON(a.id=b.id)
@@ -140,11 +148,16 @@
 	<insert id="createPostComment" parameterType="ProPostCommentVO">
 		INSERT INTO com(com_no, pro_post_no, com_content, id)
 		VALUES ((SELECT NVL(MAX(com_no), 0) +1
-		         FROM com),
+				 FROM com),
 		         #{proPostNo},
 		         #{comContent},
 		         #{id}
 		)
+		
+		<selectKey resultType="int" keyProperty="comNo" order="AFTER">
+			SELECT NVL(MAX(com_no), 0)
+		      FROM com
+		</selectKey>
 	</insert>
 	
 	<!-- 댓글 삭제 -->

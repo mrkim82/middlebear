@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProPostSchService;
-import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 
 @Controller
@@ -49,14 +48,15 @@ public class ProPostSchController {
 		return map;
 	}
 	
-	//프로젝트 메인 페이지 이동
+	//개인 캘린더 조회페이지 이동
 	@GetMapping("perSch")
 	public String proMainPage(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
 		
 		model.addAttribute("readPersonalSch", ppss.readPersonalSch(id));
-		
+		model.addAttribute("readPerCalDetail", ppss.readPerCalDetail(id));
+		model.addAttribute("readPerCalCom", ppss.readPerCalCom(id));
 		
 		return "main/personalSch";
 	};
