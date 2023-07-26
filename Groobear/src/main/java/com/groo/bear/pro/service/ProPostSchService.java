@@ -41,4 +41,7 @@ public interface ProPostSchService {
 	// 개인 캘린더 댓글 조회
 	public List<ProPerCalComVO> readPerCalCom(String id);
 	
+	//회원 탈퇴용 참가자 삭제
+	public int deleteMemberSchParti(String id);
+	
 }

@@ -111,21 +111,6 @@
 		ORDER BY pro_post_no DESC
 	</select>
 	
-	<!-- 글 조회(임시)
-	<select id="readPostWriting" resultType="ProPostWritingVO">
-		SELECT a.pro_post_no, a.post_type, a. post_title, a.post_date, a.id,
-			   b.writing_no, b.writing_content, d.name, c.profile_img
-		FROM pro_post a
-		LEFT JOIN pro_writing b
-		ON(a.pro_post_no = b.pro_post_no)
-		JOIN users c
-		ON(a.id=c.id)
-		JOIN user_info d
-		ON(c.emp_no = d.emp_no)
-		WHERE post_type = #{postType}
-		ORDER BY a.pro_post_no DESC
-	</select> -->
-	
 	<!-- 글 댓글 조회(임시) -->
 	<select id="readPostWritingComment" resultType="ProPostCommentVO">
 		SELECT a.com_no, a.com_content, a.com_date,
@@ -193,5 +178,13 @@
 		WHERE b.pro_no = #{proNo}
 		GROUP BY work_status
 	</select>
+	
+	<!-- 프로필 메모 변경 -->
+	<update id="updateProfileMemo" parameterType="ProPostUserVO">
+		UPDATE users
+		SET profile_note = #{profileNote}
+		WHERE id = #{id}
+	</update>
+	
 	
 </mapper>

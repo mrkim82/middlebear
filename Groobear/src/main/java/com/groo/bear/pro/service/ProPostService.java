@@ -46,4 +46,7 @@ public interface ProPostService {
 	
 	//차트 조회
 	public List<ProPostChartVO> readPostChart(int proNo);
+	
+	// 프로필 메모 수정
+	public int updateProfileMemo(ProPostUserVO vo);
 }

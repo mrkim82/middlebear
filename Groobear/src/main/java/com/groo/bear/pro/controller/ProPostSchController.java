@@ -61,6 +61,4 @@ public class ProPostSchController {
 		return "main/personalSch";
 	};
 	
-	
-	
 }

@@ -23,6 +23,7 @@ import com.groo.bear.comm.DateUtil;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostTaskService;
+import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.PublicCodeService;
@@ -31,6 +32,7 @@ import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
 @Controller
@@ -241,4 +243,15 @@ public class proPostController {
 		int result = taskS.updateWorkView(vo);
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
+	
+	//프로필 메모 변경
+	@PutMapping("updateProfileMemo")
+	@ResponseBody
+	public Map<String, Object> updateProfileMemo(HttpServletRequest request, @RequestBody ProPostUserVO vo) {
+		int result = proPostService.updateProfileMemo(vo);
+		
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
+	
 }

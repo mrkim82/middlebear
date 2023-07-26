@@ -12,5 +12,5 @@ public class ProPostUserVO {
 	private String deptName;
 	private String phone;
 	private String email;
-	private String profile_note;
+	private String profileNote;
 }

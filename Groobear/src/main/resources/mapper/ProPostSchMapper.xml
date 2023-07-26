@@ -206,4 +206,10 @@
 		AND d.pro_no = 7
 	</select>
 	
+	<!-- 회원 탈퇴용 참가자 삭제 -->
+	<delete id="deleteMemberSchParti">
+		DELETE sch_parti
+		WHERE id = #{id}
+	</delete>
+	
 </mapper>

@@ -95,4 +95,9 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 		return ppsm.readPerCalCom(id);
 	}
 
+	@Override
+	public int deleteMemberSchParti(String id) {
+		return ppsm.deleteMemberSchParti(id);
+	}
+
 }

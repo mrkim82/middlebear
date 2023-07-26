@@ -106,4 +106,9 @@ public class ProPostServiceImpl implements ProPostService {
 	    return updatedList;
 	}
 
+	@Override
+	public int updateProfileMemo(ProPostUserVO vo) {
+		return ppm.updateProfileMemo(vo);
+	}
+
 }
