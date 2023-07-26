@@ -166,4 +166,48 @@
 		    AND p.pay_status3='N')
 		ORDER BY pay_status,pay_no
 	</select>
+	
+	<!-- 운행일지 수정 -->
+	<update id="logUpdate" parameterType="PaymentVO">
+		UPDATE payment_logbook
+		    SET oper_date = #{operDate},
+		        destination = #{destination},
+		        befored = #{befored},
+		        afterd = #{afterd},
+		        imprest = #{imprest},
+		        purpose = #{purpose}
+    		WHERE pay_no = #{payNo}
+	</update>
+	<!-- 연차계 수정 -->
+	<update id="offUpdate" parameterType="PaymentVO">
+		UPDATE payment_off
+		    SET title = #{title},
+		        content = #{content},
+		        com = #{com},
+		        use_date = #{useDate},
+		        return_date = #{returnDate}
+		    WHERE pay_no = #{payNo}
+	</update>
+	<!-- 품의서 수정 -->
+	<update id="robinUpdate" parameterType="PaymentVO">
+		UPDATE payment_robin
+		    SET title = #{title},
+		        content = #{content},
+		        com = #{com}
+		    WHERE pay_no = #{payNo} 
+	</update>
+	<!-- 문서 2번결재자 결재,반려(update) -->
+	<update id="payUpdateApp2" parameterType="PaymentVO">
+		UPDATE payment
+		    SET pay_status2= #{payStatus2}
+		    WHERE approver2 = #{approver2}
+		    AND pay_no = #{payNo}
+	</update>
+	<!-- 문서 최종결재자 결재(update)-->
+	<update id="payUpdateApp3" parameterType="PaymentVO">
+		UPDATE payment
+		    SET pay_status3= #{payStatus3}
+		    WHERE approver3 = #{approver3}
+		    AND pay_no = #{payNo}
+	</update>
 </mapper>
