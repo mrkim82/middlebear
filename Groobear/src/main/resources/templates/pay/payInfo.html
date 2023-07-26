@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/mailTiles}">
+<head>
+<meta charset="UTF-8">
+<title>InProgressPay</title>
+</head>
+<body layout:fragment="content">
+	<div>
+		<table style="float:left">
+			<thead></thead>
+			<tbody>
+				<tr>
+					<td>결재문서 번호 [[${list.payNo}]]</td>
+				</tr>
+				<tr>
+					<td>작성자 [[${userInfo.name}]] [[${userInfo.rank}]] [[${userInfo.deptName}]]</td>
+				</tr>
+				<tr>
+					<td>작성일자 [[${list.issueDate}]]</td>
+				</tr>
+			</tbody>
+		</table>
+		<table style="float:left">
+			<thead></thead>
+			<tbody>
+				<tr>
+					<td>133333333333</td>
+					<td>23333333333</td>
+					<td>33333333333333333333333</td>
+				</tr>
+				<tr>
+					<td>45555555555</td>
+					<td>55555555555</td>
+					<td>6555555555555555</td>
+				</tr>
+			</tbody>
+		</table>
+		<table>
+			<thead></thead>
+			<tbody>
+				<th:block th:if="${list.docType=='a'}">
+				
+				</th:block>
+				<th:block th:if="${list.docType=='b'}">
+				<tr>
+					<td>결재문서 번호 [[${list.payNo}]]</td>
+				</tr>
+				<tr>
+					<td>제목 [[${list.title}]]</td>
+				</tr>
+				<tr>
+					<td>내용 [[${list.content}]]</td>
+				</tr>
+				</th:block>
+				<th:block th:if="${list.docType == 'c'}">
+				<tr>
+					<td>결재문서 번호 [[${list.payNo}]]</td>
+				</tr>
+				<tr>
+					<td>제목 [[${list.title}]]</td>
+				</tr>
+				<tr>
+					<td>내용 [[${list.content}]]</td>
+				</tr>
+			</th:block>
+			</tbody>
+		</table>
+		
+		<button type="button" id="paymentOk" style="margin-left:10px">결재</button>
+		<button type="button" id="paymentPass" style="margin-left:10px">반려</button>
+	</div>
+</body>
+</html>

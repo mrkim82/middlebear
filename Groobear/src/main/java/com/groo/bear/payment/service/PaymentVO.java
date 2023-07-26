@@ -54,4 +54,5 @@ public class PaymentVO {
 	private String profileImg;
 	private String comContent;
 	private String comDate;
+	
 }

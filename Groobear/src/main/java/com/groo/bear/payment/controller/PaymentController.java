@@ -9,10 +9,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.emp.service.EmpVO;
 import com.groo.bear.files.domain.FilesVO;
+import com.groo.bear.paging.Criteria;
+import com.groo.bear.paging.Paging;
 import com.groo.bear.payment.service.PaymentService;
 import com.groo.bear.payment.service.PaymentVO;
 
@@ -48,6 +51,7 @@ public class PaymentController {
 	public String paymentDocForm(Model model,HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("Id");
+		System.out.println("id = "+id);
 		int payNo = paymentService.paymentNo();
 		System.out.println(payNo);
 		model.addAttribute("paymentNo",paymentService.paymentNo());
@@ -59,7 +63,7 @@ public class PaymentController {
 	@ResponseBody
 	public String paymentDocLog(Model model, @RequestBody PaymentVO payVO) {
 		System.out.println("DocLog = "+payVO);
-		paymentService.paymentLogBook(payVO);
+		paymentService.paymentInsert(payVO);
 		paymentService.logDataInsert(payVO);
 		return "성공";
 	}
@@ -68,7 +72,7 @@ public class PaymentController {
 	@ResponseBody
 	public String paymentDocOff(Model model, @RequestBody PaymentVO payVO) {
 		System.out.println("DocOff = "+payVO);
-		paymentService.paymentLogBook(payVO);
+		paymentService.paymentInsert(payVO);
 		paymentService.offDataInsert(payVO);
 		return "성공";
 	}
@@ -77,7 +81,7 @@ public class PaymentController {
 	@ResponseBody
 	public String paymentDocRobin(Model model, @RequestBody PaymentVO payVO) {
 		System.out.println("DocOff = "+payVO);
-		paymentService.paymentLogBook(payVO);
+		paymentService.paymentInsert(payVO);
 		paymentService.robinDataInsert(payVO);
 		return "성공";
 	}
@@ -133,11 +137,53 @@ public class PaymentController {
 		return result;
 	}
 	
-	//결재 진행중인 문서 조회
-	
 	//결재 완료(반려)된 문서 조회
 	
 	//참조된 문서 조회
 	
-	
+	//메인페이지
+	@GetMapping("pay/payMain")
+	public String payMainForm(Model model,  HttpSession session,PaymentVO payVO) {
+		return "pay/payMain";
+	}
+	//결재 진행중인 문서 조회
+	@GetMapping("pay/InProgressPay")
+	public String InProgressPayForm(Criteria cri, Model model, HttpSession session,PaymentVO payVO, @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
+		String id = (String) session.getAttribute("Id");
+		System.out.println("id = "+id);
+		payVO.setId(id);
+		cri.setPerPageNum(10);
+		Paging paging = new Paging();
+        paging.setCri(cri);
+        paging.setTotalCount(paymentService.countPaymentList(id));
+        System.out.println(paging);
+        System.out.println("payment"+paymentService.paymentList(cri, payVO));
+        model.addAttribute("userid",id);
+		model.addAttribute("InProgressList",paymentService.paymentList(cri, payVO));
+		model.addAttribute("paging", paging);
+		return "pay/InProgressPay";
+	}
+	//결재문서 상세조회
+	@GetMapping("payInfo")
+	public String payInfo(@RequestParam int payNo, @RequestParam String docType, Model model, HttpSession session) {
+		System.out.println("payInfo payNo = "+payNo);
+		System.out.println("payInfo docType = "+docType);
+		String id = (String) session.getAttribute("Id");
+		EmpVO empvo = new EmpVO();
+		empvo = paymentService.payEmpInfo(id);
+		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
+		model.addAttribute("mySign",paymentService.searchSignImg(empvo.getEmpNo()));
+		if(docType.equals("a")) {
+			System.out.println("docType = 운행일지");
+			model.addAttribute("list",paymentService.logList(payNo));
+		}else if(docType.equals("b")) {
+			System.out.println("docType = 연차계");
+			model.addAttribute("list",paymentService.offList(payNo));
+		}else {
+			System.out.println("docType = 품의서");
+			model.addAttribute("list",paymentService.robinList(payNo));
+		}
+		return "pay/payInfo";
+	}
 }

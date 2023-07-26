@@ -37,9 +37,7 @@ public class MailController {
 		//cri.setPerPageNum(2); //페이징 2개로 끊어서 보려고 임시로 적어둔것
 		Paging paging = new Paging();
         paging.setCri(cri);
-        System.out.println(mailVO);
         paging.setTotalCount(mailService.countReceiveMail((String) session.getAttribute("Email"),(String) session.getAttribute("Email")));
-        System.out.println("3");
 		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/receiveMail";
