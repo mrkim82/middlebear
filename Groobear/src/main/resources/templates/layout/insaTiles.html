@@ -3,6 +3,9 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 >
   <head>
+  <!-- Load jQuery first -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
   	<title>Groobear</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -31,7 +34,45 @@
 			color:white;
 		}
 		.rightPad{
-			padding-right:200px;
+			padding-right:150px;
+		}
+		#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3{
+		  position: fixed; /* Stay in place */
+		  z-index: 1; /* Sit on top */
+		  padding-top: 100px; /* Location of the box */
+		  left: 0;
+		  top: 0;
+		  width: 100%; /* Full width */
+		  height: 100%; /* Full height */
+		  overflow: auto; /* Enable scroll if needed */
+		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+		  display: none;
+		}
+		
+		#modalBody, #modalBody2, #modalBody3{
+		  width: 500px;
+		  height: 300px;
+		  padding: 30px 30px;
+		  margin: 0 auto;
+		  border: 1px solid #777;
+		  background-color: #fff;
+		}
+		
+		#closeBtn, #closeBtn2{
+		  float:right;
+		  font-weight: bold;
+		  color: #777;
+		  font-size:25px;
+		  cursor: pointer;
+		}
+		details {
+	    padding: 12px;
+	    text-decoration: none;
+	    font-size: 16px;
+	    color: #bdc3c7;
+	    display: flex;
+	    align-items: center;
+	    transition: 0.3s;
 		}
 	</style>
   </head>
@@ -96,21 +137,18 @@
           <ul class="nav flex-column">
             <!-- 사이드바 메뉴 아이템들 -->
             <li class="nav-item">
-              <a href="/mail/receiveMail"><span class="material-icons">add_box</span>받은메일함</a>
+              <a href="/empInfo"><span class="material-icons">add_box</span>회원조회</a>
             </li>
             <li class="nav-item">
-			  <a href="/mail/sendingMail"><span class="material-icons">home</span>보낸메일함</a>
-			</li>
-            <li class="nav-item">
-              <a href="/mail/sendMail"><span class="material-icons">star</span>메일쓰기</a>
+              <a href="#"><span class="material-icons">home</span>부서권한관리</a>
             </li>
             <li class="nav-item">
-              <a href="/mail/deleteMail"><span class="material-icons">star</span>지운메일함</a>
+              <a href="/userInfoList"><span class="material-icons">star</span>인사등록</a>
             </li>
           </ul>
         </div>
       </nav>
-	<!-- 사이드바 우측의 컨텐츠 영역 -->
+      <!-- 사이드바 우측의 컨텐츠 영역 -->
       <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
         <div layout:fragment="content" ></div>
       </main>

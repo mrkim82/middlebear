@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Groobear 회원정보수정</title>
+</head>
+<body>
+	<form style="height: 400px;" action="/updateEmp" method="POST">
+		<h3 style='text-align:center;'>Groobear 회원정보수정</h3>
+		<fieldset>
+			<div class="row">
+				<div class="col-4" style="display:inline-block;">
+					<th:block th:if="${profImg != null && profImg != ''}">
+						<img style="width:120px;height:150px;" th:src="@{|/display?fileName=${#strings.replace(profImg.uploadPath,'\','/')}/s_${profImg.uuid}_${profImg.fileName}|}" 
+													th:data-uploadpath="${profImg.uploadPath}" th:data-uuid="${profImg.uuid}"
+													th:data-filename="${profImg.fileName}" data-type="true">
+					</th:block>
+					<th:block th:if="${profImg == null || profImg == ''}">
+						<img style="width:120px;height:150px;" src="../img/userProf.png">
+					</th:block>								
+				</div>
+				<div class="col-6" style="display: inline-block;margin-left: 20px;position: absolute;">
+					<a>사번 : </a><input name="empNo" style="width:120px; padding-top:10px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.empNo}" readonly><br>
+					<a>이름 : </a><input name="name" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.name}" readonly><br>
+					<a>직책 : </a><select name="rank">
+								   <option value="사장" th:selected="${empInfo.rank=='사장'}">사장</option>
+								   <option value="이사" th:selected="${empInfo.rank=='이사'}">이사</option>
+								   <option value="부장" th:selected="${empInfo.rank=='부장'}">부장</option>
+								   <option value="차장" th:selected="${empInfo.rank=='차장'}">차장</option>
+					               <option value="과장" th:selected="${empInfo.rank=='과장'}">과장</option>
+					               <option value="대리" th:selected="${empInfo.rank=='대리'}">대리</option>
+					               <option value="주임" th:selected="${empInfo.rank=='주임'}">주임</option>
+					               <option value="사원" th:selected="${empInfo.rank=='사원'}">사원</option>
+					            </select><br>
+					<a>부서 : </a><select name="deptNo">
+									<th:block th:each="dept, stance : ${deptList}">
+										<option th:value="${dept.deptNo}" th:selected="${empInfo.deptNo == dept.deptNo}">[[${dept.deptName}]]</option>
+									</th:block>
+								 </select><br>
+					<a>재직여부 : </a><select name="empStatus">
+						               <option value="O" th:selected="${empInfo.empStatus=='O'}">재직</option>
+						               <option value="X" th:selected="${empInfo.empStatus=='X'}">퇴직</option>
+						            </select><br>
+					<a>회원권한 : </a><select name="empGrade">
+						               <option value="C" th:selected="${empInfo.empGrade=='C'}">일반회원</option>
+						               <option value="A" th:selected="${empInfo.empGrade=='A'}">관리자</option>
+						            </select>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset style="margin-bottom:10px;">
+			<a>연락처 : </a><input name="phone" style="width:120px; padding-top:10px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.phone}" readonly><br>
+			<a>회사메일 : </a><input name="id" style="width:150px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.id}" readonly><br>
+			<a>개인메일 : </a><input name="email" style="width:150px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.email}" readonly>
+		</fieldset>
+		<fieldset style="display: flex;justify-content: center;border:hidden;">
+			<button style="margin-right:10px;" type="submit">수정</button>
+			<button type="button" onclick="closeBtn()">닫기</button>
+		</fieldset>
+	</form>
+	<script type="text/javascript">
+	//팝업 Close 기능
+    function closeBtn() {
+    	window.close();
+   }; 
+	</script>
+</body>
+</html>
