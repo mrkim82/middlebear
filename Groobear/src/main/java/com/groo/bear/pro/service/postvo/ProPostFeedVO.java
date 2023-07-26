@@ -27,7 +27,7 @@ public class ProPostFeedVO {
     private String voteEndCheck;
     private int proNo;
     
-    private String postDate;
+    private Date postDate;
     private Date workStartDay;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date workStartTime;

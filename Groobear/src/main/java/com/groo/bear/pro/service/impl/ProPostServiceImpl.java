@@ -73,8 +73,8 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public List<ProPostFeedVO> readFeedPost(int proNo) {
-		return ppm.readFeedPost(proNo);
+	public List<ProPostFeedVO> readFeedPost(int proNo , int postType) {
+		return ppm.readFeedPost(proNo, postType);
 	}
 
 	@Override

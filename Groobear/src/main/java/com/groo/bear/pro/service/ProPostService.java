@@ -21,7 +21,7 @@ public interface ProPostService {
 	public List<ProPostUserVO> readProjectParti(int proNo);
 	
 	// 게시글 조회
-	public List<ProPostFeedVO> readFeedPost(int proNo);
+	public List<ProPostFeedVO> readFeedPost(int proNo, int postType);
 		
 	// 글 작성
 	public void createPostWriting(ProPostWritingVO vo);
