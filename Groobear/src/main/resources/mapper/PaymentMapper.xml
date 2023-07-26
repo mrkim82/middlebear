@@ -23,7 +23,7 @@
 		SELECT NVL(MAX(pay_no),0)+1 as pay_no FROM payment
 	</select>
 	<!-- 결재문서 insert -->
-	<insert id="paymentLogBook" parameterType="PaymentVO">
+	<insert id="paymentInsert" parameterType="PaymentVO">
 		INSERT INTO payment(pay_no,issue_date,doc_type,id,approver2,approver3,referrer,pay_status1,public_sign) 
 						VALUES(
 								#{payNo},
@@ -111,19 +111,59 @@
 	<select id="logList" resultType="PaymentVO">
 		SELECT * FROM payment p, payment_logbook l
 			WHERE p.pay_no = l.pay_no
-			AND p.id = #{id}
+			AND p.pay_no = #{payNo}
 	</select>
 	<!-- 결재문서 연차계 조회-->
 	<select id="offList" resultType="PaymentVO">
 		SELECT * FROM payment p, payment_off o
 			WHERE p.pay_no = o.pay_no
-			AND p.id = #{id}
+			AND p.pay_no = #{payNo}
 	</select>
 	<!-- 결재문서 품의서 조회-->
 	<select id="robinList" resultType="PaymentVO">
 		SELECT * FROM payment p, payment_robin r
 			WHERE p.pay_no = r.pay_no
-			AND p.id = #{id}
+			AND p.pay_no = #{payNo}
 	</select>
-	<!-- 결재문서 전체 일괄조회-->
+	<!-- 결재문서 결재중(본인이 해당된) 일괄조회-->
+	<select id="paymentList" resultType="PaymentVO">
+		WITH payment_all AS (
+	        SELECT pay_no,purpose FROM payment_logbook
+	        UNION ALL 
+	        SELECT pay_no,title FROM payment_off
+	        UNION ALL
+	        SELECT pay_no,title FROM payment_robin
+		)
+		SELECT * FROM (
+		    SELECT p.*, a.purpose, CASE WHEN p.approver2 = #{payVO.id} AND p.pay_status3='N' THEN pay_status2 
+		                                WHEN p.approver3 = #{payVO.id} AND p.pay_status3='N' THEN pay_status3 
+		                                WHEN p.approver3 = #{payVO.id} AND p.pay_status2='N' THEN pay_status2
+		                                ELSE pay_status1 END AS pay_status ,ROWNUM AS rn
+		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
+		    WHERE (p.id = #{payVO.id} OR p.approver2 = #{payVO.id} OR p.approver3 = #{payVO.id})
+		    AND p.pay_status3='N')
+		<![CDATA[
+	            WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+	    ]]>
+		ORDER BY pay_status,pay_no
+	</select>
+	<!-- 결재중문서 개수(페이징용) -->
+	<select id="countPaymentList" resultType="int">
+		WITH payment_all AS (
+        SELECT pay_no,purpose FROM payment_logbook
+        UNION ALL 
+        SELECT pay_no,title FROM payment_off
+        UNION ALL
+        SELECT pay_no,title FROM payment_robin
+		)
+		SELECT COUNT(*) FROM (
+		    SELECT p.*,a.purpose, CASE WHEN p.approver2 = #{id} AND p.pay_status3='N' THEN pay_status2 
+		                                WHEN p.approver3 = #{id} AND p.pay_status3='N' THEN pay_status3 
+		                                WHEN p.approver3 = #{id} AND p.pay_status2='N' THEN pay_status2
+		                                ELSE pay_status1 END AS pay_status ,ROWNUM AS rn
+		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
+		    WHERE (p.id = #{id} OR p.approver2 = #{id} OR p.approver3 = #{id})
+		    AND p.pay_status3='N')
+		ORDER BY pay_status,pay_no
+	</select>
 </mapper>
