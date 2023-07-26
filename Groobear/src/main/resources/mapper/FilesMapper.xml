@@ -35,7 +35,11 @@
   	<select id="findByNo" resultType="FilesVO">
   		select * from files where ${name} = #{no}
   	</select>
+<<<<<<< HEAD
   
+=======
+  	
+>>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
   	<!-- 프로필 사진 등록 -->
   	<insert id="insertProfImg" parameterType="EmpVO">
   		insert into files (
@@ -64,4 +68,87 @@
   	<select id="getOldFiles" resultType="FilesVO">
   		select * from files where upload_path = to_char(sysdate -1 , 'yyyy/mm/dd')
   	</select>
+  	<!-- 사원 개인 서명 등록 -->
+  	<insert id="insertSignImg" parameterType="EmpVO">
+  		insert into files (
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,SIGN_NO)
+  					VALUES
+  							(
+  							#{uuid}
+  							,#{uploadPath}
+  							,#{fileName}
+  							,'1'
+  							,sysdate
+  							,#{empNo}
+  							)
+  	</insert>
+  	<!-- 사원 개인 서명 삭제 -->
+  	<delete id="deleteSignImg" parameterType="int">
+  		delete files where sign_no = #{signNo}
+  	</delete>
+  	<!-- 사원 개인 서명 조회 -->
+  	<select id="searchSignImg" parameterType="int">
+  		select * from files where sign_no = #{empNo}  
+  	</select>
+  	<!-- 운행일지 차량 운행거리사진 등록 -->
+  	<insert id="logInsert" parameterType="FilesVO">
+  		insert into files(
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,PAY_NO
+  							) 
+  					VALUES(
+  							#{uuid}
+  							,#{uploadPath}
+  							,#{fileName}
+  							,'1'
+  							,sysdate
+  							,#{payNo}
+  					)
+  	</insert>
+  	<!-- 연차계 첨부파일 등록 -->
+  	<insert id="offInsert" parameterType="FilesVO">
+  		insert into files(
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,PAY_NO
+  							)
+  					VALUES(
+  							#{uuid}
+  							,#{uploadPath}
+  							,#{fileName}
+  							,'1'
+  							,sysdate
+  							,#{payNo}
+  					)
+  	</insert>
+  	<insert id="robinInsert" parameterType="FilesVO">
+  		insert into files(
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,PAY_NO
+  							)
+  					VALUES(
+  							#{uuid}
+  							,#{uploadPath}
+  							,#{fileName}
+  							,'1'
+  							,sysdate
+  							,#{payNo}
+  					)
+  	</insert>
   </mapper>

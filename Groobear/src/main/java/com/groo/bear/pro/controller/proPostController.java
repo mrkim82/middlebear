@@ -1,6 +1,6 @@
 package com.groo.bear.pro.controller;
 
-import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.groo.bear.comm.DateUtil;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostTaskService;
+import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.PublicCodeService;
@@ -30,6 +32,7 @@ import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
 @Controller
@@ -45,7 +48,7 @@ public class proPostController {
 	ProPostSchService proPostSchService;
 	
 	@Autowired
-	ProPostSchService Sch;
+	ProPostSchService Sch;//스케쥴
 	
 	@Autowired
 	PublicCodeService publicC;//공통 코드
@@ -75,34 +78,35 @@ public class proPostController {
 		proData2(model, request);
 		
 		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));//메뉴 상단바 조회
-		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(id, proNo));
+		model.addAttribute("projectUserCount", proPostService.readTopMenuCount(id, proNo));//지울예정
 		model.addAttribute("projectPartiMember", proPostService.readProjectParti(proNo));//해당 프로젝트 회원 정보 전체 조회
 		model.addAttribute("readWorkGroup", taskS.readWorkGroup(proNo));//업무 그룹 조회
 		model.addAttribute("projectWritingDetaisComment", proPostService.readPostWritingComment(proNo));//댓글
 		model.addAttribute("readPublicCodeColorAll", publicC.readPublicCodeColorAll());//공통 색상 전체
 		model.addAttribute("cTime" , new Date());//현재시간
-		model.addAttribute("beforeOneDay" , beforeOneDay());
-		model.addAttribute("afterOneDay" , afterOneDay());
-		//System.out.println("게시글"+model.getAttribute("beforeOneDay"));
+		model.addAttribute("beforeOneDay" , DateUtil.beforeOneDay());//하루전
+		model.addAttribute("afterOneDay" , DateUtil.afterOneDay());//하루뒤
+		model.addAttribute("readProAuth", proService.readProAuth(proNo));//권한 및 프로젝트 마스터 조회
 		
+		System.out.println("게시글"+model.getAttribute("projectPartiMember"));
 		switch (homeTab) {
-		//피드
+		//업무
 		case 1 :
 			model.addAttribute("readTaskAllList", taskS.readTaskAllList(proNo));//업무 전체 조회
 			model.addAttribute("readTaskWorkPerson", taskS.readTaskWorkPerson(proNo));//업무 담당자 조회
 			model.addAttribute("readWorkDetail", taskS.readWorkDetail(proNo));//업무 단건 조회
 			model.addAttribute("readWorkView", taskS.readWorkView(proNo, id));//멤버 업무 조회 설정
 			
-			//System.out.println("게시글"+model.getAttribute("readTaskAllList"));
 			//System.out.println("게시글"+model.getAttribute("readWorkView"));
 			pagePath = "proPost/proPostTask";
 			break;
-		//업무
+		//피드
 		case 2 :
 			//글 조회(임시)
 			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo));
 			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
 			model.addAttribute("readPartiList", Sch.readPartiList(proNo));
+			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
 			//할 일
 			model.addAttribute("readTodoList", todoNVote.readTodoList(proNo));//할 일 조회
 			model.addAttribute("readAllTodoListPer", todoNVote.readAllTodoListPer(proNo));//할 일 퍼센트 조회
@@ -122,7 +126,14 @@ public class proPostController {
 			break;
 		//캘린더
 		case 4 :
+			model.addAttribute("readWorkSchView", Sch.readWorkSchView(proNo));//업무, 일정 조회(바)
+			model.addAttribute("readWorkDetail", taskS.readWorkDetail(proNo));//업무 단건 조회
 			
+			model.addAttribute("readCalDetail", Sch.readCalDetail(proNo));//일정 단건
+			model.addAttribute("readPartiList", Sch.readPartiList(proNo));//참석자 조회
+			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
+			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
+			//System.out.println("게시글"+model.getAttribute("readWorkSchView"));
 			pagePath = "proPost/proPostSchd";
 			break;
 		//파일
@@ -141,33 +152,10 @@ public class proPostController {
 			break;
 		}
 		
-		
 		return pagePath;
 	}
 	
-	//하루 전계산
-	private  Date beforeOneDay() {
-        Date currentDate = new Date();
-        
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        Date oneDayBefore = calendar.getTime();
-        
-		return oneDayBefore;
-	}
 	
-	//하루 후계산
-	private  Date afterOneDay() {
-		Date currentDate = new Date();
-		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(currentDate);
-		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		Date oneDayAfter = calendar.getTime();
-		
-		return oneDayAfter;
-	}
 	
 	//글 생성
 	@PostMapping("postCreateWriting")
@@ -207,42 +195,34 @@ public class proPostController {
 	@ResponseBody
 	public Map<String, Object> createPostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
 		HttpSession session = request.getSession();
-		Map <String, Object> map = new HashMap<>();
-		
 		vo.setId((String)session.getAttribute("Id"));
 		
-		map.put("result", proPostService.createPostComment(vo));
-		return map;
+		int comNo = proPostService.createPostComment(vo);
+		return Collections.singletonMap("result", comNo);
 	}
 	
 	//댓글 수정
 	@PutMapping("postUpdateComment")
 	@ResponseBody
 	public Map<String, Object> proGroupUpdate(@RequestBody ProPostCommentVO vo) {
-		Map <String, Object> map = new HashMap<>();
-		
-		map.put("result", proPostService.updatePostComment(vo));
-		return map;
+		int result = proPostService.updatePostComment(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//댓글 삭제
 	@PostMapping("postDeleteComment")
 	@ResponseBody
 	public Map<String, Object> deletePostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
-		Map <String, Object> map = new HashMap<>();
-		
-		map.put("result", proPostService.deletePostComment(vo.getComNo()));
-		return map;
+		int result = proPostService.deletePostComment(vo.getComNo());
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//업무 상태 수정
 	@PutMapping("updateWorkPostStatus")
 	@ResponseBody
 	public Map<String, Object> updateWorkPostStatus(@RequestBody ProPostWorkVO vo) {
-		Map <String, Object> map = new HashMap<>();
-		
-		map.put("result", proPostService.updateWorkPostStatus(vo));
-		return map;
+		int result = proPostService.updateWorkPostStatus(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//차트 조회
@@ -250,21 +230,28 @@ public class proPostController {
 	@ResponseBody
 	public List<ProPostChartVO> readGoogleChart(@RequestBody int proNo) {
 	    // 프로젝트 번호를 기반으로 데이터 조회
-	    List<ProPostChartVO> chartDataList = proPostService.readPostChart(proNo);
-	    return chartDataList;
+	    return proPostService.readPostChart(proNo);
 	}
 	
 	//멤버별 업무 조회 변경
 	@PutMapping("updateWorkView")
 	@ResponseBody
 	private Map<String, Object> updateWorkView(HttpServletRequest request, @RequestBody ProWorkViewVO vo) {
-		Map <String, Object> map = new HashMap<>();
 		HttpSession session = request.getSession();
 		vo.setId((String)session.getAttribute("Id"));
 		
-		String res = taskS.updateWorkView(vo);
-		
-		map.put("result", res);
-		return map;
+		int result = taskS.updateWorkView(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
+	
+	//프로필 메모 변경
+	@PutMapping("updateProfileMemo")
+	@ResponseBody
+	public Map<String, Object> updateProfileMemo(HttpServletRequest request, @RequestBody ProPostUserVO vo) {
+		int result = proPostService.updateProfileMemo(vo);
+		
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
+	
 }
