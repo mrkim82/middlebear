@@ -94,4 +94,10 @@
                     AND b.id = #{id})
 	</update>
 	
+	
+	<delete id="deleteWorkPerson" parameterType="String">
+		delete from work_person
+		where id=#{id}
+	</delete>
+	
 </mapper>

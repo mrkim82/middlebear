@@ -14,9 +14,17 @@ import com.groo.bear.insa.service.InsaService;
 import com.groo.bear.mypage.service.UserService;
 import com.groo.bear.paging.Criteria;
 import com.groo.bear.paging.Paging;
+import com.groo.bear.pro.service.ProPostSchService;
+import com.groo.bear.pro.service.ProPostTaskService;
 
 @Controller
 public class InsaController {
+	
+	@Autowired
+	ProPostTaskService pPTService;
+	
+	@Autowired
+	ProPostSchService proPostService;
 	
 	@Autowired
 	InsaService insaService;
@@ -53,7 +61,6 @@ public class InsaController {
 		model.addAttribute("profImg", userService.checkMyProf(vo.getId()));
 		model.addAttribute("empInfo", insaService.empDetailInfo(vo.getId()));
 		model.addAttribute("deptList", insaService.getDept());
-		System.out.println("11111"+insaService.empDetailInfo(vo.getId()));
 		return "insa/empUpdate";
 	}
 	
@@ -69,6 +76,10 @@ public class InsaController {
 	@ResponseBody
 	@PostMapping("deleteEmp")
 	public String deleteEmpInfo(@RequestBody EmpVO vo) {
+		System.out.println("2222222222222"+vo.getId());
+		System.out.println("333333333333"+vo);
+		pPTService.deleteWorkPerson(vo.getId());
+		proPostService.deleteMemberSchParti(vo.getId());
 		if(insaService.usersDelete(vo.getEmpNo()) > 0) {
 			return "success";
 		} else {

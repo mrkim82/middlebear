@@ -26,4 +26,7 @@ public interface ProPostTaskService {
 	
 	//멤버별 업무 조회 변경
 	public int updateWorkView(ProWorkViewVO vo);
+	
+	//회원 탈퇴시 work_group_person 삭제
+	public int deleteWorkPerson(String id);
 }

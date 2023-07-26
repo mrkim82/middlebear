@@ -31,7 +31,7 @@
 		</fieldset>
 		<fieldset style="margin-bottom:10px;">
 			<a>연락처 : </a><input name="phone" style="width:120px; padding-top:10px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.phone}" readonly><br>
-			<a>회사메일 : </a><input name="id" style="width:150px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.id}" readonly><br>
+			<a>회사메일 : </a><input id="id" name="id" style="width:150px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.id}" readonly><br>
 			<a>개인메일 : </a><input name="email" style="width:150px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.email}" readonly>
 		</fieldset>
 		<fieldset style="display: flex;justify-content: center;border:hidden;">
@@ -52,9 +52,11 @@
   			    method: "POST",
   			    contentType:"application/json; charset=utf-8",
   			    data: JSON.stringify({
-  			      empNo: [[${empInfo.empNo}]]
+  			      empNo: [[${empInfo.empNo}]],
+  			      id: $('#id').val()
   			    }),
   			    success: function(data) {
+
   			    	if(data == "success"){
   			    		window.opener.location.href="/empInfo";
   			    		window.close();

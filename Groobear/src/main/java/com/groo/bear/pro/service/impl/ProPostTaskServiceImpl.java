@@ -61,4 +61,9 @@ public class ProPostTaskServiceImpl implements ProPostTaskService {
 		return task.updateWorkView(vo);
 	}
 
+	@Override
+	public int deleteWorkPerson(String id) {
+		return task.deleteWorkPerson(id);
+	}
+
 }
