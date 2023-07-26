@@ -65,7 +65,7 @@ function drawChart() {
         var chartData = new google.visualization.DataTable();
         chartData.addColumn('string', 'workStatus');
         chartData.addColumn('number', 'count');
-		console.log(res);
+		//console.log(res);
         res.forEach(item => {
             // workStatus 값에 따라 이름을 변경
             let workStatusName = '';
@@ -650,7 +650,7 @@ function drawChart() {
 														<span th:text="${com.comContent}"></span>
 														<th:block th:if="${com.id == session.Id}">
 															<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
-															<span></span><!-- 지우면 안됨!!!!!!! -->
+															<span></span>
 															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
 														</th:block>
 													</li>
@@ -748,7 +748,7 @@ function drawChart() {
 						<div class="card-body">
 							<!-- 참석자 존 -->
 							<div>
-								<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}">
+								<th:block th:each="rpl : ${readPartiZone}" th:if="${rpl.schNo == allPost.schNo}">
 									<div th:text="${rpl.name}" th:data-sch-user-id="${rpl.id == session.Id ? rpl.id : ''}"
 									 	 th:data-sch-list-id="${rpl.id}"></div>
 									<th:block th:switch="${rpl.partiCheck}">
@@ -759,7 +759,8 @@ function drawChart() {
 										</nav>
 									</th:block>
 								</th:block>
-								</div>
+							</div>
+							
 								<!-- 참석자 리스트 버튼 -->
 								<div>
 									<button type="button" class="btn btn-light" data-toggle="modal" th:data-target="'#schPartiListModal' + ${allPost.proPostNo}"
@@ -787,22 +788,22 @@ function drawChart() {
 																</div>
 															</li>
 															<!-- 참가자 목록 -->
-															<!-- <th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo}"> -->
 															<th:block th:each="member : ${projectPartiMember}">
 																<li style="list-style-type: none">
 																	<nav class="nav">
-																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
-																					th:each="rpl : ${readPartiList}"
+																			
+																			<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck != null}">
+																				<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
 																					th:checked="${rpl.id == member.id}"
-																					th:if="${rpl.id == member.id && rpl.schNo == allPost.schNo}"
 																					th:data-sch-status="${rpl.partiCheck}"
-																					th:data-sch-list-id="${member.id}">
-																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
-																					th:each="rpl, j : ${readPartiList}"
-																					th:checked="${rpl.id == member.id}"
-																					th:if="${rpl.id != member.id && rpl.schNo == allPost.schNo && j.count == 1}"
-																					data-sch-status="A"
-																					th:data-sch-list-id="${member.id}">
+																					th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
+																			</th:block>
+																			<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck == null}">
+																				<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
+																					th:data-sch-status="${rpl.partiCheck}"
+																					th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
+																			</th:block>
+																			
 																			<label th:for="'schPartiList' + ${member.id}">
 																				<a class="nav-link" th:utext="${member.profileImg}"></a>
 																				<a class="nav-link" th:text="${member.name}"></a>
@@ -1035,31 +1036,6 @@ function drawChart() {
 				
 				
 				
-				<!-- <div class="container">
-					<div class="card mb-3">
-						<div class="row no-gutters">
-							<div class="col-md-4">
-								<img src="이미지 주소" class="card-img" alt="게시물 이미지">
-							</div>
-							<div class="col-md-8">
-								<div class="card-body">
-									<h5 class="card-title">게시물 제목</h5>
-									<p class="card-text">게시물 내용이 여기에 들어갑니다.</p>
-									<p class="card-text"><small class="text-muted">작성일자</small></p>
-								</div>
-							</div>
-						</div>
-						<div class="card-footer">
-							<div class="d-flex justify-content-between align-items-center">
-								<div>
-									<span class="badge badge-primary">카테고리1</span>
-									<span class="badge badge-primary">카테고리2</span>
-								</div>
-								<a href="#" class="btn btn-sm btn-primary">더보기</a>
-							</div>
-						</div>
-					</div>
-				</div> -->
 
 				<!-- 포스트 종료 -->
 			</th:block>
@@ -1068,38 +1044,95 @@ function drawChart() {
 		</div>
 		<!-- 참여자공간 -->
 		<div>
-			
-			<div class="container float-start" style="width: 250px;">
+			<div>
+				<th:block th:text="'참여자 ' + ${projectPartiMember.size}"></th:block>
+			</div>
+			<div class="card" style="width: 18rem;">
+			  <div class="card-header openModalInfo" th:each="pUser : ${projectPartiMember}"
+			  	   th:if="${pUser.id == readProAuth.id}"
+			  	   th:data-user-id="${pUser.id}"
+			  	   data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.id}"
+			  	   style="background-color: rgb(161, 204, 239)">
+			  	   <span th:text="'프로젝트 관리자 : '"></span>
+			       <span th:utext="${pUser.profileImg}"></span>
+			       <span th:text="${pUser.name}"></span>
+			  	   <span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
+			  </div>
+			  <ul class="list-group list-group-flush">
+			    <li class="list-group-item openModalInfo" th:each="pUser : ${projectPartiMember}"
+			    	th:if="${pUser.id != readProAuth.id}"
+			    	th:data-user-id="${pUser.id}"
+			    	data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.id}">
+			    	<span th:utext="${pUser.profileImg}"></span>
+			    	<span th:text="${pUser.name}"></span>
+			    	<span th:if="${session.Id == pUser.id}" th:text="(나)"></span>
+		    	</li>
+			  </ul>
+				<!-- 유저 인포 모달창 -->
+				<div th:each="mem : ${projectPartiMember}">
+					<div class="modal fade modal-dialog-centere" th:id="'proUserInfoDetail' + ${mem.id}"
+						 tabindex="-1" aria-labelledby="proUserInfoDetailLabel" aria-hidden="true"
+						 th:data-user-info-id="${mem.id}">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+				        <div class="card-deck">
+						  <div class="card">
+						  <!-- 프사 -->
+						    <img src="..." class="card-img-top" alt="...">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					          <span aria-hidden="true">&times;</span>
+					        </button>
+						    <div class="card-body">
+						    	<ul>
+						    		<li th:text="'부서명 : ' + ${mem.deptName}"></li>
+						    		<li th:text="'직급 : ' + ${mem.rank}"></li>
+						    		<li th:text="'이름 : ' + ${mem.name}"></li>
+						    		<li th:text="'이메일 : ' + ${mem.email}"></li>
+						    		<li th:text="'전화번호 : ' + ${mem.phone}"></li>
+						    		<li th:text="'메모 : ' + (${mem.profileNote == null} ? '-' : ${mem.profileNote})"></li>
+						    		
+						    	</ul>
+						    </div>
+						    <div class="card-footer">
+						    	<button type="button" class="btn btn-primary" onclick="changeProfileNote()">상태메세지 변경</button>
+						    </div>
+						  </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="container float-start" style="width: 250px;">
 				<div class="row">
 					<div class="col-md-3">
-						<!-- 왼쪽 사이드바 영역 -->
+						왼쪽 사이드바 영역
 						<div class="sidebar">
 							<ul class="list-unstyled">
 								<li>
-									<!-- 이미지 -->
+									이미지
 									<img src="" alt="이미지" class="img-fluid">
 								</li>
 							</ul>
 						</div>
 					</div>
 					<div class="col-md-9">
-						<!-- 오른쪽 콘텐츠 영역 -->
+						오른쪽 콘텐츠 영역
 						<div class="content">
 							<ul class="list-unstyled">
 								<li>
-									<!-- 이름 -->
+									이름
 									<h4>사용자 이름</h4>
 									<th:block th:text="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH:mm')}"></th:block>
 								</li>
 								<li>
-									<!-- 메시지 아이콘 -->
+									메시지 아이콘
 									<i class="fas fa-envelope"></i>
 								</li>
 							</ul>
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 
 		</div>
@@ -1344,16 +1377,20 @@ function drawChart() {
 		function changeSchStatus(button, newStatus) {
 			let schPartiChange = button.closest(".card").querySelector('[data-sch-user-id]').nextElementSibling;//상태창 위치
 			console.log('ss',button.closest(".card").querySelector('[data-sch-user-id]'))
-			console.log('sss',schPartiChange)
+			console.log('sss',schPartiChange);
+			
 			if(newStatus == 'Y') {
 				schPartiChange.textContent ='참석';
-				console.log(schPartiChange.style.color = 'green');
+				button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'Y';
+				schPartiChange.style.color = 'green';
 			} else if(newStatus == 'N') {
 				schPartiChange.textContent ='불참';
-				console.log(schPartiChange.style.color = 'red');
+				button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'N';
+				schPartiChange.style.color = 'red';
 			} else if(newStatus == 'A') {
 				schPartiChange.textContent ='미정';
-				console.log(schPartiChange.style.color = 'gray');
+				button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'A';
+				schPartiChange.style.color = 'gray';
 			}
 		}
 	</script>
@@ -1502,7 +1539,40 @@ function drawChart() {
 	   			})
 			})
 			.then(response => response.json())
-			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+			.then(res => {
+				console.log(res)
+				let insertComment = targetButton.closest('.card').getElementsByClassName('list-unstyled')[0];
+				console.log('여기',insertComment)
+				
+				insertComment.insertAdjacentHTML('beforeend', 
+					'<li data-post-code="' + res.result + '">'+
+						'<span></span>'+
+						'<span>' + selfName + '</span>'+
+						'<span>' + currentTime + '</span>'+
+						'<span>' + com.value + '</span>'+
+						'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
+						'<span></span>'+
+						'<span onclick="deleteWritingComment()" class="spanCursor">X</span>'+
+					'</li>'
+				);
+				com.focus();
+				com.value = '';
+				//location.href="/proPostMain/" + projectNo + "?homeTab=2"
+			});
+		}
+		
+		//현재시간 구하기
+		const currentTime = formatDate();
+		
+		function formatDate() {
+		  let date = new Date();
+		  const year = date.getFullYear();
+		  const month = String(date.getMonth() + 1).padStart(2, '0');
+		  const day = String(date.getDate()).padStart(2, '0');
+		  const hours = String(date.getHours()).padStart(2, '0');
+		  const minutes = String(date.getMinutes()).padStart(2, '0');
+		  
+		  return `${year}/${month}/${day} ${hours}:${minutes}`;
 		}
 	</script>
 	
@@ -1538,14 +1608,14 @@ function drawChart() {
 			let targetButton = event.target;
 			let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
 			
-			let oldCom = targetButton.parentNode.childNodes[7].textContent;//기존 댓글
-			let oldDate = targetButton.parentNode.childNodes[5].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
+			let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
+			let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
 			
 			//초기화
-			targetButton.parentNode.childNodes[5].textContent = '';//날짜 초기화
-			targetButton.parentNode.childNodes[7].textContent = '';//댓글 초기화
-			targetButton.parentNode.childNodes[9].textContent = '';//수정 초기화
-			targetButton.parentNode.childNodes[13].textContent = '';//X 초기화
+			targetButton.parentNode.children[2].textContent = '';//날짜 초기화
+			targetButton.parentNode.children[3].textContent = '';//댓글 초기화
+			targetButton.parentNode.children[4].textContent = '';//수정 초기화
+			targetButton.parentNode.children[6].textContent = '';//X 초기화
 			
 			if(document.getElementById('newComment') != null) {
 				let nC = document.getElementById('newComment').parentNode.parentNode;
@@ -1556,18 +1626,19 @@ function drawChart() {
 				nC.childNodes[13].textContent = 'X';
 			}
 			
-			targetButton.parentNode.childNodes[11].innerHTML = 
+			// 댓글 수정 폼 생성
+			targetButton.parentNode.children[5].innerHTML = 
 					'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
 					+'<span id="ooo" class="spanCursor">수정</span>'
 					+'<span id="xxx" class="spanCursor">취소</span>';
-			
+					
 			// 취소버튼
 			document.getElementById('xxx').addEventListener('click', function() {
-				targetButton.parentNode.childNodes[5].textContent = oldDate;
-				targetButton.parentNode.childNodes[7].textContent = oldCom;
-				targetButton.parentNode.childNodes[9].textContent = '수정';
-				targetButton.parentNode.childNodes[13].textContent = 'X';
-				targetButton.parentNode.childNodes[11].textContent = '';
+				targetButton.parentNode.children[2].textContent = oldDate;
+				targetButton.parentNode.children[3].textContent = oldCom;
+				targetButton.parentNode.children[4].textContent = '수정';
+				targetButton.parentNode.children[5].textContent = '';
+				targetButton.parentNode.children[6].textContent = 'X';
 			});
 			
 			// 수정버튼
@@ -1592,11 +1663,11 @@ function drawChart() {
 					.then(res => {
 						
 						if(res.result == '성공') {
-							targetButton.parentNode.childNodes[5].textContent = oldDate;
-							targetButton.parentNode.childNodes[7].textContent = newCom.value;
-							targetButton.parentNode.childNodes[9].textContent = '수정';
-							targetButton.parentNode.childNodes[13].textContent = 'X';
-							targetButton.parentNode.childNodes[11].textContent = ''
+							targetButton.parentNode.children[2].textContent = oldDate;
+							targetButton.parentNode.children[3].textContent = newCom.value;
+							targetButton.parentNode.children[4].textContent = '수정';
+							targetButton.parentNode.children[6].textContent = 'X';
+							targetButton.parentNode.children[5].textContent = '';
 							
 							let url = window.location.pathname;
 							let lastIndex = url.lastIndexOf('/');
@@ -1626,32 +1697,16 @@ function drawChart() {
 			
 			inputValues.forEach(inputValue => {
 				updateObj.schNo = schPlNo;
-				updateObj.partiCheck = inputValue.dataset.schStatus;
+				updateObj.partiCheck = inputValue.dataset.schStatus == null ? 'A' : inputValue.dataset.schStatus;
 				updateObj.id = inputValue.dataset.schListId;
 				updatePartiList.push(updateObj);
 				updateObj = {};
 		    });
-			
-			formData = updatePartiList;
+			let noSchNo = [{'schNo' : schPlNo}];
+			formData = updatePartiList.length == 0 ? noSchNo : updatePartiList;
 			console.log(formData);
 			
 			//console.log(formDataDel.get('schNo'))
-			
-			//선택인원 삭제
-			fetch("/deletePartiMemberAll", {
-				method: 'POST',
-				headers : {
-					'Content-Type': 'application/json'
-				},
-				body : JSON.stringify(schPlNo)
-			})
-			.then(response => response.text())
-			.then(data => {
-			    console.log(data);
-			})
-			.catch(error => {
-			    console.error('Error:', error);
-			});
 					
 			//기존 & 추가 인원 추가
 			fetch("/insertPartiMemberAll", {
@@ -1666,40 +1721,20 @@ function drawChart() {
 				let rC = res.result;
 				
 				if(rC == -1) {
-					alert('값이 들어가지 않음');
+					console.log('0명');
+					const currentURL = window.location.href;
+					window.location.href = currentURL;
 				} else if (rC >= 1) {
 					console.log(rC + '명 업데이트');
 					const currentURL = window.location.href;
 					window.location.href = currentURL;
-				} else if (rC == 0) {
-					console.log('0명');
-				} else {
+				}else {
 					alert('알 수 없는 접근')
 				}
 			});
 			
 		}
 	</script>
-	<!-- 시간 단위 조정 -->
-	<!-- <script>
-		// 10분 간격으로 선택할 수 있도록 설정
-		var startDateInput = document.getElementById('startDate');
-		startDateInput.addEventListener('input', function() {
-		  // 현재 선택된 날짜와 시간을 가져옴
-		  var selectedDate = new Date(startDateInput.value);
-		  // 분 단위를 가져옴
-		  var minutes = selectedDate.getMinutes();
-		  
-		  // 분 단위를 10분 간격으로 반올림
-		  var roundedMinutes = Math.round(minutes / 10) * 10;
-		  
-		  // 선택된 날짜와 시간을 조정하여 10분 간격으로 설정
-		  selectedDate.setMinutes(roundedMinutes);
-		  
-		  // 조정된 값을 다시 입력 요소에 설정
-		  startDateInput.value = selectedDate.toISOString().slice(0, 16);
-		});
-	</script> -->
 	
 	<!-- todo 버튼 상태 변경 -->
 	<script>
@@ -1740,22 +1775,68 @@ function drawChart() {
 		}
 	</script>
 
+	
+<!-- id값 가져오기 -->
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		
+		let selfId = /*[[${session.Id}]]*/;
+		let selfName = /*[[${session.Name}]]*/;
+	/*]]>*/
+</script>
 
-	<!-- 현재시간 구하기 -->
-	<script type="text/javascript" th:inline="javascript">
-		/*<![CDATA[*/
-	    	let today = new Date();
-	    	/* console.log(today)
-	    	let month = today.getMonth() + 1;  // 월
-			let date = today.getDate();  // 날짜
-			let day = today.getDay();  // 요일
-			let hours = today.getHours(); // 시
-			let minutes = today.getMinutes();  // 분 */
-			let currentTime = today.toLocaleString();
-			//console.log(currentTime)
-			//#dates.format(currentTime, 'yyyy-MM-ddTHH:mm')포맷 사용
-		/*]]>*/
-	</script>
-	<!-- <script src="../proPost/proPostJs/proPostDetail.js"></script> -->
+<script>
+//프로필 메모 변경
+function changeProfileNote() {
+	let oldProfileMemoTag = event.target.closest('.card').children[2].children[0].children[5];
+	let oldProfileMemoText = oldProfileMemoTag.textContent;
+	let profileId = event.target.closest('.fade').dataset.userInfoId;
+	let profileChangeButton = event.target;
+	
+	oldProfileMemoTag.innerHTML =
+				'<input type="text" placeholder="프로필 수정" id="newMemo">'
+				+'<span id="memoUpdate" class="spanCursor">수정</span>'
+				+'<span id="memoCancle" class="spanCursor">취소</span>';
+	
+	// 취소버튼
+	document.getElementById('memoCancle').addEventListener('click', function() {
+		event.target.parentNode.innerHTML='';
+		oldProfileMemoTag.textContent = oldProfileMemoText;
+	});
+
+	//수정 버튼
+	document.getElementById('memoUpdate').addEventListener('click', function() {
+		let newMemo = event.target.parentElement.children[0].value;
+		console.log(newMemo)
+		
+		if(newMemo == '') {
+			alert('값 입력');
+		} else {
+		fetch("/updateProfileMemo", {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					'profileNote' : newMemo,
+					'id' : profileId
+					 })
+			})
+			.then(response => response.json())
+			.then(res => {
+				console.log(res.result)
+				profileChangeButton.parentNode.innerHTML='';
+				oldProfileMemoTag.textContent = '메모 : ' + newMemo;
+			})
+		}
+
+	});
+
+
+}
+</script>	
+	
+	
+	
 </body>
 </html>

@@ -1,7 +1,6 @@
 package com.groo.bear.pro.controller;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,6 @@ public class ProPostTodoController {
 	public Map<String, Object> updateTotoStatus(@RequestBody ProPostTodoVO vo) {
 		int result = ps.updateTotoStatus(vo);
 		
-		return Collections.singletonMap("result", result>0?"성공":"취소");
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 }

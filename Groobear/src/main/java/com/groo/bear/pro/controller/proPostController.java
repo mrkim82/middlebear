@@ -1,5 +1,6 @@
 package com.groo.bear.pro.controller;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import com.groo.bear.comm.DateUtil;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostTaskService;
+import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.PublicCodeService;
@@ -30,6 +32,7 @@ import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
 @Controller
@@ -83,7 +86,9 @@ public class proPostController {
 		model.addAttribute("cTime" , new Date());//현재시간
 		model.addAttribute("beforeOneDay" , DateUtil.beforeOneDay());//하루전
 		model.addAttribute("afterOneDay" , DateUtil.afterOneDay());//하루뒤
+		model.addAttribute("readProAuth", proService.readProAuth(proNo));//권한 및 프로젝트 마스터 조회
 		
+		System.out.println("게시글"+model.getAttribute("projectPartiMember"));
 		switch (homeTab) {
 		//업무
 		case 1 :
@@ -101,6 +106,7 @@ public class proPostController {
 			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo));
 			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
 			model.addAttribute("readPartiList", Sch.readPartiList(proNo));
+			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
 			//할 일
 			model.addAttribute("readTodoList", todoNVote.readTodoList(proNo));//할 일 조회
 			model.addAttribute("readAllTodoListPer", todoNVote.readAllTodoListPer(proNo));//할 일 퍼센트 조회
@@ -120,8 +126,14 @@ public class proPostController {
 			break;
 		//캘린더
 		case 4 :
-			model.addAttribute("readWorkSchView", Sch.readWorkSchView(proNo));
-			System.out.println("게시글"+model.getAttribute("readWorkSchView"));
+			model.addAttribute("readWorkSchView", Sch.readWorkSchView(proNo));//업무, 일정 조회(바)
+			model.addAttribute("readWorkDetail", taskS.readWorkDetail(proNo));//업무 단건 조회
+			
+			model.addAttribute("readCalDetail", Sch.readCalDetail(proNo));//일정 단건
+			model.addAttribute("readPartiList", Sch.readPartiList(proNo));//참석자 조회
+			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
+			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
+			//System.out.println("게시글"+model.getAttribute("readWorkSchView"));
 			pagePath = "proPost/proPostSchd";
 			break;
 		//파일
@@ -139,7 +151,6 @@ public class proPostController {
 			pagePath = "proPost/proPostError";
 			break;
 		}
-		
 		
 		return pagePath;
 	}
@@ -184,42 +195,34 @@ public class proPostController {
 	@ResponseBody
 	public Map<String, Object> createPostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
 		HttpSession session = request.getSession();
-		Map <String, Object> map = new HashMap<>();
-		
 		vo.setId((String)session.getAttribute("Id"));
 		
-		map.put("result", proPostService.createPostComment(vo));
-		return map;
+		int comNo = proPostService.createPostComment(vo);
+		return Collections.singletonMap("result", comNo);
 	}
 	
 	//댓글 수정
 	@PutMapping("postUpdateComment")
 	@ResponseBody
 	public Map<String, Object> proGroupUpdate(@RequestBody ProPostCommentVO vo) {
-		Map <String, Object> map = new HashMap<>();
-		
-		map.put("result", proPostService.updatePostComment(vo));
-		return map;
+		int result = proPostService.updatePostComment(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//댓글 삭제
 	@PostMapping("postDeleteComment")
 	@ResponseBody
 	public Map<String, Object> deletePostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
-		Map <String, Object> map = new HashMap<>();
-		
-		map.put("result", proPostService.deletePostComment(vo.getComNo()));
-		return map;
+		int result = proPostService.deletePostComment(vo.getComNo());
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//업무 상태 수정
 	@PutMapping("updateWorkPostStatus")
 	@ResponseBody
 	public Map<String, Object> updateWorkPostStatus(@RequestBody ProPostWorkVO vo) {
-		Map <String, Object> map = new HashMap<>();
-		
-		map.put("result", proPostService.updateWorkPostStatus(vo));
-		return map;
+		int result = proPostService.updateWorkPostStatus(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//차트 조회
@@ -234,11 +237,21 @@ public class proPostController {
 	@PutMapping("updateWorkView")
 	@ResponseBody
 	private Map<String, Object> updateWorkView(HttpServletRequest request, @RequestBody ProWorkViewVO vo) {
-		Map <String, Object> map = new HashMap<>();
 		HttpSession session = request.getSession();
 		vo.setId((String)session.getAttribute("Id"));
 		
-		map.put("result", taskS.updateWorkView(vo));
-		return map;
+		int result = taskS.updateWorkView(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
+	
+	//프로필 메모 변경
+	@PutMapping("updateProfileMemo")
+	@ResponseBody
+	public Map<String, Object> updateProfileMemo(HttpServletRequest request, @RequestBody ProPostUserVO vo) {
+		int result = proPostService.updateProfileMemo(vo);
+		
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
+	
 }
