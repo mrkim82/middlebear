@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
+
 <style>
 * {
 	margin: 0;
@@ -96,7 +97,7 @@
 }
 </style>
 </head>
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
 <body>
 	<div class="chat_wrap">
 		<div class="header">MESSAGE</div>
@@ -125,104 +126,104 @@
 			</ul>
 		</div>
 	</div>
-	<script>
-		const Chat = (function() {
-				const myName = "blue";
-				let socket; // WebSocket connection
+	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>	
+<script th:inline="javascript">
 
-				// init 함수
-				function init() {
-						// Set up WebSocket connection
-						socket = new WebSocket('<Your WebSocket Server URL>');
+let roomNo = [[${roomNo}]];
+let myName = "username"; // 적당한 사용자명을 설정해주세요.
+let msgNo = 1; // 적당한 메시지 번호를 설정해주세요.
+let userId = "username"; // 적당한 사용자 아이디를 설정해주세요.
+let msgTime = new Date(); // 적당한 메시지 시간을 설정해주세요.
 
-						socket.onopen = function(event) {
-								console.log("Connected to WebSocket server");
-						};
+const stompClient = new StompJs.Client({
+    brokerURL: 'ws://localhost:8081/chatserver'
+});
+stompClient.activate();
 
-						socket.onmessage = function(event) {
-								const data = JSON.parse(event.data);
-								receive(data);
-						};
+stompClient.onConnect = (frame) => {
+	console.log('Connected: ' + frame);
+	console.log(roomNo);
+	stompClient.subscribe('/topic/messages/' + roomNo, (messages) => {
+		console.log(messages);
+        receive(JSON.parse(messages.body));
+    });
+};
 
-						socket.onerror = function(error) {
-								console.log("WebSocket Error: ", error);
-						};
+stompClient.onWebSocketError = (error) => {
+	console.error('Error with websocket', error);
+};
 
-						socket.onclose = function(event) {
-								console.log("WebSocket connection closed: ", event);
-						};
+stompClient.onStompError = (frame) => {
+	console.error('Broker reported error : ' + frame.headers['message']);
+	console.error('Additional details : ' + frame.body);
+};
 
-						$(document).on('keydown', 'div.input-div textarea', function(e) {
-								if (e.keyCode == 13 && !e.shiftKey) {
-										e.preventDefault();
-										const message = $(this).val();
+function disconnect() {
+    if(stompClient != null) {
+        stompClient.disconnect();
+    }
+    console.log("Disconnected");
+}
 
-										// 메시지 전송
-										sendAndClear(message);
-								}
-						});
-				}
+function createMessageTag(LR_className, senderName, message) {
+    let chatLi = $('div.chat.format ul li').clone();
+    chatLi.addClass(LR_className);
+    chatLi.find('.sender span').text(senderName);
+    chatLi.find('.message span').text(message);
+    return chatLi;
+}
 
-				function createMessageTag(LR_className, senderName, message) {
-						// 형식 가져오기
-						let chatLi = $('div.chat.format ul li').clone();
+function appendMessageTag(LR_className, senderName, message) {
+    const chatLi = createMessageTag(LR_className, senderName, message);
+    $('div.chat:not(.format) ul').append(chatLi);
+    $('div.chat').scrollTop($('div.chat').prop('scrollHeight'));
+}
 
-						// 값 채우기
-						chatLi.addClass(LR_className);
-						chatLi.find('.sender span').text(senderName);
-						chatLi.find('.message span').text(message);
+function sendMessage(message) {
+    stompClient.publish({
+        destination: "/app/chat/" + roomNo,
+        body: JSON.stringify({
+            'msgNo': msgNo, 
+            'roomNo': roomNo,
+            'userId' : userId,
+            'content' : message,
+            'msgTime' : msgTime
+        })
+    });
+}
 
-						return chatLi;
-				}
+function clearTextarea() {
+    $('div.input-div textarea').val('');
+}
 
-				function appendMessageTag(LR_className, senderName, message) {
-						const chatLi = createMessageTag(LR_className, senderName, message);
+function receive(data) {
+	console.log(data)
+    const LR = (data.userId != myName) ? "left" : "right";
+    appendMessageTag(LR, data.userId, data.content); 
+}
 
-						$('div.chat:not(.format) ul').append(chatLi);
+function sendAndClear(message) {
+    sendMessage(message);
+    clearTextarea();
+}
 
-						// 스크롤바 아래 고정
-						$('div.chat').scrollTop($('div.chat').prop('scrollHeight'));
-				}
+$(function() {
+    // Enter 키 이벤트
+    $(document).on('keydown', 'div.input-div textarea', function(e) {
+        if (e.keyCode == 13 && !e.shiftKey) {
+            e.preventDefault();
+            const message = $(this).val();
+            sendAndClear(message);
+        }
+    });
 
-				// 메세지 전송
-				function sendMessage(message) {
-						const data = {
-								"senderName" : myName,
-								"message" : message
-						};
-
-						// Send message via WebSocket
-						socket.send(JSON.stringify(data));
-				}
-
-				function clearTextarea() {
-						$('div.input-div textarea').val('');
-				}
-
-				function receive(data) {
-						const LR = (data.senderName != myName) ? "left" : "right";
-						appendMessageTag(LR, data.senderName, data.message);
-				}
-
-				function sendAndClear(message) {
-						sendMessage(message);
-						clearTextarea();
-				}
-
-				return {
-						'init' : init,
-						'sendAndClear' : sendAndClear
-				};
-		})();
-
-		$(function() {
-				Chat.init();
-
-				$('#sendMessageBtn').on('click', function() {
-						const message = $('div.input-div textarea').val();
-						Chat.sendAndClear(message);
-				});
-		});
+    // Send 버튼 클릭 이벤트 추가
+    $('#sendMessageBtn').on('click', function() {
+        const message = $('div.input-div textarea').val();
+        sendAndClear(message);
+    });
+});
 </script>
 </body>
 </html>

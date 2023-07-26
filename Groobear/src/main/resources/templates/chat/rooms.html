@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Chat List</title>
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <style>
     #chatlist {
     width: 300px;
@@ -58,70 +59,76 @@
     <ul id="chatlist">
         <!-- Chat rooms will be added here dynamically -->
     </ul>
-    <script src="script.js"></script>
 </body>
 <script>
-function createChatroomElement(chatroom) {
-    const li = document.createElement('li');
-    li.classList.add('chatroom');
+    function createChatroomElement(chatroom) {
+        const li = document.createElement('li');
+        li.classList.add('chatroom');
 
-    const img = document.createElement('img');
-    img.src = chatroom.profilePic;
-    img.alt = 'Profile picture';
-    img.classList.add('profile-pic');
+        const img = document.createElement('img');
+        img.src = chatroom.profilePic;
+        img.alt = 'Profile picture';
+        img.classList.add('profile-pic');
 
-    const infoDiv = document.createElement('div');
-    infoDiv.classList.add('chatroom-info');
-    const name = document.createElement('div');
-    name.textContent = chatroom.name;
-    name.classList.add('chatroom-name');
-    const lastMessage = document.createElement('div');
-    lastMessage.textContent = chatroom.lastMessage;
-    infoDiv.appendChild(name);
-    infoDiv.appendChild(lastMessage);
+        const infoDiv = document.createElement('div');
+        infoDiv.classList.add('chatroom-info');
+        const name = document.createElement('div');
+        name.textContent = chatroom.name;
+        name.classList.add('chatroom-name');
+        const lastMessage = document.createElement('div');
+        lastMessage.textContent = chatroom.lastMessage;
+        infoDiv.appendChild(name);
+        infoDiv.appendChild(lastMessage);
 
-    const notification = document.createElement('div');
-    if (chatroom.newMessages > 0) {
-        notification.textContent = chatroom.newMessages;
-        notification.classList.add('new-message-notification');
+        const notification = document.createElement('div');
+        if (chatroom.newMessages > 0) {
+            notification.textContent = chatroom.newMessages;
+            notification.classList.add('new-message-notification');
+        }
+
+        li.appendChild(img);
+        li.appendChild(infoDiv);
+        li.appendChild(notification);
+
+        li.addEventListener('click', () => {
+            alert(`You have selected ${chatroom.name}`);
+        });
+
+        return li;
     }
 
-    li.appendChild(img);
-    li.appendChild(infoDiv);
-    li.appendChild(notification);
+    const chatlist = document.getElementById('chatlist');
 
-    li.addEventListener('click', () => {
-        alert(`You have selected ${chatroom.name}`);
+    const socket = new SockJS('http://localhost:8081/chatserver/info');
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function(frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/chatrooms', function(chatrooms) {
+            const parsedChatrooms = JSON.parse(chatrooms.body);
+            chatlist.innerHTML = '';
+            parsedChatrooms.forEach(chatroom => {
+                const chatroomElement = createChatroomElement(chatroom);
+                chatlist.appendChild(chatroomElement);
+            });
+        });
     });
 
-    return li;
-}
+    document.getElementById('addChatroom').addEventListener('click', () => {
+        // Placeholder data for a new chatroom
+        const newChatroom = { 
+            id: Date.now(), 
+            name: 'New Chat Room', 
+            lastMessage: 'No messages yet', 
+            newMessages: 0, 
+            profilePic: 'placeholder.jpg' 
+        };
 
-const chatlist = document.getElementById('chatlist');
+        const chatroomElement = createChatroomElement(newChatroom);
+        chatlist.appendChild(chatroomElement);
 
-fetch('https://your-api-endpoint/chatrooms')
-    .then(response => response.json())
-    .then(chatrooms => {
-        chatrooms.forEach(chatroom => {
-            const chatroomElement = createChatroomElement(chatroom);
-            chatlist.appendChild(chatroomElement);
-        });
-    })
-    .catch(error => console.error('Error:', error));
-
-document.getElementById('addChatroom').addEventListener('click', () => {
-    // Placeholder data for a new chatroom
-    const newChatroom = { 
-        id: Date.now(), 
-        name: 'New Chat Room', 
-        lastMessage: 'No messages yet', 
-        newMessages: 0, 
-        profilePic: 'placeholder.jpg' 
-    };
-
-    const chatroomElement = createChatroomElement(newChatroom);
-    chatlist.appendChild(chatroomElement);
-});
-
-</script>
+        // Here we would also send a message to the server to create a new chat room
+        // stompClient.send("/app/newChatroom", {}, JSON.stringify(newChatroom));
+    });
+    </script>
 </html>
