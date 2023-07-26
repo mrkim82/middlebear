@@ -10,4 +10,9 @@ public class ProPostWorkSchVO {
 	private Date start;
 	private Date end;
 	
+	private int proPostNo;
+	private String postType;
+	private int proNo;
+	
+	
 }

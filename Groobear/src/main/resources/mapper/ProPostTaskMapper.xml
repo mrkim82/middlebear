@@ -63,7 +63,7 @@
 		ON(b.work_group_no = c.work_group_no)
 		WHERE a.pro_no = #{proNo}
 		AND a.post_type = 1
-		ORDER BY pro_post_no
+		ORDER BY a.pro_post_no
 	</select>
 
 	<!-- 멤버별 업무 조회 설정 -->

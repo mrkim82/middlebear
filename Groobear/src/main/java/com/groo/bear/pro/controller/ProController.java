@@ -169,20 +169,7 @@ public class ProController {
 	@PutMapping("proGroupNameC")
 	@ResponseBody
 	public Map<String, Object> proGroupUpdate(@RequestBody ProGroupVO vo) {
-//		Map <String, Object> map = new HashMap<>();
-//		String res;
-		
 		int result = proService.updateGroupName(vo);
-		
-//		if(result > 0) {
-//			res = "성공";
-//			
-//		} else {
-//			res = "취소";
-//		}
-//		
-//		map.put("result", res);
-//		System.out.println(vo);
 		
 		return Collections.singletonMap("result", result>0?"성공":"취소");
 	}
