@@ -22,7 +22,9 @@ public interface ProPostService {
 	
 	// 게시글 조회
 	public List<ProPostFeedVO> readFeedPost(int proNo, int postType);
-		
+	// 게시글 삭제
+	public int deleteProPost(int proPostNo);
+	
 	// 글 작성
 	public void createPostWriting(ProPostWritingVO vo);
 	// 글 조회

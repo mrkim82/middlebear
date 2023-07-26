@@ -111,4 +111,9 @@ public class ProPostServiceImpl implements ProPostService {
 		return ppm.updateProfileMemo(vo);
 	}
 
+	@Override
+	public int deleteProPost(int proPostNo) {
+		return ppm.deleteProPost(proPostNo);
+	}
+
 }

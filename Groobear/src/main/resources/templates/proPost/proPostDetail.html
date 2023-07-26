@@ -3,6 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/proPostTiles}">
 <head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script
 		th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js}"></script>
@@ -39,6 +40,38 @@ p {
 }
 [type="checkbox"] {
 	margin-right: 15px;
+}
+.popover {
+	position: relative;
+	display: inline-block;
+}
+
+.popover-content {
+	display: none;
+	position: absolute;
+	top: 30px;
+	left: 0;
+	width: 200px;
+	background-color: #f1f1f1;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+/* popover-content가 보이도록 설정 */
+.show {
+	display: block;
+}
+
+/* ul li 스타일 */
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	padding: 5px;
 }
 </style>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -278,7 +311,9 @@ function drawChart() {
 										  	<p>업무 그룹</p>
 											<select class="form-select" name="workGroup" id="workPostGroup">
 												<th:block th:each="group : ${readWorkGroup}">
-														<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}" th:selected="${group.workGroupSeq == 1}"></option>
+														<option th:text="${group.workGroupName}"
+																th:value="${group.workGroupNo}"
+																th:selected="${group.workGroupSeq == 1}"></option>
 												</th:block>
 											</select>
 										  	</div>
@@ -413,10 +448,12 @@ function drawChart() {
 									<div>
 										<input type="text" placeholder="제목을 입력하세요." class="postTitle">
 									</div>
+									<br>
 									<!-- 할 일 입력 -->
 									<div>
-										<ul data-todo-make-list="todoTarget">
-											<li>
+										<ul class="list-group" data-todo-make-list="todoTarget">
+											<li class="list-group-item"> </li>
+											<!-- <li>
 												<input type="text" placeholder="할 일 추가">
 												<input type="datetime-local">
 												<select class="form-select" name="todoMember">
@@ -428,8 +465,36 @@ function drawChart() {
 														th:if="${member.id != session.Id}"></option>
 													</th:block>
 												</select>
-											</li>
+											</li> -->
 										</ul>
+
+										<div>
+											<input id="todoContent"
+												   type="text"
+												   class="js-todo-content-input"
+												   placeholder="할 일 추가 (Enter) / 최대 60자"
+												   autocomplete="off"
+												   maxlength="60">
+											<div class="todo-menu">
+											<span>
+													<input type="date">
+													<span class="material-symbols-outlined popover" onclick="togglePopover()">account_circle</span>
+											</span>
+												<!-- 인원 팝 오버 -->
+												<div class="popover-content" id="popoverContent">
+													<ul class="list-group">
+														<li class="list-group-item"
+																th:each="member : ${projectPartiMember}"
+																th:text="${member.name}"
+																th:todo-popover-user-id="${member.id}"
+																th:style="${member.id == session.Id ? 'background-color: #eee;' : ''}">
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+
+
 									</div>
 									<!-- 할 일 입력 종료 -->
 								</div>
@@ -533,7 +598,7 @@ function drawChart() {
 								<div>
 							        <span th:text="${allPost.profileImg}"></span>
 							        <span th:text="${allPost.name}"></span>
-							        <span th:text="${allPost.postDate}"></span>
+							        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
 							        <span th:text="업무번호 + ${allPost.workNo}"></span>
 							        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
 							        <span onclick="deletePost()" style="cursor: pointer;">X</span>
@@ -541,7 +606,9 @@ function drawChart() {
 								<div class="card-header" th:text="'업무 : ' + ${allPost.postTitle}">
 									<!-- 글 제목 -->
 								</div>
-								<div class="workFeedPostStatus" th:attr="data-feed-work-type=${allPost.workStatus}" style="text-align: center;">
+								<div class="workFeedPostStatus"
+									 th:attr="data-feed-work-type=${allPost.workStatus}"
+									 style="text-align: center;">
 								    <button type="button" class="btn"
 								    		th:classappend="${allPost.workStatus == '1' ? 'btn-primary' : 'btn-outline-primary'}"
 								            data-work-type-status="1" onclick="toggleFeedButtonStyle(this)">요청</button>
@@ -562,7 +629,8 @@ function drawChart() {
 									<!-- 추가 항목 -->
 									<div>
 										<p>
-										  <button class="btn btn-primary" type="button" data-toggle="collapse" th:data-target="'#collapseExample' + ${allPost.workNo}"
+										  <button class="btn btn-primary" type="button"
+										  		  data-toggle="collapse" th:data-target="'#collapseExample' + ${allPost.workNo}"
 										  			aria-expanded="false" aria-controls="collapseExample">
 										    + 항목추가입력
 										  </button>
@@ -576,12 +644,15 @@ function drawChart() {
 										  	<!-- 시작일 추가 -->
 										  	<div>
 										  		<p>시작일</p>
-													<input type="datetime-local" id="startWorkDate2" th:value="${#dates.format(allPost.workStartDay, 'yyyy-MM-dd HH:mm')}">
+													<input type="datetime-local" id="startWorkDate2"
+														   th:value="${#dates.format(allPost.workStartTime, 'yyyy-MM-dd HH:mm')}">
 										  	</div>
 										  	<!-- 마감일 추가 -->
 										  	<div>
 										  		<p>마감일</p>
-										  		<input type="datetime-local"  id="endWorkDate2" th:min="${#dates.format(#calendars.createNow())}" th:value="${#dates.format(allPost.workStartTime, 'yyyy-MM-dd HH:mm')}">
+										  		<input type="datetime-local" id="endWorkDate2"
+										  			   th:min="${#dates.format(cTime)}"
+										  			   th:value="${#dates.format(allPost.workEndTime, 'yyyy-MM-dd HH:mm')}">
 										  	</div>
 										  	<!-- 우선순위 추가 -->
 										  	<div>
@@ -648,10 +719,11 @@ function drawChart() {
 														th:if="${allPost.proPostNo == com.proPostNo}">
 														<span th:utext="${com.profileImg}"></span>
 														<span th:text="${com.name}"></span>
-														<span th:text="${com.comDate}"></span>
+														<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 														<span th:text="${com.comContent}"></span>
 														<th:block th:if="${com.id == session.Id}">
-															<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+															<span onclick="UpdateWritingComment()" class="spanCursor"
+																  style="color: red">수정</span>
 															<span></span>
 															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
 														</th:block>
@@ -679,7 +751,7 @@ function drawChart() {
 								<div>
 							        <span th:text="${allPost.profileImg}"></span>
 							        <span th:text="${allPost.name}"></span>
-							        <span th:text="${allPost.postDate}"></span>
+							        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
 							        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
 							        <span onclick="deletePost()" style="cursor: pointer;">X</span>
 							    </div>
@@ -707,14 +779,16 @@ function drawChart() {
 												<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
 												<h6 th:text="댓글"></h6>
 												<ul class="list-unstyled">
-													<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+													<li th:each="com : ${projectWritingDetaisComment}"
+														th:data-post-code="${com.comNo}"
 														th:if="${allPost.proPostNo == com.proPostNo}">
 														<span th:utext="${com.profileImg}"></span>
 														<span th:text="${com.name}"></span>
-														<span th:text="${com.comDate}"></span>
+														<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 														<span th:text="${com.comContent}"></span>
 														<th:block th:if="${com.id == session.Id}">
-															<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+															<span onclick="UpdateWritingComment()" class="spanCursor"
+																  style="color: red">수정</span>
 															<span></span>
 															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
 														</th:block>
@@ -738,20 +812,20 @@ function drawChart() {
 				<!-- 3.일정 -->
 				<th:block th:if="${allPost.postType == '3'}">
 					<div class="card" style="margin-bottom: 15px; background-color: #fff;"
-						 th:data-feed-post-sch-no="${allPost.proPostNo}" th:data-feed-sch-no="${allPost.schNo}">
+						 th:data-feed-post-no="${allPost.proPostNo}" th:data-feed-sch-no="${allPost.schNo}">
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
 						<div>
 								<span th:text="${allPost.profileImg}"></span>
 								<span th:text="${allPost.name}"></span>
-								<span th:text="${allPost.postDate}"></span>
+								<span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
 								<span onclick="updatePost()" style="cursor: pointer;">수정</span>
 						        <span onclick="deletePost()" style="cursor: pointer;">X</span>
 							</div>
 						<div class="card-header" th:text="'일정 : ' + ${allPost.postTitle}">
 							<!-- 글 제목 -->
 						</div>
-						<th:block th:text="'시작' + ${allPost.schStartTime}"></th:block>
-						<th:block th:text="'종료' + ${allPost.schEndTime}"></th:block>
+						<th:block th:text="'시작' + ${#dates.format(allPost.schStartTime, 'yyyy-MM-dd HH:mm')}"></th:block>
+						<th:block th:text="'종료' + ${#dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm')}"></th:block>
 						<div class="card-body">
 							<!-- 참석자 존 -->
 							<div>
@@ -770,8 +844,9 @@ function drawChart() {
 							
 								<!-- 참석자 리스트 버튼 -->
 								<div>
-									<button type="button" class="btn btn-light" data-toggle="modal" th:data-target="'#schPartiListModal' + ${allPost.proPostNo}"
-											th:if="${#dates.format(allPost.schEndTime) >= #dates.format(#calendars.createNow())}">
+									<button type="button" class="btn btn-light" data-toggle="modal"
+											th:data-target="'#schPartiListModal' + ${allPost.proPostNo}"
+											th:if="${#dates.format(allPost.schEndTime) >= #dates.format(cTime)}">
 													참석자 변경
 									</button>
 									<!-- 참석자 리스트 Modal -->
@@ -782,7 +857,8 @@ function drawChart() {
 												<div class="modal-content">
 													<div class="modal-header">
 														<h1 class="modal-title fs-5" id="exampleModalLabel">참석자 변경</h1>
-														<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+														<button type="button" class="btn-close" data-dismiss="modal"
+																aria-label="Close"></button>
 													</div>
 													<!-- 내용 -->
 													<div class="modal-body">
@@ -790,7 +866,8 @@ function drawChart() {
 															<li style="border-bottom: 1px solid gray; list-style-type: none;">
 																<div>
 																	<input type="checkbox" value="selectAll2" id="selectAll"
-																		onclick='' /><label for="selectAll" style="cursor: pointer;">전체선택</label>
+																		onclick='' /><label for="selectAll"
+																		style="cursor: pointer;">전체선택</label>
 																		<input type="text" placeholder="참석자명 검색">
 																</div>
 															</li>
@@ -799,22 +876,24 @@ function drawChart() {
 																<li style="list-style-type: none">
 																	<nav class="nav">
 																			
-																			<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck != null}">
-																				<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
-																					th:checked="${rpl.id == member.id}"
-																					th:data-sch-status="${rpl.partiCheck}"
-																					th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
-																			</th:block>
-																			<th:block th:each="rpl : ${readPartiList}" th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck == null}">
-																				<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
-																					th:data-sch-status="${rpl.partiCheck}"
-																					th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
-																			</th:block>
-																			
-																			<label th:for="'schPartiList' + ${member.id}">
-																				<a class="nav-link" th:utext="${member.profileImg}"></a>
-																				<a class="nav-link" th:text="${member.name}"></a>
-																			</label>
+																		<th:block th:each="rpl : ${readPartiList}"
+																				  th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck != null}">
+																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
+																				th:checked="${rpl.id == member.id}"
+																				th:data-sch-status="${rpl.partiCheck}"
+																				th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
+																		</th:block>
+																		<th:block th:each="rpl : ${readPartiList}"
+																				  th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck == null}">
+																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
+																				th:data-sch-status="${rpl.partiCheck}"
+																				th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
+																		</th:block>
+																		
+																		<label th:for="'schPartiList' + ${member.id}">
+																			<a class="nav-link" th:utext="${member.profileImg}"></a>
+																			<a class="nav-link" th:text="${member.name}"></a>
+																		</label>
 																	</nav>
 																</li>
 															</th:block>
@@ -841,7 +920,8 @@ function drawChart() {
 								<!-- 내용이 여기에 들어갑니다. -->
 							</th:block>
 							<!-- 참석 여부 버튼 -->
-							<th:block th:each="rparti : ${readSchparti}" th:if="${rparti.schNo == allPost.schNo and #dates.format(allPost.schEndTime) >= #dates.format(#calendars.createNow())}">
+							<th:block th:each="rparti : ${readSchparti}"
+									  th:if="${rparti.schNo == allPost.schNo and #dates.format(allPost.schEndTime) >= #dates.format(cTime)}">
 								<div th:attr="data-feed-sch-type=${rparti.partiCheck}" style="text-align: center;">
 									<button type="button" class="btn"
 										th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
@@ -868,7 +948,7 @@ function drawChart() {
 												th:if="${allPost.proPostNo == com.proPostNo}">
 												<span th:utext="${com.profileImg}"></span>
 												<span th:text="${com.name}"></span>
-												<span th:text="${com.comDate}"></span>
+												<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 												<span th:text="${com.comContent}"></span>
 												<th:block th:if="${com.id == session.Id}">
 													<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
@@ -896,12 +976,12 @@ function drawChart() {
 				<!-- 4.할 일 -->
 				<th:block th:if="${allPost.postType == '4'}">
 					<div class="card" style="margin-bottom: 15px; background-color: #fff;"
-						 th:data-feed-post-todo-no="${allPost.proPostNo}">
+						 th:data-feed-post-no="${allPost.proPostNo}">
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
 						<div>
 					        <span th:text="${allPost.profileImg}"></span>
 					        <span th:text="${allPost.name}"></span>
-					        <span th:text="${allPost.postDate}"></span>
+					        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
 					        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
 					        <span onclick="deletePost()" style="cursor: pointer;">X</span>
 					    </div>
@@ -912,8 +992,10 @@ function drawChart() {
 							<!-- 진척도 바 -->
 							<div>
 								<div class="progress">
-									<th:block th:each="prog : ${readAllTodoListPer}" th:if="${prog.proPostNo == allPost.proPostNo}">
-										<div class="progress-bar bg-info" role="progressbar" th:style="'width: ' + ${prog.per} + '%'" aria-valuemin="0" aria-valuemax="100"></div>
+									<th:block th:each="prog : ${readAllTodoListPer}"
+											  th:if="${prog.proPostNo == allPost.proPostNo}">
+										<div class="progress-bar bg-info" role="progressbar"
+											 th:style="'width: ' + ${prog.per} + '%'" aria-valuemin="0" aria-valuemax="100"></div>
 									<th:block>
 								</div>
 							</div>
@@ -944,10 +1026,11 @@ function drawChart() {
 												th:if="${allPost.proPostNo == com.proPostNo}">
 												<span th:utext="${com.profileImg}"></span>
 												<span th:text="${com.name}"></span>
-												<span th:text="${com.comDate}"></span>
+												<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 												<span th:text="${com.comContent}"></span>
 												<th:block th:if="${com.id == session.Id}">
-													<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+													<span onclick="UpdateWritingComment()" class="spanCursor"
+														  style="color: red">수정</span>
 													<span></span>
 													<span onclick="deleteWritingComment()" class="spanCursor">X</span>
 												</th:block>
@@ -971,12 +1054,12 @@ function drawChart() {
 				<!-- 5.투표 -->
 				<th:block th:if="${allPost.postType == '5'}">
 					<div class="card" style="margin-bottom: 15px; background-color: #fff;"
-						 th:data-feed-post-vote-no="${allPost.voteNo}">
+						 th:data-feed-post-no="${allPost.proPostNo}" th:data-feed-vote-no="${allPost.voteNo}">
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
 						<div>
 					        <span th:text="${allPost.profileImg}"></span>
 					        <span th:text="${allPost.name}"></span>
-					        <span th:text="${allPost.postDate}"></span>
+					        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
 					        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
 					        <span onclick="deletePost()" style="cursor: pointer;">X</span>
 					    </div>
@@ -988,7 +1071,8 @@ function drawChart() {
 						        <button type="button" class="btn btn-outline-secondary">투표 종료</button>
 						    </th:block>
 					    </div>
-					    	<div class="card-header" th:text="'투표 : ' + ${allPost.postTitle} + ' 투표 마감일 ' + ${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd')} + '까지'">
+					    	<div class="card-header"
+					    		 th:text="'투표 : ' + ${allPost.postTitle} + ' 투표 마감일 ' + ${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd')} + '까지'">
 					    
 								<!-- 글 제목 -->
 							</div>
@@ -998,8 +1082,10 @@ function drawChart() {
 							
 							<!-- 투표창 -->
 							<ul class="list-group">
-							  <li class="list-group-item" th:each="vtCheck : ${readVoteListCheck}" th:if="${vtCheck.voteNo == allPost.voteNo}">
-							  	<span th:utext="${vtCheck.voteDetailImg}" th:data-vote-detail-img="${vtCheck.voteDetailImg}"></span>
+							  <li class="list-group-item" th:each="vtCheck : ${readVoteListCheck}"
+							  	  th:if="${vtCheck.voteNo == allPost.voteNo}">
+							  	<span th:utext="${vtCheck.voteDetailImg}"
+							  		  th:data-vote-detail-img="${vtCheck.voteDetailImg}"></span>
 							    <input class="form-check-input me-1" type="checkbox"
 							    	   th:data-vote-detail-no="${vtCheck.voteDetailNo}"
 									   th:onclick="changeTodoStatus()"
@@ -1020,10 +1106,11 @@ function drawChart() {
 												th:if="${allPost.proPostNo == com.proPostNo}">
 												<span th:utext="${com.profileImg}"></span>
 												<span th:text="${com.name}"></span>
-												<span th:text="${com.comDate}"></span>
+												<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 												<span th:text="${com.comContent}"></span>
 												<th:block th:if="${com.id == session.Id}">
-													<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+													<span onclick="UpdateWritingComment()" class="spanCursor"
+														  style="color: red">수정</span>
 													<span></span>
 													<span onclick="deleteWritingComment()" class="spanCursor">X</span>
 												</th:block>
@@ -1088,8 +1175,8 @@ function drawChart() {
 				        <div class="card-deck">
 						  <div class="card">
 						  <!-- 프사 -->
-						  	<img th:src="@{|/display?fileName=${#strings.replace(mem.uploadPath,'\','/')}/s_${mem.uuid}_${mem.fileName}|}"
-						  		 class="card-img-top" alt="프로필 이미지">
+						  	<!-- <img th:src="@{|/display?fileName=${#strings.replace(mem.uploadPath,'\','/')}/s_${mem.uuid}_${mem.fileName}|}"
+						  		 class="card-img-top" alt="프로필 이미지"> -->
 					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					          <span aria-hidden="true">&times;</span>
 					        </button>
@@ -1494,10 +1581,17 @@ function drawChart() {
 			// console.log('업무그룹',workPostGroup.value);
 			// console.log('업무상태',selectedButton.dataset.workTypeStatus);
 			// console.log('우선순위',workPostPri.value);
-			// console.log(startWorkDate.value);
-			// console.log(endWorkDate.value);
+			 console.log(startWorkDate.value);
+			 console.log(endWorkDate.value);
 			// console.log('내용',workWritingContent.value);
 			// console.log('참여자', workPersonArr);
+			
+			let newStartDate = startWorkDate.value == '' ? startWorkDate.value : convertToFormattedDateTime(startWorkDate.value);
+			let newEndDate = endWorkDate.value == '' ? endWorkDate.value : convertToFormattedDateTime(endWorkDate.value);
+			
+			console.log('뉴데잇',newStartDate)
+			console.log(newEndDate)
+			
 			fetch("/postCreateWork", {
 				method: 'POST',
 				headers: {
@@ -1509,10 +1603,10 @@ function drawChart() {
 	   				'workGroupNo': workPostGroup.value,
 	   				'workStatus': selectedButton.dataset.workTypeStatus,
 	   				'workPri': workPostPri.value,
-	   				'workStartDay': startWorkDate.value,
-	   				'workStartTime': startWorkDate.value,
-	   				'workEndDay': endWorkDate.value,
-	   				'workEndTime': endWorkDate.value,
+	   				'workStartDay': newStartDate,
+	   				'workStartTime': newStartDate,
+	   				'workEndDay': newEndDate,
+	   				'workEndTime': newEndDate,
 	   				'workContent': workWritingContent.value,
 	   				'workPersonArr': workPersonArr
 	   			})
@@ -1865,7 +1959,26 @@ function changeProfileNote() {
 <!-- 글 삭제 -->	
 <script>
 	function deletePost() {
-		console.log(event.target.closest('.card'))
+		let delProPostNo = Number(event.target.closest('.card').dataset.feedPostNo);
+		let delTarget = event.target.closest('.card');
+		let proWorkCheck = event.target.closest('.card').dataset.feedWorkNo;
+
+		fetch('/delProPost', {
+			method: 'POST',
+	        headers : {
+	            'Content-Type': 'application/json'
+	        },
+	        body : JSON.stringify(delProPostNo)
+		})
+		.then(response => response.json())
+		.then(res => {
+			if(res.result == '성공') {
+				delTarget.remove();
+				//차트 재호출
+				proWorkCheck == null ? '' : google.charts.setOnLoadCallback(drawChart);
+			}
+		});
+		
 	}
 </script>
 
@@ -1989,7 +2102,6 @@ function changeProfileNote() {
 			}
 		}
 		
-		
 		if(count > 0 ) {
 			alert('빈값이 있습니다');
 			return false;
@@ -2002,6 +2114,36 @@ function changeProfileNote() {
 		//fetch()
 
 	}
+</script>
+
+<!-- 시간 변환 -->
+<script type="text/javascript">
+function convertToFormattedDateTime(dateTimeStr) {
+	  const date = new Date(dateTimeStr);
+	  const year = date.getFullYear();
+	  const month = String(date.getMonth() + 1).padStart(2, '0');
+	  const day = String(date.getDate()).padStart(2, '0');
+	  const hours = String(date.getHours()).padStart(2, '0');
+	  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	  return `${year}-${month}-${day} ${hours}:${minutes}`;
+	}
+</script>
+
+<script>
+function togglePopover() {
+	let popoverContent = document.getElementById('popoverContent');
+	popoverContent.classList.toggle('show');
+}
+
+// popover-content 외의 곳을 클릭하면 popover를 닫도록 설정
+document.addEventListener('click', function (event) {
+	const popover = document.querySelector('.popover');
+	if (!popover.contains(event.target)) {
+		const popoverContent = document.getElementById('popoverContent');
+		popoverContent.classList.remove('show');
+	}
+});
 </script>
 
 

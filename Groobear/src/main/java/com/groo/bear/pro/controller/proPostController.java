@@ -259,4 +259,12 @@ public class proPostController {
 	    return proPostService.readPostChart(proNo);
 	}
 	
+	//댓글 삭제
+	@PostMapping("delProPost")
+	@ResponseBody
+	public Map<String, Object> deleteProPost(HttpServletRequest request, @RequestBody int delProPostNo) {
+		int result = proPostService.deleteProPost(delProPostNo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
 }

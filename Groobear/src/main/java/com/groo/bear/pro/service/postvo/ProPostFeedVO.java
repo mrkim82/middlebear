@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -27,16 +29,36 @@ public class ProPostFeedVO {
     private String voteEndCheck;
     private int proNo;
     
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+9")
     private Date postDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+9")
     private Date workStartDay;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    //@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+9")
     private Date workStartTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+9")
     private Date workEndDay;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+9")
     private Date workEndTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+9")
     private Date schStartDay;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+9")
     private Date schStartTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+9")
     private Date schEndDay;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+9")
     private Date schEndTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH-mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+9")
     private Date voteEndDay;
     
     private int workGroupNo;

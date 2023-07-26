@@ -216,6 +216,11 @@
 		        TO_DATE('2023-07-22 18:00', 'YYYY-MM-DD HH24:MI')
 		)
 	</insert>
-	
+
+	<!-- 글 삭제  -->
+	<delete id="deleteProPost">
+		DELETE FROM pro_post
+		WHERE pro_post_no = #{proPostNo}	
+	</delete>	
 	
 </mapper>
