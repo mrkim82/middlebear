@@ -35,11 +35,6 @@
   	<select id="findByNo" resultType="FilesVO">
   		select * from files where ${name} = #{no}
   	</select>
-<<<<<<< HEAD
-  
-=======
-  	
->>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
   	<!-- 프로필 사진 등록 -->
   	<insert id="insertProfImg" parameterType="EmpVO">
   		insert into files (
