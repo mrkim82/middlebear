@@ -46,7 +46,7 @@ public class ProPostTaskServiceImpl implements ProPostTaskService {
 	}
 
 	@Override
-	public String updateWorkView(ProWorkViewVO vo) {
+	public int updateWorkView(ProWorkViewVO vo) {
 		vo.setWorkName(Optional.ofNullable(vo.getWorkName()).orElse("N"));
 	    vo.setWorkStatus(Optional.ofNullable(vo.getWorkStatus()).orElse("N"));
 	    vo.setWorkPri(Optional.ofNullable(vo.getWorkPri()).orElse("N"));
@@ -58,17 +58,12 @@ public class ProPostTaskServiceImpl implements ProPostTaskService {
 	    vo.setWorkWriter(Optional.ofNullable(vo.getWorkWriter()).orElse("N"));
 	    vo.setWorkUpdateDay(Optional.ofNullable(vo.getWorkUpdateDay()).orElse("N"));
 	    
-	    String res;
-	    int result = task.updateWorkView(vo);
-	    
-	    if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-	    
-		return res;
+		return task.updateWorkView(vo);
+	}
+
+	@Override
+	public int deleteWorkPerson(String id) {
+		return task.deleteWorkPerson(id);
 	}
 
 }

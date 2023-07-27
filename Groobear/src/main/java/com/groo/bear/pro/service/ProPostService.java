@@ -35,15 +35,18 @@ public interface ProPostService {
 	
 	//댓글
 	// 댓글 작성
-	public String createPostComment(ProPostCommentVO vo);
+	public int createPostComment(ProPostCommentVO vo);
 	// 댓글 삭제
-	public String deletePostComment(int comNo);
+	public int deletePostComment(int comNo);
 	// 댓글 수정
-	public String updatePostComment(ProPostCommentVO vo);
+	public int updatePostComment(ProPostCommentVO vo);
 	
 	//게시글 조회 업무 상태 변경
-	public String updateWorkPostStatus(ProPostWorkVO vo);
+	public int updateWorkPostStatus(ProPostWorkVO vo);
 	
 	//차트 조회
 	public List<ProPostChartVO> readPostChart(int proNo);
+	
+	// 프로필 메모 수정
+	public int updateProfileMemo(ProPostUserVO vo);
 }

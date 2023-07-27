@@ -23,17 +23,19 @@
 	<!-- 프로젝트 조회 -->
 	<!-- 나중에 orderby 알림순 추가 -->
 	<select id="readProject" resultType="ProVO" parameterType="hashMap">
-		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no, m.home_tab, u.pro_range, u.pro_parti_filter
-		FROM pro p, pro_mem m, users u
-		WHERE m.id = #{id}
-		AND p.pro_no = m.pro_no
-		AND p.id = u.id
-		AND m.pro_hide_check = 'N'
-		AND m.pro_parti_check = 'Y'
-		<if test="proPartiFilter != '' and proPartiFilter != null">
-		 	AND p.id = #{proPartiFilter}
+		SELECT p.pro_name, 
+		       m.pro_color, 
+		       m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no, m.home_tab, u.pro_range, u.pro_parti_filter
+		  FROM pro p, pro_mem m, users u
+		 WHERE m.id = #{id}
+		   AND p.pro_no = m.pro_no
+		   AND p.id = u.id
+		   AND m.pro_hide_check = 'N'
+		   AND m.pro_parti_check = 'Y'
+		<if test="proPartiFilter != null and proPartiFilter != ''">
+		   AND p.id = #{proPartiFilter}
 	 	</if>
-		ORDER BY ${proRange}
+		 ORDER BY ${proRange}
 	</select>
 	
 	<!-- 정렬 조회 -->
@@ -45,8 +47,11 @@
 	
 	<!-- 프로젝트 참가자 수 -->
 	<select id="readProjectParti" resultType="ProVO">
-		SELECT m1.pro_no, COUNT(m1.pro_mem_no) AS count
-		FROM pro_mem m1 INNER JOIN (SELECT pro_no FROM pro_mem WHERE id = #{id}) m2
+		SELECT m1.pro_no, 
+		       COUNT(m1.pro_mem_no) AS count
+		FROM pro_mem m1 INNER JOIN (SELECT pro_no 
+		                              FROM pro_mem 
+		                             WHERE id = #{id}) m2
 		ON m1.pro_no = m2.pro_no
 		WHERE pro_parti_check = 'Y'
 		GROUP BY m1.pro_no
@@ -138,9 +143,11 @@
 	
 	<!-- 프로젝트 그룹 생성 -->
 	<insert id="createProjectGroup" parameterType="String">
-		INSERT INTO pro_group
+		INSERT INTO pro_group 
 		VALUES((SELECT NVL(MAX(group_no), 0) + 1
-		        FROM pro_group), #{groupName}, #{id})
+		        FROM pro_group), 
+		        #{groupName}, 
+		        #{id})
 	</insert>
 	
 	<!-- 프로젝트 그룹 생성 후 번호 조회 -->
@@ -190,5 +197,17 @@
 		        FROM pro_group), '기본 그룹', #{id})
 		SELECT * FROM DUAL
 	</insert>
+	
+	<!-- 프로젝트 권한 조회 -->
+	<select id="readProAuth" resultType="proVO">
+		SELECT pro_def_tab
+			 , post_write_auth
+			 , post_update_auth
+			 , post_view_auth
+			 , file_auth
+			 , id
+		FROM pro
+		WHERE pro_no = #{proNo}
+	</select>
 	
 </mapper>
