@@ -88,7 +88,7 @@ public class proPostController {
 		model.addAttribute("afterOneDay" , DateUtil.afterOneDay());//하루뒤
 		model.addAttribute("readProAuth", proService.readProAuth(proNo));//권한 및 프로젝트 마스터 조회
 		
-		System.out.println("게시글"+model.getAttribute("projectPartiMember"));
+		//System.out.println("게시글"+model.getAttribute("projectPartiMember"));
 		switch (homeTab) {
 		//업무
 		case 1 :
@@ -103,7 +103,7 @@ public class proPostController {
 		//피드
 		case 2 :
 			//글 조회(임시)
-			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo));
+			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo , vo.getPostType()));
 			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
 			model.addAttribute("readPartiList", Sch.readPartiList(proNo));
 			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
@@ -253,5 +253,18 @@ public class proPostController {
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
+	@PostMapping("creVote")
+	public List<ProPostChartVO> createPostVote(@RequestBody int proNo) {
+	    // 프로젝트 번호를 기반으로 데이터 조회
+	    return proPostService.readPostChart(proNo);
+	}
+	
+	//댓글 삭제
+	@PostMapping("delProPost")
+	@ResponseBody
+	public Map<String, Object> deleteProPost(HttpServletRequest request, @RequestBody int delProPostNo) {
+		int result = proPostService.deleteProPost(delProPostNo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
 	
 }

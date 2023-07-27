@@ -13,4 +13,8 @@ public class ProPostUserVO {
 	private String phone;
 	private String email;
 	private String profileNote;
+	
+	private String uuid;
+	private String uploadPath;
+	private String fileName;
 }
