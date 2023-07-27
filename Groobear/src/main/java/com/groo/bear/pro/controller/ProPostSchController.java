@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProPostSchService;
+import com.groo.bear.pro.service.postvo.ProPostWorkVO;
+import com.groo.bear.pro.service.schvo.ProCreateSchVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 
 @Controller
@@ -60,5 +62,19 @@ public class ProPostSchController {
 		
 		return "main/personalSch";
 	};
+	
+	//업무 생성
+	@PostMapping("creSch")
+	@ResponseBody
+	public Map<String, Object> creSch(HttpServletRequest request, @RequestBody ProCreateSchVO vo) {
+		HttpSession session = request.getSession();
+		Map <String, Object> map = new HashMap<>();
+		vo.setId((String)session.getAttribute("Id"));
+		
+		ppss.createPostSch(vo);
+		
+		map.put("result", "성공했겠지");
+		return map;
+	}
 	
 }

@@ -106,4 +106,17 @@
 		)
 	</insert>
 	
+	<!-- 투표글 작성(5번) -->
+	<insert id="createPostVote" statementType="CALLABLE" parameterType="CreateVoteVO">
+		{call cre_pro_work(
+				#{proNo},
+				#{id},
+				#{postTitle},
+				#{voteEndDay},
+				#{voteContent},
+				#{voteDetail, mode=IN, typeHandler=com.groo.bear.pro.mapper.OracleArrayStructHandler}
+			)
+		}
+	</insert>
+	
 </mapper>

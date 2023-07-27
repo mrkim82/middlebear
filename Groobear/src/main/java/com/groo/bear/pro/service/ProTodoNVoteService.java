@@ -2,6 +2,7 @@ package com.groo.bear.pro.service;
 
 import java.util.List;
 
+import com.groo.bear.pro.service.todovote.CreateVoteVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCountVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
@@ -28,4 +29,7 @@ public interface ProTodoNVoteService {
 	
 	//할 일 생성(총)
 	public int createTodo(ProPostTodoCreVO vo);
+	
+	//투표글 작성(5번)
+	public void createPostVote(CreateVoteVO vo);
 }

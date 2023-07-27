@@ -2,7 +2,6 @@ package com.groo.bear.pro.controller;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.groo.bear.pro.service.ProTodoNVoteService;
+import com.groo.bear.pro.service.todovote.CreateVoteVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 
 @RestController
-public class ProPostTodoController {
+public class ProPostTodoNVoteController {
 	@Autowired
 	ProTodoNVoteService ps;
 	
@@ -41,6 +41,19 @@ public class ProPostTodoController {
 		
 		int result = ps.createTodo(vo);
 		map.put("result", result);
+		return map;
+	}
+	
+	//vote게시글 작성
+	@PostMapping("creVotePost")
+	public Map<String, Object> creVotePost(HttpServletRequest request, @RequestBody CreateVoteVO vo) {
+		Map <String, Object> map = new HashMap<>();
+		HttpSession session = request.getSession();
+		vo.setId((String)session.getAttribute("Id"));
+		
+		System.out.println(vo);
+		ps.createPostVote(vo);
+		map.put("result", "잘 들어가겠지");
 		return map;
 	}
 }

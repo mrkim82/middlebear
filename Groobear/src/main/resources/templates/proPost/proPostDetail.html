@@ -82,9 +82,9 @@ li {
   google.charts.setOnLoadCallback(drawChart);
   //데이터 불러오기
 function drawChart() {
-    let url = window.location.pathname;
-    let lastIndex = url.lastIndexOf('/');
-    let projectNo = url.substring(lastIndex + 1);
+    // let url = window.location.pathname;
+    // let lastIndex = url.lastIndexOf('/');
+    // let projectNo = url.substring(lastIndex + 1);
 
     fetch("/googleChart", {
         method: 'POST',
@@ -392,7 +392,9 @@ function drawChart() {
 									<!-- 참석자 -->
 									<div>
 										<p>참석자 추가(Ctrl을 누르면 중복 처리 가능)</p>
-										<select class="form-select" multiple name="workMember" size=5>
+										<select class="form-select schPartiMembers"
+												multiple name="workMember"
+												size=5>
 											<th:block th:each="member : ${projectPartiMember}">
 													<!-- <option th:text="${member.name}" th:value="${member.id}"
 													th:if="${member.id == session.Id}" style="background-color: #eee;"></option> -->
@@ -405,14 +407,15 @@ function drawChart() {
 									</div>
 									<!-- 장소 -->
 									<div>
-										<input type="text">
+										<p>장소</p>
+										<input type="text" class="schPlace">
 									</div>
 									<!-- 내용 -->
 									<div>
-										<textarea placeholder="내용을 입력하세요."></textarea>
+										<textarea placeholder="내용을 입력하세요." class="schText"></textarea>
 									</div>
 								</div>
-									<button type="button" class="btn btn-primary">등록</button>
+									<button type="button" class="btn btn-primary" onclick="createSchButton()">등록</button>
 							</div>
 						</div>
 					</div>
@@ -614,12 +617,24 @@ function drawChart() {
 								            data-work-type-status="5" onclick="toggleFeedButtonStyle(this)">보류</button>
 								</div>
 								<div class="card-body">
+									<!-- 업무 담당자 -->
+									<div th:each="wPerson : ${readTaskWorkPerson}"
+										 th:if="${allPost.workNo == wPerson.workNo}"
+										 th:text="'담당자 : ' + ${wPerson.name}">
+									</div>
+									
+									<!-- 게시글 내용 -->
+									<p th:text="'내용 : ' + ${allPost.workContent}"></p>
+									
 									<!-- 추가 항목 -->
 									<div>
 										<p>
-										  <button class="btn btn-primary" type="button"
-										  		  data-toggle="collapse" th:data-target="'#collapseExample' + ${allPost.workNo}"
-										  			aria-expanded="false" aria-controls="collapseExample">
+										  <button class="btn btn-primary"
+										  		  type="button"
+										  		  data-toggle="collapse"
+										  		  th:data-target="'#collapseExample' + ${allPost.workNo}"
+										  		  aria-expanded="false"
+										  		  aria-controls="collapseExample">
 										    + 항목추가입력
 										  </button>
 										</p>
@@ -668,9 +683,6 @@ function drawChart() {
 										</div>
 									</div>
 									<!-- 항목추가 종료 -->
-									<p th:text="${allPost.workContent}">
-										<!-- 게시글 내용이 여기에 들어갑니다. -->
-									</p>
 									<div class="collapse" id="moreContent">
 										<p>
 											<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
@@ -1208,653 +1220,621 @@ function drawChart() {
 </div>
 	
 	
-	
-	
-	
-	<!-- 버튼 상태 변경(업무상태, 작성 모달창) -->	
-	<script>
-		let selectedButton = workTypeButtonToggle;
 
-		function toggleButtonStyle(button) {
-			
-		  if (selectedButton !== button) {
-		    if (selectedButton) {
-					console.log('selectedButton찾기',selectedButton);
-		      resetButtonStyle(selectedButton);
-		    }
-		    
-		    let className = button.classList.item(1);
-		
-		    if (className.startsWith('btn-outline')) {
-		      let filledClassName = className.replace('btn-outline', 'btn');
-		      button.classList.remove(className);
-		      button.classList.add(filledClassName);
-		    } else {
-		      let outlineClassName = className.replace('btn', 'btn-outline');
-		      button.classList.remove(className);
-		      button.classList.add(outlineClassName);
-		    }
-		
-		    selectedButton = button;
-		  } else {
-				//버튼 초기화
-		    // resetButtonStyle(button);
-		    // selectedButton = null;
-		  }
-		}
-		
-		//버튼 초기화
-		function resetButtonStyle(button) {
-		  let className = button.classList.item(1);
-		  //console.log(className);
-		  if (className.startsWith('btn-outline')) {
-		    let outlineClassName = className.replace('btn-outline', 'btn');
-		    button.classList.remove(className);
-		    button.classList.add(outlineClassName);
-		  } else {
-		    let filledClassName = className.replace('btn', 'btn-outline');
-		    button.classList.remove(className);
-		    button.classList.add(filledClassName);
-		  }
-		}
-		
-	</script>
+<!-- 버튼 상태 변경(업무상태, 작성 모달창) -->	
+<script>
+	let selectedButton = workTypeButtonToggle;
 
-	<!-- 버튼 상태 변경(업무 상태, 게시물 조회) -->
-	<script>
-		let selectedFeedButton = new Map();
-
-		function toggleFeedButtonStyle(button) {
-			let postWorkNo = button.closest('.card').dataset.feedPostNo;// 글 번호
-			let workNo = button.closest('.card').dataset.feedWorkNo;
-			//let newStatus = button.parentNode.dataset.feedWorkType;//신규 선택 버튼 번호
-			let newStatus = button.dataset.workTypeStatus;
-			let oldStatusNo = selectedFeedButton.get(postWorkNo);//선택했던 기존 버튼 번호 null or 존재
-
-			//기존 상태 버튼 찾기
-			let oldButton;
-			if(oldStatusNo == null) {//선택했던 기존 버튼이 없다면
-				let firstButtonStatusNo = button.parentNode.dataset.feedWorkType;//최초 버튼 찾기
-				oldButton = button.closest(".card").querySelector('[data-work-type-status="' + firstButtonStatusNo + '" ]');//최초 버튼 상태 찾기
-			} else {//선택했던 기존 버튼이 있다면
-				oldButton = button.closest(".card").querySelector('[data-work-type-status="' + oldStatusNo + '" ]');//구 버튼 상태를 찾기
+	function toggleButtonStyle(button) {
+		
+		if (selectedButton !== button) {
+			if (selectedButton) {
+				console.log('selectedButton찾기',selectedButton);
+				resetButtonStyle(selectedButton);
 			}
-
-			selectedFeedButton.set(postWorkNo, newStatus);//신규 번호 삽입
 			
-			console.log('신규번호?',newStatus);//새 번호 찾기
-			//console.log('기존번호?',oldStatusNo);//새 번호 찾기
-			console.log('업무번호',workNo);
-			//console.log(oldButton);
-			//console.log(button);
-			
-			fetch("/updateWorkPostStatus", {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							'workStatus' : newStatus,
-			   				'workNo': workNo
-			   			})
-					})
-					.then(response => response.json())
-					.then(res => {
-						console.log(res);
-						if(res.result == '성공') {
-							
-							  if (oldButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
-							    if (oldButton) {
-							      resetButtonStyle(oldButton);
-							    }
-							    
-							    let className = button.classList.item(1);
-							
-							    if (className.startsWith('btn-outline')) {
-							      let filledClassName = className.replace('btn-outline', 'btn');
-							      button.classList.remove(className);
-							      button.classList.add(filledClassName);
-							    } else {
-							      let outlineClassName = className.replace('btn', 'btn-outline');
-							      button.classList.remove(className);
-							      button.classList.add(outlineClassName);
-							    }
-							
-							    oldButton = button;
-							  }
-							  
-							  //차트 재호출
-							  google.charts.setOnLoadCallback(drawChart);
-							  
-						} else {
-							alert('상태 수정 실패');
-						}
-					});
-			
-		}
-		
-		//버튼 초기화
-		function resetButtonStyle(button) {
-		  let className = button.classList.item(1);
-		  //console.log(className);
-		  if (className.startsWith('btn-outline')) {
-		    let outlineClassName = className.replace('btn-outline', 'btn');
-		    button.classList.remove(className);
-		    button.classList.add(outlineClassName);
-		  } else {
-		    let filledClassName = className.replace('btn', 'btn-outline');
-		    button.classList.remove(className);
-		    button.classList.add(filledClassName);
-		  }
-		}
-		
-	</script>
+			let className = button.classList.item(1);
 	
-	<!-- 버튼 상태(일정) 참가 상황 -->
-	<script>
-		let selectedSchButton = new Map();
-
-		function toggleFeedSchButtonStyle(button) {
-			let postSchNo = button.closest('.card').dataset.feedPostSchNo;// 글 번호(map용)
-			let schNo = button.closest('.card').dataset.feedSchNo;//sch 고유번호, update용
-			let newStatus = button.dataset.schTypeStatus;//선택한 번호
-			let oldSchStatusNo = selectedSchButton.get(postSchNo);//선택했던 기존 버튼 번호 null or 존재
-
-			//기존 상태 버튼 찾기
-			let oldSchButton;
-			if(oldSchStatusNo == null) {//선택했던 기존 버튼이 없다면
-				let firstButtonSchStatusNo = button.parentNode.dataset.feedSchType;//최초 버튼 찾기
-				oldSchButton = button.closest(".card").querySelector('[data-sch-type-status="' + firstButtonSchStatusNo + '" ]');//최초 버튼 상태 찾기
-			} else {//선택했던 기존 버튼이 있다면
-				oldSchButton = button.closest(".card").querySelector('[data-sch-type-status="' + oldSchStatusNo + '" ]');//구 버튼 상태를 찾기
+			if (className.startsWith('btn-outline')) {
+				let filledClassName = className.replace('btn-outline', 'btn');
+				button.classList.remove(className);
+				button.classList.add(filledClassName);
+			} else {
+				let outlineClassName = className.replace('btn', 'btn-outline');
+				button.classList.remove(className);
+				button.classList.add(outlineClassName);
 			}
+	
+			selectedButton = button;
+		} else {
+			//버튼 초기화
+			// resetButtonStyle(button);
+			// selectedButton = null;
+		}
+	}
+	
+	//버튼 초기화
+	function resetButtonStyle(button) {
+		let className = button.classList.item(1);
+		//console.log(className);
+		if (className.startsWith('btn-outline')) {
+			let outlineClassName = className.replace('btn-outline', 'btn');
+			button.classList.remove(className);
+			button.classList.add(outlineClassName);
+		} else {
+			let filledClassName = className.replace('btn', 'btn-outline');
+			button.classList.remove(className);
+			button.classList.add(filledClassName);
+		}
+	}
+	
+</script>
 
-			selectedSchButton.set(postSchNo, newStatus);//신규 번호 삽입
-			
-			//console.log('신규상태',newStatus);//새 번호 찾기
-			//console.log('고유번호',schNo);
-			
-			fetch("/updateSchPartiCheck", {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					'partiCheck' : newStatus,
-	   				'schNo': schNo
-	   			})
-			})
-			.then(response => response.json())
-			.then(res => {
-				console.log(res);
-				if(res.result == '성공') {
-					
-					if (oldSchButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
-						if (oldSchButton) {
-							resetButtonStyle(oldSchButton);
-						}
+<!-- 버튼 상태 변경(업무 상태, 게시물 조회) -->
+<script>
+	let selectedFeedButton = new Map();
+
+	function toggleFeedButtonStyle(button) {
+		let postWorkNo = button.closest('.card').dataset.feedPostNo;// 글 번호
+		let workNo = button.closest('.card').dataset.feedWorkNo;
+		//let newStatus = button.parentNode.dataset.feedWorkType;//신규 선택 버튼 번호
+		let newStatus = button.dataset.workTypeStatus;
+		let oldStatusNo = selectedFeedButton.get(postWorkNo);//선택했던 기존 버튼 번호 null or 존재
+
+		//기존 상태 버튼 찾기
+		let oldButton;
+		if(oldStatusNo == null) {//선택했던 기존 버튼이 없다면
+			let firstButtonStatusNo = button.parentNode.dataset.feedWorkType;//최초 버튼 찾기
+			oldButton = button.closest(".card").querySelector('[data-work-type-status="' + firstButtonStatusNo + '" ]');//최초 버튼 상태 찾기
+		} else {//선택했던 기존 버튼이 있다면
+			oldButton = button.closest(".card").querySelector('[data-work-type-status="' + oldStatusNo + '" ]');//구 버튼 상태를 찾기
+		}
+
+		selectedFeedButton.set(postWorkNo, newStatus);//신규 번호 삽입
+		
+		fetch("/updateWorkPostStatus", {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'workStatus' : newStatus,
+							'workNo': workNo
+						})
+				})
+				.then(response => response.json())
+				.then(res => {
+					console.log(res);
+					if(res.result == '성공') {
 						
-						let className = button.classList.item(1);
-				
-						if (className.startsWith('btn-outline')) {
-							let filledClassName = className.replace('btn-outline', 'btn');
-							button.classList.remove(className);
-							button.classList.add(filledClassName);
-						} else {
-							let outlineClassName = className.replace('btn', 'btn-outline');
-							button.classList.remove(className);
-							button.classList.add(outlineClassName);
-						}
-				
-						oldSchButton = button;
+							if (oldButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
+								if (oldButton) {
+									resetButtonStyle(oldButton);
+								}
+								
+								let className = button.classList.item(1);
+						
+								if (className.startsWith('btn-outline')) {
+									let filledClassName = className.replace('btn-outline', 'btn');
+									button.classList.remove(className);
+									button.classList.add(filledClassName);
+								} else {
+									let outlineClassName = className.replace('btn', 'btn-outline');
+									button.classList.remove(className);
+									button.classList.add(outlineClassName);
+								}
+						
+								oldButton = button;
+							}
+							
+							//차트 재호출
+							google.charts.setOnLoadCallback(drawChart);
+							
+					} else {
+						alert('상태 수정 실패');
 					}
-					/* else {//버튼취소하는기능
-						resetButtonStyle(button);
-						selectedSchButton.set(postSchNo, null);
-						newStatus = 'B';
-					} */
-					
-					changeSchStatus(button, newStatus);
-					
-				} else {
-					alert('상태 수정 실패');
-				}
-			});
-			
-		}
-		
-		//버튼 초기화
-		function resetButtonStyle(button) {
-		  let className = button.classList.item(1);
-		  //console.log(className);
-		  if (className.startsWith('btn-outline')) {
-		    let outlineClassName = className.replace('btn-outline', 'btn');
-		    button.classList.remove(className);
-		    button.classList.add(outlineClassName);
-		  } else {
-		    let filledClassName = className.replace('btn', 'btn-outline');
-		    button.classList.remove(className);
-		    button.classList.add(filledClassName);
-		  }
-		}
-		
-		//글자 바꾸기
-		function changeSchStatus(button, newStatus) {
-			let schPartiChange = button.closest(".card").querySelector('[data-sch-user-id]').nextElementSibling;//상태창 위치
-			console.log('ss',button.closest(".card").querySelector('[data-sch-user-id]'))
-			console.log('sss',schPartiChange);
-			
-			if(newStatus == 'Y') {
-				schPartiChange.textContent ='참석';
-				button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'Y';
-				schPartiChange.style.color = 'green';
-			} else if(newStatus == 'N') {
-				schPartiChange.textContent ='불참';
-				button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'N';
-				schPartiChange.style.color = 'red';
-			} else if(newStatus == 'A') {
-				schPartiChange.textContent ='미정';
-				button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'A';
-				schPartiChange.style.color = 'gray';
-			}
-		}
-	</script>
-
-
-
-	<!-- 글 작성 -->
-	<script>
-		
-		createWritingButton.addEventListener('click', function () {
-			//제목 빈값 검사
-			let titles = document.getElementsByClassName('postTitle');
-			if(titles[0].value == '') {
-				titles[0].focus();
-				alert('제목을 입력하세요');
-				return;
-			}
-			
-			//내용 빈값 검사
-			if(writingContent.value == '') {
-				alert('내용을 입력하세요');
-				writingContent.focus();
-				return;
-			}
-			
-			//프로젝트 넘버 찾기(주소)
-			let url = window.location.pathname;
-			let lastIndex = url.lastIndexOf('/');
-			let projectNo = url.substring(lastIndex + 1);
-			
-			fetch("/postCreateWriting", {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-	   				'postTitle': titles[0].value,
-	   				'writingContent': writingContent.value,
-	   				'proNo': projectNo
-	   			})
-			})
-			.then(response => response.json())
-			.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
-			
-		});
-
-	</script>
-	
-	<!-- 업무 작성 -->
-	<script>
-		//담당자 값 가져오기
-		let workPersonArr = [];
-		function workPostPeople(e) {
-			workPersonArr = [];
-	
-			for(let i=0; i < e.options.length; i++) {
-				let option = e.options[i];
-				if(option.selected) {
-					workPersonArr.push(option.value);
-				}
-			};
-			
-			return workPersonArr;
-		}
-		
-		//등록 버튼 클릭
-		createWorkButton.addEventListener('click', function () {
-			//제목 빈값 검사
-			let titles = document.getElementsByClassName('postTitle');
-			if(titles[1].value == '') {
-				titles[1].focus();
-				alert('제목을 입력하세요');
-				return;
-			}
-			
-			//내용 빈값 검사
-			if(workWritingContent.value == '') {
-				alert('내용을 입력하세요');
-				workWritingContent.focus();
-				return;
-			}
-			
-			//프로젝트 넘버 찾기(주소)
-			let url = window.location.pathname;
-			let lastIndex = url.lastIndexOf('/');
-			let projectNo = url.substring(lastIndex + 1);
-			
-			// console.log(titles[1].value);
-			// console.log('업무그룹',workPostGroup.value);
-			// console.log('업무상태',selectedButton.dataset.workTypeStatus);
-			// console.log('우선순위',workPostPri.value);
-			 console.log(startWorkDate.value);
-			 console.log(endWorkDate.value);
-			// console.log('내용',workWritingContent.value);
-			// console.log('참여자', workPersonArr);
-			
-			let newStartDate = startWorkDate.value == '' ? startWorkDate.value : convertToFormattedDateTime(startWorkDate.value);
-			let newEndDate = endWorkDate.value == '' ? endWorkDate.value : convertToFormattedDateTime(endWorkDate.value);
-			
-			console.log('뉴데잇',newStartDate)
-			console.log(newEndDate)
-			
-			fetch("/postCreateWork", {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-	   				'proNo': projectNo,
-	   				'postTitle': titles[1].value,
-	   				'workGroupNo': workPostGroup.value,
-	   				'workStatus': selectedButton.dataset.workTypeStatus,
-	   				'workPri': workPostPri.value,
-	   				'workStartDay': newStartDate,
-	   				'workStartTime': newStartDate,
-	   				'workEndDay': newEndDate,
-	   				'workEndTime': newEndDate,
-	   				'workContent': workWritingContent.value,
-	   				'workPersonArr': workPersonArr
-	   			})
-			})
-			.then(response => response.json())
-			//.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
-			
-		});
-	</script>
-	
-	<!-- 댓글 등록 -->
-	<script>
-		function createCommentButton() {
-			let targetButton = event.target;//버튼 동적 확인
-			let com = targetButton.parentNode.children[0].children[0]; //텍스트값 찾기
-			if(com.value == '') {
-				com.focus();
-				alert('댓글을 입력하세요');
-				return;
-			}
-			
-			let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
-			
-			let url = window.location.pathname;
-			let lastIndex = url.lastIndexOf('/');
-			let projectNo = url.substring(lastIndex + 1);
-			
-			fetch("/postCreateComment", {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-	   				'proPostNo': writingNo,
-	   				'comContent': com.value
-	   			})
-			})
-			.then(response => response.json())
-			.then(res => {
-				console.log(res)
-				let insertComment = targetButton.closest('.card').getElementsByClassName('list-unstyled')[0];
-				console.log('여기',insertComment)
-				
-				insertComment.insertAdjacentHTML('beforeend', 
-					'<li data-post-code="' + res.result + '">'+
-						'<span></span>'+
-						'<span>' + selfName + '</span>'+
-						'<span>' + currentTime + '</span>'+
-						'<span>' + com.value + '</span>'+
-						'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
-						'<span></span>'+
-						'<span onclick="deleteWritingComment()" class="spanCursor">X</span>'+
-					'</li>'
-				);
-				com.focus();
-				com.value = '';
-				//location.href="/proPostMain/" + projectNo + "?homeTab=2"
-			});
-		}
-		
-		//현재시간 구하기
-		const currentTime = formatDate();
-		
-		function formatDate() {
-		  let date = new Date();
-		  const year = date.getFullYear();
-		  const month = String(date.getMonth() + 1).padStart(2, '0');
-		  const day = String(date.getDate()).padStart(2, '0');
-		  const hours = String(date.getHours()).padStart(2, '0');
-		  const minutes = String(date.getMinutes()).padStart(2, '0');
-		  
-		  return `${year}/${month}/${day} ${hours}:${minutes}`;
-		}
-	</script>
-	
-	<!-- 댓글 삭제  -->
-	<script>
-		function deleteWritingComment() {
-			let targetButton = event.target;
-			//console.log(targetButton.parentNode.dataset.postCode);
-			
-			let url = window.location.pathname;
-			let lastIndex = url.lastIndexOf('/');
-			let projectNo = url.substring(lastIndex + 1);
-			
-			fetch("/postDeleteComment", {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-	   				'comNo': targetButton.parentNode.dataset.postCode
-	   			})
-			})
-			.then(response => response.json())
-			.then(res => {
-				targetButton.parentNode.remove()
-			});
-		}
-	</script>
-	
-	<!-- 댓글 수정  -->
-	<script>
-		function UpdateWritingComment() {
-			let targetButton = event.target;
-			let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
-			
-			let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
-			let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
-			
-			//초기화
-			targetButton.parentNode.children[2].textContent = '';//날짜 초기화
-			targetButton.parentNode.children[3].textContent = '';//댓글 초기화
-			targetButton.parentNode.children[4].textContent = '';//수정 초기화
-			targetButton.parentNode.children[6].textContent = '';//X 초기화
-			
-			if(document.getElementById('newComment') != null) {
-				let nC = document.getElementById('newComment').parentNode.parentNode;
-				nC.childNodes[5].textContent = document.getElementById('newComment').dataset.comDate;
-				nC.childNodes[7].textContent = document.getElementById('newComment').value;
-				nC.childNodes[9].textContent = '수정';
-				nC.childNodes[11].textContent = '';
-				nC.childNodes[13].textContent = 'X';
-			}
-			
-			// 댓글 수정 폼 생성
-			targetButton.parentNode.children[5].innerHTML = 
-					'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
-					+'<span id="ooo" class="spanCursor">수정</span>'
-					+'<span id="xxx" class="spanCursor">취소</span>';
-					
-			// 취소버튼
-			document.getElementById('xxx').addEventListener('click', function() {
-				targetButton.parentNode.children[2].textContent = oldDate;
-				targetButton.parentNode.children[3].textContent = oldCom;
-				targetButton.parentNode.children[4].textContent = '수정';
-				targetButton.parentNode.children[5].textContent = '';
-				targetButton.parentNode.children[6].textContent = 'X';
-			});
-			
-			// 수정버튼
-			document.getElementById('ooo').addEventListener('click', function() {
-				let newCom = document.getElementById('newComment');
-				if(newCom.value == '') {
-					newCom.focus();
-					alert('댓글을 수정하세요');
-				} else {
-					
-					fetch("/postUpdateComment", {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							'comContent' : newCom.value,
-			   				'comNo': comNo
-			   			})
-					})
-					.then(response => response.json())
-					.then(res => {
-						
-						if(res.result == '성공') {
-							targetButton.parentNode.children[2].textContent = oldDate;
-							targetButton.parentNode.children[3].textContent = newCom.value;
-							targetButton.parentNode.children[4].textContent = '수정';
-							targetButton.parentNode.children[6].textContent = 'X';
-							targetButton.parentNode.children[5].textContent = '';
-							
-							let url = window.location.pathname;
-							let lastIndex = url.lastIndexOf('/');
-							let projectNo = url.substring(lastIndex + 1);
-							
-						} else {
-							alert('댓글 수정 실패');
-						}
-					});
-				}
-			});
-			
-		}
-		
-	</script>
-	
-	<!-- 참석자 선택 처리 -->
-	<script>
-		function changeSchParti() {
-			let inputValues = event.target.closest('.modal-content').children[1].children[0].querySelectorAll('input[type="checkbox"]:checked');
-			let formData = new FormData();
-			let formDataDel = new FormData();
-			let updatePartiList = [];
-			let updateObj = {};
-			
-			let schPlNo = event.target.closest('.card').dataset.feedSchNo;//스케줄 고유번호
-			
-			inputValues.forEach(inputValue => {
-				updateObj.schNo = schPlNo;
-				updateObj.partiCheck = inputValue.dataset.schStatus == null ? 'A' : inputValue.dataset.schStatus;
-				updateObj.id = inputValue.dataset.schListId;
-				updatePartiList.push(updateObj);
-				updateObj = {};
-		    });
-			let noSchNo = [{'schNo' : schPlNo}];
-			formData = updatePartiList.length == 0 ? noSchNo : updatePartiList;
-			console.log(formData);
-			
-			//console.log(formDataDel.get('schNo'))
-					
-			//기존 & 추가 인원 추가
-			fetch("/insertPartiMemberAll", {
-				method: 'POST',
-				headers : {
-					'Content-Type': 'application/json'
-				},
-				body : JSON.stringify(formData)
-			})
-			.then(response => response.json())
-			.then(res => {
-				let rC = res.result;
-				
-				if(rC == -1) {
-					console.log('0명');
-					const currentURL = window.location.href;
-					window.location.href = currentURL;
-				} else if (rC >= 1) {
-					console.log(rC + '명 업데이트');
-					const currentURL = window.location.href;
-					window.location.href = currentURL;
-				}else {
-					alert('알 수 없는 접근')
-				}
-			});
-			
-		}
-	</script>
-	
-	<!-- todo 버튼 상태 변경 -->
-	<script>
-		function changeTodoStatus() {
-			let todoNo = event.target.dataset.todoNo;
-			let checkedYN = event.target.checked ? 'Y' : 'N';
-			let totalInputExp = event.target.parentNode.parentNode;
-			//checkedYN으로 줄긋기 설정하기
-			fetch("/updateTotoStatus", {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					'todoNo' : todoNo,
-	   				'todoCheck': checkedYN
-	   			})
-			})
-			.then(response => response.json())
-			.then(res => {
-				let totalInput = totalInputExp.querySelectorAll('input').length;//총 input 수
-				let countInput = 0;
-				let inputs = totalInputExp.querySelectorAll('input');
-				inputs.forEach(input => {
-					input.checked ? countInput++ : 0;
 				});
-				let per = countInput / totalInput * 100;
-				//console.log(per)
-				
-				//퍼센트 변경
-				totalInputExp.closest('.card-body').children[0].children[0].children[0].style.width = per + '%';
-				
-			})
-			.catch(error => {
-				console.error('Error: ',error);
-			});
-			
-		}
-	</script>
-
-	
-<!-- id값 가져오기 -->
-<script type="text/javascript" th:inline="javascript">
-	/*<![CDATA[*/
 		
-		let selfId = /*[[${session.Id}]]*/;
-		let selfName = /*[[${session.Name}]]*/;
-	/*]]>*/
+	}
+	
+	//버튼 초기화
+	function resetButtonStyle(button) {
+		let className = button.classList.item(1);
+		//console.log(className);
+		if (className.startsWith('btn-outline')) {
+			let outlineClassName = className.replace('btn-outline', 'btn');
+			button.classList.remove(className);
+			button.classList.add(outlineClassName);
+		} else {
+			let filledClassName = className.replace('btn', 'btn-outline');
+			button.classList.remove(className);
+			button.classList.add(filledClassName);
+		}
+	}
+	
+</script>
+	
+<!-- 버튼 상태(일정) 참가 상황 -->
+<script>
+	let selectedSchButton = new Map();
+
+	function toggleFeedSchButtonStyle(button) {
+		let postSchNo = button.closest('.card').dataset.feedPostSchNo;// 글 번호(map용)
+		let schNo = button.closest('.card').dataset.feedSchNo;//sch 고유번호, update용
+		let newStatus = button.dataset.schTypeStatus;//선택한 번호
+		let oldSchStatusNo = selectedSchButton.get(postSchNo);//선택했던 기존 버튼 번호 null or 존재
+
+		//기존 상태 버튼 찾기
+		let oldSchButton;
+		if(oldSchStatusNo == null) {//선택했던 기존 버튼이 없다면
+			let firstButtonSchStatusNo = button.parentNode.dataset.feedSchType;//최초 버튼 찾기
+			oldSchButton = button.closest(".card").querySelector('[data-sch-type-status="' + firstButtonSchStatusNo + '" ]');//최초 버튼 상태 찾기
+		} else {//선택했던 기존 버튼이 있다면
+			oldSchButton = button.closest(".card").querySelector('[data-sch-type-status="' + oldSchStatusNo + '" ]');//구 버튼 상태를 찾기
+		}
+
+		selectedSchButton.set(postSchNo, newStatus);//신규 번호 삽입
+		
+		//console.log('신규상태',newStatus);//새 번호 찾기
+		//console.log('고유번호',schNo);
+		
+		fetch("/updateSchPartiCheck", {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				'partiCheck' : newStatus,
+					'schNo': schNo
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res);
+			if(res.result == '성공') {
+				
+				if (oldSchButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
+					if (oldSchButton) {
+						resetButtonStyle(oldSchButton);
+					}
+					
+					let className = button.classList.item(1);
+			
+					if (className.startsWith('btn-outline')) {
+						let filledClassName = className.replace('btn-outline', 'btn');
+						button.classList.remove(className);
+						button.classList.add(filledClassName);
+					} else {
+						let outlineClassName = className.replace('btn', 'btn-outline');
+						button.classList.remove(className);
+						button.classList.add(outlineClassName);
+					}
+			
+					oldSchButton = button;
+				}
+				/* else {//버튼취소하는기능
+					resetButtonStyle(button);
+					selectedSchButton.set(postSchNo, null);
+					newStatus = 'B';
+				} */
+				
+				changeSchStatus(button, newStatus);
+				
+			} else {
+				alert('상태 수정 실패');
+			}
+		});
+		
+	}
+	
+	//버튼 초기화
+	function resetButtonStyle(button) {
+		let className = button.classList.item(1);
+		//console.log(className);
+		if (className.startsWith('btn-outline')) {
+			let outlineClassName = className.replace('btn-outline', 'btn');
+			button.classList.remove(className);
+			button.classList.add(outlineClassName);
+		} else {
+			let filledClassName = className.replace('btn', 'btn-outline');
+			button.classList.remove(className);
+			button.classList.add(filledClassName);
+		}
+	}
+	
+	//글자 바꾸기
+	function changeSchStatus(button, newStatus) {
+		let schPartiChange = button.closest(".card").querySelector('[data-sch-user-id]').nextElementSibling;//상태창 위치
+		console.log('ss',button.closest(".card").querySelector('[data-sch-user-id]'))
+		console.log('sss',schPartiChange);
+		
+		if(newStatus == 'Y') {
+			schPartiChange.textContent ='참석';
+			button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'Y';
+			schPartiChange.style.color = 'green';
+		} else if(newStatus == 'N') {
+			schPartiChange.textContent ='불참';
+			button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'N';
+			schPartiChange.style.color = 'red';
+		} else if(newStatus == 'A') {
+			schPartiChange.textContent ='미정';
+			button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'A';
+			schPartiChange.style.color = 'gray';
+		}
+	}
+</script>
+
+
+
+<!-- 글 작성 -->
+<script>
+	
+	createWritingButton.addEventListener('click', function () {
+		//제목 빈값 검사
+		let titles = document.getElementsByClassName('postTitle');
+		if(titles[0].value == '') {
+			titles[0].focus();
+			alert('제목을 입력하세요');
+			return;
+		}
+		
+		//내용 빈값 검사
+		if(writingContent.value == '') {
+			alert('내용을 입력하세요');
+			writingContent.focus();
+			return;
+		}
+		
+		fetch("/postCreateWriting", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'postTitle': titles[0].value,
+					'writingContent': writingContent.value,
+					'proNo': projectNo
+				})
+		})
+		.then(response => response.json())
+		.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+		
+	});
+
+</script>
+	
+<!-- 업무 작성 -->
+<script>
+	//담당자 값 가져오기
+	let workPersonArr = [];
+	function workPostPeople(e) {
+		workPersonArr = [];
+
+		for(let i=0; i < e.options.length; i++) {
+			let option = e.options[i];
+			if(option.selected) {
+				workPersonArr.push(option.value);
+			}
+		};
+		
+		return workPersonArr;
+	}
+	
+	//등록 버튼 클릭
+	createWorkButton.addEventListener('click', function () {
+		//제목 빈값 검사
+		let titles = document.getElementsByClassName('postTitle');
+		if(titles[1].value == '') {
+			titles[1].focus();
+			alert('제목을 입력하세요');
+			return;
+		}
+		
+		//내용 빈값 검사
+		if(workWritingContent.value == '') {
+			alert('내용을 입력하세요');
+			workWritingContent.focus();
+			return;
+		}
+		
+		// console.log(titles[1].value);
+		// console.log('업무그룹',workPostGroup.value);
+		// console.log('업무상태',selectedButton.dataset.workTypeStatus);
+		// console.log('우선순위',workPostPri.value);
+			console.log(startWorkDate.value);
+			console.log(endWorkDate.value);
+		// console.log('내용',workWritingContent.value);
+		// console.log('참여자', workPersonArr);
+		
+		let newStartDate = startWorkDate.value == '' ? startWorkDate.value : convertToFormattedDateTime(startWorkDate.value);
+		let newEndDate = endWorkDate.value == '' ? endWorkDate.value : convertToFormattedDateTime(endWorkDate.value);
+		
+		fetch("/postCreateWork", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'proNo': projectNo,
+					'postTitle': titles[1].value,
+					'workGroupNo': workPostGroup.value,
+					'workStatus': selectedButton.dataset.workTypeStatus,
+					'workPri': workPostPri.value,
+					'workStartDay': newStartDate,
+					'workStartTime': newStartDate,
+					'workEndDay': newEndDate,
+					'workEndTime': newEndDate,
+					'workContent': workWritingContent.value,
+					'workPersonArr': workPersonArr
+				})
+		})
+		.then(response => response.json())
+		.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+		
+	});
+</script>
+	
+<!-- 댓글 등록 -->
+<script>
+	function createCommentButton() {
+		let targetButton = event.target;//버튼 동적 확인
+		let com = targetButton.parentNode.children[0].children[0]; //텍스트값 찾기
+		if(com.value == '') {
+			com.focus();
+			alert('댓글을 입력하세요');
+			return;
+		}
+		
+		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
+		
+		// let url = window.location.pathname;
+		// let lastIndex = url.lastIndexOf('/');
+		// let projectNo = url.substring(lastIndex + 1);
+		
+		fetch("/postCreateComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'proPostNo': writingNo,
+					'comContent': com.value
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res)
+			let insertComment = targetButton.closest('.card').getElementsByClassName('list-unstyled')[0];
+			console.log('여기',insertComment)
+			
+			insertComment.insertAdjacentHTML('beforeend', 
+				'<li data-post-code="' + res.result + '">'+
+					'<span></span>'+
+					'<span>' + selfName + '</span>'+
+					'<span>' + currentTime + '</span>'+
+					'<span>' + com.value + '</span>'+
+					'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
+					'<span></span>'+
+					'<span onclick="deleteWritingComment()" class="spanCursor">X</span>'+
+				'</li>'
+			);
+			com.focus();
+			com.value = '';
+		});
+	}
+	
+	//현재시간 구하기
+	const currentTime = formatDate();
+	
+	function formatDate() {
+		let date = new Date();
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		
+		return `${year}/${month}/${day} ${hours}:${minutes}`;
+	}
+</script>
+	
+<!-- 댓글 삭제  -->
+<script>
+	function deleteWritingComment() {
+		let targetButton = event.target;
+		//console.log(targetButton.parentNode.dataset.postCode);
+		
+		// let url = window.location.pathname;
+		// let lastIndex = url.lastIndexOf('/');
+		// let projectNo = url.substring(lastIndex + 1);
+		
+		fetch("/postDeleteComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'comNo': targetButton.parentNode.dataset.postCode
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			targetButton.parentNode.remove()
+		});
+	}
+</script>
+	
+<!-- 댓글 수정  -->
+<script>
+	function UpdateWritingComment() {
+		let targetButton = event.target;
+		let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
+		
+		let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
+		let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
+		
+		//초기화
+		targetButton.parentNode.children[2].textContent = '';//날짜 초기화
+		targetButton.parentNode.children[3].textContent = '';//댓글 초기화
+		targetButton.parentNode.children[4].textContent = '';//수정 초기화
+		targetButton.parentNode.children[6].textContent = '';//X 초기화
+		
+		if(document.getElementById('newComment') != null) {
+			let nC = document.getElementById('newComment').parentNode.parentNode;
+			nC.childNodes[5].textContent = document.getElementById('newComment').dataset.comDate;
+			nC.childNodes[7].textContent = document.getElementById('newComment').value;
+			nC.childNodes[9].textContent = '수정';
+			nC.childNodes[11].textContent = '';
+			nC.childNodes[13].textContent = 'X';
+		}
+		
+		// 댓글 수정 폼 생성
+		targetButton.parentNode.children[5].innerHTML = 
+				'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
+				+'<span id="ooo" class="spanCursor">수정</span>'
+				+'<span id="xxx" class="spanCursor">취소</span>';
+				
+		// 취소버튼
+		document.getElementById('xxx').addEventListener('click', function() {
+			targetButton.parentNode.children[2].textContent = oldDate;
+			targetButton.parentNode.children[3].textContent = oldCom;
+			targetButton.parentNode.children[4].textContent = '수정';
+			targetButton.parentNode.children[5].textContent = '';
+			targetButton.parentNode.children[6].textContent = 'X';
+		});
+		
+		// 수정버튼
+		document.getElementById('ooo').addEventListener('click', function() {
+			let newCom = document.getElementById('newComment');
+			if(newCom.value == '') {
+				newCom.focus();
+				alert('댓글을 수정하세요');
+			} else {
+				
+				fetch("/postUpdateComment", {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'comContent' : newCom.value,
+							'comNo': comNo
+						})
+				})
+				.then(response => response.json())
+				.then(res => {
+					
+					if(res.result == '성공') {
+						targetButton.parentNode.children[2].textContent = oldDate;
+						targetButton.parentNode.children[3].textContent = newCom.value;
+						targetButton.parentNode.children[4].textContent = '수정';
+						targetButton.parentNode.children[6].textContent = 'X';
+						targetButton.parentNode.children[5].textContent = '';
+						
+						// let url = window.location.pathname;
+						// let lastIndex = url.lastIndexOf('/');
+						// let projectNo = url.substring(lastIndex + 1);
+						
+					} else {
+						alert('댓글 수정 실패');
+					}
+				});
+			}
+		});
+		
+	}
+	
+</script>
+	
+<!-- 참석자 선택 처리 -->
+<script>
+	function changeSchParti() {
+		let inputValues = event.target.closest('.modal-content').children[1].children[0].querySelectorAll('input[type="checkbox"]:checked');
+		let formData = new FormData();
+		let formDataDel = new FormData();
+		let updatePartiList = [];
+		let updateObj = {};
+		
+		let schPlNo = event.target.closest('.card').dataset.feedSchNo;//스케줄 고유번호
+		
+		inputValues.forEach(inputValue => {
+			updateObj.schNo = schPlNo;
+			updateObj.partiCheck = inputValue.dataset.schStatus == null ? 'A' : inputValue.dataset.schStatus;
+			updateObj.id = inputValue.dataset.schListId;
+			updatePartiList.push(updateObj);
+			updateObj = {};
+			});
+		let noSchNo = [{'schNo' : schPlNo}];
+		formData = updatePartiList.length == 0 ? noSchNo : updatePartiList;
+		console.log(formData);
+		
+		//console.log(formDataDel.get('schNo'))
+				
+		//기존 & 추가 인원 추가
+		fetch("/insertPartiMemberAll", {
+			method: 'POST',
+			headers : {
+				'Content-Type': 'application/json'
+			},
+			body : JSON.stringify(formData)
+		})
+		.then(response => response.json())
+		.then(res => {
+			let rC = res.result;
+			
+			if(rC == -1) {
+				console.log('0명');
+				const currentURL = window.location.href;
+				window.location.href = currentURL;
+			} else if (rC >= 1) {
+				console.log(rC + '명 업데이트');
+				const currentURL = window.location.href;
+				window.location.href = currentURL;
+			}else {
+				alert('알 수 없는 접근')
+			}
+		});
+		
+	}
+</script>
+	
+<!-- todo 버튼 상태 변경 -->
+<script>
+	function changeTodoStatus() {
+		let todoNo = event.target.dataset.todoNo;
+		let checkedYN = event.target.checked ? 'Y' : 'N';
+		let totalInputExp = event.target.parentNode.parentNode;
+		//checkedYN으로 줄긋기 설정하기
+		fetch("/updateTotoStatus", {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				'todoNo' : todoNo,
+					'todoCheck': checkedYN
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			let totalInput = totalInputExp.querySelectorAll('input').length;//총 input 수
+			let countInput = 0;
+			let inputs = totalInputExp.querySelectorAll('input');
+			inputs.forEach(input => {
+				input.checked ? countInput++ : 0;
+			});
+			let per = countInput / totalInput * 100;
+			//console.log(per)
+			
+			//퍼센트 변경
+			totalInputExp.closest('.card-body').children[0].children[0].children[0].style.width = per + '%';
+			
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+		
+	}
 </script>
 
 <script>
@@ -1952,7 +1932,6 @@ function changeProfileNote() {
 <script type="text/javascript">
 	function updatePost() {
 		console.log(event.target.closest('.card'))
-		
 	}
 </script>
 
@@ -2047,8 +2026,8 @@ function changeProfileNote() {
 		let count = 0;
 		let inputValues = voteModal.querySelectorAll('input');
 		let voteObj = {};
-		let inputArr = [];
 		let iLength = inputValues.length - 1;
+		let voteDetailArr = []
 		
 		//날짜값 제외하고 input값 검사
 		for (let i = 0; i < inputValues.length -1; i++) {
@@ -2064,7 +2043,11 @@ function changeProfileNote() {
 				voteObj['voteContent'] = inputValues[1].value;
 			}
 			if(i >= 2) {
-				voteObj['voteBody' + (i - 1)] = inputValues[1].value;
+				let voteDetailObj = {};
+				voteDetailObj['voteDetailContent'] = inputValues[i].value;
+				//voteDetailObj['voteDetailImg'] = '';
+				//voteDetailArr.push(inputValues[i].value);
+				voteDetailArr.push(voteDetailObj);
 			}
 		}
 		
@@ -2072,30 +2055,28 @@ function changeProfileNote() {
 			alert('빈값이 있습니다');
 			return false;
 		}
-
-		voteObj['voteEndDay'] = inputValues[iLength].value;
-		inputArr.push(voteObj);
+		voteObj['proNo'] = projectNo;
+		voteObj['voteDetail'] = voteDetailArr;
+		voteObj['voteEndDay'] = convertToFormattedDateTime(inputValues[iLength].value);
 		
-		console.log(inputArr);
-		//fetch()
+		console.log(voteObj);
+		
+		fetch("/creVotePost", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(voteObj)
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res);
+			//location.reload();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
 
-	}
-</script>
-
-<!-- 시간 변환 -->
-<script type="text/javascript">
-function convertToFormattedDateTime(dateTimeStr) {
-		if(dateTimeStr == '') {//빈값일때 바로 리턴
-			return;
-		}
-	  const date = new Date(dateTimeStr);
-	  const year = date.getFullYear();
-	  const month = String(date.getMonth() + 1).padStart(2, '0');
-	  const day = String(date.getDate()).padStart(2, '0');
-	  const hours = String(date.getHours()).padStart(2, '0');
-	  const minutes = String(date.getMinutes()).padStart(2, '0');
-
-	  return `${year}-${month}-${day} ${hours}:${minutes}`;
 	}
 </script>
 
@@ -2228,12 +2209,64 @@ function convertToFormattedDateTime(dateTimeStr) {
 		.catch(error => {
 			console.error('Error: ',error);
 		});
+	}
+</script>
 
+<!-- 스케줄 생성 -->
+<script>
+	function createSchButton() {
+		let topCreateSch = document.getElementById('modal3');
+		let schTitle = topCreateSch.querySelector('.postTitle');
+		if(schTitle.value == '') {
+			alert('제목 입력');
+			return;
+		}
+
+		let schStartDate = topCreateSch.querySelector('#startSchDate');
+		let schEndDate = topCreateSch.querySelector('#endSchDate');
+		let schMembers = topCreateSch.querySelector('.schPartiMembers');
+		let schPlace = topCreateSch.querySelector('.schPlace');
+		let schText = topCreateSch.querySelector('.schText');
+		
+		//참석자 추가
+		let schPersonArr = Array.from(schMembers.selectedOptions).map(option => option.value);
+		
+		let schObj = {'proNo' : projectNo,
+									'postTitle' : schTitle.value,
+									'schStartDay' : convertToFormattedDateTime(schStartDate.value),
+									'schStartTime' : convertToFormattedDateTime(schStartDate.value),
+									'schEndDay' : convertToFormattedDateTime(schEndDate.value),
+									'schEndTime' : convertToFormattedDateTime(schEndDate.value),
+									'schPlace' : schPlace.value,
+									'schContent' : schText.value,
+									'personalSch' : 'N',
+									'schPersonArr' : schPersonArr
+									};
+
+ 		console.log(schObj);
+ 		
+ 		fetch("/creSch", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(schObj)
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res);
+			location.reload();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
 
 
 
 	}
 </script>
+
+
 
 </body>
 </html>

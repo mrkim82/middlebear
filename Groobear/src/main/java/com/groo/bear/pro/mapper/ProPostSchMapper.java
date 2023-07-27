@@ -2,6 +2,7 @@ package com.groo.bear.pro.mapper;
 
 import java.util.List;
 
+import com.groo.bear.pro.service.schvo.ProCreateSchVO;
 import com.groo.bear.pro.service.schvo.ProPerCalComVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.schvo.ProPostWorkSchVO;
@@ -40,5 +41,8 @@ public interface ProPostSchMapper {
 	
 	//회원 탈퇴용 참가자 삭제
 	public int deleteMemberSchParti(String id);
+	
+	//캘린더 게시글 등록
+	public void createPostSch(ProCreateSchVO vo);
 	
 }

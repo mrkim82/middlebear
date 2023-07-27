@@ -7,11 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.groo.bear.pro.mapper.ProTodoNVoteMapper;
 import com.groo.bear.pro.service.ProTodoNVoteService;
+import com.groo.bear.pro.service.todovote.CreateVoteVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCountVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCreListVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 import com.groo.bear.pro.service.todovote.ProPostVoteVO;
+
 @Service
 public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 	@Autowired
@@ -68,6 +70,12 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 		}
 		
 		return count;
+	}
+
+	@Override
+	public void createPostVote(CreateVoteVO vo) {
+		tv.createPostVote(vo);
+		
 	}
 
 

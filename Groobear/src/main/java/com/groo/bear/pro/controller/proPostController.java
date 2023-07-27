@@ -107,6 +107,8 @@ public class proPostController {
 			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
 			model.addAttribute("readPartiList", Sch.readPartiList(proNo));
 			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
+			//업무
+			model.addAttribute("readTaskWorkPerson", taskS.readTaskWorkPerson(proNo));//업무 담당자 조회
 			//할 일
 			model.addAttribute("readTodoList", todoNVote.readTodoList(proNo));//할 일 조회
 			model.addAttribute("readAllTodoListPer", todoNVote.readAllTodoListPer(proNo));//할 일 퍼센트 조회
