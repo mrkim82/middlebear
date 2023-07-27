@@ -76,5 +76,33 @@
 		ORDER BY vote_parti_no
 	</select>
 	
+	<!-- 할 일 생성 -->
+	<insert id="createPostTodo" parameterType="ProPostTodoCreVO">
+	<selectKey resultType="int" keyProperty="proPostNo" order="AFTER">
+		SELECT NVL(MAX(pro_post_no), 0)
+	      FROM pro_post
+	</selectKey>
+	
+		INSERT INTO pro_post(pro_post_no, pro_no, id, post_type, post_title)
+		VALUES((SELECT NVL(MAX(pro_post_no), 0) + 1
+		        FROM pro_post),
+		        #{proNo},
+		        #{id},
+		        4,
+		        #{postTitle}
+		)
+	</insert>
+	
+	<!-- 할 일 내용 -->
+	<insert id="createTodo" parameterType="ProPostTodoCreListVO">
+		INSERT INTO todo(todo_no, pro_post_no, todo_content, todo_end, id)
+		VALUES((SELECT NVL(MAX(todo_no), 0) + 1
+		        FROM todo),
+		       #{proPostNo},
+		       #{todoContent},
+		       #{todoEnd},
+		       #{id}
+		)
+	</insert>
 	
 </mapper>

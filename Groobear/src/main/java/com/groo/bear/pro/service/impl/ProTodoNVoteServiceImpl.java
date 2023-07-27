@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.pro.mapper.ProTodoNVoteMapper;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.todovote.ProPostTodoCountVO;
+import com.groo.bear.pro.service.todovote.ProPostTodoCreListVO;
+import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 import com.groo.bear.pro.service.todovote.ProPostVoteVO;
 @Service
@@ -44,5 +46,21 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 	public List<ProPostVoteVO> readVoteListParti(int proNo) {
 		return tv.readVoteListParti(proNo);
 	}
+
+	@Override
+	public int createTodo(ProPostTodoCreVO vo) {
+		int count = 0;
+		//tv.createPostTodo(vo);
+		List<ProPostTodoCreListVO> todoDetails = vo.getPptcl();
+		System.out.println(todoDetails);
+		for (ProPostTodoCreListVO todoDetail : todoDetails) {
+			System.out.println("투두" + todoDetail);
+			count++;
+		}
+		
+		
+		return count;
+	}
+
 
 }

@@ -452,20 +452,7 @@ function drawChart() {
 									<!-- 할 일 입력 -->
 									<div>
 										<ul class="list-group" data-todo-make-list="todoTarget">
-											<li class="list-group-item"> </li>
-											<!-- <li>
-												<input type="text" placeholder="할 일 추가">
-												<input type="datetime-local">
-												<select class="form-select" name="todoMember">
-													<th:block th:each="member : ${projectPartiMember}">
-														<option value="">없음</option>
-														<option th:text="${member.name}" th:value="${member.id}"
-														th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
-														<option th:text="${member.name}" th:value="${member.id}"
-														th:if="${member.id != session.Id}"></option>
-													</th:block>
-												</select>
-											</li> -->
+
 										</ul>
 
 										<div>
@@ -477,20 +464,21 @@ function drawChart() {
 												   maxlength="60">
 											<div class="todo-menu">
 											<span>
-													<input type="date">
-													<span class="material-symbols-outlined popover" onclick="togglePopover()">account_circle</span>
+													<input type="date"
+																 data-input-todo-date="todoDate">
+													<select class="form-select"
+																	name="todoMember"
+																	data-input-todo-select="todoSelect">
+														<option value="">없음</option>
+														<th:block th:each="member : ${projectPartiMember}">
+															<option th:text="${member.name}" th:value="${member.id}"
+															th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+															<option th:text="${member.name}" th:value="${member.id}"
+															th:if="${member.id != session.Id}"></option>
+														</th:block>
+													</select>
 											</span>
-												<!-- 인원 팝 오버 -->
-												<div class="popover-content" id="popoverContent">
-													<ul class="list-group">
-														<li class="list-group-item"
-																th:each="member : ${projectPartiMember}"
-																th:text="${member.name}"
-																th:todo-popover-user-id="${member.id}"
-																th:style="${member.id == session.Id ? 'background-color: #eee;' : ''}">
-														</li>
-													</ul>
-												</div>
+
 											</div>
 										</div>
 
@@ -499,7 +487,7 @@ function drawChart() {
 									<!-- 할 일 입력 종료 -->
 								</div>
 								<!-- modal body end -->
-								<button type="button" class="btn btn-primary">등록</button>
+								<button type="button" class="btn btn-primary" onclick="blankSearchTodo()">등록</button>
 							</div>
 						</div>
 					</div>
@@ -1187,12 +1175,16 @@ function drawChart() {
 						    		<li th:text="'이름 : ' + ${mem.name}"></li>
 						    		<li th:text="'이메일 : ' + ${mem.email}"></li>
 						    		<li th:text="'전화번호 : ' + ${mem.phone}"></li>
-						    		<li th:text="'메모 : ' + (${mem.profileNote == null} ? '-' : ${mem.profileNote})"></li>
+						    		<li th:text="'메모 : ' + (${mem.profileNote == null} ? '-' : ${mem.profileNote})"
+						    			class="profileMemoTag"></li>
 						    		
 						    	</ul>
 						    </div>
 						    <div class="card-footer">
-						    	<button type="button" class="btn btn-primary" onclick="changeProfileNote()">상태메세지 변경</button>
+						    	<button type="button"
+						    			class="btn btn-primary"
+						    			onclick="changeProfileNote()"
+						    			th:if="${mem.id == session.Id}">상태메세지 변경</button>
 						    </div>
 						  </div>
 					    </div>
@@ -1200,38 +1192,6 @@ function drawChart() {
 					</div>
 				</div>
 			</div>
-			<!-- <div class="container float-start" style="width: 250px;">
-				<div class="row">
-					<div class="col-md-3">
-						왼쪽 사이드바 영역
-						<div class="sidebar">
-							<ul class="list-unstyled">
-								<li>
-									이미지
-									<img src="" alt="이미지" class="img-fluid">
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-md-9">
-						오른쪽 콘텐츠 영역
-						<div class="content">
-							<ul class="list-unstyled">
-								<li>
-									이름
-									<h4>사용자 이름</h4>
-									<th:block th:text="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH:mm')}"></th:block>
-								</li>
-								<li>
-									메시지 아이콘
-									<i class="fas fa-envelope"></i>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div> -->
-
 
 		</div>
 	</div>
@@ -1894,7 +1854,8 @@ function drawChart() {
 <script>
 //프로필 메모 변경
 function changeProfileNote() {
-	let oldProfileMemoTag = event.target.closest('.card').children[2].children[0].children[5];
+	let oldProfileMemoTag = event.target.closest('.card').querySelector('.profileMemoTag');
+	console.log(event.target.closest('.card'))
 	let oldProfileMemoText = oldProfileMemoTag.textContent;
 	let profileId = event.target.closest('.fade').dataset.userInfoId;
 	let profileChangeButton = event.target;
@@ -1994,20 +1955,19 @@ function changeProfileNote() {
 	let voteInputs = document.querySelectorAll('.plusVoteInput');
 	voteInputs.forEach(voteInput => {
 		voteInput.addEventListener('keypress', function (e) {
-
-			//값 확인
-			if(document.querySelectorAll('.plusVoteInput')[0].value == '') {
-				alert('첫번째 값을 넣어주세요.')
-				document.querySelectorAll('.plusVoteInput')[0].focus();
-				return
-			}
-			if(document.querySelectorAll('.plusVoteInput')[1].value == '') {
-				alert('두번째 값을 넣어주세요.')
-				document.querySelectorAll('.plusVoteInput')[1].focus();
-				return
-			}
-
+			
 			if (e.key === 'Enter') {
+				//값 확인
+				if(document.querySelectorAll('.plusVoteInput')[0].value == '') {
+					alert('첫번째 값을 넣어주세요.')
+					document.querySelectorAll('.plusVoteInput')[0].focus();
+					return
+				}
+				if(document.querySelectorAll('.plusVoteInput')[1].value == '') {
+					alert('두번째 값을 넣어주세요.')
+					document.querySelectorAll('.plusVoteInput')[1].focus();
+					return
+				}
 				
 				makeVoteInput(event.target);
 
@@ -2042,20 +2002,20 @@ function changeProfileNote() {
 		voteInputXButton(newInput);
 
 		newInput.addEventListener('keypress', function (e) {
-					//값 확인
-					if(newInput.value == '') {
-						alert('값을 넣어주세요.')
-						newInput.focus();
-						return
-					}
-
-					//input상자 갯수 확인
-	        if (document.querySelectorAll('.plusVoteInput').length == 10) {
-	            alert('10개 까지만');
-	            return;
-	        }
-
-	        if (e.key === 'Enter') {
+			
+			if (e.key === 'Enter') {
+						//값 확인
+						if(newInput.value == '') {
+							alert('값을 넣어주세요.')
+							newInput.focus();
+							return
+						}
+			
+						//input상자 갯수 확인
+						if (document.querySelectorAll('.plusVoteInput').length == 10) {
+								alert('10개 까지만');
+								return;
+						}
 	            makeVoteInput(event.target);
 							let nextInput = newInput.parentElement.parentElement.lastElementChild.children[0];
 	            nextInput.focus();
@@ -2119,6 +2079,9 @@ function changeProfileNote() {
 <!-- 시간 변환 -->
 <script type="text/javascript">
 function convertToFormattedDateTime(dateTimeStr) {
+		if(dateTimeStr == '') {//빈값일때 바로 리턴
+			return;
+		}
 	  const date = new Date(dateTimeStr);
 	  const year = date.getFullYear();
 	  const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -2130,22 +2093,140 @@ function convertToFormattedDateTime(dateTimeStr) {
 	}
 </script>
 
+<!-- 할일 인풋 생성 -->
 <script>
-function togglePopover() {
-	let popoverContent = document.getElementById('popoverContent');
-	popoverContent.classList.toggle('show');
-}
+	let todoInput = document.querySelector('#todoContent');
 
-// popover-content 외의 곳을 클릭하면 popover를 닫도록 설정
-document.addEventListener('click', function (event) {
-	const popover = document.querySelector('.popover');
-	if (!popover.contains(event.target)) {
-		const popoverContent = document.getElementById('popoverContent');
-		popoverContent.classList.remove('show');
+	todoInput.addEventListener('keypress', function (e) {
+		if (e.key === 'Enter') {
+			let todoL = document.querySelector('[data-todo-make-list]');
+			if(todoL.querySelectorAll('.list-group-item').length == 10) {
+				alert('최대 10개')
+				return;
+			}
+
+			if(todoInput.value == '') {
+				alert('값을 넣어주세요.')
+				todoInput.focus();
+				return;//event종료
+			}
+			
+			let todoValue = todoInput.value;
+			//console.log(event.target);
+			let oldVoteDate = document.querySelector('[data-input-todo-date]');
+			let oldSelectDate = document.querySelector('[data-input-todo-select]'); 
+
+			let oldVoteDateV = oldVoteDate.value;
+			let oldVoteSelectVName = oldSelectDate.options[oldSelectDate.selectedIndex].text;
+			let oldVoteSelectVId = oldSelectDate.value;
+
+			let newTodoListItem = makeTodoInputList(todoValue, oldVoteDateV, oldVoteSelectVName, oldVoteSelectVId);
+			document.querySelector('[data-todo-make-list]').append(newTodoListItem);
+
+			
+			//값 초기화
+			todoInput.value = '';
+			oldVoteDate.value ='';
+			oldSelectDate.value = '';
+
+		}
+
+	});
+
+	function makeTodoInputList(con, date, selN, selId) {
+		const li = document.createElement('li');
+		li.className = 'list-group-item';
+
+		const inputTodo = document.createElement('input');
+		inputTodo.type = 'text';
+		inputTodo.value = con;
+
+		const inputVoteDate = document.createElement('input');
+		inputVoteDate.type = 'date';
+		inputVoteDate.value = date;
+
+		const inputSelectDate = document.createElement('input');
+		inputSelectDate.type = 'text';
+		inputSelectDate.value = selN;
+		inputSelectDate.readOnly = true;
+
+		const inputSelectDate2 = document.createElement('input');
+		inputSelectDate2.type = 'text';
+		inputSelectDate2.value = selId;
+		inputSelectDate2.type= 'hidden';
+
+		let newSpan = document.createElement('span');
+		newSpan.className = 'spanCursor';
+		newSpan.textContent = 'X';
+
+		//x시 삭제
+		newSpan.addEventListener('click', function(e) {
+			e.target.parentElement.remove();
+		});
+
+		li.appendChild(inputTodo);
+		li.appendChild(inputVoteDate);
+		li.appendChild(inputSelectDate);
+		li.appendChild(inputSelectDate2);
+		li.appendChild(newSpan);
+
+		return li;
 	}
-});
 </script>
 
+<script>
+	function blankSearchTodo() {
+		let todoInsertPost = document.getElementById('modal4');
+		let postVoteTitle = todoInsertPost.querySelector('.postTitle');
+		if(postVoteTitle.value == '') {
+			alert('제목 입력');
+			return;
+		}
+		
+		//인풋값 찾기
+		let todoInputValuesList = todoInsertPost.querySelector('[data-todo-make-list]').querySelectorAll('input');
+		//인풋값 검사
+		if(todoInputValuesList.length == 0) {
+			alert('내용 하나라도 있어야 함');
+			return;
+		}
+		
+		let todoInputArrSub = [];
+		//인풋값 라인 넣기
+		for (let i = 0; i < todoInputValuesList.length; i += 4) {
+			let todoObj = {}; // 새로운 객체 생성
+			todoObj['todoContent'] = todoInputValuesList[i].value;
+			todoObj['todoEnd'] = todoInputValuesList[i + 1].value;
+			todoObj['id'] = todoInputValuesList[i + 3].value;
+			todoInputArrSub.push(todoObj); // 배열에 객체 추가
+		}
+		
+		//총 인풋 넣기
+		let todoTotalInput = {'postTitle' : postVoteTitle.value,//제목 넣기
+											 'proNo' : projectNo,//프로젝트 번호 넣기
+											 'pptcl' : todoInputArrSub};//인풋값 총 라인 넣기
+		console.log(todoTotalInput)
+
+		fetch("/creTodoPost", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(todoTotalInput)
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res)
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+
+
+
+
+	}
+</script>
 
 </body>
 </html>
