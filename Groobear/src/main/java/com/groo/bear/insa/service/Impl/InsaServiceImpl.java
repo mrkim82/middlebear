@@ -59,4 +59,29 @@ public class InsaServiceImpl implements InsaService{
 	public int userInfoListCnt(Criteria cri, EmpVO vo) {
 		return insaMapper.userInfoListCnt(cri, vo);
 	}
+
+	@Override
+	public int userInfoDel(List<EmpVO> vo) {
+		int count = 0;
+		for(int i=0; i < vo.size(); i++) {
+			insaMapper.userInfoDel(vo.get(i));
+			count += 1;
+		}
+		return count;
+	}
+
+	@Override
+	public int userInfoAdd(EmpVO vo) {
+		return insaMapper.userInfoAdd(vo);
+	}
+
+	@Override
+	public int checkPno(String pno) {
+		return insaMapper.checkPno(pno);
+	}
+
+	@Override
+	public int updateUserInfo(EmpVO vo) {
+		return insaMapper.updateUserInfo(vo);
+	}
 }

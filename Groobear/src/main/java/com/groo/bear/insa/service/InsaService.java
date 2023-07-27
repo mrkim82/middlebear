@@ -24,4 +24,12 @@ public interface InsaService {
 	public List<EmpVO> userInfoList(Criteria cri, EmpVO vo);
 	//페이징
 	public int userInfoListCnt(Criteria cri, EmpVO vo);
+	//UserInfo 삭제
+	public int userInfoDel(List<EmpVO> vo);
+	//UserInfo 등록
+	public int userInfoAdd(EmpVO vo);
+	//주민번호 중복체크
+	public int checkPno(String pno);
+	//인사정보 업데이트
+	public int updateUserInfo(EmpVO vo);
 }
