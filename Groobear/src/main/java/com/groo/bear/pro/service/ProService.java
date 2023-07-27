@@ -52,4 +52,8 @@ public interface ProService {
 	
 	//회원 가입시 프로젝트 그룹 생성
 	public boolean createProGroup(String id);
+	
+	//프로젝트 권한 조회
+	public ProVO readProAuth(int proNo);
+	
 }

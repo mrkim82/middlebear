@@ -1,5 +1,6 @@
 package com.groo.bear.pro.controller;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,57 +9,56 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 
-@RestController
+@Controller
 public class ProPostSchController {
 	@Autowired
 	ProPostSchService ppss;
 	
 	//참석여부변경
 	@PutMapping("updateSchPartiCheck")
+	@ResponseBody
 	public Map<String, Object> updateSchPartiCheck(HttpServletRequest request, @RequestBody ProPostSchVO vo) {
 		HttpSession session = request.getSession();
-		Map <String, Object> map = new HashMap<>();
-		String res;
 		
 		vo.setId((String)session.getAttribute("Id"));
 		int result = ppss.updateSchPartiCheck(vo);
 		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		
-		map.put("result", res);
-		return map;
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//참석자 단건 여러번 추가
 	@PostMapping("insertPartiMemberAll")
+	@ResponseBody
 	public Map<String, Integer> insertPartiMemberAll(HttpServletRequest request, @RequestBody List<ProPostSchVO> list) {
 		Map <String, Integer> map = new HashMap<>();
 		
-		int result = ppss.insertPartiMemberAll(list);
+		map.put("result", ppss.insertPartiMemberAll(list));//성공 건수 반환
 		
-		map.put("result", result);
 		return map;
 	}
 	
-	//참석자 전체 삭제
-	@PostMapping("deletePartiMemberAll")
-	public String deletePartiMemberAll(HttpServletRequest request, @RequestBody int schPlNo) {
-		ppss.deletePartiMemberAll(schPlNo);
-		return "삭제";
-	}
-	
+	//개인 캘린더 조회페이지 이동
+	@GetMapping("perSch")
+	public String proMainPage(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("Id");
+		
+		model.addAttribute("readPersonalSch", ppss.readPersonalSch(id));
+		model.addAttribute("readPerCalDetail", ppss.readPerCalDetail(id));
+		model.addAttribute("readPerCalCom", ppss.readPerCalCom(id));
+		
+		return "main/personalSch";
+	};
 	
 }

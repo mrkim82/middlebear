@@ -1,6 +1,5 @@
 package com.groo.bear.mail.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +19,7 @@ import com.groo.bear.mail.service.MailVO;
 import com.groo.bear.paging.Criteria;
 import com.groo.bear.paging.Paging;
 
+//김영환 1.메일
 @Controller
 public class MailController {
 	
@@ -28,13 +28,8 @@ public class MailController {
 	
 	//받은메일함
 	@GetMapping("mail/receiveMail")
-	public String receiveMailForm(Criteria cri ,Model model, MailVO mailVO, HttpServletRequest request,  @RequestParam(value="nowPage", required=false)String nowPage
+	public String receiveMailForm(Criteria cri ,Model model, MailVO mailVO, HttpSession session ,  @RequestParam(value="nowPage", required=false)String nowPage
 			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
-		HttpSession session = request.getSession();
-		String email = (String) session.getAttribute("Email");
-//		model.addAttribute("mailList",mailService.receiveMail(email));
-//		System.out.println("receiver는 ? "+session.getAttribute("Email"));
-		
 		mailVO.setReceiver((String) session.getAttribute("Email"));
 		mailVO.setReferrer((String) session.getAttribute("Email"));
 		String S = "S";
@@ -42,9 +37,7 @@ public class MailController {
 		//cri.setPerPageNum(2); //페이징 2개로 끊어서 보려고 임시로 적어둔것
 		Paging paging = new Paging();
         paging.setCri(cri);
-        System.out.println(mailVO);
         paging.setTotalCount(mailService.countReceiveMail((String) session.getAttribute("Email"),(String) session.getAttribute("Email")));
-        System.out.println("3");
 		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/receiveMail";
@@ -58,24 +51,17 @@ public class MailController {
 	@PostMapping("sendMail")
 	public String sendMail(Model model, MailVO mailVO,HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		System.out.println("1번");
-		System.out.println(mailVO);
-		System.out.println(session.getAttribute("Id"));
 		String id = (String) session.getAttribute("Id");
 		mailVO.setId(id);
-		System.out.println(mailVO);
 		model.addAttribute("mail",mailService.sendMail(mailVO));
         System.out.println("메일 전송 완료");
 		return "redirect:mail/sendingMail";
 	}
 	//보낸메일함
 	@GetMapping("mail/sendingMail")
-	public String sendingMailForm(Criteria cri, Model model, MailVO mailVO, HttpServletRequest request,  @RequestParam(value="nowPage", required=false)String nowPage
+	public String sendingMailForm(Criteria cri, Model model, MailVO mailVO, HttpSession session,  @RequestParam(value="nowPage", required=false)String nowPage
 			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
-		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("Email");
-//		model.addAttribute("mailList",mailService.sendingMail(email));
-//		System.out.println("sender는 ? "+session.getAttribute("Email"));
 		
 		mailVO.setSender(email);
 		String S = "S";
@@ -83,16 +69,13 @@ public class MailController {
 		Paging paging = new Paging();
         paging.setCri(cri);
         paging.setTotalCount(mailService.countSendMail(email));
-        System.out.println("email 개수"+mailService.countSendMail(email));
-        System.out.println("123"+mailVO);
 		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/sendingMail";
 	}
 	//지운메일함 폼
 	@GetMapping("mail/deleteMail")
-	public String deleteMailForm(Criteria cri, Model model, MailVO mailVO, HttpServletRequest request) {
-		HttpSession session = request.getSession();
+	public String deleteMailForm(Criteria cri, Model model, MailVO mailVO, HttpSession session) {
 		mailVO.setSender((String) session.getAttribute("Email"));
 		mailVO.setReceiver((String) session.getAttribute("Email"));
 		String D = "D";
@@ -112,8 +95,6 @@ public class MailController {
 		int count=0;
 	    for (int i = 0 ; i < delList.size() ; i++) { 
 	        mailService.deleteMail(delList.get(i));
-	        System.out.println("mailNO : "+delList.get(i));
-	        System.out.println("mailNo : "+mailService.deleteMail(delList.get(i)));
 	        count++;
 	    }
 		return count;
@@ -131,9 +112,7 @@ public class MailController {
 		//update하는곳
 		int count=0;
 	    for (int i = 0 ; i < delList.size() ; i++) { 
-	    	System.out.println("mailNo : "+mailService.deleteMail(delList.get(i)));
 	        mailService.realDeleteMail(delList.get(i));
-	        System.out.println("mailNO : "+delList.get(i));
 	        count++;
 	    }
 		return count;

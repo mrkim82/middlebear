@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/mailTiles}">
+<head>
+<meta charset="UTF-8">
+<title>InProgressPay</title>
+</head>
+<body layout:fragment="content">
+	<div style="width: 800px;">
+		<table style="float:left; width: 400px;">
+			<thead></thead>
+			<tbody>
+				<tr>
+					<td>문서 번호  [[${list.payNo}]]</td>
+				</tr>
+				<tr>
+					<td>작성자 [[${userInfo.name}]] [[${userInfo.rank}]] [[${userInfo.deptName}]]</td>
+				</tr>
+				<tr>
+					<td>작성일자 <input type="text" id="issueDate" th:value="${#dates.format(list.issueDate,'yyyy-MM-dd')}" readonly style="border: none;"></td>
+				</tr>
+				<tr>
+					<td id="sessionId" style="display: none;">[[${session.Id}]]</td>
+				</tr>
+			</tbody>
+		</table>
+		<table style="float:left; width: 380px;">
+			<thead></thead>
+			<tbody>
+				<tr>
+					<td>133333333333</td>
+					<td>23333333333</td>
+					<td>33333333333333333333333</td>
+				</tr>
+				<tr>
+					<td>45555555555</td>
+					<td>55555555555</td>
+					<td>6555555555555555</td>
+				</tr>
+				<tr>
+					<td>75555555555</td>
+					<td>85555555555</td>
+					<td>9555555555555555</td>
+				</tr>
+			</tbody>
+		</table>
+		<table style="float:left; width: 790px;">
+			<thead></thead>
+			<tbody>
+				<th:block th:if="${list.docType=='a'}">
+				<tr>
+					<td style="display:none" id="laydocType" th:value="${list.docType}"></td>
+				</tr>
+				<tr>
+					<td style="width: 300px;">사유 : <input type="text" id="purpose" th:value="${list.purpose}" readonly></td>
+					<td style="width: 300px;">운행일자 : <input type="text" id="operDate" th:value="${#dates.format(list.operDate, 'yyyy-MM-dd')}" readonly></td>
+				</tr> 
+				<tr>
+					<td>행선지 <input type="text" id="destination" th:value="${list.destination}"></td>
+				</tr>
+				<tr>
+					<td>운행전 키로수 <input type="text" id="befored" th:value="${list.befored}"</td>
+					<td>운행후 키로수 <input type="text" id="afterd" th:value="${list.afterd}"</td>
+				</tr>
+				<tr>
+					<td>첨부파일1</td>
+					<td>첨부파일2</td>
+				</tr>
+				</th:block>
+				<th:block th:if="${list.docType=='b'}">
+				<tr>
+					<td>시작일 <input text="date" id="userDate" th:value="${#dates.format(list.useDate,'yyyy-MM-dd')}"></td>
+					<td>복귀일 <input text="date" id="returnDate" th:value="${#dates.format(list.returnDate,'yyyy-MM-dd')}"></td>
+				</tr>
+				<tr>
+					<td>제목 <input type="text" id="offTitle" th:value="${list.title}"></td>
+				</tr>
+				<tr>
+					<td>내용 <textarea id="offContent" style="width: 400px;height: 200px;" th:text="${list.content}"/></td>
+				</tr>
+				<tr>
+					<td>첨부파일</td>
+				</tr>
+				<tr>
+					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"/></td>
+				</tr>
+				</th:block>
+				<th:block th:if="${list.docType == 'c'}">
+				<tr>
+					<td>제목 <input type="text" id="robinTitle" th:value="${list.title}"></td>
+				</tr>
+				<tr>
+					<td>내용 <textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}"/></td>
+				</tr>
+				<tr>
+					<td>첨부파일</td>
+				</tr>
+				<tr>
+					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"/></td>
+				</tr>
+			</th:block>
+			</tbody>
+		</table>
+		<th:block th:if="${(list.approver2 == session.Id and list.payStatus3 == 'N') OR
+							(list.id == session.Id and list.payStatus2 == 'N') }">
+			<button type="button" id="paymentModify" onclick="paymentModify()" style="margin-left:10px">수정</button>
+		</th:block>
+		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
+							(list.approver3 == session.Id and list.payStatus3 == 'N')}">
+			<button type="button" id="paymentOk" style="margin-left:10px">결재</button>
+		</th:block>
+		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
+							(list.approver3 == session.Id and list.payStatus3 == 'N')}">
+			<button type="button" id="paymentPass" style="margin-left:10px">반려</button>
+		</th:block>
+	</div>
+	<script>
+	/*<![CDATA[*/
+		let payNo = /*[[${list.payNo}]]*/
+		let userId = document.getElementById('sessionId').textContent;
+		let issueDate = document.getElementById('issueDate').value;
+		console.log('payNo',payNo);
+		console.log('userId',userId);
+		console.log('issueDate',issueDate);
+		function paymentModify(){
+			
+		}
+	
+	/*]]>*/
+	</script>
+</body>
+</html>

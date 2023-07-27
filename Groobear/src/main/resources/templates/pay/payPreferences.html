@@ -6,13 +6,28 @@
 <title>payPreferences</title>
 </head>
 <body layout:fragment="content">
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 	<!-- 전자서명 이동버튼 -->
 	<div>
-		<label><span>사원번호 </span><span>[[${userInfo.empNo}]]</span></label><br>
+		<div style="display:none" id="empNo">[[${userInfo.empNo}]]</div>
 		<label><span>이름 </span><span>[[${userInfo.name}]]</span></label><br>
 		<span id="userInfoId" style="display:none">[[${userInfo.Id}]]</span>
 		<!-- 해당위치에 경로써서 img가져오기 -->
-		<img src="C:\Users\user\Downloads\Kim.png" alt="이미지" /><br>
+		<div id="preview-container" class="uploadResult" style="margin-top: 20px;">
+			<th:block th:if="${userSignInfo != null && userSignInfo != ''}">
+				<ul>
+					<li th:data-path="${userSignInfo.uploadPath}" th:data-uuid="${userSignInfo.uuid}"
+					data-filename="${userSignInfo.fileName}" data-type="true" style="list-style-type: none;">
+						<div>
+							<img th:src="@{|/display?fileName=${#strings.replace(userSignInfo.uploadPath,'\','/')}/${userSignInfo.uuid}_${userSignInfo.fileName}|}" 
+							th:data-uploadpath="${userSignInfo.uploadPath}" th:data-uuid="${userSignInfo.uuid}"
+							th:data-filename="${userSignInfo.fileName}" data-type="true"  style="border:1px solid;">
+						</div>
+					</li>
+				</ul>
+			</th:block>
+		</div>
+		<button type="button" id="signDelete">개인서명제거</button>
 		<button type="button" id="paySign" onclick="paySignSet()">개인서명등록</button>
 		<button type="button" id="publicSign" onclick="publicSignSet()">공용서명등록</button>
 	</div>
@@ -20,6 +35,8 @@
 		let openPaySign;
 		let userId = document.getElementById('userInfoId').textContent;
 		console.log(userId);
+		let signNo = document.getElementById('empNo').textContent;
+		console.log('empNo = ',empNo);
 		//개인서명 등록 모달로 이동
 		function paySignSet(){
 			openPaySign = window.open("/pay/paySign","paymentEmp","width=400, height=450, resizable = no");
@@ -28,6 +45,26 @@
 		function publicSignSet(){
 			
 		}
+		//공용서명 div제거
+		$("#signDelete").on("click", function(){
+			 var previewContainer = $("#preview-container");
+             previewContainer.empty(); // 기존 이미지 삭제
+             $("input[type='file']").val(""); // 선택한 파일 초기화
+             //ajax통신
+             $.ajax({
+            	 url: "/signdelete",
+            	 method:"POST",
+            	 contentType:"application/json; charset=utf-8",
+   			     data: signNo,
+   			  	 success: function(data) {
+   			    	 console.log(data);
+   			    	 location.href = "/pay/payPreferences";
+   			     },
+   			     error: function(err){
+   			    	 console.log(err);
+   			     }
+   			 });
+        });
 	</script>
 </body>
 </html>

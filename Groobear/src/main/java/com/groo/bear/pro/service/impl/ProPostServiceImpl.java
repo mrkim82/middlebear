@@ -57,51 +57,19 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public String createPostComment(ProPostCommentVO vo) {
-		String res = "";
-		
-		int result = ppm.createPostComment(vo);
-		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		
-		return res;
+	public int createPostComment(ProPostCommentVO vo) {
+		ppm.createPostComment(vo);
+		return vo.getComNo();
 	}
 
 	@Override
-	public String deletePostComment(int comNo) {
-		String res = "";
-		
-		int result = ppm.deletePostComment(comNo);
-		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		
-		return res;
+	public int deletePostComment(int comNo) {
+		return ppm.deletePostComment(comNo);
 	}
 
 	@Override
-	public String updatePostComment(ProPostCommentVO vo) {
-		String res = "";
-		
-		int result = ppm.updatePostComment(vo);
-		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		
-		return res;
+	public int updatePostComment(ProPostCommentVO vo) {
+		return ppm.updatePostComment(vo);
 	}
 
 	@Override
@@ -110,19 +78,8 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public String updateWorkPostStatus(ProPostWorkVO vo) {
-		String res = "";
-		
-		int result = ppm.updateWorkPostStatus(vo);
-		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		
-		return res;
+	public int updateWorkPostStatus(ProPostWorkVO vo) {
+		return ppm.updateWorkPostStatus(vo);
 	}
 
 	@Override
@@ -147,6 +104,11 @@ public class ProPostServiceImpl implements ProPostService {
 	        }
 	    }
 	    return updatedList;
+	}
+
+	@Override
+	public int updateProfileMemo(ProPostUserVO vo) {
+		return ppm.updateProfileMemo(vo);
 	}
 
 }
