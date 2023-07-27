@@ -58,25 +58,18 @@
 		
 	</div>
 	<div>
-			<ul class="paging pagination pagination-sm"
-				th:if="${paging.endPage != 0}">
-
-				<li class="page-item disabled"><a class="page-link"
-					th:href="|javascript:goPage(1)|">&laquo;</a></li>
-				<li th:if="${paging.prev}" class="page-item disabled"><a
-					th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a></li>
-				<li class="page-item active"
-					th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-					<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
-					th:text="${num}"></a>
-				</li>
-				<li th:if="${paging.next and paging.endPage > 0}"><a
-					th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a></li>
-				<li class="page-item"><a class="page-link"
-					th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
-				</li>
-			</ul>
-		</div>
+		<ul class="paging pagination pagination-sm" th:if="${paging.endPage != 0}">
+	        <li th:if="${paging.prev}" class="page-item disabled">
+	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+	        </li>
+	        <li class="page-item active" th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+	            <a class="page-link" th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+	        </li>
+	        <li th:if="${paging.next and paging.endPage > 0}">
+	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+	        </li>
+    	</ul>
+	</div>
 	
 	
 		<div class="modal fade" id="carMInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

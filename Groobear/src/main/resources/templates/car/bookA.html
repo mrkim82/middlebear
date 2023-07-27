@@ -26,7 +26,7 @@
 			src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
 
 		<!-- Modal -->
-		<div class="modal fade" id="commuteModal" tabindex="-1"
+		<div class="modal fade" id="bookModal" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -79,19 +79,19 @@
 
 
 		<div>
-			<h3 style="text-align: center;">근태관리</h3>
+			<h3 style="text-align: center;">운행 일지 관리</h3>
 		</div>
 		<div>
-			<form name="searchForm" action="commuteList">
+			<form name="searchForm" action="bookList">
 				<input type="hidden" name="page" value="1" /> <input
 					style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
 					type="date"
-					th:value="${#dates.format(commuteVO.startDay, 'yyyy-MM-dd')}"
+					th:value="${#dates.format(carVO.startDay, 'yyyy-MM-dd')}"
 					name="startDay" id="startDate" onchange="mindate(); changeDate();">
 				<input
 					style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
 					type="date"
-					th:value="${#dates.format(commuteVO.endDay, 'yyyy-MM-dd')}"
+					th:value="${#dates.format(carVO.endDay, 'yyyy-MM-dd')}"
 					name="endDay" id="endDate" onchange="changeDate()">
 				<div style="position: absolute; display: inline-block; right: 25px;">
 					<select
@@ -99,7 +99,7 @@
 						name="type">
 						<option value='' selected>선택</option>
 						<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
-						<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
+						<option value='destination' th:selected="${criteria.type == 'destination'}">행선지</option>
 						<option value='deptName'
 							th:selected="${criteria.type == 'deptName'}">부서</option>
 					</select> <input
@@ -113,38 +113,33 @@
 			<table class="table table-hover" style="margin-top: 5px;">
 				<thead>
 					<tr>
-						<th>날짜</th>
+						<th>작성일</th>
 						<th>사번</th>
 						<th>부서</th>
 						<th>이름</th>
-						<th>출근</th>
-						<th>퇴근</th>
-						<th>근무시간</th>
-						<th>연장근무시간</th>
-						<th>근무 여부</th>
+						<th>행선지</th>
+						<th>운행 키로수</th>
+						<th>진행 상태</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="cml table-default" th:if="${commuteList != null}"
-						th:each="comm, stat:${commuteList}" th:onclick="commuteInfo()"
-						data-mdb-toggle="modal" data-mdb-target="#commuteModal">
-						<td>[[${#dates.format(comm.day,'MM/dd')}]]</td>
-						<td class="empNo">[[${comm.empNo}]]</td>
-						<td class="dept">[[${comm.deptName}]]</td>
-						<td class="name">[[${comm.name}]]</td>
-						<td class="wStart">[[${#dates.format(comm.workStart,'HH:mm')}]]</td>
-						<td class="wEnd">[[${#dates.format(comm.workEnd,'HH:mm')}]]</td>
-						<td class="wt">[[${comm.workTime}]]</td>
-						<td class="owt">[[${comm.overWorkTime}]]</td>
-						<td th:if="${comm.offStatus == 'N'}">결근</td>
-						<td th:if="${comm.offStatus == 'Y'}">근무</td>
-						<td th:if="${comm.offStatus == 'O'}">휴무</td>
-						<td class="owStart">[[${#dates.format(comm.overWorkStart,'HH:mm')}]]</td>
-						<td class="owEnd">[[${#dates.format(comm.overWorkEnd,'HH:mm')}]]</td>
-						<td class="id" style="display: none;">[[${comm.id}]]</td>
-						<td class="day" style="display: none;">[[${#dates.format(comm.day,'yyyy-MM-dd')}]]</td>
+					<tr class="cml table-default" th:if="${bookList != null}"
+						th:each="bk, stat:${bookList}" th:onclick="bookInfo()"
+						data-mdb-toggle="modal" data-mdb-target="#bookModal">
+						<td>[[${#dates.format(bk.operDate,'MM/dd')}]]</td>
+						<td class="empNo">[[${bk.empNo}]]</td>
+						<td class="dept">[[${bk.deptName}]]</td>
+						<td class="name">[[${bk.name}]]</td>
+						<td class="destination">[[${bk.destination}]]</td>
+						<td class="driveKM">[[${bk.afterd}-${bk.befored}]]</td>
+						<td th:if="${bk.payStatus2 == 'F' || bk.payStatus3 == 'F'}">반려</td>
+						<td th:if="${bk.payStatus2 == 'N' || bk.payStatus3 == 'N'} and ${bk.payStatus2 != 'F'}">진행중</td>
+						<td th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'Y'}">지급 완료</td>
+						<td th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'N'} and ${bk.approver3 == ''}">지급 완료</td>
+						<td class="day" style="display: none;">[[${#dates.format(bk.day,'yyyy-MM-dd')}]]</td>
+						<td class="id" style="display: none;">[[${bk.id}]]</td>
 					</tr>
-				</tbody>
+				</tbody>	
 			</table>
 
 		</div>
@@ -183,57 +178,15 @@
 				let empNo = event.currentTarget.querySelector('.empNo').innerText;
 				let dept = event.currentTarget.querySelector('.dept').innerText;
 				let name = event.currentTarget.querySelector('.name').innerText;
-				let oldWorkStart = event.currentTarget.querySelector('.wStart').innerText;
-				let oldWorkEnd = event.currentTarget.querySelector('.wEnd').innerText;
 				let id = event.currentTarget.querySelector('.id').innerText;
-				let day = event.currentTarget.querySelector('.day').innerText;
-
-				console.log(name);
-				console.log(oldWorkStart);
-				console.log(day);
 
 				document.querySelector('#mEmpNo').textContent = empNo;
 				document.querySelector('#mDept').textContent = dept;
 				document.querySelector('#mName').textContent = name;
-				document.querySelector('#newWorkStart').value = oldWorkStart;
-				document.querySelector('#newWorkEnd').value = oldWorkEnd;
 				document.querySelector('#mId').value = id;
-				document.querySelector('#mDate').value = day;
 			}
 
-			for (let i = 0; i < document.querySelectorAll('.cml').length; i++) {
-
-				var number = document.querySelectorAll('.wt')[i].textContent;
-
-				var hours = Math.floor(number / 60);
-				if (hours < 10) {
-					hours = '0' + hours;
-				}
-				var minutes = number % 60;
-				if (minutes < 10) {
-					minutes = '0' + minutes;
-				}
-
-				var cal = hours + ':' + minutes;
-
-				document.querySelectorAll('.wt')[i].textContent = cal;
-
-				var number2 = document.querySelectorAll('.owt')[i].textContent;
-
-				var hours2 = Math.floor(number2 / 60);
-				if (hours2 < 10) {
-					hours2 = '0' + hours2;
-				}
-				var minutes2 = number2 % 60;
-				if (minutes2 < 10) {
-					minutes2 = '0' + minutes2;
-				}
-
-				var cal2 = hours2 + ':' + minutes2;
-
-				document.querySelectorAll('.owt')[i].textContent = cal2;
-
-			}
+			
 
 			var today = new Date();
 
@@ -243,7 +196,6 @@
 
 			var dateString = year + '-' + month + '-' + day;
 
-			console.log(dateString);
 			//debugger
 			if (document.querySelector('#startDate').value == '') {
 				document.querySelector('#startDate').value = dateString;
@@ -251,7 +203,6 @@
 
 			function mindate() {
 				let min = document.querySelector('#startDate').value;
-				console.log(min)
 				document.querySelector('#endDate').setAttribute('min', min);
 
 			}
@@ -269,58 +220,11 @@
 			})
 			
 			
-			<!-- 시간 변환 -->
-			function changeTimes(dateTimeStr) {
-			     const date = new Date();
-			     const year = date.getFullYear();
-			     const month = String(date.getMonth() + 1).padStart(2, '0');
-			     const day = String(date.getDate()).padStart(2, '0');
-			     const hours = String(date.getHours()).padStart(2, '0');
-			     const minutes = String(date.getMinutes()).padStart(2, '0');
-			
-			     return `${year}-${month}-${day} ${dateTimeStr}`;
-			   }
-			
-			
-			
-/* 			<!-- 시간 변환 -->
-function ct(dateTimeStr) {
-     const date = new Date(dateTimeStr);
-     const year = date.getFullYear();
-     const month = String(date.getMonth() + 1).padStart(2, '0');
-     const day = String(date.getDate()).padStart(2, '0');
-     const hours = String(date.getHours()).padStart(2, '0');
-     const minutes = String(date.getMinutes()).padStart(2, '0');
-
-     return `${year}-${month}-${day} ${hours}:${minutes}`;
-   } */
-			
 			
 			document.querySelector('#saveBtn').addEventListener('click',function(){
-				
-			console.log(ct(document.querySelector('#mDate').value))
-			console.log(ct(document.querySelector('#newWorkStart').value))
-			console.log(ct(document.querySelector('#mDate').value))
-			console.log(ct(document.querySelector('#newWorkEnd').value))
-			console.log(ct(document.querySelector('#mDate').value))
-				
-				 let data = {
-						'id' : document.querySelector('#mId').value,
-						'workStart2' : document.querySelector('#mDate').value + ' ' +document.querySelector('#newWorkStart').value,
-						'workEnd2' : document.querySelector('#mDate').value + ' ' +document.querySelector('#newWorkEnd').value,
-						'day2' : document.querySelector('#mDate').value
-				} 
-				/*  let data = {
-						'id' : document.querySelector('#mId').value,
-						'workStart' : ct(document.querySelector('#mDate').value),
-						'workEnd' : ct(document.querySelector('#newWorkEnd').value),
-						'day' : ct(document.querySelector('#mDate').value)
-				}
-				 */
-				
-				
+					
 				    console.log(data)
-				
+					
 					fetch('/commuteUpdate', {
 		               method : 'post',
 		               headers : {
