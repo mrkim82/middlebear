@@ -52,6 +52,16 @@ public class CarServiceImpl implements CarService {
 		return carMapper.deleteCar(carNo);
 	}
 
+	@Override
+	public List<CarVO> allBook(Criteria cri, CarVO carVO) {
+		return carMapper.getAllbook(cri, carVO);
+	}
+
+	@Override
+	public int bookCnt(Criteria cri, CarVO carVO) {
+		return carMapper.bookListCnt(cri, carVO);
+	}
+
 	
 
 	

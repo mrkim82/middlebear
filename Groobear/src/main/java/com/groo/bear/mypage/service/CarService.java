@@ -23,8 +23,11 @@ public interface CarService {
 	public int carUpdate(CarVO carVO);
 	//삭제
 	public int carDelete(String carNo);
-
-
+	
+	//운행일지 전체 조회
+	public List<CarVO> allBook(Criteria cri, CarVO carVO);
+	//운행일지 페이징
+	public int bookCnt(Criteria cri, CarVO carVO);
 
 
 }

@@ -155,10 +155,13 @@
 					 , p.pay_status1
 					 , p.pay_status2
 					 , p.pay_status3
+					 , p.approver3
 					 , p.id
 					 , ui.name
 					 , u.emp_no
 					 , d.dept_name
+					 , p.pay_no
+                     , p.doc_type
 				from 
 					   payment p
 					 , payment_logbook pl
@@ -178,8 +181,17 @@
 			</if><if test="cri.type != null and cri.type.equals('deptName')">
 				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
 			</if>
+			<if test="carVO.startDay != null and carVO.endDay != null">
+                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN #{carVO.startDay} AND #{carVO.endDay}
+            </if>
+            <if test="carVO.startDay != null and carVO.endDay == null">
+                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN #{carVO.startDay} AND to_char(sysdate, 'YYYY-MM-DD')
+            </if>
+            <if test="carVO.startDay == null and carVO.endDay == null">
+                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN to_char(sysdate, 'YYYY-MM-DD') AND to_char(sysdate, 'YYYY-MM-DD')
+            </if>
 			
-		order by u.emp_no
+		order by pl.oper_date desc
 		) t
             )
             <![CDATA[
@@ -207,6 +219,15 @@
 			</if><if test="cri.type != null and cri.type.equals('deptName')">
 				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
 			</if>
+			<if test="carVO.startDay != null and carVO.endDay != null">
+                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN #{carVO.startDay} AND #{carVO.endDay}
+            </if>
+            <if test="carVO.startDay != null and carVO.endDay == null">
+                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN #{carVO.startDay} AND to_char(sysdate, 'YYYY-MM-DD')
+            </if>
+            <if test="carVO.startDay == null and carVO.endDay == null">
+                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN to_char(sysdate, 'YYYY-MM-DD') AND to_char(sysdate, 'YYYY-MM-DD')
+            </if>
 	</select>
 		
 		

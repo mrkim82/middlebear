@@ -102,7 +102,7 @@
 			  <a href="/carList"><span class="material-icons">build</span> 차량관리 </a>            
 			</li>
             <li class="nav-item">
-              <a href="#about"><span class="material-icons">info</span> 운행일지관리</a>
+              <a id="book"><span class="material-icons">info</span> 운행일지 관리</a>
             </li>
             <li class="nav-item">
               <a href="myPageCheckPassword"><span class="material-icons">people</span> 회원정보변경</a>
@@ -128,25 +128,13 @@
 	console.log(monthDate)
 	
 	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
+	document.getElementById('book').setAttribute('href','/bookList/'+monthDate)
 	
-	/* function getList(){
-		
-		fetch("monthWork", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(sInfo)
-			})
-		.then(response => response.json())
-		.then(data => {
-				console.log(data);
-			})
-			.catch(err => {
-				console.log(err);
-			}); 
-		
-	} */
+	
+	
+	
+	
+	
 	</script>
 
       <!-- 사이드바 우측의 컨텐츠 영역 -->

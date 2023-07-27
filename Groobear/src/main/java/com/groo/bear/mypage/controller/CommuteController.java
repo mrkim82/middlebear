@@ -101,6 +101,7 @@ public class CommuteController {
 		Date workEnd = (Date)session.getAttribute("WorkEnd");
 		System.out.println(workEnd);
 		if(workEnd != null) {
+		System.out.println("김도현 ! 다이스키,,");
 			commuteService.startOverWork(commuteVO);	
 		}else {
 			commuteService.ewStartOverWork(commuteVO);
