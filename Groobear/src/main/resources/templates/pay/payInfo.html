@@ -81,7 +81,7 @@
 					<td>운행전 키로수 <input type="text" id="befored" th:value="${list.befored}"></td>
 					<td>운행후 키로수 <input type="text" id="afterd" th:value="${list.afterd}"></td>
 				</tr>
-				<tr><td><button type="button" id="robinofffiles">첨부파일(선택)</button></td></tr>
+				<tr><td><button type="button" id="logfiles1">첨부파일(선택)</button></td></tr>
 						<tr><td><div class="panel-body1">
 	                        <div class="form-group uploadDiv1">
 	                            <input name="uploadFile1" type="file" multiple>
@@ -93,7 +93,7 @@
 	                        </div>
 	                    	</div>
 	                    </td></tr>
-				<tr><td><button type="button" id="robinofffiles">첨부파일(선택)</button></td></tr>
+				<tr><td><button type="button" id="logfiles2">첨부파일(선택)</button></td></tr>
 				<tr><td>
 					<div class="panel-body2">
                         <div class="form-group uploadDiv2">
@@ -121,9 +121,19 @@
 				<tr>
 					<td>내용 <textarea id="offContent" style="width: 400px;height: 200px;" th:text="${list.content}"/></td>
 				</tr>
-				<tr>
-					<td>첨부파일</td>
-				</tr>
+				<tr><td><button type="button" id="offfiles">첨부파일(선택)</button></td></tr>
+						<tr><td><div class="panel-body3">
+	                        <div class="form-group uploadDiv3">
+	                            <input name="uploadFile3" type="file" multiple>
+	                        </div>
+	                        <div class="uploadResult3">
+	                            <ul>
+	
+	                            </ul>
+	                        </div>
+	                    	</div>
+	                    </td></tr>
+				<tr><td><button type="button" id="offfiles">첨부파일(선택)</button></td></tr>
 				<tr>
 					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"/></td>
 				</tr>
@@ -138,9 +148,18 @@
 				<tr>
 					<td>내용 <textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}"/></td>
 				</tr>
-				<tr>
-					<td>첨부파일</td>
-				</tr>
+				<tr><td><button type="button" id="robinfiles">첨부파일(선택)</button></td></tr>
+						<tr><td><div class="panel-body4">
+	                        <div class="form-group uploadDiv4">
+	                            <input name="uploadFile4" type="file" multiple>
+	                        </div>
+	                        <div class="uploadResult4">
+	                            <ul>
+	
+	                            </ul>
+	                        </div>
+	                    	</div>
+                </td></tr>
 				<tr>
 					<td>코멘트 <textarea id="robinCom" style="width: 400px;height: 200px;" th:text="${list.com}"/></td>
 				</tr>
