@@ -15,10 +15,10 @@ import lombok.ToString;
 @ToString
 public class ProPostTodoCreVO {
 	private String postTitle;
+	private String id;
+	private int proNo;
+	private int proPostNo;
 	private List<ProPostTodoCreListVO> pptcl;
 	
-	private int proNo;
-	private String id;
-	private String proPostNo;
 	
 }

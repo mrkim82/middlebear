@@ -50,14 +50,22 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 	@Override
 	public int createTodo(ProPostTodoCreVO vo) {
 		int count = 0;
-		//tv.createPostTodo(vo);
+		
+		//todo용 게시물 생성
+		tv.createPostTodo(vo);
+		int proPostNo = vo.getProPostNo();
+		System.out.println("1차"+vo);
+		
 		List<ProPostTodoCreListVO> todoDetails = vo.getPptcl();
-		System.out.println(todoDetails);
+		System.out.println("총 세부" + todoDetails);
+		
+		//todo 생성
 		for (ProPostTodoCreListVO todoDetail : todoDetails) {
+			todoDetail.setProPostNo(proPostNo);
 			System.out.println("투두" + todoDetail);
+			tv.createTodo(todoDetail);
 			count++;
 		}
-		
 		
 		return count;
 	}

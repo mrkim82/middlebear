@@ -3,6 +3,7 @@ package com.groo.bear.pro.mapper;
 import java.util.List;
 
 import com.groo.bear.pro.service.todovote.ProPostTodoCountVO;
+import com.groo.bear.pro.service.todovote.ProPostTodoCreListVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 import com.groo.bear.pro.service.todovote.ProPostVoteVO;
@@ -30,5 +31,5 @@ public interface ProTodoNVoteMapper {
 	//할 일 생성
 	public int createPostTodo(ProPostTodoCreVO vo);
 	//할 일 내용
-	public int createTodo(ProPostTodoCreVO vo);
+	public int createTodo(ProPostTodoCreListVO todoDetail);
 }

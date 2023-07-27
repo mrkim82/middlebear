@@ -585,7 +585,7 @@ function drawChart() {
 								<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
 								<div>
 							        <span th:text="${allPost.profileImg}"></span>
-							        <span th:text="${allPost.name}"></span>
+							        <span th:text="'작성자 : ' + ${allPost.name}"></span>
 							        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
 							        <span th:text="업무번호 + ${allPost.workNo}"></span>
 							        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
@@ -738,7 +738,7 @@ function drawChart() {
 								<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
 								<div>
 							        <span th:text="${allPost.profileImg}"></span>
-							        <span th:text="${allPost.name}"></span>
+							        <span th:text="'작성자 : ' + ${allPost.name}"></span>
 							        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
 							        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
 							        <span onclick="deletePost()" style="cursor: pointer;">X</span>
@@ -804,7 +804,7 @@ function drawChart() {
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
 						<div>
 								<span th:text="${allPost.profileImg}"></span>
-								<span th:text="${allPost.name}"></span>
+								<span th:text="'작성자 : ' + ${allPost.name}"></span>
 								<span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
 								<span onclick="updatePost()" style="cursor: pointer;">수정</span>
 						        <span onclick="deletePost()" style="cursor: pointer;">X</span>
@@ -968,7 +968,7 @@ function drawChart() {
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
 						<div>
 					        <span th:text="${allPost.profileImg}"></span>
-					        <span th:text="${allPost.name}"></span>
+					        <span th:text="'작성자 : ' + ${allPost.name}"></span>
 					        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
 					        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
 					        <span onclick="deletePost()" style="cursor: pointer;">X</span>
@@ -990,15 +990,21 @@ function drawChart() {
 							<!-- 할 일 체크 공간 -->
 							<div>
 								<ul class="list-group">
-								  <li class="list-group-item" th:each="rt : ${readTodoList}" th:if="${rt.proPostNo == allPost.proPostNo}">
-								    <input class="form-check-input me-1" type="checkbox"
+								  <li class="list-group-item"
+								  	  th:each="rt : ${readTodoList}"
+								  	  th:if="${rt.proPostNo == allPost.proPostNo}"
+								  	  th:style="${rt.todoCheck == 'Y'} ? 'text-decoration : line-through' : ''">
+								    <input class="form-check-input me-1"
+								    	   type="checkbox"
 								    	   th:data-todo-no="${rt.todoNo}"
-								    	   th:checked="${rt.todoCheck == 'Y'}" style="cursor: pointer;"
+								    	   th:checked="${rt.todoCheck == 'Y'}"
+								    	   style="cursor: pointer;"
 										   th:onclick="changeTodoStatus()">
 								    	   <!-- th:value="${rt.todoNo}" th:id="'firstCheckboxStretched' + ${rt.todoNo}" -->
-								   	<span th:text="${rt.todoContent}"></span>
-										<span th:text="${#dates.format(rt.todoEnd, 'MM/dd')}"  th:style="${rt.todoEnd >= #dates.format(currentTime, 'MM/dd') ? 'color: red' : ''}"></span>
-										<span th:text="'담당자' + ${rt.name}"></span>
+								   	<span th:text="'Todo : ' + ${rt.todoContent}"></span>
+									<span th:text="${rt.todoEnd == null} ? '' : '마감일 : ' + ${#dates.format(rt.todoEnd, 'MM/dd')}"
+										  th:style="${rt.todoEnd >= #dates.format(currentTime, 'MM/dd') ? 'color: red' : ''}"></span>
+									<span th:text="${rt.name == null} ? '' : '담당자 : ' + ${rt.name}"></span>
 								  </li>
 								</ul>
 							</div>
@@ -1046,7 +1052,7 @@ function drawChart() {
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
 						<div>
 					        <span th:text="${allPost.profileImg}"></span>
-					        <span th:text="${allPost.name}"></span>
+					        <span th:text="'작성자 : ' + ${allPost.name}"></span>
 					        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
 					        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
 					        <span onclick="deletePost()" style="cursor: pointer;">X</span>
@@ -1808,7 +1814,7 @@ function drawChart() {
 			let todoNo = event.target.dataset.todoNo;
 			let checkedYN = event.target.checked ? 'Y' : 'N';
 			let totalInputExp = event.target.parentNode.parentNode;
-			
+			//checkedYN으로 줄긋기 설정하기
 			fetch("/updateTotoStatus", {
 				method: 'PUT',
 				headers: {
@@ -2216,7 +2222,8 @@ function convertToFormattedDateTime(dateTimeStr) {
 		})
 		.then(response => response.json())
 		.then(res => {
-			console.log(res)
+			console.log(res);
+			location.reload();
 		})
 		.catch(error => {
 			console.error('Error: ',error);

@@ -9,11 +9,12 @@
 		SELECT a.todo_no, a.pro_post_no, a.todo_content, a.todo_end, a.todo_check, a.id, d.name
 		FROM todo a JOIN pro_post b
 		ON(a.pro_post_no = b.pro_post_no)
-		JOIN users c
+		LEFT JOIN users c
 		ON(a.id = c.id)
-		JOIN user_info d
+		LEFT JOIN user_info d
 		ON(c.emp_no = d.emp_no)
 		WHERE b.pro_no = #{proNo}
+		ORDER BY a.todo_no
 	</select>
 
 	<!-- 체크리스트 yn여부 바꾸기 -->

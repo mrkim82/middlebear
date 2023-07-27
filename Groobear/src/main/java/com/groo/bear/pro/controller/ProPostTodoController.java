@@ -36,11 +36,11 @@ public class ProPostTodoController {
 	public Map<String, Object> creTodoPost(HttpServletRequest request, @RequestBody ProPostTodoCreVO vo) {
 		Map <String, Object> map = new HashMap<>();
 		HttpSession session = request.getSession();
+		
 		vo.setId((String)session.getAttribute("Id"));
 		
-		System.out.println("vo테스트"+vo);
-		ps.createTodo(vo);
-		map.put("result", "ㄴ");
+		int result = ps.createTodo(vo);
+		map.put("result", result);
 		return map;
 	}
 }
