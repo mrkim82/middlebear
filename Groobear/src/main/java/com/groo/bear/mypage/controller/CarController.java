@@ -96,9 +96,41 @@ public class CarController {
 		return result;
 	}
 	
+	//운행일지 조회
+	@GetMapping("bookList/{monthDate}")
+	public String carBook(HttpServletRequest request, Model model, CarVO carVO, Criteria cri) {
+		
+		int bookListCnt = carService.bookCnt(cri, carVO);
+		System.out.println(bookListCnt);
+			
+		Paging paging = new Paging();
+		paging.setCri(cri);
+		paging.setTotalCount(bookListCnt);    
+		
+		System.out.println(paging);
+
+		HttpSession session = request.getSession();
+		
+		String id = (String)session.getAttribute("Id");
+		String empG = (String)session.getAttribute("EmpGrade");
+		System.out.println(empG);
+		
+		if(empG.equals("A")) {
+			model.addAttribute("bookList",carService.allBook(cri, carVO));
+			model.addAttribute("paging",paging);
+			System.out.println(model);
+			
+			return "car/bookA";
+		}else {
+			
+			
+			return "car/bookP";
+		}
 	
 	
+	}
 	
+
 	
 	
 }

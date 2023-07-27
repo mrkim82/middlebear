@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.emp.service.EmpVO;
 import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.files.mapper.FilesMapper;
+import com.groo.bear.paging.Criteria;
 import com.groo.bear.payment.mapper.PaymentMapper;
 import com.groo.bear.payment.service.PaymentService;
 import com.groo.bear.payment.service.PaymentVO;
@@ -42,8 +43,8 @@ public class PaymentServiceImpl implements PaymentService{
 	}
 
 	@Override
-	public int paymentLogBook(PaymentVO payVO) {
-		return paymentMapper.paymentLogBook(payVO);
+	public int paymentInsert(PaymentVO payVO) {
+		return paymentMapper.paymentInsert(payVO);
 	}
 
 	@Override
@@ -80,5 +81,75 @@ public class PaymentServiceImpl implements PaymentService{
 	@Override
 	public int robinDataInsert(PaymentVO payVO) {
 		return paymentMapper.robinDataInsert(payVO);
+	}
+
+	@Override
+	public List<PaymentVO> paymentList(Criteria cri, PaymentVO payVO) {
+		return paymentMapper.paymentList(cri, payVO);
+	}
+
+	@Override
+	public int countPaymentList(String id) {
+		return paymentMapper.countPaymentList(id);
+	}
+
+	@Override
+	public PaymentVO logList(int payNo) {
+		return paymentMapper.logList(payNo);
+	}
+
+	@Override
+	public PaymentVO offList(int payNo) {
+		return paymentMapper.offList(payNo);
+	}
+
+	@Override
+	public PaymentVO robinList(int payNo) {
+		return paymentMapper.robinList(payNo);
+	}
+
+	@Override
+	public int logUpdate(PaymentVO payVO) {
+		return paymentMapper.logUpdate(payVO);
+	}
+
+	@Override
+	public int offUpdate(PaymentVO payVO) {
+		return paymentMapper.offUpdate(payVO);
+	}
+
+	@Override
+	public int robinUpdate(PaymentVO payVO) {
+		return paymentMapper.robinUpdate(payVO);
+	}
+
+	@Override
+	public int paymentReject2(PaymentVO payVO) {
+		return paymentMapper.paymentReject2(payVO);
+	}
+
+	@Override
+	public int paymentReject3(PaymentVO payVO) {
+		return paymentMapper.paymentReject3(payVO);
+	}
+
+	@Override
+	public List<PaymentVO> completePaymentList(Criteria cri, PaymentVO payVO) {
+		return paymentMapper.completePaymentList(cri, payVO);
+	}
+
+	@Override
+	public int completePayCount(String id) {
+		return paymentMapper.completePayCount(id);
+	}
+
+	@Override
+	public List<PaymentVO> referrerPayList(Criteria cri, PaymentVO payVO) {
+		return paymentMapper.referrerPayList(cri, payVO);
+	}
+
+	@Override
+	public int referrerPayCount(String id) {
+		return paymentMapper.referrerPayCount(id);
 	}	
 }

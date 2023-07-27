@@ -102,7 +102,7 @@
 			  <a href="/carList"><span class="material-icons">build</span> 차량관리 </a>            
 			</li>
             <li class="nav-item">
-              <a href="#about"><span class="material-icons">info</span> 운행일지관리</a>
+              <a id="book"><span class="material-icons">info</span> 운행일지 관리</a>
             </li>
             <li class="nav-item">
               <a href="/myPageCheckPassword"><span class="material-icons">people</span> 회원정보변경</a>
@@ -110,6 +110,32 @@
           </ul>
         </div>
       </nav>
+<div class="data" style="display:none">
+	<p class="id">[[${session.Id}]]</p>
+	<p class="nowMon"></p>
+	
+</div>
+	<script>
+	
+	var today = new Date();
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var monthString = year + '-' + month;
+	
+	const id = document.querySelector('.id').textContent;
+	const monthDate = monthString;
+	
+	console.log(monthDate)
+	
+	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
+	document.getElementById('book').setAttribute('href','/bookList/'+monthDate)
+	
+	
+	
+	
+	
+	
+	</script>
 
       <!-- 사이드바 우측의 컨텐츠 영역 -->
       <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
@@ -117,6 +143,11 @@
       </main>
     </div>
     <script th:inline="javascript">
+    
+    
+    
+    
+    
     </script>
   </body>
 </html>

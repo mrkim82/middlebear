@@ -92,7 +92,7 @@ p {
 		<span th:text="${session.Pno}"></span>
 	</p>
 	<a href="/proMain">프로젝트</a>
-	
+	<a href="/roomList">실시간대화</a>
 	<div class="work">
 		
 	</div>	
@@ -324,9 +324,9 @@ p {
 								'Content-Type': 'application/json'
 							},
 							body: JSON.stringify(sInfo)
-						})
-							.then(response => response.json())
-							.then(data => {
+							})
+						.then(response => response.json())
+						.then(data => {
 								console.log(data);
 							})
 							.catch(err => {

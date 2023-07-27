@@ -2,7 +2,9 @@
 <html>
 <head>
     <title>Chat List</title>
-    <link rel="stylesheet" href="style.css">
+	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>	
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
     <style>
     #chatlist {
     width: 300px;
@@ -50,78 +52,157 @@
     font-size: 14px;
     margin-left: 10px;
 }
+
+#addChatroom {
+    font-size: 24px;
+    background: none;
+    border: none;
+}
     </style>
 </head>
 <body>
     <h1>채팅방목록</h1>
-    <button id="addChatroom">Add Chat Room</button>
+    <button id="addChatroom" data-toggle="modal" data-target="#myModal">+</button>
     <ul id="chatlist">
         <!-- Chat rooms will be added here dynamically -->
     </ul>
-    <script src="script.js"></script>
-</body>
-<script>
-function createChatroomElement(chatroom) {
-    const li = document.createElement('li');
-    li.classList.add('chatroom');
 
-    const img = document.createElement('img');
-    img.src = chatroom.profilePic;
-    img.alt = 'Profile picture';
-    img.classList.add('profile-pic');
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-    const infoDiv = document.createElement('div');
-    infoDiv.classList.add('chatroom-info');
-    const name = document.createElement('div');
-    name.textContent = chatroom.name;
-    name.classList.add('chatroom-name');
-    const lastMessage = document.createElement('div');
-    lastMessage.textContent = chatroom.lastMessage;
-    infoDiv.appendChild(name);
-    infoDiv.appendChild(lastMessage);
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">새 채팅방 만들기</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
 
-    const notification = document.createElement('div');
-    if (chatroom.newMessages > 0) {
-        notification.textContent = chatroom.newMessages;
-        notification.classList.add('new-message-notification');
-    }
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <input type="text" id="chatroomName" placeholder="채팅방 이름">
+                </div>
 
-    li.appendChild(img);
-    li.appendChild(infoDiv);
-    li.appendChild(notification);
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="createChatroom">생성</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    li.addEventListener('click', () => {
-        alert(`You have selected ${chatroom.name}`);
-    });
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    return li;
-}
+    <script>
+    
+    
+        function createChatroomElement(chatroom) {
+        	console.log("넘어와")
+            const li = document.createElement('li');
+            li.classList.add('chatroom');
 
-const chatlist = document.getElementById('chatlist');
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent the li click event from triggering
+                stompClient.send("/app/deleteChatroom", {}, JSON.stringify(chatroom));
+            });
 
-fetch('https://your-api-endpoint/chatrooms')
-    .then(response => response.json())
-    .then(chatrooms => {
-        chatrooms.forEach(chatroom => {
-            const chatroomElement = createChatroomElement(chatroom);
-            chatlist.appendChild(chatroomElement);
+            li.appendChild(deleteButton);
+            
+            const img = document.createElement('img');
+            img.src = chatroom.profilePic;
+            img.alt = 'Profile picture';
+            img.classList.add('profile-pic');
+
+            const infoDiv = document.createElement('div');
+            infoDiv.classList.add('chatroom-info');
+            const name = document.createElement('div');
+            name.textContent = chatroom.name;
+            name.classList.add('chatroom-name');
+            const lastMessage = document.createElement('div');
+            lastMessage.textContent = chatroom.lastMessage;
+            infoDiv.appendChild(name);
+            infoDiv.appendChild(lastMessage);
+
+            const notification = document.createElement('div');
+            if (chatroom.newMessages > 0) {
+                notification.textContent = chatroom.newMessages;
+                notification.classList.add('new-message-notification');
+            }
+
+            li.appendChild(img);
+            li.appendChild(infoDiv);
+            li.appendChild(notification);
+
+            li.addEventListener('click', () => {
+                alert(`You have selected ${chatroom.name}`);
+            });
+
+            return li;
+        }
+
+        const chatlist = document.getElementById('chatlist');
+
+        /* socket = new SockJS('/chatserver');
+        const stompClient = Stomp.over(socket); */
+        const stompClient = new StompJs.Client({
+        	brokerURL : 'ws://localhost:8081/chatserver'
+        })
+        stompClient.activate();
+        stompClient.onConnect(function(frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/chatrooms' , function(chatrooms) {
+                const parsedChatrooms = JSON.parse(chatrooms.body);
+                chatlist.innerHTML = '';
+                parsedChatrooms.forEach(chatroom => {
+                    const chatroomElement = createChatroomElement(chatroom);
+                    chatlist.appendChild(chatroomElement);
+                });
+            });
+            
         });
-    })
-    .catch(error => console.error('Error:', error));
 
-document.getElementById('addChatroom').addEventListener('click', () => {
-    // Placeholder data for a new chatroom
-    const newChatroom = { 
-        id: Date.now(), 
-        name: 'New Chat Room', 
-        lastMessage: 'No messages yet', 
-        newMessages: 0, 
-        profilePic: 'placeholder.jpg' 
-    };
-
-    const chatroomElement = createChatroomElement(newChatroom);
-    chatlist.appendChild(chatroomElement);
-});
-
-</script>
+        document.getElementById('createChatroom').addEventListener('click', () => {
+            const chatroomName = document.getElementById('chatroomName').value;
+            if (chatroomName) {
+                const newChatroom = {
+                    roomName: chatroomName, 
+                    lastMessage: 'No messages yet', 
+                    newMessages: 0, 
+                    profilePic: 'placeholder.jpg' 
+                };
+                fetch('/newChatroom', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newChatroom),
+                })
+                .then(response => response.json())
+                .then(createdRoom => {
+                	console.log(createdRoom)
+                    const chatroomElement = createChatroomElement(createdRoom);
+                    chatlist.appendChild(chatroomElement);
+                    $('#myModal').modal('hide');
+                    document.getElementById('chatroomName').value = '';
+                    
+                    
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+        fetch("/roomGetList")
+        .then(response => response.json())
+        .then(result => {
+        	console.log(result);
+        })
+        
+    </script>
+</body>
 </html>

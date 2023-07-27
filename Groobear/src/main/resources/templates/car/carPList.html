@@ -1,112 +1,159 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- 	  layout:decorate="~{layout/myPageATiles}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/myPageATiles}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-		<link rel="stylesheet" href="modal6/css/ionicons.min.css">
-		<link rel="stylesheet" href="modal6/css/flaticon.css">
-		<link rel="stylesheet" href="modal6/css/style.css">
-		<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<link rel="stylesheet" href="modal6/css/ionicons.min.css">
+<link rel="stylesheet" href="modal6/css/flaticon.css">
+<link rel="stylesheet" href="modal6/css/style.css">
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body>
-<div layout:fragment="content">
-	<div>
-		<form action="carInsert" method="post">
-		<div th:each="info, es:${info}">
-			<div style="display:inline-block;">
-				<h3>차량 관리</h3>
-				<p>사번 <input name="empNo" th:value="${info.empNo}" readonly></p>
-				<p>부서 <input name="deptName" th:value="${info.deptName}" readonly></p>
-				<p>직급 <input name="rank" th:value="${info.Rank}" readonly></p>
-				<p>이름 <input name="name" th:value="${info.Name}" readonly></p>
-			</div>
-			<div style="display:inline-block;">
-				<p style="display:none;">아이디    <input name="id" th:value="${info.id}" readonly></p>
-				<p>연락처    <input name="phone" th:value="${info.Phone}" readonly></p>
-				<p>차량번호 <input name="carNo" value=""></p>
-				<p>차종    <input name="carType" value=""></p>		
-				<button type="submit" style="text-align:center; margin-left:80%;">등록</button>
-			</div>
-		</div>
-		</form>
-	</div>
-	
-	<div th:if="${carPList != null}" th:onclick="carInfofo()" id="carIn" class="container mt-5 btn py-3 px-4" th:each="car, es:${carPList}" data-toggle="modal" data-target="#carMInfo" style="border-radius: 52px; width:250px; background-color:#6aa0db; display:inline-block; box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);">
-      <img src="https://via.placeholder.com/150" style="width:200px;" class="" alt="Card Image">
-      <div class="card-body" >
-        <h5 class="card-title">차량번호 : <span class="carNo">[[${car.carNo}]]</span></h5>
-        <p class="card-text" style="margin-bottom:0;">차종 : <span class="carType">[[${car.carType}]]</span></p>
-        <p class="card-text">등록일 : <span>[[${#dates.format(car.carDate,'yyyy년 MM월 dd일')}]]</span></p>
-   	  </div>
-  	</div>
-
-
-	<div class="modal fade" id="carMInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		  <div class="modal-dialog modal-dialog-centered" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close d-flex align-items-center justify-content-center" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true" class="ion-ios-close"></span>
-		        </button>
-		      </div>
-		      <div class="row no-gutters">
-			      <div class="col-md-6 d-flex">
-				      <div class="modal-body p-5 img d-flex color-1 text-center d-flex align-items-center">
-				      	<div class="text w-100">
-				      		<span class="icon-2 ion-ios-car"></span>
-					      	<h5>차량 정보만 변경 가능합니다.</h5>
-					      	<div class="icon">
-					      		<span class="ion-ios-car"></span>
-					      	</div>
+	<div layout:fragment="content">
+		<div>
+			<form action="carInsert" method="post">
+				<div th:each="info, es:${info}">
+						<h3 style="text-align: center;">차량 관리</h3>
+					<div style="display: inline-block;">
+						<div style="border:1px solid lightgray;border-radius: 15px;width: 100%;">
+						<div class="form-group row" style="margin-left: 15%;">
+					      <label class="col-form-label">사번 :</label>
+					      <div class="col-sm-1">
+					        <input type="text" class="form-control-plaintext" name="empNo" th:value="${info.empNo}" readonly>
 					      </div>
-				      </div>
-				    </div>
-				    <div class="col-md-6 d-flex">
-				      <div class="modal-body p-5 img d-flex align-items-center color-2">
-				      	<div class="text w-100 py-0 py-md-5">
-				      		<h3 class="mb-4">Change Car Info</h3>
-				      		<form action="carUpdate" method="post" class="signup-form">
-					      		<div class="form-group mb-3">
-					      			<label class="label">Old Car Number</label>
-					      			<input name="oldCarNo" id="infoCarNo" type="text" value="" class="form-control" readOnly>
-					      		</div>
-					      		<div class="form-group mb-3">
-					      			<label class="label">New Car Number</label>
-					      			<input name="carNo" id="newCarNo" type="text" value=" " class="form-control">
-					      		</div>
-				            <div class="form-group mb-3">
-				            	<label class="label">Car Type</label>
-				              <input id="infoCarType" name="carType" type="text" value="" class="form-control" placeholder="휘발유 혹은 디젤">
-				            </div>
-				            <div class="form-group mb-3" th:each="info, es:${info}" style="display:none;">
-				            	<label class="label">id</label>
-				              <input name="id" type="text" th:value="${info.id}" class="form-control">
-				            </div>
-				            <div class="form-group d-md-flex">
-				            </div>
-				            <div class="form-group" style="margin-left:30px;">
-				            	<button type="submit" style="width:150px; margin:0px 5px;" class="btn btn-primary rounded submit px-3">수정</button>
-				            	<button type="button" id="deleteBtn" style="width:150px; margin:0px 5px;" class="btn btn-primary rounded">삭제</button>
-				            </div>
-						</form>
-				      	</div>
-				      </div>
-				    </div>
-				 </div>
-		    </div>
-		  </div>
+					       <label class="col-form-label">부서 :</label>
+					      <div class="col-sm-2">
+					        <input type="text" class="form-control-plaintext" name="deptName" th:value="${info.deptName}" readonly>
+					      </div>
+					       <label class="col-form-label">직급 :</label>
+					      <div class="col-sm-1">
+					        <input type="text" class="form-control-plaintext" name="rank" th:value="${info.Rank}" readonly>
+					      </div>
+					       <label class="col-form-label">이름 :</label>
+					      <div class="col-sm-1">
+					        <input type="text" class="form-control-plaintext" name="name" th:value="${info.Name}" readonly>
+					      </div>
+					      <label class="col-form-label">연락처 :</label>
+					      <div class="col-sm-2">
+					        <input type="text" class="form-control-plaintext" name="phone" th:value="${info.Phone}" readonly>
+					      </div>
+					    </div>
+					    <div class="form-group row" style="margin-left: 25%;">
+					      <p style="display: none;">
+							아이디 <input type="text" class="form-control-plaintext" name="id" th:value="${info.id}" readonly>
+						  </p>
+					      <label class="col-form-label">차량번호 :</label>
+					      <div class="col-sm-2">
+					        <input class="form-control" name="carNo" value="" style="height: 32px;">
+					      </div>
+					       <label class="col-form-label">차종 :</label>
+					      <div class="col-sm-2">
+					        <input class="form-control" name="carType" value="" style="height: 32px;">
+					      </div>
+					      <button type="submit" class="insertBtn btn btn-primary" onclick="checkBtn()"
+							style="text-align: center; width:100px">등록</button>
+					    </div>
+					    
+						</div>
+					</div>
+				</div>
+			</form>
 		</div>
+		
+		
 
+		<div style="display:flex; margin-top:20px;">
+			<div class="card border-success mb-3 " style="width: 18rem; display:inline-block; margin: 0 auto;" th:if="${carPList != null}" th:onclick="carInfofo()" id="carIn"
+						th:each="car, es:${carPList}" data-toggle="modal" data-target="#carMInfo">
+			  <div class="card-header">dd</div>
+			  <div class="card-body">
+			  	<img alt="" src="https://via.placeholder.com/100">
+			    <p class="card-title">차량번호 : <span class="carNo">[[${car.carNo}]]</span></p>
+			    <p class="card-text">차종 : <span class="carType">[[${car.carType}]]</span></p>
+			    <p class="card-text">등록일 : <span>[[${#dates.format(car.carDate,'yyyy년 MM월 dd일')}]]</span></p>
+			  </div>
+			</div>
+		</div>
 	
 
-	<script src="modal6/js/jquery.min.js"></script>
-    <script src="modal6/js/popper.js"></script>
-    <script src="modal6/js/bootstrap.min.js"></script>
-    <script src="modal6/js/main.js"></script>
+		<div class="modal fade" id="carMInfo" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button"
+							class="close d-flex align-items-center justify-content-center"
+							data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true" class="ion-ios-close"></span>
+						</button>
+					</div>
+					<div class="row no-gutters">
+						<div class="col-md-6 d-flex">
+							<div
+								class="modal-body p-5 img d-flex color-1 text-center d-flex align-items-center">
+								<div class="text w-100">
+									<span class="icon-2 ion-ios-car"></span>
+									<h5>차량 정보만 변경 가능합니다.</h5>
+									<div class="icon">
+										<span class="ion-ios-car"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 d-flex">
+							<div class="modal-body p-5 img d-flex align-items-center color-2">
+								<div class="text w-100 py-0 py-md-5">
+									<h3 class="mb-4">Change Car Info</h3>
+									<form action="carUpdate" method="post" class="signup-form"
+										name="carInfoForm">
+										<div class="form-group mb-3">
+											<label class="label">Old Car Number</label> <input
+												name="oldCarNo" id="infoCarNo" type="text" value=""
+												class="form-control" readOnly>
+										</div>
+										<div class="form-group mb-3">
+											<label class="label">New Car Number</label> <input
+												name="carNo" id="newCarNo" type="text" value=""
+												class="form-control">
+										</div>
+										<div class="form-group mb-3">
+											<label class="label">Car Type</label> <input id="infoCarType"
+												name="carType" type="text" value="" class="form-control"
+												placeholder="휘발유 혹은 디젤">
+										</div>
+										<div class="form-group mb-3" th:each="info, es:${info}"
+											style="display: none;">
+											<label class="label">id</label> <input name="id" type="text"
+												th:value="${info.id}" class="form-control">
+										</div>
+										<div class="form-group d-md-flex"></div>
+										<div class="form-group" style="margin-left: 30px;">
+											<button type="submit" style="width: 150px; margin: 0px 5px;"
+												class="btn btn-primary rounded submit px-3">수정</button>
+											<button type="button" id="deleteBtn"
+												style="width: 150px; margin: 0px 5px;"
+												class="btn btn-primary rounded">삭제</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		
-	<script>
+
+
+		<script src="modal6/js/jquery.min.js"></script>
+		<script src="modal6/js/popper.js"></script>
+		<script src="modal6/js/bootstrap.min.js"></script>
+		<script src="modal6/js/main.js"></script>
+
+		<script>
 		function carInfofo(){
 			console.log("hi");
 
@@ -150,10 +197,32 @@
 				console.log(err);
 			})
 	})
-	 
+	
+	 $('#carMInfo').on('hidden.bs.modal', function (event) {
+		 carInfoForm.reset();
+	})
+	
+		
+		function checkBtn(){
+			if(document.getElementsByName('carNo')[0].value == '' || document.getElementsByName('carType')[0].value == ''){
+				event.preventDefault();
+				alert('차량번호와 차종 모두 작성해주세요')
+			}else if($('.card-body').length > 1){
+				alert('2대이상 등록 금지')
+				event.preventDefault();
+				document.getElementsByName('carNo')[0].value = '';
+				document.getElementsByName('carType')[0].value = '';
+			}else{
+				document.querySelector('.insertBtn').submit();
+					
+			}
+		}
+
+	
+	
 	</script>
 
-</div>
+	</div>
 </body>
 
 
