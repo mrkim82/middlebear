@@ -1,5 +1,12 @@
 package com.groo.bear.chat.controller;
 
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -7,9 +14,13 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.chat.domain.ChatMessageDTO;
-import com.groo.bear.chat.domain.MsgRoomMemDTO;
+import com.groo.bear.chat.domain.RoomDTO;
+import com.groo.bear.chat.service.ChatService;
 
 @Controller
 //이 클래스는 STOMP 메시지를 받고 보내는 역할을 한다.
@@ -19,6 +30,9 @@ public class ChatController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
     //SimpMessagingTemplate -> 메세지를 STOMP브로커로 전송하는데 사용
+    
+    @Autowired
+    private ChatService chatService;
 
     @GetMapping("/chatDetail")
     public String rooms(Integer roomNo, Model model, ChatMessageDTO chatDTO) {
@@ -34,13 +48,44 @@ public class ChatController {
     	//이 메소드는 클라이언트로부터 받은 메세지를 STOMP브로커로 전송한다.
         try {
             messagingTemplate.convertAndSend("/topic/messages/" + roomNo , chatMessage);
-            //messagingTemplate.convertAndSend이 부분이 @SendTo 역할을 대체한다.
-            //SimpMessagingTemplate의 'converAndSend'메소드는 메세지를 해당 주소에 전송한다.
-            //@SendTo 어노테이션은 메소드의 반환값을 전달하는 데 사용되므로
-            //messagingTemplate.convertAndSend 메소드를 사용하면 반환값을 따로 전달할 필요가 없다.
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
+    @GetMapping("/roomList")
+    public String roomList(HttpSession session, Model model) {
+    	String id = (String)session.getAttribute("Id");
+    	model.addAttribute("userId", chatService.chatRoomList(id));
+    	return "chat/rooms";
+    }
+    
+    //채팅방을 전체 반복문으로 화면에 뽑아주기.
+    @GetMapping("/roomGetList")
+    @ResponseBody
+    public List<RoomDTO> roomGetList(HttpSession session, Model model) {
+        String id = (String)session.getAttribute("Id");
+        List<RoomDTO> roomList = chatService.chatRoomList(id);
+        model.addAttribute("userId", roomList);
+        return roomList;
+    }
+    
+    @PostMapping("/newChatroom")
+    @ResponseBody
+    public Map<String, Object> createChatroom(HttpSession session, @RequestBody RoomDTO room) {
+    	String id = (String)session.getAttribute("Id");
+    	room.setUserId(id);
+        int createdRoom = chatService.createChatRoom(room);
+        messagingTemplate.convertAndSend("/topic/chatrooms/", createdRoom);
+        return Collections.singletonMap("roomNo", createdRoom);
+    }
+    //HTTP를 사용하려면 @PostMapping을, 웹소켓과 STOMP를 사용하려면 @MessageMapping
+    
+    @MessageMapping("/deleteChatroom")
+    public void deleteChatroom(RoomDTO roomDTO) {
+    	chatService.deleteChatRoom(roomDTO.getRoomNo());
+    	messagingTemplate.convertAndSend("/topic/chatroomDeleted");
+    }
+    
     
 }
