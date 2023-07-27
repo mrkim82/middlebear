@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <style>
 * {
 	margin: 0;
@@ -97,7 +98,7 @@
 }
 </style>
 </head>
-
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <body>
 	<div class="chat_wrap">
 		<div class="header">MESSAGE</div>
@@ -126,28 +127,26 @@
 			</ul>
 		</div>
 	</div>
-	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script th:inline="javascript">
+let roomNo = [[${roomNo}]]
 
-let roomNo = [[${roomNo}]];
-let myName = "username"; // 적당한 사용자명을 설정해주세요.
-let msgNo = 1; // 적당한 메시지 번호를 설정해주세요.
-let userId = "username"; // 적당한 사용자 아이디를 설정해주세요.
-let msgTime = new Date(); // 적당한 메시지 시간을 설정해주세요.
-
-const stompClient = new StompJs.Client({
-    brokerURL: 'ws://localhost:8081/chatserver'
+const stompClient = new StompJs.client({
+	brokerURL : 'ws://localhost:8081/chatserver'
+	
 });
 stompClient.activate();
 
 stompClient.onConnect = (frame) => {
 	console.log('Connected: ' + frame);
-	console.log(roomNo);
 	stompClient.subscribe('/topic/messages/' + roomNo, (messages) => {
-		console.log(messages);
-        receive(JSON.parse(messages.body));
+        showMessages(JSON.parse(messages.body).content);
     });
+
+stompClient.subscribe('/topic/messages/'+ roomNo, function(messageOutput) {
+       //const message = JSON.parse(messageOutput.body);
+   	console.log(message);
+   	});
 };
 
 stompClient.onWebSocketError = (error) => {
@@ -157,7 +156,7 @@ stompClient.onWebSocketError = (error) => {
 stompClient.onStompError = (frame) => {
 	console.error('Broker reported error : ' + frame.headers['message']);
 	console.error('Additional details : ' + frame.body);
-};
+}
 
 function disconnect() {
     if(stompClient != null) {
@@ -166,63 +165,92 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function createMessageTag(LR_className, senderName, message) {
-    let chatLi = $('div.chat.format ul li').clone();
-    chatLi.addClass(LR_className);
-    chatLi.find('.sender span').text(senderName);
-    chatLi.find('.message span').text(message);
-    return chatLi;
-}
+(function() {
+        // enter 키 이벤트
+        $(document).on('keydown', 'div.input-div textarea', function(e) {
+            if (e.keyCode == 13 && !e.shiftKey) {
+                e.preventDefault();
+                const message = $(this).val();
 
-function appendMessageTag(LR_className, senderName, message) {
-    const chatLi = createMessageTag(LR_className, senderName, message);
-    $('div.chat:not(.format) ul').append(chatLi);
-    $('div.chat').scrollTop($('div.chat').prop('scrollHeight'));
-}
+                // 메시지 전송
+                sendAndClear(message);
+            }
+        });
+    
+    /* function createMessageTag(){
+    	console.log(event.target)
+    } */
 
-function sendMessage(message) {
-    stompClient.publish({
-        destination: "/app/chat/" + roomNo,
-        body: JSON.stringify({
-            'msgNo': msgNo, 
-            'roomNo': roomNo,
-            'userId' : userId,
-            'content' : message,
-            'msgTime' : msgTime
-        })
-    });
-}
+    // 메세지 태그 생성
+     function createMessageTag(LR_className, senderName, message) {
+			console.log(event.target)
+        // 형식 가져오기
+        let chatLi = $('div.chat.format ul li').clone();
 
-function clearTextarea() {
-    $('div.input-div textarea').val('');
-}
+        // 값 채우기
+        chatLi.addClass(LR_className);
+        chatLi.find('.sender span').text(senderName);
+        chatLi.find('.message span').text(message);
 
-function receive(data) {
-	console.log(data)
-    const LR = (data.userId != myName) ? "left" : "right";
-    appendMessageTag(LR, data.userId, data.content); 
-}
+        return chatLi;
+    }
 
-function sendAndClear(message) {
-    sendMessage(message);
-    clearTextarea();
-}
+    // 메세지 태그 append
+    function appendMessageTag(LR_className, senderName, message) {
+        const chatLi = createMessageTag(LR_className, senderName, message);
+
+        $('div.chat:not(.format) ul').append(chatLi);
+
+        // 스크롤바 아래 고정
+        $('div.chat').scrollTop($('div.chat').prop('scrollHeight'));
+    }
+
+     // 메시지 전송
+     stompClient.send("/app/chat" + roomNo, {}, JSON.stringify({
+             'msgNo': msgNo, 
+             'roomNo': roomNo,
+             'userId' : userId,
+             'content' : message,
+             'msgTime' : msgTime
+         }));
+     }
+		
+    // 메세지 입력박스 내용 지우기
+    function clearTextarea() {
+        $('div.input-div textarea').val('');
+    }
+	
+ 	// 메시지 수신
+    function receive(data) {
+        const LR = (data.userId != myName) ? "left" : "right";
+        appendMessageTag(LR, data.userId, data.content);
+    }
+	
+    function sendAndClear(message) {
+        sendMessage(message);
+        clearTextarea();
+    }
+
+    return {
+        'init' : init,
+        'sendAndClear' : sendAndClear,
+        'receive' : receive
+    };
+	
+})();
 
 $(function() {
-    // Enter 키 이벤트
-    $(document).on('keydown', 'div.input-div textarea', function(e) {
-        if (e.keyCode == 13 && !e.shiftKey) {
-            e.preventDefault();
-            const message = $(this).val();
-            sendAndClear(message);
-        }
-    });
 
     // Send 버튼 클릭 이벤트 추가
     $('#sendMessageBtn').on('click', function() {
         const message = $('div.input-div textarea').val();
-        sendAndClear(message);
+        Chat.sendAndClear(message);
     });
+});
+
+// 페이지가 닫힐 때 웹소켓 서버와의 연결을 종료
+$(window).on('beforeunload', function(){
+    disconnect();
 });
 </script>
 </body>

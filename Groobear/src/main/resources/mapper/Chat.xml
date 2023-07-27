@@ -29,7 +29,7 @@
   				  		 )
   	</insert>
   	
-  	<delete id="deleteChatRoom" parameterType="int">
+  	<delete id="deleteChatRoom" parameterType="RoomDTO">
   		DELETE FROM ROOM
   		WHERE ROOM_NO = #{roomNo}
   	</delete>

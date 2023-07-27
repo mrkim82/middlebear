@@ -14,7 +14,7 @@ public interface ChatMapper {
 	public int createChatRoom(RoomDTO roomDTO);
 	
 	//채팅방 삭제
-	public int deleteChatRoom(int roomNo);
+	public int deleteChatRoom(RoomDTO roomDTO);
 	
 	//메세지 전체조회
 	public List<ChatMessageDTO> MessageAllList();

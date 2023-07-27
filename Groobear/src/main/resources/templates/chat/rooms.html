@@ -100,7 +100,7 @@
     
     
         function createChatroomElement(chatroom) {
-        	console.log("넘어와")
+        	
             const li = document.createElement('li');
             li.classList.add('chatroom');
 
@@ -108,8 +108,25 @@
             deleteButton.textContent = 'Delete';
             deleteButton.addEventListener('click', (event) => {
                 event.stopPropagation(); // Prevent the li click event from triggering
-                stompClient.send("/app/deleteChatroom", {}, JSON.stringify(chatroom));
+                fetch('/deleteChatroom', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ roomNo: chatroom.roomNo }), // assuming chatroom is the object that has roomNo property.
+                })
+                .then(response => {
+                    if (response.ok) {
+                        li.remove(); // assuming li is the HTML element for the chatroom
+                    } else {
+                        console.error('Failed to delete chatroom');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
             });
+
 
             li.appendChild(deleteButton);
             
@@ -146,9 +163,7 @@
         }
 
         const chatlist = document.getElementById('chatlist');
-
-        /* socket = new SockJS('/chatserver');
-        const stompClient = Stomp.over(socket); */
+        
         const stompClient = new StompJs.Client({
         	brokerURL : 'ws://localhost:8081/chatserver'
         })
@@ -200,8 +215,14 @@
         fetch("/roomGetList")
         .then(response => response.json())
         .then(result => {
-        	console.log(result);
+            result.forEach(chatroom => {
+                const chatroomElement = createChatroomElement(chatroom);
+                chatlist.appendChild(chatroomElement);
+            });
         })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
         
     </script>
 </body>

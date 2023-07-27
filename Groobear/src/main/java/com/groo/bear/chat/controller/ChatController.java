@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -81,11 +83,15 @@ public class ChatController {
     }
     //HTTP를 사용하려면 @PostMapping을, 웹소켓과 STOMP를 사용하려면 @MessageMapping
     
-    @MessageMapping("/deleteChatroom")
-    public void deleteChatroom(RoomDTO roomDTO) {
-    	chatService.deleteChatRoom(roomDTO.getRoomNo());
-    	messagingTemplate.convertAndSend("/topic/chatroomDeleted");
+    @PostMapping("/deleteChatroom")
+    @ResponseBody
+    public ResponseEntity<?> deleteChatroom(@RequestBody RoomDTO room) {
+        int isDeleted = chatService.deleteChatRoom(room); // chatService는 채팅방을 관리하는 서비스 객체입니다.
+
+        if (isDeleted == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-    
-    
 }

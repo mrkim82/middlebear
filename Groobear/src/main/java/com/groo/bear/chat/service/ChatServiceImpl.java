@@ -31,8 +31,8 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public int deleteChatRoom(int roomNo) {
-		return chatMapper.deleteChatRoom(roomNo);
+	public int deleteChatRoom(RoomDTO roomDTO) {
+		return chatMapper.deleteChatRoom(roomDTO);
 	}
 	
 }
