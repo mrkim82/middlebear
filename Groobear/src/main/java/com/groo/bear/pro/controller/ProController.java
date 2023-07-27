@@ -117,6 +117,7 @@ public class ProController {
 	}
 	
 	
+	
 	//프로젝트 메인 페이지 즐찾 보기
 	@GetMapping("proMainS")
 	public String proMainPageS(Model model, HttpServletRequest request) {

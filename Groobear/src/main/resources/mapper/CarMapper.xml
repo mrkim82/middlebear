@@ -17,7 +17,8 @@
 						ui.name,
 						c.car_no,
 						u.phone,
-						c.car_date
+						c.car_date,
+						c.car_type
 				from users u,
 						departments d,
 						user_info ui,
@@ -137,6 +138,83 @@
 		where car_no = #{carNo}
 	</delete>
 
+		
+	<!-- 운행일지 -->	
+	<select id="getAllbook" resultType="CarVO">
+		SELECT * 
+            FROM (
+              SELECT t.*, ROWNUM AS rn
+              FROM (
+				select 
+					   pl.oper_date
+					 , pl.destination
+					 , pl.befored
+					 , pl.afterd
+					 , pl.imprest
+					 , pl.purpose
+					 , p.pay_status1
+					 , p.pay_status2
+					 , p.pay_status3
+					 , p.id
+					 , ui.name
+					 , u.emp_no
+					 , d.dept_name
+				from 
+					   payment p
+					 , payment_logbook pl
+					 , users u
+					 , user_info ui
+					 , departments d
+				where 
+				     p.pay_no = pl.pay_no 
+				     and p.id = u.id 
+				     and u.emp_no = ui.emp_no
+				     and d.dept_no = ui.dept_no
+			<if test="cri.type != null and cri.type.equals('name')">
+				and ui.name LIKE '%${cri.keyword}%'
+			</if>
+			<if test="cri.type != null and cri.type.equals('destination')">
+				and pl.destination LIKE '%${cri.keyword}%'
+			</if><if test="cri.type != null and cri.type.equals('deptName')">
+				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
+			</if>
+			
+		order by u.emp_no
+		) t
+            )
+            <![CDATA[
+            WHERE rn >= (#{cri.page}-1) * 10 +1 
+			and rn <= #{cri.page} * 10
+            ]]>
+	</select>
+	
+	<!-- 운행일지 페이징  -->
+	<select id="bookListCnt" resultType="int">
+		select count(*)
+		from 	payment p
+			  , payment_logbook pl
+			  , users u
+			  , user_info ui
+		where p.pay_no = pl.pay_no 
+			  and p.id = u.id 
+			  and u.emp_no = ui.emp_no
+					
+			<if test="cri.type != null and cri.type.equals('name')">
+				and ui.name LIKE '%${cri.keyword}%'
+			</if>
+			<if test="cri.type != null and cri.type.equals('destination')">
+				and pl.destination LIKE '%${cri.keyword}%'
+			</if><if test="cri.type != null and cri.type.equals('deptName')">
+				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
+			</if>
+	</select>
+		
+		
+		
+		
+		
+		
+		
 
 
 

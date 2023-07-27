@@ -6,8 +6,6 @@
 
 	<!-- 전체조회 -->
 	
-	
-	
 	<select id="selectAllCommute" parameterType="CommuteVO" resultType="CommuteVO">
 		SELECT * 
             FROM (
@@ -21,7 +19,9 @@
                         cm.day,
                         NVL(to_number(trunc((work_end - work_start)*24*60)) ,0)as work_time,
                         NVL(cm.over_work_time,0) as over_work_time,
-                        o.off_count
+                        o.off_count,
+                        cm.off_status,
+	            		u.id
 				from users u,
 						departments d,
 						user_info ui,
@@ -41,9 +41,17 @@
 			<if test="cri.type != null and cri.type.equals('deptName')">
 				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
 			</if>
-				
+			<if test="commuteVO.startDay != null and commuteVO.endDay != null">
+                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN #{commuteVO.startDay} AND #{commuteVO.endDay}
+            </if>
+            <if test="commuteVO.startDay != null and commuteVO.endDay == null">
+                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN #{commuteVO.startDay} AND to_char(sysdate, 'YYYY-MM-DD')
+            </if>
+            <if test="commuteVO.startDay == null and commuteVO.endDay == null">
+                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN to_char(sysdate, 'YYYY-MM-DD') AND to_char(sysdate, 'YYYY-MM-DD')
+            </if>
 			
-		order by u.emp_no
+		order by cm.day desc
 		) t
             )
             <![CDATA[
@@ -72,40 +80,16 @@
 			</if><if test="cri.type != null and cri.type.equals('deptName')">
 				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
 			</if>
+			<if test="commuteVO.startDay != null and commuteVO.endDay != null">
+                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN to_char(#{commuteVO.startDay}, 'YYYY-MM-DD') AND to_char(#{commuteVO.endDay}, 'YYYY-MM-DD')
+            </if>
+            <if test="commuteVO.startDay != null and commuteVO.endDay == null">
+                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN #{commuteVO.startDay} AND to_char(sysdate, 'YYYY-MM-DD')
+            </if>
+            <if test="commuteVO.startDay == null and commuteVO.endDay == null">
+                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN to_char(sysdate, 'YYYY-MM-DD') AND to_char(sysdate, 'YYYY-MM-DD')
+            </if>
 	</select>
-	
-	<!-- <select id="selectAllCommute" parameterType="CommuteVO" resultType="CommuteVO">
-		SELECT * 
-            FROM (
-              SELECT t.*, ROWNUM AS rn
-              FROM (
-				select  u.emp_no,
-					    d.dept_name,
-						ui.name,
-                        cm.work_start,
-                        cm.work_end,   
-                        NVL(to_number(trunc((work_end - work_start)*24*60)) ,0)as work_time,
-                        NVL(cm.over_work_time,0) as over_work_time,
-                        o.off_count
-				from users u,
-						departments d,
-						user_info ui,
-                        commute cm,
-                        off o
-				where d.dept_no = ui.dept_no
-						and ui.emp_no = u.emp_no
-                        and u.id = cm.id
-                        and cm.id = o.id
-						and id = #{id}	
-						order by 		
-		) t
-            )
-            <![CDATA[
-            WHERE rn >= (#{cri.page}-1) * 10 +1 
-			and rn <= #{cri.page} * 10
-            ]]>
-	</select> -->
-	
 	
 	
 	<insert id="workStart22" parameterType="CommuteVO">
@@ -121,7 +105,7 @@
 	
 	<update id="workEnd" parameterType="CommuteVO">
 		update commute 
-		set work_end = sysdate
+		set work_end = sysdate , off_status = 'Y'
 		where id = #{id} and to_char(day,'yyyy-MM-DD') = to_char(sysdate,'yyyy-MM-DD')
 	</update>
 
@@ -134,15 +118,22 @@
 			update commute set over_work_start = sysdate
 			where id = #{id} and to_char(day,'yyyy-MM-DD') = to_char(sysdate,'yyyy-MM-DD')
 	</update>
-
-
+	
+	
 	<update id="overWorkEnd" parameterType="CommuteVO">
 		update commute 
-		set over_work_end = sysdate, over_work_time = NVL(to_number(trunc((over_work_end - over_work_start)*24*60)) ,0)
+		set over_work_end = sysdate
 		where id = #{id} and to_char(day,'yyyy-MM-DD') = to_char(sysdate,'yyyy-MM-DD')
 		
-		
 	</update>
+	
+	<update id="overWorkTime" parameterType="CommuteVO">
+		update commute 
+		set over_work_time = NVL(to_number(trunc((over_work_end - over_work_start)*24*60)) ,0)
+		where id = #{id} and to_char(day,'yyyy-MM-DD') = to_char(sysdate,'yyyy-MM-DD')
+	</update>
+	
+	
 	<!-- 출근기록 조회 -->
 	<select id="chkWork" parameterType="String" resultType="CommuteVO">
 	
@@ -152,7 +143,7 @@
 		
 	</select>	
 
-	<select id="getMyCommute" parameterType="String" resultType="CommuteVO">
+	<select id="getMyCommute" resultType="CommuteVO">
 		select
 				u.emp_no,
 			    d.dept_name,
@@ -160,6 +151,7 @@
 	            cm.work_start,
 	            cm.work_end,   
 	            cm.day,
+	            cm.off_status,
 	            NVL(to_number(trunc((work_end - work_start)*24*60)) ,0)as work_time,
 	            NVL(cm.over_work_time,0) as over_work_time,
 	            o.off_count
@@ -175,8 +167,46 @@
 	            and u.id = cm.id
 	            and cm.id = o.id
 				and u.id = #{id}
+				<if test="monthDate != null">
+	                AND to_char(cm.day, 'YYYY-MM') = #{monthDate}
+				</if>
 		order by cm.day desc	
 	</select>
-
+			
+	<!-- 회원가입 날짜 초기지정 -->
+	<select id="insertDay" parameterType="CommuteVO" resultType="CommuteVO">
+		insert into commute(day,work_start,work_end,over_work_start,over_work_end,over_work_time,id)
+		values(sysdate,null,null,null,null,null,#{id})
+	</select>
+	
+	<!-- 달별 조회 -->
+	<select id="calWork" resultType="CommuteVO">
+		select id, count(day) as count, NVL(sum(over_work_time),0) as over
+        from commute
+        where id = #{id}
+        and work_end is not null
+        <if test="monthDate == null">
+       	 	and TO_CHAR(day,'yyyy-MM') = TO_CHAR(sysdate, 'yyyy-MM') 
+		</if>
+		<if test="monthDate != null">
+       	 	and TO_CHAR(day,'yyyy-MM') = #{monthDate}
+		</if>
+        group by id
+	</select>	
+	
+	<!-- 정보수정  -->
+	<update id="commuteUpdate" parameterType="CommuteVO">
+		update commute 
+		set work_start = to_date(#{workStart2},'yyyy-MM-DD HH24:MI') , work_end = to_date(#{workEnd2},'yyyy-MM-DD HH24:MI') 
+		<if test = "workEnd2 != null">
+			, off_status = 'Y'
+		</if>
+		where id = #{id} and to_char(day,'yyyy-MM-DD') = #{day2}
+	</update>
+	
+	
+	
+	
+	
 
 </mapper>

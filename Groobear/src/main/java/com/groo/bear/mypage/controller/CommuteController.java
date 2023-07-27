@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.mypage.service.CommuteService;
@@ -20,7 +20,7 @@ import com.groo.bear.mypage.service.CommuteVO;
 import com.groo.bear.mypage.service.UserService;
 import com.groo.bear.paging.Criteria;
 import com.groo.bear.paging.Paging;
-
+//김도현 / 근태관련 
 @Controller
 public class CommuteController {
 
@@ -32,14 +32,15 @@ public class CommuteController {
 	
 	
 	//근태 페이지 조회
-	@GetMapping("/commuteList")
-	public String getCarList(HttpServletRequest request, Criteria cri, Model model, CommuteVO commuteVO) {
+	@GetMapping("/commuteList/{monthDate}")
+	public String getCommuteList(HttpServletRequest request, Criteria cri, Model model, CommuteVO commuteVO,@PathVariable String monthDate) {
 		
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
 		System.out.println(id);
 		String empG = userService.checkGrade(id).getEmpGrade();
 		System.out.println(empG);
+		
 		
 		int commuteListCnt = commuteService.commuteCnt(cri, commuteVO);
 		
@@ -51,15 +52,14 @@ public class CommuteController {
 		if(empG.equals("A")) {
 			model.addAttribute("commuteList",commuteService.getAllCommuteList(cri, commuteVO));
 			System.out.println(model);
-			
 			model.addAttribute("paging",paging);
-		    //System.out.println(model);
 			return "commute/commuteA";
+			
 		}else {
-			model.addAttribute("info",commuteService.getMyCommuteList(cri, id));
+			model.addAttribute("info",commuteService.getMyCommuteList(cri, id, monthDate));
+			model.addAttribute("work",commuteService.monthWork(id, monthDate));
 			model.addAttribute("paging",paging);
 			System.out.println(model);
-			
 			return "commute/commuteP";
 		}
 		
@@ -84,7 +84,6 @@ public class CommuteController {
 		commuteService.startWork(commuteVO);
 		return commuteVO;
 	}
-	
 	
 	//퇴근등록
 	@ResponseBody
@@ -115,13 +114,31 @@ public class CommuteController {
 	@ResponseBody
 	@PostMapping("overWorkEnd")
 	public CommuteVO overWorkEnd(@RequestBody CommuteVO commuteVO) {
+		System.out.println(commuteVO);
 		commuteService.endOverWork(commuteVO);
+		
 		return commuteVO;
 	}
 	
-	
-	
-	
+
+	//수정 
+	@ResponseBody
+	@PostMapping("/commuteUpdate")
+	public String commuteUpdate(@RequestBody CommuteVO commuteVO) {
+		System.out.println("11111");
+		System.out.println(commuteVO);
+		String result;
+		if(commuteService.commuteUpdate(commuteVO)>0) {
+			System.out.println("2221");
+			result = "success";
+			return result;
+		} else {
+			System.out.println("333");
+			result = "fail";
+			return result;
+		}
+		
+	}
 	
 	
 	

@@ -22,6 +22,15 @@ public class CarVO {
 	private String rank;
 	private String empGrade;
 	
+	private Date operDate;
+	private String destination;
+	private String befored;
+	private String afterd;
+	private int imprest;
+	private String purpose;
+	private String payStatus1;
+	private String payStatus2;
+	private String payStatus3;
 	
 	
 	
