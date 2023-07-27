@@ -106,5 +106,50 @@ public class PaymentServiceImpl implements PaymentService{
 	@Override
 	public PaymentVO robinList(int payNo) {
 		return paymentMapper.robinList(payNo);
+	}
+
+	@Override
+	public int logUpdate(PaymentVO payVO) {
+		return paymentMapper.logUpdate(payVO);
+	}
+
+	@Override
+	public int offUpdate(PaymentVO payVO) {
+		return paymentMapper.offUpdate(payVO);
+	}
+
+	@Override
+	public int robinUpdate(PaymentVO payVO) {
+		return paymentMapper.robinUpdate(payVO);
+	}
+
+	@Override
+	public int paymentReject2(PaymentVO payVO) {
+		return paymentMapper.paymentReject2(payVO);
+	}
+
+	@Override
+	public int paymentReject3(PaymentVO payVO) {
+		return paymentMapper.paymentReject3(payVO);
+	}
+
+	@Override
+	public List<PaymentVO> completePaymentList(Criteria cri, PaymentVO payVO) {
+		return paymentMapper.completePaymentList(cri, payVO);
+	}
+
+	@Override
+	public int completePayCount(String id) {
+		return paymentMapper.completePayCount(id);
+	}
+
+	@Override
+	public List<PaymentVO> referrerPayList(Criteria cri, PaymentVO payVO) {
+		return paymentMapper.referrerPayList(cri, payVO);
+	}
+
+	@Override
+	public int referrerPayCount(String id) {
+		return paymentMapper.referrerPayCount(id);
 	}	
 }
