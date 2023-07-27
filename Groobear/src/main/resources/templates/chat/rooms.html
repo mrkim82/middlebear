@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Chat List</title>
 	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>	
@@ -64,7 +64,14 @@
     <h1>채팅방목록</h1>
     <button id="addChatroom" data-toggle="modal" data-target="#myModal">+</button>
     <ul id="chatlist">
-        <!-- Chat rooms will be added here dynamically -->
+        <li th:each="room : ${id}" class="chatroom">
+            <div class="chatroom-info">
+                <div class="chatroom-name" th:text="${room.roomName}">Room Name</div>
+                <div>Last message: No messages yet</div>
+                <!-- Add your other fields here -->
+            </div>
+                <button class="delete-chatroom" th:data-room-no="${room.roomNo}">Delete</button>
+        </li>
     </ul>
 
     <!-- The Modal -->
@@ -97,27 +104,97 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <script>
-    
-    
-        function createChatroomElement(chatroom) {
-        	
+window.onload = function() {
+    let chatrooms = document.getElementsByClassName('chatroom');
+    for(let i = 0; i < chatrooms.length; i++) {
+        let roomNo = chatrooms[i].getElementsByClassName('delete-chatroom')[0].getAttribute('data-room-no');
+        let infoDiv = chatrooms[i].getElementsByClassName('chatroom-info')[0];
+        infoDiv.addEventListener('click', () => {
+            location.href = `/chat/${roomNo}`;
+        });
+        
+        let deleteButton = chatrooms[i].getElementsByClassName('delete-chatroom')[0];
+        deleteButton.addEventListener('click', (event) => {
+            event.stopPropagation(); 
+            fetch('/deleteChatroom', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ roomNo: roomNo }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Chatroom deleted successfully');
+                    chatrooms[i].remove();
+                    location.reload();
+                } else {
+                    console.error('Failed to delete chatroom');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    }
+}
+
+document.getElementById('createChatroom').addEventListener('click', () => {
+    const chatroomName = document.getElementById('chatroomName').value;
+    if (chatroomName) {
+        const newChatroom = {
+            roomName: chatroomName, 
+            lastMessage: 'No messages yet', 
+            newMessages: 0,
+        };
+        fetch('/newChatroom', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newChatroom),
+        })
+        .then(response => response.json())
+        .then(createdRoom => {
+            const chatlist = document.getElementById('chatlist');
+
             const li = document.createElement('li');
             li.classList.add('chatroom');
 
+            const infoDiv = document.createElement('div');
+            infoDiv.classList.add('chatroom-info');
+
+            const name = document.createElement('div');
+            name.textContent = createdRoom.roomName;
+            name.classList.add('chatroom-name');
+
+            const lastMessage = document.createElement('div');
+            lastMessage.textContent = 'Last message: No messages yet';
+            
+            location.reload();
+            
+            infoDiv.addEventListener('click', () => {
+                location.href = `/chat/${createdRoom.roomNo}`;
+            });
+
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
+            deleteButton.classList.add('delete-chatroom');
+            deleteButton.setAttribute('data-room-no', createdRoom.roomNo);
+
             deleteButton.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevent the li click event from triggering
+                event.stopPropagation(); 
                 fetch('/deleteChatroom', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ roomNo: chatroom.roomNo }), // assuming chatroom is the object that has roomNo property.
+                    body: JSON.stringify({ roomNo: createdRoom.roomNo }),
                 })
                 .then(response => {
                     if (response.ok) {
-                        li.remove(); // assuming li is the HTML element for the chatroom
+                        console.log('Chatroom deleted successfully');
+                        li.remove();
                     } else {
                         console.error('Failed to delete chatroom');
                     }
@@ -127,103 +204,21 @@
                 });
             });
 
-
-            li.appendChild(deleteButton);
-            
-            const img = document.createElement('img');
-            img.src = chatroom.profilePic;
-            img.alt = 'Profile picture';
-            img.classList.add('profile-pic');
-
-            const infoDiv = document.createElement('div');
-            infoDiv.classList.add('chatroom-info');
-            const name = document.createElement('div');
-            name.textContent = chatroom.name;
-            name.classList.add('chatroom-name');
-            const lastMessage = document.createElement('div');
-            lastMessage.textContent = chatroom.lastMessage;
             infoDiv.appendChild(name);
             infoDiv.appendChild(lastMessage);
-
-            const notification = document.createElement('div');
-            if (chatroom.newMessages > 0) {
-                notification.textContent = chatroom.newMessages;
-                notification.classList.add('new-message-notification');
-            }
-
-            li.appendChild(img);
             li.appendChild(infoDiv);
-            li.appendChild(notification);
+            li.appendChild(deleteButton);
+            chatlist.appendChild(li);
 
-            li.addEventListener('click', () => {
-                alert(`You have selected ${chatroom.name}`);
-            });
-
-            return li;
-        }
-
-        const chatlist = document.getElementById('chatlist');
-        
-        const stompClient = new StompJs.Client({
-        	brokerURL : 'ws://localhost:8081/chatserver'
-        })
-        stompClient.activate();
-        stompClient.onConnect(function(frame) {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/chatrooms' , function(chatrooms) {
-                const parsedChatrooms = JSON.parse(chatrooms.body);
-                chatlist.innerHTML = '';
-                parsedChatrooms.forEach(chatroom => {
-                    const chatroomElement = createChatroomElement(chatroom);
-                    chatlist.appendChild(chatroomElement);
-                });
-            });
-            
-        });
-
-        document.getElementById('createChatroom').addEventListener('click', () => {
-            const chatroomName = document.getElementById('chatroomName').value;
-            if (chatroomName) {
-                const newChatroom = {
-                    roomName: chatroomName, 
-                    lastMessage: 'No messages yet', 
-                    newMessages: 0, 
-                    profilePic: 'placeholder.jpg' 
-                };
-                fetch('/newChatroom', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(newChatroom),
-                })
-                .then(response => response.json())
-                .then(createdRoom => {
-                	console.log(createdRoom)
-                    const chatroomElement = createChatroomElement(createdRoom);
-                    chatlist.appendChild(chatroomElement);
-                    $('#myModal').modal('hide');
-                    document.getElementById('chatroomName').value = '';
-                    
-                    
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            }
-        });
-        fetch("/roomGetList")
-        .then(response => response.json())
-        .then(result => {
-            result.forEach(chatroom => {
-                const chatroomElement = createChatroomElement(chatroom);
-                chatlist.appendChild(chatroomElement);
-            });
+            document.getElementById('chatroomName').value = '';
         })
         .catch((error) => {
             console.error('Error:', error);
         });
-        
-    </script>
+    }
+});
+</script>
+
+
 </body>
 </html>

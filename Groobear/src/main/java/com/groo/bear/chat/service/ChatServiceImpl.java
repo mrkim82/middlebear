@@ -16,14 +16,10 @@ public class ChatServiceImpl implements ChatService {
 	ChatMapper chatMapper;
 	
 	@Override
-	public List<RoomDTO> chatRoomList(String userId) {
-		return chatMapper.chatRoomList(userId);
+	public List<RoomDTO> chatRoomList(String id) {
+		return chatMapper.chatRoomList(id);
 	}
 
-	@Override
-	public List<ChatMessageDTO> MessageAllList() {
-		return chatMapper.MessageAllList();
-	}
 	
 	@Override
 	public int createChatRoom(RoomDTO roomDTO) {
@@ -34,5 +30,24 @@ public class ChatServiceImpl implements ChatService {
 	public int deleteChatRoom(RoomDTO roomDTO) {
 		return chatMapper.deleteChatRoom(roomDTO);
 	}
+	
+	//메세지 전체조회
+	@Override
+	public List<ChatMessageDTO> MessageAllList(String id) {
+		return chatMapper.MessageAllList(id);
+	}
+
+
+	@Override
+	public int sendMessage(ChatMessageDTO msgDTO) {
+		return chatMapper.sendMessage(msgDTO);
+	}
+
+	//test
+	@Override
+	public List<ChatMessageDTO> getMessagesForRoom(int roomNo) {
+		return chatMapper.getMessagesForRoom(roomNo);
+	}
+	
 	
 }

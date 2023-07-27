@@ -10,8 +10,9 @@ import lombok.Data;
 public class ChatMessageDTO {
 	private int msgNo;
     private Integer roomNo;
-    private String userId;
+    private String id;
     private String content;
+    private String name;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate msgTime;
     
@@ -19,11 +20,12 @@ public class ChatMessageDTO {
     
     //생성자 만드는 이유
     //인스턴스 생성시 필드에 초기값으로 부여하기 위함.
-    public ChatMessageDTO(int msgNo, int roomNo, String userId, String content, LocalDate msgTime) {
+    public ChatMessageDTO(int msgNo, int roomNo, String id, String content, LocalDate msgTime, String name) {
         this.msgNo = msgNo;
         this.roomNo = roomNo;
-        this.userId = userId;
+        this.id = id;
         this.content = content;
         this.msgTime = msgTime;
+        this.name = name;
     }
 }

@@ -3,12 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="com.groo.bear.chat.mapper.ChatMapper">
-  	<select id="MessageAllList">
-  		SELECT * FROM MESSAGE
-  	</select>
   	
-  	<select id="chatRoomList">
-  		SELECT * FROM ROOM WHERE id = #{userId}
+  	<select id="chatRoomList" resultType="RoomDTO">
+  		SELECT * FROM ROOM WHERE id = #{id}
   	</select>
   	
   	<insert id="createChatRoom" parameterType="RoomDTO">
@@ -25,7 +22,7 @@
   				  		  #{roomNo}
   				  		 ,#{roomName}
   				  		 ,sysdate
-  				  		 ,#{userId}
+  				  		 ,#{id}
   				  		 )
   	</insert>
   	
@@ -33,4 +30,38 @@
   		DELETE FROM ROOM
   		WHERE ROOM_NO = #{roomNo}
   	</delete>
+  	
+  	<!-- 메세지전체조회 -->
+  	<!-- <select id="MessageAllList">
+  		select i.name, m.content, m.msg_time
+		from message m, users u, user_info i
+		where m.id = #{id}
+		AND u.emp_no = i.emp_no
+  	</select> -->
+  	<select id="getMessagesForRoom" resultType="ChatMessageDTO">
+        SELECT *
+        FROM Message
+        WHERE room_No = #{roomNo}
+        ORDER BY msg_Time ASC
+    </select>
+  	
+  	<insert id="sendMessage" parameterType="ChatMessageDTO">
+  		<selectKey keyProperty="msgNo" order="BEFORE" resultType="int">
+		    SELECT MESSAGE_SEQ.NEXTVAL FROM DUAL
+  		</selectKey>
+  		INSERT INTO MESSAGE (
+  						  ROOM_NO
+  						 ,ID
+  						 ,CONTENT
+  						 ,MSG_TIME
+  						 ,MSG_NO
+  						 )
+  				  VALUES (
+  				  		  #{roomNo}
+  				  		 ,#{id}
+  				  		 ,#{content}
+  				  		 ,sysdate
+  				  		 ,#{msgNo}
+  				  		 )
+  	</insert>
   </mapper>
