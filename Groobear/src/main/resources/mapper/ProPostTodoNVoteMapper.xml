@@ -9,11 +9,12 @@
 		SELECT a.todo_no, a.pro_post_no, a.todo_content, a.todo_end, a.todo_check, a.id, d.name
 		FROM todo a JOIN pro_post b
 		ON(a.pro_post_no = b.pro_post_no)
-		JOIN users c
+		LEFT JOIN users c
 		ON(a.id = c.id)
-		JOIN user_info d
+		LEFT JOIN user_info d
 		ON(c.emp_no = d.emp_no)
 		WHERE b.pro_no = #{proNo}
+		ORDER BY a.todo_no
 	</select>
 
 	<!-- 체크리스트 yn여부 바꾸기 -->
@@ -64,7 +65,7 @@
 	
 	<!-- 투표 참여자 조회 -->
 	<select id="readVoteListParti" resultType="ProPostVoteVO">
-		SELECT d.vote_parti_no, d.id, d.vote_detail_no
+		SELECT d.vote_parti_no, d.id, d.vote_detail_no, i.name
 		FROM vote a
 		JOIN pro_post b
 		ON(a.pro_post_no = b.pro_post_no)
@@ -72,8 +73,12 @@
 		ON(a.vote_no = c.vote_no)
 		JOIN vote_parti d
 		ON(d.vote_detail_no = c.vote_detail_no)
+		JOIN users u
+		ON(d.id = u.id)
+		JOIN user_info i
+		ON(u.emp_no = i.emp_no)
 		WHERE b.pro_no = #{proNo}
-		ORDER BY vote_parti_no
+		ORDER BY i.name
 	</select>
 	
 	<!-- 할 일 생성 -->
@@ -104,5 +109,42 @@
 		       #{id}
 		)
 	</insert>
+	
+	<!-- 투표글 작성(5번) -->
+	<insert id="createPostVote" statementType="CALLABLE" parameterType="CreateVoteVO">
+		{call cre_pro_vote(
+				#{proNo},
+				#{id},
+				#{postTitle},
+				#{voteContent},
+				#{voteEndDay, mode=IN, jdbcType=DATE},
+				#{voteDetail, mode=IN, typeHandler=com.groo.bear.pro.mapper.OracleArrayStructHandler}
+			)
+		}
+	</insert>
+	
+	<!-- 투표 마감 -->
+	<update id="updateVoteStatus">
+		UPDATE vote
+		SET vote_end_check = 'Y'
+		WHERE vote_no = #{voteNo}
+	</update>
+	
+	<!-- 투표 참가 인원수 조회 -->
+	<select id="readVotePartiCount" resultType="ProTodoPartiCountVO">
+		SELECT COUNT(*) AS count, d.vote_detail_no
+		FROM vote a
+		
+		JOIN pro_post b
+		ON(a.pro_post_no = b.pro_post_no)
+		JOIN vote_detail c
+		ON(a.vote_no = c.vote_no)
+		JOIN vote_parti d
+		ON(d.vote_detail_no = c.vote_detail_no)
+		
+		WHERE b.pro_no = #{proNo}
+		GROUP BY d.vote_detail_no
+	</select>
+	
 	
 </mapper>

@@ -18,13 +18,14 @@
 }
 
 .filled-star {
-	color: yellow;
+	color: rgb(49, 17, 226);
 }
 
 .empty-star {
-	color: transparent;
+	color: gray;
 }
 </style>
+
 </head>
 <body layout:fragment="content">
 	<div>
@@ -68,6 +69,12 @@
 					<td th:text="${pro.proName}"></td>
 					<td th:each="parti:${projectPartiList}"
 						th:if="${parti.proNo == pro.proNo}" th:text="${parti.count} + '명'"></td>
+					<td>
+						<span class="material-symbols-outlined"
+							  onclick="hideProject()"
+							  th:data-pro-hide="${pro.proHideCheck}"
+							  th:text="${pro.proHideCheck == 'Y'} ? 'visibility_off' : 'visibility'"></span>
+					</td>
 				</tr>
 
 			</tbody>
@@ -92,6 +99,12 @@
 					<td th:text="${pro.proName}"></td>
 					<td th:each="parti:${projectPartiList}"
 						th:if="${parti.proNo == pro.proNo}" th:text="${parti.count} + '명'"></td>
+					<td>
+						<span class="material-symbols-outlined"
+							  onclick="hideProject()"
+							  th:data-pro-hide="${pro.proHideCheck}"
+							  th:text="${pro.proHideCheck == 'Y'} ? 'visibility_off' : 'visibility'"></span>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -241,5 +254,35 @@
 			location.href="/proPostMain/" + proNo + "?homeTab=" + homeTNum;
 		}
 	</script>
+	
+<!-- 프로젝트 숨김 -->
+<script>
+function hideProject() {
+	event.stopPropagation();
+	let hideC = event.target.dataset.proHide;
+	hideC = hideC == 'N' ? 'Y' : 'N';
+	console.log(hideC)
+	let trTag = event.target.closest('tr');
+	let proMemNo = trTag.dataset.pmn;
+	
+	fetch("/updateProHide", {
+		  method: 'PUT',
+		  headers: {
+		    'Content-Type': 'application/json'
+		  },
+		  body: JSON.stringify({
+			  	proMemNo: proMemNo,
+			  	proHideCheck: hideC
+			  })
+		})
+		.then(response => response.json())
+		.then(res => {
+			let rC = res.result;
+			if(rC == '성공') {
+				trTag.remove();
+			}
+		});
+}
+</script>	
 </body>
 </html>
