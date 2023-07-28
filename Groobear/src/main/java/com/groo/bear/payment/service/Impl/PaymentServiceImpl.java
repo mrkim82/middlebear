@@ -151,5 +151,15 @@ public class PaymentServiceImpl implements PaymentService{
 	@Override
 	public int referrerPayCount(String id) {
 		return paymentMapper.referrerPayCount(id);
+	}
+
+	@Override
+	public List<FilesVO> searchPayImg(int payNo) {
+		return filesMapper.searchPayImg(payNo);
+	}
+
+	@Override
+	public int deletePayImg(int payNo) {
+		return filesMapper.deletePayImg(payNo);
 	}	
 }

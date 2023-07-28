@@ -62,6 +62,11 @@ public class CarServiceImpl implements CarService {
 		return carMapper.bookListCnt(cri, carVO);
 	}
 
+	@Override
+	public List<CarVO> getBook(Criteria cri, String id, String monthDate) {
+		return carMapper.getMybook(cri, id, monthDate);
+	}
+
 	
 
 	

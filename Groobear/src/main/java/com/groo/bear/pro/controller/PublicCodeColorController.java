@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.groo.bear.pro.service.ProGroupVO;
 import com.groo.bear.pro.service.PublicCodeService;
+import com.groo.bear.pro.service.provo.ProGroupVO;
 
 @RestController
 public class PublicCodeColorController {

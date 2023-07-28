@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.groo.bear.pro.mapper.ProPostSchMapper;
 import com.groo.bear.pro.service.ProPostSchService;
+import com.groo.bear.pro.service.schvo.ProCreateSchVO;
 import com.groo.bear.pro.service.schvo.ProPerCalComVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.schvo.ProPostWorkSchVO;
@@ -98,6 +99,11 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 	@Override
 	public int deleteMemberSchParti(String id) {
 		return ppsm.deleteMemberSchParti(id);
+	}
+
+	@Override
+	public void createPostSch(ProCreateSchVO vo) {
+		ppsm.createPostSch(vo);
 	}
 
 }

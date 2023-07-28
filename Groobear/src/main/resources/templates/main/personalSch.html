@@ -120,6 +120,7 @@ p {
 	var calendarEl = document.getElementById('calendar');
 	let allEvents = schAllDatas;
 	
+	console.log('데이터', allEvents);
 	let formattedEvents = allEvents.map(eventData => ({
 	    title: eventData.title,
 	    start: eventData.start,

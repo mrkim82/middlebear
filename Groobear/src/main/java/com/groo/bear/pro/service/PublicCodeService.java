@@ -2,6 +2,8 @@ package com.groo.bear.pro.service;
 
 import java.util.List;
 
+import com.groo.bear.pro.service.provo.ProGroupVO;
+
 public interface PublicCodeService {
 	
 	//전체 색상 조회

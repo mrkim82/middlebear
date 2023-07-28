@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.groo.bear.pro.service.ProGroupVO;
 import com.groo.bear.pro.service.ProService;
-import com.groo.bear.pro.service.ProUsersVO;
-import com.groo.bear.pro.service.ProVO;
+import com.groo.bear.pro.service.provo.ProGroupVO;
+import com.groo.bear.pro.service.provo.ProHideVO;
+import com.groo.bear.pro.service.provo.ProUsersVO;
+import com.groo.bear.pro.service.provo.ProVO;
 
 //강병관 - 프로젝트 첫화면 관리
 @Controller
@@ -233,6 +234,15 @@ public class ProController {
 		
 		map.put("result", res);
 		return map;
+	}
+	
+	//프로젝트 그룹 수정
+	@PutMapping("updateProHide")
+	@ResponseBody
+	public Map<String, Object> updateProHide(@RequestBody ProHideVO vo) {
+		int result = proService.updateProHide(vo);
+		
+		return Collections.singletonMap("result", result>0?"성공":"취소");
 	}
 	
 }
