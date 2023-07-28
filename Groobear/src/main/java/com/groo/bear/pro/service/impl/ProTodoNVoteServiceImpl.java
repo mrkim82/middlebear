@@ -99,8 +99,8 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 	}
 
 	@Override
-	public List<ProVoteCDVO> readxxVote(String id) {
-		return tv.readxxVote(id);
+	public List<ProVoteCDVO> readxxVote(String id, int proNo) {
+		return tv.readxxVote(id, proNo);
 	}
 
 	

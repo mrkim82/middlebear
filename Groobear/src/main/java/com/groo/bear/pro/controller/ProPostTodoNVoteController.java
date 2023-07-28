@@ -80,7 +80,10 @@ public class ProPostTodoNVoteController {
 	
 	//투표취소
 	@PostMapping("deleteVote")
-	public Map<String, Object> deleteVote(@RequestBody ProVoteCDVO vo) {
+	public Map<String, Object> deleteVote(HttpServletRequest request, @RequestBody ProVoteCDVO vo) {
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("Id");
+		vo.setId(id);
 		int result = ps.deleteVote(vo);
 		
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");

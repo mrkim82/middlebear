@@ -158,14 +158,22 @@
 	<!-- 투표취소 -->
 	<delete id="deleteVote" parameterType="ProVoteCDVO">
 		DELETE FROM vote_parti
-		WHERE vote_parti_no = #{votePartiNo}
+		WHERE vote_detail_no = #{voteDetailNo}
+		AND id= #{id}
 	</delete>
 	
 	<!-- 투표 체크 조회하기 위한 select -->
 	<select id="readxxVote" resultType="ProVoteCDVO">
-		SELECT vote_detail_no, id
-		FROM vote_parti
-		WHERE id =#{id}
+		SELECT d.vote_detail_no, d.id
+		FROM pro_post a
+		JOIN vote b
+		ON(a.pro_post_no = b.pro_post_no)
+		JOIN vote_detail c
+		ON(b.vote_no = c.vote_no)
+		JOIN vote_parti d
+		ON(c.vote_detail_no = d.vote_detail_no)
+		WHERE d.id = #{id}
+		AND a.pro_no = #{proNo}
 	</select>
 	
 	

@@ -7,5 +7,7 @@ public class ProVoteCDVO {
 	private int voteDetailNo;
 	private String id;
 	
-	private int votePartiNo;
+	//private int votePartiNo;
+	private int proNo;
+	
 }

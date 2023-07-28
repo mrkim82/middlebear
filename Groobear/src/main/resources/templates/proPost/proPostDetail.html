@@ -1102,15 +1102,13 @@ function drawChart() {
 										   
 								<span th:text="${vtCheck.voteDetailContent}"></span>
 								<span th:each="vC : ${readVotePartiCount}"
-									  th:if="${vtCheck.voteDetailNo == vC.voteDetailNo}" 
-									  th:data-vote-parti-person-id="${vC.voteDetailNo}">
+									  th:if="${vtCheck.voteDetailNo == vC.voteDetailNo}"> 
 									  <span	th:text="${vC.count} + '명'"
 									  		class="spanCursor"></span>
 								</span>
 								
 							  </li>
 							</ul>
-							
 								<!-- <span th:each="vpl : ${readVoteListParti}"
 									  th:if="${vtCheck.voteDetailNo == vpl.voteDetailNo}"
 									  th:data-vote-parti-person-id="${vpl.votePartiNo}">
@@ -1240,6 +1238,13 @@ function drawChart() {
 </div>
 	
 	
+<!-- model값 가져오기 -->
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		//투표 check하기
+		let modelVoteChecks = /*[[${readxxVote}]]*/;
+	/*]]>*/
+</script>
 
 <!-- 버튼 상태 변경(업무상태, 작성 모달창) -->	
 <script>
@@ -2321,8 +2326,10 @@ function changeProfileNote() {
 		let voteDetailNo = event.target.dataset.voteDetailNo;
 		console.log('vote',voteDetailNo)
 		let countWrite = event.target.parentElement.children[3];
+		
 		if(countWrite == null) {
 			console.log('null임')
+			let newVoteCountTag = `<span><span classs="spanCursor">1명</span></span>`;
 		}
 		
 		//투표 등록
@@ -2353,18 +2360,31 @@ function changeProfileNote() {
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(schObj)
+				body: JSON.stringify({'voteDetailNo' : voteDetailNo})
 			})
 			.then(response => response.json())
 			.then(res => {
 				console.log(res);
 			})
-			.catch(error => {
-				console.error('Error: ',error);
-			});
+			.catch(error => console.error('Error: ',error));
 
 		}
 	}
+</script>
+
+<!-- vote 초기 checked 정하기 -->
+<script>
+	let allVoteCheckBoxes = document.querySelectorAll('[data-vote-detail-no]');
+	modelVoteChecks.forEach(modelVoteCheck => {
+
+		allVoteCheckBoxes.forEach(voteCheckbox => {
+			if(voteCheckbox.dataset.voteDetailNo == modelVoteCheck.voteDetailNo) {
+				voteCheckbox.checked = true;
+			};
+			
+		});
+		
+	});
 </script>
 
 

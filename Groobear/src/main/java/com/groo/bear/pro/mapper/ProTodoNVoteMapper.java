@@ -52,6 +52,6 @@ public interface ProTodoNVoteMapper {
 	public int deleteVote(ProVoteCDVO vo);
 	
 	//투표 체크 조회하기 위한 select
-	public List<ProVoteCDVO> readxxVote(String id);
+	public List<ProVoteCDVO> readxxVote(String id, int proNo);
 	
 }
