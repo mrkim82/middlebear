@@ -10,19 +10,24 @@ public interface CommuteService {
 	public List<CommuteVO> getAllCommuteList(Criteria cri, CommuteVO commuteVO);
 	//페이징
 	public int commuteCnt(Criteria cri, CommuteVO commuteVO);
-//	//차량 개별조회 
-//	public List<CarVO> getMyCarList(String id);
-//	public List<CarVO> getMyCarInfo(String id);
-//	
-
-//	//추가
-//	public int addCar(CarVO carVO);
-//	//수정 
-//	public int carUpdate(CarVO carVO);
-//	//삭제
-//	public int carDelete(String carNo);
-
-
-
-
+	//출근
+	public int startWork(CommuteVO commuteVO);
+	//퇴근 
+	public int endWork(CommuteVO commuteVO);
+	//퇴근없이 연장근무 시작
+	public int ewStartOverWork(CommuteVO commuteVO);
+	//연장근무 시작
+	public int startOverWork(CommuteVO commuteVO);
+	//연장근무 종료
+	public int endOverWork(CommuteVO commuteVO);
+	//근무기록 확인
+	public CommuteVO chkWork(String id);
+	//기록 조회
+	public List<CommuteVO> getMyCommuteList(Criteria cri,String id,String monthDate);
+	//초기값 지정
+	public int settingDay(CommuteVO commuteVO);
+	//개인 월별 기록
+	public CommuteVO monthWork(String id, String monthDate);
+	//수정
+	public int commuteUpdate(CommuteVO commuteVO);
 }

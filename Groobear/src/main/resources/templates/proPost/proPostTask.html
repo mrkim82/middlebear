@@ -4,14 +4,801 @@
 	  layout:decorate="~{layout/proPostTiles}"
 >
 <head>
-<meta charset="UTF-8">
-<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js}"></script>
+<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js}"></script>
+<style>
+#workTableHead th {
+    position: sticky;
+    top: 0px;
+    background-color: gray !important;
+}
+table#workTable th:first-child { position: sticky; top: 0; }
+//table#workTable td:first-child { position: sticky; left: 0; }
+
+tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
+
+.custom-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 670px;
+    background-color: #f8f9fa;
+    box-shadow: -1px 0px 3px rgba(0, 0, 0, 0.2);
+    transform: translateX(100%);
+    transition: transform 0.3s;
+}
+
+.show-modal {
+    transform: translateX(0);
+    z-index: 9999;
+}
+
+.modal-header {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.modal-body {
+    padding: 10px;
+}
+
+.modal-footer {
+    padding: 10px;
+    background-color: #f8f9fa;
+    text-align: right;
+}
+</style>
 </head>
-<body layout:fragment="content">
-	<div>할 일(업무)</div>
+
+<th:block layout:fragment="content">
+
+<!-- 보기 항목 설정 -->
+<div style="width: 100%;">
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#workView">보기</button>
+</div>
+<!-- 보기 항목 설정 Modal -->
+<div class="modal fade" id="workView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="workViewModalLabel">보기 설정</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4>항목 설정</h4>
+        <h6>조회할 항목을 선택할 수 있습니다.</h6>
+       	<!-- 개인 업무 보기 설정(modal) -->
+        <ul id="workViewCheck">
+        	<li><div class="form-check form-switch">
+			  <input class="form-check-input" type="checkbox" role="switch" id="workNameCheckbox"
+			  		 th:checked="${readWorkView.workName == 'Y'}" th:text="업무명"
+			  		 data-work-view="workName" disabled>
+			  <label class="form-check-label" for="workNameCheckbox"></label>
+			</div></li>
+        	<li><div class="form-check form-switch">
+			  <input class="form-check-input" type="checkbox" role="switch" id="workStatusCheckbox"
+			  		 th:checked="${readWorkView.workStatus == 'Y'}" th:text="상태"
+			  		 data-work-view="workStatus">
+			  <label class="form-check-label" for="workStatusCheckbox"></label>
+			</div></li>
+        	<li><div class="form-check form-switch">
+			  <input class="form-check-input" type="checkbox" role="switch" id="workPrikCheckbox"
+			  		 th:checked="${readWorkView.workPri == 'Y'}" th:text="우선순위"
+			  		 data-work-view="workPri">
+			  <label class="form-check-label" for="workPrikCheckbox"></label>
+			</div></li>
+        	<li><div class="form-check form-switch">
+			  <input class="form-check-input" type="checkbox" role="switch" id="workManagerCheckbox"
+			  		 th:checked="${readWorkView.workManager == 'Y'}" th:text="담당자"
+			  		 data-work-view="workManager">
+			  <label class="form-check-label" for="workManagerCheckbox"></label>
+			</div></li>
+        	<li><div class="form-check form-switch">
+			  <input class="form-check-input" type="checkbox" role="switch" id="workStartDayCheckbox"
+			  		 th:checked="${readWorkView.workStartDay == 'Y'}" th:text="시작일"
+			  		 data-work-view="workStartDay">
+			  <label class="form-check-label" for="workStartDayCheckbox"></label>
+			</div></li>
+        	<li><div class="form-check form-switch">
+			  <input class="form-check-input" type="checkbox" role="switch" id="workEndDayCheckbox"
+			  		 th:checked="${readWorkView.workEndDay == 'Y'}" th:text="마감일"
+			  		 data-work-view="workEndDay">
+			  <label class="form-check-label" for="workEndDayCheckbox"></label>
+			</div></li>
+        	<li><div class="form-check form-switch">
+			  <input class="form-check-input" type="checkbox" role="switch" id="workDateCheckbox"
+			  		 th:checked="${readWorkView.workDate == 'Y'}" th:text="등록일"
+			  		 data-work-view="workDate">
+			  <label class="form-check-label" for="workDateCheckbox"></label>
+			</div></li>
+        	<li><div class="form-check form-switch">
+			  <input class="form-check-input" type="checkbox" role="switch" id="workNumCheckbox"
+			  		 th:checked="${readWorkView.workNum == 'Y'}" th:text="업무번호"
+			  		 data-work-view="workNum">
+			  <label class="form-check-label" for="workNumCheckbox"></label>
+			</div></li>
+        	<li><div class="form-check form-switch">
+			  <input class="form-check-input" type="checkbox" role="switch" id="workWriterCheckbox"
+			  		 th:checked="${readWorkView.workWriter == 'Y'}" th:text="작성자"
+			  		 data-work-view="workWriter">
+			  <label class="form-check-label" for="workWriter"></label>
+			</div></li>
+        	<li><div class="form-check form-switch">
+			  <input class="form-check-input" type="checkbox" role="switch" id="workUpdateDayCheckbox"
+			  		 th:checked="${readWorkView.workUpdateDay == 'Y'}" th:text="수정일"
+			  		 data-work-view="workUpdateDay">
+			  <label class="form-check-label" for="workUpdateDayCheckbox"></label>
+			</div></li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary" onclick="subWorkView()">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 테이블 크기 -->
+<div class="float-start table-responsive" style="width: 1600px; margin-left: 10px; height: 630px" >
+
+<table class="table table-bordered table-hover" id="workTable">
+
+  <!-- 테이블 제목 -->
+  <thead id="workTableHead">
+    <tr>
+      <th scope="col" th:style="${readWorkView.workName == 'N'} ? 'display: none;' : ''">업무명</th>
+      <th scope="col" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workStatus">상태</th>
+      <th scope="col" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workPri">우선순위</th>
+      <th scope="col" th:style="${readWorkView.workManager == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workManager">담당자</th>
+      <th scope="col" th:style="${readWorkView.workStartDay == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workStartDay">시작일</th>
+      <th scope="col" th:style="${readWorkView.workEndDay == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workEndDay">마감일</th>
+      <th scope="col" th:style="${readWorkView.workDate == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workDate">등록일</th>
+      <th scope="col" th:style="${readWorkView.workNum == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workNum">업무번호</th>
+      <th scope="col" th:style="${readWorkView.workWriter == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workWriter">작성자</th>
+      <th scope="col" th:style="${readWorkView.workUpdateDay == 'N'} ? 'display: none;' : ''"
+      	  data-work-column="workUpdateDay">수정일</th>
+    </tr>
+  </thead>
+	
+  <tbody>
+  
+  	<th:block th:each="taskG : ${readWorkGroup}">
+  		<!-- 업무 그룹 표시 -->
+  		<tr>
+  			<td th:text="${taskG.workGroupName}" th:data-work-group-no="${taskG.workGroupNo}"
+  				style="background-color: #b6b3b3"></td>
+  		</tr>
+  		
+	    <tr th:each="task : ${readTaskAllList}" th:if="${task.workGroupNo == taskG.workGroupNo}"
+	    	th:data-pro-post-no="${task.proPostNo}" th:data-work-no="${task.workNo}">
+	    	
+  		  <!-- 업무명 -->
+	      <td th:text="'    ' + ${task.postTitle}" th:data-modal="'modal' + ${task.proPostNo}"
+	      	  class="sideWork" th:style="${readWorkView.workName == 'N' ? 'display: none;' : ''}">업무명</td>
+  		  <!-- 업무명 종료 -->
+  		  
+	      <!-- 업무 상태 -->
+	      <th:block th:switch="${task.workStatus}">
+	      	<td th:case="1" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''">
+	      		<button type="button" class="btn btn-primary" data-work-type-status="1" data-trigger="focus"
+	      		data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom popover"
+	      		th:data-target-status=${task.workNo} data-work-column="workStatus">요청</button></td>
+	      	<td th:case="2" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''">
+	      		<button type="button" class="btn btn-warning" data-work-type-status="2" data-trigger="focus"
+	      		data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom popover"
+	      		th:data-target-status=${task.workNo} data-work-column="workStatus">진행</button></td>
+	      	<td th:case="3" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''">
+	      		<button type="button" class="btn btn-danger" data-work-type-status="3" data-trigger="focus"
+	      		data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom popover"
+	      		th:data-target-status=${task.workNo} data-work-column="workStatus">피드백</button></td>
+	      	<td th:case="4" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''">
+	      		<button type="button" class="btn btn-success" data-work-type-status="4" data-trigger="focus"
+	      		data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom popover"
+	      		th:data-target-status=${task.workNo} data-work-column="workStatus">완료</button></td>
+	      	<td th:case="5" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''">
+	      		<button type="button" class="btn btn-secondary" data-work-type-status="5" data-trigger="focus"
+	      		data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom popover"
+	      		th:data-target-status=${task.workNo} data-work-column="workStatus">보류</button></td>
+	      </th:block>
+	      <!-- 업무 상태 종료-->
+	      
+	      <!-- 우선순위 -->
+	      <th:block th:switch="${task.workPri}">
+	      	<td th:case="1" th:text="낮음" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+	      		data-work-column="workPri">낮음</td>
+	      	<td th:case="2" th:text="보통" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+	      		data-work-column="workPri">보통</td>
+	      	<td th:case="3" th:text="높음" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+	      		data-work-column="workPri">높음</td>
+	      	<td th:case="4" th:text="긴급" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+	      		data-work-column="workPri">긴급</td>
+	      	<td th:case="*" th:text="'-'" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+	      		data-work-column="workPri">우선순위</td>
+	      </th:block>
+	      <!-- 우선순위 종료-->
+	      
+	      <!-- 담당자 -->
+	      <td th:style="${readWorkView.workManager == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workManager">담당자</td>
+	      <!-- 담당자 종료-->
+	      
+	      <!-- 시작일 -->
+	      <td th:text="${task.workStartTime != null} ? ${#dates.format(task.workStartTime, 'yyyy-MM-dd')} : '-'"
+	      	  th:style="${readWorkView.workStartDay == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workStartDay">
+	      	  시작일</td>
+	      <!-- 시작일 종료-->
+	      
+	      <!-- 마감일 -->
+	      <th:block th:if="${task.workEndTime == null}">
+			<td th:style="${readWorkView.workEndDay == 'N'} ? 'display: none;' : ''"
+				data-work-column="workEndDay">-</td>
+	      </th:block>
+	      <th:block th:if="${task.workEndTime != null}">
+			<td th:if="${#dates.format(task.workEndTime) > #dates.format(afterOneDay)}"
+				th:text="${#dates.format(task.workEndTime, 'yyyy-MM-dd')}"
+				th:style="${readWorkView.workEndDay == 'N'} ? 'display: none;' : ''"
+				data-work-column="workEndDay">마감일</td>
+			<td th:if="${#dates.format(task.workEndTime) <= #dates.format(afterOneDay)}"
+				th:text="${#dates.format(task.workEndTime, 'MM/dd, HH:mm')}"
+				th:style="'color: red; display: ' + (${readWorkView.workEndDay == 'N'} ? 'none;' : 'block;')"
+				data-work-column="workEndDay">마감일, 24시 전</td>
+      	  </th:block>
+		  <!-- 마감일 종료 -->
+		  
+	      <td th:text="${#dates.format(task.postDate, 'yyyy-MM-dd')}"
+	      	  th:style="${readWorkView.workDate == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workDate">등록일</td>
+	      <td th:text="${task.workNo}"
+	      	  th:style="${readWorkView.workNum == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workNum">업무번호</td>
+	      <td th:text="${task.name}"
+	      	  th:style="${readWorkView.workWriter == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workWriter">작성자</td>
+	      <td th:text="${#dates.format(task.workUpdateDay, 'yyyy-MM-dd')}"
+	      	  th:style="${readWorkView.workUpdateDay == 'N'} ? 'display: none;' : ''"
+	      	  data-work-column="workUpdateDay">수정일</td>
+	    </tr>
+	    
+    </th:block>
+    
+  </tbody>
+</table>
+
+<!-- Custom Modal -->
+<div class="custom-modal" th:each="taskD : ${readWorkDetail}" th:id="'modal' + ${taskD.proPostNo}"
+	 th:data-feed-post-no="${taskD.proPostNo}" th:data-feed-work-no="${taskD.workNo}">
+    <div class="modal-header">
+        <h6 class="modal-title"
+        	th:utext="${taskD.profileImg} + ${taskD.name} + ${#dates.format(taskD.postDate, 'yyyy-MM-dd HH:mm')}"></h6>
+        <button type="button" class="close closeModalButton" aria-label="Close">
+        	<span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-header">
+        <h5 class="modal-title" th:text="'제목 : ' + ${taskD.postTitle}"></h5>
+    </div>
+    <div class="modal-body">
+    	<div class="workFeedPostStatus" th:attr="data-feed-work-type=${taskD.workStatus}" style="text-align: center;">
+		    <button type="button" class="btn"
+		    		th:classappend="${taskD.workStatus == '1' ? 'btn-primary' : 'btn-outline-primary'}"
+		            data-work-type-status="1" onclick="toggleFeedButtonStyle(this)">요청</button>
+		    <button type="button" class="btn"
+		    		th:classappend="${taskD.workStatus == '2' ? 'btn-warning' : 'btn-outline-warning'}"
+		            data-work-type-status="2" onclick="toggleFeedButtonStyle(this)">진행</button>
+		    <button type="button" class="btn"
+		    		th:classappend="${taskD.workStatus == '3' ? 'btn-danger' : 'btn-outline-danger'}"
+		            data-work-type-status="3" onclick="toggleFeedButtonStyle(this)">피드백</button>
+		    <button type="button" class="btn"
+		    		th:classappend="${taskD.workStatus == '4' ? 'btn-success' : 'btn-outline-success'}"
+		            data-work-type-status="4" onclick="toggleFeedButtonStyle(this)">완료</button>
+		    <button type="button" class="btn"
+		    		th:classappend="${taskD.workStatus == '5' ? 'btn-secondary' : 'btn-outline-secondary'}"
+		            data-work-type-status="5" onclick="toggleFeedButtonStyle(this)">보류</button>
+		</div>
+		
+		<!-- 추가 항목 -->
+		<div>
+			<p>
+			  <button class="btn btn-primary" type="button" data-toggle="collapse" th:data-target="'#collapseExample' + ${taskD.workNo}"
+			  			aria-expanded="false" aria-controls="collapseExample">
+			    + 항목추가입력
+			  </button>
+			</p>
+			<!-- 하위업무 생성 공간 -->
+			<div>
+
+			</div>
+			<div class="collapse" th:id="'collapseExample' + ${taskD.workNo}">
+			  <div class="card card-body">
+			  	<!-- 시작일 추가 -->
+			  	<div>
+			  		<p>시작일</p>
+						<input type="datetime-local" id="startWorkDate2" th:value="${#dates.format(taskD.workStartDay, 'yyyy-MM-dd HH:mm')}">
+			  	</div>
+			  	<!-- 마감일 추가 -->
+			  	<div>
+			  		<p>마감일</p>
+			  		<input type="datetime-local"  id="endWorkDate2" th:min="${#dates.format(#calendars.createNow())}" th:value="${#dates.format(taskD.workStartTime, 'yyyy-MM-dd HH:mm')}">
+			  	</div>
+			  	<!-- 우선순위 추가 -->
+			  	<div>
+						<p>우선순위</p>
+						<select class="custom-select" name="workPri" id="workPostPri">
+							<option value="">없음</option>
+							<option value="1" th:selected="${taskD.workStatus == '1'}">낮음</option>
+							<option value="2" th:selected="${taskD.workStatus == '2'}">보통</option>
+						    <option value="3" th:selected="${taskD.workStatus == '3'}">높음</option>
+						    <option value="4" th:selected="${taskD.workStatus == '4'}">긴급</option>
+						</select>
+			  	</div>
+			  	<!-- 그룹 추가 -->
+			  	<div>
+			  	
+			  	<p>업무 그룹</p>
+				<select class="form-select" name="workGroup" id="workPostGroup2">
+					<th:block th:each="group : ${readWorkGroup}">
+							<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}"
+									th:selected="${taskD.workGroupNo == group.workGroupNo}"></option>
+					</th:block>
+				</select>
+			  	</div>
+			  </div>
+			</div>
+		</div>
+		<!-- 항목추가 종료 -->
+		<p th:text="${taskD.workContent}">
+			<!-- 게시글 내용이 여기에 들어갑니다. -->
+		</p>
+		<div class="collapse" id="moreContent">
+			<p>
+				<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
+			</p>
+			<a class="btn btn-link" data-toggle="collapse" href="#moreContent" role="button"
+				aria-expanded="false" aria-controls="moreContent">더보기</a>
+		</div>
+		
+		
+    </div>
+    <div class="modal-body">
+    
+        <!-- 하위업무 -->
+		<div>
+			<!-- 하위업무 수 -->
+			<div>
+				<p>ㄴ하위업무</p>
+			</div>
+			<!-- 하위업무 동적 생성 -->
+			<div>
+				<button type="button">+ 하위업무 추가</button>
+			</div>
+			<!-- 하위업무 입력란 -->
+			<div>
+				
+			</div>
+		</div>
+    </div>
+    <div class="modal-body">
+    
+    </div>
+	<!-- 북마크, 댓글수 -->
 	<div>
-		<table>
-		</table>
+	
 	</div>
-</body>
+    <div class="modal-footer">
+		
+		<div class="col-md-8">
+			<ul class="list-unstyled">
+				<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+					th:if="${taskD.proPostNo == com.proPostNo}">
+					<span th:utext="${com.profileImg}"></span>
+					<span th:text="${com.name}"></span>
+					<span th:text="${com.comDate}"></span>
+					<span th:text="${com.comContent}"></span>
+					<th:block th:if="${com.id == session.Id}">
+						<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+						<span></span><!-- 지우면 안됨!!!!!!! -->
+						<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+					</th:block>
+				</li>
+			</ul>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="댓글 작성">
+			</div>
+			<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+					th:data-post-writing-no="${taskD.proPostNo}">댓글 등록</button>
+		</div>
+		
+    </div>
+</div>
+
+</div>
+
+<script>
+	$(function () {
+	  $('[data-toggle="popover"]').popover()
+	});
+</script>
+
+<!-- Custom JS -->
+<script>
+    $(document).ready(function () {
+        var $buttons = $('.sideWork');
+        var $modals = $('.custom-modal');
+        
+        // Event handler for dynamically created buttons
+        $buttons.click(function () {
+            // Get the ID of the corresponding modal
+            var modalId = $(this).data('modal');
+			console.log('찾는거',modalId)
+			
+            // Show the selected modal and hide others
+            $modals.not('#' + modalId).removeClass('show-modal');
+            $('#' + modalId).toggleClass('show-modal');
+        });
+
+        // Close the custom modal when the close button is clicked
+        $('.closeModalButton').click(function () {
+            $(this).closest('.custom-modal').removeClass('show-modal');
+        });
+    });
+</script>
+
+<!-- 버튼 상태 변경(업무 상태, 게시물 조회) -->
+<script>
+	let selectedFeedButton = new Map();
+
+	function toggleFeedButtonStyle(button) {
+		let postWorkNo = button.closest('.custom-modal').dataset.feedPostNo;// 글 번호
+		let workNo = button.closest('.custom-modal').dataset.feedWorkNo;
+		let newStatus = button.dataset.workTypeStatus;
+		let oldStatusNo = selectedFeedButton.get(postWorkNo);//선택했던 기존 버튼 번호 null or 존재
+
+		//기존 상태 버튼 찾기
+		let oldButton;
+		if(oldStatusNo == null) {//선택했던 기존 버튼이 없다면
+			let firstButtonStatusNo = button.parentNode.dataset.feedWorkType;//최초 버튼 찾기
+			oldButton = button.closest(".custom-modal").querySelector('[data-work-type-status="' + firstButtonStatusNo + '" ]');//최초 버튼 상태 찾기
+		} else {//선택했던 기존 버튼이 있다면
+			oldButton = button.closest(".custom-modal").querySelector('[data-work-type-status="' + oldStatusNo + '" ]');//구 버튼 상태를 찾기
+		}
+
+		selectedFeedButton.set(postWorkNo, newStatus);//신규 번호 삽입
+		
+		fetch("/updateWorkPostStatus", {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				'workStatus' : newStatus,
+   				'workNo': workNo
+   			})
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res);
+			if(res.result == '성공') {
+				
+				  if (oldButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
+				    if (oldButton) {
+				      resetButtonStyle(oldButton);
+				    }
+				    
+				    let className = button.classList.item(1);
+				
+				    if (className.startsWith('btn-outline')) {
+				      let filledClassName = className.replace('btn-outline', 'btn');
+				      button.classList.remove(className);
+				      button.classList.add(filledClassName);
+				    } else {
+				      let outlineClassName = className.replace('btn', 'btn-outline');
+				      button.classList.remove(className);
+				      button.classList.add(outlineClassName);
+				    }
+				
+				    oldButton = button;
+				    
+					changeMainStatus(newStatus, workNo, className);
+				  }
+				  
+			} else {
+				alert('상태 수정 실패');
+			}
+			
+			
+		});
+		
+	}
+	
+	function changeMainStatus(newStatus, workNo, className) {
+		let MainButton = document.querySelector('[data-target-status="' + workNo + '" ]');
+		let filledClassName = className.replace('btn-outline', 'btn');
+		//console.log(MainButton);
+		//console.log(filledClassName);
+		MainButton.className = '';
+		MainButton.dataset.workTypeStatus= newStatus;
+		MainButton.classList.add('btn', filledClassName);
+		//console.log(MainButton);
+		switch (newStatus) {
+		  case '1':
+			  MainButton.innerText = '요청';
+		    break;
+		  case '2':
+			  MainButton.innerText = '진행';
+		    break;
+		  case '3':
+			  MainButton.innerText = '피드백';
+		    break;
+		  case '4':
+			  MainButton.innerText = '완료';
+		    break;
+		  case '5':
+			  MainButton.innerText = '보류';
+		    break;
+		}
+	}
+	
+	
+	//버튼 초기화
+	function resetButtonStyle(button) {
+	  let className = button.classList.item(1);
+	  if (className.startsWith('btn-outline')) {
+	    let outlineClassName = className.replace('btn-outline', 'btn');
+	    button.classList.remove(className);
+	    button.classList.add(outlineClassName);
+	  } else {
+	    let filledClassName = className.replace('btn', 'btn-outline');
+	    button.classList.remove(className);
+	    button.classList.add(filledClassName);
+	  }
+	}
+	
+</script>
+
+<!-- 댓글 등록 -->
+<script>
+	function createCommentButton() {
+		let targetButton = event.target;//버튼 동적 확인
+		let com = targetButton.parentNode.children[0].children[0]; //텍스트값 찾기
+		if(com.value == '') {
+			com.focus();
+			alert('댓글을 입력하세요');
+			return;
+		}
+		
+		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
+		
+		/* let url = window.location.pathname;
+		let lastIndex = url.lastIndexOf('/');
+		let projectNo = url.substring(lastIndex + 1); */
+		
+		fetch("/postCreateComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+   				'proPostNo': writingNo,
+   				'comContent': com.value
+   			})
+		})
+		.then(response => response.json())
+		.then(res => {
+			let insertComment = targetButton.closest('.modal-footer').getElementsByClassName('list-unstyled')[0];
+			
+			
+			insertComment.insertAdjacentHTML('beforeend', 
+				'<li data-post-code="' + res.result + '">'+
+					'<span></span>'+
+					'<span>' + selfName + '</span>'+
+					'<span>' + currentTime + '</span>'+
+					'<span>' + com.value + '</span>'+
+					'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
+					'<span></span>'+
+					'<span onclick="deleteWritingComment()" class="spanCursor">X</span>'+
+				'</li>'
+			);
+			com.focus();
+			com.value = '';
+		})
+		//.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=1");
+	}
+	//현재시간 구하기
+	const currentTime = formatDate();
+	
+	function formatDate() {
+	  let date = new Date();
+	  const year = date.getFullYear();
+	  const month = String(date.getMonth() + 1).padStart(2, '0');
+	  const day = String(date.getDate()).padStart(2, '0');
+	  const hours = String(date.getHours()).padStart(2, '0');
+	  const minutes = String(date.getMinutes()).padStart(2, '0');
+	  
+	  return `${year}/${month}/${day} ${hours}:${minutes}`;
+	}
+</script>
+
+<!-- 댓글 삭제  -->
+<script>
+	function deleteWritingComment() {
+		let targetButton = event.target;
+		//console.log(targetButton.parentNode.dataset.postCode);
+		
+		let url = window.location.pathname;
+		let lastIndex = url.lastIndexOf('/');
+		let projectNo = url.substring(lastIndex + 1);
+		
+		fetch("/postDeleteComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+   				'comNo': targetButton.parentNode.dataset.postCode
+   			})
+		})
+		.then(response => response.json())
+		.then(res => {
+			targetButton.parentNode.remove()
+		});
+	}
+</script>
+
+<!-- 댓글 수정  -->
+<script>
+	function UpdateWritingComment() {
+		let targetButton = event.target;
+		let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
+		
+		let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
+		let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
+		
+		//초기화
+		targetButton.parentNode.children[2].textContent = '';//날짜 초기화
+		targetButton.parentNode.children[3].textContent = '';//댓글 초기화
+		targetButton.parentNode.children[4].textContent = '';//수정 초기화
+		targetButton.parentNode.children[6].textContent = '';//X 초기화
+		
+		if(document.getElementById('newComment') != null) {
+			let nC = document.getElementById('newComment').parentNode.parentNode;
+			nC.childNodes[5].textContent = document.getElementById('newComment').dataset.comDate;
+			nC.childNodes[7].textContent = document.getElementById('newComment').value;
+			nC.childNodes[9].textContent = '수정';
+			nC.childNodes[11].textContent = '';
+			nC.childNodes[13].textContent = 'X';
+		}
+		
+		targetButton.parentNode.children[5].innerHTML = 
+				'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
+				+'<span id="ooo" class="spanCursor">수정</span>'
+				+'<span id="xxx" class="spanCursor">취소</span>';
+		
+		// 취소버튼
+		document.getElementById('xxx').addEventListener('click', function() {
+			targetButton.parentNode.children[2].textContent = oldDate;
+			targetButton.parentNode.children[3].textContent = oldCom;
+			targetButton.parentNode.children[4].textContent = '수정';
+			targetButton.parentNode.children[5].textContent = '';
+			targetButton.parentNode.children[6].textContent = 'X';
+		});
+		
+		// 수정버튼
+		document.getElementById('ooo').addEventListener('click', function() {
+			let newCom = document.getElementById('newComment');
+			if(newCom.value == '') {
+				newCom.focus();
+				alert('댓글을 수정하세요');
+			} else {
+				
+				fetch("/postUpdateComment", {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'comContent' : newCom.value,
+		   				'comNo': comNo
+		   			})
+				})
+				.then(response => response.json())
+				.then(res => {
+					
+					if(res.result == '성공') {
+						targetButton.parentNode.children[2].textContent = oldDate;
+						targetButton.parentNode.children[3].textContent = newCom.value;
+						targetButton.parentNode.children[4].textContent = '수정';
+						targetButton.parentNode.children[6].textContent = 'X';
+						targetButton.parentNode.children[5].textContent = '';
+						
+						
+						let url = window.location.pathname;
+						let lastIndex = url.lastIndexOf('/');
+						let projectNo = url.substring(lastIndex + 1);
+						
+					} else {
+						alert('댓글 수정 실패');
+					}
+				});
+			}
+		});
+		
+	}
+</script>
+
+<!-- 멤버별 업무 보기 설정 -->
+<script>
+	function subWorkView() {
+		let checkeds = document.getElementById('workViewCheck').querySelectorAll('li>div>input:checked');
+		let checkedObj= {};
+		let changeColums = [];
+		
+		checkeds.forEach(check => {
+			let dName = check.dataset.workView;
+			checkedObj[dName] = 'Y';
+			changeColums.push(dName);
+		});
+		
+		//프로젝트 번호 넣기(postTile에 해당 번호 있습니다)
+		checkedObj['proNo'] = projectNo;
+		
+		//console.log(checkedObj);
+
+		fetch("/updateWorkView", {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(checkedObj)
+		})
+		.then(response => response.json())
+		.then(res => {
+			//console.log(res);
+			//console.log(changeColums);
+
+			let columns = document.querySelectorAll('[data-work-column]');
+
+			columns.forEach((column) => {
+			  column.style.display = 'none';
+			});
+
+			changeColums.forEach(colum => {
+				let targetColumns = document.querySelectorAll('[data-work-column="' + colum + '" ]');
+				targetColumns.forEach((targetColumn) => {
+				    targetColumn.style.display = '';
+				});
+			});
+			
+			$('#workView').modal('hide')
+
+
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	}
+</script>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		
+		let selfName = /*[[${session.Name}]]*/;
+	/*]]>*/
+</script>
+</th:block>
 </html>

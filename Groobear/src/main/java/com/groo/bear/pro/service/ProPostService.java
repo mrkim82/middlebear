@@ -2,9 +2,11 @@ package com.groo.bear.pro.service;
 
 import java.util.List;
 
+import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostFeedVO;
-import com.groo.bear.pro.service.postvo.ProPostWorkGroupVO;
+import com.groo.bear.pro.service.postvo.ProPostUserVO;
+import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 
@@ -17,11 +19,13 @@ public interface ProPostService {
 	public int readTopMenuCount(String id, int proNo);
 	
 	// 프로젝트 참가자 정보
-	public List<ProPostUserVO> readProjectParti(ProPostUserVO vo);
+	public List<ProPostUserVO> readProjectParti(int proNo);
 	
 	// 게시글 조회
-	public List<ProPostFeedVO> readFeedPost(int proNo);
-		
+	public List<ProPostFeedVO> readFeedPost(int proNo, int postType);
+	// 게시글 삭제
+	public int deleteProPost(int proPostNo);
+	
 	// 글 작성
 	public void createPostWriting(ProPostWritingVO vo);
 	// 글 조회
@@ -31,8 +35,6 @@ public interface ProPostService {
 	
 	//업무 작성
 	public void createPostWork(ProPostWorkVO vo);
-	//업무 그룹조회
-	public List<ProPostWorkGroupVO> readWritingWorkGroup(int proNo);
 	
 	//댓글
 	// 댓글 작성
@@ -44,4 +46,10 @@ public interface ProPostService {
 	
 	//게시글 조회 업무 상태 변경
 	public int updateWorkPostStatus(ProPostWorkVO vo);
+	
+	//차트 조회
+	public List<ProPostChartVO> readPostChart(int proNo);
+	
+	// 프로필 메모 수정
+	public int updateProfileMemo(ProPostUserVO vo);
 }

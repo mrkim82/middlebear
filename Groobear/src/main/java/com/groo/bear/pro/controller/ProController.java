@@ -1,7 +1,7 @@
 package com.groo.bear.pro.controller;
 
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.groo.bear.pro.service.ProGroupVO;
-import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProService;
-import com.groo.bear.pro.service.ProUsersVO;
-import com.groo.bear.pro.service.ProVO;
+import com.groo.bear.pro.service.provo.ProGroupVO;
+import com.groo.bear.pro.service.provo.ProHideVO;
+import com.groo.bear.pro.service.provo.ProUsersVO;
+import com.groo.bear.pro.service.provo.ProVO;
 
+//강병관 - 프로젝트 첫화면 관리
 @Controller
 public class ProController {
 	
@@ -53,10 +54,10 @@ public class ProController {
 		param.put("id", id);
 		param.put("proPartiFilter", vo.getProPartiFilter());//기본값 참여중or관리자 프로젝트 구분
 		param.put("proRange", vo.getProRange());//정렬 기본값
-		System.out.println(param);
+		
 		model.addAttribute("projectMainList", proService.readProject(param));
 		model.addAttribute("userProjectFilter", vo);
-		System.out.println(model);
+		
 		proData(model, request);
 		return "proHome/proMain";
 	};
@@ -67,17 +68,15 @@ public class ProController {
 	public Map<String, Object> proMainPageOrder(Model model, HttpServletRequest request, @RequestBody ProUsersVO vo) {
 		HttpSession session = request.getSession();
 		Map<String, Object> param = new HashMap<String, Object>();
-		Map <String, Object> map = new HashMap<>();
-		String res;
+		int result = 0;
+		
 		String id = (String)session.getAttribute("Id");
 		String newProPartiFilter = vo.getProPartiFilter();//필터 신규값
 		String newProRange = vo.getProRange();//신규 정렬값
+		
 		ProUsersVO vo2 = proService.readOrder(id);//기본 데이터 저장 값
 		String oldProPartiFilter = vo2.getProPartiFilter();
 		String oldProRange = vo2.getProRange();
-		int result = 0;
-		//System.out.println("필터 : " + newProPartiFilter);
-		//System.out.println("정렬 : " + newProRange);
 		
 		param.put("id", id);
 		
@@ -91,9 +90,6 @@ public class ProController {
 			//System.out.println("정렬임");
 		//필터 변경시
 		} else if (newProRange == null || newProRange == "") {
-			//newProPartiFilter = newProPartiFilter != "" ? newProPartiFilter : "";
-			//System.out.println(newProPartiFilter);
-			//System.out.println("필터임");
 			param.put("proRange", oldProRange);//정렬 기본값
 			param.put("proPartiFilter", newProPartiFilter);//기본값 참여중or관리자 프로젝트 구분
 			result = proService.updateProjectFilter(newProPartiFilter, id);
@@ -105,16 +101,9 @@ public class ProController {
 		model.addAttribute("userProjectFilter", vo2);
 		proData(model, request);
 		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		
-		map.put("result", res);
-		return map;
+		return Collections.singletonMap("result", result>0?"성공":"취소");
 	}
+	
 	
 	
 	//프로젝트 메인 페이지 즐찾 보기
@@ -175,7 +164,6 @@ public class ProController {
 		
 		map.put("result", res);
 		map.put("pGN", proGroupNo);
-		System.out.println(map);
 		return map;
 	}
 	
@@ -183,42 +171,18 @@ public class ProController {
 	@PutMapping("proGroupNameC")
 	@ResponseBody
 	public Map<String, Object> proGroupUpdate(@RequestBody ProGroupVO vo) {
-		Map <String, Object> map = new HashMap<>();
-		String res;
-		
 		int result = proService.updateGroupName(vo);
 		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		
-		map.put("result", res);
-		System.out.println(vo);
-		
-		return map;
+		return Collections.singletonMap("result", result>0?"성공":"취소");
 	}
 	
 	//프로젝트 그룹 삭제
 	@DeleteMapping("FolderGroupD/{groupNo}")
 	@ResponseBody
 	public Map<String, Object> proGroupDelete(@PathVariable int groupNo) {
-		Map <String, Object> map = new HashMap<>();
-		String res;
-		
 		int result = proService.deleteGroup(groupNo);
 		
-		if(result > 0) {
-			res = "성공";
-			
-		} else {
-			res = "취소";
-		}
-		
-		map.put("result", res);
-		return map;
+		return Collections.singletonMap("result", result>0?"성공":"취소");
 	}
 	
 	//프로젝트 생성 페이지 이동
@@ -270,6 +234,15 @@ public class ProController {
 		
 		map.put("result", res);
 		return map;
+	}
+	
+	//프로젝트 그룹 수정
+	@PutMapping("updateProHide")
+	@ResponseBody
+	public Map<String, Object> updateProHide(@RequestBody ProHideVO vo) {
+		int result = proService.updateProHide(vo);
+		
+		return Collections.singletonMap("result", result>0?"성공":"취소");
 	}
 	
 }

@@ -1,5 +1,8 @@
 package com.groo.bear.mypage.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -7,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -96,9 +100,47 @@ public class CarController {
 		return result;
 	}
 	
+	//운행일지 조회
+	@GetMapping("bookList/{monthDate}")
+	public String carBook(HttpServletRequest request, Model model, CarVO carVO, Criteria cri,@PathVariable String monthDate) {
+		
+		int bookListCnt = carService.bookCnt(cri, carVO);
+		System.out.println(bookListCnt);
+			
+		Paging paging = new Paging();
+		paging.setCri(cri);
+		paging.setTotalCount(bookListCnt);    
+		
+		System.out.println(paging);
+
+		HttpSession session = request.getSession();
+		
+		String id = (String)session.getAttribute("Id");
+		String empG = (String)session.getAttribute("EmpGrade");
+		System.out.println(empG);
+		
+		Date date = new Date();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+	    String fd = sdf.format(date);
+	    
+		
+		if(empG.equals("A")) {
+			model.addAttribute("bookList",carService.allBook(cri, carVO));
+			model.addAttribute("paging",paging);
+			System.out.println(model);
+			
+			return "car/bookA";
+		}else {
+			model.addAttribute("bookList",carService.getBook(cri,id, monthDate));
+			model.addAttribute("paging",paging);
+			System.out.println(model);
+			return "car/bookP";
+		}
 	
 	
+	}
 	
+
 	
 	
 }

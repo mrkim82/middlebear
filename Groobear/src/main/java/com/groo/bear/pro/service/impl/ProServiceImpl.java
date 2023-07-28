@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.groo.bear.pro.mapper.ProMapper;
-import com.groo.bear.pro.service.ProGroupVO;
 import com.groo.bear.pro.service.ProService;
-import com.groo.bear.pro.service.ProUsersVO;
-import com.groo.bear.pro.service.ProVO;
+import com.groo.bear.pro.service.provo.ProGroupVO;
+import com.groo.bear.pro.service.provo.ProHideVO;
+import com.groo.bear.pro.service.provo.ProUsersVO;
+import com.groo.bear.pro.service.provo.ProVO;
 
 @Service
 public class ProServiceImpl implements ProService {
@@ -114,7 +115,14 @@ public class ProServiceImpl implements ProService {
 		return res;
 	}
 
+	@Override
+	public ProVO readProAuth(int proNo) {
+		return proMapper.readProAuth(proNo);
+	}
 
-
+	@Override
+	public int updateProHide(ProHideVO vo) {
+		return proMapper.updateProHide(vo);
+	}
 
 }

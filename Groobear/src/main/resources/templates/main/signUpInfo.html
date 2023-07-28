@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>인사등록 정보 조회</title>
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인사등록 정보 조회</title>
+	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <style>
-	/* The Modal (background) */
+.free table {width: 550px; margin: 0 auto; border-collapse: collapse; table-layout: fixed;}
+.free th {border-top: 3px solid blue; border-bottom: 3px solid blue;}
+.free td {border-bottom: 1px solid gray;}
+.free .col4{width: 8%;}
+.free .col3, .free .col1, .free .col5 {width: 14%;}
+.free th, .free td {padding: 10px;}
+.free td, .free td + td + td {text-align: center;}
+/* The Modal (background) */
         .modal {
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
@@ -28,30 +37,32 @@
             width: 30%; /* Could be more or less, depending on screen size */ 
 </style>
 </head>
-<body>
-	<h2 class="mb-3">인사정보</h2>
-	<p>본인 정보에 맞는 행을 더블클릭하여 주시기 바랍니다.</p>
-	<table id="list" class="table">
-		<thead>
-			<tr>
-				<td>이름</td>
-				<td>사번</td>
-				<td>부서</td>
-				<td>주민등록번호</td>
-				<td>가입여부</td>
-			</tr>
-		</thead>
-		<tbody id="body">
-			<tr th:each="emp, stat : ${empInfo}" th:ondblclick="${#strings.isEmpty(emp.id)} ? 'sendInfo()' : 'hasId()'">
-					<td>[[${emp.name}]]</td>
-					<td>[[${emp.empNo}]]</td>
-					<td>[[${emp.deptName}]]</td>
-					<td>[[${emp.pno}]]</td>
-					<td th:if="${emp.id != null && emp.id != ''}">O</td>
-					<td th:if="${emp.id == null || emp.id == ''}">X</td>
-			</tr>
-		</tbody>
-	</table>
+<body>   
+    <main>
+        <div class="free">
+            <table>
+            	<thead>
+	                <tr>
+	                    <th class="col1">이름</th>
+	                    <th class="col4">사번</th>
+	                    <th class="col3">부서</th>
+	                    <th class="col2">주민등록번호</th>
+	                    <th class="col5">가입여부</th>
+	                </tr>
+                </thead>
+                <tbody id="body">
+					<tr th:each="emp, stat : ${empInfo}" th:ondblclick="${#strings.isEmpty(emp.id)} ? 'sendInfo()' : 'hasId()'">
+							<td>[[${emp.name}]]</td>
+							<td>[[${emp.empNo}]]</td>
+							<td>[[${emp.deptName}]]</td>
+							<td>[[${emp.pno}]]</td>
+							<td th:if="${emp.id != null && emp.id != ''}">O</td>
+							<td th:if="${emp.id == null || emp.id == ''}">X</td>
+					</tr>
+				</tbody>
+            </table>
+        </div>
+    </main>
 	<!-- The Modal -->
     <div id="myModal" class="modal">
       <!-- Modal content -->
@@ -80,5 +91,7 @@
         $('#myModal').hide();
    }; 
 	</script>
+</body>
+</html>
 </body>
 </html>

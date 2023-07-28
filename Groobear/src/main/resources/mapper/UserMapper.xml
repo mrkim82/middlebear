@@ -14,12 +14,35 @@
 		
 	</select>
 	
-	
-
-
-
-
-
-
-
+	<!-- 마이페이지 비밀번호 확인 -->
+    <select id="checkMypage" parameterType="EmpVO" resultType="EmpVO">
+    	select *
+    	from users
+    	where id = #{id} and password = #{password}
+    </select>
+    
+    <!-- 마이페이지 프로필 사진 여부 확인 -->
+    <select id="checkMyProf" parameterType="String" resultType="EmpVO">
+    	select *
+    	from files
+    	where id = #{id}
+    </select>
+    
+    <!-- DB 비밀번호 비교용 -->
+    <select id="checkScPw" parameterType="String" resultType="EmpVO">
+    	select *
+    	from users
+    	where id = #{id}
+    </select>
+    
+    <!-- 회원정보 수정 -->
+    <update id="updateUsers" parameterType="EmpVO">
+    	update users
+    	set email = #{email},
+    		phone = #{phone},
+    		addr = #{addr},
+    		addr_detail = #{addrDetail}		
+    	where id = #{id}
+    </update>
+    
 </mapper>

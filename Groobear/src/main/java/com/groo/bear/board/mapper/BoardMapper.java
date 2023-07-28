@@ -42,8 +42,8 @@ public interface BoardMapper {
 	//첨부파일 할 때 게시판 번호를 알기위함 -> 시퀀스로 했기 때문에.
 	public int boardNoSequence();
 	
-	//서버측 게시물 수정과 첨부파일 처리
-	public boolean modify(BoardVO boardVO);
+	public int deleteCommentByBoardId(int boardNo);
+	
 }
 
 
