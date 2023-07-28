@@ -59,7 +59,6 @@
   				  		 ,#{content}
   				  		 ,sysdate
   				  		 ,#{msgNo}
-  				  		 
   				  		 )
   	</insert>
   </mapper>
