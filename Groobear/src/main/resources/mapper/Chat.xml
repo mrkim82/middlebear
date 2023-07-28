@@ -37,6 +37,15 @@
         WHERE room_No = #{roomNo}
         ORDER BY msg_Time ASC
     </select>
+  	<!-- 메세지전체조회 -->
+  	<select id="MessageAllList" parameterType="int">
+  		select i.name, m.content, m.msg_time
+		from message m, users u, user_info i
+		where m.id = u.id
+		AND u.emp_no = i.emp_no
+		AND room_no = #{roomNo}
+		order By msg_no asc
+  	</select>
   	
   	<insert id="sendMessage" parameterType="ChatMessageDTO">
   		<selectKey keyProperty="msgNo" order="BEFORE" resultType="int">
@@ -48,6 +57,7 @@
   						 ,CONTENT
   						 ,MSG_TIME
   						 ,MSG_NO
+  						 
   						 )
   				  VALUES (
   				  		  #{roomNo}

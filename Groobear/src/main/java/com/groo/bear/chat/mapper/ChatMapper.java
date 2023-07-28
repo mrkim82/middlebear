@@ -17,15 +17,17 @@ public interface ChatMapper {
 	public int deleteChatRoom(RoomDTO roomDTO);
 	
 	//메세지 전체조회
-	public List<ChatMessageDTO> MessageAllList(String id);
+	public List<ChatMessageDTO> MessageAllList(int roomNo);
 	
 	//메세지 등록
 	public int sendMessage(ChatMessageDTO msgDTO);
 	
+
 	//하나의 대화방 메세지보기 에서 값 넘겨주려고
 	public List<ChatMessageDTO> getMessagesForRoom(int roomNo);
 	
 	//사원 전체조회 -> 모달에서 띄우기 위함
 	public List<RoomDTO> empAllList();
 	
+
 }

@@ -1,5 +1,7 @@
 package com.groo.bear.payment.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -138,9 +140,39 @@ public class PaymentController {
 	}
 	
 	//결재 완료(반려)된 문서 조회
-	
+	@GetMapping("pay/completePay")
+	public String CompletePayForm(Criteria cri, Model model, HttpSession session,PaymentVO payVO, @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
+		String id = (String) session.getAttribute("Id");
+		System.out.println("id = "+id);
+		payVO.setId(id);
+		cri.setPerPageNum(10);
+		Paging paging = new Paging();
+        paging.setCri(cri);
+        paging.setTotalCount(paymentService.completePayCount(id));
+        System.out.println("에러위치체크");
+        model.addAttribute("userid",id);
+        model.addAttribute("completePaymentList",paymentService.completePaymentList(cri, payVO));
+        model.addAttribute("paging",paging);
+		return "pay/completePay";
+	}
 	//참조된 문서 조회
-	
+	@GetMapping("pay/referrerPay")
+	public String referrerPayForm(Criteria cri, Model model, HttpSession session,PaymentVO payVO, @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
+		String id = (String) session.getAttribute("Id");
+		System.out.println("id = "+id);
+		payVO.setId(id);
+		cri.setPerPageNum(10);
+		Paging paging = new Paging();
+        paging.setCri(cri);
+        paging.setTotalCount(paymentService.referrerPayCount(id));
+        System.out.println("에러위치체크");
+        model.addAttribute("userid",id);
+        model.addAttribute("referrerList",paymentService.referrerPayList(cri, payVO));
+        model.addAttribute("paging",paging);
+		return "pay/referrerPay";
+	}
 	//메인페이지
 	@GetMapping("pay/payMain")
 	public String payMainForm(Model model,  HttpSession session,PaymentVO payVO) {
@@ -176,14 +208,70 @@ public class PaymentController {
 		model.addAttribute("mySign",paymentService.searchSignImg(empvo.getEmpNo()));
 		if(docType.equals("a")) {
 			System.out.println("docType = 운행일지");
+			PaymentVO payVO = paymentService.logList(payNo);
+			System.out.println("payVO = "+payVO);
+			empvo = paymentService.payEmpInfo(payVO.getId());
+			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.logList(payNo));
-		}else if(docType.equals("b")) {
+		}
+		if(docType.equals("b")) {
 			System.out.println("docType = 연차계");
+			System.out.println("payNo"+payNo);
+			PaymentVO payVO = paymentService.offList(payNo);
+			System.out.println("payVO = "+payVO);
+			empvo = paymentService.payEmpInfo(payVO.getId());
+			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.offList(payNo));
-		}else {
+		}
+		if(docType.equals("c")){
 			System.out.println("docType = 품의서");
+			PaymentVO payVO = paymentService.robinList(payNo);
+			System.out.println("payVO = "+payVO);
+			empvo = paymentService.payEmpInfo(payVO.getId());
+			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.robinList(payNo));
 		}
+		List<FilesVO> list = paymentService.searchPayImg(payNo);
+		System.out.println(list);
+		model.addAttribute("payImgInfo",list);
 		return "pay/payInfo";
 	}
+	//문서 상세조회 페이지에서 수정
+	@PostMapping("paymentUpdate")
+	@ResponseBody
+	public String paymentUpdate(@RequestBody PaymentVO payVO, Model model) {
+		System.out.println("update docType = "+payVO.getDocType());
+		if(payVO.getDocType().equals("a")) {
+			System.out.println("payVo = "+payVO);
+			paymentService.logUpdate(payVO);
+			//첨부파일도 있으면 업데이트 서비스 넣어줘야됨
+			System.out.println("운행일지 업데이트 완료");
+		}else if(payVO.getDocType().equals("b")) {
+			paymentService.offUpdate(payVO);
+			//첨부파일도 있으면 업데이트 서비스 넣어줘야됨
+			System.out.println("연차계 업데이트 완료");
+		}else {
+			paymentService.robinUpdate(payVO);
+			//첨부파일도 있으면 업데이트 서비스 넣어줘야됨
+			System.out.println("품의서 업데이트 완료");
+		}
+		
+		return "pay/InProgressPay";
+	}
+	//문서 결재(반려)
+	@PostMapping("paymentReject")
+	@ResponseBody
+	public String paymentReject(@RequestBody PaymentVO payVO, Model model, HttpSession session) {
+		System.out.println("payVO = "+payVO);
+		String id = (String) session.getAttribute("Id");
+		if(payVO.getApprover2().equals(id)){
+			paymentService.paymentReject2(payVO);
+			System.out.println(payVO.getPayNo()+"문서 결재자2 결재상태변경완료");
+		}else if(payVO.getApprover3().equals(id)) {
+			paymentService.paymentReject3(payVO);
+			System.out.println(payVO.getPayNo()+"문서 결재자3 결재상태변경완료");
+		}
+		return "pay/InProgressPay";
+	}
+	
 }

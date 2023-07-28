@@ -90,7 +90,7 @@
   	<select id="searchSignImg" parameterType="int">
   		select * from files where sign_no = #{empNo}  
   	</select>
-  	<!-- 운행일지 차량 운행거리사진 등록 -->
+  	<!-- 전자결재 차량 운행거리사진 등록 -->
   	<insert id="logInsert" parameterType="FilesVO">
   		insert into files(
   							UUID
@@ -109,41 +109,12 @@
   							,#{payNo}
   					)
   	</insert>
-  	<!-- 연차계 첨부파일 등록 -->
-  	<insert id="offInsert" parameterType="FilesVO">
-  		insert into files(
-  							UUID
-  							,UPLOAD_PATH
-  							,FILE_NAME
-  							,FILE_TYPE
-  							,FILE_DATE
-  							,PAY_NO
-  							)
-  					VALUES(
-  							#{uuid}
-  							,#{uploadPath}
-  							,#{fileName}
-  							,'1'
-  							,sysdate
-  							,#{payNo}
-  					)
-  	</insert>
-  	<insert id="robinInsert" parameterType="FilesVO">
-  		insert into files(
-  							UUID
-  							,UPLOAD_PATH
-  							,FILE_NAME
-  							,FILE_TYPE
-  							,FILE_DATE
-  							,PAY_NO
-  							)
-  					VALUES(
-  							#{uuid}
-  							,#{uploadPath}
-  							,#{fileName}
-  							,'1'
-  							,sysdate
-  							,#{payNo}
-  					)
-  	</insert>
+  	<!-- 전자결재 등록파일 조회 -->
+  	<select id="searchPayImg" parameterType="int">
+  		select * from files where pay_no = #{payNo} 
+  	</select>
+  	<!-- 전자결재 등록파일 삭제 -->
+  	<delete id="deletePayImg" parameterType="int">
+  		delete files where pay_no = #{payNo}
+  	</delete>
   </mapper>

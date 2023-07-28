@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +38,10 @@ import net.coobird.thumbnailator.Thumbnailator;
 @Controller
 @Log4j2
 public class UploadController {
+	
+	@Value("${making.files}")
+	public String path;
+	
 	//첨부파일 업로드 페이지
 	@GetMapping("/uploadAjax")
 	public String uploadAjax() {
@@ -62,7 +67,7 @@ public class UploadController {
 		
 		log.info("update ajax post ......");
 		
-		String uploadFolder = "C:\\upload";
+		String uploadFolder = path;
 		
 		String uploadFolderPath = getFolder();
 		
@@ -134,7 +139,7 @@ public class UploadController {
 	@ResponseBody
 	public ResponseEntity<byte[]> getFile(String fileName) {
 		log.info("fileName : " + fileName);
-		File file = new File("c:\\upload\\" + fileName);
+		File file = new File(path + fileName);
 		log.info("file: " + file);
 		
 		ResponseEntity<byte[]> result = null;
@@ -157,7 +162,7 @@ public class UploadController {
 		log.info("download file: " + fileName);
 		
 		//FileSystemResource resource = new FileSystemResource("C:\\upload\\" + fileName);
-		Resource resource = new FileSystemResource("C:\\upload\\" + fileName);
+		Resource resource = new FileSystemResource(path + fileName);
 		log.info("resource : " + resource);
 		
 		if(resource.exists() == false) {
@@ -200,7 +205,7 @@ public class UploadController {
 		File file;
 		
 		try {
-			file = new File("c:\\upload\\" + URLDecoder.decode(fileName, "UTF-8"));
+			file = new File(path + URLDecoder.decode(fileName, "UTF-8"));
 			
 			file.delete();
 			

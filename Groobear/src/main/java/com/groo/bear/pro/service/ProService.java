@@ -3,6 +3,11 @@ package com.groo.bear.pro.service;
 import java.util.List;
 import java.util.Map;
 
+import com.groo.bear.pro.service.provo.ProGroupVO;
+import com.groo.bear.pro.service.provo.ProHideVO;
+import com.groo.bear.pro.service.provo.ProUsersVO;
+import com.groo.bear.pro.service.provo.ProVO;
+
 public interface ProService {
 	//프로젝트 생성
 	public void insertPro(Map<String, Object> map);
@@ -55,5 +60,8 @@ public interface ProService {
 	
 	//프로젝트 권한 조회
 	public ProVO readProAuth(int proNo);
+	
+	//프로젝트 숨김 여부
+	public int updateProHide(ProHideVO vo);
 	
 }

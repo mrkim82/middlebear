@@ -146,7 +146,7 @@
 			    		$('#spantext').text('검색 항목을 선택해주세요.');
 			            $('#errorModal').show();
 			            $('#closeModal').on('click', function() {
-			            	$('#errorModal').hide();
+			            $('#errorModal').hide();
 			            })
 			            return false;
 			       	}    		
@@ -221,7 +221,10 @@
         // window.open("open할 window", "자식창 이름", "팝업창 옵션");
         openWin = window.open("/empDetailInfo?id="+id, "empDetailInfo", "width=370, height=480, resizable = no, scrollbars = no");    	
     }
-	
+  	//모달 Close 기능
+    function close_pop(flag) {
+        $('#myModal').hide();
+   	}; 
 	</script>
 </div>
 </body>

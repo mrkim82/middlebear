@@ -97,6 +97,7 @@
 		where emp_no = #{empNo}
 	</delete>
 	
+	<!-- 인사정보 리스트 -->
 	<select id="userInfoList" resultType="EmpVO">
         SELECT * 
             FROM (
@@ -163,4 +164,145 @@
 		        </if>
 		    </where>
 	</select>
+	<!-- userInfo 삭제 -->
+	<delete id="userInfoDel" parameterType="EmpVO">
+		delete from user_info where emp_no=#{empNo}
+	</delete>
+	
+	<!-- userInfo 등록 -->
+	<insert id="userInfoAdd" parameterType="EmpVO">
+		insert into user_info 
+		values(user_seq.nextval, #{name}, #{rank}, #{pno}, sysdate, #{deptNo})
+	</insert>
+	
+	<!-- 주민번호 중복체크 -->
+	<select id="checkPno" parameterType="String">
+		select count(*)
+		from user_info
+		where pno = #{pno}
+	</select>
+	
+	<!-- 인사정보 업데이트 -->
+	<update id="updateUserInfo" parameterType="EmpVO">
+		update user_info
+		set name = #{name},
+			rank = #{rank},
+			dept_no = #{deptNo},
+			pno = #{pno}
+		where emp_no = #{empNo}
+	</update>
+	
+	<!-- 부서권한관리 리스트 -->
+	<select id="deptAllList" resultType="EmpVO">
+		SELECT * 
+            FROM (
+              		SELECT t.*, ROWNUM AS rn
+              		FROM (
+              				select dept_no, dept_name, dept_head, dept_date, dept_auth
+            				from departments
+            				<where>
+						        <if test="cri.type != null and cri.type.equals('deptName')">
+						            AND dept_name LIKE '%${cri.keyword}%'
+						        </if>
+						        <if test="cri.type != null and cri.type.equals('deptHead')">
+						            AND dept_head LIKE '%${cri.keyword}%'
+						        </if>
+						    </where>
+            				order by dept_date desc
+		   				 ) t
+    	         )
+    <![CDATA[
+    	WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+    ]]>
+	</select>
+	 <!-- 페이징 -->
+	<select id="deptAllListCnt" resultType="int">
+	        SELECT count(*)
+	        from departments
+	        <where>
+		        <if test="cri.type != null and cri.type.equals('deptName')">
+		            AND dept_name LIKE '%${cri.keyword}%'
+		        </if>
+		        <if test="cri.type != null and cri.type.equals('deptHead')">
+		            AND dept_head LIKE '%${cri.keyword}%'
+		        </if>
+		    </where>
+	</select>
+	<!-- 부서인원 구하기 -->
+	<select id="deptCnt" resultType="EmpVO">
+		select d.dept_name, count(id) as dept_cnt
+        from departments d left join (select i.name, i.dept_no, i.rank, u.emp_no, u.id, u.phone, u.emp_status
+                                 from user_info i join users u
+                                 on i.emp_no = u.emp_no
+                                 where u.emp_status = 'O') a
+        on d.dept_no = a.dept_no
+        group by d.dept_name
+	</select>
+	
+	<!-- 부서 상세조회 -->
+	<select id="deptDetail" parameterType="int" resultType="EmpVO">
+		select d.dept_no, d.dept_name, d.dept_head, d.dept_date, d.dept_auth, a.rank, a.emp_no, a.id, a.phone, a.name
+        from departments d left join (select i.name, i.dept_no, i.rank, u.emp_no, u.id, u.phone, u.emp_status
+                                 from user_info i join users u
+                                 on i.emp_no = u.emp_no
+                                 where u.emp_status = 'O') a
+        on d.dept_no = a.dept_no
+        where d.dept_no = #{deptNo}
+        order by a.emp_no
+	</select>
+	
+	<!-- 부서 구성원 추가 -->
+	<select id="deptAddMem" resultType = "EmpVO">
+		select u.id, u.emp_no, i.dept_no, i.name, i.rank
+		from users u join user_info i 
+		on u.emp_no = i.emp_no
+		where i.dept_no is null
+		and u.emp_status = 'O'
+	</select>
+	
+	<!-- 부서 구성원 추가 진행 -->
+	<update id="updateDeptMem" parameterType = "EmpVO">
+		update user_info set dept_no = #{deptNo} where emp_no = #{empNo}
+	</update>
+	
+	<!-- 부서 구성원 제회 진행 -->
+	<update id="delDeptMem" parameterType = "EmpVO">
+		update user_info set dept_no = null where emp_no = #{empNo}
+	</update>
+	
+	<!-- 부서 삭제 -->
+	<update id="deptDel1" parameterType = "EmpVO">
+		update user_info set dept_no = null where dept_no = #{deptNo}
+	</update>
+	<delete id="deptDel2" parameterType = "EmpVO">
+		delete from departments where dept_no = ${deptNo}
+	</delete>
+	
+	<!-- 부서권한 목록 -->
+	<select id="deptAuthList" parameterType = "EmpVO">
+		select a.code, a.code_name, m.group_code 
+		from public_code_auth a join public_code_master m
+		on a.group_code = m.group_code
+		where m.group_code = 'B'
+	</select>
+	
+	<!-- 부서정보 수정 -->
+	<update id="deptUpdate" parameterType = "EmpVO">
+		update departments 
+		set dept_name = #{deptName},
+			dept_head = #{deptHead},
+			dept_auth = #{deptAuth}
+		where dept_no = #{deptNo}
+	</update>
+	
+	<!-- 부서추가 -->
+	<insert id="deptInsert" parameterType = "EmpVO">
+		insert into departments(dept_no, dept_name, dept_date, dept_auth)
+		values(dept_seq.nextval, #{deptName}, sysdate, #{deptAuth})
+	</insert>
+	
+	<!-- 팀장 제거 -->
+	<update id="removeHead" parameterType = "EmpVO">
+		update departments set dept_head = null where dept_no = #{deptNo}
+	</update>
 </mapper>

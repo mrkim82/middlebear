@@ -355,8 +355,38 @@
 
 	</div>
 
+<!-- 공통 js -->
+<!-- 프로젝트 넘버 찾기(주소) -->
+<script>
+	let url = window.location.pathname;
+	let lastIndex = url.lastIndexOf('/');
+	let projectNo = url.substring(lastIndex + 1);
+</script>
 
+<!-- session값 가져오기 -->
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		let selfId = /*[[${session.Id}]]*/;
+		let selfName = /*[[${session.Name}]]*/;
+	/*]]>*/
+</script>
 
+<!-- 시간 변환 -->
+<script type="text/javascript">
+	function convertToFormattedDateTime(dateTimeStr) {
+		if(dateTimeStr == '') {//빈값일때 바로 리턴
+			return;
+		}
+	  const date = new Date(dateTimeStr);
+	  const year = date.getFullYear();
+	  const month = String(date.getMonth() + 1).padStart(2, '0');
+	  const day = String(date.getDate()).padStart(2, '0');
+	  const hours = String(date.getHours()).padStart(2, '0');
+	  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	  return `${year}-${month}-${day} ${hours}:${minutes}`;
+	}
+</script>
 
 
 	<script th:inline="javascript">
@@ -727,9 +757,9 @@
 
     <script>
     	let newColor;
-   		let url = window.location.pathname;
-		let lastIndex = url.lastIndexOf('/');
-		let projectNo = url.substring(lastIndex + 1);//프로젝트 번호
+   		//let url = window.location.pathname;
+		//let lastIndex = url.lastIndexOf('/');
+		//let projectNo = url.substring(lastIndex + 1);//프로젝트 번호
     	
     	//클릭시 색상 정보 저장
     	function saveColor() {

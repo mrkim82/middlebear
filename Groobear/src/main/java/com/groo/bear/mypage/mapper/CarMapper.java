@@ -15,8 +15,6 @@ public interface CarMapper {
 	//내차량 조회
 	public List<CarVO> getMyCar(String id);	
 	public List<CarVO> getCarInfo(String id);
-	
-	
 
 	//추가
 	public int insertCar(CarVO carVO); 
@@ -25,8 +23,12 @@ public interface CarMapper {
 	//삭제
 	public int deleteCar(String carNo);
 	
-	
-	
+	//운행일지 전체조회
+	public List<CarVO> getAllbook(Criteria cri,CarVO carVO);
+	//운행일지 페이징
+	public int bookListCnt(Criteria cri, CarVO carVO);
+	//운행일지 개별조회
+	public List<CarVO> getMybook(Criteria cri, String id,String monthDate);
 	
 	
 }

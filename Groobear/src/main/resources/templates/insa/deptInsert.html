@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Groobear 부서 생성</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<style>
+	body {
+		font-family: Arial, sans-serif;
+		background-color: #f7f7f7;
+	}
+	
+	form {
+		height: 400px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 20px;
+	}
+	
+	h3 {
+		text-align: center;
+		margin-bottom: 20px;
+	}
+	
+	fieldset {
+		border: 1px solid #ccc;
+		padding: 10px;
+		margin-bottom: 10px;
+		width: 400px;
+	}
+	
+	a {
+		font-weight: bold;
+	}
+	
+	input[type="text"] {
+		width: 120px;
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		margin-bottom: 10px;
+	}
+	
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		border: 1px solid #ccc; /* Add border around the table */
+	}
+	
+	th, td {
+		padding: 8px;
+		text-align: left;
+		border-bottom: 1px solid #ccc;
+		font-size: 14px; /* Set font size for table cells */
+	}
+	
+	.blueone th {
+		background-color: #f0f8ff;
+	}
+	
+	button {
+			padding: 10px 20px;
+			background-color: #4CAF50;
+		color: white;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	
+	button:not(:last-child) {
+		margin-right: 10px;
+	}
+	
+	/* Add margin between "구성원" and the table */
+	.members-table {
+		margin-top: 30px;
+	}
+	/* Reduce vertical spacing between table rows */
+	table tbody tr {
+		line-height: 1; /* Adjust the value as per your preference */
+	}
+</style>
+</head>
+<body>
+	<form style="height: 400px;">
+		<h3 style="text-align:center; margin-top:50px;">Groobear 부서생성</h3>
+		<fieldset>
+			<a>부서명 : </a><input id="deptName" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" value=""><br>
+			<a>부서권한 : </a><select id="deptAuth" style="width:120px; padding-bottom:10px; border:0 solid black;">
+								<option value="" selected>선택</option>
+								<th:block th:each="auth, stance : ${deptAuth}">
+									<option th:value="${auth.code}">[[${auth.codeName}]]</option>
+								</th:block>
+							 </select><br>
+		</fieldset>
+		
+		<fieldset style="display: flex;justify-content: center;border:hidden;">
+			<button type="button" style="margin-right:10px;" id="addBtn">생성</button>
+			<button type="button" onclick="closeBtn()">닫기</button>
+		</fieldset>
+	</form>
+	<!-- The Modal -->
+    <div id="errorModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
+                <p><br /></p>
+            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
+                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
+                     닫기
+                </span>
+            </div>
+      </div>
+    </div>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$('#addBtn').on('click', function(){
+			let deptName = $('#deptName').val();
+			let deptAuth = $('#deptAuth').val();
+			if(deptName == ''){
+				$('#spantext').text('부서명을 입력하세요.');
+	            $('#errorModal').show();
+	            $('#closeModal').on('click', function() {
+	            	$('#errorModal').hide();
+	            })
+			}else{
+				$.ajax({
+	      			url: "insertDept",
+	      			method: "POST",
+	      			contentType: "application/json; charset=utf-8",
+	      			data:JSON.stringify({
+	      				deptName: deptName,
+	      				deptAuth: deptAuth
+	      			}),
+	      			success: function(data){
+	      				console.log(data);
+	      				if(data == 'success'){
+	      					window.opener.location.href="/deptList";
+	      					window.close();
+	      				}else{
+	      					$('#spantext').text('부서 생성 과정에서 오류 발생');
+				            $('#errorModal').show();
+				            $('#closeModal').on('click', function() {
+				            	$('#errorModal').hide();
+				            })
+	      				}
+	      			},
+	      			error : function(error){
+	      				console.log(error);
+	      			}
+	      		});
+			}
+		})
+	})
+	//팝업 Close 기능
+    function closeBtn() {
+    	window.close();
+    };
+	</script>
+</body>
+</html>

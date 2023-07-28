@@ -7,9 +7,14 @@ import org.springframework.stereotype.Service;
 
 import com.groo.bear.pro.mapper.ProTodoNVoteMapper;
 import com.groo.bear.pro.service.ProTodoNVoteService;
+import com.groo.bear.pro.service.todovote.CreateVoteVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCountVO;
+import com.groo.bear.pro.service.todovote.ProPostTodoCreListVO;
+import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 import com.groo.bear.pro.service.todovote.ProPostVoteVO;
+import com.groo.bear.pro.service.todovote.ProTodoPartiCountVO;
+
 @Service
 public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 	@Autowired
@@ -44,5 +49,43 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 	public List<ProPostVoteVO> readVoteListParti(int proNo) {
 		return tv.readVoteListParti(proNo);
 	}
+
+	@Override
+	public int createTodo(ProPostTodoCreVO vo) {
+		int count = 0;
+		
+		//todo용 게시물 생성
+		tv.createPostTodo(vo);
+		int proPostNo = vo.getProPostNo();
+		
+		List<ProPostTodoCreListVO> todoDetails = vo.getPptcl();
+		
+		//todo 생성
+		for (ProPostTodoCreListVO todoDetail : todoDetails) {
+			todoDetail.setProPostNo(proPostNo);
+			System.out.println("투두" + todoDetail);
+			tv.createTodo(todoDetail);
+			count++;
+		}
+		
+		return count;
+	}
+
+	@Override
+	public void createPostVote(CreateVoteVO vo) {
+		tv.createPostVote(vo);
+		
+	}
+
+	@Override
+	public int updateVoteStatus(int voteNo) {
+		return tv.updateVoteStatus(voteNo);
+	}
+
+	@Override
+	public List<ProTodoPartiCountVO> readVotePartiCount(int proNo) {
+		return tv.readVotePartiCount(proNo);
+	}
+
 
 }
