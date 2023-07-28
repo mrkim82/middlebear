@@ -28,6 +28,7 @@ public interface CarService {
 	public List<CarVO> allBook(Criteria cri, CarVO carVO);
 	//운행일지 페이징
 	public int bookCnt(Criteria cri, CarVO carVO);
-
+	//개인 조회 
+	public List<CarVO> getBook(Criteria cri, String id,String monthDate);
 
 }
