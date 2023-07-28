@@ -29,4 +29,10 @@ public interface ProPostTaskMapper {
 	
 	//회원 탈퇴시 work_group_person 삭제
 	public int deleteWorkPerson(String id);
+	
+	//업무 그룹 생성
+	public int createWorkGroup(ProPostTaskWorkGroupVO vo);
+	
+	//업무 그룹 삭제
+	public int deleteWorkGroup(int workGroupNo);
 }

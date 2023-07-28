@@ -32,7 +32,6 @@ import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
-import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
 @Controller

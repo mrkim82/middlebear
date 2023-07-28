@@ -117,6 +117,9 @@
 			border-bottom: 3px solid red;
 			z-index: 1050;
 		}
+		.spanCursor {
+			cursor: pointer
+		}
 	</style>
 	</head>
   <body>
@@ -297,8 +300,12 @@
 					<!-- <th:block th:text="${#strings.substringAfter((#strings.substringAfter(#request.requestURI, '/')), '/')}"></th:block>
 					<p th:text="${#request.requestURI}"></p>
 					<th:block th:text="${#strings.substringAfter(#request.getQueryString(), '=')}"></th:block> -->
+				<div>
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteMember">
+					  +초대하기
+					</button>
+				</div>
 				</nav>
-				
 			</div>
 			<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 		        <div layout:fragment="content" ></div>
@@ -311,8 +318,6 @@
 
 
 	<div>
-
-
 
 		<!-- modal창 -->
 		<div id="modalFolderCreate1">
@@ -352,6 +357,28 @@
 			</div>
 		</div>
 
+	<!-- 인원 초대 모달 -->
+	<div class="modal fade" id="inviteMember" tabindex="-1" aria-labelledby="inviteMemberLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="inviteMemberLabel">Modal title</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	        <button type="button" class="btn btn-primary">저장</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
 
 	</div>
 
@@ -388,6 +415,14 @@
 	}
 </script>
 
+<!-- 모달 초기화 -->
+<script>
+	$('.modal').on('hidden.bs.modal', function (e) {
+	  // 모달 내부의 모든 input 요소를 찾아 값을 초기화
+	  $(this).find('input, select, textarea').val('');
+	});
+	
+</script>
 
 	<script th:inline="javascript">
     /*<![CDATA[*/

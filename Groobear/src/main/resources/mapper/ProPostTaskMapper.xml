@@ -100,4 +100,27 @@
 		where id=#{id}
 	</delete>
 	
+	<!-- 업무 그룹 생성 -->
+	<insert id="createWorkGroup" parameterType="ProPostTaskWorkGroupVO">
+		INSERT INTO work_group(work_group_no, work_group_name, work_group_seq, pro_no)
+		VALUES ((SELECT NVL(MAX(work_group_no), 0) + 1
+		         FROM work_group),
+		        #{workGroupName},
+		        (SELECT MAX(work_group_seq) + 1
+		         FROM work_group
+		         WHERE pro_no = #{proNo}),
+		         #{proNo})
+		         
+		<selectKey resultType="int" keyProperty="workGroupNo" order="AFTER">
+			SELECT NVL(MAX(work_group_no), 0)
+	        FROM work_group
+		</selectKey>
+	</insert>
+	
+	<!-- 업무 그룹 삭제 -->
+	<delete id="deleteWorkGroup">
+		DELETE FROM work_group
+		WHERE work_group_no = #{workGroupNo}
+	</delete>
+	
 </mapper>

@@ -58,6 +58,7 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 <!-- 보기 항목 설정 -->
 <div style="width: 100%;">
 	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#workView">보기</button>
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#workGroupCreate">업무 그룹 생성</button>
 </div>
 <!-- 보기 항목 설정 Modal -->
 <div class="modal fade" id="workView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -173,13 +174,15 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
     </tr>
   </thead>
 	
-  <tbody>
+  <tbody id="workBodyList">
   
   	<th:block th:each="taskG : ${readWorkGroup}">
   		<!-- 업무 그룹 표시 -->
   		<tr>
-  			<td th:text="${taskG.workGroupName}" th:data-work-group-no="${taskG.workGroupNo}"
-  				style="background-color: #b6b3b3"></td>
+  			<td th:data-work-group-no="${taskG.workGroupNo}"
+  				style="background-color: #b6b3b3">
+  				<span th:text="${taskG.workGroupName}"></span>
+  				<span class="spanCursor" onclick="delWorkGroup()">X</span></td>
   		</tr>
   		
 	    <tr th:each="task : ${readTaskAllList}" th:if="${task.workGroupNo == taskG.workGroupNo}"
@@ -406,7 +409,7 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 					th:if="${taskD.proPostNo == com.proPostNo}">
 					<span th:utext="${com.profileImg}"></span>
 					<span th:text="${com.name}"></span>
-					<span th:text="${com.comDate}"></span>
+					<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 					<span th:text="${com.comContent}"></span>
 					<th:block th:if="${com.id == session.Id}">
 						<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
@@ -429,6 +432,28 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 
 </div>
 
+<!-- 업무 그룹 생성 모달 -->
+<div class="modal fade" id="workGroupCreate" tabindex="-1" aria-labelledby="workGroupCreateLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="workGroupCreateLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<input type="text" placeholder="그룹명을 입력하세요." id="workGroupName">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary" onclick="creWorkGroup()">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
 	$(function () {
 	  $('[data-toggle="popover"]').popover()
@@ -445,16 +470,18 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
         $buttons.click(function () {
             // Get the ID of the corresponding modal
             var modalId = $(this).data('modal');
-			console.log('찾는거',modalId)
 			
             // Show the selected modal and hide others
             $modals.not('#' + modalId).removeClass('show-modal');
             $('#' + modalId).toggleClass('show-modal');
+            $('input').val('');
         });
 
         // Close the custom modal when the close button is clicked
         $('.closeModalButton').click(function () {
             $(this).closest('.custom-modal').removeClass('show-modal');
+            //$(this).closest('.custom-modal').find('input').val('');
+            $('input').val('');
         });
     });
 </script>
@@ -583,10 +610,6 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 		}
 		
 		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
-		
-		/* let url = window.location.pathname;
-		let lastIndex = url.lastIndexOf('/');
-		let projectNo = url.substring(lastIndex + 1); */
 		
 		fetch("/postCreateComment", {
 			method: 'POST',
@@ -794,11 +817,62 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 	}
 </script>
 
-<script type="text/javascript" th:inline="javascript">
-	/*<![CDATA[*/
+<!-- 업무 그룹 생성 -->
+<script>
+	function creWorkGroup() {
+		let workgn = document.getElementById('workGroupName').value;
+
+		if(workgn == '') {
+			alert('제목을 입력하세요.')
+			return;
+		}
+
+		fetch("/creWorkGroup", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+   				'proNo': projectNo,
+				'workGroupName' : workgn
+   			})
+		})
+		.then(response => response.json())
+		.then(res => {
+			let newTr = document.createElement("tr");
+			newTr.innerHTML = `
+				<td data-work-group-no="${res.result}" style="background-color: #b6b3b3">
+				<span>${workgn}</span>
+  				<span class="spanCursor" onclick="delWorkGroup()">X</span>
+				</td>
+			`;
+			workBodyList.prepend(newTr);
+			$('#workGroupCreate').modal('hide');
+			$('input').val('');
+		});
+	}
+</script>
+
+<!-- work group 삭제 -->
+<script>
+	function delWorkGroup() {
+		let workGroupTag = event.target.parentElement
+		let delworkGroupNo = workGroupTag.dataset.workGroupNo;
+		fetch("/delWorkGroup", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(delworkGroupNo)
+		})
+		.then(response => response.json())
+		.then(res => {
+			if(res.result == '성공') {
+				workGroupTag.remove();
+			}
+		});
 		
-		let selfName = /*[[${session.Name}]]*/;
-	/*]]>*/
+	}
 </script>
 </th:block>
 </html>
