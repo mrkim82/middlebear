@@ -165,8 +165,7 @@ function drawChart() {
 					<li class="nav-item" data-post-code="3"><a class="nav-link"
 						data-toggle="modal" data-target="#modal3" href="#"><span>일정</span></a></li>
 					<li class="nav-item" data-post-code="4"><a class="nav-link"
-						data-toggle="modal" data-target="#modal4" href="#"><span>할
-								일</span></a></li>
+						data-toggle="modal" data-target="#modal4" href="#"><span>할일</span></a></li>
 					<li class="nav-item" data-post-code="5"><a class="nav-link"
 						data-toggle="modal" data-target="#modal5" href="#"><span>투표</span></a></li>
 				</ul>
@@ -570,8 +569,8 @@ function drawChart() {
 				<div>
 					<select name="postTypeFilter" id="postTypeFilter" onchange="chagePostType()">
 						<option value="0">전체</option>
-						<option value="1" th:selected="${proPostVO.postType == 1}">업무</option>
 						<option value="2" th:selected="${proPostVO.postType == 2}">글</option>
+						<option value="1" th:selected="${proPostVO.postType == 1}">업무</option>
 						<option value="3" th:selected="${proPostVO.postType == 3}">일정</option>
 						<option value="4" th:selected="${proPostVO.postType == 4}">할 일</option>
 						<option value="5" th:selected="${proPostVO.postType == 5}">투표</option>
