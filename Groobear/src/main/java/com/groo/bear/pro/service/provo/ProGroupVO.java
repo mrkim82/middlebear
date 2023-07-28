@@ -1,4 +1,4 @@
-package com.groo.bear.pro.service;
+package com.groo.bear.pro.service.provo;
 
 import lombok.Data;
 

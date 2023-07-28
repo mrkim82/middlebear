@@ -15,8 +15,8 @@ public class CreateVoteVO {
 	private String id;
 	private String postTitle;
 	//private int voteNo;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date voteEndDay;
 	private String voteContent;
 	

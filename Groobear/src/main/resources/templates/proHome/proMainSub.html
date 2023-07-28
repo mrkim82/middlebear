@@ -18,6 +18,12 @@
 				<td th:text="${pro.proName}"></td>
 				<td th:each="parti:${projectPartiList}" th:if="${parti.proNo == pro.proNo}"
 					th:text="${parti.count} + '명'"></td>
+				<td>
+					<span class="material-symbols-outlined"
+						  onclick="hideProject()"
+						  th:data-pro-hide="${pro.proHideCheck}"
+						  th:text="${pro.proHideCheck == 'Y'} ? 'visibility_off' : 'visibility'"></span>
+				</td>
 			</tr>
 		</table>
 	</div>
@@ -96,5 +102,35 @@
 			location.href="/proPostMain/" + homeTNum;
 		}
 	</script>
+	
+<!-- 프로젝트 숨김 해제 -->
+<script>
+	function hideProject() {
+		event.stopPropagation();
+		let hideC = event.target.dataset.proHide;
+		hideC = hideC == 'N' ? 'Y' : 'N';
+		console.log(hideC)
+		let trTag = event.target.closest('tr');
+		let proMemNo = trTag.dataset.pmn;
+		
+		fetch("/updateProHide", {
+			  method: 'PUT',
+			  headers: {
+			    'Content-Type': 'application/json'
+			  },
+			  body: JSON.stringify({
+				  	proMemNo: proMemNo,
+				  	proHideCheck: hideC
+				  })
+			})
+			.then(response => response.json())
+			.then(res => {
+				let rC = res.result;
+				if(rC == '성공') {
+					trTag.remove();
+				}
+			});
+	}
+</script>
 </body>
 </html>

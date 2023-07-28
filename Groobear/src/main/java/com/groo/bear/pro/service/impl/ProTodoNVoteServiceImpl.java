@@ -13,6 +13,7 @@ import com.groo.bear.pro.service.todovote.ProPostTodoCreListVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 import com.groo.bear.pro.service.todovote.ProPostVoteVO;
+import com.groo.bear.pro.service.todovote.ProTodoPartiCountVO;
 
 @Service
 public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
@@ -56,10 +57,8 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 		//todo용 게시물 생성
 		tv.createPostTodo(vo);
 		int proPostNo = vo.getProPostNo();
-		System.out.println("1차"+vo);
 		
 		List<ProPostTodoCreListVO> todoDetails = vo.getPptcl();
-		System.out.println("총 세부" + todoDetails);
 		
 		//todo 생성
 		for (ProPostTodoCreListVO todoDetail : todoDetails) {
@@ -76,6 +75,16 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 	public void createPostVote(CreateVoteVO vo) {
 		tv.createPostVote(vo);
 		
+	}
+
+	@Override
+	public int updateVoteStatus(int voteNo) {
+		return tv.updateVoteStatus(voteNo);
+	}
+
+	@Override
+	public List<ProTodoPartiCountVO> readVotePartiCount(int proNo) {
+		return tv.readVotePartiCount(proNo);
 	}
 
 

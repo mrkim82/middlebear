@@ -56,4 +56,12 @@ public class ProPostTodoNVoteController {
 		map.put("result", "잘 들어가겠지");
 		return map;
 	}
+	
+	//프로젝트 그룹 수정
+	@PutMapping("updateVoteStatus")
+	public Map<String, Object> updateVoteStatus(@RequestBody int changeVoteStatusNo) {
+		int result = ps.updateVoteStatus(changeVoteStatusNo);
+		
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
 }

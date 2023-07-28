@@ -538,7 +538,7 @@ function drawChart() {
 										<!-- 투표 마감일 -->
 										<div>
 											<p>투표 마감일</p>
-											<input type="datetime-local" id="endVoteDate">
+											<input type="date" id="endVoteDate">
 										</div>
 										<!--  -->
 									</div>
@@ -823,8 +823,10 @@ function drawChart() {
 						<div class="card-header" th:text="'일정 : ' + ${allPost.postTitle}">
 							<!-- 글 제목 -->
 						</div>
-						<th:block th:text="'시작' + ${#dates.format(allPost.schStartTime, 'yyyy-MM-dd HH:mm')}"></th:block>
-						<th:block th:text="'종료' + ${#dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm')}"></th:block>
+						<th:block th:if="${allPost.schStartTime != null}"
+								  th:text="'시작' + ${#dates.format(allPost.schStartTime, 'yyyy-MM-dd HH:mm')}"></th:block>
+						<th:block th:if="${allPost.schEndTime != null}"
+								  th:text="'종료' + ${#dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm')}"></th:block>
 						<div class="card-body">
 							<!-- 참석자 존 -->
 							<div>
@@ -1001,16 +1003,15 @@ function drawChart() {
 							<!-- 할 일 체크 공간 -->
 							<div>
 								<ul class="list-group">
-								  <li class="list-group-item"
+								  <li th:class="${rt.todoCheck == 'Y'} ? 'list-group-item grayC' : 'list-group-item'"
 								  	  th:each="rt : ${readTodoList}"
-								  	  th:if="${rt.proPostNo == allPost.proPostNo}"
-								  	  th:style="${rt.todoCheck == 'Y'} ? 'text-decoration : line-through' : ''">
+								  	  th:if="${rt.proPostNo == allPost.proPostNo}">
 								    <input class="form-check-input me-1"
 								    	   type="checkbox"
 								    	   th:data-todo-no="${rt.todoNo}"
 								    	   th:checked="${rt.todoCheck == 'Y'}"
 								    	   style="cursor: pointer;"
-										   th:onclick="changeTodoStatus()">
+										   onclick="changeTodoStatus()">
 								    	   <!-- th:value="${rt.todoNo}" th:id="'firstCheckboxStretched' + ${rt.todoNo}" -->
 								   	<span th:text="'Todo : ' + ${rt.todoContent}"></span>
 									<span th:text="${rt.todoEnd == null} ? '' : '마감일 : ' + ${#dates.format(rt.todoEnd, 'MM/dd')}"
@@ -1072,7 +1073,7 @@ function drawChart() {
 						    <th:block th:if="${#dates.format(allPost.voteEndDay) >= #dates.format(cTime)} and ${allPost.voteEndCheck == 'N'}">
 						        <button type="button" class="btn btn-outline-danger">진행중</button>
 						    </th:block>
-						    <th:block th:if="(${#dates.format(allPost.voteEndDay) < #dates.format(cTime)}) or allPost.voteEndCheck == 'Y'">
+						    <th:block th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') < #dates.format(cTime, 'yyyy-MM-dd')}) or ${allPost.voteEndCheck == 'Y'}">
 						        <button type="button" class="btn btn-outline-secondary">투표 종료</button>
 						    </th:block>
 					    </div>
@@ -1093,12 +1094,27 @@ function drawChart() {
 							  		  th:data-vote-detail-img="${vtCheck.voteDetailImg}"></span>
 							    <input class="form-check-input me-1" type="checkbox"
 							    	   th:data-vote-detail-no="${vtCheck.voteDetailNo}"
-									   th:onclick="changeTodoStatus()"
-									   th:unless="(${#dates.format(allPost.voteEndDay) < #dates.format(cTime)}) and ${allPost.voteEndCheck == 'N'}">
+									   onclick="changeVoteStatus()"
+									   th:unless="(${#dates.format(allPost.voteEndDay) < #dates.format(cTime)}) or ${allPost.voteEndCheck == 'Y'}">
 								<span th:text="${vtCheck.voteDetailContent}"></span>
+								<span th:each="vC : ${readVotePartiCount}"
+									  th:if="${vtCheck.voteDetailNo == vC.voteDetailNo}" 
+									  th:data-vote-parti-person-id="${vC.voteDetailNo}">
+									  <span	th:text="${vC.count} + '명'"
+									  		class="spanCursor"></span>
+								</span>
 							  </li>
 							</ul>
 							
+								<!-- <span th:each="vpl : ${readVoteListParti}"
+									  th:if="${vtCheck.voteDetailNo == vpl.voteDetailNo}"
+									  th:data-vote-parti-person-id="${vpl.votePartiNo}">
+									  <span th:text="${vpl.name} + ' '"></span>
+								</span> -->
+							<!-- 투표 종료 버튼 -->
+							<th:block th:if="${#dates.format(allPost.voteEndDay) >= #dates.format(cTime)} and ${allPost.voteEndCheck == 'N'}">
+						        <button type="button" class="btn btn-danger" onclick="voteEnd()">투표 마감</button>
+						    </th:block>
 							<!-- 하단 -->
 							<div class="card-footer">
 								
@@ -1803,14 +1819,16 @@ function drawChart() {
 		let todoNo = event.target.dataset.todoNo;
 		let checkedYN = event.target.checked ? 'Y' : 'N';
 		let totalInputExp = event.target.parentNode.parentNode;
-		//checkedYN으로 줄긋기 설정하기
+		let liTag = event.target.parentElement;
+		liTag.classList.toggle("grayC");
+		
 		fetch("/updateTotoStatus", {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				'todoNo' : todoNo,
+					'todoNo' : todoNo,
 					'todoCheck': checkedYN
 				})
 		})
@@ -2070,7 +2088,7 @@ function changeProfileNote() {
 		.then(response => response.json())
 		.then(res => {
 			console.log(res);
-			//location.reload();
+			location.reload();
 		})
 		.catch(error => {
 			console.error('Error: ',error);
@@ -2160,6 +2178,7 @@ function changeProfileNote() {
 	}
 </script>
 
+<!-- 할일 생성(4번) -->
 <script>
 	function blankSearchTodo() {
 		let todoInsertPost = document.getElementById('modal4');
@@ -2211,7 +2230,7 @@ function changeProfileNote() {
 	}
 </script>
 
-<!-- 스케줄 생성 -->
+<!-- 스케줄(3번) 생성 -->
 <script>
 	function createSchButton() {
 		let topCreateSch = document.getElementById('modal3');
@@ -2262,6 +2281,46 @@ function changeProfileNote() {
 
 
 
+	}
+</script>
+
+<!-- 투표 강제마감 -->
+<script>
+	function voteEnd() {
+		let changeVoteStatusNo = event.target.closest('.card').dataset.feedVoteNo;
+		console.log(changeVoteStatusNo)
+		
+		fetch("/updateVoteStatus", {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(changeVoteStatusNo)
+		})
+		.then(response => response.json())
+		.then(res => {
+			if(res.result == '성공')
+				location.reload();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	}
+</script>
+
+<!-- 투표 변경 -->
+<script>
+	function changeVoteStatus() {
+		let checkedStatus = event.target.checked;
+		console.log(event.target);
+		console.log(event.target.nextElementSibling.nextElementSibling);
+
+		if(checkedStatus) {
+			console.log('등록')
+		} else {
+			console.log('삭제')
+
+		}
 	}
 </script>
 

@@ -57,6 +57,7 @@ public class ProPostSchController {
 		String id = (String)session.getAttribute("Id");
 		
 		model.addAttribute("readPersonalSch", ppss.readPersonalSch(id));
+		System.out.println(model);
 		model.addAttribute("readPerCalDetail", ppss.readPerCalDetail(id));
 		model.addAttribute("readPerCalCom", ppss.readPerCalCom(id));
 		

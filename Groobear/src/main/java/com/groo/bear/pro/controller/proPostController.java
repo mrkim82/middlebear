@@ -23,12 +23,12 @@ import com.groo.bear.comm.DateUtil;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostTaskService;
-import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.PublicCodeService;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
+import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
@@ -117,6 +117,7 @@ public class proPostController {
 			model.addAttribute("readVoteList", todoNVote.readVoteList(proNo));//투표 조회
 			model.addAttribute("readVoteListCheck", todoNVote.readVoteListCheck(proNo));//투표 내용
 			model.addAttribute("readVoteListParti", todoNVote.readVoteListParti(proNo));//투표 인원
+			model.addAttribute("readVotePartiCount", todoNVote.readVotePartiCount(proNo));//투표 인원 수
 			
 			//System.out.println("게시글"+model.getAttribute("readFeedPost"));
 			pagePath = "proPost/proPostDetail";
