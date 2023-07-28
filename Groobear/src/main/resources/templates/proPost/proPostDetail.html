@@ -1090,12 +1090,16 @@ function drawChart() {
 							<ul class="list-group">
 							  <li class="list-group-item" th:each="vtCheck : ${readVoteListCheck}"
 							  	  th:if="${vtCheck.voteNo == allPost.voteNo}">
+							  	  
 							  	<span th:utext="${vtCheck.voteDetailImg}"
 							  		  th:data-vote-detail-img="${vtCheck.voteDetailImg}"></span>
-							    <input class="form-check-input me-1" type="checkbox"
-							    	   th:data-vote-detail-no="${vtCheck.voteDetailNo}"
-									   onclick="changeVoteStatus()"
-									   th:unless="(${#dates.format(allPost.voteEndDay) < #dates.format(cTime)}) or ${allPost.voteEndCheck == 'Y'}">
+							  		  
+ 								    <input class="form-check-input me-1"
+								    	   type="checkbox"
+								    	   th:data-vote-detail-no="${vtCheck.voteDetailNo}"
+										   onclick="changeVoteStatus()"
+										   th:unless="(${#dates.format(allPost.voteEndDay) < #dates.format(cTime)}) or ${allPost.voteEndCheck == 'Y'}">
+										   
 								<span th:text="${vtCheck.voteDetailContent}"></span>
 								<span th:each="vC : ${readVotePartiCount}"
 									  th:if="${vtCheck.voteDetailNo == vC.voteDetailNo}" 
@@ -1103,6 +1107,7 @@ function drawChart() {
 									  <span	th:text="${vC.count} + '명'"
 									  		class="spanCursor"></span>
 								</span>
+								
 							  </li>
 							</ul>
 							
@@ -2311,14 +2316,52 @@ function changeProfileNote() {
 <!-- 투표 변경 -->
 <script>
 	function changeVoteStatus() {
+		console.log(event.target)
 		let checkedStatus = event.target.checked;
-		console.log(event.target);
-		console.log(event.target.nextElementSibling.nextElementSibling);
-
+		let voteDetailNo = event.target.dataset.voteDetailNo;
+		console.log('vote',voteDetailNo)
+		let countWrite = event.target.parentElement.children[3];
+		if(countWrite == null) {
+			console.log('null임')
+		}
+		
+		//투표 등록
 		if(checkedStatus) {
 			console.log('등록')
+			
+			fetch("/insertVote", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({'voteDetailNo' : voteDetailNo})
+			})
+			.then(response => response.json())
+			.then(res => {
+				console.log(res);
+			})
+			.catch(error => {
+				console.error('Error: ',error);
+			});
+			
+			//투표 삭제
 		} else {
 			console.log('삭제')
+			
+			fetch("/deleteVote", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(schObj)
+			})
+			.then(response => response.json())
+			.then(res => {
+				console.log(res);
+			})
+			.catch(error => {
+				console.error('Error: ',error);
+			});
 
 		}
 	}

@@ -118,6 +118,7 @@ public class proPostController {
 			model.addAttribute("readVoteListCheck", todoNVote.readVoteListCheck(proNo));//투표 내용
 			model.addAttribute("readVoteListParti", todoNVote.readVoteListParti(proNo));//투표 인원
 			model.addAttribute("readVotePartiCount", todoNVote.readVotePartiCount(proNo));//투표 인원 수
+			model.addAttribute("readxxVote", todoNVote.readxxVote(id));//투표 checked를 위한 조회
 			
 			//System.out.println("게시글"+model.getAttribute("readFeedPost"));
 			pagePath = "proPost/proPostDetail";

@@ -14,6 +14,7 @@ import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 import com.groo.bear.pro.service.todovote.ProPostVoteVO;
 import com.groo.bear.pro.service.todovote.ProTodoPartiCountVO;
+import com.groo.bear.pro.service.todovote.ProVoteCDVO;
 
 @Service
 public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
@@ -87,5 +88,20 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 		return tv.readVotePartiCount(proNo);
 	}
 
+	@Override
+	public int insertVote(ProVoteCDVO vo) {
+		return tv.insertVote(vo);
+	}
 
+	@Override
+	public int deleteVote(ProVoteCDVO vo) {
+		return tv.deleteVote(vo);
+	}
+
+	@Override
+	public List<ProVoteCDVO> readxxVote(String id) {
+		return tv.readxxVote(id);
+	}
+
+	
 }
