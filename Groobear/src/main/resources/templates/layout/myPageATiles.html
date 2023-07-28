@@ -96,7 +96,7 @@
           <ul class="nav flex-column">
             <!-- 사이드바 메뉴 아이템들 -->
             <li class="nav-item">
-              <a href="/commuteList"><span class="material-icons">home</span> 근태관리 </a>
+              <a id="commute"><span class="material-icons">home</span> 근태관리 </a>
             </li>
             <li class="nav-item">
 			  <a href="/carList"><span class="material-icons">build</span> 차량관리 </a>            
@@ -111,7 +111,6 @@
         </div>
       </nav>
 <div class="data" style="display:none">
-	<p class="id">[[${session.Id}]]</p>
 	<p class="nowMon"></p>
 	
 </div>
@@ -122,7 +121,6 @@
 	var month = ('0' + (today.getMonth() + 1)).slice(-2);
 	var monthString = year + '-' + month;
 	
-	const id = document.querySelector('.id').textContent;
 	const monthDate = monthString;
 	
 	console.log(monthDate)

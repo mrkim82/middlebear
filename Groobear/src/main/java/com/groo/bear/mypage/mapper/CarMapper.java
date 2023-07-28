@@ -27,7 +27,8 @@ public interface CarMapper {
 	public List<CarVO> getAllbook(Criteria cri,CarVO carVO);
 	//운행일지 페이징
 	public int bookListCnt(Criteria cri, CarVO carVO);
-	
+	//운행일지 개별조회
+	public List<CarVO> getMybook(Criteria cri, String id,String monthDate);
 	
 	
 }

@@ -231,7 +231,54 @@
 	</select>
 		
 		
-		
+		<select id="getMybook" resultType="CarVO">
+		SELECT * 
+            FROM (
+              SELECT t.*, ROWNUM AS rn
+              FROM (
+				select 
+					   pl.oper_date
+					 , pl.destination
+					 , pl.befored
+					 , pl.afterd
+					 , pl.imprest
+					 , pl.purpose
+					 , p.pay_status1
+					 , p.pay_status2
+					 , p.pay_status3
+					 , p.approver3
+					 , p.id
+					 , ui.name
+					 , u.emp_no
+					 , d.dept_name
+					 , p.pay_no
+                     , p.doc_type
+                     , p.issue_date
+				from 
+					   payment p
+					 , payment_logbook pl
+					 , users u
+					 , user_info ui
+					 , departments d
+				where 
+				     p.pay_no = pl.pay_no 
+				     and p.id = u.id 
+				     and u.emp_no = ui.emp_no
+				     and d.dept_no = ui.dept_no
+				     and p.id = #{id}
+				<if test="monthDate != null">
+	                AND to_char(issue_date, 'YYYY-MM') = #{monthDate}
+				</if>
+			
+			
+		order by pl.oper_date desc
+		) t
+            )
+            <![CDATA[
+            WHERE rn >= (#{cri.page}-1) * 10 +1 
+			and rn <= #{cri.page} * 10
+            ]]>
+	</select>
 		
 		
 		
