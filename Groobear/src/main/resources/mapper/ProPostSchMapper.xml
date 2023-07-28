@@ -212,4 +212,22 @@
 		WHERE id = #{id}
 	</delete>
 	
+	<!-- 스케줄 작성 -->
+	<insert id="createPostSch" statementType="CALLABLE" parameterType="ProCreateSchVO">
+		{call cre_pro_sch(
+			 #{proNo}
+		   , #{id}
+		   , #{postTitle}
+		   , #{schStartDay}
+		   , #{schStartTime}
+		   , #{schEndDay}
+		   , #{schEndTime}
+		   , #{schPlace}
+		   , #{schContent}
+		   , #{personalSch}
+		   , #{schPersonArr, mode=IN, typeHandler=com.groo.bear.pro.mapper.OracleArrayHandler}
+			)
+		}
+	</insert>
+	
 </mapper>

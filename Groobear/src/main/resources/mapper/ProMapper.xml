@@ -210,4 +210,12 @@
 		WHERE pro_no = #{proNo}
 	</select>
 	
+	<!-- 프로젝트 숨김 여부 -->
+	<update id="updateProHide" parameterType="ProHideVO">
+		UPDATE pro_mem
+		SET pro_hide_check = #{proHideCheck}
+		WHERE pro_mem_no = #{proMemNo}
+	</update>
+	
+	
 </mapper>

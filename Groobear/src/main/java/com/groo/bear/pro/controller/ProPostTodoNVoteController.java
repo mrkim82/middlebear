@@ -2,7 +2,6 @@ package com.groo.bear.pro.controller;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.groo.bear.pro.service.ProTodoNVoteService;
+import com.groo.bear.pro.service.todovote.CreateVoteVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 
 @RestController
-public class ProPostTodoController {
+public class ProPostTodoNVoteController {
 	@Autowired
 	ProTodoNVoteService ps;
 	
@@ -36,11 +36,32 @@ public class ProPostTodoController {
 	public Map<String, Object> creTodoPost(HttpServletRequest request, @RequestBody ProPostTodoCreVO vo) {
 		Map <String, Object> map = new HashMap<>();
 		HttpSession session = request.getSession();
+		
 		vo.setId((String)session.getAttribute("Id"));
 		
-		System.out.println("vo테스트"+vo);
-		ps.createTodo(vo);
-		map.put("result", "ㄴ");
+		int result = ps.createTodo(vo);
+		map.put("result", result);
 		return map;
+	}
+	
+	//vote게시글 작성
+	@PostMapping("creVotePost")
+	public Map<String, Object> creVotePost(HttpServletRequest request, @RequestBody CreateVoteVO vo) {
+		Map <String, Object> map = new HashMap<>();
+		HttpSession session = request.getSession();
+		vo.setId((String)session.getAttribute("Id"));
+		
+		System.out.println(vo);
+		ps.createPostVote(vo);
+		map.put("result", "잘 들어가겠지");
+		return map;
+	}
+	
+	//프로젝트 그룹 수정
+	@PutMapping("updateVoteStatus")
+	public Map<String, Object> updateVoteStatus(@RequestBody int changeVoteStatusNo) {
+		int result = ps.updateVoteStatus(changeVoteStatusNo);
+		
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 }

@@ -2,10 +2,10 @@ package com.groo.bear.pro.mapper;
 
 import java.util.List;
 
-import com.groo.bear.pro.service.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostFeedVO;
+import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
