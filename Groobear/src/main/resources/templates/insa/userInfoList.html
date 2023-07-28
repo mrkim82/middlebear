@@ -54,6 +54,36 @@
 <div layout:fragment="content" >
   <div>
   	<h3>Groobear 인사관리</h3>
+  	<div style="margin-top:20px;">
+	  	<a>사번 : </a><input style="margin-bottom:20px; border:0 solid black;" id="empNo" name="empNo" type="text" value="" readonly><br>
+  		<a>이름 : </a><input style="margin-bottom:20px;" id="name" name="name" type="text" value=""><br>
+  		<a>직급 : </a><select style="margin-bottom:20px;" id="rank" name="rank">
+  								   <option value="" selected="selected">선택</option>
+								   <option value="사장" >사장</option>
+								   <option value="이사" >이사</option>
+								   <option value="부장" >부장</option>
+								   <option value="차장" >차장</option>
+					               <option value="과장" >과장</option>
+					               <option value="대리" >대리</option>
+					               <option value="주임" >주임</option>
+					               <option value="사원" >사원</option>
+					            </select><br>
+		<a>부서 : </a><select style="margin-bottom:20px;" id="deptNo" name="deptNo">
+									<option value="" selected="selected">선택</option>
+								<th:block th:each="dept, stance : ${deptList}">
+									<option th:value="${dept.deptNo}">[[${dept.deptName}]]</option>
+								</th:block>
+							 	</select><br>
+		<a>주민번호 : </a><input style="margin-bottom:20px;" id="pno" name="pno" 
+		type="text" value="" oninput="setJumin(pno)"><br>
+		<p id="result"></p>
+  	</div>
+  	<div style="float: right;margin-bottom:20px;">
+	  	<button style="margin-right:10px;" type="button" id="resetBtn">초기화</button>
+  		<button style="margin-right:10px;" type="button" id="insertBtn">등록</button>
+  		<button style="margin-right:10px;" type="button" id="updateBtn">수정</button>
+  		<button style="margin-right:10px;" type="button" id="delBtn">삭제</button>
+  	</div>
 	<table id="list" class="table">
 		<thead>
 			<tr>
@@ -67,12 +97,12 @@
 			</tr>
 		</thead>
 		<tbody id="bodyWash">
-			<tr th:each="emp, stat : ${empList}">
-				<td><input type="checkbox" th:id="${emp.empNo}"></td>
+			<tr th:each="emp, stat : ${empList}" th:attr="onclick='updateUserInfo()'">
+				<td><input type="checkbox" th:id="${emp.empNo}" class="sel"></td>
 				<td>[[${emp.empNo}]]</td>
 				<td>[[${emp.name}]]</td>
 				<td>[[${emp.rank}]]</td>
-				<td>[[${emp.deptName}]]</td>
+				<td th:name=${emp.deptNo}>[[${emp.deptName}]]</td>
 				<td>[[${emp.pno}]]</td>
 				<td th:if="${emp.id != null && emp.id != ''}">가입완료</td>
 				<td th:unless="${emp.id != null && emp.id != ''}">미가입</td>
@@ -127,10 +157,253 @@
 	      </div>
 
 	<script th:inline="javascript">
-		//input 태그 안에 빈 값인데 검색 버튼을 눌렀을 때 실행하는 함수.
+		function updateUserInfo(){
+			if(event.target.tagName=='INPUT')
+				return;
+			if(event.target == $(event.target).closest('tr').children().eq(0)[0])
+				return;
+			$('#empNo').val($(event.target).closest('tr').children().eq(1).text());
+			$('#name').val($(event.target).closest('tr').children().eq(2).text());
+			$('#rank').val($(event.target).closest('tr').children().eq(3).text());
+			$('#deptNo').val($(event.target).closest('tr').children().eq(4).attr('name'));
+			$('#pno').val($(event.target).closest('tr').children().eq(5).text());
+		}
+		
 		$(document).ready(function() {
-			$('#list').on('click','#allChk', function(){
-				$('input:checkbox').is(':checked');
+			// 수정 버튼
+			$('#updateBtn').on('click', function(){
+				if($('#empNo').val()!='' && $('#empNo').val()!=null){
+					if($('#name').val() == ''){
+						$('#spantext').text('이름을 입력해주세요.');
+			            $('#errorModal').show();
+			            $('#closeModal').on('click', function() {
+			           		$('#errorModal').hide();
+			           		$('#name').focus();
+			            })	
+					} else if($('#rank').val() == ''){
+						$('#spantext').text('직급을 입력해주세요.');
+			            $('#errorModal').show();
+			            $('#closeModal').on('click', function() {
+			           		$('#errorModal').hide();
+			            })
+					}  else if($('#deptNo').val() == ''){
+						$('#spantext').text('부서를 선택해주세요.');
+			            $('#errorModal').show();
+			            $('#closeModal').on('click', function() {
+			           		$('#errorModal').hide();
+			            })
+					} else if($('#pno').val().length < 14){
+						$('#spantext').text('주민등록번호 길이가 맞지 않습니다.');
+			            $('#errorModal').show();
+			            $('#closeModal').on('click', function() {
+			           		$('#errorModal').hide();
+			           		$('#pno').focus();
+			            })	
+					} else{
+						let empNo = $('#empNo').val();
+						let name = $('#name').val();
+						let rank = $('#rank').val();
+						let deptNo = $('#deptNo').val();
+						let pno = $('#pno').val();
+						$.ajax({
+			      			url: "updateUserInfo",
+			      			method: "POST",
+			      			contentType: "application/json; charset=utf-8",
+			      			data:JSON.stringify({
+			      				empNo : empNo,
+			      				name : name,
+			      				rank : rank,
+			      				deptNo : deptNo,
+			      				pno : pno
+			      			}),
+			      			success: function(data){
+			      				console.log(data);
+			      				if(data == 'success'){
+			      					$('#spantext').text('수정이 완료되었습니다.');
+						            $('#errorModal').show();
+						            $('#closeModal').on('click', function() {
+						           		$('#errorModal').attr('onclick', "location.href='/userInfoList'");
+						            })	
+			      				} else if(data == 'has'){
+			      					$('#spantext').text('이미 등록된 주민번호 입니다.');
+						            $('#errorModal').show();
+						            $('#closeModal').on('click', function() {
+						           		$('#errorModal').hide();
+						           		$('#pno').focus();
+						            })
+			      				} else{
+			      					$('#spantext').text('수정 중 오류가 발생하였습니다.');
+						            $('#errorModal').show();
+						            $('#closeModal').on('click', function() {
+						           		$('#errorModal').attr('onclick', "location.href='/userInfoList'");
+						            })
+			      				}
+			      			},
+			      			error : function(error){
+			      				console.log(error);
+			      			}
+			      		});
+					}
+				}else{
+					$('#spantext').text('목록에서 수정할 인원을 클릭 후 진행바랍니다.');
+		            $('#errorModal').show();
+		            $('#closeModal').on('click', function() {
+		            	$('#errorModal').hide();
+		            })
+				}
+			})
+			
+			// 초기화 버튼
+			$('#resetBtn').on('click', function(){
+				$('#empNo').val('');
+				$('#name').val('');
+				$('#rank').val('');
+				$('#deptNo').val('');
+				$('#pno').val('');
+			})
+			
+			// 등록 버튼
+			$('#insertBtn').on('click', function(){
+				if($('#empNo').val()=='' || $('#empNo').val()==null){
+					if($('#name').val() == ''){
+						$('#spantext').text('이름을 입력해주세요.');
+			            $('#errorModal').show();
+			            $('#closeModal').on('click', function() {
+			           		$('#errorModal').hide();
+			           		$('#name').focus();
+			            })	
+					} else if($('#rank').val() == ''){
+						$('#spantext').text('직급을 입력해주세요.');
+			            $('#errorModal').show();
+			            $('#closeModal').on('click', function() {
+			           		$('#errorModal').hide();
+			            })
+					}  else if($('#deptNo').val() == ''){
+						$('#spantext').text('부서를 선택해주세요.');
+			            $('#errorModal').show();
+			            $('#closeModal').on('click', function() {
+			           		$('#errorModal').hide();
+			            })
+					} else if($('#pno').val().length < 14){
+						console.log($('#pno').length);
+						$('#spantext').text('주민등록번호 길이가 맞지 않습니다.');
+			            $('#errorModal').show();
+			            $('#closeModal').on('click', function() {
+			           		$('#errorModal').hide();
+			           		$('#pno').focus();
+			            })	
+					} else{
+						let empNo = $('#empNo').val();
+						let name = $('#name').val();
+						let rank = $('#rank').val();
+						let deptNo = $('#deptNo').val();
+						let pno = $('#pno').val();
+						$.ajax({
+			      			url: "insertUserInfo",
+			      			method: "POST",
+			      			contentType: "application/json; charset=utf-8",
+			      			data:JSON.stringify({
+			      				empNo : empNo,
+			      				name : name,
+			      				rank : rank,
+			      				deptNo : deptNo,
+			      				pno : pno
+			      			}),
+			      			success: function(data){
+			      				console.log(data);
+			      				if(data == 'success'){
+			      					$('#spantext').text('등록이 완료되었습니다.');
+						            $('#errorModal').show();
+						            $('#closeModal').on('click', function() {
+						           		$('#errorModal').attr('onclick', "location.href='/userInfoList'");
+						            })	
+			      				} else if(data == 'has'){
+			      					$('#spantext').text('이미 등록된 주민번호 입니다.');
+						            $('#errorModal').show();
+						            $('#closeModal').on('click', function() {
+						           		$('#errorModal').hide();
+						           		$('#pno').focus();
+						            })
+			      				} else{
+			      					$('#spantext').text('가입 중 오류가 발생하였습니다.');
+						            $('#errorModal').show();
+						            $('#closeModal').on('click', function() {
+						           		$('#errorModal').attr('onclick', "location.href='/userInfoList'");
+						            })
+			      				}
+			      				
+			      			},
+			      			error : function(error){
+			      				console.log(error);
+			      			}
+			      		});	
+					}
+				}else{
+					$('#spantext').text('초기화 버튼 클릭 후 재시도 바랍니다.');
+		            $('#errorModal').show();
+		            $('#closeModal').on('click', function() {
+		            	$('#errorModal').hide();
+		            })
+				}
+			})
+			
+			// 삭제 버튼
+			$('#delBtn').on('click', function(){
+				let list = [];
+				let obj = {};
+				let chk = '';
+				$("[class='sel']:checked").each(function(i, checkbox){
+					obj={};
+					obj["empNo"] = $(checkbox.closest('tr')).children('td:eq(1)').text();
+					if($(checkbox.closest('tr')).children('td:eq(6)').text() == "가입완료"){
+						chk = 'O';
+					}
+					obj["id"] = $(checkbox.closest('tr')).children('td:eq(6)').text();
+					list.push(obj);
+				})
+				if(chk == 'O'){
+					chk = '';
+					$('#spantext').text('계정이 존재하는 인원이 있습니다.');
+		            $('#errorModal').show();
+		            $('#closeModal').on('click', function() {
+		            	$('#errorModal').hide();
+		            })
+				}else{
+					$.ajax({
+		      			url: "delUserInfo",
+		      			method: "POST",
+		      			contentType: "application/json; charset=utf-8",
+		      			data:JSON.stringify(list),
+		      			success: function(data){
+		      				console.log(data);
+		      				if(data == 'success'){
+		      					$('#spantext').text('삭제가 완료되었습니다.');
+					            $('#errorModal').show();
+					            $('#closeModal').on('click', function() {
+					            	$('#errorModal').attr('onclick', "location.href='/userInfoList'");
+					            })
+		      				}else{
+		      					$('#spantext').text('삭제할 인원을 체크 후 클릭 바랍니다.');
+					            $('#errorModal').show();
+					            $('#closeModal').on('click', function() {
+					            	$('#errorModal').hide();
+					            })
+		      				}
+		      			},
+		      			error : function(error){
+		      				console.log(error);
+		      			}
+		      		});	
+				}
+			})
+			
+			// 체크박스 전체선택 및 해제
+			$('#allChk').on('click', function(){
+				if($('#allChk').is(':checked')){
+					$('input:checkbox').attr('checked','true');	
+				} else{
+					$('input:checkbox').attr('checked',!$('input:checkbox').attr('checked','true'));
+				}
 			})
 			//검색 빈값 처리
 			$('#searchBtn').on('click', function() {
@@ -139,7 +412,6 @@
 			    	if($('#inputBtn').val()==''){
 			    		location.href='/userInfoList';
 			    	}else{
-			    		$('#inputBtn').val('');
 			    		$('#spantext').text('검색 항목을 선택해주세요.');
 			            $('#errorModal').show();
 			            $('#closeModal').on('click', function() {
@@ -204,6 +476,35 @@
 	
 		return dateString;
 	}
+	//모달 Close 기능
+    function close_pop(flag) {
+        $('#myModal').hide();
+   	}; 
+   	
+	 // 한글만 입력 가능
+    $("#name").keyup(function (event) {
+        regexp = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
+        v = $(this).val();
+        if (regexp.test(v)) {
+            $(this).val(v.replace(regexp, ''));
+        }
+    });
+ 
+   	// 주민번호
+   	function setJumin(obj){
+	   	ju = obj.value;
+	   	ju = ju.replace("-","");
+	   	if(ju.length > 6){
+		   	ju1 = ju.substring(0,6);
+		   	ju2 = ju.substring(6,13);  	
+		   	obj.value = ju1+"-"+ju2;
+	   	}
+   	}
+   	
+   	// 주민번호용
+   	$('#pno').on('keyup', function () {
+	  $(this).val($(this).val().replace(/[^\d-]/g, ""));
+	});
 	</script>
 </div>
 </body>

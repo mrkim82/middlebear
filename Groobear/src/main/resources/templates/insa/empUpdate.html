@@ -22,7 +22,7 @@
 				<div class="col-6" style="display: inline-block;margin-left: 20px;position: absolute;">
 					<a>사번 : </a><input name="empNo" style="width:120px; padding-top:10px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.empNo}" readonly><br>
 					<a>이름 : </a><input name="name" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.name}" readonly><br>
-					<a>직책 : </a><select name="rank">
+					<a>직급 : </a><select name="rank">
 								   <option value="사장" th:selected="${empInfo.rank=='사장'}">사장</option>
 								   <option value="이사" th:selected="${empInfo.rank=='이사'}">이사</option>
 								   <option value="부장" th:selected="${empInfo.rank=='부장'}">부장</option>
