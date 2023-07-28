@@ -32,4 +32,29 @@ public interface InsaMapper {
 	public int checkPno(String pno);
 	//인사정보 업데이트
 	public int updateUserInfo(EmpVO vo);
+	//부서권한관리 전체조회
+	public List<EmpVO> deptAllList(Criteria cri, EmpVO vo);	
+	//페이징
+	public int deptAllListCnt(Criteria cri, EmpVO vo);
+	//부서인원
+	public List<EmpVO> deptCnt();
+	//부서상세조회
+	public List<EmpVO> deptDetail(int deptNo);
+	//부서구성원 추가목록
+	public List<EmpVO> deptAddMem();
+	//부서구성원 추가
+	public int updateDeptMem(EmpVO vo);
+	//부서구성원 제외
+	public int delDeptMem(EmpVO vo);
+	//부서삭제
+	public int deptDel1(EmpVO vo);
+	public int deptDel2(EmpVO vo);
+	//부서권한
+	public List<EmpVO> deptAuthList();
+	//부서수정
+	public int deptUpdate(EmpVO vo);
+	//부서추가
+	public int deptInsert(EmpVO vo);
+	//팀장제거
+	public int removeHead(EmpVO vo);
 }
