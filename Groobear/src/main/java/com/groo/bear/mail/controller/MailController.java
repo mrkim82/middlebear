@@ -44,7 +44,9 @@ public class MailController {
 	}
 	//메일작성폼
 	@GetMapping("mail/sendMail")
-	public String sendMailForm() {
+	public String sendMailForm(Model model,HttpSession session) {
+		String email =(String) session.getAttribute("Email");
+		model.addAttribute("email",email);
 		return "mail/sendMail";
 	}
 	//메일 작성(발송)
@@ -53,6 +55,7 @@ public class MailController {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("Id");
 		mailVO.setId(id);
+		System.out.println(mailVO);
 		model.addAttribute("mail",mailService.sendMail(mailVO));
         System.out.println("메일 전송 완료");
 		return "redirect:mail/sendingMail";

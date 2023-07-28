@@ -38,4 +38,10 @@ public interface FilesMapper {
 	
 	//운행일지 파일등록
 	public int logInsert(FilesVO vo);
+	
+	//전자결재 이미지 조회
+	public List<FilesVO> searchPayImg(int payNo);
+	
+	//전자결재 이미지 제거
+	public int deletePayImg(int payNo);
 }
