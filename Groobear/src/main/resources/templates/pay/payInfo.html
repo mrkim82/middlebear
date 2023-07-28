@@ -81,11 +81,29 @@
 					<td>운행전 키로수 <input type="text" id="befored" th:value="${list.befored}"></td>
 					<td>운행후 키로수 <input type="text" id="afterd" th:value="${list.afterd}"></td>
 				</tr>
-				<tr><td><button type="button" id="logfiles1">첨부파일(선택)</button></td></tr>
+				<tr>
+					<td>
+						<input type="text">
+					</td>
+				</tr>
 						<tr><td><div class="panel-body1">
 	                        <div class="form-group uploadDiv1">
 	                            <input name="uploadFile1" type="file" multiple>
 	                        </div>
+		                        <!-- foreach써서 조회하는걸로 변경 -->
+								<div class="uploadResult0">
+							       <ul th:each="pay : ${payImgInfo}">
+									<li th:data-path="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
+									th:data-fileName="${pay.fileName}" data-type="true" style="list-style-type:none">
+									<button type="button" id="robinImgDel" onclick="robinImgDel(this)">제거</button>
+										<div>
+											<img th:src="@{|/display?fileName=${#strings.replace(pay.uploadPath,'\','/')}/${pay.uuid}_${pay.fileName}|}" 
+											th:data-uploadpath="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
+											th:data-fileName="${pay.fileName}" data-type="true"  style="border:1px solid;">
+										</div>
+									</li>
+								   </ul>
+								</div>
 	                        <div class="uploadResult1">
 	                            <ul>
 	
@@ -93,7 +111,6 @@
 	                        </div>
 	                    	</div>
 	                    </td></tr>
-				<tr><td><button type="button" id="logfiles2">첨부파일(선택)</button></td></tr>
 				<tr><td>
 					<div class="panel-body2">
                         <div class="form-group uploadDiv2">
@@ -133,9 +150,8 @@
 	                        </div>
 	                    	</div>
 	                    </td></tr>
-				<tr><td><button type="button" id="offfiles">첨부파일(선택)</button></td></tr>
 				<tr>
-					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"/></td>
+					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 				</tr>
 				</th:block>
 				<th:block th:if="${list.docType == 'c'}">
@@ -146,13 +162,25 @@
 					<td>제목 <input type="text" id="robinTitle" th:value="${list.title}"></td>
 				</tr>
 				<tr>
-					<td>내용 <textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}"/></td>
+					<td>내용 <textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}"></textarea></td>
 				</tr>
-				<tr><td><button type="button" id="robinfiles">첨부파일(선택)</button></td></tr>
 						<tr><td><div class="panel-body4">
 	                        <div class="form-group uploadDiv4">
 	                            <input name="uploadFile4" type="file" multiple>
 	                        </div>
+	                        <div class="uploadResult0">
+							       <ul th:each="pay : ${payImgInfo}">
+									<li th:data-path="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
+									th:data-fileName="${pay.fileName}" data-type="true" style="list-style-type:none">
+										<button type="button" id="robinImgDel" onclick="robinImgDel(this)">제거</button>
+										<div>
+											<img th:src="@{|/display?fileName=${#strings.replace(pay.uploadPath,'\','/')}/${pay.uuid}_${pay.fileName}|}" 
+											th:data-uploadpath="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
+											th:data-filename="${pay.fileName}" data-type="true"  style="border:1px solid;">
+										</div>
+									</li>
+								   </ul>
+								</div>
 	                        <div class="uploadResult4">
 	                            <ul>
 	
@@ -161,7 +189,7 @@
 	                    	</div>
                 </td></tr>
 				<tr>
-					<td>코멘트 <textarea id="robinCom" style="width: 400px;height: 200px;" th:text="${list.com}"/></td>
+					<td>코멘트 <textarea id="robinCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 				</tr>
 			</th:block>
 			</tbody>
@@ -191,6 +219,10 @@
 		let approver3 = document.getElementById('approver3').value;
 		let payStatus2 = document.getElementById('payStatus2').value;
 		let payStatus3 = document.getElementById('payStatus3').value;
+		//이미지 제거용 구이미지 값 저장용
+		let olduuid = "";
+		let olduploadPath = "";
+		let fileName = "";
 		if(masterDocType=='a'){
 		//운행일지
 			let purpose = document.getElementById('purpose').value;
@@ -416,6 +448,14 @@
 					console.log(err);
   			    }
 			});
+		}
+		function robinImgDel(elem){
+			olduuid = "";
+			olduploadPath = "";
+			oldfileName = "";
+			console.log(elem.parentElement);
+			console.log(elem.nextElementSibling.children.data);
+			elem.parentElement.remove();
 		}
 	/*]]>*/
 	</script>

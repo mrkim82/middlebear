@@ -1,5 +1,7 @@
 package com.groo.bear.payment.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -229,6 +231,9 @@ public class PaymentController {
 			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.robinList(payNo));
 		}
+		List<FilesVO> list = paymentService.searchPayImg(payNo);
+		System.out.println(list);
+		model.addAttribute("payImgInfo",list);
 		return "pay/payInfo";
 	}
 	//문서 상세조회 페이지에서 수정
