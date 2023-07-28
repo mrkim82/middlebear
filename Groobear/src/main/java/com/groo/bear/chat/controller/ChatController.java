@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,15 +75,20 @@ public class ChatController {
     	return "chat/rooms";
     }
     
+    //채팅방 생성.
     @PostMapping("/newChatroom")
     @ResponseBody
     public Map<String, Object> createChatroom(HttpSession session, @RequestBody RoomDTO room) {
     	String id = (String)session.getAttribute("Id");
     	room.setId(id);
         int createdRoom = chatService.createChatRoom(room);
+        
+        //생성된 번호를 가져오는 중간 작업 필요할 거임. 그래야 그 번호를 알아야 그 안에 사원을 넣을 수 있기 때문에
+        // 1.chatService.createChatRoom(room); 얘의 결과를 가져오거나 2. 제일 최신 번호를 가져오거나.
         messagingTemplate.convertAndSend("/topic/chatrooms/", createdRoom);
         return Collections.singletonMap("roomNo", createdRoom);
     }
+    
     //HTTP를 사용하려면 @PostMapping을, 웹소켓과 STOMP를 사용하려면 @MessageMapping
     
     @PostMapping("/deleteChatroom")
