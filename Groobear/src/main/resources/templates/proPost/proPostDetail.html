@@ -1070,7 +1070,7 @@ function drawChart() {
 					        <span onclick="deletePost()" style="cursor: pointer;">X</span>
 					    </div>
 					    <div>
-						    <th:block th:if="${#dates.format(allPost.voteEndDay) >= #dates.format(cTime)} and ${allPost.voteEndCheck == 'N'}">
+						    <th:block th:if="${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')} and ${allPost.voteEndCheck == 'N'}">
 						        <button type="button" class="btn btn-outline-danger">진행중</button>
 						    </th:block>
 						    <th:block th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') < #dates.format(cTime, 'yyyy-MM-dd')}) or ${allPost.voteEndCheck == 'Y'}">
@@ -1098,13 +1098,12 @@ function drawChart() {
 								    	   type="checkbox"
 								    	   th:data-vote-detail-no="${vtCheck.voteDetailNo}"
 										   onclick="changeVoteStatus()"
-										   th:unless="(${#dates.format(allPost.voteEndDay) < #dates.format(cTime)}) or ${allPost.voteEndCheck == 'Y'}">
-										   
+ 										   th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')}) and ${allPost.voteEndCheck == 'N'}">
 								<span th:text="${vtCheck.voteDetailContent}"></span>
 								<span th:each="vC : ${readVotePartiCount}"
-									  th:if="${vtCheck.voteDetailNo == vC.voteDetailNo}"> 
-									  <span	th:text="${vC.count} + '명'"
-									  		class="spanCursor"></span>
+									  th:if="${vtCheck.voteDetailNo == vC.voteDetailNo}"
+									  class="spanCursor voteCount"
+									  th:text="${vC.count} + '명'"> 
 								</span>
 								
 							  </li>
@@ -1115,7 +1114,7 @@ function drawChart() {
 									  <span th:text="${vpl.name} + ' '"></span>
 								</span> -->
 							<!-- 투표 종료 버튼 -->
-							<th:block th:if="${#dates.format(allPost.voteEndDay) >= #dates.format(cTime)} and ${allPost.voteEndCheck == 'N'}">
+							<th:block th:if="${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')} and ${allPost.voteEndCheck == 'N'}">
 						        <button type="button" class="btn btn-danger" onclick="voteEnd()">투표 마감</button>
 						    </th:block>
 							<!-- 하단 -->
@@ -2321,21 +2320,13 @@ function changeProfileNote() {
 <!-- 투표 변경 -->
 <script>
 	function changeVoteStatus() {
-		console.log(event.target)
 		let checkedStatus = event.target.checked;
 		let voteDetailNo = event.target.dataset.voteDetailNo;
-		console.log('vote',voteDetailNo)
-		let countWrite = event.target.parentElement.children[3];
-		
-		if(countWrite == null) {
-			console.log('null임')
-			let newVoteCountTag = `<span><span classs="spanCursor">1명</span></span>`;
-		}
+		let liTag = event.target.parentElement;
 		
 		//투표 등록
 		if(checkedStatus) {
-			console.log('등록')
-			
+
 			fetch("/insertVote", {
 				method: 'POST',
 				headers: {
@@ -2345,7 +2336,7 @@ function changeProfileNote() {
 			})
 			.then(response => response.json())
 			.then(res => {
-				console.log(res);
+				createUpCount(liTag);
 			})
 			.catch(error => {
 				console.error('Error: ',error);
@@ -2353,7 +2344,6 @@ function changeProfileNote() {
 			
 			//투표 삭제
 		} else {
-			console.log('삭제')
 			
 			fetch("/deleteVote", {
 				method: 'POST',
@@ -2364,10 +2354,37 @@ function changeProfileNote() {
 			})
 			.then(response => response.json())
 			.then(res => {
-				console.log(res);
+				deleteDowunCount(liTag);
 			})
 			.catch(error => console.error('Error: ',error));
 
+		}
+	}
+
+	//투표 숫자 증가 및 생성
+	function createUpCount(liTag) {
+		let countWrite = liTag.children[3];
+
+		if(countWrite == null) {
+			let newSpan = document.createElement('span');
+			newSpan.className = 'voteCount spanCursor';
+			newSpan.textContent = '1명';
+
+			liTag.appendChild(newSpan);
+		} else {
+			let countWriteV = Number(countWrite.textContent.substr(0, 1)) + 1;
+			countWrite.textContent = countWriteV + '명';
+		}
+	}
+
+	//투표 숫자 감소 및 삭제
+	function deleteDowunCount(liTag) {
+		let countWrite = liTag.children[3];
+		let countWriteV = Number(countWrite.textContent.substr(0, 1));
+		if(countWriteV == 1) {
+			countWrite.remove();
+		} else {
+			countWrite.textContent = (countWriteV - 1) + '명';
 		}
 	}
 </script>
