@@ -30,6 +30,7 @@ public class ProPostVO {
 	private String workWrite;
 	private String workUpdate;
 	
+	private int postType;
 	private int count;
 	
 }

@@ -101,6 +101,10 @@
 						<tr><td>전도금 <input type="text" id="imprest" readonly></td></tr>
 						<tr><td>목적 <input type="text" id="purpose"></td></tr>
 						<tr><td>
+							<div class="bigPictureWrapper">
+								<div class="bigPicture">
+								</div>
+							</div>
 							<div class="row">
 					            <div class="col-lg-12">
 					                <div class="panel panel-default1">
@@ -755,15 +759,15 @@
 		  uploadUL4.append(str);
 	    }
 		
-        $(".uploadResult").on("click", "button", function(e){
+        $(".uploadResult1").on("click", "button", function(e){
 		  console.log("delete file");
 		  
 		  var targetFile = $(this).data("file");
 		  var type = $(this).data("type");
 		  
 		  var targetLi = $(this).closest("li");
-		  
-		  $.ajax({
+		  targetLi.remove();
+		  /* $.ajax({
 		  	url : 'deleteFile',
 		  	data : {fileName : targetFile, type : type},
 		  	dataType : 'text',
@@ -772,28 +776,7 @@
 		  			alert(result);
 		  			targetLi.remove();
 		  		}
-		  });
-	    });
-	    $(document).ready(function(e) {
-	        
-	        var formObj = $("form[role='form']");
-	        $("button[type='submit']").on("click", function(e){
-	            e.preventDefault();
-	            console.log("submit clicked");
-	            
-	            var str = "";
-	            
-	            $(".uploadResult ul li").each(function(i, obj){
-	                console.log(obj)
-	                var jobj = $(obj);
-	                str += "<input type = 'hidden' name = 'attachList["+i+"].fileName' value = '" + jobj.data("filename")+"'>";
-	                str += "<input type = 'hidden' name = 'attachList["+i+"].uuid' value = '" + jobj.data("uuid") + "'>";
-	                str += "<input type = 'hidden' name = 'attachList["+i+"].uploadPath' value = '" + jobj.data("path") + "'>";
-	                str += "<input type = 'hidden' name = 'attachList["+i+"].fileType' value = '" + jobj.data("type") + "'>";
-	                console.log(str)
-	            });
-	
-	        });
+		  }); */
 	    });
 	    var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
 	    var maxSize = 5242880;

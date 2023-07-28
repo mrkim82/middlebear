@@ -9,11 +9,18 @@
 <body>
 <div layout:fragment="content">
 	<div>
-		<div>
-			<input type="date" name="startDay" id="startDate" onchange = "">
-            <input type="date" name="endDay" id="endDate" onchange = "" >
+		<div style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px; margin:3px 0;" >
+			<div>
+				<button type="button" onclick="prevMon()" class="btn btn-primary"> < </button>
+				<input style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px;height:35px;" type="month" name="monthDate" id="monthDate" onchange ="changeMon()" th:value="${#dates.format(info[0].day,'yyyy-MM')}">
+				<button type="button" onclick="nextMon()" class="btn btn-primary"> > </button>
+			</div>
+			<p>잔여 연차 : [[${info[0].offCount}]]</p>
+			<p>월 연장 근무 시간 : <span class="owt">[[${work.over}]]</span></p>
+			<p>월 근무 일수 : [[${work.count}]] </p>
 		</div>
-		<table>
+		
+		<table class="table table-hover" style="margin-top:5px;">
 			<thead>
 				<tr>
 					<th>날짜</th>
@@ -24,7 +31,7 @@
 					<th>퇴근</th>
 					<th>근무시간</th>
 					<th>연장근무시간</th>
-					<th>연차수량</th>
+					<th>근무 여부</th>
 				</tr> 
 			</thead>
 			<tbody>
@@ -37,23 +44,32 @@
 					<td>[[${#dates.format(comm.workEnd,'HH:mm')}]]</td>
 					<td class="wt">[[${comm.workTime}]]</td>
 					<td class="owt">[[${comm.overWorkTime}]]</td>
-					<td>[[${comm.offCount}]]</td>
+					<td th:if="${comm.offStatus == 'N'}">결근</td>
+					<td th:if="${comm.offStatus == 'Y'}">근무</td>
+					<td th:if="${comm.offStatus == 'O'}">휴무</td>
 				</tr>
 			</tbody>
 		</table>
 		
 	</div>
-	<div>
-		<ul class="paging" th:if="${paging.endPage != 0}">
-	        <li th:if="${paging.prev}">
+<div>
+		<ul class="paging pagination pagination-sm" th:if="${paging.endPage != 0}">
+			
+			 <li class="page-item disabled">
+      				<a class="page-link" th:href="|javascript:goPage(1)|">&laquo;</a>
+    		</li>
+	        <li th:if="${paging.prev}" class="page-item disabled">
 	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
 	        </li>
-	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-	            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+	        <li class="page-item active" th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+	            <a class="page-link" th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
 	        </li>
 	        <li th:if="${paging.next and paging.endPage > 0}">
 	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
 	        </li>
+	        <li class="page-item">
+      <a class="page-link" th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+    </li>
     	</ul>
 	</div>
 	
@@ -67,18 +83,15 @@ for(let i = 0 ; i < document.querySelectorAll('.cml').length;i++){
 		
 
 	var number = document.querySelectorAll('.wt')[i].textContent;
-	console.log(number);
 	
 	var hours = Math.floor(number/60);
 	if(hours < 10){
 		hours = '0'+hours;
 	}
-	console.log(hours);
 	var minutes = number%60;
 	if(minutes < 10){
 		minutes = '0'+minutes;
 	}
-	console.log(minutes)
 	
 	var cal = 
 		hours + ':' + minutes;
@@ -87,18 +100,15 @@ for(let i = 0 ; i < document.querySelectorAll('.cml').length;i++){
 
 	
 	var number2 = document.querySelectorAll('.owt')[i].textContent;
-	console.log(number2);
 	
 	var hours2 = Math.floor(number2/60);
 	if(hours2 < 10){
 		hours2 = '0'+hours2;
 	}
-	console.log(hours);
 	var minutes2 = number2%60;
 	if(minutes2 < 10){
 		minutes2 = '0'+minutes2;
 	}
-	console.log(minutes2)
 	
 	var cal2 = 
 		hours2 + ':' + minutes2;
@@ -106,20 +116,35 @@ for(let i = 0 ; i < document.querySelectorAll('.cml').length;i++){
 	document.querySelectorAll('.owt')[i].textContent = cal2;
 	
 }
-var today = new Date();
 
-var year = today.getFullYear();
-var month = ('0' + (today.getMonth() + 1)).slice(-2);
-var day = ('0' + today.getDate()).slice(-2);
 
-var dateString = year + '-' + month  + '-' + day;
+var mon = document.querySelector('#monthDate').value
 
-console.log(dateString);
+console.log(mon);
 
-document.querySelector('#startDate').value = dateString;
-document.querySelector('#endDate').value = dateString;
-	
-	
+var nowMon = new Date(mon);
+
+var nextMonth = ('0' + (nowMon.getMonth() + 2)).slice(-2);
+var prevMonth = ('0' + (nowMon.getMonth())).slice(-2);
+
+var nextMonthString = year + '-' + nextMonth;
+var prevMonthString = year + '-' + prevMonth;
+
+console.log(nextMonthString);
+
+function nextMon(){
+	location.href ='/commuteList/'+nextMonthString;
+}
+function prevMon(){
+	location.href ='/commuteList/'+prevMonthString;
+}
+function changeMon(){
+	let monthDate = document.querySelector('#monthDate').value;
+	location.href ='/commuteList/'+monthDate;
+}
+
+
+
 	
 </script>
 

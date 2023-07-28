@@ -163,4 +163,31 @@
 		        </if>
 		    </where>
 	</select>
+	<!-- userInfo 삭제 -->
+	<delete id="userInfoDel" parameterType="EmpVO">
+		delete from user_info where emp_no=#{empNo}
+	</delete>
+	
+	<!-- userInfo 등록 -->
+	<insert id="userInfoAdd" parameterType="EmpVO">
+		insert into user_info 
+		values(user_seq.nextval, #{name}, #{rank}, #{pno}, sysdate, #{deptNo})
+	</insert>
+	
+	<!-- 주민번호 중복체크 -->
+	<select id="checkPno" parameterType="String">
+		select count(*)
+		from user_info
+		where pno = #{pno}
+	</select>
+	
+	<!-- 인사정보 업데이트 -->
+	<update id="updateUserInfo" parameterType="EmpVO">
+		update user_info
+		set name = #{name},
+			rank = #{rank},
+			dept_no = #{deptNo},
+			pno = #{pno}
+		where emp_no = #{empNo}
+	</update>
 </mapper>

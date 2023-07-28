@@ -1,5 +1,7 @@
 package com.groo.bear.insa.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,8 +78,6 @@ public class InsaController {
 	@ResponseBody
 	@PostMapping("deleteEmp")
 	public String deleteEmpInfo(@RequestBody EmpVO vo) {
-		System.out.println("2222222222222"+vo.getId());
-		System.out.println("333333333333"+vo);
 		pPTService.deleteWorkPerson(vo.getId());
 		proPostService.deleteMemberSchParti(vo.getId());
 		if(insaService.usersDelete(vo.getEmpNo()) > 0) {
@@ -100,7 +100,50 @@ public class InsaController {
 	
 		model.addAttribute("empList", insaService.userInfoList(cri, vo));
 		model.addAttribute("paging", paging);
+		model.addAttribute("deptList", insaService.getDept());
 		
 		return "insa/userInfoList";
+	}
+	
+	// 인사정보 삭제
+	@ResponseBody
+	@PostMapping("delUserInfo")
+	public String deleteUserInfo(@RequestBody List<EmpVO> vo) {	
+		
+		if(insaService.userInfoDel(vo) > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	// 인사정보 등록
+	@ResponseBody
+	@PostMapping("insertUserInfo")
+	public String insertUserInfo(@RequestBody EmpVO vo) {
+		if(insaService.checkPno(vo.getPno())>0) {
+			return "has";
+		}else{
+			if(insaService.userInfoAdd(vo) > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+		}
+	}
+	
+	// 인사정보 등록
+	@ResponseBody
+	@PostMapping("updateUserInfo")
+	public String updateUserInfo(@RequestBody EmpVO vo) {
+		if(insaService.checkPno(vo.getPno())>0) {
+			return "has";
+		}else{
+			if(insaService.updateUserInfo(vo) > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+		}
 	}
 }

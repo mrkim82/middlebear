@@ -22,10 +22,26 @@ public interface CommuteMapper {
 	public int overWorkStart(CommuteVO commuteVO);
 	//연장근무 종료
 	public int overWorkEnd(CommuteVO commuteVO);
+	//연장근무 계산
+	public int overWorkTime(CommuteVO commuteVO);
 	//근무기록 확인 
 	public CommuteVO chkWork(String id);
 	//개인 기록 조회
-	public List<CommuteVO> getMyCommute(Criteria cri, String id);	
+	public List<CommuteVO> getMyCommute(Criteria cri,String id, String monthDate);	
+	//회원가입 초기값
+	public int setDay(CommuteVO commuteVO);
+	//개인 월별 정보
+	public CommuteVO calWork(String id,String monthDate);
+	//시간 수정
+	public int commuteUpdate(CommuteVO commuteVO);
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }

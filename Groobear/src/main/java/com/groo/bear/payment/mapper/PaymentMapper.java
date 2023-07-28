@@ -27,10 +27,28 @@ public interface PaymentMapper {
 	public List<PaymentVO> paymentList(Criteria cri,PaymentVO payVO);
 	//결재중 문서 페이징용 카운트
 	public int countPaymentList(String id);
+	//결재완료된 문서 전체조회
+	public List<PaymentVO> completePaymentList(Criteria cri,PaymentVO payVO);
+	//결재완료된 문서 페이징용 카운트
+	public int completePayCount(String id);
+	//참조된 문서 전체조회
+	public List<PaymentVO> referrerPayList(Criteria cri,PaymentVO payVO);
+	//참조된 문서 페이징용 카운트
+	public int referrerPayCount(String id);
 	//결재문서 운행일지 상세조회
 	public PaymentVO logList(int payNo);
 	//결재문서 연차계 상세조회
 	public PaymentVO offList(int payNo);
 	//결재문서 품의서 상세조회
 	public PaymentVO robinList(int payNo);
+	//결재문서 운행일지 수정
+	public int logUpdate(PaymentVO payVO);
+	//결재문서 연차계 수정
+	public int offUpdate(PaymentVO payVO);
+	//결재문서 품의서 수정
+	public int robinUpdate(PaymentVO payVO);
+	//결재문서 결재자2 결재/반려 업데이트
+	public int paymentReject2(PaymentVO payVO);
+	//결재문서 결재자3 결재/반려 업데이트
+	public int paymentReject3(PaymentVO payVO);
 }

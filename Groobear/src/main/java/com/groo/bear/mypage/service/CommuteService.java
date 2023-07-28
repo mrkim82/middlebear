@@ -23,7 +23,11 @@ public interface CommuteService {
 	//근무기록 확인
 	public CommuteVO chkWork(String id);
 	//기록 조회
-	public List<CommuteVO> getMyCommuteList(Criteria cri,String id);
-
-
+	public List<CommuteVO> getMyCommuteList(Criteria cri,String id,String monthDate);
+	//초기값 지정
+	public int settingDay(CommuteVO commuteVO);
+	//개인 월별 기록
+	public CommuteVO monthWork(String id, String monthDate);
+	//수정
+	public int commuteUpdate(CommuteVO commuteVO);
 }
