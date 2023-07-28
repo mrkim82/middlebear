@@ -17,11 +17,9 @@ public interface ChatService {
 	public int deleteChatRoom(RoomDTO roomDTO);
 	
 	//메세지 전체조회
-	public List<ChatMessageDTO> MessageAllList(String id);
+	public List<ChatMessageDTO> MessageAllList(int roomNo);
 	
 	//메세지 등록
 	public int sendMessage(ChatMessageDTO msgDTO);
 	
-	//test
-		public List<ChatMessageDTO> getMessagesForRoom(int roomNo);
 }

@@ -45,20 +45,24 @@ public class ChatController {
     	String id = (String)session.getAttribute("Id");
     	model.addAttribute("id", id);
     	model.addAttribute("roomNo", roomNo);
-    	model.addAttribute("chatDTO", chatService.getMessagesForRoom(roomNo));
+    	model.addAttribute("chatDTO", chatService.MessageAllList(roomNo));
+    	System.out.println("===============================");
+    	//System.out.println(chatService.MessageAllList(roomNo));
+    	System.out.println("===============================");
+    	System.out.println("2222");
     	//나중에 서비스단도 추가될 예정
     	return "chat/chat";
     }
-//    @GetMapping("/chat/{roomNo}")
-//    public String chatroom(@PathVariable Integer roomNo, Model model, @AuthenticationPrincipal User user) {
-//        model.addAttribute("username", user.getUsername());
-//        return "chat/chat";
-//    }
     
-    @MessageMapping("/chat/{roomNo}")
+    @MessageMapping("/chat/{roomNo}") 
+    //"/chat/{roomNo}" 경로로 오는 메시지를 처리
     public void send(ChatMessageDTO chatMessage, @DestinationVariable int roomNo) {
         try {
-            messagingTemplate.convertAndSend("/topic/messages/" + roomNo , chatMessage);
+            System.out.println("3333");
+        	messagingTemplate.convertAndSend("/topic/messages/" + roomNo , chatMessage);
+            /* 주어진 대상에 메시지를 전송합니다. 이 경우, 
+            클라이언트가 구독하고 있는 주제에 메시지를 전달합니다. 
+            즉, 해당 roomNo를 구독하고 있는 클라이언트에게 chatMessage를 보냅니다. */
             chatService.sendMessage(chatMessage); //메세지를 데이터베이스에 저장
         } catch (Exception e) {
             e.printStackTrace();

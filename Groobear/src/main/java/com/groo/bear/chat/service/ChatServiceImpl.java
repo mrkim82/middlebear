@@ -30,24 +30,18 @@ public class ChatServiceImpl implements ChatService {
 	public int deleteChatRoom(RoomDTO roomDTO) {
 		return chatMapper.deleteChatRoom(roomDTO);
 	}
-	
-	//메세지 전체조회
-	@Override
-	public List<ChatMessageDTO> MessageAllList(String id) {
-		return chatMapper.MessageAllList(id);
-	}
 
+	@Override
+	public List<ChatMessageDTO> MessageAllList(int roomNo) {
+		return chatMapper.MessageAllList(roomNo);
+	}
 
 	@Override
 	public int sendMessage(ChatMessageDTO msgDTO) {
 		return chatMapper.sendMessage(msgDTO);
 	}
 
-	//test
-	@Override
-	public List<ChatMessageDTO> getMessagesForRoom(int roomNo) {
-		return chatMapper.getMessagesForRoom(roomNo);
-	}
+
 	
 	
 }

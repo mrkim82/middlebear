@@ -14,11 +14,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     //configureMessageBroker() -> 메시지 브로커 옵션을 설정
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic");
-        //"/topic"으로 시작하는 메세지를 가진 브로커로 활성화. 라우팅된다.
         config.setApplicationDestinationPrefixes("/app"); 
-        //"/app"으로 시작하는 모든 메세지를 애플리케이션의 메시지 핸들러(Controller)로 라우팅 설정
         
-        // 이 브로커는 해당 주제를 구독하는 모든 클라이언트에 메세지를 전송.
         // 클라이언트는 "/app"으로 시작하는 주소로 메세지를 보낼 수 있고,
         // 서버는 "/topic" 으로 시작하는 주소를 구독하는 클라이언트에게 메세지를 전송할 수 있다.
     }
