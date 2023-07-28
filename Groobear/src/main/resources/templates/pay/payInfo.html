@@ -78,12 +78,12 @@
 					<td>행선지 <input type="text" id="destination" th:value="${list.destination}"></td>
 				</tr>
 				<tr>
-					<td>운행전 키로수 <input type="text" id="befored" th:value="${list.befored}"></td>
-					<td>운행후 키로수 <input type="text" id="afterd" th:value="${list.afterd}"></td>
+					<td>운행전 키로수 <input type="text" id="befored" th:value="${list.befored}" onchange="kmChange()"></td>
+					<td>운행후 키로수 <input type="text" id="afterd" th:value="${list.afterd}" onchange="kmChange()"></td>
 				</tr>
 				<tr>
 					<td>
-						<input type="text">
+						출자금 <input type="text" id="imprest" th:value="${list.imprest}" readonly>
 					</td>
 				</tr>
 						<tr><td><div class="panel-body1">
@@ -95,7 +95,7 @@
 							       <ul th:each="pay : ${payImgInfo}">
 									<li th:data-path="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
 									th:data-fileName="${pay.fileName}" data-type="true" style="list-style-type:none">
-									<button type="button" id="robinImgDel" onclick="robinImgDel(this)">제거</button>
+									<button type="button" id="logImgDel" onclick="payImgDel(this)">제거</button>
 										<div>
 											<img th:src="@{|/display?fileName=${#strings.replace(pay.uploadPath,'\','/')}/${pay.uuid}_${pay.fileName}|}" 
 											th:data-uploadpath="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
@@ -136,13 +136,26 @@
 					<td>제목 <input type="text" id="offTitle" th:value="${list.title}"></td>
 				</tr>
 				<tr>
-					<td>내용 <textarea id="offContent" style="width: 400px;height: 200px;" th:text="${list.content}"/></td>
+					<td>내용 <textarea id="offContent" style="width: 400px;height: 200px;" th:text="${list.content}"></textarea></td>
 				</tr>
-				<tr><td><button type="button" id="offfiles">첨부파일(선택)</button></td></tr>
 						<tr><td><div class="panel-body3">
 	                        <div class="form-group uploadDiv3">
 	                            <input name="uploadFile3" type="file" multiple>
 	                        </div>
+		                        <!-- foreach써서 조회하는걸로 변경 -->
+								<div class="uploadResult0">
+							       <ul th:each="pay : ${payImgInfo}">
+									<li th:data-path="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
+									th:data-fileName="${pay.fileName}" data-type="true" style="list-style-type:none">
+										<button type="button" id="offImgDel" onclick="payImgDel(this)">제거</button>
+										<div>
+											<img th:src="@{|/display?fileName=${#strings.replace(pay.uploadPath,'\','/')}/${pay.uuid}_${pay.fileName}|}" 
+											th:data-uploadpath="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
+											th:data-fileName="${pay.fileName}" data-type="true"  style="border:1px solid;">
+										</div>
+									</li>
+								   </ul>
+								</div>
 	                        <div class="uploadResult3">
 	                            <ul>
 	
@@ -172,7 +185,7 @@
 							       <ul th:each="pay : ${payImgInfo}">
 									<li th:data-path="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
 									th:data-fileName="${pay.fileName}" data-type="true" style="list-style-type:none">
-										<button type="button" id="robinImgDel" onclick="robinImgDel(this)">제거</button>
+										<button type="button" id="robinImgDel" onclick="payImgDel(this)">제거</button>
 										<div>
 											<img th:src="@{|/display?fileName=${#strings.replace(pay.uploadPath,'\','/')}/${pay.uuid}_${pay.fileName}|}" 
 											th:data-uploadpath="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
@@ -219,10 +232,29 @@
 		let approver3 = document.getElementById('approver3').value;
 		let payStatus2 = document.getElementById('payStatus2').value;
 		let payStatus3 = document.getElementById('payStatus3').value;
+		if(masterDocType === 'a'){
+			let befored = document.getElementById('befored').value;
+			let afterd = document.getElementById('afterd').value;
+			let imprestText = document.getElementById('imprest');
+		}
 		//이미지 제거용 구이미지 값 저장용
 		let olduuid = "";
 		let olduploadPath = "";
 		let fileName = "";
+		let delOn = "";
+		let upCheck = "";
+		let car1uploadPath = '';
+		let car1uuid = '';
+		let car1fileName = '';
+		let car2uploadPath = '';
+		let car2uuid = '';
+		let car2fileName = '';
+		let offuuid = '';
+		let offuploadPath = '';
+		let offfileName = '';
+		let robinuuid = '';
+		let robinuploadPath = '';
+		let robinfileName = '';
 		if(masterDocType=='a'){
 		//운행일지
 			let purpose = document.getElementById('purpose').value;
@@ -269,6 +301,7 @@
 				let destination = document.getElementById('destination').value;
 				let befored = document.getElementById('befored').value;
 				let afterd = document.getElementById('afterd').value;
+				let imprest = ((afterd*1)-(befored*1))*1500;
 				console.log('masterDocType',masterDocType);
 				console.log('payNo',payNo);
 				console.log('userId',userId);
@@ -278,10 +311,71 @@
 				console.log('destination',destination);
 				console.log('befored',befored);
 				console.log('afterd',afterd);
-				let imprest = ((afterd*1)-(befored*1))*1500;
 				console.log(imprest);
 				console.log(approver2);
 				console.log(approver3);
+				//파일지우기
+				if(delOn==='o'){
+					console.log(payNo);
+					$.ajax({
+						url:"/payfiledel",
+						method: "POST",
+		  			    contentType:"application/json; charset=utf-8",
+		  			    data: JSON.stringify({
+		  			    	payNo : payNo
+		  			    }),
+		  			    async : false,
+		  			  	success: function(data) {
+		  			    	console.log(data);
+		  			    	console.log('delOn = ',delOn);
+		  			    	console.log('afterd = ',afterd);
+		  			    },
+		  			    error: function(err) {
+							console.log(err);
+		  			    }
+					});
+				}
+				delOn="";
+				//controller에 전송하는 운행일지 첨부파일 1번
+				if(car1uuid!==""){
+					$.ajax({
+		    			url: "/logInsert",
+		  			    method: "POST",
+		  			    contentType:"application/json; charset=utf-8",
+		  			    data: JSON.stringify({
+		  			      payNo : payNo,
+		  			      uuid : car1uuid,
+		  			      uploadPath : car1uploadPath,
+		  			      fileName : car1fileName
+		  			    }),
+		  			    success: function(data) {
+		  			    	console.log(data);
+		  			    },
+		  			    error: function(err) {
+							console.log(err);
+		  			    }	
+		    		});
+				}
+				if(car2uuid!==""){
+					//controller에 전송하는 운행일지 첨부파일 2번
+					$.ajax({
+		    			url: "/logInsert",
+		  			    method: "POST",
+		  			    contentType:"application/json; charset=utf-8",
+		  			    data: JSON.stringify({
+		  			      payNo : payNo,
+		  			      uuid : car2uuid,
+		  			      uploadPath : car2uploadPath,
+		  			      fileName : car2fileName
+		  			    }),
+		  			    success: function(data) {
+		  			    	console.log(data);
+		  			    },
+		  			    error: function(err) {
+							console.log(err);
+		  			    }	
+		    		});
+				}
 				//ajax로 값보내줌
 				$.ajax({
 					url:"/paymentUpdate",
@@ -298,7 +392,7 @@
 						approver3 : approver3,
 						destination : destination,
 						befored : befored,
-						afterd : afterd
+						afterd : afterd,
 	  			    }),
 	  			    async : false,
 	  			  	success: function(data) {
@@ -309,6 +403,7 @@
 						console.log(err);
 	  			    }
 				});
+				//파일업로드
 			}else if(masterDocType=='b'){
 				let useDate = document.getElementById('useDate').value;
 				let returnDate = document.getElementById('returnDate').value;
@@ -320,6 +415,47 @@
 				console.log('offTitle',offTitle);
 				console.log('offContent',offContent);
 				console.log('offCom',offCom);
+				if(delOn === 'o'){
+					console.log('delOn = o');
+					$.ajax({
+						url:"/payfiledel",
+						method: "POST",
+		  			    contentType:"application/json; charset=utf-8",
+		  			    data: JSON.stringify({
+		  			    	payNo : payNo
+		  			    }),
+		  			    async : false,
+		  			  	success: function(data) {
+		  			    	console.log(data);
+		  			    },
+		  			    error: function(err) {
+							console.log(err);
+		  			    }
+					});
+				}
+				delOn="";
+				console.log('offuuid',offuuid);
+				console.log('offuploadPath',offuploadPath);
+				console.log('offfileName',offfileName);
+				if(offuuid!==""){
+					$.ajax({
+		    			url: "/logInsert",
+		  			    method: "POST",
+		  			    contentType:"application/json; charset=utf-8",
+		  			    data: JSON.stringify({
+		  			    	payNo : payNo,
+		  			    	uuid : offuuid,
+		  			    	uploadPath : offuploadPath,
+		  			    	fileName : offfileName
+		  			    }),
+		  			    success: function(data) {
+		  			    	console.log(data);
+		  			    },
+		  			    error: function(err) {
+							console.log(err);
+		  			    }	
+		    		});
+				}
 				//ajax
 				$.ajax({
 					url:"/paymentUpdate",
@@ -346,6 +482,7 @@
 						console.log(err);
 	  			    }
 				});
+  				//controller에 전송하는 연차계 첨부파일 1번
 			}else{
 				let robinTitle = document.getElementById('robinTitle').value;
 				let robinContent = document.getElementById('robinContent').value;
@@ -353,6 +490,44 @@
 				console.log('robinTitle',robinTitle);
 				console.log('robinContent',robinContent);
 				console.log('robinCom',robinCom);
+				if(delOn === 'o'){
+					console.log('delOn = o');
+					$.ajax({
+						url:"/payfiledel",
+						method: "POST",
+		  			    contentType:"application/json; charset=utf-8",
+		  			    data: JSON.stringify({
+		  			    	payNo : payNo
+		  			    }),
+		  			    async : false,
+		  			  	success: function(data) {
+		  			    	console.log(data);
+		  			    },
+		  			    error: function(err) {
+							console.log(err);
+		  			    }
+					});
+				}
+				//controller에 전송하는 연차 첨부파일 1번
+				if(robinuuid!==""){
+					$.ajax({
+		    			url: "/logInsert",
+		  			    method: "POST",
+		  			    contentType:"application/json; charset=utf-8",
+		  			    data: JSON.stringify({
+		  			      payNo : payNo,
+		  			      uuid : robinuuid,
+		  			      uploadPath : robinuploadPath,
+		  			      fileName : robinfileName
+		  			    }),
+		  			    success: function(data) {
+		  			    	console.log(data);
+		  			    },
+		  			    error: function(err) {
+							console.log(err);
+		  			    }	
+		    		});
+				}
 				//ajax
 				$.ajax({
 					url:"/paymentUpdate",
@@ -449,14 +624,332 @@
   			    }
 			});
 		}
-		function robinImgDel(elem){
+		function payImgDel(elem){
 			olduuid = "";
 			olduploadPath = "";
 			oldfileName = "";
 			console.log(elem.parentElement);
-			console.log(elem.nextElementSibling.children.data);
 			elem.parentElement.remove();
+			delOn = "o";
+			console.log(delOn);
 		}
+		function showUploadResult1(uploadResultArr){
+            console.log(uploadResultArr)
+		  if(!uploadResultArr || uploadResultArr.length == 0){return ;}
+		  var uploadUL1 = $(".uploadResult1 ul");
+		  var str = "";
+		  
+		  $(uploadResultArr).each(function(i, obj){
+            console.log("11:06" + i)
+			  console.log("11:05" + obj)
+              console.log(obj.image)
+              console.log(obj.fileType)
+			   //image type
+		        if(obj.image){
+		          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+		          str += "<li data-path='"+obj.uploadPath+"'";
+                  str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+                  str + "><div>";
+		          str += "<span> "+ obj.fileName+"</span>";
+		          str += "<button type='button' onclick='imgTagDel(this)' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<img src='/display?fileName="+fileCallPath+"'>";
+		          str += "</div>";
+		          str +"</li>";
+		        }else{
+		          var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+		          var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+		              
+                  str += "<li data-path='"+obj.uploadPath+"'";
+                  str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+                  str + "><div>";
+		          str += "<span> "+ obj.fileName+"</span>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+		          str += "</div>";
+		          str +"</li>";
+		        } 
+		  });
+		  uploadUL1.append(str);
+	    }
+		function showUploadResult2(uploadResultArr){
+            console.log(uploadResultArr)
+		  if(!uploadResultArr || uploadResultArr.length == 0){return ;}
+		  var uploadUL2 = $(".uploadResult2 ul");
+		  var str = "";
+		  
+		  $(uploadResultArr).each(function(i, obj){
+            console.log("11:06" + i)
+			  console.log("11:05" + obj)
+              console.log(obj.image)
+              console.log(obj.fileType)
+			   //image type
+		        if(obj.image){
+		          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+		          str += "<li data-path='"+obj.uploadPath+"'";
+                  str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+                  str + "><div>";
+		          str += "<span> "+ obj.fileName+"</span>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<img src='/display?fileName="+fileCallPath+"'>";
+		          str += "</div>";
+		          str +"</li>";
+		        }else{
+		          var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+		          var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+		              
+                  str += "<li data-path='"+obj.uploadPath+"'";
+                  str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+                  str + "><div>";
+		          str += "<span> "+ obj.fileName+"</span>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+		          str += "</div>";
+		          str +"</li>";
+		        } 
+		  });
+		  uploadUL2.append(str);
+	    }
+		
+		function showUploadResult3(uploadResultArr){
+            console.log(uploadResultArr)
+		  if(!uploadResultArr || uploadResultArr.length == 0){return ;}
+		  var uploadUL3 = $(".uploadResult3 ul");
+		  var str = "";
+		  
+		  $(uploadResultArr).each(function(i, obj){
+            console.log("11:06" + i)
+			  console.log("11:05" + obj)
+              console.log(obj.image)
+              console.log(obj.fileType)
+			   //image type
+		        if(obj.image){
+		          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+		          str += "<li data-path='"+obj.uploadPath+"'";
+                  str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+                  str + "><div>";
+		          str += "<span> "+ obj.fileName+"</span>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<img src='/display?fileName="+fileCallPath+"'>";
+		          str += "</div>";
+		          str +"</li>";
+		        }else{
+		          var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+		          var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+		              
+                  str += "<li data-path='"+obj.uploadPath+"'";
+                  str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+                  str + "><div>";
+		          str += "<span> "+ obj.fileName+"</span>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+		          str += "</div>";
+		          str +"</li>";
+		        } 
+		  });
+		  uploadUL3.append(str);
+	    }
+		
+		function showUploadResult4(uploadResultArr){
+            console.log(uploadResultArr)
+		  if(!uploadResultArr || uploadResultArr.length == 0){return ;}
+		  var uploadUL4 = $(".uploadResult4 ul");
+		  var str = "";
+		  
+		  $(uploadResultArr).each(function(i, obj){
+            console.log("11:06" + i)
+			  console.log("11:05" + obj)
+              console.log(obj.image)
+              console.log(obj.fileType)
+			   //image type
+		        if(obj.image){
+		          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+		          str += "<li data-path='"+obj.uploadPath+"'";
+                  str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+                  str + "><div>";
+		          str += "<span> "+ obj.fileName+"</span>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<img src='/display?fileName="+fileCallPath+"'>";
+		          str += "</div>";
+		          str +"</li>";
+		        }else{
+		          var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+		          var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+		              
+                  str += "<li data-path='"+obj.uploadPath+"'";
+                  str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+                  str + "><div>";
+		          str += "<span> "+ obj.fileName+"</span>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+		          str += "</div>";
+		          str +"</li>";
+		        } 
+		  });
+		  uploadUL4.append(str);
+	    }
+		//운행전 첨부파일
+	    $("input[name='uploadFile1']").change(function(e) {
+	        var formData = new FormData();
+	        var inputFile1 = $("input[name='uploadFile1']");
+	        var files = inputFile1[0].files;
+	
+	        for(var i=0; i<files.length; i++) {
+	
+	            if(!checkExtension(files[i].name, files[i].size) ){
+	                return false;
+	            }
+	            formData.append("uploadFile", files[i]);
+	
+	        }
+	        $.ajax({
+				url: "/uploadAjaxAction",
+				processData: false,
+				contentType: false,
+				data: formData,
+				type: "POST",
+				dataType: "json",
+				success: function(result) {
+	                console.log('result = ',result);
+	                showUploadResult1(result);
+	                car1uuid = result[0].uuid;
+	                car1fileName = result[0].fileName;
+	                car1uploadPath = result[0].uploadPath;
+	                upCheck = "o";
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+	    });
+	    //운행후 첨부파일
+	    $("input[name='uploadFile2']").change(function(e) {
+	        var formData = new FormData();
+	        var inputFile2 = $("input[name='uploadFile2']");
+	        var files = inputFile2[0].files;
+	
+	        for(var i=0; i<files.length; i++) {
+	
+	            if(!checkExtension(files[i].name, files[i].size) ){
+	                return false;
+	            }
+	            formData.append("uploadFile", files[i]);
+	
+	        }
+	        $.ajax({
+				url: "/uploadAjaxAction",
+				processData: false,
+				contentType: false,
+				data: formData,
+				type: "POST",
+				dataType: "json",
+				success: function(result) {
+	                console.log('result = ',result);
+	                showUploadResult2(result);
+	                car2uuid = result[0].uuid;
+	                car2fileName = result[0].fileName;
+	                car2uploadPath = result[0].uploadPath;
+	                upCheck = "o";
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+	    });
+	    //연차계 첨부파일
+	    $("input[name='uploadFile3']").change(function(e) {
+	        var formData = new FormData();
+	        var inputFile3 = $("input[name='uploadFile3']");
+	        var files = inputFile3[0].files;
+	
+	        for(var i=0; i<files.length; i++) {
+	
+	            if(!checkExtension(files[i].name, files[i].size) ){
+	                return false;
+	            }
+	            formData.append("uploadFile", files[i]);
+	
+	        }
+	        $.ajax({
+				url: "/uploadAjaxAction",
+				processData: false,
+				contentType: false,
+				data: formData,
+				type: "POST",
+				dataType: "json",
+				success: function(result) {
+	                console.log('result = ',result);
+	                showUploadResult3(result);
+	                offuuid = result[0].uuid;
+	        		offuploadPath = result[0].uploadPath;
+	        		offfileName = result[0].fileName;
+	        		console.log('offu',offuuid);
+	        		console.log('offup',offuploadPath);
+	        		console.log('offf',offfileName);
+	        		upCheck = "o";
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+	    });
+	    //품의서 첨부파일
+	    $("input[name='uploadFile4']").change(function(e) {
+	        var formData = new FormData();
+	        var inputFile4 = $("input[name='uploadFile4']");
+	        var files = inputFile4[0].files;
+	
+	        for(var i=0; i<files.length; i++) {
+	
+	            if(!checkExtension(files[i].name, files[i].size) ){
+	                return false;
+	            }
+	            formData.append("uploadFile", files[i]);
+	
+	        }
+	        $.ajax({
+				url: "/uploadAjaxAction",
+				processData: false,
+				contentType: false,
+				data: formData,
+				type: "POST",
+				dataType: "json",
+				success: function(result) {
+	                console.log('result = ',result);
+	                showUploadResult4(result);
+	                robinuuid = result[0].uuid;
+	                robinfileName = result[0].fileName;
+	                robinuploadPath = result[0].uploadPath;
+	                upCheck = "o";
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+	    });
+	    var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
+	    var maxSize = 5242880;
+	
+	    function checkExtension(fileName, fileSize) {
+	        if (fileSize >= maxSize) {
+	            alert('파일 사이즈 초과');
+	            return false;
+	        }
+	        if (regex.test(fileName)) {
+	            alert('해당 종류의 파일은 업로드할 수 없습니다.');
+	            return false;
+	        }
+	        return true;
+	    }
+	    function kmChange(){
+	    	befored = document.getElementById('befored').value;
+			afterd = document.getElementById('afterd').value;
+			imprest = ((afterd*1)-(befored*1))*1500;
+			imprestText.value = imprest;
+	    }
+	    function imgTagDel(elem){
+	    	elem.parentElement.remove();
+	    	upCheck = "x";
+	    }
 	/*]]>*/
 	</script>
 </body>
