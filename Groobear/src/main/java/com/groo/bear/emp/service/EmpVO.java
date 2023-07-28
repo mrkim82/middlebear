@@ -13,6 +13,10 @@ public class EmpVO {
 	private Date pinfoDate;
 	private int deptNo;
 	private String deptName;
+	private String deptHead;
+	private Date deptDate; 
+	private String deptAuth;
+	private int deptCnt;
 	private String id;
 	private String password;
 	private String email;
@@ -32,4 +36,7 @@ public class EmpVO {
 	private boolean fileType; // 이미지 파일 여부
 	private Date fileDate; //file_date default sysdate
 	private String addrDetail;
+	private String code;
+	private String codeName;
+	private String groupCode;
 }

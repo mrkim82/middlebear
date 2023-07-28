@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Groobear 부서 수정</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<style>
+	body {
+		font-family: Arial, sans-serif;
+		background-color: #f7f7f7;
+	}
+	
+	form {
+		height: 400px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 20px;
+	}
+	
+	h3 {
+		text-align: center;
+		margin-bottom: 20px;
+	}
+	
+	fieldset {
+		border: 1px solid #ccc;
+		padding: 10px;
+		margin-bottom: 10px;
+		width: 400px;
+	}
+	
+	a {
+		font-weight: bold;
+	}
+	
+	input[type="text"] {
+		width: 120px;
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		margin-bottom: 10px;
+	}
+	
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		border: 1px solid #ccc; /* Add border around the table */
+	}
+	
+	th, td {
+		padding: 8px;
+		text-align: left;
+		border-bottom: 1px solid #ccc;
+		font-size: 14px; /* Set font size for table cells */
+	}
+	
+	.blueone th {
+		background-color: #f0f8ff;
+	}
+	
+	button {
+			padding: 10px 20px;
+			background-color: #4CAF50;
+		color: white;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	
+	button:not(:last-child) {
+		margin-right: 10px;
+	}
+	
+	/* Add margin between "구성원" and the table */
+	.members-table {
+		margin-top: 30px;
+	}
+	/* Reduce vertical spacing between table rows */
+	table tbody tr {
+		line-height: 1; /* Adjust the value as per your preference */
+	}
+</style>
+</head>
+<body>
+	<form style="height: 400px;" action="/updateDept" method="POST">
+		<h3 style="text-align:center; margin-top:50px;">Groobear 부서정보수정</h3>
+		<fieldset>
+			<a>부서번호 : </a><input name="deptNo" style="width:120px;background-color: #f7f7f7; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo.deptNo}" readonly><br>
+			<a>부서명 : </a><input name="deptName" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo.deptName}"><br>
+			<a>팀장 : </a><select name="deptHead" style="width:120px; padding-bottom:10px; border:0 solid black;">
+							<option value="" selected>선택</option>
+							<th:block th:each="mem, stance : ${deptMem}">
+								<option th:value="${mem.name}">[[${mem.name}]]</option>
+							</th:block>
+						 </select><br>
+			<a>부서권한 : </a><select name="deptAuth" style="width:120px; padding-bottom:10px; border:0 solid black;">
+								<option value="" selected>선택</option>
+								<th:block th:each="auth, stance : ${deptAuth}">
+									<option th:value="${auth.code}">[[${auth.codeName}]]</option>
+								</th:block>
+							 </select><br>
+		</fieldset>
+		
+		<fieldset style="display: flex;justify-content: center;border:hidden;">
+			<button type="submit" style="margin-right:10px;">수정</button>
+			<button type="button" style="margin-right:10px;" onclick="goBack()">취소</button>
+			<button type="button" onclick="closeBtn()">닫기</button>
+		</fieldset>
+	</form>
+	<script type="text/javascript">
+	//전 화면으로 돌아가기
+	function goBack() {
+        window.history.back();
+    };
+	//팝업 Close 기능
+    function closeBtn() {
+    	window.close();
+    }; 
+	</script>
+</body>
+</html>

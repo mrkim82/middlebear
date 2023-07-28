@@ -146,4 +146,107 @@ public class InsaController {
 			}
 		}
 	}
+	
+	// 부서권한관리 리스트
+	@GetMapping("/deptList")
+	public String getDeptList(Criteria cri, Model model, EmpVO vo) {
+		cri.setPerPageNum(6);
+		int listCnt = insaService.deptAllListCnt(cri, vo);
+		Paging paging = new Paging();
+        paging.setCri(cri);
+        paging.setTotalCount(listCnt);
+        model.addAttribute("deptCnt", insaService.deptCnt());
+        model.addAttribute("deptList", insaService.deptAllList(cri, vo));
+		model.addAttribute("paging", paging);
+		return "insa/deptList";
+	}
+	
+	// 부서정보 상세조회
+	@GetMapping("deptDetailInfo")
+	public String getdeptDetailInfo(@RequestParam int deptNo, Model model) {
+		model.addAttribute("deptInfo", insaService.deptDetail(deptNo));
+		return "insa/deptDetail";
+	}
+	// 회원정보 조회(사번을 이용한 회원정보 조회)
+	@GetMapping("deptAddInfo")
+	public String getdeptAddInfo(@RequestParam int deptNo, Model model) {
+		model.addAttribute("memList", insaService.deptAddMem());
+		model.addAttribute("deptNum", deptNo);
+		return "insa/deptAddInfo";
+	}
+	
+	//부서구성원 추가
+	@ResponseBody
+	@PostMapping("updateDeptMem")
+	public String updateDeptMem(@RequestBody EmpVO vo) {
+		if(insaService.updateDeptMem(vo) > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	// 부서구성원 제외
+	@ResponseBody
+	@PostMapping("delDeptMem")
+	public String delDeptMemInfo(@RequestBody List<EmpVO> vo) {	
+		if(insaService.delDeptMem(vo) > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	// 부서 삭제
+	@ResponseBody
+	@PostMapping("delDept")
+	public String delDept(@RequestBody EmpVO vo) {
+		insaService.deptDel1(vo);
+		if(insaService.deptDel2(vo) > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	@GetMapping("updateForm")
+	public String updateForm(Model model, EmpVO vo) {
+		model.addAttribute("deptMem", insaService.deptDetail(vo.getDeptNo()));
+		model.addAttribute("deptAuth", insaService.deptAuthList());
+		model.addAttribute("deptInfo", vo);
+		return "insa/deptUpdate";
+	}
+	
+	@PostMapping("updateDept")
+	public String updateDept(EmpVO vo) {
+		System.out.println(vo);
+		insaService.deptUpdate(vo);
+		return "redirect:deptDetailInfo?deptNo="+vo.getDeptNo();	
+	}
+	
+	@GetMapping("deptAddForm")
+	public String deptAddForm(Model model) {
+		model.addAttribute("deptAuth", insaService.deptAuthList());
+		return "insa/deptInsert";
+	}
+	// 부서 추가
+	@ResponseBody
+	@PostMapping("insertDept")
+	public String insertDept(@RequestBody EmpVO vo) {
+		if(insaService.deptInsert(vo) > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	//팀장 제거
+	@ResponseBody
+	@PostMapping("delHead")
+	public String delDeptHead(@RequestBody EmpVO vo) {
+		if(insaService.removeHead(vo) > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
 }
