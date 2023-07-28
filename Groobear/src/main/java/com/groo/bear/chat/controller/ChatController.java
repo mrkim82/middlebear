@@ -2,6 +2,7 @@ package com.groo.bear.chat.controller;
 
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,11 +49,6 @@ public class ChatController {
     	//나중에 서비스단도 추가될 예정
     	return "chat/chat";
     }
-//    @GetMapping("/chat/{roomNo}")
-//    public String chatroom(@PathVariable Integer roomNo, Model model, @AuthenticationPrincipal User user) {
-//        model.addAttribute("username", user.getUsername());
-//        return "chat/chat";
-//    }
     
     @MessageMapping("/chat/{roomNo}")
     public void send(ChatMessageDTO chatMessage, @DestinationVariable int roomNo) {
@@ -93,5 +88,11 @@ public class ChatController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+    
+    @GetMapping("/empAllList")
+    @ResponseBody
+    public List<RoomDTO> empAllList() {
+        return chatService.empAllList();
     }
 }

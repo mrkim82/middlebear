@@ -22,6 +22,10 @@ public interface ChatMapper {
 	//메세지 등록
 	public int sendMessage(ChatMessageDTO msgDTO);
 	
-	//test
+	//하나의 대화방 메세지보기 에서 값 넘겨주려고
 	public List<ChatMessageDTO> getMessagesForRoom(int roomNo);
+	
+	//사원 전체조회 -> 모달에서 띄우기 위함
+	public List<RoomDTO> empAllList();
+	
 }

@@ -22,6 +22,9 @@ public interface ChatService {
 	//메세지 등록
 	public int sendMessage(ChatMessageDTO msgDTO);
 	
-	//test
-		public List<ChatMessageDTO> getMessagesForRoom(int roomNo);
+	//대화방에서 메세지 순서 맞춰주기
+	public List<ChatMessageDTO> getMessagesForRoom(int roomNo);
+	
+	//사원 전체조회 -> 모달에서 띄우기 위함
+	public List<RoomDTO> empAllList();
 }

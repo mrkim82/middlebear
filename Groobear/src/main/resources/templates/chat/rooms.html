@@ -88,6 +88,7 @@
                 <!-- Modal body -->
                 <div class="modal-body">
                     <input type="text" id="chatroomName" placeholder="채팅방 이름">
+                    <ul id="employeeList"></ul>
                 </div>
 
                 <!-- Modal footer -->
@@ -99,11 +100,58 @@
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <script>
+<script>
+ // 사원 목록을 가져오는 함수를 추가
+    // Fetch all employees
+        function fetchEmployees() {
+            fetch('/empAllList')
+            .then(response => response.json())
+            .then(employees => {
+                const employeeListUl = document.getElementById('employeeList');
+                employees.forEach(employee => {
+                	console.log(employee)
+                    const li = document.createElement('li');
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = 'employee-' + employee.id;
+                    checkbox.value = employee.id;
+
+                    const empNo = document.createElement('span');
+                    empNo.textContent = employee.empNo + ' ';
+					
+                    const empId = document.createElement('span');
+                    empId.textContent = employee.id + ' ';
+                    
+                    const empName = document.createElement('span');
+                    empName.textContent = employee.name + ' ';
+
+                    const empRank = document.createElement('span');
+                    empRank.textContent = employee.rank + ' ';
+
+                    const empDept = document.createElement('span');
+                    empDept.textContent = employee.deptName;
+
+                    li.appendChild(checkbox);
+                    li.appendChild(empNo);
+                    li.appendChild(empId);
+                    li.appendChild(empName);
+                    li.appendChild(empRank);
+                    li.appendChild(empDept);
+                    
+                    employeeListUl.appendChild(li);
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+
 window.onload = function() {
     let chatrooms = document.getElementsByClassName('chatroom');
     for(let i = 0; i < chatrooms.length; i++) {
@@ -136,16 +184,19 @@ window.onload = function() {
                 console.error('Error:', error);
             });
         });
-    }
+    } fetchEmployees();
 }
 
 document.getElementById('createChatroom').addEventListener('click', () => {
     const chatroomName = document.getElementById('chatroomName').value;
+    const employeeIds = Array.from(document.querySelectorAll('#employeeList input:checked')).map(checkbox => checkbox.value);
+    
     if (chatroomName) {
         const newChatroom = {
             roomName: chatroomName, 
             lastMessage: 'No messages yet', 
             newMessages: 0,
+            employeeIds: employeeIds,
         };
         fetch('/newChatroom', {
             method: 'POST',
@@ -218,7 +269,5 @@ document.getElementById('createChatroom').addEventListener('click', () => {
     }
 });
 </script>
-
-
 </body>
 </html>

@@ -31,13 +31,6 @@
   		WHERE ROOM_NO = #{roomNo}
   	</delete>
   	
-  	<!-- 메세지전체조회 -->
-  	<!-- <select id="MessageAllList">
-  		select i.name, m.content, m.msg_time
-		from message m, users u, user_info i
-		where m.id = #{id}
-		AND u.emp_no = i.emp_no
-  	</select> -->
   	<select id="getMessagesForRoom" resultType="ChatMessageDTO">
         SELECT *
         FROM Message
@@ -64,4 +57,16 @@
   				  		 ,#{msgNo}
   				  		 )
   	</insert>
+  	
+  	<!-- 사원전체조회 -> 모달에서 보기 위함 -->
+  	<select id="empAllList" resultType="RoomDTO"> 
+  		select i.emp_no, u.id, i.name, i.rank, d.dept_name
+		FROM user_info i, departments d, users u
+		where i.dept_no = d.dept_no
+		AND i.emp_no = u.emp_no
+  	</select>
+  	
+  	
+  	
+  	
   </mapper>

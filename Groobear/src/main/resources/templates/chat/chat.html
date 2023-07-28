@@ -131,7 +131,22 @@
 <script th:inline="javascript">
 let myName = /*[[${name}]]*/ 'name';
 let senderName = /*[[${name}]]*/ 'name';
+console.log("확인하려는 용도" + senderName)
 let roomNo = /*[[${roomNo}]]*/ 'roomNo';
+let realId = /*[[${id}]]*/ 'id';
+let chatDTO = /*[[${chatDTO}]]*/ 'chatDTO'; // 추가된 코드
+
+// 페이지가 로드될 때 chatDTO 내용을 기반으로 채팅 내용을 화면에 추가
+$(document).ready(function() {
+    chatDTO.forEach(function(chat) {
+        if (chat.name == myName) {  // 추가된 코드
+            chat.id = realId;
+        }
+        const LR = (chat.id != realId) ? "left" : "right";
+        appendMessageTag(LR, chat.name, chat.content);
+    });
+});
+
 
 const stompClient = new StompJs.Client({
 	brokerURL : 'ws://localhost:8081/chatserver'
@@ -195,10 +210,13 @@ function clearTextarea() {
     $('div.input-div textarea').val('');
 }
 
+// 1. 좌우지정 2. 이름과 제목을 메세지에 달아줌.
 function receive(data) {
-    console.log("Received data: ", data);  // 추가된 코드
-    const LR = (data.id != myName) ? "left" : "right";
-    appendMessageTag(LR, data.id, data.content);
+    console.log("Received data: ", data);
+    const LR = (data.id != realId) ? "left" : "right";
+    console.log("data.id 확인용 콘솔" + data.id)
+    console.log("밑의 senderName 확인용" + senderName)
+    appendMessageTag(LR, data.name, data.content);
 }
 
 function sendAndClear(message) {
@@ -207,13 +225,19 @@ function sendAndClear(message) {
 }
 
 function sendMessage(message) {
+	console.log('111111')
+	console.log('roomNo:', roomNo);
+	console.log('realId:', realId);
+	console.log(message)
     stompClient.publish({
     	destination: "/app/chat/" + roomNo,
         body: JSON.stringify({
         	'roomNo': roomNo,
-            'name': myName,
+					  //'name': myName,
+            'name': senderName,
             'content': message,
-            'id' : senderName
+            'id' : realId
+            
         })
     });
 }

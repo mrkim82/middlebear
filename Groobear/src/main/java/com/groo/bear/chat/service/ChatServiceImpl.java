@@ -43,11 +43,13 @@ public class ChatServiceImpl implements ChatService {
 		return chatMapper.sendMessage(msgDTO);
 	}
 
-	//test
 	@Override
 	public List<ChatMessageDTO> getMessagesForRoom(int roomNo) {
 		return chatMapper.getMessagesForRoom(roomNo);
 	}
 	
-	
+	@Override
+	public List<RoomDTO> empAllList() {
+		return chatMapper.empAllList();
+	}
 }

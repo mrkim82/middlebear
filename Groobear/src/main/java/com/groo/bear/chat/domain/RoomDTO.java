@@ -15,6 +15,11 @@ public class RoomDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate roomTime;
     
+    private int empNo;
+    private String name;
+    private String rank;
+    private String deptName;
+    
     public RoomDTO() {}
     
     public RoomDTO(Integer roomNo, String id, String roomName, LocalDate roomTime) {
