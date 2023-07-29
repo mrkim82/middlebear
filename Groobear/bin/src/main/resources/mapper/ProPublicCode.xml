@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.pro.mapper.ProPublicCodeMapper">
+	
+	<!-- 전체 색상 조회 -->
+	<select id="readPublicCodeColorAll" resultType="PublicCodeVO">
+		SELECT code, code_name
+		FROM public_code_auth
+		WHERE group_code = 'D'
+	</select>
+	
+	<!-- 프로젝트 색상 변경 -->
+	<update id="updateProMemColor" parameterType="ProGroupVO">
+		UPDATE pro_mem
+		SET pro_color = #{proColor}
+		WHERE pro_mem_no = (SELECT pro_mem_no
+		                    FROM pro_mem
+		                    WHERE pro_no = #{proNo}
+		                    AND id = #{id})
+	</update>
+	
+</mapper>

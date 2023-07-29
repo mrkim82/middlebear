@@ -201,7 +201,7 @@ function changeGorupStatus() {
 	let checkedStatus = event.target.checked;
 	let proMemNo = event.target.dataset.proMemNo;
 	let liTag = event.target.parentElement;
-	
+	let mainCont = event.target.nextElementSibling.textContent;
 	const url = window.location.href;
 	const parts = url.split('/');
 	const lastPart = parts[parts.length - 1];
@@ -223,6 +223,28 @@ function changeGorupStatus() {
 		})
 		.then(response => response.json())
 		.then(res => {
+			let newTr = document.createElement("tr");
+			
+			//tr생성
+			newTr.innerHTML = `
+			    <tr style="cursor:pointer" data-pmn="${proMemNo}" data-starc="N" data-hometab="4">
+			        <td>red</td>
+			        <td class="starCheck">N</td>
+			        <td>${mainCont}</td>
+			        <td>1명</td>
+			        <td>
+			            <span class="material-symbols-outlined" onclick="hideProject()" data-pro-hide="N">visibility</span>
+			        </td>
+			    </tr>
+			`;
+			newTr.setAttribute('data-pmn', proMemNo);
+			newTr.setAttribute('data-starc', 'N');
+			newTr.setAttribute('data-hometab', '4');
+
+
+			
+			let aTbody = document.querySelector('#goProjectDetail');
+			aTbody.append(newTr);
 			
 		})
 		.catch(error => {
@@ -244,7 +266,7 @@ function changeGorupStatus() {
 		})
 		.then(response => response.json())
 		.then(res => {
-			
+			let ss = document.querySelector('[data-pmn="' + proMemNo + '"]').remove();
 		})
 		.catch(error => console.error('Error: ',error));
 

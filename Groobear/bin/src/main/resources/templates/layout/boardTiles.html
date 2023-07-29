@@ -4,20 +4,38 @@
 >
   <head>
   <!-- Load jQuery first -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
-<!-- Then load Bootstrap's JavaScript -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   	<title>Groobear</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 		
-	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 	<link rel="stylesheet" href="/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style>
+		@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+		
+		.dohyeon{
+			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			color:black;
+		}
+		
+		.dohyeonmenu{
+			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			font-size : 20px;
+			color:white;
+		}
+		.nanumgothic{
+			font-family: 'Nanum Gothic', serif;/*웹 폰트 지정*/
+			font-weight : 300;
+			color:white;
+		}
+		.rightPad{
+			padding-right:150px;
+		}
 		#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3{
 		  position: fixed; /* Stay in place */
 		  z-index: 1; /* Sit on top */
@@ -56,6 +74,18 @@
 	    align-items: center;
 	    transition: 0.3s;
 		}
+/* ul {
+	list-style:none;
+}
+
+li {
+	float: left;
+	padding: 10px;
+}
+a { 
+	text-decoration:none ;
+	color: black;
+}  */
 	</style>
   </head>
   <body>
@@ -67,18 +97,19 @@
 			</div>
             
             <div class="col-4 text-center">
-                <a class="blog-header-logo text-body-emphasis" href="#">Groobear</a>
+                <a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:40px; font-weight : 500;" href="/main">Groobear</a>
             </div>
-            <div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px; font-family: 'Hahmlet', serif;">
+            <div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px;">
                 <table style="width: 300px;">
                 	<tbody>
 	                	<tr>
-	                		<td><a>[[${session.Name }]]님 반갑습니다</a></td>
+	                		<td>
+	                			<a class="dohyeon">[[${session.Name }]]님 반갑습니다</a>
+	                		</td>
 	                	</tr>
 	                	<tr>
-	                		<td><span><a href="logout">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
-	                		<span><a href="#">마이페이지</a></span></td>
-
+	                		<td><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
+	                		<span><a href="/mypage" class="dohyeon">마이페이지</a></span></td>
 	                	</tr>
                 	</tbody>
                 </table>
@@ -86,67 +117,55 @@
         </div>
     </header>
 	</div>
-	
-		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
-        aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+	<nav class="navbar navbar-expand-lg" style="text-align: center; background-color:#35A880;"> 
       <div class="collapse navbar-collapse" id="navbarColor01">
       
-	        <ul class="navbar-nav mr-auto">
-	          <li class="nav-item active">
-	            <a class="nav-link" href="#">Home
-	              <span class="sr-only">(current)</span>
-	            </a>
+	        <ul class="navbar-nav mr-auto" style="display:flex; margin:auto;">
+	          <li class="nav-item active rightPad">
+	            <a class="nav-link dohyeonmenu" href="/introduce">회사소개</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/mail/receiveMail">메일</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/proMain">프로젝트</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/pay/payMain">전자결재</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/boardList?boardType=N">게시판</a>
 	          </li>
 	          <li class="nav-item">
-	            <a class="nav-link" href="#">Features</a>
-	          </li>
-	          <li class="nav-item">
-	            <a class="nav-link" href="#">Pricing</a>
-	          </li>
-	          <li class="nav-item">
-	            <a class="nav-link" href="#">About</a>
-	          </li>
-	          <li class="nav-item dropdown">
-	            <a class="nav-link dropdown-toggle" onclick="location.href='boardList?boardType=N'" type="button" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-	              aria-expanded="false">게시판</a>
-	            <div class="dropdown-menu">
-	              <a class="dropdown-item" href="#">Action</a>
-	              <a class="dropdown-item" href="#">Another action</a>
-	              <a class="dropdown-item" href="#">Something else here</a>
-	              <div class="dropdown-divider"></div>
-	              <a class="dropdown-item" href="#">Separated link</a>
-	            </div>
-	          </li>
-	          <li>
-	          	<a th:text="${session.UserId}"></a>
+	            <a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
 	          </li>
 	        </ul>
         </div>
     </nav>
-    
-    <!-- 사이드바 -->
-    <div>
-    <table>
-    	<tbody>
-    		<tr>
-    			<td style="vertical-align: top" class="col-4">
-    				<div class="sidebar">
-				        <a href="/boardList?boardType=N"><span class="material-icons">add_box</span>공지사항</a>
-				        <a href="/boardList?boardType=C"><span class="material-icons">home</span>언론보도</a>
-				        <a href="/boardList?boardType=K"><span class="material-icons">star</span>자유게시판</a>
-			        	</div>
-    			</td>
-    			<td class="col-8">
-    				<div>
-				    	<div layout:fragment="content" ></div>
-				    </div>
-    			</td>
-    		</tr>
-    	</tbody>
-    </table>
+    <div class="row">
+      <!-- 사이드바 -->
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+        <div class="position-sticky">
+          <ul class="nav flex-column">
+            <!-- 사이드바 메뉴 아이템들 -->
+            <li class="nav-item">
+              <a href="/boardList?boardType=N"><span class="material-icons">add_box</span>공지사항</a>
+            </li>
+            <li class="nav-item">
+              <a href="/boardList?boardType=C"><span class="material-icons">home</span>언론보도</a>
+            </li>
+            <li class="nav-item">
+              <a href="/boardList?boardType=K"><span class="material-icons">star</span>자유게시판</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- 사이드바 우측의 컨텐츠 영역 -->
+      <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div layout:fragment="content" ></div>
+      </main>
+    </div>
     
     <!-- modal창 -->
     <div id="modalFolderCreate1">
@@ -183,12 +202,8 @@
 	    </div>
 	  </div>
 	</div>
-					
-    </div>
+			
     <script th:inline="javascript">
     </script>
-    <!-- 이거 지우지 말아주세요. - 욱환 -->
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-
   </body>
 </html>

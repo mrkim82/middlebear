@@ -181,6 +181,7 @@ public class proPostController {
 	public Map<String, Object> postCreateWork(HttpServletRequest request, @RequestBody ProPostWorkVO vo) {
 		HttpSession session = request.getSession();
 		Map <String, Object> map = new HashMap<>();
+		System.out.println(vo);
 		String res = "";
 		if(vo.getWorkPersonArr().length == 0) {
 			vo.setWorkPersonArr(null);
@@ -188,7 +189,7 @@ public class proPostController {
 		vo.setId((String)session.getAttribute("Id"));
 		
 		proPostService.createPostWork(vo);
-		
+		System.out.println(vo);
 		map.put("result", res);
 		return map;
 	}

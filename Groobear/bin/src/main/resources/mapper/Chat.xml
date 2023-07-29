@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.groo.bear.chat.mapper.ChatMapper">
+  	<select id="MessageAllList">
+  		SELECT * FROM MESSAGE
+  	</select>
+  	
+  	<select id="chatRoomList">
+  		SELECT * FROM ROOM WHERE id = #{userId}
+  	</select>
+  	
+  	<insert id="createChatRoom" parameterType="RoomDTO">
+  		<selectKey keyProperty="roomNo" order="BEFORE" resultType="int">
+		    SELECT ROOM_SEQ.NEXTVAL FROM DUAL
+  		</selectKey>
+  		INSERT INTO ROOM (
+  						  ROOM_NO
+  						 ,ROOM_NAME
+  						 ,ROOM_TIME
+  						 ,ID
+  						 )
+  				  VALUES (
+  				  		  #{roomNo}
+  				  		 ,#{roomName}
+  				  		 ,sysdate
+  				  		 ,#{userId}
+  				  		 )
+  	</insert>
+  	
+  	<delete id="deleteChatRoom" parameterType="int">
+  		DELETE FROM ROOM
+  		WHERE ROOM_NO = #{roomNo}
+  	</delete>
+  </mapper>

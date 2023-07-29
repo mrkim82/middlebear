@@ -1,227 +1,233 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-<title>Groobear</title>
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link
-	href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
-	rel="stylesheet">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+  <head>
+  	<title>Groobear</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-<link rel="stylesheet" href="/bootstrap.min.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-	rel="stylesheet">
-<style>
-#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	padding-top: 100px; /* Location of the box */
-	left: 0;
-	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: auto; /* Enable scroll if needed */
-	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-	display: none;
-}
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+		
+	<link rel="stylesheet" href="/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-.horizontal-bar {
-	height: 80px;
-	width: 100%;
-	background-color: rgb(32, 196, 202);
-}
-
-.horizontal-bar2 {
-	height: 40px;
-	width: 100%;
-	background-color: rgb(41, 189, 195);
-}
-
-#modalFolderCreate4 {
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	padding-top: 100px; /* Location of the box */
-	left: 0;
-	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: auto; /* Enable scroll if needed */
-	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-	display: none;
-}
-
-#modalBody, #modalBody2, #modalBody3 {
-	width: 500px;
-	height: 300px;
-	padding: 30px 30px;
-	margin: 0 auto;
-	border: 1px solid #777;
-	background-color: #fff;
-}
-
-#closeBtn, #closeBtn2 {
-	float: right;
-	font-weight: bold;
-	color: #777;
-	font-size: 25px;
-	cursor: pointer;
-}
-
-details {
-	padding: 12px;
-	text-decoration: none;
-	font-size: 16px;
-	color: #bdc3c7;
-	display: flex;
-	align-items: center;
-	transition: 0.3s;
-}
-
-.square {
-	width: 50px;
-	height: 50px;
-	background-color: #000;
-	margin-left: 30px;
-	border-radius: 10px;
-}
-
-.bottomLine {
-	border-bottom: 3px solid red;
-<<<<<<< HEAD
-	z-index: 1050;
-=======
->>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
-}
-</style>
-
-</head>
-<body>
-	<div>
-
-		<!-- 상단 header -->
-		<header class="blog-header lh-1 py-3">
-			<div
-				class="row flex-nowrap justify-content-between align-items-center">
-				<div class="col-4 pt-1">
-					<img src="" title="" style="width: 200px;">
-				</div>
-
-				<div class="col-4 text-center">
-					<a class="blog-header-logo text-body-emphasis" href="#">Groobear</a>
-				</div>
-				<div class="col-6 d-flex justify-content-end align-items-center"
-					style="margin-left: -200px; font-family: 'Hahmlet', serif;">
-					<table style="width: 300px;">
-						<tbody>
-							<tr>
-								<td><a>[[${session.Name }]]님 반갑습니다</a></td>
-							</tr>
-							<tr>
-								<td><span><a href="/logout">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;
-									<span><a href="#">마이페이지</a></span></td>
-
-							</tr>
-						</tbody>
-					</table>
-				</div>
+	<!-- 풀캘린더 -->
+	<script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
+	
+	<!-- 제이쿼리 -->
+	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+	
+	<style>
+		@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+		
+		.dohyeon{
+			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			color:black;
+		}
+		
+		.dohyeonmenu{
+			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			font-size : 20px;
+			color:white;
+		}
+		.nanumgothic{
+			font-family: 'Nanum Gothic', serif;/*웹 폰트 지정*/
+			font-weight : 300;
+			color:white;
+		}
+		.rightPad{
+			padding-right:150px;
+		}
+		#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
+			position: fixed; /* Stay in place */
+			z-index: 1; /* Sit on top */
+			padding-top: 100px; /* Location of the box */
+			left: 0;
+			top: 0;
+			width: 100%; /* Full width */
+			height: 100%; /* Full height */
+			overflow: auto; /* Enable scroll if needed */
+			background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+			display: none;
+		}
+		
+		.horizontal-bar {
+			height: 80px;
+			width: 100%;
+			background-color: #f9f9f9;
+		}
+		
+		.horizontal-bar2 {
+			height: 40px;
+			width: 100%;
+			background-color: #f5f5f5;
+		}
+		
+		#modalFolderCreate4 {
+			position: fixed; /* Stay in place */
+			z-index: 1; /* Sit on top */
+			padding-top: 100px; /* Location of the box */
+			left: 0;
+			top: 0;
+			width: 100%; /* Full width */
+			height: 100%; /* Full height */
+			overflow: auto; /* Enable scroll if needed */
+			background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+			display: none;
+		}
+		
+		#modalBody, #modalBody2, #modalBody3 {
+			width: 500px;
+			height: 300px;
+			padding: 30px 30px;
+			margin: 0 auto;
+			border: 1px solid #777;
+			background-color: #fff;
+		}
+		
+		#closeBtn, #closeBtn2 {
+			float: right;
+			font-weight: bold;
+			color: #777;
+			font-size: 25px;
+			cursor: pointer;
+		}
+		
+		details {
+			padding: 12px;
+			text-decoration: none;
+			font-size: 16px;
+			color: #bdc3c7;
+			display: flex;
+			align-items: center;
+			transition: 0.3s;
+		}
+		
+		.square {
+			width: 50px;
+			height: 50px;
+			background-color: #000;
+			margin-left: 30px;
+			border-radius: 10px;
+		}
+		
+		.bottomLine {
+			border-bottom: 3px solid red;
+			z-index: 1050;
+		}
+		.spanCursor {
+			cursor: pointer
+		}
+	</style>
+	</head>
+  <body>
+  	<div>
+    <header class="blog-header lh-1 py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+            <div class="col-4 pt-1">
+	    		<img src="" title="" style="width: 200px;">
 			</div>
-		</header>
+            
+            <div class="col-4 text-center">
+                <a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:40px; font-weight : 500;" href="/main">Groobear</a>
+            </div>
+            <div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px;">
+                <table style="width: 300px;">
+                	<tbody>
+	                	<tr>
+	                		<td>
+	                			<a class="dohyeon">[[${session.Name }]]님 반갑습니다</a>
+	                		</td>
+	                	</tr>
+	                	<tr>
+	                		<td><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
+	                		<span><a href="/mypage" class="dohyeon">마이페이지</a></span></td>
+	                	</tr>
+                	</tbody>
+                </table>
+            </div>
+        </div>
+    </header>
 	</div>
-
-	<!-- 상단 nav -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-		<button class="navbar-toggler" type="button" data-toggle="collapse"
-			data-target="#navbarColor01" aria-controls="navbarColor01"
-			aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarColor01">
-
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="#">Home
-						<span class="sr-only">(current)</span>
-				</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">Features</a>
-				</li>
-				<li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">About</a></li>
-				<li class="nav-item dropdown"><a
-					class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
-					role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">Action</a> <a
-							class="dropdown-item" href="#">Another action</a> <a
-							class="dropdown-item" href="#">Something else here</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="#">Separated link</a>
-					</div></li>
-				<li><a th:text="${session.UserId}"></a></li>
-			</ul>
-		</div>
-	</nav>
-
-	<!-- 사이드바 -->
-
-	<div class="container-fluid" style="padding: 0;">
-		<div class="float-start">
-			<div class="sidebar" style="padding: 0;">
-				<!-- 사이드바 내용 -->
-				<table>
-					<tbody>
-						<tr>
-							<td style="vertical-align: top">
-								<div class="row">
-									<div class="sidebar col-4">
-										<a href="/proCreate"><span class="material-icons">add_box</span>
-											새 프로젝트 생성</a> <a href="/proMain"><span class="material-icons">home</span>
-											내 프로젝트</a> <a href="/proMainS"><span class="material-icons">star</span>
-											즐겨찾기</a> <a href="#"><span class="material-icons">mail</span>
-											미확인(x)</a> <a href="/proMainG"><span class="material-icons">drafts</span>
-											미분류</a> <a href="/proMainH"><span class="material-icons">visibility_off</span>
-											숨김</a>
-										<details>
-											<summary>모아보기</summary>
-											<ul>
-												<li>전체업무</li>
-												<li>북마크</li>
-												<li>나를 언급</li>
-												<li>내 게시물</li>
-											</ul>
-										</details>
-										<details id="groupFolderList" open>
-											<summary>
-												프로젝트 폴더<span id="popupProjectBtn" class="material-icons">add</span>
-											</summary>
-											<!-- 프로젝트 그룹 리스트 -->
-											<ul id="proGroup">
-												<th:block th:each="proG : ${projectGroupList}">
-													<li><a
-														th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
-														th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
-															[[${proG.groupName}]]<span
-															class='material-icons moreVertIcons'
-															style='display: none;'>more_vert</span>
-													</a></li>
-												</th:block>
-											</ul>
-										</details>
-
-									</div>
-
-
-
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-
+	<nav class="navbar navbar-expand-lg" style="text-align: center; background-color:#35A880;"> 
+      <div class="collapse navbar-collapse" id="navbarColor01">
+      
+	        <ul class="navbar-nav mr-auto" style="display:flex; margin:auto;">
+	          <li class="nav-item active rightPad">
+	            <a class="nav-link dohyeonmenu" href="/introduce">회사소개</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/mail/receiveMail">메일</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/proMain">프로젝트</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/pay/payMain">전자결재</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/boardList?boardType=N">게시판</a>
+	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
+	          </li>
+	        </ul>
+        </div>
+    </nav>
+	<div class="row">
+      <!-- 사이드바 -->
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+        <div class="position-sticky">
+          <ul class="nav flex-column">
+            <!-- 사이드바 메뉴 아이템들 -->
+            <li class="nav-item">
+              <a href="/proCreate"><span class="material-icons">add_box</span>새 프로젝트 생성</a>
+            </li>
+            <li class="nav-item">
+			  <a href="/proMain"><span class="material-icons">home</span>내 프로젝트</a>            
+			</li>
+            <li class="nav-item">
+              <a href="/proMainS"><span class="material-icons">star</span>즐겨찾기</a>
+            </li>
+            <li class="nav-item">
+              <a href="#"><span class="material-icons">mail</span>미확인(x)</a>
+            </li>
+            <li class="nav-item">
+              <a href="/proMainG"><span class="material-icons">drafts</span>미분류</a>
+            </li>
+            <li class="nav-item">
+              <a href="/proMainH"><span class="material-icons">visibility_off</span>숨김</a>
+              <details>
+				<summary>모아보기</summary>
+				<ul>
+					<li>전체업무</li>
+					<li>북마크</li>
+					<li>나를 언급</li>
+					<li>내 게시물</li>
+				</ul>
+			  </details>
+			  <details id="groupFolderList" open>
+				<summary>
+					프로젝트 폴더<span id="popupProjectBtn" class="material-icons">add</span>
+				</summary>
+				<!-- 프로젝트 그룹 리스트 -->
+				<ul id="proGroup">
+					<th:block th:each="proG : ${projectGroupList}">
+						<li><a
+							th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
+							th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
+								[[${proG.groupName}]]<span
+								class='material-icons moreVertIcons' style='display: none;'>more_vert</span>
+						</a></li>
+					</th:block>
+				</ul>
+			  </details>
+            </li>
+          </ul>
+        </div>
+      </nav>
 		<!-- 프로젝트 우측 컨텐츠 -->
 		<div class="col">
 			<!-- 프로젝트 최 상단 바 -->
@@ -294,12 +300,16 @@ details {
 					<!-- <th:block th:text="${#strings.substringAfter((#strings.substringAfter(#request.requestURI, '/')), '/')}"></th:block>
 					<p th:text="${#request.requestURI}"></p>
 					<th:block th:text="${#strings.substringAfter(#request.getQueryString(), '=')}"></th:block> -->
+				<div>
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteMember">
+					  +초대하기
+					</button>
+				</div>
 				</nav>
-				
 			</div>
-			<div>
-				<div layout:fragment="content"></div>
-			</div>
+			<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+		        <div layout:fragment="content" ></div>
+		    </main>
 		</div>
 
 
@@ -308,8 +318,6 @@ details {
 
 
 	<div>
-
-
 
 		<!-- modal창 -->
 		<div id="modalFolderCreate1">
@@ -349,12 +357,73 @@ details {
 			</div>
 		</div>
 
-
+	<!-- 인원 초대 모달 -->
+	<div class="modal fade" id="inviteMember" tabindex="-1" aria-labelledby="inviteMemberLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="inviteMemberLabel">Modal title</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	        <button type="button" class="btn btn-primary">저장</button>
+	      </div>
+	    </div>
+	  </div>
 	</div>
 
 
 
+	</div>
 
+<!-- 공통 js -->
+<!-- 프로젝트 넘버 찾기(주소) -->
+<script>
+	let url = window.location.pathname;
+	let lastIndex = url.lastIndexOf('/');
+	let projectNo = url.substring(lastIndex + 1);
+</script>
+
+<!-- session값 가져오기 -->
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		let selfId = /*[[${session.Id}]]*/;
+		let selfName = /*[[${session.Name}]]*/;
+	/*]]>*/
+</script>
+
+<!-- 시간 변환 -->
+<script type="text/javascript">
+	function convertToFormattedDateTime(dateTimeStr) {
+		if(dateTimeStr == '') {//빈값일때 바로 리턴
+			return;
+		}
+	  const date = new Date(dateTimeStr);
+	  const year = date.getFullYear();
+	  const month = String(date.getMonth() + 1).padStart(2, '0');
+	  const day = String(date.getDate()).padStart(2, '0');
+	  const hours = String(date.getHours()).padStart(2, '0');
+	  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	  return `${year}-${month}-${day} ${hours}:${minutes}`;
+	}
+</script>
+
+<!-- 모달 초기화 -->
+<script>
+	$('.modal').on('hidden.bs.modal', function (e) {
+	  // 모달 내부의 모든 input 요소를 찾아 값을 초기화
+	  $(this).find('input, select, textarea').val('');
+	  //$(this).find('.collapse').removeClass('show');
+	});
+	
+</script>
 
 	<script th:inline="javascript">
     /*<![CDATA[*/
@@ -724,9 +793,9 @@ details {
 
     <script>
     	let newColor;
-   		let url = window.location.pathname;
-		let lastIndex = url.lastIndexOf('/');
-		let projectNo = url.substring(lastIndex + 1);//프로젝트 번호
+   		//let url = window.location.pathname;
+		//let lastIndex = url.lastIndexOf('/');
+		//let projectNo = url.substring(lastIndex + 1);//프로젝트 번호
     	
     	//클릭시 색상 정보 저장
     	function saveColor() {
@@ -759,6 +828,5 @@ details {
 			});
     	}
     </script>
-    
-</body>
+  </body>
 </html>

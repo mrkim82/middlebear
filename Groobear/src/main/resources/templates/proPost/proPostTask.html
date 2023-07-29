@@ -182,7 +182,10 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
   			<td th:data-work-group-no="${taskG.workGroupNo}"
   				style="background-color: #b6b3b3">
   				<span th:text="${taskG.workGroupName}"></span>
-  				<span class="spanCursor" onclick="delWorkGroup()">X</span></td>
+  				<span class="spanCursor"
+  					  onclick="delWorkGroup()"
+  					  th:if="${taskG.workGroupSeq != 1}"
+  					  >X</span></td>
   		</tr>
   		
 	    <tr th:each="task : ${readTaskAllList}" th:if="${task.workGroupNo == taskG.workGroupNo}"

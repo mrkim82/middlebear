@@ -291,13 +291,13 @@ function drawChart() {
 										  	<!-- 마감일 추가 -->
 										  	<div>
 										  		<p>마감일</p>
-										  		<input type="datetime-local"  id="endWorkDate">
+										  		<input type="datetime-local" th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}" id="endWorkDate">
 										  	</div>
 										  	<!-- 우선순위 추가 -->
 										  	<div>
 													<p>우선순위</p>
-													<select class="custom-select" name="workPri" id="workPostPri">
-														<option value="">없음</option>
+													<select class="custom-select" name="workPri" id="workPostPriPost">
+														<option value="0">없음</option>
 														<option value="1">낮음</option>
 														<option value="2">보통</option>
 														<option value="3">높음</option>
@@ -386,7 +386,7 @@ function drawChart() {
 									<!-- 마감일 -->
 									<div>
 										<p>마감일</p>
-										<input type="datetime-local" id="endSchDate">
+										<input type="datetime-local" th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}" id="endSchDate">
 									</div>
 									<!-- 참석자 -->
 									<div>
@@ -660,7 +660,7 @@ function drawChart() {
 										  	<div>
 													<p>우선순위</p>
 													<select class="custom-select" name="workPri" id="workPostPri">
-														<option value="">없음</option>
+														<option value="0" th:selected="${allPost.workStatus == '0'}">없음</option>
 														<option value="1" th:selected="${allPost.workStatus == '1'}">낮음</option>
 														<option value="2" th:selected="${allPost.workStatus == '2'}">보통</option>
 													    <option value="3" th:selected="${allPost.workStatus == '3'}">높음</option>
@@ -1168,10 +1168,12 @@ function drawChart() {
 				<th:block th:text="'참여자 ' + ${projectPartiMember.size}"></th:block>
 			</div>
 			<div class="card" style="width: 18rem;">
-			  <div class="card-header openModalInfo" th:each="pUser : ${projectPartiMember}"
+			  <!-- 관리자 -->
+			  <div class="card-header openModalInfo"
+			  	   th:each="pUser : ${projectPartiMember}"
 			  	   th:if="${pUser.id == readProAuth.id}"
 			  	   th:data-user-id="${pUser.id}"
-			  	   data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.id}"
+			  	   data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.empNo}"
 			  	   style="background-color: rgb(161, 204, 239)">
 			  	   <span th:text="'프로젝트 관리자 : '"></span>
 			       <span th:utext="${pUser.profileImg}"></span>
@@ -1182,7 +1184,7 @@ function drawChart() {
 			    <li class="list-group-item openModalInfo" th:each="pUser : ${projectPartiMember}"
 			    	th:if="${pUser.id != readProAuth.id}"
 			    	th:data-user-id="${pUser.id}"
-			    	data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.id}">
+			    	data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.empNo}">
 			    	<span th:utext="${pUser.profileImg}"></span>
 			    	<span th:text="${pUser.name}"></span>
 			    	<span th:if="${session.Id == pUser.id}" th:text="(나)"></span>
@@ -1190,7 +1192,7 @@ function drawChart() {
 			  </ul>
 				<!-- 유저 인포 모달창 -->
 				<div th:each="mem : ${projectPartiMember}">
-					<div class="modal fade modal-dialog-centere" th:id="'proUserInfoDetail' + ${mem.id}"
+					<div class="modal fade modal-dialog-centere" th:id="'proUserInfoDetail' + ${mem.empNo}"
 						 tabindex="-1" aria-labelledby="proUserInfoDetailLabel" aria-hidden="true"
 						 th:data-user-info-id="${mem.id}">
 					  <div class="modal-dialog">
@@ -1227,7 +1229,8 @@ function drawChart() {
 					</div>
 				</div>
 			</div>
-
+			<!-- 유저 인포 모달창 -->
+			
 		</div>
 	</div>
 	<div>
@@ -1564,9 +1567,9 @@ function drawChart() {
 		// console.log(titles[1].value);
 		// console.log('업무그룹',workPostGroup.value);
 		// console.log('업무상태',selectedButton.dataset.workTypeStatus);
-		// console.log('우선순위',workPostPri.value);
-			console.log(startWorkDate.value);
-			console.log(endWorkDate.value);
+		 //console.log('우선순위',workPostPriPost.value);
+			//console.log(startWorkDate.value);
+		//	console.log(endWorkDate.value);
 		// console.log('내용',workWritingContent.value);
 		// console.log('참여자', workPersonArr);
 		
@@ -1583,7 +1586,7 @@ function drawChart() {
 					'postTitle': titles[1].value,
 					'workGroupNo': workPostGroup.value,
 					'workStatus': selectedButton.dataset.workTypeStatus,
-					'workPri': workPostPri.value,
+					'workPri': workPostPriPost.value,
 					'workStartDay': newStartDate,
 					'workStartTime': newStartDate,
 					'workEndDay': newEndDate,

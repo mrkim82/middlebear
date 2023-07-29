@@ -35,6 +35,7 @@
 		     , e.file_name
 		     , i.rank
 		     , d.dept_name
+		     , u.emp_no
 		FROM pro_mem m
 		JOIN users u
 		ON(m.id = u.id)
