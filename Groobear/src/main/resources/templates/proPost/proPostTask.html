@@ -335,7 +335,11 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 			  	<!-- 마감일 추가 -->
 			  	<div>
 			  		<p>마감일</p>
-			  		<input type="datetime-local"  id="endWorkDate2" th:min="${#dates.format(#calendars.createNow())}" th:value="${#dates.format(taskD.workStartTime, 'yyyy-MM-dd HH:mm')}">
+			  		<input type="datetime-local"
+			  			   id="endWorkDate2"
+			  			   th:min="${#dates.format(cTime)}"
+			  			   th:value="${#dates.format(taskD.workStartTime, 'yyyy-MM-dd HH:mm')}">
+			  			   
 			  	</div>
 			  	<!-- 우선순위 추가 -->
 			  	<div>
@@ -454,12 +458,6 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 </div>
 
 
-<script>
-	$(function () {
-	  $('[data-toggle="popover"]').popover()
-	});
-</script>
-
 <!-- Custom JS -->
 <script>
     $(document).ready(function () {
@@ -474,14 +472,16 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
             // Show the selected modal and hide others
             $modals.not('#' + modalId).removeClass('show-modal');
             $('#' + modalId).toggleClass('show-modal');
-            $('input').val('');
+            $('.form-control').val('');
+            $('.collapse').removeClass('show');
         });
 
         // Close the custom modal when the close button is clicked
         $('.closeModalButton').click(function () {
             $(this).closest('.custom-modal').removeClass('show-modal');
             //$(this).closest('.custom-modal').find('input').val('');
-            $('input').val('');
+            $('.form-control').val('');
+            $('.collapse').removeClass('show');
         });
     });
 </script>
@@ -839,6 +839,7 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 		})
 		.then(response => response.json())
 		.then(res => {
+			//테이블에 태그 추가
 			let newTr = document.createElement("tr");
 			newTr.innerHTML = `
 				<td data-work-group-no="${res.result}" style="background-color: #b6b3b3">
@@ -847,8 +848,13 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 				</td>
 			`;
 			workBodyList.prepend(newTr);
+			
+			//모달 종료
 			$('#workGroupCreate').modal('hide');
 			$('input').val('');
+			
+			//게시물에 태그 추가
+			$('.form-select').append($("<option value="+res.result+">"+workgn+"</option>"))
 		});
 	}
 </script>
@@ -874,5 +880,10 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
 		
 	}
 </script>
+
+<script>
+	
+</script>
+
 </th:block>
 </html>

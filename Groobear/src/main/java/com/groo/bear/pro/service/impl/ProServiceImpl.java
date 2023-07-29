@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.groo.bear.pro.mapper.ProMapper;
 import com.groo.bear.pro.service.ProService;
+import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
 import com.groo.bear.pro.service.provo.ProUsersVO;
@@ -123,6 +124,26 @@ public class ProServiceImpl implements ProService {
 	@Override
 	public int updateProHide(ProHideVO vo) {
 		return proMapper.updateProHide(vo);
+	}
+
+	@Override
+	public List<ProGroupManageVO> readPerAllPro(String id) {
+		return proMapper.readPerAllPro(id);
+	}
+
+	@Override
+	public List<ProGroupManageVO> readGroupCheckPro(int groupNo, String id) {
+		return proMapper.readGroupCheckPro(groupNo, id);
+	}
+
+	@Override
+	public int createGroupProManage(ProGroupManageVO vo) {
+		return proMapper.createGroupProManage(vo);
+	}
+
+	@Override
+	public int deleteGroupProManage(ProGroupManageVO vo) {
+		return proMapper.deleteGroupProManage(vo);
 	}
 
 }
