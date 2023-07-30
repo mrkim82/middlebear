@@ -100,4 +100,60 @@
 		where id=#{id}
 	</delete>
 	
+	<!-- 업무 그룹 생성 -->
+	<insert id="createWorkGroup" parameterType="ProPostTaskWorkGroupVO">
+		INSERT INTO work_group(work_group_no, work_group_name, work_group_seq, pro_no)
+		VALUES ((SELECT NVL(MAX(work_group_no), 0) + 1
+		         FROM work_group),
+		        #{workGroupName},
+		        (SELECT MAX(work_group_seq) + 1
+		         FROM work_group
+		         WHERE pro_no = #{proNo}),
+		         #{proNo})
+		         
+		<selectKey resultType="int" keyProperty="workGroupNo" order="AFTER">
+			SELECT NVL(MAX(work_group_no), 0)
+	        FROM work_group
+		</selectKey>
+	</insert>
+	
+	<!-- 업무 그룹 삭제 -->
+	<delete id="deleteWorkGroup">
+		DELETE FROM work_group
+		WHERE work_group_no = #{workGroupNo}
+	</delete>
+	
+	<!-- 해당 work 담당자-->
+	<select id="readDetailWorkPerson" resultType="String">
+		SELECT id
+		FROM work_person a
+		JOIN pro_work b
+		ON(a.work_no = b.work_no)
+		WHERE pro_post_no = #{proPostNo}
+	</select>
+	
+	<!-- 업무 내용 변경 -->
+	<update id="updateProWork" parameterType="ProUpWorkVo">
+		UPDATE pro_work
+		SET work_content = #{workContent}
+		WHERE pro_post_no = #{proPostNo}
+	</update>
+	
+	<!-- 해당 업무 담당자 전체 삭제 -->
+	<delete id="deleteWorkMemberAll" parameterType="ProUpWorkVo">
+		DELETE FROM work_person
+		WHERE work_no = (SELECT DISTINCT work_no
+						 FROM pro_work
+						 WHERE pro_post_no = #{proPostNo})
+	</delete>
+	
+	<!-- 업무 담당자 추가(단건) -->
+	<insert id="createWorkMember">
+		INSERT INTO work_person(work_no, id)
+		VALUES(
+				(SELECT DISTINCT work_no
+				 FROM pro_work
+				 WHERE pro_post_no = #{proPostNo}),
+				#{id}) 
+	</insert>
 </mapper>

@@ -7,4 +7,5 @@ public class ProPostTaskWorkGroupVO {
 	private int workGroupNo;
 	private String workGroupName;
 	private int workGroupSeq;
+	private int proNo;
 }
