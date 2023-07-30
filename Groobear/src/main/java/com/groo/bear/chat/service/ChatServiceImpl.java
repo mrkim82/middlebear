@@ -23,7 +23,7 @@ public class ChatServiceImpl implements ChatService {
 	
 	@Override
 	public int createChatRoom(RoomDTO roomDTO) {
-		return chatMapper.createChatRoom(roomDTO);
+	    return chatMapper.createChatRoom(roomDTO);
 	}
 
 	@Override
@@ -41,7 +41,53 @@ public class ChatServiceImpl implements ChatService {
 		return chatMapper.sendMessage(msgDTO);
 	}
 
+	@Override
+	public List<ChatMessageDTO> getMessagesForRoom(int roomNo) {
+		return chatMapper.getMessagesForRoom(roomNo);
+	}
 
+	@Override
+	public List<RoomDTO> empAllList(String id) {
+		return chatMapper.empAllList(id);
+	}
+
+	@Override
+	public int newJeans() {
+		return chatMapper.newJeans();
+	}
+
+
+	@Override
+	public int insertMem(RoomDTO roomDTO) {
+	    return chatMapper.insertMem(roomDTO);
+	}
+	
+	//빈방 삭제
+	@Override
+	public void deleteEmptyRooms() {
+	        List<Integer> emptyRooms = chatMapper.findEmptyRooms();
+	        for (Integer roomNo : emptyRooms) {
+	        	chatMapper.deleteRoom(roomNo);
+        }
+    }
+
+
+	@Override
+	public List<RoomDTO> empListExcludingRoomMembers(String id, int roomNo) {
+	    return chatMapper.empListExcludingRoomMembers(id, roomNo);
+	}
+
+
+	@Override
+	public int countRoomMembers(int roomNo) {
+		return chatMapper.countRoomMem(roomNo);
+	}
+
+
+	@Override
+	public String getLastMessage(int roomNo) {
+	    return chatMapper.getLastMessage(roomNo);
+	}
 	
 	
 }

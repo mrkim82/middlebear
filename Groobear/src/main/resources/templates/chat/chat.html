@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>	
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <style>
 * {
 	margin: 0;
@@ -18,10 +20,27 @@
 	background: #35a880;
 	color: white;
 	text-align: center;
+	position: fixed;
+	width: 100%;
+	z-index: 100;
+}
+.header a i {
+    color: white;  /* Icon color */
+    font-size: 24px;  /* Icon size */
 }
 
+.header .header-buttons {
+    display: flex;
+}
+
+.header .header-buttons a {
+    margin-left: 10px;
+}
 .chat_wrap .chat {
-	padding-bottom: 80px;
+	padding-top: 60px;
+	padding-bottom: 100px;
+	height: calc(100vh - 160px);  
+    overflow-y: scroll; 
 }
 
 .chat_wrap .chat ul {
@@ -78,7 +97,7 @@
 
 .chat_wrap .input-div>textarea {
 	flex-grow: 1;
-	height: 60px;
+	height: 40px;
 	border: none;
 	padding: 10px;
 	margin-right: 10px;
@@ -96,22 +115,30 @@
 .format {
 	display: none;
 }
+.message-time {
+    font-size: 0.7em;  /* 시간을 작게 표시합니다. */
+    color: #777;      /* 시간 텍스트의 색상을 설정합니다. */
+}
 </style>
 </head>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <body>
 	<div class="chat_wrap">
-		<div class="header">MESSAGE</div>
+		<div class="header">MESSAGE
+        <a href="#"data-toggle="modal" data-target="#inviteModal" ><i class="material-icons">group_add</i></a>  <!-- Invite Icon -->
+        <a href="#" id="deleteChatroomButton"><i class="material-icons">exit_to_app</i></a>  <!-- Exit Icon -->
+        </div>
 		<div class="chat">
 			<ul>
 				<!-- 동적 생성 -->
 			</ul>
 		</div>
+		
 		<div class="input-div">
 			<textarea placeholder="Press Enter for send message."></textarea>
 			<button id="sendMessageBtn">Send</button>
 		</div>
-
+		
 		<!-- format -->
 
 		<div class="chat format">
@@ -121,20 +148,50 @@
 						<span></span>
 					</div>
 					<div class="message">
-						<span></span>
+						<span class="message-content"></span>
+    					<small class="message-time">[[${#dates.format(chatMessageDTO.msgTime, 'yyyy-MM-dd HH:mm:ss')}]]</small>
 					</div>
 				</li>
 			</ul>
 		</div>
 	</div>
+	<!-- The Modal -->
+    <div class="modal" id="inviteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">초대하기</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                
+                    <ul id="employeeList"></ul>
+                    <div id="userListContainer">
+         <!-- 사용자 목록이 이곳에 표시됩니다 -->
+    					</div>
+                </div>
+				
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="createChatroom">생성</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script th:inline="javascript">
 let myName = /*[[${name}]]*/ 'name';
 let senderName = /*[[${name}]]*/ 'name';
-console.log("확인하려는 용도" + senderName)
-let roomNo = /*[[${roomNo}]]*/ 'roomNo';
 let realId = /*[[${id}]]*/ 'id';
 let chatDTO = /*[[${chatDTO}]]*/ 'chatDTO'; // 추가된 코드
+console.log(chatDTO.msgTime + "시간 테스트 용")
+var roomNo = /*[[${roomNo}]]*/ 'roomNo';
 
 // 페이지가 로드될 때 chatDTO 내용을 기반으로 채팅 내용을 화면에 추가
 $(document).ready(function() {
@@ -143,7 +200,7 @@ $(document).ready(function() {
             chat.id = realId;
         }
         const LR = (chat.id != realId) ? "left" : "right";
-        appendMessageTag(LR, chat.name, chat.content);
+        appendMessageTag(LR, chat.name, chat.content, chat.time);
     });
 });
 
@@ -157,8 +214,9 @@ console.log("Room number: ", roomNo);  // 로그 추가
 stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/messages/' + roomNo, (messages) => {
-        console.log("Received message: " + messages.body);  // 추가된 코드
-        receive(JSON.parse(messages.body));
+        receive(JSON.parse(messages.body)
+        		);
+        
     });
 };
 console.log("Username: ", myName);  // 로그 추가
@@ -174,36 +232,74 @@ stompClient.onStompError = (frame) => {
 stompClient.onWebSocketClose = (event) => {
     console.error('Websocket closed', event);
 };
+//채팅방 나가기
+const deleteButton = document.getElementById('deleteChatroomButton');
+deleteButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    fetch('/deleteChatroom', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ roomNo: roomNo, id: realId }),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Chatroom deleted successfully');
+            //location.reload();
+            window.close();
+            window.opener.location.href="/roomList";
+        } else {
+            console.error('Failed to delete chatroom');
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+function getCurrentTime() {
+    const now = new Date();
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
 
-function disconnect() {
-    if(stompClient != null) {
-        stompClient.disconnect();
-    }
-    console.log("Disconnected");
+    // 시간과 분이 10 미만일 경우 앞에 0을 붙여줍니다.
+    if(hours < 10) hours = '0' + hours;
+    if(minutes < 10) minutes = '0' + minutes;
+    return hours + ":" + minutes;
 }
 
 $(document).on('keydown', 'div.input-div textarea', function(e) {
     if (e.keyCode == 13 && !e.shiftKey) {
+    	console.log("이벤트타켓확인용"+event.target)
         e.preventDefault();
         const message = $(this).val();
         sendAndClear(message);
     }
 });
 
+
 function createMessageTag(LR_className, senderName, message) {
-	let chatLi = $('div.chat.format ul li').clone();
+    let chatLi = $('div.chat.format ul li').clone();
     chatLi.addClass(LR_className);
     chatLi.find('.sender span').text(senderName);
     chatLi.find('.message span').text(message);
+
+    // 메시지 옆에 시간 표시
+    let timeSpan = document.createElement('span');
+    timeSpan.className = 'time';
+    timeSpan.textContent = getCurrentTime();
+    chatLi.find('.message').append(timeSpan);
+
     return chatLi;
 }
 
-function appendMessageTag(LR_className, senderName, message) {
-    console.log("Appending message tag");  // 로그 추가
-    const chatLi = createMessageTag(LR_className, senderName, message);
+function appendMessageTag(LR_className, senderName, message, msgTime) {
+    const chatLi = createMessageTag(LR_className, senderName, message, msgTime);
     $('div.chat:not(.format) ul').append(chatLi);
-    console.log("New message appended: ", chatLi.html());  // 로그 추가
-    $('div.chat').scrollTop($('div.chat').prop('scrollHeight'));
+    window.requestAnimationFrame(function () {
+        const chatDiv = $('div.chat');
+        chatDiv.scrollTop(chatDiv.prop('scrollHeight'));
+    });
 }
 
 function clearTextarea() {
@@ -212,23 +308,20 @@ function clearTextarea() {
 
 // 1. 좌우지정 2. 이름과 제목을 메세지에 달아줌.
 function receive(data) {
-    console.log("Received data: ", data);
     const LR = (data.id != realId) ? "left" : "right";
-    console.log("data.id 확인용 콘솔" + data.id)
-    console.log("밑의 senderName 확인용" + senderName)
-    appendMessageTag(LR, data.name, data.content);
+    appendMessageTag(LR, data.name, data.content, data.time);  // 서버에서 받은 시간 데이터를 사용합니다.
 }
 
 function sendAndClear(message) {
-    sendMessage(message);
-    clearTextarea();
+    if (message.trim() !== "") {
+        sendMessage(message);
+        clearTextarea();
+        window.opener.location.reload();
+    }
 }
 
 function sendMessage(message) {
-	console.log('111111')
-	console.log('roomNo:', roomNo);
-	console.log('realId:', realId);
-	console.log(message)
+	const currentTime = getCurrentTime();
     stompClient.publish({
     	destination: "/app/chat/" + roomNo,
         body: JSON.stringify({
@@ -236,7 +329,8 @@ function sendMessage(message) {
 					  //'name': myName,
             'name': senderName,
             'content': message,
-            'id' : realId
+            'id' : realId,
+            'time' : currentTime 
             
         })
     });
@@ -249,6 +343,97 @@ $('#sendMessageBtn').on('click', function() {
 
 $(window).on('beforeunload', function(){
     disconnect();
+});
+function fetchEmployees(roomNo) {
+console.log(roomNo + "룸방번호 확인")
+    fetch('/empListExcludingRoomMembers/' + roomNo)
+    .then(response => response.json())
+    .then(employees => {
+        const employeeListUl = document.getElementById('employeeList');
+        // Clear the list before appending new items
+        employeeListUl.innerHTML = '';
+        employees.forEach(employee => {
+            const li = document.createElement('li');
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = 'employee-' + employee.id;
+            checkbox.value = employee.id;
+
+            const empNo = document.createElement('span');
+            empNo.textContent = employee.empNo + ' ';
+            
+            const empId = document.createElement('span');
+            empId.textContent = employee.id + ' ';
+            
+            const empName = document.createElement('span');
+            empName.textContent = employee.name + ' ';
+
+            const empRank = document.createElement('span');
+            empRank.textContent = employee.rank + ' ';
+
+            const empDept = document.createElement('span');
+            empDept.textContent = employee.deptName;
+
+            li.appendChild(checkbox);
+            li.appendChild(empNo);
+            li.appendChild(empId);
+            li.appendChild(empName);
+            li.appendChild(empRank);
+            li.appendChild(empDept);
+
+            employeeListUl.appendChild(li);
+        });
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+$('#inviteModal').on('shown.bs.modal', function (event) {
+	console.log(roomNo);
+    fetchEmployees(roomNo);
+});
+
+//채팅멤버 추가하는 로직
+$('#createChatroom').on('click', function() {
+    // Checked checkboxes
+    const checkedEmployeeIds = [];
+    $('#employeeList input[type="checkbox"]:checked').each(function () {
+        checkedEmployeeIds.push($(this).val());
+    });
+
+    if (checkedEmployeeIds.length === 0) {
+        alert('Please select at least one employee to invite.');
+        return;
+    }
+
+    // Post request to the server
+    const roomDTO = {
+        roomNo: roomNo,
+        employeeIds: checkedEmployeeIds,
+    };
+
+    fetch('/inviteEmployees', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(roomDTO),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Employees invited successfully');
+            // Here you might want to do something to reflect that the employees were added
+            // For example, you could close the modal
+            $('#inviteModal').modal('hide');
+        } else {
+            console.error('Failed to invite employees');
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 });
 </script>
 </body>
