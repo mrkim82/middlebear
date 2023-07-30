@@ -80,6 +80,7 @@
 </style>
 </head>
 <body layout:fragment="content">
+<div class="work"></div>
 	<table>
 		<tbody>
 		<tr>
@@ -151,31 +152,29 @@
 				<fieldset style="width: 1211px; height: 80px;margin-top:10px;margin-bottom:10px;border:1px solid black;">
 					<div class="row">
 					   <!-- 출근/퇴근 스위치 -->
-						<div id="workSwitch">
-						   <label class="switch"> 
-						      <input class="chkBox" type="checkbox">
-						      <span class="slider round cBtn"></span>
-						   </label>
-						   <span id="workSwitch"> </span> 
+						<div>
+							<label class="switch"> 
+								<input class="chkBox" type="checkbox">
+								<span class="slider round cBtn"></span>
+							</label>
+							<span id="workSwitch"> </span> 
 							<span id="workStart">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</span>
 							<span>&nbsp&nbsp~&nbsp&nbsp</span>
 							<span id=workEnd>&nbsp&nbsp:&nbsp&nbsp</span>
 						</div>
 						
 						<!-- 연장근무 시작/종료 스위치 -->
-						<div id="overWorkSwitch">
-						   <label class="switch"> 
-						      <input class="chkBoxo" type="checkbox">
-						      <span class="slider round cBtno"></span>
-						   </label>
-						   <span id="overWorkSwitch"> </span> 
+						<div>
+							<label class="switch"> 
+								<input class="chkBoxo" type="checkbox">
+								<span class="slider round cBtno"></span>
+							</label>
+							<span id="overWorkSwitch"> </span> 
 							<span id="overWorkStart">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</span>
 							<span>&nbsp&nbsp~&nbsp&nbsp</span>
 							<span id="overWorkEnd">&nbsp&nbsp:&nbsp&nbsp</span>
+						
 						</div>
-						
-						
-						
 						
 					</div>
 				</fieldset>
@@ -199,12 +198,13 @@
       
    </div>   
 	<!-- 데이터 -->
-	<p class="day" style="display:none;"></p>
+<p class="day" style="display:none;"></p>
 <p class="startWork" style="display:none;"></p>
 <p class="endWork" style="display:none;"></p>
 <p class="startOverWork" style="display:none;"></p>
 <p class="endOverWork" style="display:none;"></p>
 <p class="monthOver" style="display:none;"></p>
+
 
    <script>
    getProfImg();
@@ -217,6 +217,7 @@
 		      if(data.uuid != null){
 		    	  $('#profImg').attr('src', '/display?fileName='+data.uploadPath.replace(/\\/g, '/')+'/s_'+data.uuid+'_'+data.fileName);
 		      }
+		      
 		    },
 		    error: function(err) {
 		      console.log(err);
@@ -224,12 +225,10 @@
    		});
    }
    
- 
-
-	<script>
+     //김도현 시작
 	let chkCount = 0;
 	let chkCounto = 0;
-	let id = '[[${session.Id}]]'
+	let id = '[[${session.Id}]]';
 	let sInfo = {
 			'id' : id
 	}
@@ -343,19 +342,19 @@
 			let ocheck = document.querySelector('.cBtno');
 
 			
-			 if (document.querySelector('.startWork').textContent != '') {
-					chkCount = 1;
-				}
-				if (document.querySelector('.endWork').textContent != '') {
-					chkCount = 2;
-				}
-				let chkCounto = 0;
-				if (document.querySelector('.startOverWork').textContent != '') {
-					chkCounto = 1;
-				}
-				if (document.querySelector('.endOverWork').textContent != '') {
-					chkCounto = 2;
-				}
+			if (document.querySelector('.startWork').textContent != '') {
+				chkCount = 1;
+			}
+			if (document.querySelector('.endWork').textContent != '') {
+				chkCount = 2;
+			}
+			let chkCounto = 0;
+			if (document.querySelector('.startOverWork').textContent != '') {
+				chkCounto = 1;
+			}
+			if (document.querySelector('.endOverWork').textContent != '') {
+				chkCounto = 2;
+			}
 			if(parseInt(document.querySelector('.monthOver').textContent) > 2400){
 				chkCounto = 2;
 			}	
