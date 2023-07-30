@@ -6,12 +6,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.groo.bear.pro.mapper.ProPostMapper;
 import com.groo.bear.pro.mapper.ProPostTaskMapper;
 import com.groo.bear.pro.service.ProPostTaskService;
 import com.groo.bear.pro.service.task.ProPostTaskDetailVO;
 import com.groo.bear.pro.service.task.ProPostTaskVO;
 import com.groo.bear.pro.service.task.ProPostTaskWorkGroupVO;
 import com.groo.bear.pro.service.task.ProPostTaskWorkPersonVO;
+import com.groo.bear.pro.service.task.ProUpWorkVo;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
 @Service
@@ -19,6 +21,9 @@ public class ProPostTaskServiceImpl implements ProPostTaskService {
 	
 	@Autowired
 	ProPostTaskMapper task;
+	
+	@Autowired
+	ProPostMapper ppm;
 	
 	@Override
 	public List<ProPostTaskVO> readTaskAllList(int proNo) {
@@ -79,6 +84,26 @@ public class ProPostTaskServiceImpl implements ProPostTaskService {
 	@Override
 	public List<String> readDetailWorkPerson(int proPostNo) {
 		return task.readDetailWorkPerson(proPostNo);
+	}
+
+	@Override
+	public int updateWorkPost(ProUpWorkVo vo) {
+		//제목 변경
+		ppm.updateProPostTitle(vo.getPostTitle(), vo.getProPostNo());
+		//내용 변경
+		task.updateProWork(vo);
+		
+		//담당자 전체 삭제
+		task.deleteWorkMemberAll(vo);
+		//담당자 추가
+		if(!vo.getIds().isEmpty()) {
+			
+			for (int i = 0; i < vo.getIds().size(); i++) {
+				System.out.println(vo.getIds().get(i));
+				task.createWorkMember(vo.getProPostNo(), vo.getIds().get(i));
+			}
+		}
+		return 0;
 	}
 
 }

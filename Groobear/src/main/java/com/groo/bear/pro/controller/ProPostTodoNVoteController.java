@@ -17,6 +17,7 @@ import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.todovote.CreateVoteVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
+import com.groo.bear.pro.service.todovote.ProUpdateVoteVO;
 import com.groo.bear.pro.service.todovote.ProVoteCDVO;
 
 @RestController
@@ -88,4 +89,13 @@ public class ProPostTodoNVoteController {
 		
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
+	
+	//투표취소
+	@PostMapping("upVote")
+	public Map<String, Object> upVote(@RequestBody ProUpdateVoteVO vo) {
+		int result = 0;
+		ps.updateVotePost(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
 }

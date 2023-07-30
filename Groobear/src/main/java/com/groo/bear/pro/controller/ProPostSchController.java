@@ -21,6 +21,7 @@ import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.schvo.ProCreateSchVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
+import com.groo.bear.pro.service.schvo.ProUpdateSchVO;
 
 @Controller
 public class ProPostSchController {
@@ -73,6 +74,19 @@ public class ProPostSchController {
 		vo.setId((String)session.getAttribute("Id"));
 		
 		ppss.createPostSch(vo);
+		
+		map.put("result", "성공했겠지");
+		return map;
+	}
+	
+	//일정글 수정
+	@PostMapping("upSch")
+	@ResponseBody
+	public Map<String, Object> upSch(@RequestBody ProUpdateSchVO vo) {
+		Map <String, Object> map = new HashMap<>();
+		System.out.println(vo);
+		ppss.updateProSch(vo);
+		
 		
 		map.put("result", "성공했겠지");
 		return map;

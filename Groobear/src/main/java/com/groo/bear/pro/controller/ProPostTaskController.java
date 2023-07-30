@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.groo.bear.pro.service.ProPostTaskService;
 import com.groo.bear.pro.service.task.ProPostTaskWorkGroupVO;
+import com.groo.bear.pro.service.task.ProUpWorkVo;
 
 @RestController
 public class ProPostTaskController {
@@ -34,4 +38,12 @@ public class ProPostTaskController {
 	public List<String> 해당work담당자조회(@RequestBody int proPostNo) {
 		return task.readDetailWorkPerson(proPostNo);
 	}
+	
+	@PostMapping("upWork")
+	public Map<String, Object> upWork(@RequestBody ProUpWorkVo vo) {
+		int result = task.updateWorkPost(vo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
+	
 }

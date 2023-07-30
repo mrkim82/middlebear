@@ -9,6 +9,7 @@ import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 import com.groo.bear.pro.service.todovote.ProPostVoteVO;
 import com.groo.bear.pro.service.todovote.ProTodoPartiCountVO;
+import com.groo.bear.pro.service.todovote.ProUpdateVoteVO;
 import com.groo.bear.pro.service.todovote.ProVoteCDVO;
 
 public interface ProTodoNVoteMapper {
@@ -53,5 +54,11 @@ public interface ProTodoNVoteMapper {
 	
 	//투표 체크 조회하기 위한 select
 	public List<ProVoteCDVO> readxxVote(String id, int proNo);
+	
+	//투표 내용변경
+	public int updateVote(ProUpdateVoteVO vo);
+	
+	//추가
+	public int createVoteDetail(String voteDetailContent, int voteNo);
 	
 }

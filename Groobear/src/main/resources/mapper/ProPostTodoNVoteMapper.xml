@@ -176,5 +176,22 @@
 		AND a.pro_no = #{proNo}
 	</select>
 	
+	<!-- 투표 내용변경 -->
+	<update id="updateVote" parameterType="ProUpdateVoteVO">
+		UPDATE vote
+		SET vote_content = #{voteContent},
+			vote_end_day = #{voteEndDay}
+		WHERE pro_post_no = #{proPostNo}
+	</update>
+	
+	<!-- 투표내용 추가 -->
+	<insert id="createVoteDetail">
+		INSERT INTO vote_detail(vote_detail_no, vote_detail_content, vote_no)
+		VALUES(
+			   (SELECT NVL(MAX(vote_detail_no), 0) + 1
+			   FROM vote_detail),
+			   #{voteDetailContent},
+			   #{voteNo})
+	</insert>
 	
 </mapper>

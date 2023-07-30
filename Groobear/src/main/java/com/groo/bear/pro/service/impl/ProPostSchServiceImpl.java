@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.groo.bear.pro.mapper.ProPostMapper;
 import com.groo.bear.pro.mapper.ProPostSchMapper;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.schvo.ProCreateSchVO;
@@ -12,11 +13,15 @@ import com.groo.bear.pro.service.schvo.ProPerCalComVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.schvo.ProPostWorkSchVO;
 import com.groo.bear.pro.service.schvo.ProSchDetailVO;
+import com.groo.bear.pro.service.schvo.ProUpdateSchVO;
 
 @Service
 public class ProPostSchServiceImpl implements ProPostSchService {
 	@Autowired
 	ProPostSchMapper ppsm;
+	
+	@Autowired
+	ProPostMapper ppm;
 	
 	@Override
 	public List<ProPostSchVO> readSchparti(String id) {
@@ -104,6 +109,15 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 	@Override
 	public void createPostSch(ProCreateSchVO vo) {
 		ppsm.createPostSch(vo);
+	}
+
+	@Override
+	public int updateProSch(ProUpdateSchVO vo) {
+		//제목 변경
+		ppm.updateProPostTitle(vo.getPostTitle(), vo.getProPostNo());
+		
+		ppsm.updateProSch(vo);
+		return 0;
 	}
 
 }

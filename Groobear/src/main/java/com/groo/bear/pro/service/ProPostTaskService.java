@@ -6,6 +6,7 @@ import com.groo.bear.pro.service.task.ProPostTaskDetailVO;
 import com.groo.bear.pro.service.task.ProPostTaskVO;
 import com.groo.bear.pro.service.task.ProPostTaskWorkGroupVO;
 import com.groo.bear.pro.service.task.ProPostTaskWorkPersonVO;
+import com.groo.bear.pro.service.task.ProUpWorkVo;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
 public interface ProPostTaskService {
@@ -38,4 +39,6 @@ public interface ProPostTaskService {
 	
 	//해당 work 담당자
 	public List<String> readDetailWorkPerson(int proPostNo);
+	
+	public int updateWorkPost(ProUpWorkVo vo);
 }

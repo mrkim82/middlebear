@@ -8,6 +8,7 @@ import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 import com.groo.bear.pro.service.todovote.ProPostVoteVO;
 import com.groo.bear.pro.service.todovote.ProTodoPartiCountVO;
+import com.groo.bear.pro.service.todovote.ProUpdateVoteVO;
 import com.groo.bear.pro.service.todovote.ProVoteCDVO;
 
 public interface ProTodoNVoteService {
@@ -49,4 +50,7 @@ public interface ProTodoNVoteService {
 	
 	//투표 체크 조회하기 위한 select
 	public List<ProVoteCDVO> readxxVote(String id, int proNo);
+	
+	//투표 변경
+	public int updateVotePost(ProUpdateVoteVO vo);
 }

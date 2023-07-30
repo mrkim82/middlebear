@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.groo.bear.pro.mapper.ProPostMapper;
 import com.groo.bear.pro.mapper.ProTodoNVoteMapper;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.todovote.CreateVoteVO;
@@ -14,6 +15,7 @@ import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 import com.groo.bear.pro.service.todovote.ProPostVoteVO;
 import com.groo.bear.pro.service.todovote.ProTodoPartiCountVO;
+import com.groo.bear.pro.service.todovote.ProUpdateVoteVO;
 import com.groo.bear.pro.service.todovote.ProVoteCDVO;
 
 @Service
@@ -21,6 +23,9 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 	@Autowired
 	ProTodoNVoteMapper tv;
 
+	@Autowired
+	ProPostMapper ppm;
+	
 	@Override
 	public List<ProPostTodoVO> readTodoList(int proNo) {
 		return tv.readTodoList(proNo);
@@ -101,6 +106,25 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 	@Override
 	public List<ProVoteCDVO> readxxVote(String id, int proNo) {
 		return tv.readxxVote(id, proNo);
+	}
+
+	@Override
+	public int updateVotePost(ProUpdateVoteVO vo) {
+		
+		ppm.updateProPostTitle(vo.getPostTitle(), vo.getProPostNo());
+		
+		tv.updateVote(vo);
+		
+		if(!vo.getVoteDetailContents().isEmpty()) {
+			
+			for (int i = 0; i < vo.getVoteDetailContents().size(); i++) {
+				System.out.println("돈다"+vo.getVoteDetailContents().get(i));
+				tv.createVoteDetail(vo.getVoteDetailContents().get(i), vo.getVoteNo());
+			}
+		}
+		
+		
+		return 0;
 	}
 
 	
