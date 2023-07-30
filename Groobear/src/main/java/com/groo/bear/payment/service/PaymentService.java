@@ -66,4 +66,6 @@ public interface PaymentService {
 	public List<FilesVO> searchPayImg(int payNo);
 	//전자결재 이미지 제거
 	public int deletePayImg(int payNo);
+	//첨부파일 조회
+	public List<FilesVO> getAtt(int payNo);
 }

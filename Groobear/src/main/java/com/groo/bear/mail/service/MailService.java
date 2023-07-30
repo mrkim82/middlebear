@@ -2,6 +2,7 @@ package com.groo.bear.mail.service;
 
 import java.util.List;
 
+import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.paging.Criteria;
 
 public interface MailService {
@@ -19,15 +20,34 @@ public interface MailService {
 	//지운메일함 조회
 	public List<MailVO> deletedMail(Criteria cri, MailVO mailVO);
 	//메일삭제(update)
-	public int deleteMail(int mailNo);
+	public int deleteMail(MailVO mailVO);
 	//메일 완전삭제(delete)
-	public int realDeleteMail(int mailNo);
+	public int realDeleteMail(MailVO mailVO);
 	//메일 상세조회
-	public MailVO mailInfo(int mailNo);
+	public MailVO mailInfo(MailVO mailVO);
 	// 보낸메일 총 갯수
 	public int countSendMail(String sender);
 	// 받은메일 총 갯수
 	public int countReceiveMail(String receiver, String referrer);
 	// 지운메일 총 갯수
 	public int countDeleteMail(MailVO mailVO);
+	//메일 첨부파일 등록
+	public int insertMailFile(FilesVO vo);
+	//메일 첨부파일 조회
+	public FilesVO searchMailFile(int mailNo);
+	//메일 첨부파일 삭제
+	public int deleteMailFile(int mailNo);
+	//메일번호 받아오는 쿼리문
+	public int mailNo();
+	//수신자가 메일상세조회로 읽을경우
+	public int mailCheck(int mailNo);
+	//personnel에 추가값 넣기
+	public int insertPersonnel(MailVO mailVO);
+	//personnel 맥스번호
+	public int personnelNo();
+	//이메일로 유저아이디 받아오기
+	public String userIdGet(String email);
+	//첨부파일 조회
+	public List<FilesVO> getAttach(int mailNo);
+	
 }

@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -284,4 +287,51 @@ public class PaymentController {
 		System.out.println("result = "+result);
 		return result;
 	}
+	//첨부파일 다운로드
+	@GetMapping(value ="/getAtt", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<FilesVO>> getAtt(@RequestBody @RequestParam int payNo) {
+		//log.info("getAttachList" + payNo);
+		return new ResponseEntity<>(paymentService.getAtt(payNo), HttpStatus.OK);
+	}
+	//결재문서 상세조회
+		@GetMapping("payInfoRead")
+		public String payInfoRead(@RequestParam int payNo, @RequestParam String docType, Model model, HttpSession session) {
+			System.out.println("payInfo payNo = "+payNo);
+			System.out.println("payInfo docType = "+docType);
+			String id = (String) session.getAttribute("Id");
+			EmpVO empvo = new EmpVO();
+			empvo = paymentService.payEmpInfo(id);
+			model.addAttribute("userInfo",paymentService.payEmpInfo(id));
+			model.addAttribute("mySign",paymentService.searchSignImg(empvo.getEmpNo()));
+			if(docType.equals("a")) {
+				System.out.println("docType = 운행일지");
+				PaymentVO payVO = paymentService.logList(payNo);
+				System.out.println("payVO = "+payVO);
+				empvo = paymentService.payEmpInfo(payVO.getId());
+				model.addAttribute("drafterInfo",empvo);
+				model.addAttribute("list",paymentService.logList(payNo));
+			}
+			if(docType.equals("b")) {
+				System.out.println("docType = 연차계");
+				System.out.println("payNo"+payNo);
+				PaymentVO payVO = paymentService.offList(payNo);
+				System.out.println("payVO = "+payVO);
+				empvo = paymentService.payEmpInfo(payVO.getId());
+				model.addAttribute("drafterInfo",empvo);
+				model.addAttribute("list",paymentService.offList(payNo));
+			}
+			if(docType.equals("c")){
+				System.out.println("docType = 품의서");
+				PaymentVO payVO = paymentService.robinList(payNo);
+				System.out.println("payVO = "+payVO);
+				empvo = paymentService.payEmpInfo(payVO.getId());
+				model.addAttribute("drafterInfo",empvo);
+				model.addAttribute("list",paymentService.robinList(payNo));
+			}
+			List<FilesVO> list = paymentService.searchPayImg(payNo);
+			System.out.println(list);
+			model.addAttribute("payImgInfo",list);
+			return "pay/payInfo";
+		}
 }

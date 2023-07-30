@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 </head>
 <body layout:fragment="content">
 <div>
@@ -67,7 +68,7 @@
 		}
 		function checkBoxClick(){
 			console.log(event.target); //event는 전역객체
-			let mailNo = event.target.parentElement.parentElement.children[2].textContent;
+			let mailNo = event.target.parentElement.parentElement.children[1].textContent;
 			console.log('mailNo = ',mailNo)
 			if(event.target.checked){
 				console.log('체크됨2');
@@ -90,7 +91,7 @@
 			}
 			console.log(delList);
 			$.ajax({
-			    url : "realdelete",  // 전송 URL
+			    url : "delete",  // 전송 URL
 			    type : 'POST',
 			    contentType : 'application/json',
 			    data :JSON.stringify( delList ),

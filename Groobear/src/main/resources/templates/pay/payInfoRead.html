@@ -98,9 +98,8 @@
 					</div>
 					</td>
 						<tr><td><div class="panel-body1">
-	                        <div class="form-group uploadDiv1 row">
+	                        <div class="form-group uploadDiv1">
 	                            <input name="uploadFile1" type="file" multiple>
-	                            <button name="delImg" type="button" onclick="delImgTag(this)">제거</button>
 	                        </div>
 	                        <div class="uploadResult9">
 	                            <ul>
@@ -609,6 +608,15 @@
   			    }
 			});
 		}
+		function payImgDel(elem){
+			olduuid = "";
+			olduploadPath = "";
+			oldfileName = "";
+			console.log(elem);
+			//console.log(elem.parent);
+			delOn = "o";
+			console.log(delOn);
+		}
 		//운행전 첨부파일
 	    $("input[name='uploadFile1']").change(function(e) {
 	        var formData = new FormData();
@@ -768,10 +776,13 @@
 			imprest = ((afterd*1)-(befored*1))*1500;
 			imprestText.value = imprest;
 	    }
-	    function delImgTag(elem){
-	    	console.log(elem);
-	    	delOn= 'o';
+	    function imgTagDel(elem){
+	    	elem.parentElement.remove();
+	    	upCheck = "x";
 	    }
+	    $(document).on("click",'.logImgDelete', function(){
+	    	console.log('1');
+	    })
 	    //운행일지1번 이미지,파일 가져와서 다운가능하고 보여주는구문
 	    if(masterDocType==='a'){
 	    $.getJSON(`/getAtt?payNo=[[${list.payNo}]]`, function(arr) {
@@ -786,6 +797,9 @@
 	                str += "<img src='/display?fileName=" + fileCallPath + "' style='width:200px;height:140px'>";
 	                str += "</div>";
 	                str += "</li>";
+	                str += "<li style='margin:10px;list-style-type:none'>"
+	                str += "<button type='button' id='logImgDel' class='logImgDelete' style='width:50px; height:40px'>제거</button>";
+	                str += "</li>"
 	            } else {
 	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
