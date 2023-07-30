@@ -1,9 +1,11 @@
 package com.groo.bear.pro.controller;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,5 +28,10 @@ public class ProPostTaskController {
 	public Map<String, Object> 업무그룹삭제(@RequestBody int workGroupNo) {
 		int result = task.deleteWorkGroup(workGroupNo);
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
+	@PostMapping("readDetailWorkMem")
+	public List<String> 해당work담당자조회(@RequestBody int proPostNo) {
+		return task.readDetailWorkPerson(proPostNo);
 	}
 }

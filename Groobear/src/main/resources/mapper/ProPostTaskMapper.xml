@@ -123,4 +123,13 @@
 		WHERE work_group_no = #{workGroupNo}
 	</delete>
 	
+	<!-- 해당 work 담당자-->
+	<select id="readDetailWorkPerson" resultType="String">
+		SELECT id
+		FROM work_person a
+		JOIN pro_work b
+		ON(a.work_no = b.work_no)
+		WHERE pro_post_no = #{proPostNo}
+	</select>
+	
 </mapper>

@@ -76,4 +76,9 @@ public class ProPostTaskServiceImpl implements ProPostTaskService {
 		return task.deleteWorkGroup(workGroupNo);
 	}
 
+	@Override
+	public List<String> readDetailWorkPerson(int proPostNo) {
+		return task.readDetailWorkPerson(proPostNo);
+	}
+
 }

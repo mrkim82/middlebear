@@ -32,6 +32,7 @@ import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.postvo.ProWritingUVO;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
 @Controller
@@ -269,6 +270,15 @@ public class proPostController {
 	public Map<String, Object> deleteProPost(HttpServletRequest request, @RequestBody int delProPostNo) {
 		int result = proPostService.deleteProPost(delProPostNo);
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
+	//글 수정
+	@PutMapping("upProPost")
+	@ResponseBody
+	public Map<String, Object> updateProPost(@RequestBody ProWritingUVO vo) {
+		System.out.println(vo);
+		int result = proPostService.updateProWriting(vo);
+		return Collections.singletonMap("result", result);
 	}
 	
 }

@@ -15,6 +15,7 @@ import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.postvo.ProWritingUVO;
 
 @Service
 public class ProPostServiceImpl implements ProPostService {
@@ -115,5 +116,24 @@ public class ProPostServiceImpl implements ProPostService {
 	public int deleteProPost(int proPostNo) {
 		return ppm.deleteProPost(proPostNo);
 	}
+
+	@Override
+	public int updateProWriting(ProWritingUVO vo) {
+		int res = 0;
+		String title = vo.getPostTitle();
+		
+		if(title != null) {
+			ppm.updateProPostTitle(title, vo.getProPostNo());
+			res++;
+		}
+		
+		if(vo.getWritingContent() != null) {
+			ppm.updateProWriting(vo);
+			res++;
+		}
+		
+		return res;
+	}
+
 
 }

@@ -35,4 +35,7 @@ public interface ProPostTaskMapper {
 	
 	//업무 그룹 삭제
 	public int deleteWorkGroup(int workGroupNo);
+	
+	//해당 work 담당자
+	public List<String> readDetailWorkPerson(int proPostNo);
 }

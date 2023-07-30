@@ -9,6 +9,7 @@ import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.postvo.ProWritingUVO;
 
 public interface ProPostService {
 	//상단메뉴바
@@ -52,4 +53,10 @@ public interface ProPostService {
 	
 	// 프로필 메모 수정
 	public int updateProfileMemo(ProPostUserVO vo);
+	
+	//게시글 수정
+	// 글변경
+	public int updateProWriting(ProWritingUVO vo);
+	
+	
 }

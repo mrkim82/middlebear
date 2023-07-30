@@ -221,6 +221,22 @@
 	<delete id="deleteProPost">
 		DELETE FROM pro_post
 		WHERE pro_post_no = #{proPostNo}	
-	</delete>	
+	</delete>
+	
+	<!-- 게시글 제목 변경 -->
+	<update id="updateProPostTitle">
+		UPDATE pro_post
+		SET post_title = #{postTitle}
+		WHERE pro_post_no = #{proPostNo}
+	</update>
+	
+	<!-- 글 내용 변경 -->	
+	<update id="updateProWriting" parameterType="ProWritingUVO">
+		UPDATE pro_writing
+		SET writing_content = #{writingContent}
+		WHERE pro_post_no = #{proPostNo}
+	</update>	
+	
+	
 	
 </mapper>
