@@ -2271,8 +2271,6 @@ function updatePost() {
 	let postTargetTop = event.target.closest('.card');
 	let postTypeCheck = event.target.closest('.card').dataset.postType;
 	let updateFeedPostNo = event.target.closest('.card').dataset.feedPostNo;
-	console.log(postTargetTop)
-	console.log('post번호',updateFeedPostNo)
 	
 	if(postTypeCheck == 1) {//업무
 		changeWorkPost(postTargetTop, updateFeedPostNo);
@@ -2380,20 +2378,20 @@ function makeUlTag(updateContents, ulTag) {
 		let input1 = document.createElement('input');
 		input1.type = 'text';
 		input1.value = updateContent.children[1].textContent.substr(7);
-		input1.disabled = true;
+		//input1.disabled = true;
 		
 		let newTime = updateContent.children[2].textContent.substr(6);
 		// 두 번째 <input> 요소를 생성하고 설정합니다.
 		let input2 = document.createElement('input');
 		input2.type = 'date';
 		input2.value = newDate(newTime);
-		input2.disabled = true;
+		//input2.disabled = true;
 
 		// 세 번째 <input> 요소를 생성하고 설정합니다.
 		let input3 = document.createElement('input');
 		input3.type = 'text';
 		input3.value = updateContent.children[3].textContent;
-		input3.disabled = true;
+		//input3.disabled = true;
 
 		newLi.appendChild(input1);
 		newLi.appendChild(input2);
@@ -2454,7 +2452,7 @@ function makeVoteUlTag(updateVoteContents, ulTag) {
 		// <input> 요소를 <li> 요소 안에 추가
 		newLi.appendChild(newInput);
 
-		ulTag.prepend(newLi);
+		ulTag.append(newLi);
 	})
 
 }

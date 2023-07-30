@@ -194,4 +194,10 @@
 			   #{voteNo})
 	</insert>
 	
+	<!-- 할 일 단건 조회 -->
+	<select id="readTodoDetail" resultType="ProTodoDetailVO">
+		SELECT todo_no, todo_content, todo_end, todo_check
+		FROM todo
+		WHERE pro_post_no = #{proPostNo}
+	</select>
 </mapper>

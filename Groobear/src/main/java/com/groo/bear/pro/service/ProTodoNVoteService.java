@@ -7,6 +7,7 @@ import com.groo.bear.pro.service.todovote.ProPostTodoCountVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
 import com.groo.bear.pro.service.todovote.ProPostVoteVO;
+import com.groo.bear.pro.service.todovote.ProTodoDetailVO;
 import com.groo.bear.pro.service.todovote.ProTodoPartiCountVO;
 import com.groo.bear.pro.service.todovote.ProUpdateVoteVO;
 import com.groo.bear.pro.service.todovote.ProVoteCDVO;
@@ -53,4 +54,7 @@ public interface ProTodoNVoteService {
 	
 	//투표 변경
 	public int updateVotePost(ProUpdateVoteVO vo);
+	
+	//할 일 단건 조회
+	public List<ProTodoDetailVO> readTodoDetail(int proPostNo);
 }
