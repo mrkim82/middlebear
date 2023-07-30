@@ -282,7 +282,11 @@
 	</select>
 		
 		
-		
+	<select id="checkCarNo" parameterType="String" resultType="int">
+    	select count(*)
+    	from car
+    	where car_no = #{carNo}
+    </select>
 		
 
 

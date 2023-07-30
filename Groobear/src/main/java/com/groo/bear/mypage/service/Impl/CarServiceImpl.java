@@ -67,6 +67,11 @@ public class CarServiceImpl implements CarService {
 		return carMapper.getMybook(cri, id, monthDate);
 	}
 
+	@Override
+	public int carNoChk(String carNo) {
+		return carMapper.checkCarNo(carNo);
+	}
+
 	
 
 	

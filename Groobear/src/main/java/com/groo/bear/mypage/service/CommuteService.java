@@ -35,6 +35,8 @@ public interface CommuteService {
 	public CommuteVO monthNoWork(String id, String monthDate);
 	//개별 정보 조회
 	public List<CommuteVO> getComInfo(String id); 
+	//전체 월 정보 
+	public List<CommuteVO> getAllMonth(Criteria cri, CommuteVO commuteVO, String monthDate);
 	//수정
 	public int commuteUpdate(CommuteVO commuteVO);
 	

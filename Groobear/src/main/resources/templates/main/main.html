@@ -194,16 +194,14 @@
 		</tr>
 		</tbody>
 	</table>
-   <div class="work">
-      
-   </div>   
+   <div class="work"></div>   
 	<!-- 데이터 -->
 <p class="day" style="display:none;"></p>
 <p class="startWork" style="display:none;"></p>
 <p class="endWork" style="display:none;"></p>
 <p class="startOverWork" style="display:none;"></p>
 <p class="endOverWork" style="display:none;"></p>
-<p class="monthOver" style="display:none;"></p>
+<p class="monthOver" style="display:bolck;"></p>
 
 
    <script>
@@ -225,7 +223,7 @@
    		});
    }
    
-     //김도현 시작
+   
 	let chkCount = 0;
 	let chkCounto = 0;
 	let id = '[[${session.Id}]]';
@@ -309,6 +307,7 @@
 					document.getElementById('workEnd').innerText = data.workEnd.substr(-5);
 			} 
 			
+			
 			// 연장근무 시작/종료 스위치 업데이트
 			if(parseInt(document.querySelector('.monthOver').textContent) < 2401){
 				if (data.overWorkStart != null && data.overWorkEnd == null) {
@@ -331,7 +330,7 @@
 					document.getElementById('overWorkStart').innerText = data.overWorkStart.substr(-5);
 					document.getElementById('overWorkEnd').innerText = data.overWorkEnd.substr(-5);
 				} 
-			}else {
+			}else if(parseInt(document.querySelector('.monthOver').textContent) > 2402){
 				chkBoxo.checked = false;
 				let p = document.createElement('p');
 				p.innerText = '연장근무 불가능';
