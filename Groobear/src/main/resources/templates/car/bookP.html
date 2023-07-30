@@ -71,21 +71,22 @@
 								<table style="float: left; width: 790px;">
 									<thead></thead>
 									<tbody>
-										<tr><td>사유 : <input id="mPurpose" value="" style="border:1px solid lightgray; border-radius:3px;"></td></tr>
-										<tr><td>행선지 : <input id="mDestination" value="" style="border:1px solid lightgray; border-radius:3px;"></td></tr>
-										<tr><td>운행일자 : <input type="Date" id="mOperDate" value="" style="border:1px solid lightgray; border-radius:3px;"></td></tr>
-										<tr><td>운행전 키로수 : <input id="mBefored" onchange="changeKM()" value="" style="border:1px solid lightgray; border-radius:3px;"></td></tr>
-										<tr><td>운행후 키로수 : <input id="mAfterd" onchange="changeKM()" value="" style="border:1px solid lightgray; border-radius:3px;"></td></tr>
-										<tr><td>전도금 : <input id="mImprest" style="border:none;"></td></tr>
+										<tr><td>사유 : <span id="mPurpose"></span>
+										<tr><td>행선지 : <span id="mDestination"></span>
+										<tr><td>운행일자 : <span id="mOperDate"></span>
+										<tr><td>운행전 키로수 : <span id="mBefored"></span>
+										<tr><td>운행후 키로수 : <span id="mAfterd"></span>
+										<tr><td>전도금 : <span id="mImprest"></span>
+										<tr style="display:none;"><td><input id="mDocType" style="border:none;"></td></tr>
 									</tbody>
 								</table>
 							</div>
 						</div>
 
 						<div class="modal-footer">
-							<button type="button" id="saveBtn" class="btn btn-primary">Save</button>
+							<button type="button" id="saveBtn" class="btn btn-primary">수정</button>
 							<button type="button" class="btn btn-secondary"
-								data-mdb-dismiss="modal">Close</button>
+								data-mdb-dismiss="modal">닫기</button>
 						</div>
 					</form>
 				</div>
@@ -101,29 +102,13 @@
 			<form name="searchForm" action="bookList">
 				<div>
 					<button type="button" onclick="prevMon()" class="btn btn-primary">
-						<</button>
+						&laquo;</button>
 					<input
 						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
 						type="month" name="monthDate" id="monthDate"
 						onchange="changeMon()" th:value="${monthDate}">
 					<button type="button" onclick="nextMon()" class="btn btn-primary">
-						></button>
-				</div>
-				<div
-					style="position: absolute; display: inline-block; right: 25px; top: 40px;">
-					<select
-						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
-						name="type">
-						<option value='' selected>선택</option>
-						<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
-						<option value='destination'
-							th:selected="${criteria.type == 'destination'}">행선지</option>
-						<option value='deptName'
-							th:selected="${criteria.type == 'deptName'}">부서</option>
-					</select> <input
-						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
-						type="text" name="keyword" th:value="${criteria.keyword}" />
-					<button type="submit" id="searchBtn" class="btn btn-primary">검색</button>
+						&raquo;</button>
 				</div>
 			</form>
 		</div>
@@ -217,24 +202,28 @@
 				let issueDate = event.currentTarget.querySelector('.issueDate').innerText;
 				let purpose = event.currentTarget.querySelector('.purpose').innerText;
 				let destination = event.currentTarget.querySelector('.destination').innerText;
+				let docType = event.currentTarget.querySelector('.docType').innerText;
 				let imprest = (parseInt(afterd) - parseInt(befored)) * 1500;
 				
+				
+				console.log(destination);
 				console.log(payNo);
 				console.log(empNo);
 				
 				
-				document.querySelector('#mOperDate').value = operDate;
+				document.querySelector('#mOperDate').textContent = operDate;
 				//document.querySelector('#mEmpNo').textContent = empNo;
 				document.querySelector('#mDept').textContent = dept;
 				document.querySelector('#mName').textContent = name;
 				//document.querySelector('#mId').value = id;
 				document.querySelector('#mPayNo').textContent = payNo;
-				document.querySelector('#mBefored').value = befored;
-				document.querySelector('#mAfterd').value = afterd;
+				document.querySelector('#mBefored').textContent = befored;
+				document.querySelector('#mAfterd').textContent = afterd;
 				document.querySelector('#mIssueDate').textContent = issueDate;
-				document.querySelector('#mPurpose').value = purpose;
-				document.querySelector('#mDestination').value = destination;
-				document.querySelector('#mImprest').value = imprest;
+				document.querySelector('#mPurpose').textContent = purpose;
+				document.querySelector('#mDestination').textContent = destination;
+				document.querySelector('#mImprest').textContent = imprest;
+				document.querySelector('#mDocType').textContent = docType;
 				
 				
 				
@@ -251,39 +240,12 @@
 
 			var dateString = year + '-' + month + '-' + day;
 
-			//debugger
 
 			$('#commuteModal').on('hidden.bs.modal', function(event) {
 				commuteInfoForm.reset();
 			})
 
-			/* document.querySelector('#saveBtn').addEventListener('click',function(){
-					
-				let data = {
-						
-				}
-					
-					fetch('/ddd', {
-			           method : 'post',
-			           headers : {
-			              'Content-Type' : 'application/json'
-			           },
-			           body : JSON.stringify(data)
-					})
-			        .then(response => response.json())
-			        .then(result => {
-			           if(result == 'success'){
-			        	   console.log('success')
-			        	   alert('success');
-			        	   location.reload();
-			           } else if(result == 'fail'){
-			        	   console.log('fail')
-			        	   alert('fail')
-			           }else {
-			        	   console.log('etc')
-			           }
-			        })
-			        .catch(err=> console.log(err)) */
+			
 
 			var mon = document.querySelector('#monthDate').value
 
@@ -305,6 +267,7 @@
 			}
 			function prevMon() {
 				location.href = '/bookList/' + prevMonthString;
+				
 			}
 			function changeMon() {
 				let monthDate = document.querySelector('#monthDate').value;
@@ -324,13 +287,51 @@
 			}
 			
 			
-			
-			
-			
+			document.querySelector('#saveBtn').addEventListener('click',function(){
+			let issueDate = document.querySelector('#mIssueDate').textContent;	
+				
+		
+				let data = {
+						'operDate' : document.getElementById('mOperDate').value,
+						'destination' : document.getElementById('mDestination').value,
+						'befored' : document.getElementById('mBefored').value,
+						'afterd' : document.getElementById('mAfterd').value,
+						'imprest' : document.getElementById('mImprest').value,
+						'purpose' : document.getElementById('mPurpose').value,
+						'payNo' : document.getElementById('mPayNo').textContent,
+						'docType' : document.getElementById('mDocType').value
+						}
+				location.href="/payInfo?payNo="+document.getElementById('mPayNo').textContent+"&docType="+document.getElementById('mDocType').textContent		
+				
+				/* console.log(data);
+					fetch('/paymentUpdate', {
+			           method : 'post',
+			           headers : {
+			              'Content-Type' : 'application/json'
+			           },
+			           body : JSON.stringify(data)
+					})
+			        .then(response => response.text())
+			        .then(result => {
+			           if(result == 'success'){
+			        	   console.log('success')
+			        	   alert('success');
+			        	   location.reload();
+			           } else if(result == 'fail'){
+			        	   console.log('fail')
+			        	   alert('fail')
+			           }else {
+			        	   console.log('etc')
+			           }
+			       		})
+			        .catch(err => console.log(err))
+					
+					location.href="/bookList/"+issueDate.substr(0,7); */
+			})
+										
 		</script>
 
 	</div>
-
 
 </body>
 </html>

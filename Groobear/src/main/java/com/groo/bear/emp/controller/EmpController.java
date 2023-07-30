@@ -22,6 +22,7 @@ import org.springframework.web.client.RestClientException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.groo.bear.emp.service.EmpService;
 import com.groo.bear.emp.service.EmpVO;
+import com.groo.bear.mypage.service.CommuteService;
 import com.groo.bear.mypage.service.OffService;
 import com.groo.bear.mypage.service.OffVO;
 import com.groo.bear.pro.service.ProService;
@@ -42,6 +43,9 @@ public class EmpController {
 	
 	@Autowired
 	ProService proService;
+	
+	@Autowired
+	CommuteService commuteService;
 	
 	private final SmsService smsService;
 	
@@ -143,10 +147,13 @@ public class EmpController {
 		OffVO offvo = new OffVO();
 		offvo.setId(vo.getId());
 		
+		
+		
 		String result = "";
 		if(empService.signUp(vo) > 0) {
 			offService.firstSetOff(offvo);
 			proService.createProGroup(vo.getId());
+			commuteService.settingDay(vo.getId());
 			result = "success";
 			return result;
 		} else {

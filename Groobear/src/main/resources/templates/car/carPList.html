@@ -24,7 +24,7 @@
 					        <input type="text" class="form-control-plaintext" name="empNo" th:value="${info.empNo}" readonly>
 					      </div>
 					       <label class="col-form-label">부서 :</label>
-					      <div class="col-sm-2">
+					      <div class="" style=" width: 70px;">
 					        <input type="text" class="form-control-plaintext" name="deptName" th:value="${info.deptName}" readonly>
 					      </div>
 					       <label class="col-form-label">직급 :</label>
@@ -39,23 +39,58 @@
 					      <div class="col-sm-2">
 					        <input type="text" class="form-control-plaintext" name="phone" th:value="${info.Phone}" readonly>
 					      </div>
+					      <div>
+					    		<img id="carImg" src="" style="width:70px; position:absolute; margin-top:10px; right:32%;">
+					    	</div>
 					    </div>
-					    <div class="form-group row" style="margin-left: 25%;">
+					    <div class="form-group row" style="margin-left: 20%;">
 					      <p style="display: none;">
 							아이디 <input type="text" class="form-control-plaintext" name="id" th:value="${info.id}" readonly>
 						  </p>
 					      <label class="col-form-label">차량번호 :</label>
 					      <div class="col-sm-2">
-					        <input class="form-control" name="carNo" value="" style="height: 32px;">
+					        <input id="carNo2" class="form-control" name="carNo" value="" style="height: 32px;" minlength="7"  maxlength="8" onkeyup="this.nextSibling.innerHTML=/^\d{2,3}[가-힣]\d{4}$/.test(this.value)?'정상' : '차량번호 형식이 아닙니다.'"><span class="carNoCk"></span>
 					      </div>
-					       <label class="col-form-label">차종 :</label>
+					       <label class="col-form-label">자동차 브랜드 :</label>
 					      <div class="col-sm-2">
-					        <input class="form-control" name="carType" value="" style="height: 32px;">
+					        <select id="infoCarType" name="carType" onchange="changeImage()" style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;">
+												<option value="" selected>선택</option>
+												<option value="../img/hyd.png">Hyundai</option>
+												<option value="../img/kia.png">Kia</option>
+												<option value="../img/sy.png">Ssangyong</option>
+												<option value="../img/ch.png">Chevrolet</option>
+												<option value="../img/gs.png">Genesis</option>
+												<option value="../img/ad.png">Audi</option>
+												<option value="../img/bz.png">Mercedes-Benz</option>
+												<option value="../img/bmw.png">BMW</option>
+												<option value="../img/bgt.png">Bugatti</option>
+												<option value="../img/ben.png">Bentley</option>
+												<option value="../img/cad.png">Cadillac</option>
+												<option value="../img/fd.png">Ford</option>
+												<option value="../img/hd.png">Honda</option>
+												<option value="../img/inf.png">Infiniti</option>
+												<option value="../img/jp.png">Jeep</option>
+												<option value="../img/lb.png">Lamborghini</option>
+												<option value="../img/lex.png">Lexus</option>
+												<option value="../img/lr.png">Land-Rover</option>
+												<option value="../img/mas.png">Maserati</option>
+												<option value="../img/mc.png">Mclaren</option>
+												<option value="../img/may.png">Maybach</option>
+												<option value="../img/ns.png">Nissan</option>
+												<option value="../img/ps.png">Porsche</option>
+												<option value="../img/rr.png">Rolls-Royce</option>
+												<option value="../img/tsl.png">Tesla</option>
+												<option value="../img/tyt.png">Toyota</option>
+												<option value="../img/vv.png">Volvo</option>
+												<option value="../img/vw.png">Volkswagen</option>
+											</select>
 					      </div>
 					      <button type="submit" class="insertBtn btn btn-primary" onclick="checkBtn()"
-							style="text-align: center; width:100px">등록</button>
+							style="text-align: center; width:100px; height: 35px;">등록</button>
+							
 					    </div>
 					    
+					    	
 						</div>
 					</div>
 				</div>
@@ -67,17 +102,47 @@
 		<div style="display:flex;margin-top:20px;align-items: stretch;justify-content: center;">
 			<div class="card border-success mb-3 " style="width: 18rem;display:inline-block; margin: 0 50px;" th:if="${carPList != null}" th:onclick="carInfofo()" id="carIn"
 						th:each="car, es:${carPList}" data-toggle="modal" data-target="#carMInfo">
-			  <div class="card-header">dd</div>
+			  <div class="card-header"></div>
 			  <div class="card-body">
-			  	<img alt="" src="https://via.placeholder.com/100">
-			    <p class="card-title">차량번호 : <span class="carNo">[[${car.carNo}]]</span></p>
-			    <p class="card-text">차종 : <span class="carType">[[${car.carType}]]</span></p>
+			  	<div style="height:220px">
+			  	<img id="carImg3" th:src="${car.carType}" style="width:200px;">
+			  	</div>
+			    <p class="card-title" style="margin-top:15px;">차량번호 : <span class="carNo">[[${car.carNo}]]</span></p>
+			    <p class="card-text">자동차 브랜드 : 
+					<span class="carType" th:if="${car.carType} == '../img/hyd.png'">Hyundai</span>
+					<span class="carType" th:if="${car.carType} == '../img/kia.png'">Kia</span>
+					<span class="carType" th:if="${car.carType} == '../img/sy.png'">Ssangyoung</span>
+					<span class="carType" th:if="${car.carType} == '../img/ch.png'">Chevrolet</span>
+					<span class="carType" th:if="${car.carType} == '../img/gs.png'">Genesis</span>
+					<span class="carType" th:if="${car.carType} == '../img/ad.png'">Audi</span>
+					<span class="carType" th:if="${car.carType} == '../img/bz.png'">Mercedes-Benz</span>
+					<span class="carType" th:if="${car.carType} == '../img/bmw.png'">BMW</span>
+					<span class="carType" th:if="${car.carType} == '../img/bgt.png'">Bugatti</span>
+					<span class="carType" th:if="${car.carType} == '../img/ben.png'">Bentley</span>
+					<span class="carType" th:if="${car.carType} == '../img/cad.png'">Cadillac</span>
+					<span class="carType" th:if="${car.carType} == '../img/fd.png'">Ford</span>
+					<span class="carType" th:if="${car.carType} == '../img/hd.png'">Honda</span>
+					<span class="carType" th:if="${car.carType} == '../img/inf.png'">Infiniti</span>
+					<span class="carType" th:if="${car.carType} == '../img/jp.png'">Jeep</span>
+					<span class="carType" th:if="${car.carType} == '../img/lb.png'">Lamborghini</span>
+					<span class="carType" th:if="${car.carType} == '../img/lex.png'">Lexus</span>
+					<span class="carType" th:if="${car.carType} == '../img/lr.png'">Land-Rover</span>
+					<span class="carType" th:if="${car.carType} == '../img/mas.png'">Maserati</span>
+					<span class="carType" th:if="${car.carType} == '../img/mc.png'">Mclaren</span>
+					<span class="carType" th:if="${car.carType} == '../img/may.png'">Maybach</span>
+					<span class="carType" th:if="${car.carType} == '../img/ns.png'">Nissan</span>
+					<span class="carType" th:if="${car.carType} == '../img/ps.png'">Porsche</span>
+					<span class="carType" th:if="${car.carType} == '../img/rr.png'">Rolls-Royce</span>
+					<span class="carType" th:if="${car.carType} == '../img/tsl.png'">Tesla</span>
+					<span class="carType" th:if="${car.carType} == '../img/tyt.png'">Toyota</span>
+					<span class="carType" th:if="${car.carType} == '../img/vv.png'">Volvo</span>
+					<span class="carType" th:if="${car.carType} == '../img/vw.png'">Volkswagen</span>
+			    </p>
 			    <p class="card-text">등록일 : <span>[[${#dates.format(car.carDate,'yyyy년 MM월 dd일')}]]</span></p>
 			  </div>
 			</div>
 		</div>
 	
-
 		<div class="modal fade" id="carMInfo" tabindex="-1" role="dialog"
 			aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
@@ -116,12 +181,42 @@
 										<div class="form-group mb-3">
 											<label class="label">New Car Number</label> <input
 												name="carNo" id="newCarNo" type="text" value=""
-												class="form-control">
+												class="form-control" minlength="7"  maxlength="8" onkeyup="this.nextSibling.innerHTML=/^\d{2,3}[가-힣]\d{4}$/.test(this.value)?'정상' : '차량번호 형식이 아닙니다.'"><span id="mCarNoCk"></span>
 										</div>
 										<div class="form-group mb-3">
-											<label class="label">Car Type</label> <input id="infoCarType"
-												name="carType" type="text" value="" class="form-control"
-												placeholder="휘발유 혹은 디젤">
+											<label class="label">Car brand</label> 
+												<select id="infoCarType2" name="carType" onchange="changeImage2()">
+													<option value="" selected>선택</option>
+													<option value="../img/hyd.png">Hyundai</option>
+													<option value="../img/kia.png">Kia</option>
+													<option value="../img/sy.png">Ssangyong</option>
+													<option value="../img/ch.png">Chevrolet</option>
+													<option value="../img/gs.png">Genesis</option>
+													<option value="../img/ad.png">Audi</option>
+													<option value="../img/bz.png">Mercedes-Benz</option>
+													<option value="../img/bmw.png">BMW</option>
+													<option value="../img/bgt.png">Bugatti</option>
+													<option value="../img/ben.png">Bentley</option>
+													<option value="../img/cad.png">Cadillac</option>
+													<option value="../img/fd.png">Ford</option>
+													<option value="../img/hd.png">Honda</option>
+													<option value="../img/inf.png">Infiniti</option>
+													<option value="../img/jp.png">Jeep</option>
+													<option value="../img/lb.png">Lamborghini</option>
+													<option value="../img/lex.png">Lexus</option>
+													<option value="../img/lr.png">Land-Rover</option>
+													<option value="../img/mas.png">Maserati</option>
+													<option value="../img/mc.png">Mclaren</option>
+													<option value="../img/may.png">Maybach</option>
+													<option value="../img/ns.png">Nissan</option>
+													<option value="../img/ps.png">Porsche</option>
+													<option value="../img/rr.png">Rolls-Royce</option>
+													<option value="../img/tsl.png">Tesla</option>
+													<option value="../img/tyt.png">Toyota</option>
+													<option value="../img/vv.png">Volvo</option>
+													<option value="../img/vw.png">Volkswagen</option>
+												</select>
+											<img id="carImg2" style="width:300px;">
 										</div>
 										<div class="form-group mb-3" th:each="info, es:${info}"
 											style="display: none;">
@@ -131,7 +226,7 @@
 										<div class="form-group d-md-flex"></div>
 										<div class="form-group" style="margin-left: 30px;">
 											<button type="submit" style="width: 150px; margin: 0px 5px;"
-												class="btn btn-primary rounded submit px-3">수정</button>
+												class="btn btn-primary rounded submit px-3" onclick="checkBtn2()">수정</button>
 											<button type="button" id="deleteBtn"
 												style="width: 150px; margin: 0px 5px;"
 												class="btn btn-primary rounded">삭제</button>
@@ -163,10 +258,40 @@
 			console.log(carNo);
 			console.log(carType);
 			
+			document.querySelector('#infoCarType2').children.value = carType;
+			
+			
 			document.querySelector('#infoCarNo').value = carNo;
 			document.querySelector('#infoCarType').value = carType;
 		}
 		
+		
+		let changeimg = document.getElementById("infoCarType");
+        let carImg = document.getElementById("carImg");
+        document.getElementById('infoCarType').children[0].selected = true;
+        function changeImage(){
+            let index = changeimg.selectedIndex;
+            carImg.src = changeimg.options[index].value;
+        }
+		console.log(carImg)
+        
+        
+        let changeimg2 = document.getElementById("infoCarType2");
+        let carImg2 = document.getElementById("carImg2");
+        document.getElementById('infoCarType2').children[0].selected = true;
+        function changeImage2(){
+            let index = changeimg2.selectedIndex;
+            carImg2.src = changeimg2.options[index].value;
+        }
+		
+        
+        
+		
+        let carType = document.querySelector('.carType').innerText;
+        //document.getElementById('carImg3').src = carType;
+        
+        console.log(carType)
+        
 		
 		document.querySelector('#deleteBtn').addEventListener('click',function(){
 			
@@ -208,7 +333,12 @@
 				event.preventDefault();
 				alert('차량번호와 차종 모두 작성해주세요')
 			}else if($('.card-body').length > 2){
-				alert('2대이상 등록 금지')
+				alert('3대이상 등록 금지')
+				event.preventDefault();
+				document.getElementsByName('carNo')[0].value = '';
+				document.getElementsByName('carType')[0].value = '';
+			}else if(document.querySelector('.carNoCk').textContent != '정상'){
+				alert('차량번호를 제대로 입력해 주세요.')
 				event.preventDefault();
 				document.getElementsByName('carNo')[0].value = '';
 				document.getElementsByName('carType')[0].value = '';
@@ -217,7 +347,84 @@
 					
 			}
 		}
-
+		
+		
+		function checkBtn2(){
+			if(document.getElementById('newCarNo').value == ''){
+				event.preventDefault();
+				alert('차량번호를 입력해 주세요')
+			}else if(document.querySelector('#mCarNoCk').textContent != '정상'){
+				alert('차량번호를 올바른 형식으로 입력해 주세요.')
+				event.preventDefault();
+				document.getElementById('newCarNo').value = '';
+			}else{
+				document.querySelector('.insertBtn').submit();
+					
+			}
+		}
+		
+		
+		
+		
+		
+		
+		function carCheck(str) {
+		    if (/^\d{2}[가-힣]\d{4}/.exec(str) !== null && str.length === 7) {
+		       alert('성공');
+		    }else if (/^\d{3}[가-힣]\d{4}/.exec(str) !== null && str.length === 8) {
+		    	alert('성공');
+		    }else{
+		    	alert('올바른 차량번호를 입력해 주세요');
+		    }
+		}
+		
+		
+		$("#carNo2").keyup(function(event){ 
+			if (!(event.keyCode >=37 && event.keyCode<=40)) { 
+				var inputVal = $(this).val(); 
+				var check = /[a-z|A-Z]/; 
+				var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
+				if(check.test(inputVal)){ 
+					$(this).val(inputVal.replace(check, ''));
+				}	
+					if(regExp.test(inputVal)){
+					$(this).val(inputVal.replace(regExp, '')); 
+					
+				} 
+			} 
+		});
+				
+				
+		$("#newCarNo").keyup(function(event){ 
+			if (!(event.keyCode >=37 && event.keyCode<=40)) { 
+				var inputVal = $(this).val(); 
+				var check = /[a-z|A-Z]/; 
+				var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
+				if(check.test(inputVal)){ 
+					$(this).val(inputVal.replace(check, ''));
+				}	
+					if(regExp.test(inputVal)){
+					$(this).val(inputVal.replace(regExp, '')); 
+					
+				} 
+			} 
+		});	
+				
+				
+		let srcc = '../img/'
+		let brand = document.querySelector('.carType').textContent
+		if(brand = srcc+'ad.png'){
+			brand = 'Audi';
+		}
+		if(brand = srcc+'rr.png'){
+			brand = 'Rolls-Royce';
+		}		
+		
+		console.log(brand)
+				
+				
+		
+		
 	
 	
 	</script>
