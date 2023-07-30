@@ -3,7 +3,7 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 >
   <head>
-  	<title>Groobear</title>
+  	<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -117,6 +117,9 @@
 			border-bottom: 3px solid red;
 			z-index: 1050;
 		}
+		.spanCursor {
+			cursor: pointer
+		}
 	</style>
 	</head>
   <body>
@@ -140,7 +143,7 @@
 	                	</tr>
 	                	<tr>
 	                		<td><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
-	                		<span><a href="/mypage" class="dohyeon">마이페이지</a></span></td>
+	                		<span><a id="commute" class="dohyeon">마이페이지</a></span></td>
 	                	</tr>
                 	</tbody>
                 </table>
@@ -225,6 +228,21 @@
           </ul>
         </div>
       </nav>
+       <div class="data" style="display:none">
+	<p class="nowMon"></p>
+	
+</div>
+	<script>
+	
+	var today = new Date();
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var monthString = year + '-' + month;
+	const monthDate = monthString;
+	
+	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
+	
+	</script>
 		<!-- 프로젝트 우측 컨텐츠 -->
 		<div class="col">
 			<!-- 프로젝트 최 상단 바 -->
@@ -297,8 +315,13 @@
 					<!-- <th:block th:text="${#strings.substringAfter((#strings.substringAfter(#request.requestURI, '/')), '/')}"></th:block>
 					<p th:text="${#request.requestURI}"></p>
 					<th:block th:text="${#strings.substringAfter(#request.getQueryString(), '=')}"></th:block> -->
+				<div>
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteMember">
+					  +초대하기
+					</button>
+					<input type="text" id="proInSearch" placeholder="프로젝트 내 검색">
+				</div>
 				</nav>
-				
 			</div>
 			<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 		        <div layout:fragment="content" ></div>
@@ -311,8 +334,6 @@
 
 
 	<div>
-
-
 
 		<!-- modal창 -->
 		<div id="modalFolderCreate1">
@@ -352,6 +373,28 @@
 			</div>
 		</div>
 
+	<!-- 인원 초대 모달 -->
+	<div class="modal fade" id="inviteMember" tabindex="-1" aria-labelledby="inviteMemberLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="inviteMemberLabel">Modal title</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	        <button type="button" class="btn btn-primary">저장</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
 
 	</div>
 
@@ -388,6 +431,15 @@
 	}
 </script>
 
+<!-- 모달 초기화 -->
+<script>
+	$('.modal').on('hidden.bs.modal', function (e) {
+	  // 모달 내부의 모든 input 요소를 찾아 값을 초기화
+	  $(this).find('input, textarea').val('');
+	  //$(this).find('.collapse').removeClass('show');
+	});
+	
+</script>
 
 	<script th:inline="javascript">
     /*<![CDATA[*/
@@ -757,9 +809,6 @@
 
     <script>
     	let newColor;
-   		//let url = window.location.pathname;
-		//let lastIndex = url.lastIndexOf('/');
-		//let projectNo = url.substring(lastIndex + 1);//프로젝트 번호
     	
     	//클릭시 색상 정보 저장
     	function saveColor() {
@@ -792,5 +841,22 @@
 			});
     	}
     </script>
+    
+<!-- 검색기능 -->
+<script type="text/javascript">
+	proInSearch.addEventListener('keyup', function(event) {
+		if(event.keyCode === 13) {
+			if(proInSearch.value == '') {
+				alert('빈값 허용 안함');
+				proInSearch.focus();
+				return false;
+			}
+			let searchKeyword = proInSearch.value;
+			location.href="/proSearch/" + projectNo + "?search=" + searchKeyword;
+			
+		}
+	})
+</script>
+    
   </body>
 </html>

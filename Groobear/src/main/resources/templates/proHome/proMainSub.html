@@ -3,11 +3,48 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layout/proTiles}"
 >
-<head>
-<meta charset="UTF-8">
-<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
-</head>
 <body layout:fragment="content">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script
+		th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+<!-- 그룹에 프로젝트 버튼 -->
+<div>
+	<!-- Button trigger modal -->
+<button type="button"
+		class="btn btn-primary"
+		data-toggle="modal"
+		data-target="#proFolder"
+		th:if="${readPerAllPro != null}">
+	프로젝트 폴더 설정
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="proFolder" tabindex="-1" aria-labelledby="proFolderLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="proFolderLabel">그룹에 포함시킬 프로젝트</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<ul>
+      		<li th:each="pro : ${readPerAllPro}">
+      			<input type="checkbox"
+      				   th:data-pro-mem-no="${pro.proMemNo}"
+      				   onclick="changeGorupStatus()">
+      			<span th:text="${pro.proName}"></span>
+    		</li>
+      	</ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 	<div>
 		<table class="table table-hover" id="goProjectDetail">
 			<tr th:each="pro:${projectMainList}"
@@ -27,81 +64,106 @@
 			</tr>
 		</table>
 	</div>
-	<script>
-		let starCheck = document.querySelectorAll(".starCheck");
-		
-		starCheck.forEach(sC => {
-			
-			sC.addEventListener("click", function(event) {
-				event.stopPropagation();
-				changeStar();
-			});
-			
-		});
 	
-		function changeStar() {
-			let dpMN = event.target.parentNode.getAttribute("data-pMN");
-			let starC = event.target.parentNode.getAttribute("data-starC");
-			let trTag = event.target.parentNode;
+<!-- 스크립트 -->
+<!-- model값 가져오기 -->
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		//투표 check하기
+		let modelGroupChecks = /*[[${readGroupCheckPro}]]*/;
+	/*]]>*/
+</script>
 
-			let formData = new FormData();
-	        formData.append('pMN', dpMN);
-	        formData.append('starC', starC);
-			console.log(formData.get('pMN'))
-			console.log(formData.get('starC'))
-			fetch("/proUpdate", {
-				method: 'POST',
-				body : formData
-			})
-			.then(response => response.json())
-			.then(res => {
-				let rC = res.result;
-				console.log(rC)
-				if (rC == '등록' || rC == '취소') {
-					changeProOne(rC, trTag);
-				} else {
-					alert('요청이 취소 되었습니다.');
-				} 
-				
-			})
-		};
-	
-		//즐겨찾기 변경
-		function changeProOne(rC, trTag) {
+<!-- group 초기 checked 정하기 -->
+<script>
+	let allGroupCheckBoxes = document.querySelectorAll('[data-pro-mem-no]');
+	modelGroupChecks.forEach(modelGroupCheck => {
+
+		allGroupCheckBoxes.forEach(groupCheckbox => {
+			if(groupCheckbox.dataset.proMemNo == modelGroupCheck.proMemNo) {
+				groupCheckbox.checked = true;
+			};
 			
-			if (rC == '등록') {
-				trTag.setAttribute('data-starc', 'Y');
-				trTag.getElementsByClassName('starCheck')[0].textContent = 'Y';
-			} else {
-				trTag.setAttribute('data-starc', 'N');
-				trTag.getElementsByClassName('starCheck')[0].textContent = 'N';
-			}
-	
-		}
-		
-		//프로젝트 master여부
-		function chagepartiSelect() {
-			let partiSelectId = document.getElementById('partiSelect').value;
-			console.log(partiSelectId);
-			
-		}
-	</script>
-	
-	<!-- 프로젝트 홈에서 상세 페이지 이동 -->
-	<script>
-		let gPList = document.querySelectorAll('#goProjectDetail tr');
-		
-		gPList.forEach(gPDetail => {
-			let homeTabNum = gPDetail.dataset.hometab;
-			gPDetail.addEventListener('click', function() {
-				projectDetail(homeTabNum);
-			});
 		});
+		
+	});
+</script>
+
+<script>
+	let starCheck = document.querySelectorAll(".starCheck");
 	
-		function projectDetail(homeTNum) {
-			location.href="/proPostMain/" + homeTNum;
+	starCheck.forEach(sC => {
+		
+		sC.addEventListener("click", function(event) {
+			event.stopPropagation();
+			changeStar();
+		});
+		
+	});
+
+	function changeStar() {
+		let dpMN = event.target.parentNode.getAttribute("data-pMN");
+		let starC = event.target.parentNode.getAttribute("data-starC");
+		let trTag = event.target.parentNode;
+
+		let formData = new FormData();
+        formData.append('pMN', dpMN);
+        formData.append('starC', starC);
+		console.log(formData.get('pMN'))
+		console.log(formData.get('starC'))
+		fetch("/proUpdate", {
+			method: 'POST',
+			body : formData
+		})
+		.then(response => response.json())
+		.then(res => {
+			let rC = res.result;
+			console.log(rC)
+			if (rC == '등록' || rC == '취소') {
+				changeProOne(rC, trTag);
+			} else {
+				alert('요청이 취소 되었습니다.');
+			} 
+			
+		})
+	};
+
+	//즐겨찾기 변경
+	function changeProOne(rC, trTag) {
+		
+		if (rC == '등록') {
+			trTag.setAttribute('data-starc', 'Y');
+			trTag.getElementsByClassName('starCheck')[0].textContent = 'Y';
+		} else {
+			trTag.setAttribute('data-starc', 'N');
+			trTag.getElementsByClassName('starCheck')[0].textContent = 'N';
 		}
-	</script>
+
+	}
+	
+	//프로젝트 master여부
+	function chagepartiSelect() {
+		let partiSelectId = document.getElementById('partiSelect').value;
+		console.log(partiSelectId);
+		
+	}
+</script>
+	
+<!-- 프로젝트 홈에서 상세 페이지 이동 -->
+<script>
+	let gPList = document.querySelectorAll('#goProjectDetail tr');
+	
+	gPList.forEach(gPDetail => {
+		let homeTabNum = gPDetail.dataset.hometab;
+		gPDetail.addEventListener('click', function() {
+			projectDetail(homeTabNum);
+		});
+	});
+
+	function projectDetail(homeTNum) {
+		location.href="/proPostMain/" + homeTNum;
+	}
+</script>
 	
 <!-- 프로젝트 숨김 해제 -->
 <script>
@@ -132,5 +194,85 @@
 			});
 	}
 </script>
+
+<!-- 그룹 추가/ 삭제 -->
+<script type="text/javascript">
+function changeGorupStatus() {
+	let checkedStatus = event.target.checked;
+	let proMemNo = event.target.dataset.proMemNo;
+	let liTag = event.target.parentElement;
+	let mainCont = event.target.nextElementSibling.textContent;
+	const url = window.location.href;
+	const parts = url.split('/');
+	const lastPart = parts[parts.length - 1];
+	
+	console.log(lastPart);
+	
+	//그룹 추가
+	if(checkedStatus) {
+
+		fetch("/creGroupManage", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				'proMemNo' : proMemNo,
+				'groupNo' : lastPart
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			let newTr = document.createElement("tr");
+			
+			//tr생성
+			newTr.innerHTML = `
+			    <tr style="cursor:pointer" data-pmn="${proMemNo}" data-starc="N" data-hometab="4">
+			        <td>red</td>
+			        <td class="starCheck">N</td>
+			        <td>${mainCont}</td>
+			        <td>1명</td>
+			        <td>
+			            <span class="material-symbols-outlined" onclick="hideProject()" data-pro-hide="N">visibility</span>
+			        </td>
+			    </tr>
+			`;
+			newTr.setAttribute('data-pmn', proMemNo);
+			newTr.setAttribute('data-starc', 'N');
+			newTr.setAttribute('data-hometab', '4');
+
+
+			
+			let aTbody = document.querySelector('#goProjectDetail');
+			aTbody.append(newTr);
+			
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+		
+		//투표 삭제
+	} else {
+		
+		fetch("/delGroupManage", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				'proMemNo' : proMemNo,
+				'groupNo' : lastPart
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			let ss = document.querySelector('[data-pmn="' + proMemNo + '"]').remove();
+		})
+		.catch(error => console.error('Error: ',error));
+
+	}
+}
+</script>
+
 </body>
 </html>

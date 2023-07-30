@@ -5,7 +5,13 @@
   <mapper namespace="com.groo.bear.chat.mapper.ChatMapper">
   	
   	<select id="chatRoomList" resultType="RoomDTO">
-  		SELECT * FROM ROOM WHERE id = #{id}
+  		select r.room_no, r.room_time, r.room_name, a.id
+        from room r join (select u.id, m.room_no
+                            from users u join room_mem m
+                            on u.id = m.id
+                            ) a
+        on r.room_no = a.room_no
+        where a.id = #{id}
   	</select>
   	
   	<insert id="createChatRoom" parameterType="RoomDTO">
@@ -16,21 +22,36 @@
   						  ROOM_NO
   						 ,ROOM_NAME
   						 ,ROOM_TIME
-  						 ,ID
+  						 
   						 )
   				  VALUES (
   				  		  #{roomNo}
   				  		 ,#{roomName}
   				  		 ,sysdate
-  				  		 ,#{id}
+  				  		 
   				  		 )
   	</insert>
   	
   	<delete id="deleteChatRoom" parameterType="RoomDTO">
-  		DELETE FROM ROOM
+  		DELETE FROM ROOM_mem
   		WHERE ROOM_NO = #{roomNo}
+  		AND id = #{id}
   	</delete>
   	
+  	<!-- <select id="getMessagesForRoom" resultType="ChatMessageDTO">
+        SELECT *
+        FROM Message
+        WHERE room_No = #{roomNo}
+        ORDER BY msg_Time ASC
+    </select> -->
+    <select id="getMessagesForRoom" resultType="ChatMessageDTO">
+    SELECT msg_no, room_no, id, content, TO_CHAR(msg_time, 'YYYY-MM-DD HH24:MI:SS') AS msg_time, name
+    FROM Message
+    WHERE room_No = #{roomNo}
+    ORDER BY msg_Time ASC
+</select>
+    
+    
   	<!-- 메세지전체조회 -->
   	<select id="MessageAllList" parameterType="int">
   		select i.name, m.content, m.msg_time
@@ -59,7 +80,82 @@
   				  		 ,#{content}
   				  		 ,sysdate
   				  		 ,#{msgNo}
-  				  		 
   				  		 )
   	</insert>
+  	
+  	<!-- 사원전체조회 -> 모달에서 보기 위함 -->
+  	<select id="empAllList" resultType="RoomDTO"> 
+  		select i.emp_no, u.id, i.name, i.rank, d.dept_name
+		FROM user_info i, departments d, users u
+		where i.dept_no = d.dept_no
+		AND i.emp_no = u.emp_no
+		AND u.id != #{id}
+  	</select>
+  	
+  	
+  	
+  	<select id="newJeans">
+  		SELECT MAX(room_no) room_no
+		FROM room
+  	</select>
+  	
+  	<insert id="insertMem" parameterType="RoomDTO">
+  		INSERT INTO ROOM_MEM 
+					  		(
+					  		MEM_TIME      
+							,ID                
+							,ROOM_NO
+				  			)
+  					VALUES (
+  							sysdate
+  							,#{id}
+  							,#{roomNo}
+							)
+  	</insert>
+  	
+  	<select id="findEmptyRooms" resultType="Integer">
+        SELECT r.room_no 
+        FROM room r 
+        LEFT JOIN room_mem m ON r.room_no = m.room_no
+        GROUP BY r.room_no 
+        HAVING COUNT(m.id) = 0
+    </select>
+
+    <delete id="deleteRoom">
+        DELETE FROM room WHERE room_no = #{roomNo}
+    </delete>
+  	
+  	<!-- 방에 속해있지 않은 사원 조회 -> 모달에서 보기 위함 -->
+	<select id="empListExcludingRoomMembers" resultType="RoomDTO">
+	    SELECT i.emp_no, u.id, i.name, i.rank, d.dept_name
+		FROM user_info i
+		JOIN departments d ON i.dept_no = d.dept_no
+		JOIN users u ON i.emp_no = u.emp_no
+		WHERE u.id != #{id}
+		AND u.id NOT IN (
+		    SELECT rm.id 
+		    FROM room_mem rm
+		    WHERE rm.room_no = #{roomNo}
+		)
+	</select>
+	
+	<!-- 채팅방 인원수 -->
+	<select id="countRoomMem" parameterType="int">
+		select count(id) as id
+		from room r, room_mem m
+		where r.room_no = m.room_no
+		and r.room_no = #{roomNo}
+	</select>
+  	
+  	<!-- 맨 마지막 채팅 보이게 하기 위함 -->
+  	<select id="getLastMessage" parameterType="int">
+	    SELECT SUBSTR(CONTENT, 1, LEAST(10, LENGTH(CONTENT))) AS CONTENT
+	    FROM (
+	        SELECT CONTENT
+	        FROM MESSAGE
+	        WHERE ROOM_NO = #{roomNo}
+	        ORDER BY MSG_TIME DESC
+	    )
+	    WHERE ROWNUM = 1
+	</select>
   </mapper>

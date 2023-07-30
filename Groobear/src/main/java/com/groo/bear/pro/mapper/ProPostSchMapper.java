@@ -7,6 +7,7 @@ import com.groo.bear.pro.service.schvo.ProPerCalComVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.schvo.ProPostWorkSchVO;
 import com.groo.bear.pro.service.schvo.ProSchDetailVO;
+import com.groo.bear.pro.service.schvo.ProUpdateSchVO;
 
 public interface ProPostSchMapper {
 	//참석자 조회
@@ -44,5 +45,8 @@ public interface ProPostSchMapper {
 	
 	//캘린더 게시글 등록
 	public void createPostSch(ProCreateSchVO vo);
+	
+	//스케쥴 수정
+	public int updateProSch(ProUpdateSchVO vo);
 	
 }

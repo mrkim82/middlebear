@@ -13,19 +13,23 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeMessage.RecipientType;
+import javax.mail.internet.MimeMultipart;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.groo.bear.board.mapper.BoardMapper;
+import com.groo.bear.files.domain.FilesVO;
+import com.groo.bear.files.mapper.FilesMapper;
 import com.groo.bear.mail.mapper.MailMapper;
 import com.groo.bear.mail.service.MailService;
 import com.groo.bear.mail.service.MailVO;
 import com.groo.bear.paging.Criteria;
+
+import lombok.Setter;
 
 @Service
 public class MailServiceImpl implements MailService{
@@ -45,7 +49,8 @@ public class MailServiceImpl implements MailService{
 	private String protocol;
 	@Autowired
 	MailMapper mailMapper;
-	
+	@Autowired
+	FilesMapper filesMapper;
 	@Override
 	public int sendMail(MailVO mailVO) {
 		return mailMapper.sendMail(mailVO);
@@ -145,19 +150,19 @@ public class MailServiceImpl implements MailService{
 		return mailMapper.deletedMail(cri, mailVO);
 	}
 	@Override
-	public int deleteMail(int mailNo) {
+	public int deleteMail(MailVO mailVO) {
 		//메일지우기(update)
-		return mailMapper.deleteMail(mailNo);
+		return mailMapper.deleteMail(mailVO);
 	}
 	@Override
-	public int realDeleteMail(int mailNo) {
+	public int realDeleteMail(MailVO mailVO) {
 		//메일지우기(delete)
-		return mailMapper.realDeleteMail(mailNo);
+		return mailMapper.realDeleteMail(mailVO);
 	}
 	@Override
-	public MailVO mailInfo(int mailNo) {
+	public MailVO mailInfo(MailVO mailVO) {
 		//메일 상세조회페이지
-		return mailMapper.mailInfo(mailNo);
+		return mailMapper.mailInfo(mailVO);
 	}
 	@Override
 	public int countSendMail(String sender) {
@@ -175,6 +180,50 @@ public class MailServiceImpl implements MailService{
 	public int countDeleteMail(MailVO mailVO) {
 		// 지운메일 총 갯수
 		return mailMapper.countDeleteMail(mailVO);
+	}
+	@Override
+	public int insertMailFile(FilesVO vo) {
+		return filesMapper.insertMailFile(vo);
+	}
+	@Override
+	public int deleteMailFile(int mailNo) {
+		return filesMapper.deleteMailFile(mailNo);
+	}
+	@Override
+	public FilesVO searchMailFile(int mailNo) {
+		return filesMapper.searchMailFile(mailNo);
+	}
+	@Override
+	public int mailNo() {
+		return mailMapper.mailNo();
+	}
+	@Override
+	public int mailCheck(int mailNo) {
+		return mailMapper.mailCheck(mailNo);
+	}
+	@Override
+	public int insertPersonnel(MailVO mailVO) {
+		return mailMapper.insertPersonnel(mailVO);
+	}
+	@Override
+	public int personnelNo() {
+		return mailMapper.personnelNo();
+	}
+	@Override
+	public String userIdGet(String email) {
+		return mailMapper.userIdGet(email);
+	}
+	
+	@Setter(onMethod_= @Autowired)
+	private MailMapper mapper;
+	
+	@Setter(onMethod_= @Autowired)
+	private FilesMapper attachMapper;
+
+	@Override
+	public List<FilesVO> getAttach(int mailNo) {
+		//log.info("get Attach list by boardNo" + boardNo);
+		return attachMapper.findByNo("mail_no",mailNo);
 	}
 	
 }

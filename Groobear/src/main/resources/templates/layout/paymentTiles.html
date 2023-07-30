@@ -56,7 +56,7 @@
 	                	</tr>
 	                	<tr>
 	                		<td><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
-	                		<span><a href="/mypage" class="dohyeon">마이페이지</a></span></td>
+	                		<span><a id="commute" class="dohyeon">마이페이지</a></span></td>
 	                	</tr>
                 	</tbody>
                 </table>
@@ -96,26 +96,44 @@
           <ul class="nav flex-column">
             <!-- 사이드바 메뉴 아이템들 -->
             <li class="nav-item">
-              <a href="/"><span class="material-icons">add_box</span>전자결재</a>
+              <a href="/pay/payMain"><span class="material-icons">add_box</span>전자결재</a>
             </li>
             <li class="nav-item">
-			  <a href="/"><span class="material-icons">add_box</span>결재문서</a>           
+			  <a href="/pay/paymentDoc"><span class="material-icons">add_box</span>결재문서</a>           
 			</li>
             <li class="nav-item">
-              <a href="/"><span class="material-icons">add_box</span>진행중결재조회</a>
+              <a href="/pay/InProgressPay"><span class="material-icons">add_box</span>진행중결재조회</a>
             </li>
             <li class="nav-item">
-              <a href="/"><span class="material-icons">home</span>완료된결재조회</a>
+              <a href="/pay/completePay"><span class="material-icons">home</span>완료된결재조회</a>
             </li>
             <li class="nav-item">
-              <a href="/"><span class="material-icons">star</span>참조문서 조회</a>
+              <a href="/pay/referrerPay"><span class="material-icons">star</span>참조문서 조회</a>
             </li>
             <li class="nav-item">
-              <a href="/"><span class="material-icons">star</span>환경설정</a>
+              <a href="/pay/payPreferences"><span class="material-icons">star</span>환경설정</a>
             </li>
           </ul>
         </div>
       </nav>
+      
+       <div class="data" style="display:none">
+	<p class="nowMon"></p>
+	
+</div>
+	<script>
+	
+	var today = new Date();
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var monthString = year + '-' + month;
+	const monthDate = monthString;
+	
+	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
+	
+	</script>
+      
+      
 		<!-- 사이드바 우측의 컨텐츠 영역 -->
       <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
         <div layout:fragment="content" ></div>

@@ -73,8 +73,8 @@ public class CommuteServiceImpl implements CommuteService {
 
 
 	@Override
-	public int settingDay(CommuteVO commuteVO) {
-		return commuteMapper.setDay(commuteVO);
+	public int settingDay(String id) {
+		return commuteMapper.insertDay(id);
 	}
 
 
@@ -86,7 +86,32 @@ public class CommuteServiceImpl implements CommuteService {
 
 	@Override
 	public int commuteUpdate(CommuteVO commuteVO) {
-		return commuteMapper.commuteUpdate(commuteVO);
+			commuteMapper.commuteUpdate(commuteVO);
+		return commuteMapper.overWorkTime(commuteVO);
+	}
+
+
+	@Override
+	public CommuteVO monthNoWork(String id, String monthDate) {
+		return commuteMapper.calNoWork(id, monthDate);
+	}
+
+
+	@Override
+	public List<CommuteVO> getComInfo(String id) {
+		return commuteMapper.comInfo(id);
+	}
+
+
+	@Override
+	public int commuteCnt2(String id,String monthDate) {
+		return commuteMapper.commuteListCnt2(id, monthDate);
+	}
+
+
+	@Override
+	public List<CommuteVO> getAllMonth(Criteria cri, CommuteVO commuteVO, String monthDate) {
+		return commuteMapper.calAllWork(cri, monthDate, monthDate);
 	}
 
 

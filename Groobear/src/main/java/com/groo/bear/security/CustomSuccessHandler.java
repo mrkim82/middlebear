@@ -27,6 +27,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler{
 		
 		
 		if(vo != null) {
+			session.setAttribute("EmpNo", vo.getEmpNo());
 			session.setAttribute("Id", vo.getId());
 			session.setAttribute("Name", vo.getName());
 			session.setAttribute("Rank", vo.getRank());
@@ -39,7 +40,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler{
 			session.setAttribute("Sign", vo.getSign());
 			session.setAttribute("ProfileImg", vo.getProfileImg());
 			session.setAttribute("ProfileNote", vo.getProfileNote());	
-				
+			
+			
 		}
 		
 		

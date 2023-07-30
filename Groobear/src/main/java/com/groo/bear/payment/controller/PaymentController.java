@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -175,7 +178,47 @@ public class PaymentController {
 	}
 	//메인페이지
 	@GetMapping("pay/payMain")
-	public String payMainForm(Model model,  HttpSession session,PaymentVO payVO) {
+	public String payMainForm(Criteria cri, Model model, HttpSession session,PaymentVO payVO, @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
+		//결재중문서조회
+		String id = (String) session.getAttribute("Id");
+		System.out.println("id = "+id);
+		payVO.setId(id);
+		cri.setPerPageNum(5);
+		Paging paging = new Paging();
+        paging.setCri(cri);
+        paging.setTotalCount(paymentService.countPaymentList(id));
+        System.out.println(paging);
+        System.out.println("payment"+paymentService.paymentList(cri, payVO));
+        model.addAttribute("userid",id);
+		model.addAttribute("InProgressList",paymentService.paymentList(cri, payVO));
+		model.addAttribute("paging", paging);
+		
+		//완료,반려된 문서 조회
+		id = (String) session.getAttribute("Id");
+		System.out.println("id = "+id);
+		payVO.setId(id);
+		cri.setPerPageNum(10);
+		paging = new Paging();
+        paging.setCri(cri);
+        paging.setTotalCount(paymentService.completePayCount(id));
+        System.out.println("에러위치체크");
+        model.addAttribute("userid",id);
+        model.addAttribute("completePaymentList",paymentService.completePaymentList(cri, payVO));
+        model.addAttribute("paging",paging);
+		
+		//참조된 문서조회
+		id = (String) session.getAttribute("Id");
+		System.out.println("id = "+id);
+		payVO.setId(id);
+		cri.setPerPageNum(5);
+		paging = new Paging();
+        paging.setCri(cri);
+        paging.setTotalCount(paymentService.referrerPayCount(id));
+        System.out.println("에러위치체크");
+        model.addAttribute("userid",id);
+        model.addAttribute("referrerList",paymentService.referrerPayList(cri, payVO));
+        model.addAttribute("paging",paging);
 		return "pay/payMain";
 	}
 	//결재 진행중인 문서 조회
@@ -210,8 +253,18 @@ public class PaymentController {
 			System.out.println("docType = 운행일지");
 			PaymentVO payVO = paymentService.logList(payNo);
 			System.out.println("payVO = "+payVO);
+			//기안자
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
+			//결재자1
+			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			model.addAttribute("approver2Info",empvo);
+			//결재자2
+			if(payVO.getApprover3() != null && payVO.getApprover3() != "" ) {
+				empvo = paymentService.payEmpInfo(payVO.getApprover3());
+				model.addAttribute("approver3Info",empvo);
+				System.out.println("approver3은 있음");
+			}
 			model.addAttribute("list",paymentService.logList(payNo));
 		}
 		if(docType.equals("b")) {
@@ -271,7 +324,73 @@ public class PaymentController {
 			paymentService.paymentReject3(payVO);
 			System.out.println(payVO.getPayNo()+"문서 결재자3 결재상태변경완료");
 		}
+		//해당위치에서 docType='a'면 com추가
+		if(payVO.getDocType().equals("a")){
+			paymentService.logCommentUpdate(payVO);
+		}else if(payVO.getDocType().equals("b")){
+			paymentService.offCommentUpdate(payVO);
+		}else {
+			paymentService.robinCommentUpdate(payVO);
+		}
+		
 		return "pay/InProgressPay";
 	}
-	
+	//결재문서 파일삭제
+	@PostMapping("payfiledel")
+	@ResponseBody
+	public int payfileDel(@RequestBody PaymentVO payVO, Model model, HttpSession session) {
+		int result = 0;
+		System.out.println("payVO.getpayNo = "+payVO.getPayNo());
+		result = paymentService.deletePayImg(payVO.getPayNo());
+		
+		System.out.println("result = "+result);
+		return result;
+	}
+	//첨부파일 다운로드
+	@GetMapping(value ="/getAtt", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<FilesVO>> getAtt(@RequestBody @RequestParam int payNo) {
+		//log.info("getAttachList" + payNo);
+		return new ResponseEntity<>(paymentService.getAtt(payNo), HttpStatus.OK);
+	}
+	//결재문서 상세조회
+	@GetMapping("payInfoRead")
+	public String payInfoRead(@RequestParam int payNo, @RequestParam String docType, Model model, HttpSession session) {
+		System.out.println("payInfo payNo = "+payNo);
+		System.out.println("payInfo docType = "+docType);
+		String id = (String) session.getAttribute("Id");
+		EmpVO empvo = new EmpVO();
+		empvo = paymentService.payEmpInfo(id);
+		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
+		model.addAttribute("mySign",paymentService.searchSignImg(empvo.getEmpNo()));
+		if(docType.equals("a")) {
+			System.out.println("docType = 운행일지");
+			PaymentVO payVO = paymentService.logList(payNo);
+			System.out.println("payVO = "+payVO);
+			empvo = paymentService.payEmpInfo(payVO.getId());
+			model.addAttribute("drafterInfo",empvo);
+			model.addAttribute("list",paymentService.logList(payNo));
+		}
+		if(docType.equals("b")) {
+			System.out.println("docType = 연차계");
+			System.out.println("payNo"+payNo);
+			PaymentVO payVO = paymentService.offList(payNo);
+			System.out.println("payVO = "+payVO);
+			empvo = paymentService.payEmpInfo(payVO.getId());
+			model.addAttribute("drafterInfo",empvo);
+			model.addAttribute("list",paymentService.offList(payNo));
+		}
+		if(docType.equals("c")){
+			System.out.println("docType = 품의서");
+			PaymentVO payVO = paymentService.robinList(payNo);
+			System.out.println("payVO = "+payVO);
+			empvo = paymentService.payEmpInfo(payVO.getId());
+			model.addAttribute("drafterInfo",empvo);
+			model.addAttribute("list",paymentService.robinList(payNo));
+		}
+		List<FilesVO> list = paymentService.searchPayImg(payNo);
+		System.out.println(list);
+		model.addAttribute("payImgInfo",list);
+		return "pay/payInfoRead";
+	}
 }

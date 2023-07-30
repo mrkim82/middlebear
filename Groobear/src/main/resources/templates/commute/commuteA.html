@@ -49,12 +49,20 @@
 							</div>
 
 							<div class="form-group mb-3">
-								<label class="label">변경할 출근 시간 <input name="workStart"
+								<label class="label">출근 시간 <input name="workStart"
 									id="newWorkStart" type="time" value="" class="form-control"></label>
 							</div>
 							<div class="form-group mb-3">
-								<label class="label">변경할 퇴근 시간 <input name="workEnd"
+								<label class="label">퇴근 시간 <input name="workEnd"
 									id="newWorkEnd" type="time" value="" class="form-control"></label>
+							</div>
+							<div class="form-group mb-3">
+								<label class="label">연장근무 시작 시간 <input name="overWorkStart"
+									id="newOverWorkStart" type="time" value="" class="form-control"></label>
+							</div>
+							<div class="form-group mb-3">
+								<label class="label">연장근무 종료 시간 <input name="overWorkEnd"
+									id="newOverWorkEnd" type="time" value="" class="form-control"></label>
 							</div>
 							<div class="form-group mb-3" style="display: none;">
 								<label>id<input name="id" type="text" id="mId"
@@ -96,13 +104,13 @@
 				<div style="position: absolute; display: inline-block; right: 25px;">
 					<select
 						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
-						name="type">
-						<option value='' selected>선택</option>
+						name="type" id="selectBox" onchange="boxRe()">
+						<option value='' selected id="base">선택</option>
 						<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
 						<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
 						<option value='deptName'
 							th:selected="${criteria.type == 'deptName'}">부서</option>
-					</select> <input
+					</select> <input id="textBox"
 						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
 						type="text" name="keyword" th:value="${criteria.keyword}" />
 					<button type="submit" id="searchBtn" class="btn btn-primary">검색</button>
@@ -139,8 +147,8 @@
 						<td th:if="${comm.offStatus == 'N'}">결근</td>
 						<td th:if="${comm.offStatus == 'Y'}">근무</td>
 						<td th:if="${comm.offStatus == 'O'}">휴무</td>
-						<td class="owStart">[[${#dates.format(comm.overWorkStart,'HH:mm')}]]</td>
-						<td class="owEnd">[[${#dates.format(comm.overWorkEnd,'HH:mm')}]]</td>
+						<td class="owStart" style="display: none;">[[${#dates.format(comm.overWorkStart,'HH:mm')}]]</td>
+						<td class="owEnd" style="display: none;">[[${#dates.format(comm.overWorkEnd,'HH:mm')}]]</td>
 						<td class="id" style="display: none;">[[${comm.id}]]</td>
 						<td class="day" style="display: none;">[[${#dates.format(comm.day,'yyyy-MM-dd')}]]</td>
 					</tr>
@@ -176,6 +184,25 @@
 
 				searchForm.submit();
 			}
+			
+			document.getElementById('searchBtn').addEventListener('click',function(){
+				var selectBox = document.getElementById('selectBox');
+			    var textBox = document.getElementById('textBox');
+			    var selectedOption = selectBox.value;
+			    var searchText = textBox.value;
+			    
+					if(selectedOption == '' && searchText != '') {
+				        alert('검색 조건을 선택해 주세요. 선택 상태에서는 검색어를 입력할 수 없습니다.');
+				        selectBox.selectedIndex = 0; 
+				        textBox.value = ''; 
+				        event.preventDefault()
+				    } 
+					
+			}) 
+			function boxRe(){
+				document.getElementById('textBox').value = '';
+			}
+			
 
 			function commuteInfo() {
 				console.log("hi");
@@ -185,6 +212,8 @@
 				let name = event.currentTarget.querySelector('.name').innerText;
 				let oldWorkStart = event.currentTarget.querySelector('.wStart').innerText;
 				let oldWorkEnd = event.currentTarget.querySelector('.wEnd').innerText;
+				let oldOwStart = event.currentTarget.querySelector('.owStart').innerText;
+				let oldOwEnd = event.currentTarget.querySelector('.owEnd').innerText;
 				let id = event.currentTarget.querySelector('.id').innerText;
 				let day = event.currentTarget.querySelector('.day').innerText;
 
@@ -197,6 +226,8 @@
 				document.querySelector('#mName').textContent = name;
 				document.querySelector('#newWorkStart').value = oldWorkStart;
 				document.querySelector('#newWorkEnd').value = oldWorkEnd;
+				document.querySelector('#newOverWorkStart').value = oldOwStart;
+				document.querySelector('#newOverWorkEnd').value = oldOwEnd;
 				document.querySelector('#mId').value = id;
 				document.querySelector('#mDate').value = day;
 			}
@@ -280,47 +311,24 @@
 			
 			     return `${year}-${month}-${day} ${dateTimeStr}`;
 			   }
-			
-			
-			
-/* 			<!-- 시간 변환 -->
-function ct(dateTimeStr) {
-     const date = new Date(dateTimeStr);
-     const year = date.getFullYear();
-     const month = String(date.getMonth() + 1).padStart(2, '0');
-     const day = String(date.getDate()).padStart(2, '0');
-     const hours = String(date.getHours()).padStart(2, '0');
-     const minutes = String(date.getMinutes()).padStart(2, '0');
-
-     return `${year}-${month}-${day} ${hours}:${minutes}`;
-   } */
+		
 			
 			
 			document.querySelector('#saveBtn').addEventListener('click',function(){
-				
-			console.log(ct(document.querySelector('#mDate').value))
-			console.log(ct(document.querySelector('#newWorkStart').value))
-			console.log(ct(document.querySelector('#mDate').value))
-			console.log(ct(document.querySelector('#newWorkEnd').value))
-			console.log(ct(document.querySelector('#mDate').value))
-				
+				 let newWorkEnd = document.querySelector('#newWorkEnd').value;
+				 let newOverWorkEnd = document.querySelector('#newOverWorkEnd').value
+					 
+			
 				 let data = {
 						'id' : document.querySelector('#mId').value,
 						'workStart2' : document.querySelector('#mDate').value + ' ' +document.querySelector('#newWorkStart').value,
-						'workEnd2' : document.querySelector('#mDate').value + ' ' +document.querySelector('#newWorkEnd').value,
-						'day2' : document.querySelector('#mDate').value
-				} 
-				/*  let data = {
-						'id' : document.querySelector('#mId').value,
-						'workStart' : ct(document.querySelector('#mDate').value),
-						'workEnd' : ct(document.querySelector('#newWorkEnd').value),
-						'day' : ct(document.querySelector('#mDate').value)
-				}
-				 */
-				
-				
-				    console.log(data)
-				
+						'workEnd2' : newWorkEnd !== '' ? document.querySelector('#mDate').value + ' ' +newWorkEnd : null,
+						'overWorkStart2' : document.querySelector('#mDate').value + ' ' +document.querySelector('#newOverWorkStart').value,
+						'overWorkEnd2' : newOverWorkEnd !== '' ? document.querySelector('#mDate').value + ' ' +newOverWorkEnd : null,
+ 						'day2' : document.querySelector('#mDate').value
+					} 
+						
+				 
 					fetch('/commuteUpdate', {
 		               method : 'post',
 		               headers : {
@@ -328,7 +336,7 @@ function ct(dateTimeStr) {
 		               },
 		               body : JSON.stringify(data)
 		            })
-		            .then(response => response.json())
+		            .then(response => response.text())
 		            .then(result => {
 		               if(result == 'success'){
 		            	   console.log('success')
@@ -341,10 +349,12 @@ function ct(dateTimeStr) {
 		            	   console.log('etc')
 		               }
 		            })
-		            .catch(err=> console.log(err)); 
+		            .catch(err=> console.log(err));
 				
 				
 			})
+			
+			
 			
 			
 		</script>

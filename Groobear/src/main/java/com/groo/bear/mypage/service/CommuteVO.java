@@ -23,9 +23,11 @@ public class CommuteVO {
 	
 	private String workTime;
 	
-	@DateTimeFormat(pattern="HH24-MI")
+	@DateTimeFormat(pattern="HH:mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone="GMT+9")
 	private Date overWorkStart;
-	@DateTimeFormat(pattern="HH24-MI")
+	@DateTimeFormat(pattern="HH:mm")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone="GMT+9")
 	private Date overWorkEnd;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
@@ -49,9 +51,11 @@ public class CommuteVO {
 	private String count;
 	private String over;
 	
+	
+	private String day2;
 	private String workStart2;
 	private String workEnd2;
-	private String day2;
-	
+	private String overWorkStart2;
+	private String overWorkEnd2;
 	
 }

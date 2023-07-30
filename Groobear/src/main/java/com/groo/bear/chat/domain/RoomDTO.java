@@ -1,6 +1,8 @@
 package com.groo.bear.chat.domain;
 
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,13 +17,16 @@ public class RoomDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate roomTime;
     
-    public RoomDTO() {}
+    private int empNo;
     
-    public RoomDTO(Integer roomNo, String id, String roomName, LocalDate roomTime) {
-        this.roomNo = roomNo;
-        this.id = id;
-        this.roomName = roomName;
-        this.roomTime = roomTime;
-    }
+    private String name;
+    private String rank;
+    private String deptName;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate memTime;
+    private List<String> employeeIds;
+    
+    private int participantCount;
+    private String lastMessage;
     
 }

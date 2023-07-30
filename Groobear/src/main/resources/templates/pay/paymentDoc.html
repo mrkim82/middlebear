@@ -374,7 +374,7 @@
 	  			    async : false,
 	  			    success: function(data) {
 	  			    	console.log(data);
-	  			    	location.href="/main";
+	  			    	location.href="/pay/payMain";
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
@@ -389,7 +389,8 @@
 	  			      payNo : payNo,
 	  			      uuid : car1uuid,
 	  			      uploadPath : car1uploadPath,
-	  			      fileName : car1fileName
+	  			      fileName : car1fileName,
+	  			      fileType : 1
 	  			    }),
 	  			    success: function(data) {
 	  			    	console.log(data);
@@ -407,7 +408,8 @@
 	  			      payNo : payNo,
 	  			      uuid : car2uuid,
 	  			      uploadPath : car2uploadPath,
-	  			      fileName : car2fileName
+	  			      fileName : car2fileName,
+	  			      fileType : 1
 	  			    }),
 	  			    success: function(data) {
 	  			    	console.log(data);
@@ -883,8 +885,8 @@
 	                console.log('result = ',result);
 	                showUploadResult3(result);
 	                offuuid = result[0].uuid;
-	        		offuploadPath = result[0].fileName;
-	        		offfileName = result[0].uploadPath;
+	        		offuploadPath = result[0].uploadPath;
+	        		offfileName = result[0].fileName;
 	        		console.log('offu',offuuid);
 	        		console.log('offup',offuploadPath);
 	        		console.log('offf',offfileName);

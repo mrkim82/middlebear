@@ -20,13 +20,13 @@
 		<div style="text-align: right;" class="form-group">
 		<form name="searchForm" action="carList" >
 			<input type="hidden" name="page" value="1"/>
-			<select name="type" style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px;height:35px;">
+			<select name="type" style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px;height:35px;" id="selectBox" onchange="boxRe()">
 				<option value='' selected>선택</option>
 				<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
 				<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
 				<option value='carNo' th:selected="${criteria.type == 'carNo'}">차량번호</option>
 			</select>
-			<input type="text" name="keyword" th:value="${criteria.keyword}" style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px;height:35px;"/>
+			<input type="text" id="textBox" name="keyword" th:value="${criteria.keyword}" style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px;height:35px;"/>
 			<button type="submit" id="searchBtn" class="btn btn-primary">검색</button>
 		</form>
 	</div>
@@ -101,34 +101,73 @@
 				    </div>
 				    <div class="col-md-6 d-flex">
 				      <div class="modal-body p-5 img d-flex align-items-center color-2">
-				      	<div class="text w-100 py-0 py-md-5">
-				      		<h3 class="mb-4">Change Car Info</h3>
-				      		<form action="carUpdate" method="post" class="signup-form" name="carInfoForm">
-					      		<div class="form-group mb-3">
-					      			<label class="label">Old Car Number</label>
-					      			<input name="oldCarNo" id="infoCarNo" type="text" value="" class="form-control" readOnly>
-					      		</div>
-					      		<div class="form-group mb-3">
-					      			<label class="label">New Car Number</label>
-					      			<input name="carNo" id="newCarNo" type="text" value="" class="form-control">
-					      		</div>
-				            <div class="form-group mb-3">
-				            	<label class="label">Car Type</label>
-				              <input id="infoCarType" name="carType" type="text" value="" class="form-control" placeholder="휘발유 혹은 디젤">
-				            </div>
-				            <div class="form-group mb-3" th:each="info, es:${info}" style="display:none;">
-				            	<label class="label">id</label>
-				              <input name="id" type="text" th:value="${info.id}" class="form-control">
-				            </div>
-				            <div class="form-group d-md-flex">
-				            </div>
-				            <div class="form-group" style="margin-left:30px;">
-				            	<button type="submit" style="width:150px; margin:0px 5px;" class="btn btn-primary rounded submit px-3">수정</button>
-				            	<button type="button" id="deleteBtn" style="width:150px; margin:0px 5px;" class="btn btn-primary rounded">삭제</button>
-				            </div>
-						</form>
-				      	</div>
-				      </div>
+								<div class="text w-100 py-0 py-md-5">
+									<h3 class="mb-4">Change Car Info</h3>
+									<form action="carUpdate" method="post" class="signup-form"
+										name="carInfoForm">
+										<div class="form-group mb-3">
+											<label class="label">Old Car Number</label> <input
+												name="oldCarNo" id="infoCarNo" type="text" value=""
+												class="form-control" readOnly>
+										</div>
+										<div class="form-group mb-3">
+											<label class="label">New Car Number</label> <input
+												name="carNo" id="newCarNo" type="text" value=""
+												class="form-control" minlength="7"  maxlength="8" onkeyup="this.nextSibling.innerHTML=/^\d{2,3}[가-힣]\d{4}$/.test(this.value)?'정상' : '차량번호 형식이 아닙니다.'"><span id="mCarNoCk"></span>
+										</div>
+										<div class="form-group mb-3">
+											<label class="label">Car brand</label>
+											<!-- <input id="infoCarType" name="carType" type="text" value="" maxlength="15" class="form-control" placeholder="ex) hyundai"> -->
+											<select id="infoCarType" name="carType" onchange="changeImage()">
+												<option value="" selected>선택</option>
+												<option value="../img/hyd.png">Hyundai</option>
+												<option value="../img/kia.png">Kia</option>
+												<option value="../img/sy.png">Ssangyong</option>
+												<option value="../img/ch.png">Chevrolet</option>
+												<option value="../img/gs.png">Genesis</option>
+												<option value="../img/ad.png">Audi</option>
+												<option value="../img/bz.png">Mercedes-Benz</option>
+												<option value="../img/bmw.png">BMW</option>
+												<option value="../img/bgt.png">Bugatti</option>
+												<option value="../img/ben.png">Bentley</option>
+												<option value="../img/cad.png">Cadillac</option>
+												<option value="../img/fd.png">Ford</option>
+												<option value="../img/hd.png">Honda</option>
+												<option value="../img/inf.png">Infiniti</option>
+												<option value="../img/jp.png">Jeep</option>
+												<option value="../img/lb.png">Lamborghini</option>
+												<option value="../img/lex.png">Lexus</option>
+												<option value="../img/lr.png">Land-Rover</option>
+												<option value="../img/mas.png">Maserati</option>
+												<option value="../img/mc.png">Mclaren</option>
+												<option value="../img/may.png">Maybach</option>
+												<option value="../img/ns.png">Nissan</option>
+												<option value="../img/ps.png">Porsche</option>
+												<option value="../img/rr.png">Rolls-Royce</option>
+												<option value="../img/tsl.png">Tesla</option>
+												<option value="../img/tyt.png">Toyota</option>
+												<option value="../img/vv.png">Volvo</option>
+												<option value="../img/vw.png">Volkswagen</option>
+											</select>
+											<img id="carImg" style="width:300px;">											
+											
+										</div>
+										<div class="form-group mb-3" th:each="info, es:${info}"
+											style="display: none;">
+											<label class="label">id</label> <input name="id" type="text"
+												th:value="${info.id}" class="form-control">
+										</div>
+										<div class="form-group d-md-flex"></div>
+										<div class="form-group" style="margin-left: 30px;">
+											<button type="submit" style="width: 150px; margin: 0px 5px;"
+												class="btn btn-primary rounded submit px-3" onclick="checkBtn2()">수정</button>
+											<button type="button" id="deleteBtn"
+												style="width: 150px; margin: 0px 5px;"
+												class="btn btn-primary rounded">삭제</button>
+										</div>
+									</form>
+								</div>
+							</div>
 				    </div>
 				 </div>
 		    </div>
@@ -154,6 +193,44 @@ function goPage(p){
 $('#carMInfo').on('hidden.bs.modal', function (event) {
 	 carInfoForm.reset();
 })
+
+ 		let changeimg = document.getElementById("infoCarType");
+        let carImg = document.getElementById("carImg");
+        document.getElementById('infoCarType').children[0].selected = true;
+        function changeImage(){
+            let index = changeimg.selectedIndex;
+            carImg.src = changeimg.options[index].value;
+        }
+        
+
+
+
+
+document.getElementById('searchBtn').addEventListener('click',function(){
+				var selectBox = document.getElementById('selectBox');
+			    var textBox = document.getElementById('textBox');
+			    var selectedOption = selectBox.value;
+			    var searchText = textBox.value;
+			    
+					if(selectedOption == '' && searchText != '') {
+				        alert('검색 조건을 선택해 주세요. 선택 상태에서는 검색어를 입력할 수 없습니다.');
+				        selectBox.selectedIndex = 0; 
+				        textBox.value = ''; 
+				        event.preventDefault()
+				    } 
+					
+			}) 
+			function boxRe(){
+				document.getElementById('textBox').value = '';
+			}
+
+
+
+
+
+
+
+
 
 document.querySelector('#deleteBtn').addEventListener('click',function(){
 			
@@ -187,7 +264,7 @@ document.querySelector('#deleteBtn').addEventListener('click',function(){
 
 	function carInfofo(){
 			console.log("hi");
-
+			
 			let carNo = event.currentTarget.querySelector('.carNo').innerText;
 			let carType = event.currentTarget.querySelector('.carType').innerText;
 			
@@ -201,6 +278,93 @@ $('#carMInfo').on('hidden.bs.modal', function (event) {
 	 carInfoForm.reset();
 })
 	
+
+function checkBtn(){
+			if(document.getElementsByName('carNo')[0].value == '' || document.getElementsByName('carType')[0].value == ''){
+				event.preventDefault();
+				alert('차량번호와 차종 모두 작성해주세요')
+			}else if($('.card-body').length > 2){
+				alert('2대이상 등록 금지')
+				event.preventDefault();
+				document.getElementsByName('carNo')[0].value = '';
+				document.getElementsByName('carType')[0].value = '';
+			}else if(document.querySelector('.carNoCk').textContent != '정상'){
+				alert('차량번호를 제대로 입력해 주세요.')
+				event.preventDefault();
+				document.getElementsByName('carNo')[0].value = '';
+				document.getElementsByName('carType')[0].value = '';
+			}else{
+				document.querySelector('.insertBtn').submit();
+					
+			}
+		}
+		
+		
+		function checkBtn2(){
+			if(document.getElementById('newCarNo').value == ''){
+				event.preventDefault();
+				alert('차량번호를 입력해 주세요')
+			}else if(document.querySelector('#mCarNoCk').textContent != '정상'){
+				event.preventDefault();
+				document.getElementById('newCarNo').value = '';;
+				alert('차량번호를 올바른 형식으로 입력해 주세요.')
+			}else{
+				document.querySelector('.insertBtn').submit();
+					
+			}
+		}
+		
+		
+		
+		
+		
+		
+		function carCheck(str) {
+		    if (/^\d{2}[가-힣]\d{4}/.exec(str) !== null && str.length === 7) {
+		       alert('성공');
+		    }else if (/^\d{3}[가-힣]\d{4}/.exec(str) !== null && str.length === 8) {
+		    	alert('성공');
+		    }else{
+		    	alert('올바른 차량번호를 입력해 주세요');
+		    }
+		}
+		
+		
+		$("#carNo2").keyup(function(event){ 
+			if (!(event.keyCode >=37 && event.keyCode<=40)) { 
+				var inputVal = $(this).val(); 
+				var check = /[a-z|A-Z]/; 
+				var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
+				if(check.test(inputVal)){ 
+					$(this).val(inputVal.replace(check, ''));
+				}	
+					if(regExp.test(inputVal)){
+					$(this).val(inputVal.replace(regExp, '')); 
+					
+				} 
+			} 
+		});
+				
+				
+		$("#newCarNo").keyup(function(event){ 
+			if (!(event.keyCode >=37 && event.keyCode<=40)) { 
+				var inputVal = $(this).val(); 
+				var check = /[a-z|A-Z]/; 
+				var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
+				if(check.test(inputVal)){ 
+					$(this).val(inputVal.replace(check, ''));
+				}	
+					if(regExp.test(inputVal)){
+					$(this).val(inputVal.replace(regExp, '')); 
+					
+				} 
+			} 
+		});	
+
+
+
+
+
 
 
 

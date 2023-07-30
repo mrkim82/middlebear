@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.groo.bear.files.domain.AttachFileDTO;
-import com.groo.bear.files.domain.FilesVO;
 
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -135,26 +134,26 @@ public class UploadController {
 		return false;
 	}
 	
-//	@GetMapping("/display")
-//	@ResponseBody
-//	public ResponseEntity<byte[]> getFile(String fileName) {
-//		log.info("fileName : " + fileName);
-//		File file = new File(path + fileName);
-//		log.info("file: " + file);
-//		
-//		ResponseEntity<byte[]> result = null;
-//		
-//		try {
-//			HttpHeaders header = new HttpHeaders();
-//			
-//			header.add("Content-Type", Files.probeContentType(file.toPath()));
-//			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
-//			
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		return result;
-//	}
+	@GetMapping("/display")
+	@ResponseBody
+	public ResponseEntity<byte[]> getFile(String fileName) {
+		log.info("fileName : " + fileName);
+		File file = new File(path + fileName);
+		log.info("file: " + file);
+		
+		ResponseEntity<byte[]> result = null;
+		
+		try {
+			HttpHeaders header = new HttpHeaders();
+			
+			header.add("Content-Type", Files.probeContentType(file.toPath()));
+			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	@GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
