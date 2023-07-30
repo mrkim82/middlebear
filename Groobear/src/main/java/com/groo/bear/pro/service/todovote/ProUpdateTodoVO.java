@@ -9,13 +9,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 @Data
-public class ProTodoDetailVO {
-	private int todoNo;
+public class ProUpdateTodoVO {
 	private String todoContent;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH-mm")
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+9")
+	@JsonFormat(pattern="yyyy-MM-dd", timezone = "GMT+9")
 	private Date todoEnd;
-	private String todoCheck;
 	private String id;
+	private int todoNo;
+	private int proPostNo;
+	
+	private String postTitle;
 	
 }

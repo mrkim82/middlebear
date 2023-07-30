@@ -304,6 +304,7 @@
 					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteMember">
 					  +초대하기
 					</button>
+					<input type="text" id="proInSearch" placeholder="프로젝트 내 검색">
 				</div>
 				</nav>
 			</div>
@@ -793,9 +794,6 @@
 
     <script>
     	let newColor;
-   		//let url = window.location.pathname;
-		//let lastIndex = url.lastIndexOf('/');
-		//let projectNo = url.substring(lastIndex + 1);//프로젝트 번호
     	
     	//클릭시 색상 정보 저장
     	function saveColor() {
@@ -828,5 +826,22 @@
 			});
     	}
     </script>
+    
+<!-- 검색기능 -->
+<script type="text/javascript">
+	proInSearch.addEventListener('keyup', function(event) {
+		if(event.keyCode === 13) {
+			if(proInSearch.value == '') {
+				alert('빈값 허용 안함');
+				proInSearch.focus();
+				return false;
+			}
+			let searchKeyword = proInSearch.value;
+			location.href="/proSearch/" + projectNo + "?search=" + searchKeyword;
+			
+		}
+	})
+</script>
+    
   </body>
 </html>

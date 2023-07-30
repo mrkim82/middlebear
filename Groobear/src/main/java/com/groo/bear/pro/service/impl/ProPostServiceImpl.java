@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.groo.bear.pro.mapper.ProPostMapper;
 import com.groo.bear.pro.service.ProPostService;
+import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostFeedVO;
@@ -133,6 +134,11 @@ public class ProPostServiceImpl implements ProPostService {
 		}
 		
 		return res;
+	}
+
+	@Override
+	public List<ProDetailSearchVO> readProInSearch(ProDetailSearchVO vo) {
+		return ppm.readProInSearch(vo);
 	}
 
 

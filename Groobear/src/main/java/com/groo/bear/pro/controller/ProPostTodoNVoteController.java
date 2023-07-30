@@ -2,12 +2,14 @@ package com.groo.bear.pro.controller;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,8 @@ import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.todovote.CreateVoteVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoCreVO;
 import com.groo.bear.pro.service.todovote.ProPostTodoVO;
+import com.groo.bear.pro.service.todovote.ProTodoDetailVO;
+import com.groo.bear.pro.service.todovote.ProUpdateTodoVO;
 import com.groo.bear.pro.service.todovote.ProUpdateVoteVO;
 import com.groo.bear.pro.service.todovote.ProVoteCDVO;
 
@@ -90,12 +94,35 @@ public class ProPostTodoNVoteController {
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
-	//투표취소
+	//투표수정
 	@PostMapping("upVote")
 	public Map<String, Object> upVote(@RequestBody ProUpdateVoteVO vo) {
 		int result = 0;
 		ps.updateVotePost(vo);
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
+	
+	//투표취소
+	@PostMapping("deVote")
+	public List<ProTodoDetailVO> deVote(@RequestBody int proPostNo) {
+		return ps.readTodoDetail(proPostNo);
+	}
+	
+	//할 일 수정
+	@PostMapping("upTodo")
+	public Map<String, Object> upTodo(@RequestBody List<ProUpdateTodoVO> vo) {
+		int result = ps.updateTodo(vo);
+		System.out.println(result);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
+	//할일 단건 삭제
+	@DeleteMapping("delDetailTodo")
+	public Map<String, Object> delDetailTodo(@RequestBody int todoNo) {
+		int result = ps.deleteTodoDetail(todoNo);
+		
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
 	
 }

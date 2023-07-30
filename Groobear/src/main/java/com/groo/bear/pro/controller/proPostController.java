@@ -26,6 +26,7 @@ import com.groo.bear.pro.service.ProPostTaskService;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.PublicCodeService;
+import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostUserVO;
@@ -279,6 +280,22 @@ public class proPostController {
 		System.out.println(vo);
 		int result = proPostService.updateProWriting(vo);
 		return Collections.singletonMap("result", result);
+	}
+	
+	// 프로젝트 내 검색
+	@GetMapping("proSearch/{proNo}")
+	public String 프로젝트내검색(Model model, HttpServletRequest request, @PathVariable int proNo, ProDetailSearchVO vo) {
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("Id");
+		proData2(model, request);
+		
+		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));//메뉴 상단바 조회
+		model.addAttribute("readPublicCodeColorAll", publicC.readPublicCodeColorAll());//공통 색상 전체
+		model.addAttribute("readProAuth", proService.readProAuth(proNo));//권한 및 프로젝트 마스터 조회
+		
+		model.addAttribute("readProInSearch", proPostService.readProInSearch(vo));//검색 내용
+		
+		return "proPost/proPostSearch";
 	}
 	
 }

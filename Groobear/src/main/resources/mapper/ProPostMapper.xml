@@ -237,6 +237,46 @@
 		WHERE pro_post_no = #{proPostNo}
 	</update>	
 	
-	
+	<!-- 프로젝트 내 검색 -->
+	<select id="readProInSearch" resultType="ProDetailSearchVO" parameterType="ProDetailSearchVO">
+		SELECT a.pro_no,
+			   a.pro_post_no,
+			   a.post_type,
+			   a.post_date,
+			   a.post_title,
+			   a.id,
+			   b.writing_content,
+			   c.sch_content,
+			   d.vote_content,
+			   e.work_content,
+			   f.todo_content,
+			   i.name
+			   
+		FROM pro_post a
+		LEFT JOIN pro_writing b
+		ON(a.pro_post_no = b.pro_post_no)
+		LEFT JOIN pro_sch c
+		ON(a.pro_post_no = c.pro_post_no)
+		LEFT JOIN vote d
+		ON(a.pro_post_no = d.pro_post_no)
+		LEFT JOIN pro_work e
+		ON(a.pro_post_no = e.pro_post_no)
+		LEFT JOIN todo f
+		ON(a.pro_post_no = f.pro_post_no)
+		JOIN users u
+		ON(a.id = u.id)
+		JOIN user_info i
+		ON(u.emp_no = i.emp_no)
+		
+		WHERE a.pro_no = #{proNo}
+		AND a.post_title LIKE '%${search}%'
+		OR b.writing_content LIKE '%${search}%'
+		OR c.sch_content LIKE '%${search}%'
+		OR d.vote_content LIKE '%${search}%'
+		OR e.work_content LIKE '%${search}%'
+		OR f.todo_content LIKE '%${search}%'
+		OR i.name LIKE '%${search}%'
+		ORDER BY a.pro_post_no DESC, d.vote_no, f.todo_no
+	</select>
 	
 </mapper>

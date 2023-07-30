@@ -1077,7 +1077,8 @@ function drawChart() {
 								<ul class="list-group">
 								  <li th:class="${rt.todoCheck == 'Y'} ? 'list-group-item grayC' : 'list-group-item'"
 								  	  th:each="rt : ${readTodoList}"
-								  	  th:if="${rt.proPostNo == allPost.proPostNo}">
+								  	  th:if="${rt.proPostNo == allPost.proPostNo}"
+											th:data-post-todo-no="${rt.todoNo}">
 								    <input class="form-check-input me-1"
 								    	   type="checkbox"
 								    	   th:data-todo-no="${rt.todoNo}"
@@ -1364,7 +1365,7 @@ function drawChart() {
 			  </div>
 			</div>
 			
-			<!-- 4.할 일 작성 -->					
+			<!-- 4.할 일 수정 -->					
 			<div class="modal fade" id="modal14" tabindex="-1" aria-labelledby="modal14Label" aria-hidden="true">
 			  <div class="modal-dialog">
 			    <div class="modal-content">
@@ -1386,7 +1387,7 @@ function drawChart() {
 						</ul>
 
 						<div>
-							<input id="todoContent"
+							<input id="todoContent2"
 								   type="text"
 								   class="js-todo-content-input"
 								   placeholder="할 일 추가 (Enter) / 최대 60자"
@@ -1551,6 +1552,7 @@ function drawChart() {
 	/*<![CDATA[*/
 		//투표 check하기
 		let modelVoteChecks = /*[[${readxxVote}]]*/;
+		let proAllMember = /*[[${projectPartiMember}]]*/;
 	/*]]>*/
 </script>
 
@@ -2172,8 +2174,8 @@ function drawChart() {
 	}
 </script>
 
+<!-- 프로필 메모 변경 -->
 <script>
-//프로필 메모 변경
 function changeProfileNote() {
 	let oldProfileMemoTag = event.target.closest('.card').querySelector('.profileMemoTag');
 	console.log(event.target.closest('.card'))
@@ -2356,46 +2358,101 @@ function changeSchPost(topTag, updateFeedPostNo) {
 function changeTodoPost(topTag, updateFeedPostNo) {
 	modal14.setAttribute("data-update-post-no", updateFeedPostNo);
 	let updateTitle = topTag.querySelector('.card-header').textContent;
-	let updateUlTag = topTag.querySelector('.list-group');
-	
-	let ulTag = modal14.querySelector('.list-group');
-	let updateContents = topTag.querySelectorAll('.list-group-item');
-	$('#modal14 .list-group').empty();
-	makeUlTag(updateContents, ulTag);
-	
 	updateTodoTitle.value = updateTitle.substr(6);
+	let ulTag = modal14.querySelector('.list-group');
+
+	fetch("/deVote", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(updateFeedPostNo)
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res)
+			makeUlTag(res, ulTag, topTag)
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+
+	 let updateUlTag = topTag.querySelector('.list-group');
+	$('#modal14 .list-group').empty();
+	
 	$('#modal14').modal('toggle');
 }
 
 //li태그 생성
-function makeUlTag(updateContents, ulTag) {
-	updateContents.forEach(updateContent => {
+function makeUlTag(results, ulTag, topTag) {
+	results.forEach(result => {
 		let newLi = document.createElement('li');
-		
 		newLi.classList.add('list-group-item');
+		newLi.setAttribute('data-change-todo-no', result.todoNo);;
 
-		// 첫 번째 <input> 요소를 생성하고 설정합니다.
+		// 할 일 내용
 		let input1 = document.createElement('input');
 		input1.type = 'text';
-		input1.value = updateContent.children[1].textContent.substr(7);
-		//input1.disabled = true;
+		input1.value = result.todoContent;
 		
-		let newTime = updateContent.children[2].textContent.substr(6);
-		// 두 번째 <input> 요소를 생성하고 설정합니다.
+		//시간
 		let input2 = document.createElement('input');
 		input2.type = 'date';
-		input2.value = newDate(newTime);
-		//input2.disabled = true;
+		let newTodoDate = result.todoEnd == null ? '' : MMdd(result.todoEnd);
+		input2.value = newTodoDate;
 
 		// 세 번째 <input> 요소를 생성하고 설정합니다.
-		let input3 = document.createElement('input');
-		input3.type = 'text';
-		input3.value = updateContent.children[3].textContent;
-		//input3.disabled = true;
+		let select = document.createElement('select');//projectPartiMember
+		
+		let noneOption = document.createElement('option');
+		noneOption.textContent = '없음';
+		noneOption.value = '';
+		select.appendChild(noneOption);
+		  
+		proAllMember.forEach(pMember => {
+			let optionElement = document.createElement('option');
+			optionElement.textContent = pMember .name;
+			optionElement.value = pMember.id;
+
+			// 변수3 값과 선택된 값이 같을 경우, 해당 옵션을 선택함
+			if (pMember.id === result.id) {
+				optionElement.selected = true;
+    		}
+			
+			select.appendChild(optionElement);
+		});
+
+		let newSpan = document.createElement('span');
+		newSpan.className = 'spanCursor';
+		newSpan.textContent = 'X';
+
+		//x시 삭제
+		newSpan.addEventListener('click', function(e) {
+			fetch("/delDetailTodo", {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(result.todoNo)
+			})
+			.then(response => response.json())
+			.then(res => {
+				console.log(res);
+				if(res.result == '성공') {
+					topTag.querySelector('[data-post-todo-no="' + result.todoNo + '"]').remove();
+					e.target.parentElement.remove();
+				}
+			})
+			.catch(error => {
+				console.error('Error: ',error);
+			});
+
+		});
 
 		newLi.appendChild(input1);
 		newLi.appendChild(input2);
-		newLi.appendChild(input3);
+		newLi.appendChild(select);
+		newLi.appendChild(newSpan);
 		
 		ulTag.appendChild(newLi);
 	});
@@ -2415,6 +2472,15 @@ function newDate(inputDate) {
   return formattedDate;
 }
 
+//시간 변환(yyyy-MM-dd -> MM/dd)
+function MMdd(dateTimeStr) {
+  const dateObj = new Date(dateTimeStr);
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObj.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
+  return formattedDate;
+}
 //투표 수정
 function changeVotePost(topTag, updateFeedPostNo) {
 	modal15.setAttribute("data-update-post-no", updateFeedPostNo);
@@ -3152,5 +3218,165 @@ function chagemodal12() {
 
 	}
 </script>
+
+<!-- 할일 인풋 생성(수정) -->
+<script>
+	todoContent2.addEventListener('keypress', function (e) {
+		if (e.key === 'Enter') {
+			let todoL = modal14.querySelector('[data-todo-make-list]');
+
+			if(todoL.querySelectorAll('.list-group-item').length == 10) {
+				alert('최대 10개')
+				return;
+			}
+
+			if(todoContent2.value == '') {
+				alert('값을 넣어주세요.')
+				todoContent2.focus();
+				return;
+			}
+			
+			let todoValue = todoContent2.value;
+			let oldVoteDate = modal14.querySelector('[data-input-todo-date]');
+			let oldSelectDate = modal14.querySelector('[data-input-todo-select]'); 
+
+			let oldVoteDateV = oldVoteDate.value;
+			let oldVoteSelectVName = oldSelectDate.options[oldSelectDate.selectedIndex].text;
+			let oldVoteSelectVId = oldSelectDate.value;
+
+			let newTodoListItem = makeTodoInputList(todoValue, oldVoteDateV, oldVoteSelectVName, oldVoteSelectVId);
+			modal14.querySelector('[data-todo-make-list]').append(newTodoListItem);
+			
+			//값 초기화
+			todoContent2.value = '';
+			oldVoteDate.value ='';
+			oldSelectDate.value = '';
+
+		}
+
+	});
+
+	function makeTodoInputList(con, date, selN, selId) {
+		const li = document.createElement('li');
+		li.className = 'list-group-item';
+
+		const inputTodo = document.createElement('input');
+		inputTodo.type = 'text';
+		inputTodo.value = con;
+
+		const inputVoteDate = document.createElement('input');
+		inputVoteDate.type = 'date';
+		inputVoteDate.value = date;
+
+		//3요소
+		let select = document.createElement('select');//projectPartiMember
+		
+		let noneOption = document.createElement('option');
+		noneOption.textContent = '없음';
+		noneOption.value = '';
+		select.appendChild(noneOption);
+
+		proAllMember.forEach(pMember => {
+			let optionElement = document.createElement('option');
+			optionElement.textContent = pMember .name;
+			optionElement.value = pMember.id;
+
+			// 변수3 값과 선택된 값이 같을 경우, 해당 옵션을 선택함
+			if (pMember.id === selId) {
+				optionElement.selected = true;
+    		}
+			
+			select.appendChild(optionElement);
+		});
+
+		let newSpan = document.createElement('span');
+		newSpan.className = 'spanCursor';
+		newSpan.textContent = 'X';
+
+		//x시 삭제
+		newSpan.addEventListener('click', function(e) {
+			e.target.parentElement.remove();
+		});
+
+		li.appendChild(inputTodo);
+		li.appendChild(inputVoteDate);
+		li.appendChild(select);
+		li.appendChild(newSpan);
+
+		return li;
+	}
+</script>
+
+<!-- 할일 생성(4번) -->
+<script>
+	function chagemodal14() {
+		let postTodoTitle = modal14.querySelector('#updateTodoTitle');
+		if(postTodoTitle.value == '') {
+			postTodoTitle.focus()
+			alert('제목 입력');
+			return;
+		}
+		
+		//인풋값 찾기
+		let todoInputValuesList = modal14.querySelector('[data-todo-make-list]').querySelectorAll('input');
+		let todoSelectValuesList = modal14.querySelector('[data-todo-make-list]').querySelectorAll('select');
+		console.log('s',todoInputValuesList)
+		console.log('s',todoSelectValuesList)
+
+		//제목 빈값 찾기
+		for (let i = 0; i < todoInputValuesList.length; i+=2) {
+			let oldTitle = todoInputValuesList[i].value;
+			if(oldTitle == '') {
+				alert('빈 제목이 있습니다.');
+				todoInputValuesList[i].focus();
+				return false;
+			}
+		}
+
+		let updateTodoList = modal14.querySelectorAll('[data-todo-make-list] li');
+		let oldTodoArr = [];
+
+		for (let i = 0; i < updateTodoList.length; i++) {
+			let todoObj = {}; // 새로운 객체 생성
+			todoObj['todoContent'] = updateTodoList[i].children[0].value;
+			let todoDate = updateTodoList[i].children[1].value;
+			// if(todoDate != '') {
+			// 	todoDate = MMdd(todoDate);
+			// }
+			todoObj['todoEnd'] = todoDate;
+			todoObj['id'] = updateTodoList[i].children[2].value;
+			todoObj['todoNo'] = updateTodoList[i].dataset.changeTodoNo;
+			todoObj['proPostNo'] = modal14.dataset.updatePostNo;
+
+			oldTodoArr.push(todoObj); // 배열에 객체 추가
+		}
+
+		let subObj = {
+			'proPostNo' : modal14.dataset.updatePostNo,
+			'postTitle' : postTodoTitle.value
+		}
+		oldTodoArr.push(subObj)
+
+		console.log('배열',oldTodoArr)
+
+		fetch("/upTodo", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(oldTodoArr)
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res);
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+
+	}
+</script>
+
+
 </body>
 </html>

@@ -196,8 +196,33 @@
 	
 	<!-- 할 일 단건 조회 -->
 	<select id="readTodoDetail" resultType="ProTodoDetailVO">
-		SELECT todo_no, todo_content, todo_end, todo_check
+		SELECT todo_no, todo_content, todo_end, todo_check, id
 		FROM todo
 		WHERE pro_post_no = #{proPostNo}
 	</select>
+	
+	<!-- 할일 단건 삭제 -->
+	<delete id="deleteTodoDetail" parameterType="int">
+		DELETE FROM todo
+		WHERE todo_no = #{todoNo}
+	</delete>
+	
+	<!-- 할 일 항목 추가 -->
+	<insert id="createTodoDetail" parameterType="ProUpdateTodoVO">
+		INSERT INTO todo(pro_post_no, todo_no, todo_content, todo_end, id)
+		VALUES(#{proPostNo},
+		       (SELECT NVL(MAX(todo_no), 0) + 1
+        		FROM todo),
+		       #{todoContent},
+		       #{todoEnd},
+		       #{id})
+	</insert>
+	
+	<!-- 할 일 항목 수정 -->
+	<update id="updateTodoDetail" parameterType="ProUpdateTodoVO">
+		UPDATE todo
+		SET todo_content = #{todoContent}, todo_end = #{todoEnd}, id = #{id}
+		WHERE todo_no = #{todoNo}
+	</update>
+	
 </mapper>
