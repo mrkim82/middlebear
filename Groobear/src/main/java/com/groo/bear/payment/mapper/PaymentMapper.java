@@ -51,4 +51,11 @@ public interface PaymentMapper {
 	public int paymentReject2(PaymentVO payVO);
 	//결재문서 결재자3 결재/반려 업데이트
 	public int paymentReject3(PaymentVO payVO);
+	//결재문서 운행일지 코멘트작성
+	public int logCommentUpdate(PaymentVO payVO);
+	//결재문서 운행일지 코멘트작성
+	public int offCommentUpdate(PaymentVO payVO);
+	//결재문서 운행일지 코멘트작성
+	public int robinCommentUpdate(PaymentVO payVO);
+
 }

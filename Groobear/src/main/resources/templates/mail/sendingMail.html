@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 </head>
 <body layout:fragment="content">
 <div>
@@ -22,6 +23,7 @@
 				<td>[[${mail.title}]]</td>
 				<td>[[${mail.content}]]</td>
 				<td th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td style="display:none"><input id="mailNo" type="text" th:value="${mail.mailNo}"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -38,6 +40,8 @@
     </ul>
 	
 	<script>
+	let mailNo = document.getElementById('mailNo').value;
+	console.log(mailNo);
 	function goPage(p){
 		location.href="sendingMail?page="+p;
 			
@@ -91,7 +95,7 @@
 			}
 			console.log(delList);
 			$.ajax({
-			    url : "delete",                    // 전송 URL
+				url : "delete",  // 전송 URL
 			    type : 'POST',
 			    contentType : 'application/json',
 			    data :JSON.stringify( delList ),

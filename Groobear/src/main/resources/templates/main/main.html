@@ -117,7 +117,7 @@
 						</div>
 						<div style="text-align: center;">
 							<img src="../img/communication.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;"><br>
-							<a class="dohyeon" style="font-size:20px;">실시간대화</a>
+							<a class="dohyeon" style="font-size:20px;" onclick="openChat()">실시간대화</a>
 						</div>
 					</div>
 					<div class="row" style="width: 375px;margin:10px;">
@@ -203,7 +203,12 @@
 <p class="endOverWork" style="display:none;"></p>
 <p class="monthOver" style="display:bolck;"></p>
 
-
+<script>
+var openChat  = function() {
+	
+ window.open("/roomList", "", "_blank");
+}
+</script>
    <script>
    getProfImg();
    function getProfImg() {

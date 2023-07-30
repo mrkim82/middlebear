@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html
+ xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/insaTiles}">
+ 
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<title>Groobear 회원조회</title>
+<style>
+		ul {
+			list-style:none;
+		}
+		
+		li {
+			float: left;
+			padding: 10px;
+		}
+		a { 
+			text-decoration:none ;
+			color: black;
+		}
+		.paging .active a {
+		    background-color: #f00;
+		    color: #fff;
+		}
+ /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1050; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+    
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%; /* Could be more or less, depending on screen size */                          
+        }
+</style>
+</head>
+
+<body>
+
+<div layout:fragment="content" >
+  <div>
+  	<h3>Groobear 회원조회</h3>
+	<table id="list" class="table">
+		<thead>
+			<tr>
+				<td>사번</td>
+				<td>이름</td>
+				<td>직급</td>
+				<td>부서</td>
+				<td>연락처</td>
+				<td>메일</td>
+				<td>입사일</td>
+				<td>상태</td>
+			</tr>
+		</thead>
+		<tbody id="bodyWash">
+			<tr th:each="emp, stat : ${empList}" th:attr="onclick='detailPopUp()'">
+				<td>[[${emp.empNo}]]</td>
+				<td>[[${emp.name}]]</td>
+				<td>[[${emp.rank}]]</td>
+				<td>[[${emp.deptName}]]</td>
+				<td>[[${emp.phone}]]</td>
+				<td>[[${emp.id}]]</td>
+				<td th:text="${#dates.format(emp.pinfoDate, 'yyyy.MM.dd')}"></td>
+				<th:block th:if="${emp.empStatus =='O'}">
+					<td>재직</td>
+				</th:block>
+				<th:block th:if="${emp.empStatus=='X'}">
+					<td>퇴직</td>
+				</th:block>
+			</tr>
+		</tbody>
+	</table>
+	<div style="display: flex;justify-content: center;height:30px;">
+	    <ul class="paging" th:if="${paging.endPage != 0}">
+					<li>
+						<a th:href="|javascript:goPage(1)|">처음</a>
+					</li>
+	        <li th:if="${paging.prev}">
+	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+	        </li>
+	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
+	            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+	        </li>
+	        <li th:if="${paging.next and paging.endPage > 0}">
+	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+	            </li>
+				<li>
+					<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
+				</li>
+	    </ul>
+	</div>
+	</div>
+	<div style="display: flex;justify-content: center;">
+		<form name="searchForm" action="empInfo">
+		<input type="hidden" name="page" value="1"/><br>
+		<select name="type">
+			<option value='' selected>-- 선택 --</option>
+			<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
+			<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
+			<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
+		</select>
+		<input type="text" name="keyword" id="inputBtn" th:value="${criteria.keyword}"/>
+		<button type="submit" id="searchBtn">검색</button>
+	</form>
+	</div>
+		<!-- The Modal -->
+	    <div id="errorModal" class="modal">
+	      <!-- Modal content -->
+	      <div class="modal-content">
+	                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
+	                <p><br /></p>
+	            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
+	                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
+	                     닫기
+	                </span>
+	            </div>
+	      </div>
+	      </div>
+
+	<script th:inline="javascript">
+		//input 태그 안에 빈 값인데 검색 버튼을 눌렀을 때 실행하는 함수.
+		$(document).ready(function() {
+			//검색 빈값 처리
+			$('#searchBtn').on('click', function() {
+			    let val = $('select[name="type"]').val();
+			    if(val == '') {
+			    	if($('#inputBtn').val()==''){
+			    		location.href='/empInfo';
+			    	}else{
+			    		$('#inputBtn').val('');
+			    		$('#spantext').text('검색 항목을 선택해주세요.');
+			            $('#errorModal').show();
+			            $('#closeModal').on('click', function() {
+			            $('#errorModal').hide();
+			            })
+			            return false;
+			       	}    		
+		    	}
+			})
+		})
+	
+	//페이징 관련
+	function goPage(p) {
+	    //event.preventDefault();
+	    document.searchForm.page.value = p;
+	    document.searchForm.submit();
+	}
+	//날짜포맷 맞춰주는 함수 
+	//https://carrotweb.tistory.com/160 참고사이트.
+	function SimpleDateTimeFormat(date, pattern) {
+		var dateString = pattern.replace(/(yyyy|MM|dd|HH|mm|ss|SSS)/g, function(match) {
+			var matchString = "";
+			switch(match) {
+				case "yyyy":
+					matchString = date.getFullYear();
+					break;
+				case "MM":
+					matchString = date.getMonth() + 1;
+					break;
+				case "dd":
+					matchString = date.getDate();
+					break;
+				case "HH":
+					matchString = date.getHours();
+					break;
+				case "mm":
+					matchString = date.getMinutes();
+					break;
+				case "ss":
+					matchString = date.getSeconds();
+					break;
+				case "SSS":
+					matchString = date.getMilliseconds();
+					break;
+				default :
+					matchString = match;
+					break;
+			}
+			if (match == "SSS") {
+				if (matchString < 10) {
+					matchString = "00" + matchString;
+				} else if (matchString < 100) {
+					matchString = "0" + matchString;
+				}
+			} else {
+				if ((typeof(matchString) == "number" && matchString < 10)) {
+					matchString = "0" + matchString;
+				}
+			}
+			return matchString;
+		});
+	
+		return dateString;
+	}
+	
+	// 팝업창
+    let checkPop = '';
+    let openWin;
+	
+    function detailPopUp() {
+    	let id = $(event.target).closest('tr').children().eq(5).text();
+    	console.log(id)
+    	checkPop = id;
+    	// window.name = "부모창 이름"; 
+        window.name = "empInfo";   
+        // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+        openWin = window.open("/empDetailInfo?id="+id, "empDetailInfo", "width=370, height=480, resizable = no, scrollbars = no");    	
+    }
+  	//모달 Close 기능
+    function close_pop(flag) {
+        $('#myModal').hide();
+   	}; 
+	</script>
+</div>
+</body>
+</html>

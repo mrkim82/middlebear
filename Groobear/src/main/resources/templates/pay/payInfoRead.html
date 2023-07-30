@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/paymentTiles}">
+<head>
+<meta charset="UTF-8">
+<title>InProgressPay</title>
+</head>
+<body layout:fragment="content">
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+	<div style="width: 800px;">
+		<table style="float:left; width: 400px;">
+			<thead></thead>
+			<tbody>
+				<tr>
+					<td>문서 번호 <input type="text" id="payNo" th:value="${list.payNo}" style="border:none" readonly></td>
+				</tr>
+				<tr>
+					<td>작성자 [[${drafterInfo.name}]] [[${drafterInfo.rank}]] [[${drafterInfo.deptName}]]</td>
+				</tr>
+				<tr>
+					<td>작성일자 <input type="text" id="issueDate" th:value="${#dates.format(list.issueDate,'yyyy-MM-dd')}" readonly style="border: none;"></td>
+				</tr>
+				<tr>
+					<td id="sessionId" style="display: none;">[[${session.Id}]]</td>
+				</tr>
+				<tr>
+					<td style="display:none"><input type="text" id="masterDocType" th:value="${list.docType}" readonly></td>
+				</tr>
+				<tr>
+					<td style="display:none"><input type="text" id="drafter" th:value="${drafterInfo.id}" readonly></td>
+				</tr>
+				<tr>
+					<td style="display:none"><input type="text" id="approver2" th:value="${list.approver2}" readonly></td>
+				</tr>
+				<tr>
+					<td style="display:none"><input type="text" id="approver3" th:value="${list.approver3}" readonly></td>
+				</tr>
+				<tr>
+					<td style="display:none"><input type="text" id="payStatus2" th:value="${list.payStatus2}" readonly></td>
+				</tr>
+				<tr>
+					<td style="display:none"><input type="text" id="payStatus3" th:value="${list.payStatus3}" readonly></td>
+				</tr>
+			</tbody>
+		</table>
+		<table style="float:left; width: 380px;">
+			<thead></thead>
+			<tbody>
+				
+				
+			</tbody>
+		</table>
+		<table style="float:left; width: 790px;">
+			<thead></thead>
+			<tbody>
+				<th:block th:if="${list.docType=='a'}">
+				<tr>
+					<td style="display:none"><input type="text" id="laydocType" th:value="${list.docType}" readonly></td>
+				</tr>
+				<tr>
+					<td style="width: 300px;">사유 : <input type="text" id="purpose" th:value="${list.purpose}" readonly></td>
+					<td style="width: 300px;">운행일자 : <input type="text" id="operDate" th:value="${#dates.format(list.operDate, 'yyyy-MM-dd')}" readonly></td>
+				</tr> 
+				<tr>
+					<td>행선지 <input type="text" id="destination" th:value="${list.destination}" readonly></td>
+				</tr>
+				<tr>
+					<td>운행전 키로수 <input type="text" id="befored" th:value="${list.befored}" onchange="kmChange()" readonly></td>
+					<td>운행후 키로수 <input type="text" id="afterd" th:value="${list.afterd}" onchange="kmChange()" readonly></td>
+				</tr>
+				<tr>
+					<td>
+						출자금 <input type="text" id="imprest" th:value="${list.imprest}" readonly>
+					</td>
+				</tr>
+				<td><div class="bigPictureWrapper1">
+					<div class="bigPicture1">
+					</div>
+					</div>
+		     		<div class = "row">
+						<div class = "col-lg-12">
+						<!-- end panel body -->
+						</div>
+						<!-- end panel -->
+					</div>
+					</td>
+						<tr><td><div class="panel-body1">
+	                        <div class="form-group uploadDiv1">
+	                            <input name="uploadFile1" type="file" multiple style="display: none;">
+	                        </div>
+	                        <div class="uploadResult9">
+	                            <ul>
+									<th:block th:if='${drafterInfo.id==list.id}'>
+	
+	                            	</th:block>
+	                            </ul>
+	                        </div>
+	                    	</div>
+	                    </td></tr>
+				<tr>
+					<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+				</tr>
+				</th:block>
+				<th:block th:if="${list.docType=='b'}">
+				<tr>
+					<td style="display:none" id="offdocType" th:value="${list.docType}" readonly></td>
+				</tr>
+				<tr>
+					<td>시작일 <input type="date" id="useDate" th:value="${#dates.format(list.useDate,'yyyy-MM-dd')}" readonly></td>
+					<td>복귀일 <input type="date" id="returnDate" th:value="${#dates.format(list.returnDate,'yyyy-MM-dd')}" readonly></td>
+				</tr>
+				<tr>
+					<td>제목 <input type="text" id="offTitle" th:value="${list.title}" readonly></td>
+				</tr>
+				<tr>
+					<td>내용 <textarea id="offContent" style="width: 400px;height: 200px;" th:text="${list.content}" readonly></textarea></td>
+				</tr>
+					<td><div class="bigPictureWrapper3">
+					<div class="bigPicture3">
+					</div>
+					</div>
+		     		<div class = "row">
+						<div class = "col-lg-12">
+							<div class = "panel-heading3">Files</div>
+							<!-- /.panel-heading -->
+							<div class = "panel-body3">
+								<div class = 'uploadResult3'>
+									<ul>
+									</ul>
+								</div>
+							</div>
+						<!-- end panel body -->
+						</div>
+						<!-- end panel -->
+					</div>
+					</td>
+				<tr>
+					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+				</tr>
+				</th:block>
+				<th:block th:if="${list.docType == 'c'}">
+				<tr>
+					<td style="display:none" id="robindocType" th:value="${list.docType}" readonly></td>
+				</tr>
+				<tr>
+					<td>제목 <input type="text" id="robinTitle" th:value="${list.title}" readonly></td>
+				</tr>
+				<tr>
+					<td>내용 <textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}" readonly></textarea></td>
+				</tr>
+					<td><div class="bigPictureWrapper3">
+					<div class="bigPicture3">
+					</div>
+					</div>
+		     		<div class = "row">
+						<div class = "col-lg-12">
+							<div class = "panel-heading3">Files</div>
+							<!-- /.panel-heading -->
+							<div class = "panel-body3">
+								<div class = 'uploadResult3'>
+									<ul>
+									</ul>
+								</div>
+							</div>
+						<!-- end panel body -->
+						</div>
+						<!-- end panel -->
+					</div>
+					</td>
+				<tr>
+					<td>코멘트 <textarea id="robinCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+				</tr>
+			</th:block>
+			</tbody>
+		</table>
+		<th:block th:if="${(list.id == session.Id and list.payStatus3 == 'N') OR
+							(list.id == session.Id and list.payStatus2 == 'N') }">
+			<button type="button" id="paymentModify" onclick="paymentModify()" style="margin-left:10px">수정페이지</button>
+		</th:block>
+		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
+							(list.approver3 == session.Id and list.payStatus3 == 'N')}">
+			<button type="button" id="paymentOk" onclick="payOks()" style="margin-left:10px">결재</button>
+		</th:block>
+		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
+							(list.approver3 == session.Id and list.payStatus3 == 'N')}">
+			<button type="button" id="paymentPass" onclick="payPassed()" style="margin-left:10px">반려</button>
+		</th:block>
+	</div>
+	<script>
+	/*<![CDATA[*/
+		//기본값
+		let masterDocType = document.getElementById('masterDocType').value;
+		let payNo = document.getElementById('payNo').value;
+		let userId = document.getElementById('sessionId').textContent;
+		let issueDate = document.getElementById('issueDate').value;
+		let drafter = document.getElementById('drafter').value;
+		let approver2 = document.getElementById('approver2').value;
+		let approver3 = document.getElementById('approver3').value;
+		let payStatus2 = document.getElementById('payStatus2').value;
+		let payStatus3 = document.getElementById('payStatus3').value;
+		let com="";
+		if(masterDocType === 'a'){
+			let befored = document.getElementById('befored').value;
+			let afterd = document.getElementById('afterd').value;
+			let imprestText = document.getElementById('imprest');
+		}
+		//이미지 제거용 구이미지 값 저장용
+		let olduuid = "";
+		let olduploadPath = "";
+		let fileName = "";
+		let delOn = "";
+		let upCheck = "";
+		let car1uploadPath = '';
+		let car1uuid = '';
+		let car1fileName = '';
+		let car2uploadPath = '';
+		let car2uuid = '';
+		let car2fileName = '';
+		let offuuid = '';
+		let offuploadPath = '';
+		let offfileName = '';
+		let robinuuid = '';
+		let robinuploadPath = '';
+		let robinfileName = '';
+		if(masterDocType=='a'){
+		//운행일지
+			let purpose = document.getElementById('purpose').value;
+			let operDate = document.getElementById('operDate').value;
+			let destination = document.getElementById('destination').value;
+			let befored = document.getElementById('befored').value;
+			let afterd = document.getElementById('afterd').value;
+			com = document.getElementById('logCom').value;
+			console.log('masterDocType',masterDocType);
+			console.log('payNo',payNo);
+			console.log('userId',userId);
+			console.log('issueDate',issueDate);
+			console.log('purpose',purpose);
+			console.log('operDate',operDate);
+			console.log('destination',destination);
+			console.log('befored',befored);
+			console.log('afterd',afterd);
+			console.log('com',com);
+		}else if(masterDocType=='b'){
+		//연차계
+			let useDate = document.getElementById('useDate').value;
+			let returnDate = document.getElementById('returnDate').value;
+			let offTitle = document.getElementById('offTitle').value;
+			let offContent = document.getElementById('offContent').value;
+			com = document.getElementById('offCom').value;
+			console.log('useDate',useDate);
+			console.log('returnDate',returnDate);
+			console.log('offTitle',offTitle);
+			console.log('offContent',offContent);
+			console.log('com',com);
+		}else{
+		//품의서
+			let robinTitle = document.getElementById('robinTitle').value;
+			let robinContent = document.getElementById('robinContent').value;
+			Com = document.getElementById('robinCom').value;
+			console.log('robinTitle',robinTitle);
+			console.log('robinContent',robinContent);
+			console.log('com',com);
+		}
+		function paymentModify(){
+			//각 버튼들은 공용이기때문에 if조건으로 문서값에 맞추어 값을 유지
+			if(masterDocType==='a'){
+				location.href='payInfo?payNo='+payNo+'&docType='+masterDocType;
+			}else if(masterDocType=='b'){
+				location.href='payInfo?payNo='+payNo+'&docType='+masterDocType;
+			}else{
+				location.href='payInfo?payNo='+payNo+'&docType='+masterDocType;
+			}
+		}
+		function payOks(){
+			console.log('결재통과');
+			if(approver2 === userId){
+				console.log('이전payStatus2',payStatus2);
+				payStatus2 = 'Y';
+				console.log('바뀐payStatus2',payStatus2);
+				//밑에 ajax가져와서 먼저넣고 도현이형꺼 넣기
+				
+				//도현이형이 if조건 추가해서 마지막 결재자가 맞으면
+				
+				//도현이형 offtable에 데이터 넣기
+			}else if(approver3 === userId){
+				console.log('이전payStatus3',payStatus2);
+				payStatus3 = 'Y';
+				console.log('바뀐payStatus3',payStatus2);
+				//밑에 ajax가져와서 먼저넣고 도현이형꺼 넣기
+				
+				//도현이형이 if조건 추가해서 마지막 결재자가 맞으면
+				
+				//도현이형 offtable에 데이터 넣기
+			}
+			$.ajax({
+				url:"/paymentReject",
+				method: "POST",
+  			    contentType:"application/json; charset=utf-8",
+  			    data: JSON.stringify({
+  			    	payNo : payNo,
+					docType : masterDocType,
+					id : drafter,
+					approver2 : approver2,
+					approver3 : approver3,
+					payStatus2 : payStatus2,
+					payStatus3 : payStatus3,
+					com : com
+  			    }),
+  			    async : false,
+  			  	success: function(data) {
+  			    	console.log(data);
+  			    	location.href="/pay/InProgressPay";
+  			    },
+  			    error: function(err) {
+					console.log(err);
+  			    }
+			});
+		}
+		function payPassed(){
+			console.log('결재반려');	
+			console.log('결재통과');
+			if(approver2 === userId){
+				console.log('이전payStatus2',payStatus2);
+				payStatus2 = 'F';
+				console.log('바뀐payStatus2',payStatus2);
+			}else if(approver3 === userId){
+				console.log('이전payStatus3',payStatus2);
+				payStatus3 = 'F';
+				console.log('바뀐payStatus3',payStatus2);
+			}
+			
+			$.ajax({
+				url:"/paymentReject",
+				method: "POST",
+  			    contentType:"application/json; charset=utf-8",
+  			    data: JSON.stringify({
+  			    	payNo : payNo,
+					docType : masterDocType,
+					id : drafter,
+					approver2 : approver2,
+					approver3 : approver3,
+					payStatus2 : payStatus2,
+					payStatus3 : payStatus3,
+					com : com
+  			    }),
+  			    async : false,
+  			  	success: function(data) {
+  			    	console.log(data);
+  			    	location.href="/pay/InProgressPay";
+  			    },
+  			    error: function(err) {
+					console.log(err);
+  			    }
+			});
+		}
+		function payImgDel(elem){
+			olduuid = "";
+			olduploadPath = "";
+			oldfileName = "";
+			console.log(elem);
+			//console.log(elem.parent);
+			delOn = "o";
+			console.log(delOn);
+		}
+		//운행전 첨부파일
+	    $("input[name='uploadFile1']").change(function(e) {
+	        var formData = new FormData();
+	        var inputFile1 = $("input[name='uploadFile1']");
+	        var files = inputFile1[0].files;
+	
+	        for(var i=0; i<files.length; i++) {
+	
+	            if(!checkExtension(files[i].name, files[i].size) ){
+	                return false;
+	            }
+	            formData.append("uploadFile", files[i]);
+	
+	        }
+	        $.ajax({
+				url: "/uploadAjaxAction",
+				processData: false,
+				contentType: false,
+				data: formData,
+				type: "POST",
+				dataType: "json",
+				success: function(result) {
+	                console.log('result = ',result);
+	                showUploadResult1(result);
+	                car1uuid = result[0].uuid;
+	                car1fileName = result[0].fileName;
+	                car1uploadPath = result[0].uploadPath;
+	                upCheck = "o";
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+	    });
+	    //운행후 첨부파일
+	    $("input[name='uploadFile2']").change(function(e) {
+	        var formData = new FormData();
+	        var inputFile2 = $("input[name='uploadFile2']");
+	        var files = inputFile2[0].files;
+	
+	        for(var i=0; i<files.length; i++) {
+	
+	            if(!checkExtension(files[i].name, files[i].size) ){
+	                return false;
+	            }
+	            formData.append("uploadFile", files[i]);
+	
+	        }
+	        $.ajax({
+				url: "/uploadAjaxAction",
+				processData: false,
+				contentType: false,
+				data: formData,
+				type: "POST",
+				dataType: "json",
+				success: function(result) {
+	                console.log('result = ',result);
+	                showUploadResult2(result);
+	                car2uuid = result[0].uuid;
+	                car2fileName = result[0].fileName;
+	                car2uploadPath = result[0].uploadPath;
+	                upCheck = "o";
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+	    });
+	    //연차계 첨부파일
+	    $("input[name='uploadFile3']").change(function(e) {
+	        var formData = new FormData();
+	        var inputFile3 = $("input[name='uploadFile3']");
+	        var files = inputFile3[0].files;
+	
+	        for(var i=0; i<files.length; i++) {
+	
+	            if(!checkExtension(files[i].name, files[i].size) ){
+	                return false;
+	            }
+	            formData.append("uploadFile", files[i]);
+	
+	        }
+	        $.ajax({
+				url: "/uploadAjaxAction",
+				processData: false,
+				contentType: false,
+				data: formData,
+				type: "POST",
+				dataType: "json",
+				success: function(result) {
+	                console.log('result = ',result);
+	                showUploadResult3(result);
+	                offuuid = result[0].uuid;
+	        		offuploadPath = result[0].uploadPath;
+	        		offfileName = result[0].fileName;
+	        		console.log('offu',offuuid);
+	        		console.log('offup',offuploadPath);
+	        		console.log('offf',offfileName);
+	        		upCheck = "o";
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+	    });
+	    //품의서 첨부파일
+	    $("input[name='uploadFile4']").change(function(e) {
+	        var formData = new FormData();
+	        var inputFile4 = $("input[name='uploadFile4']");
+	        var files = inputFile4[0].files;
+	
+	        for(var i=0; i<files.length; i++) {
+	
+	            if(!checkExtension(files[i].name, files[i].size) ){
+	                return false;
+	            }
+	            formData.append("uploadFile", files[i]);
+	
+	        }
+	        $.ajax({
+				url: "/uploadAjaxAction",
+				processData: false,
+				contentType: false,
+				data: formData,
+				type: "POST",
+				dataType: "json",
+				success: function(result) {
+	                console.log('result = ',result);
+	                showUploadResult4(result);
+	                robinuuid = result[0].uuid;
+	                robinfileName = result[0].fileName;
+	                robinuploadPath = result[0].uploadPath;
+	                upCheck = "o";
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+	    });
+	    var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
+	    var maxSize = 5242880;
+	
+	    function checkExtension(fileName, fileSize) {
+	        if (fileSize >= maxSize) {
+	            alert('파일 사이즈 초과');
+	            return false;
+	        }
+	        if (regex.test(fileName)) {
+	            alert('해당 종류의 파일은 업로드할 수 없습니다.');
+	            return false;
+	        }
+	        return true;
+	    }
+	    function kmChange(){
+	    	befored = document.getElementById('befored').value;
+			afterd = document.getElementById('afterd').value;
+			imprest = ((afterd*1)-(befored*1))*1500;
+			imprestText.value = imprest;
+	    }
+	    function imgTagDel(elem){
+	    	elem.parentElement.remove();
+	    	upCheck = "x";
+	    }
+	    $(document).on("click",'.logImgDelete', function(){
+	    	console.log('1');
+	    })
+	    //운행일지1번 이미지,파일 가져와서 다운가능하고 보여주는구문
+	    if(masterDocType==='a'){
+	    $.getJSON(`/getAtt?payNo=[[${list.payNo}]]`, function(arr) {
+	        var str = "";
+	        console.log('들어는와짐');
+	        $(arr).each(function(i, attach){
+	            console.log("여기도 들어와짐");
+	            if(attach.fileType){
+	                var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
+	                str += "<li style='list-style-type:none' data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
+	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+	                str += "<img src='/display?fileName=" + fileCallPath + "' style='width:200px;height:140px'>";
+	                str += "</div>";
+	                str += "</li>";
+	                if(drafter == userId){
+		                str += "<li style='margin:10px;list-style-type:none'>";
+		                str += "<button type='button' id='logImgDel' class='logImgDelete' style='width:50px; height:40px'>제거</button>";
+		                str += "</li>"
+	                }
+	            } else {
+	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
+	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+	                str += "<span>" + attach.fileName + "</span><br/>";
+	                str += "<img src='img/attach.png/'>";
+	                str += "</div>";
+	                str += "</li>";
+	            }
+	        });
+	        
+	        $(".uploadResult9 ul").html(str);
+	    });
+			$(".uploadResult9").on("click","li", function(e){
+		      
+			    console.log("view image");
+			    
+			    var liObj = $(this);
+			    
+			    var path = encodeURIComponent(liObj.data("path")+"/" + liObj.data("uuid")+"_" + liObj.data("filename"));
+			    
+			    if(liObj.data("type")){
+			      showImage1(path.replace(new RegExp(/\\/g),"/"));
+			    }else {
+			      //download 
+			      self.location ="/download?fileName="+path
+			    }
+			  });
+			function showImage1(fileCallPath){
+			    
+			    alert(fileCallPath);
+			    
+			    $(".bigPictureWrapper2").css("display","flex").show();
+			    
+			    $(".bigPicture2")
+			    .html("<img src='/display?fileName="+fileCallPath+"' >")
+			    .animate({width:'100%', height: '100%'}, 1000);
+			  }
+			  $(".bigPictureWrapper2").on("click", function(e){
+			    $(".bigPicture2").animate({width:'0%', height: '0%'}, 1000);
+			    setTimeout(function(){
+			      $('.bigPictureWrapper2').hide();
+			    }, 1000);
+			  });
+	    
+	    }
+	    //연차계 이미지,파일 가져와서 다운가능하게 하는구문
+	    if(masterDocType==='b'){
+	    $.getJSON(`/getAtt?payNo=[[${list.payNo}]]`, function(arr) {
+	        var str = "";
+	        console.log('들어는와짐');
+	        $(arr).each(function(i, attach){
+	            console.log("여기도 들어와짐");
+	            if(attach.fileType){
+	                var fileCallPath = "";
+	            } else {
+	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
+	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+	                str += "<span>" + attach.fileName + "</span><br/>";
+	                str += "</div>";
+	                str += "</li>";
+	            }
+	        });
+	        
+	        $(".uploadResult3 ul").html(str);
+	    });
+			$(".uploadResult3").on("click","li", function(e){
+		      
+			    console.log("view image");
+			    
+			    var liObj = $(this);
+			    
+			    var path = encodeURIComponent(liObj.data("path")+"/" + liObj.data("uuid")+"_" + liObj.data("filename"));
+			    
+			    if(liObj.data("type")){
+			      //showImage3(path.replace(new RegExp(/\\/g),"/"));
+			    }else {
+			      //download 
+			      self.location ="/download?fileName="+path
+			    }
+			  });
+			function showImage(fileCallPath){
+			    
+			    alert(fileCallPath);
+			    
+			    $(".bigPictureWrapper1").css("display","flex").show();
+			    
+			    $(".bigPicture1")
+			    .html("<img src='/display?fileName="+fileCallPath+"' >")
+			    .animate({width:'100%', height: '100%'}, 1000);
+			  }
+			  $(".bigPictureWrapper1").on("click", function(e){
+			    $(".bigPicture1").animate({width:'0%', height: '0%'}, 1000);
+			    setTimeout(function(){
+			      $('.bigPictureWrapper1').hide();
+			    }, 1000);
+			  });
+	    }
+	/*]]>*/
+	</script>
+</body>
+</html>

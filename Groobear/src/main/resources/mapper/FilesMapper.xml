@@ -104,17 +104,46 @@
   							#{uuid}
   							,#{uploadPath}
   							,#{fileName}
-  							,'1'
+  							,#{fileType}
   							,sysdate
   							,#{payNo}
   					)
   	</insert>
   	<!-- 전자결재 등록파일 조회 -->
   	<select id="searchPayImg" parameterType="int">
-  		select * from files where pay_no = #{payNo} 
+  		select * from files where pay_no = #{payNo}
+  		ORDER BY file_date desc
   	</select>
   	<!-- 전자결재 등록파일 삭제 -->
   	<delete id="deletePayImg" parameterType="int">
   		delete files where pay_no = #{payNo}
+  	</delete>
+  	<!-- 메일 첨부파일 등록 -->
+  	<insert id="insertMailFile" parameterType="FilesVO">
+  		insert into files(
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,MAIL_NO
+  							) 
+  					VALUES(
+  							#{uuid}
+  							,#{uploadPath}
+  							,#{fileName}
+  							,#{fileType}
+  							,sysdate
+  							,#{mailNo}
+  					)
+  	</insert>
+  	<!-- 메일 첨부파일 조회 -->
+  	<select id="searchMailFile" parameterType="int">
+  		select * from files
+  		where mail_no = #{mailNo}
+  	</select>
+  	<!-- 메일 첨부파일 삭제 -->
+  	<delete id="deleteMailFile" parameterType="int">
+  		delete files where mail_no = #{mailNo}
   	</delete>
   </mapper>

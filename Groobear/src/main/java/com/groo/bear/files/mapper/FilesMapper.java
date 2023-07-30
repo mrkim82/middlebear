@@ -44,4 +44,13 @@ public interface FilesMapper {
 	
 	//전자결재 이미지 제거
 	public int deletePayImg(int payNo);
+	
+	//메일 첨부파일 등록
+	public int insertMailFile(FilesVO vo);
+	
+	//메일 첨부파일 조회
+	public FilesVO searchMailFile(int mailNo);
+	
+	//메일 첨부파일 삭제
+	public int deleteMailFile(int mailNo);
 }
