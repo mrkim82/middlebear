@@ -1,6 +1,7 @@
-<<<<<<< HEAD
 <!doctype html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
   <head>
   	<title>Groobear</title>
     <meta charset="utf-8">
@@ -8,9 +9,31 @@
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 		
-	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 	<link rel="stylesheet" href="/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<style>
+		@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+		
+		.dohyeon{
+			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			color:black;
+		}
+		
+		.dohyeonmenu{
+			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			font-size : 20px;
+			color:white;
+		}
+		.nanumgothic{
+			font-family: 'Nanum Gothic', serif;/*웹 폰트 지정*/
+			font-weight : 300;
+			color:white;
+		}
+		.rightPad{
+			padding-right:150px;
+		}
+	</style>
   </head>
   <body>
   	<div>
@@ -21,18 +44,19 @@
 			</div>
             
             <div class="col-4 text-center">
-                <a class="blog-header-logo text-body-emphasis" href="#">Groobear</a>
+                <a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:40px; font-weight : 500;" href="/main">Groobear</a>
             </div>
-            <div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px; font-family: 'Hahmlet', serif;">
+            <div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px;">
                 <table style="width: 300px;">
                 	<tbody>
 	                	<tr>
-	                		<td><a>[[${session.Name }]]님 반갑습니다</a></td>
+	                		<td>
+	                			<a class="dohyeon">[[${session.Name }]]님 반갑습니다</a>
+	                		</td>
 	                	</tr>
 	                	<tr>
-	                		<td><span><a href="logout">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
-	                		<span><a href="mypage">마이페이지</a></span></td>
-
+	                		<td><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
+	                		<span><a href="/mypage" class="dohyeon">마이페이지</a></span></td>
 	                	</tr>
                 	</tbody>
                 </table>
@@ -40,173 +64,88 @@
         </div>
     </header>
 	</div>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
-        aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-  
+	<nav class="navbar navbar-expand-lg" style="text-align: center; background-color:#35A880;"> 
       <div class="collapse navbar-collapse" id="navbarColor01">
       
-	        <ul class="navbar-nav mr-auto">
-	          <li class="nav-item active">
-	            <a class="nav-link" href="#">Home
-	              <span class="sr-only">(current)</span>
-	            </a>
+	        <ul class="navbar-nav mr-auto" style="display:flex; margin:auto;">
+	          <li class="nav-item active rightPad">
+	            <a class="nav-link dohyeonmenu" href="/introduce">회사소개</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/mail/receiveMail">메일</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/proMain">프로젝트</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/pay/payMain">전자결재</a>
+	          </li>
+	          <li class="nav-item rightPad">
+	            <a class="nav-link dohyeonmenu" href="/boardList?boardType=N">게시판</a>
 	          </li>
 	          <li class="nav-item">
-	            <a class="nav-link" href="#">Features</a>
-	          </li>
-	          <li class="nav-item">
-	            <a class="nav-link" href="#">Pricing</a>
-	          </li>
-	          <li class="nav-item">
-	            <a class="nav-link" href="#">About</a>
-	          </li>
-	          <li class="nav-item dropdown">
-	            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-	              aria-expanded="false">Dropdown</a>
-	            <div class="dropdown-menu">
-	              <a class="dropdown-item" href="#">Action</a>
-	              <a class="dropdown-item" href="#">Another action</a>
-	              <a class="dropdown-item" href="#">Something else here</a>
-	              <div class="dropdown-divider"></div>
-	              <a class="dropdown-item" href="#">Separated link</a>
-	            </div>
+	            <a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
 	          </li>
 	        </ul>
         </div>
-        
     </nav>
-    <div>
-    <table>
-    	<tbody>
-    		<tr>
-    			<td style="vertical-align: top" class="col-4">
-    				<div class="sidebar">
-				        <a href="commuteList"><span class="material-icons">home</span> 근태관리 </a>
-				        <a href="carList"><span class="material-icons">build</span> 차량관리 </a>
-				        <a href="#about"><span class="material-icons">info</span> 소개</a>
-				        <a href="#contact"><span class="material-icons">mail</span> 연락처</a>
-				    </div>
-    			</td>
-    			<td class="col-8">
-    				<div>
-				    	<div layout:fragment="content" ></div>
-				    </div>
-    			</td>
-    		</tr>
-    	</tbody>
-    </table>
-    
-
-    
-    </div>
-  </body>
-=======
-<!doctype html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-  <head>
-  	<title>Groobear</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-		
-	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-	<link rel="stylesheet" href="/bootstrap.min.css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  </head>
-  <body>
-  	<div>
-    <header class="blog-header lh-1 py-3">
-        <div class="row flex-nowrap justify-content-between align-items-center">
-            <div class="col-4 pt-1">
-	    		<img src="" title="" style="width: 200px;">
-			</div>
-            
-            <div class="col-4 text-center">
-                <a class="blog-header-logo text-body-emphasis" href="#">Groobear</a>
-            </div>
-            <div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px; font-family: 'Hahmlet', serif;">
-                <table style="width: 300px;">
-                	<tbody>
-	                	<tr>
-	                		<td><a>[[${session.Name }]]님 반갑습니다</a></td>
-	                	</tr>
-	                	<tr>
-	                		<td><span><a href="logout">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
-	                		<span><a href="mypage">마이페이지</a></span></td>
-
-	                	</tr>
-                	</tbody>
-                </table>
-            </div>
+    <div class="row">
+      <!-- 사이드바 -->
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+        <div class="position-sticky">
+          <ul class="nav flex-column">
+            <!-- 사이드바 메뉴 아이템들 -->
+            <li class="nav-item">
+              <a id="commute"><span class="material-icons">home</span> 근태관리 </a>
+            </li>
+            <li class="nav-item">
+			  <a href="/carList"><span class="material-icons">build</span> 차량관리 </a>            
+			</li>
+            <li class="nav-item">
+              <a id="book"><span class="material-icons">info</span> 운행일지 관리</a>
+            </li>
+            <li class="nav-item">
+              <a href="/myPageCheckPassword"><span class="material-icons">people</span> 회원정보변경</a>
+            </li>
+          </ul>
         </div>
-    </header>
-	</div>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
-        aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-  
-      <div class="collapse navbar-collapse" id="navbarColor01">
-      
-	        <ul class="navbar-nav mr-auto">
-	          <li class="nav-item active">
-	            <a class="nav-link" href="#">Home
-	              <span class="sr-only">(current)</span>
-	            </a>
-	          </li>
-	          <li class="nav-item">
-	            <a class="nav-link" href="#">Features</a>
-	          </li>
-	          <li class="nav-item">
-	            <a class="nav-link" href="#">Pricing</a>
-	          </li>
-	          <li class="nav-item">
-	            <a class="nav-link" href="#">About</a>
-	          </li>
-	          <li class="nav-item dropdown">
-	            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-	              aria-expanded="false">Dropdown</a>
-	            <div class="dropdown-menu">
-	              <a class="dropdown-item" href="#">Action</a>
-	              <a class="dropdown-item" href="#">Another action</a>
-	              <a class="dropdown-item" href="#">Something else here</a>
-	              <div class="dropdown-divider"></div>
-	              <a class="dropdown-item" href="#">Separated link</a>
-	            </div>
-	          </li>
-	        </ul>
-        </div>
-        
-    </nav>
-    <div>
-    <table>
-    	<tbody>
-    		<tr>
-    			<td style="vertical-align: top" class="col-4">
-    				<div class="sidebar">
-				        <a href="commuteList"><span class="material-icons">home</span> 근태관리 </a>
-				        <a href="carList"><span class="material-icons">build</span> 차량관리 </a>
-				        <a href="#about"><span class="material-icons">info</span> 소개</a>
-				        <a href="#contact"><span class="material-icons">mail</span> 연락처</a>
-				    </div>
-    			</td>
-    			<td class="col-8">
-    				<div>
-				    	<div layout:fragment="content" ></div>
-				    </div>
-    			</td>
-    		</tr>
-    	</tbody>
-    </table>
-    
+      </nav>
+<div class="data" style="display:none">
+	<p class="nowMon"></p>
+	
+</div>
+	<script>
+	
+	var today = new Date();
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var monthString = year + '-' + month;
+	
+	const monthDate = monthString;
+	
+	console.log(monthDate)
+	
+	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
+	document.getElementById('book').setAttribute('href','/bookList/'+monthDate)
+	
+	
+	
+	
+	
+	
+	</script>
 
-    
+      <!-- 사이드바 우측의 컨텐츠 영역 -->
+      <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div layout:fragment="content" ></div>
+      </main>
     </div>
+    <script th:inline="javascript">
+    
+    
+    
+    
+    
+    </script>
   </body>
->>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
 </html>

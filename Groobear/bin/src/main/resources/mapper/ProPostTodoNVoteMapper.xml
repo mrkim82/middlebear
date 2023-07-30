@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.pro.mapper.ProTodoNVoteMapper">
+	
+	<!-- 프로젝트 일정 참여자 조회 -->
+	<select id="readTodoList" resultType="ProPostTodoVO">
+		SELECT a.todo_no, a.pro_post_no, a.todo_content, a.todo_end, a.todo_check, a.id, d.name
+		FROM todo a JOIN pro_post b
+		ON(a.pro_post_no = b.pro_post_no)
+		LEFT JOIN users c
+		ON(a.id = c.id)
+		LEFT JOIN user_info d
+		ON(c.emp_no = d.emp_no)
+		WHERE b.pro_no = #{proNo}
+		ORDER BY a.todo_no
+	</select>
+
+	<!-- 체크리스트 yn여부 바꾸기 -->
+	<update id="updateTotoStatus" parameterType="ProPostTodoVO">
+		UPDATE todo
+		SET todo_check = #{todoCheck}
+		WHERE todo_no = #{todoNo}
+	</update>
+	
+	<!-- 게시물 당 진척도 % -->
+	<select id="readAllTodoListPer" parameterType="ProPostTodoCountVO">
+		SELECT a.pro_post_no, NVL(NULLIF(c.county, 0) / COUNT(a.todo_check), 0) * 100 AS per
+		FROM todo a JOIN pro_post b
+		ON(a.pro_post_no = b.pro_post_no)
+		LEFT JOIN (SELECT a.pro_post_no, COUNT(a.todo_check) AS county
+		        FROM todo a JOIN pro_post b
+		        ON(a.pro_post_no = b.pro_post_no)
+		        WHERE b.pro_no = 1
+		        AND a.todo_check = 'Y'
+		        GROUP BY a.pro_post_no, a.todo_check
+		        ORDER BY 1) c
+		ON(a.pro_post_no = c.pro_post_no)
+		WHERE b.pro_no = #{proNo}
+		GROUP BY a.pro_post_no, c.county
+		ORDER BY 1
+	</select>
+	
+	<!-- 투표 게시판 조회 -->
+	<select id="readVoteList" resultType="ProPostVoteVO">
+		SELECT a.pro_post_no, a.vote_no, a.vote_content, a.vote_end_day, a.vote_end_check
+		FROM vote a
+		JOIN pro_post b
+		ON(a.pro_post_no = b.pro_post_no)
+		WHERE b.pro_no = #{proNo}
+	</select>
+	
+	<!-- 투표 항목 조회 -->
+	<select id="readVoteListCheck" resultType="ProPostVoteVO">
+		SELECT c.vote_detail_no, c.vote_detail_content, c.vote_detail_img, b.vote_no
+		FROM pro_post a
+		JOIN vote b
+		ON(a.pro_post_no = b.pro_post_no)
+		JOIN vote_detail c
+		ON(b.vote_no = c.vote_no)
+		WHERE a.pro_no = #{proNo}
+		ORDER BY vote_detail_no
+	</select>
+	
+	<!-- 투표 참여자 조회 -->
+	<select id="readVoteListParti" resultType="ProPostVoteVO">
+		SELECT d.vote_parti_no, d.id, d.vote_detail_no, i.name
+		FROM vote a
+		JOIN pro_post b
+		ON(a.pro_post_no = b.pro_post_no)
+		JOIN vote_detail c
+		ON(a.vote_no = c.vote_no)
+		JOIN vote_parti d
+		ON(d.vote_detail_no = c.vote_detail_no)
+		JOIN users u
+		ON(d.id = u.id)
+		JOIN user_info i
+		ON(u.emp_no = i.emp_no)
+		WHERE b.pro_no = #{proNo}
+		ORDER BY i.name
+	</select>
+	
+	<!-- 할 일 생성 -->
+	<insert id="createPostTodo" parameterType="ProPostTodoCreVO">
+	<selectKey resultType="int" keyProperty="proPostNo" order="AFTER">
+		SELECT NVL(MAX(pro_post_no), 0)
+	      FROM pro_post
+	</selectKey>
+	
+		INSERT INTO pro_post(pro_post_no, pro_no, id, post_type, post_title)
+		VALUES((SELECT NVL(MAX(pro_post_no), 0) + 1
+		        FROM pro_post),
+		        #{proNo},
+		        #{id},
+		        4,
+		        #{postTitle}
+		)
+	</insert>
+	
+	<!-- 할 일 내용 -->
+	<insert id="createTodo" parameterType="ProPostTodoCreListVO">
+		INSERT INTO todo(todo_no, pro_post_no, todo_content, todo_end, id)
+		VALUES((SELECT NVL(MAX(todo_no), 0) + 1
+		        FROM todo),
+		       #{proPostNo},
+		       #{todoContent},
+		       #{todoEnd},
+		       #{id}
+		)
+	</insert>
+	
+	<!-- 투표글 작성(5번) -->
+	<insert id="createPostVote" statementType="CALLABLE" parameterType="CreateVoteVO">
+		{call cre_pro_vote(
+				#{proNo},
+				#{id},
+				#{postTitle},
+				#{voteContent},
+				#{voteEndDay, mode=IN, jdbcType=DATE},
+				#{voteDetail, mode=IN, typeHandler=com.groo.bear.pro.mapper.OracleArrayStructHandler}
+			)
+		}
+	</insert>
+	
+	<!-- 투표 마감 -->
+	<update id="updateVoteStatus">
+		UPDATE vote
+		SET vote_end_check = 'Y'
+		WHERE vote_no = #{voteNo}
+	</update>
+	
+	<!-- 투표 참가 인원수 조회 -->
+	<select id="readVotePartiCount" resultType="ProTodoPartiCountVO">
+		SELECT COUNT(*) AS count, d.vote_detail_no
+		FROM vote a
+		
+		JOIN pro_post b
+		ON(a.pro_post_no = b.pro_post_no)
+		JOIN vote_detail c
+		ON(a.vote_no = c.vote_no)
+		JOIN vote_parti d
+		ON(d.vote_detail_no = c.vote_detail_no)
+		
+		WHERE b.pro_no = #{proNo}
+		GROUP BY d.vote_detail_no
+	</select>
+	
+	<!-- 투표하기 -->
+	<insert id="insertVote" parameterType="ProVoteCDVO">
+		INSERT INTO vote_parti(vote_detail_no, vote_parti_no, id)
+		VALUES(#{voteDetailNo},
+		      (SELECT NVL(MAX(vote_parti_no), 0) +1
+		       FROM vote_parti),
+		       #{id})
+	</insert>
+	
+	<!-- 투표취소 -->
+	<delete id="deleteVote" parameterType="ProVoteCDVO">
+		DELETE FROM vote_parti
+		WHERE vote_detail_no = #{voteDetailNo}
+		AND id= #{id}
+	</delete>
+	
+	<!-- 투표 체크 조회하기 위한 select -->
+	<select id="readxxVote" resultType="ProVoteCDVO">
+		SELECT d.vote_detail_no, d.id
+		FROM pro_post a
+		JOIN vote b
+		ON(a.pro_post_no = b.pro_post_no)
+		JOIN vote_detail c
+		ON(b.vote_no = c.vote_no)
+		JOIN vote_parti d
+		ON(c.vote_detail_no = d.vote_detail_no)
+		WHERE d.id = #{id}
+		AND a.pro_no = #{proNo}
+	</select>
+	
+	
+</mapper>

@@ -5,24 +5,35 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+	<link rel="stylesheet" href="modal6/css/ionicons.min.css">
+		<link rel="stylesheet" href="modal6/css/flaticon.css">
+		<link rel="stylesheet" href="modal6/css/style.css">
+		<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+		
 </head>
 <body>
 <div layout:fragment="content">
 	<div>
-		<div>
-		<form name="searchForm" action="carList">
+		<h3 style="text-align: center;">차량관리</h3>
+	</div>
+	<div>
+		<div style="text-align: right;" class="form-group">
+		<form name="searchForm" action="carList" >
 			<input type="hidden" name="page" value="1"/>
-			<select name="type">
+			<select name="type" style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px;height:35px;">
 				<option value='' selected>선택</option>
 				<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
 				<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
 				<option value='carNo' th:selected="${criteria.type == 'carNo'}">차량번호</option>
-			</select>		
-			<input type="text" name="keyword" th:value="${criteria.keyword}"/>
-			<button type="submit" id="searchBtn">검색</button>
+			</select>
+			<input type="text" name="keyword" th:value="${criteria.keyword}" style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px;height:35px;"/>
+			<button type="submit" id="searchBtn" class="btn btn-primary">검색</button>
 		</form>
 	</div>
-		<table>
+
+
+
+		<table class="table table-hover">
 			<thead>
 				<tr>
 					<th>사번</th>
@@ -33,30 +44,106 @@
 				</tr> 
 			</thead>
 			<tbody>
-				<tr th:if="${carList != null}" th:each="car, stat:${carList}">
+				<tr class="cml table-default" th:if="${carList != null}" th:each="car, stat:${carList}" th:onclick="carInfofo()" id="carIn" data-toggle="modal" data-target="#carMInfo">
 					<td>[[${car.empNo}]]</td>
 					<td>[[${car.deptName}]]</td>
 					<td>[[${car.name}]]</td>
-					<td>[[${car.carNo}]]</td>
+					<td class="carNo">[[${car.carNo}]]</td>
 					<td>[[${car.phone}]]</td>
+					<td class="carType" style="display:none">[[${car.carType}]]</td>
+					
 				</tr>
 			</tbody>
 		</table>
 		
 	</div>
 	<div>
-		<ul class="paging" th:if="${paging.endPage != 0}">
-	        <li th:if="${paging.prev}">
-	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
-	        </li>
-	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-	            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
-	        </li>
-	        <li th:if="${paging.next and paging.endPage > 0}">
-	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
-	        </li>
-    	</ul>
-	</div>
+			<ul class="paging pagination pagination-sm"
+				th:if="${paging.endPage != 0}">
+
+				<li class="page-item disabled"><a class="page-link"
+					th:href="|javascript:goPage(1)|">&laquo;</a></li>
+				<li th:if="${paging.prev}" class="page-item disabled"><a
+					th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a></li>
+				<li class="page-item active"
+					th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+					<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+					th:text="${num}"></a>
+				</li>
+				<li th:if="${paging.next and paging.endPage > 0}"><a
+					th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a></li>
+				<li class="page-item"><a class="page-link"
+					th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+				</li>
+			</ul>
+		</div>
+	
+	
+		<div class="modal fade" id="carMInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close d-flex align-items-center justify-content-center" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true" class="ion-ios-close"></span>
+		        </button>
+		      </div>
+		      <div class="row no-gutters">
+			      <div class="col-md-6 d-flex">
+				      <div class="modal-body p-5 img d-flex color-1 text-center d-flex align-items-center">
+				      	<div class="text w-100">
+				      		<span class="icon-2 ion-ios-car"></span>
+					      	<h5>차량 정보만 변경 가능합니다.</h5>
+					      	<div class="icon">
+					      		<span class="ion-ios-car"></span>
+					      	</div>
+					      </div>
+				      </div>
+				    </div>
+				    <div class="col-md-6 d-flex">
+				      <div class="modal-body p-5 img d-flex align-items-center color-2">
+				      	<div class="text w-100 py-0 py-md-5">
+				      		<h3 class="mb-4">Change Car Info</h3>
+				      		<form action="carUpdate" method="post" class="signup-form" name="carInfoForm">
+					      		<div class="form-group mb-3">
+					      			<label class="label">Old Car Number</label>
+					      			<input name="oldCarNo" id="infoCarNo" type="text" value="" class="form-control" readOnly>
+					      		</div>
+					      		<div class="form-group mb-3">
+					      			<label class="label">New Car Number</label>
+					      			<input name="carNo" id="newCarNo" type="text" value="" class="form-control">
+					      		</div>
+				            <div class="form-group mb-3">
+				            	<label class="label">Car Type</label>
+				              <input id="infoCarType" name="carType" type="text" value="" class="form-control" placeholder="휘발유 혹은 디젤">
+				            </div>
+				            <div class="form-group mb-3" th:each="info, es:${info}" style="display:none;">
+				            	<label class="label">id</label>
+				              <input name="id" type="text" th:value="${info.id}" class="form-control">
+				            </div>
+				            <div class="form-group d-md-flex">
+				            </div>
+				            <div class="form-group" style="margin-left:30px;">
+				            	<button type="submit" style="width:150px; margin:0px 5px;" class="btn btn-primary rounded submit px-3">수정</button>
+				            	<button type="button" id="deleteBtn" style="width:150px; margin:0px 5px;" class="btn btn-primary rounded">삭제</button>
+				            </div>
+						</form>
+				      	</div>
+				      </div>
+				    </div>
+				 </div>
+		    </div>
+		  </div>
+		</div>
+
+	
+
+	<script src="modal6/js/jquery.min.js"></script>
+    <script src="modal6/js/popper.js"></script>
+    <script src="modal6/js/bootstrap.min.js"></script>
+    <script src="modal6/js/main.js"></script>
+	
+	
+	
 	
 <script th:inline="javascript">
 function goPage(p){
@@ -64,78 +151,60 @@ function goPage(p){
 	searchForm.submit();
 }
 
+$('#carMInfo').on('hidden.bs.modal', function (event) {
+	 carInfoForm.reset();
+})
 
-
-
-/* 	const headers = ['empNo','deptName','name','carNo','phone'];
-
-	document.querySelector('#searchBtn').addEventListener('click',searchCarInfo);
-	document.querySelector('#keyword').addEventListener('keyup',function(e){
-		if(e.keyCode == 13){
-			searchCarInfo();
-		}
-	})
-	
-	function searchCarInfo(){
-		let searchsel = document.getElementById('car_select').value;
-		let keyword = document.getElementById('keyword').value;
-		if(keyword != '' && searchsel != ''){
-			document.getElementsByTagName('tbody')[2].replaceChildren();
-			console.log(searchsel,keyword);
-			let name = ""; 
-			let carNo = "";
-			let deptName = "";
-			if(searchsel == 'name'){
-				name = keyword;
-				console.log('이름',keyword);
-			}else if(searchsel == 'carNo'){
-				carNo = keyword;
-				console.log('차번호',keyword);
-			}else if(searchsel == 'deptName'){
-				deptName = keyword;
-				console.log('부서명',keyword);
+document.querySelector('#deleteBtn').addEventListener('click',function(){
+			
+		
+			let carNo = document.querySelector('#infoCarNo').value;
+			
+			let carInfo = {
+					 'carNo' : carNo
 			}
-			fetch('http://localhost:8081/searchPList',{
-				method:"POST",
-				headers : {
-					'Content-Type': 'application/json'
+			
+			fetch("carDelete",{
+				method:'POST',
+				headers:{
+					'Content-Type' : 'application/json'	
 				},
-				body:JSON.stringify({
-					"carNo" : carNo,
-					"name" : name,
-					"deptName" : deptName
-				})
-			}) 
+				body:JSON.stringify(carInfo)
+			})
 			.then(response => response.json())
 			.then(data => {
-				data.forEach(car => {
-					console.log(car);
-					let trTg = document.createElement('tr');
-					//trTg.addEventListener('click',함수명 )
-					let tdTg = document.createElement('td');
-					for(let header of headers){
-						tdTg = document.createElement('td');
-						tdTg.textContent = car[header];
-						trTg.append(tdTg);
-					}
-					trTg.append(tdTg);
-					let tbody = document.getElementsByTagName('tbody')[2];
-					tbody.append(trTg);
-
-				})
+				console.log(data)
+				if(data == 'true'){
+					location.href="carList"
+				}else{
+					location.href="carList"
+				}
 			})
-			.catch(reject => console.log(reject));
-		}else if(keyword != '' && searchsel == '') {
-			alert('조건을 선택하세요 \n전체조회는 입력값을 비우고 검색해주세요.');
-			location.reload();
-		}else if(keyword == '' && searchsel != '') {
-			alert('검색어를 입력 해 주세요. ');
-			location.reload();
-		}else{
-			location.reload();
+			.catch(err =>{
+				console.log(err);
+			})
+	})
+
+	function carInfofo(){
+			console.log("hi");
+
+			let carNo = event.currentTarget.querySelector('.carNo').innerText;
+			let carType = event.currentTarget.querySelector('.carType').innerText;
+			
+			console.log(carNo);
+			console.log(carType);
+			
+			document.querySelector('#infoCarNo').value = carNo;
+			document.querySelector('#infoCarType').value = carType;
 		}
-	}
- */
+$('#carMInfo').on('hidden.bs.modal', function (event) {
+	 carInfoForm.reset();
+})
+	
+
+
+
+
   
 </script>
 </div>

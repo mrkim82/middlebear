@@ -26,13 +26,14 @@ import com.groo.bear.pro.service.ProPostTaskService;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.PublicCodeService;
+import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
-import com.groo.bear.pro.service.schvo.ProPostSchVO;
+import com.groo.bear.pro.service.postvo.ProWritingUVO;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
 @Controller
@@ -118,6 +119,7 @@ public class proPostController {
 			model.addAttribute("readVoteListCheck", todoNVote.readVoteListCheck(proNo));//투표 내용
 			model.addAttribute("readVoteListParti", todoNVote.readVoteListParti(proNo));//투표 인원
 			model.addAttribute("readVotePartiCount", todoNVote.readVotePartiCount(proNo));//투표 인원 수
+			model.addAttribute("readxxVote", todoNVote.readxxVote(id, proNo));//투표 checked를 위한 조회
 			
 			//System.out.println("게시글"+model.getAttribute("readFeedPost"));
 			pagePath = "proPost/proPostDetail";
@@ -181,6 +183,7 @@ public class proPostController {
 	public Map<String, Object> postCreateWork(HttpServletRequest request, @RequestBody ProPostWorkVO vo) {
 		HttpSession session = request.getSession();
 		Map <String, Object> map = new HashMap<>();
+		System.out.println(vo);
 		String res = "";
 		if(vo.getWorkPersonArr().length == 0) {
 			vo.setWorkPersonArr(null);
@@ -188,7 +191,7 @@ public class proPostController {
 		vo.setId((String)session.getAttribute("Id"));
 		
 		proPostService.createPostWork(vo);
-		
+		System.out.println(vo);
 		map.put("result", res);
 		return map;
 	}
@@ -268,6 +271,31 @@ public class proPostController {
 	public Map<String, Object> deleteProPost(HttpServletRequest request, @RequestBody int delProPostNo) {
 		int result = proPostService.deleteProPost(delProPostNo);
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
+	//글 수정
+	@PutMapping("upProPost")
+	@ResponseBody
+	public Map<String, Object> updateProPost(@RequestBody ProWritingUVO vo) {
+		System.out.println(vo);
+		int result = proPostService.updateProWriting(vo);
+		return Collections.singletonMap("result", result);
+	}
+	
+	// 프로젝트 내 검색
+	@GetMapping("proSearch/{proNo}")
+	public String 프로젝트내검색(Model model, HttpServletRequest request, @PathVariable int proNo, ProDetailSearchVO vo) {
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("Id");
+		proData2(model, request);
+		
+		model.addAttribute("projectTopBar", proPostService.readTopMenu(proNo, id));//메뉴 상단바 조회
+		model.addAttribute("readPublicCodeColorAll", publicC.readPublicCodeColorAll());//공통 색상 전체
+		model.addAttribute("readProAuth", proService.readProAuth(proNo));//권한 및 프로젝트 마스터 조회
+		
+		model.addAttribute("readProInSearch", proPostService.readProInSearch(vo));//검색 내용
+		
+		return "proPost/proPostSearch";
 	}
 	
 }

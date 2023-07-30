@@ -217,5 +217,41 @@
 		WHERE pro_mem_no = #{proMemNo}
 	</update>
 	
+	<!-- 개인 전체 프로젝트 조회(그룹용)  -->
+	<select id="readPerAllPro" resultType="ProGroupManageVO">
+		SELECT a.pro_mem_no, b.pro_name
+		FROM pro_mem a
+		JOIN pro b
+		ON(a.pro_no = b.pro_no)
+		WHERE a.id= #{id}
+		AND a.pro_hide_check = 'N'
+	</select>
 	
+	<!-- 프로젝트 그룹의 프로젝트 체크 여부 -->
+	<select id="readGroupCheckPro" parameterType="ProGroupManageVO" resultType="ProGroupManageVO">
+		SELECT b.pro_mem_no
+		FROM pro_group a
+		JOIN pro_group_management b
+		ON(a.group_no = b.group_no)
+		JOIN pro_mem c
+		ON(b.pro_mem_no = c.pro_mem_no)
+		JOIN pro d
+		ON(c.pro_no = d.pro_no)
+		WHERE c.id = #{id}
+		AND c.pro_hide_check = 'N'
+		AND a.group_no = #{groupNo}
+	</select>
+	
+	<!-- 그룹에 프로젝트 추가 -->
+	<insert id="createGroupProManage" parameterType="ProGroupManageVO">
+		INSERT INTO pro_group_management(group_no, pro_mem_no)
+		VALUES (#{groupNo}, #{proMemNo})
+	</insert>
+	
+	<!-- 그룹에 프로젝트 제거 -->
+	<delete id="deleteGroupProManage" parameterType="ProGroupManageVO">
+		DELETE pro_group_management
+		WHERE group_no = #{groupNo}
+		AND pro_mem_no = #{proMemNo}
+	</delete>
 </mapper>
