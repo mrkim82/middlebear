@@ -24,43 +24,30 @@
 					<td id="sessionId" style="display: none;">[[${session.Id}]]</td>
 				</tr>
 				<tr>
-					<td style="display:none"><input type="text" id="masterDocType" th:value="${list.docType}"></td>
+					<td style="display:none"><input type="text" id="masterDocType" th:value="${list.docType}" readonly></td>
 				</tr>
 				<tr>
-					<td style="display:none"><input type="text" id="drafter" th:value="${drafterInfo.id}"></td>
+					<td style="display:none"><input type="text" id="drafter" th:value="${drafterInfo.id}" readonly></td>
 				</tr>
 				<tr>
-					<td style="display:none"><input type="text" id="approver2" th:value="${list.approver2}"></td>
+					<td style="display:none"><input type="text" id="approver2" th:value="${list.approver2}" readonly></td>
 				</tr>
 				<tr>
-					<td style="display:none"><input type="text" id="approver3" th:value="${list.approver3}"></td>
+					<td style="display:none"><input type="text" id="approver3" th:value="${list.approver3}" readonly></td>
 				</tr>
 				<tr>
-					<td style="display:none"><input type="text" id="payStatus2" th:value="${list.payStatus2}"></td>
+					<td style="display:none"><input type="text" id="payStatus2" th:value="${list.payStatus2}" readonly></td>
 				</tr>
 				<tr>
-					<td style="display:none"><input type="text" id="payStatus3" th:value="${list.payStatus3}"></td>
+					<td style="display:none"><input type="text" id="payStatus3" th:value="${list.payStatus3}" readonly></td>
 				</tr>
 			</tbody>
 		</table>
 		<table style="float:left; width: 380px;">
 			<thead></thead>
 			<tbody>
-				<tr>
-					<td>133333333333</td>
-					<td>23333333333</td>
-					<td>33333333333333333333333</td>
-				</tr>
-				<tr>
-					<td>45555555555</td>
-					<td>55555555555</td>
-					<td>6555555555555555</td>
-				</tr>
-				<tr>
-					<td>75555555555</td>
-					<td>85555555555</td>
-					<td>9555555555555555</td>
-				</tr>
+				
+				
 			</tbody>
 		</table>
 		<table style="float:left; width: 790px;">
@@ -68,18 +55,18 @@
 			<tbody>
 				<th:block th:if="${list.docType=='a'}">
 				<tr>
-					<td style="display:none"><input type="text" id="laydocType" th:value="${list.docType}"></td>
+					<td style="display:none"><input type="text" id="laydocType" th:value="${list.docType}" readonly></td>
 				</tr>
 				<tr>
 					<td style="width: 300px;">사유 : <input type="text" id="purpose" th:value="${list.purpose}" readonly></td>
 					<td style="width: 300px;">운행일자 : <input type="text" id="operDate" th:value="${#dates.format(list.operDate, 'yyyy-MM-dd')}" readonly></td>
 				</tr> 
 				<tr>
-					<td>행선지 <input type="text" id="destination" th:value="${list.destination}"></td>
+					<td>행선지 <input type="text" id="destination" th:value="${list.destination}" readonly></td>
 				</tr>
 				<tr>
-					<td>운행전 키로수 <input type="text" id="befored" th:value="${list.befored}" onchange="kmChange()"></td>
-					<td>운행후 키로수 <input type="text" id="afterd" th:value="${list.afterd}" onchange="kmChange()"></td>
+					<td>운행전 키로수 <input type="text" id="befored" th:value="${list.befored}" onchange="kmChange()" readonly></td>
+					<td>운행후 키로수 <input type="text" id="afterd" th:value="${list.afterd}" onchange="kmChange()" readonly></td>
 				</tr>
 				<tr>
 					<td>
@@ -99,29 +86,34 @@
 					</td>
 						<tr><td><div class="panel-body1">
 	                        <div class="form-group uploadDiv1">
-	                            <input name="uploadFile1" type="file" multiple>
+	                            <input name="uploadFile1" type="file" multiple style="display: none;">
 	                        </div>
 	                        <div class="uploadResult9">
 	                            <ul>
+									<th:block th:if='${drafterInfo.id==list.id}'>
 	
+	                            	</th:block>
 	                            </ul>
 	                        </div>
 	                    	</div>
 	                    </td></tr>
+				<tr>
+					<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+				</tr>
 				</th:block>
 				<th:block th:if="${list.docType=='b'}">
 				<tr>
-					<td style="display:none" id="offdocType" th:value="${list.docType}"></td>
+					<td style="display:none" id="offdocType" th:value="${list.docType}" readonly></td>
 				</tr>
 				<tr>
-					<td>시작일 <input type="date" id="useDate" th:value="${#dates.format(list.useDate,'yyyy-MM-dd')}"></td>
-					<td>복귀일 <input type="date" id="returnDate" th:value="${#dates.format(list.returnDate,'yyyy-MM-dd')}"></td>
+					<td>시작일 <input type="date" id="useDate" th:value="${#dates.format(list.useDate,'yyyy-MM-dd')}" readonly></td>
+					<td>복귀일 <input type="date" id="returnDate" th:value="${#dates.format(list.returnDate,'yyyy-MM-dd')}" readonly></td>
 				</tr>
 				<tr>
-					<td>제목 <input type="text" id="offTitle" th:value="${list.title}"></td>
+					<td>제목 <input type="text" id="offTitle" th:value="${list.title}" readonly></td>
 				</tr>
 				<tr>
-					<td>내용 <textarea id="offContent" style="width: 400px;height: 200px;" th:text="${list.content}"></textarea></td>
+					<td>내용 <textarea id="offContent" style="width: 400px;height: 200px;" th:text="${list.content}" readonly></textarea></td>
 				</tr>
 					<td><div class="bigPictureWrapper3">
 					<div class="bigPicture3">
@@ -148,13 +140,13 @@
 				</th:block>
 				<th:block th:if="${list.docType == 'c'}">
 				<tr>
-					<td style="display:none" id="robindocType" th:value="${list.docType}"></td>
+					<td style="display:none" id="robindocType" th:value="${list.docType}" readonly></td>
 				</tr>
 				<tr>
-					<td>제목 <input type="text" id="robinTitle" th:value="${list.title}"></td>
+					<td>제목 <input type="text" id="robinTitle" th:value="${list.title}" readonly></td>
 				</tr>
 				<tr>
-					<td>내용 <textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}"></textarea></td>
+					<td>내용 <textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}" readonly></textarea></td>
 				</tr>
 					<td><div class="bigPictureWrapper3">
 					<div class="bigPicture3">
@@ -181,17 +173,17 @@
 			</th:block>
 			</tbody>
 		</table>
-		<th:block th:if="${(list.approver2 == session.Id and list.payStatus3 == 'N') OR
+		<th:block th:if="${(list.id == session.Id and list.payStatus3 == 'N') OR
 							(list.id == session.Id and list.payStatus2 == 'N') }">
-			<button type="button" id="paymentModify" onclick="paymentModify()" style="margin-left:10px">수정</button>
+			<button type="button" id="paymentModify" onclick="paymentModify()" style="margin-left:10px">수정페이지</button>
 		</th:block>
 		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
 							(list.approver3 == session.Id and list.payStatus3 == 'N')}">
-			<button type="button" id="paymentOk" onclick="paymentOk()" style="margin-left:10px">결재</button>
+			<button type="button" id="paymentOk" onclick="payOks()" style="margin-left:10px">결재</button>
 		</th:block>
 		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
 							(list.approver3 == session.Id and list.payStatus3 == 'N')}">
-			<button type="button" id="paymentPass" onclick="paymentPass()" style="margin-left:10px">반려</button>
+			<button type="button" id="paymentPass" onclick="payPassed()" style="margin-left:10px">반려</button>
 		</th:block>
 	</div>
 	<script>
@@ -206,6 +198,7 @@
 		let approver3 = document.getElementById('approver3').value;
 		let payStatus2 = document.getElementById('payStatus2').value;
 		let payStatus3 = document.getElementById('payStatus3').value;
+		let com="";
 		if(masterDocType === 'a'){
 			let befored = document.getElementById('befored').value;
 			let afterd = document.getElementById('afterd').value;
@@ -236,6 +229,7 @@
 			let destination = document.getElementById('destination').value;
 			let befored = document.getElementById('befored').value;
 			let afterd = document.getElementById('afterd').value;
+			com = document.getElementById('logCom').value;
 			console.log('masterDocType',masterDocType);
 			console.log('payNo',payNo);
 			console.log('userId',userId);
@@ -245,291 +239,39 @@
 			console.log('destination',destination);
 			console.log('befored',befored);
 			console.log('afterd',afterd);
+			console.log('com',com);
 		}else if(masterDocType=='b'){
 		//연차계
 			let useDate = document.getElementById('useDate').value;
 			let returnDate = document.getElementById('returnDate').value;
 			let offTitle = document.getElementById('offTitle').value;
 			let offContent = document.getElementById('offContent').value;
-			let offCom = document.getElementById('offCom').value;
+			com = document.getElementById('offCom').value;
 			console.log('useDate',useDate);
 			console.log('returnDate',returnDate);
 			console.log('offTitle',offTitle);
 			console.log('offContent',offContent);
-			console.log('offCom',offCom);
+			console.log('com',com);
 		}else{
 		//품의서
 			let robinTitle = document.getElementById('robinTitle').value;
 			let robinContent = document.getElementById('robinContent').value;
-			let robinCom = document.getElementById('robinCom').value;
+			Com = document.getElementById('robinCom').value;
 			console.log('robinTitle',robinTitle);
 			console.log('robinContent',robinContent);
-			console.log('robinCom',robinCom);
+			console.log('com',com);
 		}
 		function paymentModify(){
 			//각 버튼들은 공용이기때문에 if조건으로 문서값에 맞추어 값을 유지
 			if(masterDocType==='a'){
-				//값 초기화
-				let purpose = document.getElementById('purpose').value;
-				let operDate = document.getElementById('operDate').value;
-				let destination = document.getElementById('destination').value;
-				let befored = document.getElementById('befored').value;
-				let afterd = document.getElementById('afterd').value;
-				let imprest = ((afterd*1)-(befored*1))*1500;
-				console.log('masterDocType',masterDocType);
-				console.log('payNo',payNo);
-				console.log('userId',userId);
-				console.log('issueDate',issueDate);
-				console.log('purpose',purpose);
-				console.log('operDate',operDate);
-				console.log('destination',destination);
-				console.log('befored',befored);
-				console.log('afterd',afterd);
-				console.log(imprest);
-				console.log(approver2);
-				console.log(approver3);
-				//파일지우기
-				if(delOn==='o'){
-					console.log(payNo);
-					$.ajax({
-						url:"/payfiledel",
-						method: "POST",
-		  			    contentType:"application/json; charset=utf-8",
-		  			    data: JSON.stringify({
-		  			    	payNo : payNo
-		  			    }),
-		  			    async : false,
-		  			  	success: function(data) {
-		  			    	console.log(data);
-		  			    	console.log('delOn = ',delOn);
-		  			    	console.log('afterd = ',afterd);
-		  			    },
-		  			    error: function(err) {
-							console.log(err);
-		  			    }
-					});
-				}
-				delOn="";
-				//controller에 전송하는 운행일지 첨부파일 1번
-				if(car1uuid!==""){
-					$.ajax({
-		    			url: "/logInsert",
-		  			    method: "POST",
-		  			    contentType:"application/json; charset=utf-8",
-		  			    data: JSON.stringify({
-		  			      payNo : payNo,
-		  			      uuid : car1uuid,
-		  			      uploadPath : car1uploadPath,
-		  			      fileName : car1fileName
-		  			    }),
-		  			    success: function(data) {
-		  			    	console.log(data);
-		  			    },
-		  			    error: function(err) {
-							console.log(err);
-		  			    }	
-		    		});
-				}
-				if(car2uuid!==""){
-					//controller에 전송하는 운행일지 첨부파일 2번
-					$.ajax({
-		    			url: "/logInsert",
-		  			    method: "POST",
-		  			    contentType:"application/json; charset=utf-8",
-		  			    data: JSON.stringify({
-		  			      payNo : payNo,
-		  			      uuid : car2uuid,
-		  			      uploadPath : car2uploadPath,
-		  			      fileName : car2fileName
-		  			    }),
-		  			    success: function(data) {
-		  			    	console.log(data);
-		  			    },
-		  			    error: function(err) {
-							console.log(err);
-		  			    }	
-		    		});
-				}
-				//ajax로 값보내줌
-				$.ajax({
-					url:"/paymentUpdate",
-					method: "POST",
-	  			    contentType:"application/json; charset=utf-8",
-	  			    data: JSON.stringify({
-	  			    	payNo : payNo,
-						operDate : operDate,
-						docType : masterDocType,
-						id : userId,
-						imprest : imprest,
-						purpose : purpose,
-						approver2 : approver2,
-						approver3 : approver3,
-						destination : destination,
-						befored : befored,
-						afterd : afterd,
-	  			    }),
-	  			    async : false,
-	  			  	success: function(data) {
-	  			    	console.log(data);
-	  			    	location.href="/pay/InProgressPay";
-	  			    },
-	  			    error: function(err) {
-						console.log(err);
-	  			    }
-				});
-				//파일업로드
+				location.href='payInfo?payNo='+payNo+'&docType='+masterDocType;
 			}else if(masterDocType=='b'){
-				let useDate = document.getElementById('useDate').value;
-				let returnDate = document.getElementById('returnDate').value;
-				let offTitle = document.getElementById('offTitle').value;
-				let offContent = document.getElementById('offContent').value;
-				let offCom = document.getElementById('offCom').value;
-				console.log('useDate',useDate);
-				console.log('returnDate',returnDate);
-				console.log('offTitle',offTitle);
-				console.log('offContent',offContent);
-				console.log('offCom',offCom);
-				if(delOn === 'o'){
-					console.log('delOn = o');
-					$.ajax({
-						url:"/payfiledel",
-						method: "POST",
-		  			    contentType:"application/json; charset=utf-8",
-		  			    data: JSON.stringify({
-		  			    	payNo : payNo
-		  			    }),
-		  			    async : false,
-		  			  	success: function(data) {
-		  			    	console.log(data);
-		  			    },
-		  			    error: function(err) {
-							console.log(err);
-		  			    }
-					});
-				}
-				delOn="";
-				console.log('offuuid',offuuid);
-				console.log('offuploadPath',offuploadPath);
-				console.log('offfileName',offfileName);
-				if(offuuid!==""){
-					$.ajax({
-		    			url: "/logInsert",
-		  			    method: "POST",
-		  			    contentType:"application/json; charset=utf-8",
-		  			    data: JSON.stringify({
-		  			    	payNo : payNo,
-		  			    	uuid : offuuid,
-		  			    	uploadPath : offuploadPath,
-		  			    	fileName : offfileName
-		  			    }),
-		  			    success: function(data) {
-		  			    	console.log(data);
-		  			    },
-		  			    error: function(err) {
-							console.log(err);
-		  			    }	
-		    		});
-				}
-				//ajax
-				$.ajax({
-					url:"/paymentUpdate",
-					method: "POST",
-	  			    contentType:"application/json; charset=utf-8",
-	  			    data: JSON.stringify({
-	  			    	payNo : payNo,
-						docType : masterDocType,
-						id : userId,
-						approver2 : approver2,
-						approver3 : approver3,
-						useDate : useDate,
-						returnDate : returnDate,
-						title : offTitle,
-						content : offContent,
-						com : offCom
-	  			    }),
-	  			    async : false,
-	  			  	success: function(data) {
-	  			    	console.log(data);
-	  			    	location.href="/pay/InProgressPay";
-	  			    },
-	  			    error: function(err) {
-						console.log(err);
-	  			    }
-				});
-  				//controller에 전송하는 연차계 첨부파일 1번
+				location.href='payInfo?payNo='+payNo+'&docType='+masterDocType;
 			}else{
-				let robinTitle = document.getElementById('robinTitle').value;
-				let robinContent = document.getElementById('robinContent').value;
-				let robinCom = document.getElementById('robinCom').value;
-				console.log('robinTitle',robinTitle);
-				console.log('robinContent',robinContent);
-				console.log('robinCom',robinCom);
-				if(delOn === 'o'){
-					console.log('delOn = o');
-					$.ajax({
-						url:"/payfiledel",
-						method: "POST",
-		  			    contentType:"application/json; charset=utf-8",
-		  			    data: JSON.stringify({
-		  			    	payNo : payNo
-		  			    }),
-		  			    async : false,
-		  			  	success: function(data) {
-		  			    	console.log(data);
-		  			    },
-		  			    error: function(err) {
-							console.log(err);
-		  			    }
-					});
-				}
-				//controller에 전송하는 연차 첨부파일 1번
-				if(robinuuid!==""){
-					$.ajax({
-		    			url: "/logInsert",
-		  			    method: "POST",
-		  			    contentType:"application/json; charset=utf-8",
-		  			    data: JSON.stringify({
-		  			      payNo : payNo,
-		  			      uuid : robinuuid,
-		  			      uploadPath : robinuploadPath,
-		  			      fileName : robinfileName
-		  			    }),
-		  			    success: function(data) {
-		  			    	console.log(data);
-		  			    },
-		  			    error: function(err) {
-							console.log(err);
-		  			    }	
-		    		});
-				}
-				//ajax
-				$.ajax({
-					url:"/paymentUpdate",
-					method: "POST",
-	  			    contentType:"application/json; charset=utf-8",
-	  			    data: JSON.stringify({
-	  			    	payNo : payNo,
-						docType : masterDocType,
-						id : userId,
-						approver2 : approver2,
-						approver3 : approver3,
-						title : robinTitle,
-						content : robinContent,
-						com : robinCom
-	  			    }),
-	  			    async : false,
-	  			  	success: function(data) {
-	  			    	console.log(data);
-	  			    	location.href="/pay/InProgressPay";
-	  			    },
-	  			    error: function(err) {
-						console.log(err);
-	  			    }
-				});
+				location.href='payInfo?payNo='+payNo+'&docType='+masterDocType;
 			}
-			
 		}
-		function paymentOk(){
+		function payOks(){
 			console.log('결재통과');
 			if(approver2 === userId){
 				console.log('이전payStatus2',payStatus2);
@@ -561,7 +303,8 @@
 					approver2 : approver2,
 					approver3 : approver3,
 					payStatus2 : payStatus2,
-					payStatus3 : payStatus3
+					payStatus3 : payStatus3,
+					com : com
   			    }),
   			    async : false,
   			  	success: function(data) {
@@ -573,7 +316,7 @@
   			    }
 			});
 		}
-		function paymentPass(){
+		function payPassed(){
 			console.log('결재반려');	
 			console.log('결재통과');
 			if(approver2 === userId){
@@ -585,6 +328,7 @@
 				payStatus3 = 'F';
 				console.log('바뀐payStatus3',payStatus2);
 			}
+			
 			$.ajax({
 				url:"/paymentReject",
 				method: "POST",
@@ -596,7 +340,8 @@
 					approver2 : approver2,
 					approver3 : approver3,
 					payStatus2 : payStatus2,
-					payStatus3 : payStatus3
+					payStatus3 : payStatus3,
+					com : com
   			    }),
   			    async : false,
   			  	success: function(data) {
@@ -797,9 +542,11 @@
 	                str += "<img src='/display?fileName=" + fileCallPath + "' style='width:200px;height:140px'>";
 	                str += "</div>";
 	                str += "</li>";
-	                str += "<li style='margin:10px;list-style-type:none'>"
-	                str += "<button type='button' id='logImgDel' class='logImgDelete' style='width:50px; height:40px'>제거</button>";
-	                str += "</li>"
+	                if(drafter == userId){
+		                str += "<li style='margin:10px;list-style-type:none'>";
+		                str += "<button type='button' id='logImgDel' class='logImgDelete' style='width:50px; height:40px'>제거</button>";
+		                str += "</li>"
+	                }
 	            } else {
 	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";

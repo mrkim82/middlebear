@@ -173,5 +173,20 @@ public class PaymentServiceImpl implements PaymentService{
 	@Override
 	public List<FilesVO> getAtt(int payNo) {
 		return attachMapper.findByNo("pay_no", payNo);
+	}
+
+	@Override
+	public int logCommentUpdate(PaymentVO payVO) {
+		return paymentMapper.logCommentUpdate(payVO);
+	}
+
+	@Override
+	public int offCommentUpdate(PaymentVO payVO) {
+		return paymentMapper.offCommentUpdate(payVO);
+	}
+
+	@Override
+	public int robinCommentUpdate(PaymentVO payVO) {
+		return paymentMapper.robinCommentUpdate(payVO);
 	}	
 }
