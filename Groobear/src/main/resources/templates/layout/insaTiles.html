@@ -139,12 +139,14 @@
             <li class="nav-item">
               <a href="/empInfo"><span class="material-icons">add_box</span>회원조회</a>
             </li>
-            <li class="nav-item">
-              <a href="/deptList"><span class="material-icons">home</span>부서권한관리</a>
-            </li>
-            <li class="nav-item">
-              <a href="/userInfoList"><span class="material-icons">star</span>인사등록</a>
-            </li>
+            <th:block th:if="${session.EmpGrade == 'A'}">
+	            <li class="nav-item">
+	              <a href="/deptList"><span class="material-icons">home</span>부서권한관리</a>
+	            </li>
+	            <li class="nav-item">
+	              <a href="/userInfoList"><span class="material-icons">star</span>인사등록</a>
+	            </li>
+	         </th:block>
           </ul>
         </div>
       </nav>

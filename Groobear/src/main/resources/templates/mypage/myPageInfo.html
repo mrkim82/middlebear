@@ -161,7 +161,7 @@
 						<th:block th:if="${profImg != null && profImg != ''}">
 							<ul>
 								<li th:data-path="${profImg.uploadPath}" th:data-uuid="${profImg.uuid}"
-								data-filename="${profImg.fileName}" data-type="true">
+								th:data-filename="${profImg.fileName}" data-type="true">
 									<div>
 										<img th:src="@{|/display?fileName=${#strings.replace(profImg.uploadPath,'\','/')}/s_${profImg.uuid}_${profImg.fileName}|}" 
 										th:data-uploadpath="${profImg.uploadPath}" th:data-uuid="${profImg.uuid}"

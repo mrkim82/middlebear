@@ -24,6 +24,7 @@ import com.groo.bear.emp.service.EmpService;
 import com.groo.bear.emp.service.EmpVO;
 import com.groo.bear.mypage.service.OffService;
 import com.groo.bear.mypage.service.OffVO;
+import com.groo.bear.mypage.service.UserService;
 import com.groo.bear.pro.service.ProService;
 import com.groo.bear.sms.service.MessageDTO;
 import com.groo.bear.sms.service.SmsResponseDTO;
@@ -36,6 +37,9 @@ import lombok.RequiredArgsConstructor;
 public class EmpController {
 	@Autowired
 	EmpService empService;
+	
+	@Autowired
+	UserService userService;
 	
 	@Autowired
 	OffService offService;
@@ -153,5 +157,14 @@ public class EmpController {
 			result = "fail";
 			return result;
 		}
+	}
+	// 메인 프로필 사진
+	@ResponseBody
+	@GetMapping("checkProfImg")
+	public EmpVO mainCheckProfImg(HttpServletRequest request) {
+		HttpSession session = request.getSession(true);
+		String id = (String) session.getAttribute("Id");
+		EmpVO vo = userService.checkMyProf(id);
+		return vo;
 	}
 }
