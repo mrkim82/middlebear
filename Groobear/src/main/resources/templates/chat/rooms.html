@@ -64,13 +64,15 @@
     <h1>채팅방목록</h1>
     <button id="addChatroom" data-toggle="modal" data-target="#myModal">+</button>
     <ul id="chatlist">
-        <li th:each="room : ${id}" class="chatroom">
+        <li th:each="room : ${rooms}" class="chatroom">
             <div class="chatroom-info">
                 <div class="chatroom-name" th:text="${room.roomName}">Room Name</div>
-                <div>Last message: No messages yet</div>
+                <div class="participant-count" th:text="${room.participantCount} + '명 참여중'"></div> <!-- 참여인원 수 추가 -->
+                <div th:text="${room.lastMessage != null} ? ${room.lastMessage} : '메세지 내용이 없습니다.'"></div>
+
                 <!-- Add your other fields here -->
             </div>
-                <button class="delete-chatroom" th:data-room-no="${room.roomNo}">Delete</button>
+                <button class="delete-chatroom" th:data-room-no="${room.roomNo}" style="display: none;">Delete</button>
         </li>
     </ul>
 
@@ -87,10 +89,12 @@
 
                 <!-- Modal body -->
                 <div class="modal-body">
+                
                     <input type="text" id="chatroomName" placeholder="채팅방 이름">
+                    <ul id="employeeList"></ul>
                     <div id="userListContainer">
-        <!-- 이 부분에 서버로부터 받아온 사용자 리스트를 체크박스와 함께 렌더링해야 합니다. -->
-    				</div>
+         <!-- 사용자 목록이 이곳에 표시됩니다 -->
+    					</div>
                 </div>
 				
                 <!-- Modal footer -->
@@ -101,19 +105,86 @@
             </div>
         </div>
     </div>
+<!-- Alert Modal -->
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Modal body text goes here.
+            </div>
+            <div class="modal-footer">
+                <button id="alertModalClose" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <script>
+<script>
+ // 사원 목록을 가져오는 함수를 추가
+    // Fetch all employees
+        function fetchEmployees() {
+            fetch('/empAllList')
+            .then(response => response.json())
+            .then(employees => {
+                const employeeListUl = document.getElementById('employeeList');
+                employees.forEach(employee => {
+                	console.log(employee)
+                    const li = document.createElement('li');
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = 'employee-' + employee.id;
+                    checkbox.value = employee.id;
+
+                    const empNo = document.createElement('span');
+                    empNo.textContent = employee.empNo + ' ';
+					
+                    const empId = document.createElement('span');
+                    empId.textContent = employee.id + ' ';
+                    
+                    const empName = document.createElement('span');
+                    empName.textContent = employee.name + ' ';
+
+                    const empRank = document.createElement('span');
+                    empRank.textContent = employee.rank + ' ';
+
+                    const empDept = document.createElement('span');
+                    empDept.textContent = employee.deptName;
+
+                    li.appendChild(checkbox);
+                    li.appendChild(empNo);
+                    li.appendChild(empId);
+                    li.appendChild(empName);
+                    li.appendChild(empRank);
+                    li.appendChild(empDept);
+                    
+                    employeeListUl.appendChild(li);
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+
 window.onload = function() {
     let chatrooms = document.getElementsByClassName('chatroom');
     for(let i = 0; i < chatrooms.length; i++) {
         let roomNo = chatrooms[i].getElementsByClassName('delete-chatroom')[0].getAttribute('data-room-no');
         let infoDiv = chatrooms[i].getElementsByClassName('chatroom-info')[0];
         infoDiv.addEventListener('click', () => {
-            location.href = `/chat/${roomNo}`;
+            //location.href = `/chat/${roomNo}`;
+            window.open("/chat/" + roomNo, "", "_blank");
         });
         
         let deleteButton = chatrooms[i].getElementsByClassName('delete-chatroom')[0];
@@ -139,18 +210,43 @@ window.onload = function() {
                 console.error('Error:', error);
             });
         });
-    }
+    } fetchEmployees();
 }
-
 document.getElementById('createChatroom').addEventListener('click', () => {
     const chatroomName = document.getElementById('chatroomName').value;
-    const userList = Array.from(document.querySelectorAll('#userListContainer input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+    const employeeIds = Array.from(document.querySelectorAll('#employeeList input:checked')).map(checkbox => checkbox.value);
+    
+ // 방 제목이 없는 경우 모달창 띄우기
+    if (!chatroomName) {
+        // 기존 채팅방 생성 모달 닫기
+        $('#myModal').modal('hide');
+        $('#alertModalLabel').text('Error');
+        $('.modal-body').text('채팅방 제목을 작성해주세요.');
+        $('#alertModal').modal('show');
+        return;
+    }
+    
+    // 체크박스가 선택되지 않은 경우 모달창 띄우기
+    if (employeeIds.length === 0) {
+        // 기존 채팅방 생성 모달 닫기
+        $('#myModal').modal('hide');
+        $('#alertModalLabel').text('Error');
+        $('.modal-body').text('적어도 한 명의 사원을 선택해주세요.');
+        $('#alertModal').modal('show');
+        return;
+    }
+    //해결해야 하는 부분
+    $('#alertModalClose').on('hidden.bs.modal', function (e) {
+    	window.location.href = window.location.href;
+    });
+    
     if (chatroomName) {
         const newChatroom = {
             roomName: chatroomName, 
-            lastMessage: 'No messages yet', 
-            newMessages: 0,
-            users: userList,
+            //lastMessage: 'No messages yet!', 
+            //newMessages: 0,
+            employeeIds: employeeIds,
+            
         };
         fetch('/newChatroom', {
             method: 'POST',
@@ -173,13 +269,15 @@ document.getElementById('createChatroom').addEventListener('click', () => {
             name.textContent = createdRoom.roomName;
             name.classList.add('chatroom-name');
 
-            const lastMessage = document.createElement('div');
-            lastMessage.textContent = 'Last message: No messages yet';
+            //const lastMessage = document.createElement('div');
+            //lastMessage.textContent = 'Last message: No messages yet!!';
             
             location.reload();
             
             infoDiv.addEventListener('click', () => {
-                location.href = `/chat/${createdRoom.roomNo}`;
+                //location.href = `/chat/${createdRoom.roomNo}`;
+                //window.open = (`/chat/${createdRoom.roomNo}`);
+            	window.open("/chat/" + createdRoom.roomNo, "", "_blank");
             });
 
             const deleteButton = document.createElement('button');
@@ -210,7 +308,7 @@ document.getElementById('createChatroom').addEventListener('click', () => {
             });
 
             infoDiv.appendChild(name);
-            infoDiv.appendChild(lastMessage);
+            //infoDiv.appendChild(lastMessage);
             li.appendChild(infoDiv);
             li.appendChild(deleteButton);
             chatlist.appendChild(li);
@@ -223,7 +321,5 @@ document.getElementById('createChatroom').addEventListener('click', () => {
     }
 });
 </script>
-
-
 </body>
 </html>
