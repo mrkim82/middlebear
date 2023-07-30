@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html
+ xmlns:th="http://www.thymeleaf.org">
+ 
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<title>Insert title here</title>
+<style>
+	@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+	
+	.dohyeon{
+		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		color:black;
+		font-size : 20px;
+	}
+	#ulId li.active a.page-link {
+    	background-color: #35A880;
+   		border: 1px solid #35A880;
+  	}
+</style>
+</head>
+<body>
+<div>
+  <div class="dohyeon" style="padding:10px;">
+    <a style="font-size : 30px;color: #35A880;" href="boardListMain?boardType=N">공지사항</a>
+    <a style="font-size : 30px;color: #35A880;">/</a>
+    <a style="font-size : 30px;color: #35A880;" href="boardListMain?boardType=C">언론보도</a>
+	<table id="list" class="table" style="margin:10px;margin-top:20px;">
+		<thead>
+			<tr>
+				<td>글번호</td>
+				<td>제목</td>
+				<td>작성자</td>
+				<td>작성일자</td>
+				<td>조회수</td>
+			</tr>
+		</thead>
+		<tbody id="bodyWash">
+			<tr th:each="board, stat : ${boardList}"  th:attr="onclick='window.parent.location.href=\'/boardInfo?boardNo=' + ${board.boardNo} + '\''">
+				<td th:text="${board.btNo}"></td>
+				<td>[[${board.title}]]</td>
+				<td>[[${board.name}]]</td>
+				<td th:text="${#dates.format(board.insertDate, 'yyyy.MM.dd')}"></td>
+				<td>[[${board.count}]]</td>
+				<td style="display:none;">[[${board.boardType}]]</td>
+			</tr>
+		</tbody>
+	</table>
+	<div>
+	
+    <ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
+		<li class="page-item"><a class="page-link"
+					th:href="|javascript:goPage(1)|">&laquo;</a></li>
+		<li class="page-item active"
+			th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+			<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+			th:text="${num}"></a>
+		</li>
+		<li class="page-item"><a class="page-link"
+			th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+		</li>
+    </ul>
+
+	</div>
+	</div>
+	<div style="display:none;">
+		<th:block th:if="${(session.EmpGrade == 'A') and (boardVO.boardType == 'N')}">
+			<button type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
+		</th:block>
+		<th:block th:if="${(session.EmpGrade == 'A') and (boardVO.boardType == 'C')}">
+			<button type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
+		</th:block>
+		<th:block th:if="${boardVO.boardType == 'K'}">
+			<button type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
+		</th:block>
+		
+		<form name="searchForm" action="boardListMain">
+		<input type="hidden" name="boardType" th:value="${boardVO.boardType}"/>
+		<input type="hidden" name="page" value="1"/>
+		<select name="type">
+			<option value='' selected>-- 선택 --</option>
+			<option value='title' th:selected="${criteria.type == 'title'}">제목</option>
+			<option value='content' th:selected="${criteria.type == 'content'}">내용</option>
+			<option value='name' th:selected="${criteria.type == 'name'}">작성자</option>
+		</select>
+		<input type="text" name="keyword" th:value="${criteria.keyword}"/>
+		<button type="submit" id="searchBtn">검색</button>
+	</form>
+	<button type="button" id="resetBtn">초기화</button>
+	</div>
+		<!-- The Modal -->
+	    <div id="errorModal" class="modal">
+	      <!-- Modal content -->
+	      <div class="modal-content">
+	                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
+	                <p><br /></p>
+	            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
+	                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
+	                     닫기
+	                </span>
+	            </div>
+	      </div>
+	      </div>
+		<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+			integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+			crossorigin="anonymous"></script>
+<script th:inline="javascript">
+	//input 태그 안에 빈 값인데 검색 버튼을 눌렀을 때 실행하는 함수.
+	$(document).ready(function() {
+		
+		//검색 빈값 처리
+		$('#searchBtn').on('click', function() {
+    let val = $('select[name="type"]').val();
+    if(val == '') {
+    	$('#spantext').text('검색 항목을 선택해주세요.');
+        $('#errorModal').show();
+        $('#closeModal').on('click', function() {
+            $('#errorModal').hide();
+        })
+        return false;
+    	}
+		})
+		//초기화 처리
+		$('#resetBtn').on('click', function() {
+			$('input[name="keyword"]').val('');
+		})
+	})
+
+//페이징 관련
+function goPage(p) {
+    //event.preventDefault();
+    document.searchForm.boardType.value = /*[[${boardVO.boardType}]]*/
+    document.searchForm.page.value = p;
+    document.searchForm.submit();
+}
+//날짜포맷 맞춰주는 함수 
+//https://carrotweb.tistory.com/160 참고사이트.
+function SimpleDateTimeFormat(date, pattern) {
+	var dateString = pattern.replace(/(yyyy|MM|dd|HH|mm|ss|SSS)/g, function(match) {
+		var matchString = "";
+		switch(match) {
+			case "yyyy":
+				matchString = date.getFullYear();
+				break;
+			case "MM":
+				matchString = date.getMonth() + 1;
+				break;
+			case "dd":
+				matchString = date.getDate();
+				break;
+			case "HH":
+				matchString = date.getHours();
+				break;
+			case "mm":
+				matchString = date.getMinutes();
+				break;
+			case "ss":
+				matchString = date.getSeconds();
+				break;
+			case "SSS":
+				matchString = date.getMilliseconds();
+				break;
+			default :
+				matchString = match;
+				break;
+		}
+		if (match == "SSS") {
+			if (matchString < 10) {
+				matchString = "00" + matchString;
+			} else if (matchString < 100) {
+				matchString = "0" + matchString;
+			}
+		} else {
+			if ((typeof(matchString) == "number" && matchString < 10)) {
+				matchString = "0" + matchString;
+			}
+		}
+		return matchString;
+	});
+
+	return dateString;
+}
+
+</script>
+</div>
+</body>
+</html>

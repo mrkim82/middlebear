@@ -269,54 +269,18 @@
 			})
 			
 			
-			<!-- 시간 변환 -->
-			function changeTimes(dateTimeStr) {
-			     const date = new Date();
-			     const year = date.getFullYear();
-			     const month = String(date.getMonth() + 1).padStart(2, '0');
-			     const day = String(date.getDate()).padStart(2, '0');
-			     const hours = String(date.getHours()).padStart(2, '0');
-			     const minutes = String(date.getMinutes()).padStart(2, '0');
-			
-			     return `${year}-${month}-${day} ${dateTimeStr}`;
-			   }
-			
-			
-			
-/* 			<!-- 시간 변환 -->
-function ct(dateTimeStr) {
-     const date = new Date(dateTimeStr);
-     const year = date.getFullYear();
-     const month = String(date.getMonth() + 1).padStart(2, '0');
-     const day = String(date.getDate()).padStart(2, '0');
-     const hours = String(date.getHours()).padStart(2, '0');
-     const minutes = String(date.getMinutes()).padStart(2, '0');
-
-     return `${year}-${month}-${day} ${hours}:${minutes}`;
-   } */
+		
 			
 			
 			document.querySelector('#saveBtn').addEventListener('click',function(){
-				
-			console.log(ct(document.querySelector('#mDate').value))
-			console.log(ct(document.querySelector('#newWorkStart').value))
-			console.log(ct(document.querySelector('#mDate').value))
-			console.log(ct(document.querySelector('#newWorkEnd').value))
-			console.log(ct(document.querySelector('#mDate').value))
-				
+			
 				 let data = {
 						'id' : document.querySelector('#mId').value,
 						'workStart2' : document.querySelector('#mDate').value + ' ' +document.querySelector('#newWorkStart').value,
 						'workEnd2' : document.querySelector('#mDate').value + ' ' +document.querySelector('#newWorkEnd').value,
 						'day2' : document.querySelector('#mDate').value
 				} 
-				/*  let data = {
-						'id' : document.querySelector('#mId').value,
-						'workStart' : ct(document.querySelector('#mDate').value),
-						'workEnd' : ct(document.querySelector('#newWorkEnd').value),
-						'day' : ct(document.querySelector('#mDate').value)
-				}
-				 */
+				
 				
 				
 				    console.log(data)
@@ -328,7 +292,7 @@ function ct(dateTimeStr) {
 		               },
 		               body : JSON.stringify(data)
 		            })
-		            .then(response => response.json())
+		            .then(response => response.text())
 		            .then(result => {
 		               if(result == 'success'){
 		            	   console.log('success')

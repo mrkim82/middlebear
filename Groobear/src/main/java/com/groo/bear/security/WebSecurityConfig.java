@@ -41,6 +41,8 @@ public class WebSecurityConfig {
 			//.antMatchers("/emp/**").hasRole("ADMIN")
 			.anyRequest().permitAll()//authenticated()
 			.and()
+			.headers().frameOptions().sameOrigin()
+			.and()
 			.formLogin()
 			.successHandler(authenticationSuccessHandler())
 			.failureHandler(authenticationFailureHandler())
