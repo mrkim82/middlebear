@@ -80,6 +80,7 @@
 </style>
 </head>
 <body layout:fragment="content">
+<div class="work"></div>
 	<table>
 		<tbody>
 		<tr>
@@ -151,19 +152,30 @@
 				<fieldset style="width: 1211px; height: 80px;margin-top:10px;margin-bottom:10px;border:1px solid black;">
 					<div class="row">
 					   <!-- 출근/퇴근 스위치 -->
-						<div id="workSwitch">
-						   <label class="switch"> 
-						      <input class="chkBox" type="checkbox">
-						      <span class="slider round cBtn"></span>
-						   </label>
+						<div>
+							<label class="switch"> 
+								<input class="chkBox" type="checkbox">
+								<span class="slider round cBtn"></span>
+							</label>
+							<span id="workSwitch"> </span> 
+							<span id="workStart">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</span>
+							<span>&nbsp&nbsp~&nbsp&nbsp</span>
+							<span id=workEnd>&nbsp&nbsp:&nbsp&nbsp</span>
 						</div>
+						
 						<!-- 연장근무 시작/종료 스위치 -->
-						<div id="overWorkSwitch">
-						   <label class="switch"> 
-						      <input class="chkBoxo" type="checkbox">
-						      <span class="slider round cBtno"></span>
-						   </label>
+						<div>
+							<label class="switch"> 
+								<input class="chkBoxo" type="checkbox">
+								<span class="slider round cBtno"></span>
+							</label>
+							<span id="overWorkSwitch"> </span> 
+							<span id="overWorkStart">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</span>
+							<span>&nbsp&nbsp~&nbsp&nbsp</span>
+							<span id="overWorkEnd">&nbsp&nbsp:&nbsp&nbsp</span>
+						
 						</div>
+						
 					</div>
 				</fieldset>
 			</td>
@@ -186,11 +198,13 @@
       
    </div>   
 	<!-- 데이터 -->
-	<p class="day" style="display:none;"></p>
-	<p class="startWork" style="display:none;"></p>
-	<p class="endWork" style="display:none;"></p>
-	<p class="startOverWork" style="display:none;"></p>
-	<p class="endOverWork" style="display:none;"></p>
+<p class="day" style="display:none;"></p>
+<p class="startWork" style="display:none;"></p>
+<p class="endWork" style="display:none;"></p>
+<p class="startOverWork" style="display:none;"></p>
+<p class="endOverWork" style="display:none;"></p>
+<p class="monthOver" style="display:none;"></p>
+
 
    <script>
    getProfImg();
@@ -203,6 +217,7 @@
 		      if(data.uuid != null){
 		    	  $('#profImg').attr('src', '/display?fileName='+data.uploadPath.replace(/\\/g, '/')+'/s_'+data.uuid+'_'+data.fileName);
 		      }
+		      
 		    },
 		    error: function(err) {
 		      console.log(err);
@@ -210,252 +225,295 @@
    		});
    }
    
-   let chkCount = 0;
-   let chkCounto = 0;
-   let id = '[[${session.Id}]]';
-   let sInfo = {
-         'id' : id
-   }
-   console.log(id);
-   init();
-   function init(){
-      console.log('11')
-      fetch('getWork', {
-         method:'POST',
-         headers:{
-            'content-Type' : 'application/json'   
-         },
-         body:JSON.stringify(sInfo)
-      })
-      .then(response => response.json())
-      .then(data => {
-         //console.log(data.day)
-           document.querySelector('.day').textContent = data.day;
-           document.querySelector('.startWork').textContent = data.workStart;
-           document.querySelector('.endWork').textContent = data.workEnd;
-           document.querySelector('.startOverWork').textContent = data.overWorkStart;
-           document.querySelector('.endOverWork').textContent = data.overWorkEnd;
-           updateSwitches(data);
-             
-           
-      })      
-      .catch(err => {
-         console.log(err);
-      })      
-      
-      
-      function updateSwitches(data) {
-         let chkBox = document.querySelector('.chkBox');
-         let chkBoxo = document.querySelector('.chkBoxo');
-         let work = document.querySelector('.work');
-         let noWork = document.querySelector('.noWork');
-         let onBtno = document.querySelector('.onBtno');
+     //김도현 시작
+	let chkCount = 0;
+	let chkCounto = 0;
+	let id = '[[${session.Id}]]';
+	let sInfo = {
+			'id' : id
+	}
+	console.log(id);
+	init();
+	function init(){
+		console.log('11')
+		fetch('getWork', {
+			method:'POST',
+			headers:{
+				'content-Type' : 'application/json'	
+			},
+			body:JSON.stringify(sInfo)
+		})
+		.then(response => response.json())
+		.then(data => {
+			//console.log(data.day)
+	        document.querySelector('.day').textContent = data.day;
+	        document.querySelector('.startWork').textContent = data.workStart;
+	        document.querySelector('.endWork').textContent = data.workEnd;
+	        document.querySelector('.startOverWork').textContent = data.overWorkStart;
+	        document.querySelector('.endOverWork').textContent = data.overWorkEnd;
+	        updateSwitches(data);
+	       	
+	        
+		})		
+		.catch(err => {
+			console.log(err);
+		})		
+		
+		//22
+		fetch('getMonth', {
+			method:'POST',
+			headers:{
+				'content-Type' : 'application/json'	
+			},
+			body:JSON.stringify(sInfo)
+		})
+		.then(response => response.json())
+		.then(data2 => {
+	        document.querySelector('.monthOver').textContent = data2.over;
+	        console.log(data2)
+	        
+		})		
+		.catch(err => {
+			console.log(err);
+		})
+		
+		
+		function updateSwitches(data) {
+			let chkBox = document.querySelector('.chkBox');
+			let chkBoxo = document.querySelector('.chkBoxo');
+			let work = document.querySelector('.work');
+			let noWork = document.querySelector('.noWork');
+			let onBtno = document.querySelector('.onBtno');
 
-         // 출근/퇴근 스위치 업데이트
-         console.log(data.workStart);
-         console.log(data.workEnd);
-         console.log(data.overWorkStart);
-         console.log(chkBox.checked);
-         if (data.workStart != null && data.workEnd == null) {
-            chkBox.checked = true;
-            if(chkBox.checked = true){
-               let p = document.createElement('p');
-               p.innerText = '출근';
-               document.querySelector('#workSwitch').append(p);
-            }
-         } else if(data.workEnd != null || data.workStart == null){
-            chkBox.checked = false;
-               let p = document.createElement('p');
-               p.innerText = '퇴근';
-               document.querySelector('#workSwitch').append(p);
-         }
-         
-         // 연장근무 시작/종료 스위치 업데이트
-         if (data.overWorkStart != null && data.overWorkEnd == null) {
-            chkBoxo.checked = true;
-            let p = document.createElement('p');
-            p.innerText = '연장근무 시작';
-            document.querySelector('#overWorkSwitch').append(p);
-         } else if(data.overWorkEnd != null || data.overWorkStart == null){
-            chkBoxo.checked = false;
-            let p = document.createElement('p');
-            p.innerText = '연장근무 종료';
-            document.querySelector('#overWorkSwitch').append(p);
-         }
+			// 출근/퇴근 스위치 업데이트
+			if (data.workStart != null && data.workEnd == null) {
+				chkBox.checked = true;
+				if(chkBox.checked = true){
+					let p = document.createElement('p');
+					p.innerText = '출근';
+					document.querySelector('#workSwitch').append(p);
+					document.getElementById('workStart').innerText = data.workStart.substr(-5);
+					
+				}
+			} else if(data.workEnd == null && data.workStart == null){
+				chkBox.checked = false;
+				let p = document.createElement('p');
+				p.innerText = '출근 전';
+				document.querySelector('#workSwitch').append(p);
+			} else if(data.workEnd != null || data.workStart == null){
+				chkBox.checked = false;
+					let p = document.createElement('p');
+					p.innerText = '퇴근';
+					document.querySelector('#workSwitch').append(p);
+					document.getElementById('workStart').innerText = data.workStart.substr(-5);
+					document.getElementById('workEnd').innerText = data.workEnd.substr(-5);
+			} 
+			
+			// 연장근무 시작/종료 스위치 업데이트
+			if(parseInt(document.querySelector('.monthOver').textContent) < 2401){
+				if (data.overWorkStart != null && data.overWorkEnd == null) {
+					chkBoxo.checked = true;
+					let p = document.createElement('p');
+					p.innerText = '연장근무 시작';
+					document.querySelector('#overWorkSwitch').append(p);
+					document.getElementById('overWorkStart').innerText = data.overWorkStart.substr(-5);
+				} else if(data.overWorkEnd == null && data.overWorkStart == null){
+					chkBoxo.checked = false;
+					let p = document.createElement('p');
+					p.innerText = '연장근무 시작 전';
+					document.querySelector('#overWorkSwitch').append(p);
+				} else if(data.overWorkEnd != null || data.overWorkStart == null){
+					chkBoxo.checked = false;
+					let p = document.createElement('p');
+					p.innerText = '연장근무 종료';
+					document.querySelector('#overWorkSwitch').append(p);
+					console.log(data.overWorkStart)
+					document.getElementById('overWorkStart').innerText = data.overWorkStart.substr(-5);
+					document.getElementById('overWorkEnd').innerText = data.overWorkEnd.substr(-5);
+				} 
+			}else {
+				chkBoxo.checked = false;
+				let p = document.createElement('p');
+				p.innerText = '연장근무 불가능';
+				document.querySelector('#overWorkSwitch').append(p);
+			}
+			
+	        let check = document.querySelector('.cBtn');
+			let ocheck = document.querySelector('.cBtno');
 
-         /* document.querySelector('.day').textContent = data.day;
-           document.querySelector('.startWork').textContent = data.workStart;
-           document.querySelector('.endWork').textContent = data.workEnd;
-           document.querySelector('.startOverWork').textContent = data.overWorkStart;
-           document.querySelector('.endOverWork').textContent = data.overWorkEnd; */
-      
-           let check = document.querySelector('.cBtn');
-         let ocheck = document.querySelector('.cBtno');
+			
+			if (document.querySelector('.startWork').textContent != '') {
+				chkCount = 1;
+			}
+			if (document.querySelector('.endWork').textContent != '') {
+				chkCount = 2;
+			}
+			let chkCounto = 0;
+			if (document.querySelector('.startOverWork').textContent != '') {
+				chkCounto = 1;
+			}
+			if (document.querySelector('.endOverWork').textContent != '') {
+				chkCounto = 2;
+			}
+			if(parseInt(document.querySelector('.monthOver').textContent) > 2400){
+				chkCounto = 2;
+			}	
+			console.log(document.querySelector('.startWork').textContent != '');
+			// 출근/퇴근 스위치 클릭 이벤트 핸들러
+			check.addEventListener('click', function () {
+				
+				let chk = document.querySelector('.chkBox').checked;
+				if (chkCount < 2) {
+					if (chk == false) {
+						chkCount++;
+						console.log(chkCount)
+						chk = true;
+						
+						fetch("workStart", {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(sInfo)
+						})
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+							})
+							.catch(err => {
+								console.log(err);
+							});
+						document.querySelector('#workSwitch').children[0].textContent = '출근';
+						location.reload();
+						
+						
+					} else {
+						chkCount++;
+						console.log(chkCount)
+						chk = false;
+						
+						fetch("workEnd", {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(sInfo)
+						})
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+							})
+							.catch(err => {
+								console.log(err);
+							});
+						document.querySelector('#workSwitch').children[0].textContent = '퇴근';
+						location.reload();
+						
+					}
+				} else {
+					event.preventDefault();
+				}
+			});
 
-         
-          if (document.querySelector('.startWork').textContent != '') {
-               chkCount = 1;
-            }
-            if (document.querySelector('.endWork').textContent != '') {
-               chkCount = 2;
-            }
-            let chkCounto = 0;
-            if (document.querySelector('.startOverWork').textContent != '') {
-               chkCounto = 1;
-            }
-            if (document.querySelector('.endOverWork').textContent != '') {
-               chkCounto = 2;
-            }
-         
-         
-         
-         console.log(chkCount);
-         console.log(chkCounto);
-         
-         
-         console.log(document.querySelector('.startWork').textContent != '');
-         // 출근/퇴근 스위치 클릭 이벤트 핸들러
-         check.addEventListener('click', function () {
-            
-            let chk = document.querySelector('.chkBox').checked;
-            if (chkCount < 2) {
-               if (chk == false) {
-                  chkCount++;
-                  console.log(chkCount)
-                  chk = true;
-                     
-                  document.querySelector('#workSwitch').children[1].textContent = '출근';
-                  
-                  fetch("workStart", {
-                     method: 'POST',
-                     headers: {
-                        'Content-Type': 'application/json'
-                     },
-                     body: JSON.stringify(sInfo)
-                  })
-                     .then(response => response.json())
-                     .then(data => {
-                        console.log(data);
-                     })
-                     .catch(err => {
-                        console.log(err);
-                     });
-               } else {
-                  chkCount++;
-                  console.log(chkCount)
-                  chk = false;
-                  
-                  document.querySelector('#workSwitch').children[1].textContent = '퇴근';
-                  
-                  fetch("workEnd", {
-                     method: 'POST',
-                     headers: {
-                        'Content-Type': 'application/json'
-                     },
-                     body: JSON.stringify(sInfo)
-                  })
-                     .then(response => response.json())
-                     .then(data => {
-                        console.log(data);
-                     })
-                     .catch(err => {
-                        console.log(err);
-                     });
-               }
-            } else {
-               event.preventDefault();
-            }
-         });
+			// 연장근무 시작/종료 스위치 클릭 이벤트 핸들러
+			ocheck.addEventListener('click', function () {
+				let chk = document.querySelector('.chkBoxo').checked;
+				if(chkCount > 1){
+				if (chkCounto < 2) {
+					if (chk == false) {
+						chkCounto++;
+						console.log(chkCounto)
+						chk = true;
 
-         // 연장근무 시작/종료 스위치 클릭 이벤트 핸들러
-         ocheck.addEventListener('click', function () {
-            let chk = document.querySelector('.chkBoxo').checked;
-            if(chkCount > 1){
-            if (chkCounto < 2) {
-               if (chk == false) {
-                  chkCounto++;
-                  console.log(chkCounto)
-                  chk = true;
+						document.querySelector('#overWorkSwitch').children[0].textContent = '연장근무 시작';
+						
+						fetch("overWorkStart", {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(sInfo)
+						})
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+							})
+							.catch(err => {
+								console.log(err);
+							});
+						
+						location.reload();
+					} else {
+						chkCounto++;
+						console.log(chkCounto)
+						chk = false;
 
-                  document.querySelector('#overWorkSwitch').children[1].textContent = '연장근무 시작';
-                  
-                  fetch("overWorkStart", {
-                     method: 'POST',
-                     headers: {
-                        'Content-Type': 'application/json'
-                     },
-                     body: JSON.stringify(sInfo)
-                  })
-                     .then(response => response.json())
-                     .then(data => {
-                        console.log(data);
-                     })
-                     .catch(err => {
-                        console.log(err);
-                     });
-               } else {
-                  chkCounto++;
-                  console.log(chkCounto)
-                  chk = false;
-
-                  document.querySelector('#overWorkSwitch').children[1].textContent = '연장근무 종료';
-                  
-                  fetch("overWorkEnd", {
-                     method: 'POST',
-                     headers: {
-                        'Content-Type': 'application/json'
-                     },
-                     body: JSON.stringify(sInfo)
-                     })
-                  .then(response => response.json())
-                  .then(data => {
-                        console.log(data);
-                     })
-                     .catch(err => {
-                        console.log(err);
-                     });  
-               }
-            } else {
-               event.preventDefault();
-            }
-            }else{
-               event.preventDefault();
-            }
-         });
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      }
-   
-      
-      
-      
-      
-      
-      
-      
-      
-      
-   }
-   
-   
-      
-      
-      
-   
-      
-      
-      
-   </script>
+						document.querySelector('#overWorkSwitch').children[0].textContent = '연장근무 종료';
+						
+						fetch("overWorkEnd", {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(sInfo)
+							})
+						.then(response => response.json())
+						.then(data => {
+								console.log(data);
+							})
+							.catch(err => {
+								console.log(err);
+							});  
+						
+						location.reload();
+					}
+				} else {
+					event.preventDefault();
+				}
+				}else{
+					event.preventDefault();
+				}
+			});
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		}
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}//init end
+	
+	
+		
+		
+		
+	
+		
+		
+		
+	</script>
 
 
 </body>

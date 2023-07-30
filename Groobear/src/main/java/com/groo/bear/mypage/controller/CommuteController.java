@@ -43,10 +43,11 @@ public class CommuteController {
 		
 		
 		int commuteListCnt = commuteService.commuteCnt(cri, commuteVO);
-		
+				
 		Paging paging = new Paging();
 		paging.setCri(cri);
         paging.setTotalCount(commuteListCnt);    
+        
         System.out.println(paging);
         
 		if(empG.equals("A")) {
@@ -56,9 +57,16 @@ public class CommuteController {
 			return "commute/commuteA";
 			
 		}else {
+			model.addAttribute("comInfo",commuteService.getComInfo(id));
 			model.addAttribute("info",commuteService.getMyCommuteList(cri, id, monthDate));
 			model.addAttribute("work",commuteService.monthWork(id, monthDate));
-			model.addAttribute("paging",paging);
+			model.addAttribute("noWork",commuteService.monthNoWork(id, monthDate));
+			int commuteListCnt2 = commuteService.commuteCnt2(id, monthDate);
+			Paging paging2 = new Paging();
+			paging2.setCri(cri);
+			paging2.setTotalCount(commuteListCnt2);
+			model.addAttribute("paging",paging2);
+			System.out.println(paging2);
 			System.out.println(model);
 			return "commute/commuteP";
 		}
@@ -101,7 +109,6 @@ public class CommuteController {
 		Date workEnd = (Date)session.getAttribute("WorkEnd");
 		System.out.println(workEnd);
 		if(workEnd != null) {
-		System.out.println("김도현 ! 다이스키,,");
 			commuteService.startOverWork(commuteVO);	
 		}else {
 			commuteService.ewStartOverWork(commuteVO);
@@ -129,6 +136,7 @@ public class CommuteController {
 		System.out.println("11111");
 		System.out.println(commuteVO);
 		String result;
+		
 		if(commuteService.commuteUpdate(commuteVO)>0) {
 			System.out.println("2221");
 			result = "success";
@@ -140,7 +148,15 @@ public class CommuteController {
 		}
 		
 	}
-	
+	//40시간 조회
+		@ResponseBody
+		@PostMapping("/getMonth")
+		public CommuteVO monthData2(@RequestBody CommuteVO vo) {
+			System.out.println("1111"+vo.getId());
+			vo = (CommuteVO) commuteService.monthWork(vo.getId(), null);
+			System.out.println(vo);
+			return vo;
+		}
 	
 	
 	

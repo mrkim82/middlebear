@@ -162,6 +162,7 @@
 					 , d.dept_name
 					 , p.pay_no
                      , p.doc_type
+                     , p.issue_date
 				from 
 					   payment p
 					 , payment_logbook pl
@@ -173,8 +174,8 @@
 				     and p.id = u.id 
 				     and u.emp_no = ui.emp_no
 				     and d.dept_no = ui.dept_no
-			<if test="cri.type != null and cri.type.equals('name')">
-				and ui.name LIKE '%${cri.keyword}%'
+			<if test="cri.type != null and cri.type.equals('empNo')">
+				and u.emp_no LIKE '%${cri.keyword}%'
 			</if>
 			<if test="cri.type != null and cri.type.equals('destination')">
 				and pl.destination LIKE '%${cri.keyword}%'
@@ -207,9 +208,11 @@
 			  , payment_logbook pl
 			  , users u
 			  , user_info ui
+			  , departments d 
 		where p.pay_no = pl.pay_no 
 			  and p.id = u.id 
 			  and u.emp_no = ui.emp_no
+			  and d.dept_no = ui.dept_no
 					
 			<if test="cri.type != null and cri.type.equals('name')">
 				and ui.name LIKE '%${cri.keyword}%'
@@ -269,8 +272,6 @@
 				<if test="monthDate != null">
 	                AND to_char(issue_date, 'YYYY-MM') = #{monthDate}
 				</if>
-			
-			
 		order by pl.oper_date desc
 		) t
             )

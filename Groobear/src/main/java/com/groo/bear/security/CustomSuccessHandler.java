@@ -40,7 +40,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler{
 			session.setAttribute("Sign", vo.getSign());
 			session.setAttribute("ProfileImg", vo.getProfileImg());
 			session.setAttribute("ProfileNote", vo.getProfileNote());	
-				
+			
+			
 		}
 		
 		

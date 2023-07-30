@@ -11,13 +11,26 @@
 	<div>
 		<div style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px; margin:3px 0;" >
 			<div>
-				<button type="button" onclick="prevMon()" class="btn btn-primary"> < </button>
-				<input style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px;height:35px;" type="month" name="monthDate" id="monthDate" onchange ="changeMon()" th:value="${#dates.format(info[0].day,'yyyy-MM')}">
-				<button type="button" onclick="nextMon()" class="btn btn-primary"> > </button>
+				<button type="button" onclick="prevMon()" class="btn btn-primary">
+						&laquo;</button>
+					<input
+						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+						type="month" name="monthDate" id="monthDate"
+						onchange="changeMon()" th:value="${monthDate}">
+					<button type="button" onclick="nextMon()" class="btn btn-primary">
+						&raquo;</button>
 			</div>
-			<p>잔여 연차 : [[${info[0].offCount}]]</p>
-			<p>월 연장 근무 시간 : <span class="owt">[[${work.over}]]</span></p>
-			<p>월 근무 일수 : [[${work.count}]] </p>
+			<div>
+				<p>이름 : <span>[[${comInfo[0].name}]]</span></p>
+				<p>사번 : <span>[[${comInfo[0].empNo}]]</span></p>
+				<p>부서 : <span>[[${comInfo[0].deptName}]]</span></p>
+				<p>직급 : <span>[[${session.Rank}]]</span></p>
+				<p>연차수량 : <span>[[${comInfo[0].offCount}]]</span></p>
+				<p>이번달 연장근무 시간 : <span id="owtIn"></span></p>
+				<p>이번달 근무 일 수 : <span>[[${work.count}]]</span></p>
+				<p>이번달 결근 일 수 : <span>[[${noWork.count}]]</span></p>
+				<span id="owt2" th:text="${work.over}" style="display:none;"></span>
+			</div>
 		</div>
 		
 		<table class="table table-hover" style="margin-top:5px;">
@@ -117,6 +130,23 @@ for(let i = 0 ; i < document.querySelectorAll('.cml').length;i++){
 	
 }
 
+var number3 = document.getElementById('owt2').textContent;
+
+var hours3 = Math.floor(number2/60);
+if(hours3 < 10){
+	hours3 = '0'+hours3;
+}
+var minutes3 = number3%60;
+if(minutes3 < 10){
+	minutes3 = '0'+minutes3;
+}
+
+var cal3 = 
+	hours3 + ':' + minutes3;
+
+document.getElementById('owtIn').textContent = cal3;
+
+
 
 var mon = document.querySelector('#monthDate').value
 
@@ -144,7 +174,10 @@ function changeMon(){
 }
 
 
-
+	
+	
+	
+	
 	
 </script>
 

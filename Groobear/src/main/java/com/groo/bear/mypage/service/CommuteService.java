@@ -10,6 +10,9 @@ public interface CommuteService {
 	public List<CommuteVO> getAllCommuteList(Criteria cri, CommuteVO commuteVO);
 	//페이징
 	public int commuteCnt(Criteria cri, CommuteVO commuteVO);
+	//paging
+	public int commuteCnt2(String id,String monthDate);
+	
 	//출근
 	public int startWork(CommuteVO commuteVO);
 	//퇴근 
@@ -25,9 +28,17 @@ public interface CommuteService {
 	//기록 조회
 	public List<CommuteVO> getMyCommuteList(Criteria cri,String id,String monthDate);
 	//초기값 지정
-	public int settingDay(CommuteVO commuteVO);
+	public int settingDay(String id);
 	//개인 월별 기록
 	public CommuteVO monthWork(String id, String monthDate);
+	//개인 월별 결근 기록
+	public CommuteVO monthNoWork(String id, String monthDate);
+	//개별 정보 조회
+	public List<CommuteVO> getComInfo(String id); 
 	//수정
 	public int commuteUpdate(CommuteVO commuteVO);
+	
+	
+	
+	
 }

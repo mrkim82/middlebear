@@ -15,7 +15,9 @@
 					    d.dept_name,
 						ui.name,
                         cm.work_start,
-                        cm.work_end,   
+                        cm.work_end,  
+                        cm.over_work_start,
+                        cm.over_work_end, 
                         cm.day,
                         NVL(to_number(trunc((work_end - work_start)*24*60)) ,0)as work_time,
                         NVL(cm.over_work_time,0) as over_work_time,
@@ -90,6 +92,25 @@
                 AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN to_char(sysdate, 'YYYY-MM-DD') AND to_char(sysdate, 'YYYY-MM-DD')
             </if>
 	</select>
+	
+	<select id="commuteListCnt2" resultType="int">
+		select count(*)
+			from users u,
+						departments d,
+						user_info ui,
+                        commute cm,
+                        off o
+				where d.dept_no = ui.dept_no
+						and ui.emp_no = u.emp_no
+                        and u.id = cm.id
+                        and cm.id = o.id
+                        and u.id = #{id}
+                <if test="monthDate != null">
+	                AND to_char(cm.day, 'YYYY-MM') = #{monthDate}
+				</if>
+	</select>
+	
+	
 	
 	
 	<insert id="workStart22" parameterType="CommuteVO">
@@ -174,32 +195,78 @@
 	</select>
 			
 	<!-- 회원가입 날짜 초기지정 -->
-	<select id="insertDay" parameterType="CommuteVO" resultType="CommuteVO">
+	<select id="insertDay" resultType="CommuteVO">
 		insert into commute(day,work_start,work_end,over_work_start,over_work_end,over_work_time,id)
 		values(sysdate,null,null,null,null,null,#{id})
 	</select>
 	
 	<!-- 달별 조회 -->
 	<select id="calWork" resultType="CommuteVO">
-		select id, count(day) as count, NVL(sum(over_work_time),0) as over
-        from commute
-        where id = #{id}
-        and work_end is not null
-        <if test="monthDate == null">
+		SELECT NVL(COUNT(commute.day), 0) AS count, NVL(SUM(commute.over_work_time), 0) AS over
+			FROM (
+  				SELECT day, over_work_time
+  				FROM commute
+  				WHERE id = #{id}
+    			AND work_end IS NOT NULL
+    	<if test="monthDate == null">
        	 	and TO_CHAR(day,'yyyy-MM') = TO_CHAR(sysdate, 'yyyy-MM') 
 		</if>
 		<if test="monthDate != null">
        	 	and TO_CHAR(day,'yyyy-MM') = #{monthDate}
 		</if>
-        group by id
+			) commute
 	</select>	
+	
+	<!-- 결근일수 -->
+	<select id="calNoWork" resultType="CommuteVO">
+        SELECT count(day) AS count
+  		FROM commute
+	  	WHERE off_status = 'N'
+	    and TO_CHAR(day,'yyyy-MM') = #{monthDate}
+	    AND id = #{id}
+	</select>
+	
+	<!-- 기본정보 -->
+	<select id="comInfo" resultType = "CommuteVO">
+		select
+				u.emp_no,
+			    d.dept_name,
+				ui.name,
+	            cm.work_start,
+	            cm.work_end,   
+	            cm.day,
+	            cm.off_status,
+	            NVL(to_number(trunc((work_end - work_start)*24*60)) ,0)as work_time,
+	            NVL(cm.over_work_time,0) as over_work_time,
+	            o.off_count
+		from 
+				users u,
+				departments d,
+				user_info ui,
+	            commute cm,
+	            off o
+		where 
+				d.dept_no = ui.dept_no
+				and ui.emp_no = u.emp_no
+	            and u.id = cm.id
+	            and cm.id = o.id
+				and u.id = #{id}
+				
+	</select>
+	
 	
 	<!-- 정보수정  -->
 	<update id="commuteUpdate" parameterType="CommuteVO">
 		update commute 
-		set work_start = to_date(#{workStart2},'yyyy-MM-DD HH24:MI') , work_end = to_date(#{workEnd2},'yyyy-MM-DD HH24:MI') 
+		set work_start = to_date(#{workStart2},'yyyy-MM-DD HH24:MI')
 		<if test = "workEnd2 != null">
-			, off_status = 'Y'
+			, work_end = to_date(#{workEnd2},'yyyy-MM-DD HH24:MI') , off_status = 'Y'
+		</if>
+		<if test = "overWorkStart2!= null">
+			, over_work_start = to_date(#{overWorkStart2},'yyyy-MM-DD HH24:MI')
+		</if>
+		<if test = "overWorkEnd2!= null">
+			, over_work_end = to_date(#{overWorkEnd2},'yyyy-MM-DD HH24:MI')
 		</if>
 		where id = #{id} and to_char(day,'yyyy-MM-DD') = #{day2}
 	</update>

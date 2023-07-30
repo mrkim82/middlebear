@@ -11,7 +11,8 @@ public interface CommuteMapper {
 	public List<CommuteVO> selectAllCommute(Criteria cri,CommuteVO commuteVO);
 	//페이징
 	public int commuteListCnt(Criteria cri, CommuteVO commuteVO);
-		
+	//paging
+	public int commuteListCnt2(String id,String monthDate);
 	//출근
 	public int workStart(CommuteVO commuteVO); 
 	//퇴근
@@ -29,9 +30,14 @@ public interface CommuteMapper {
 	//개인 기록 조회
 	public List<CommuteVO> getMyCommute(Criteria cri,String id, String monthDate);	
 	//회원가입 초기값
-	public int setDay(CommuteVO commuteVO);
-	//개인 월별 정보
+	public int insertDay(String id);
+	//개인 월별 출근 정보
 	public CommuteVO calWork(String id,String monthDate);
+	//개인 월별 결근 정보
+	public CommuteVO calNoWork(String id, String monthDate);
+	//개인정보 조회
+	public List<CommuteVO> comInfo(String id);
+	
 	//시간 수정
 	public int commuteUpdate(CommuteVO commuteVO);
 	

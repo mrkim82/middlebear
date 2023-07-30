@@ -140,7 +140,7 @@
 	                	</tr>
 	                	<tr>
 	                		<td><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
-	                		<span><a href="/mypage" class="dohyeon">마이페이지</a></span></td>
+	                		<span><a id="commute" class="dohyeon">마이페이지</a></span></td>
 	                	</tr>
                 	</tbody>
                 </table>
@@ -225,6 +225,21 @@
           </ul>
         </div>
       </nav>
+       <div class="data" style="display:none">
+	<p class="nowMon"></p>
+	
+</div>
+	<script>
+	
+	var today = new Date();
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var monthString = year + '-' + month;
+	const monthDate = monthString;
+	
+	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
+	
+	</script>
 		<!-- 프로젝트 우측 컨텐츠 -->
 		<div class="col">
 			<!-- 프로젝트 최 상단 바 -->
