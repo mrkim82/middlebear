@@ -273,5 +273,15 @@ public class PaymentController {
 		}
 		return "pay/InProgressPay";
 	}
-	
+	//결재문서 파일삭제
+	@PostMapping("payfiledel")
+	@ResponseBody
+	public int payfileDel(@RequestBody PaymentVO payVO, Model model, HttpSession session) {
+		int result = 0;
+		System.out.println("payVO.getpayNo = "+payVO.getPayNo());
+		result = paymentService.deletePayImg(payVO.getPayNo());
+		
+		System.out.println("result = "+result);
+		return result;
+	}
 }
