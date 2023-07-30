@@ -22,4 +22,27 @@ public interface ChatService {
 	//메세지 등록
 	public int sendMessage(ChatMessageDTO msgDTO);
 	
+	//대화방에서 메세지 순서 맞춰주기
+	public List<ChatMessageDTO> getMessagesForRoom(int roomNo);
+	
+	//사원 전체조회 -> 모달에서 띄우기 위함
+	public List<RoomDTO> empAllList(String id);
+	
+	//방번호 최신거 뽑아주기
+	public int newJeans();
+	
+	//방에 들어갈 멤버 추가
+	public int insertMem(RoomDTO roomDTO);
+	
+	//채팅방 삭제
+	public void deleteEmptyRooms();
+	
+	//초대된 사람 제외하고 초대하기
+	public List<RoomDTO> empListExcludingRoomMembers(String id, int roomNo);
+	
+	//방 인원 표시
+	public int countRoomMembers(int roomNo);
+	
+	//가장 최신 내용 가져오기
+	public String getLastMessage(int roomNo);
 }
