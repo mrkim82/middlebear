@@ -109,6 +109,9 @@
 	                        </div>
 	                    	</div>
 	                    </td></tr>
+	                <tr>
+					<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+					</tr>
 				</th:block>
 				<th:block th:if="${list.docType=='b'}">
 				<tr>
@@ -182,18 +185,7 @@
 			</th:block>
 			</tbody>
 		</table>
-		<th:block th:if="${(list.approver2 == session.Id and list.payStatus3 == 'N') OR
-							(list.id == session.Id and list.payStatus2 == 'N') }">
-			<button type="button" id="paymentModify" onclick="paymentModify()" style="margin-left:10px">수정</button>
-		</th:block>
-		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
-							(list.approver3 == session.Id and list.payStatus3 == 'N')}">
-			<button type="button" id="paymentOk" onclick="paymentOk()" style="margin-left:10px">결재</button>
-		</th:block>
-		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
-							(list.approver3 == session.Id and list.payStatus3 == 'N')}">
-			<button type="button" id="paymentPass" onclick="paymentPass()" style="margin-left:10px">반려</button>
-		</th:block>
+		<button type="button" id="paymentModify" onclick="paymentModify()" style="margin-left:10px">수정</button>
 	</div>
 	<script>
 	/*<![CDATA[*/
@@ -207,11 +199,6 @@
 		let approver3 = document.getElementById('approver3').value;
 		let payStatus2 = document.getElementById('payStatus2').value;
 		let payStatus3 = document.getElementById('payStatus3').value;
-		if(masterDocType === 'a'){
-			let befored = document.getElementById('befored').value;
-			let afterd = document.getElementById('afterd').value;
-			let imprestText = document.getElementById('imprest');
-		}
 		//이미지 제거용 구이미지 값 저장용
 		let olduuid = "";
 		let olduploadPath = "";
@@ -237,6 +224,8 @@
 			let destination = document.getElementById('destination').value;
 			let befored = document.getElementById('befored').value;
 			let afterd = document.getElementById('afterd').value;
+			let imprestText = document.getElementById('imprest');
+			let logCom = document.getElementById('logCom').value;
 			console.log('masterDocType',masterDocType);
 			console.log('payNo',payNo);
 			console.log('userId',userId);
@@ -246,6 +235,7 @@
 			console.log('destination',destination);
 			console.log('befored',befored);
 			console.log('afterd',afterd);
+			console.log('logCOm',logCom);
 		}else if(masterDocType=='b'){
 		//연차계
 			let useDate = document.getElementById('useDate').value;
@@ -277,6 +267,7 @@
 				let befored = document.getElementById('befored').value;
 				let afterd = document.getElementById('afterd').value;
 				let imprest = ((afterd*1)-(befored*1))*1500;
+				logCom = document.getElementById('logCom').value;
 				console.log('masterDocType',masterDocType);
 				console.log('payNo',payNo);
 				console.log('userId',userId);
@@ -368,6 +359,7 @@
 						destination : destination,
 						befored : befored,
 						afterd : afterd,
+						com : logCom
 	  			    }),
 	  			    async : false,
 	  			  	success: function(data) {
@@ -529,85 +521,6 @@
 				});
 			}
 			
-		}
-		function paymentOk(){
-			console.log('결재통과');
-			if(approver2 === userId){
-				console.log('이전payStatus2',payStatus2);
-				payStatus2 = 'Y';
-				console.log('바뀐payStatus2',payStatus2);
-				//밑에 ajax가져와서 먼저넣고 도현이형꺼 넣기
-				
-				//도현이형이 if조건 추가해서 마지막 결재자가 맞으면
-				
-				//도현이형 offtable에 데이터 넣기
-			}else if(approver3 === userId){
-				console.log('이전payStatus3',payStatus2);
-				payStatus3 = 'Y';
-				console.log('바뀐payStatus3',payStatus2);
-				//밑에 ajax가져와서 먼저넣고 도현이형꺼 넣기
-				
-				//도현이형이 if조건 추가해서 마지막 결재자가 맞으면
-				
-				//도현이형 offtable에 데이터 넣기
-			}
-			$.ajax({
-				url:"/paymentReject",
-				method: "POST",
-  			    contentType:"application/json; charset=utf-8",
-  			    data: JSON.stringify({
-  			    	payNo : payNo,
-					docType : masterDocType,
-					id : drafter,
-					approver2 : approver2,
-					approver3 : approver3,
-					payStatus2 : payStatus2,
-					payStatus3 : payStatus3
-  			    }),
-  			    async : false,
-  			  	success: function(data) {
-  			    	console.log(data);
-  			    	location.href="/pay/InProgressPay";
-  			    },
-  			    error: function(err) {
-					console.log(err);
-  			    }
-			});
-		}
-		function paymentPass(){
-			console.log('결재반려');	
-			console.log('결재통과');
-			if(approver2 === userId){
-				console.log('이전payStatus2',payStatus2);
-				payStatus2 = 'F';
-				console.log('바뀐payStatus2',payStatus2);
-			}else if(approver3 === userId){
-				console.log('이전payStatus3',payStatus2);
-				payStatus3 = 'F';
-				console.log('바뀐payStatus3',payStatus2);
-			}
-			$.ajax({
-				url:"/paymentReject",
-				method: "POST",
-  			    contentType:"application/json; charset=utf-8",
-  			    data: JSON.stringify({
-  			    	payNo : payNo,
-					docType : masterDocType,
-					id : drafter,
-					approver2 : approver2,
-					approver3 : approver3,
-					payStatus2 : payStatus2,
-					payStatus3 : payStatus3
-  			    }),
-  			    async : false,
-  			  	success: function(data) {
-  			    	console.log(data);
-  			    	location.href="/pay/InProgressPay";
-  			    },
-  			    error: function(err) {
-					console.log(err);
-  			    }
-			});
 		}
 		//운행전 첨부파일
 	    $("input[name='uploadFile1']").change(function(e) {
