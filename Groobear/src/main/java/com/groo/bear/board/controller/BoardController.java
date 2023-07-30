@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,9 +31,32 @@ import lombok.extern.log4j.Log4j2;
 @Controller
 @Log4j2
 public class BoardController {
-	
+
+	   
 	@Autowired
 	BoardService boardService;
+	
+	@GetMapping("/boardListMain")
+	   public String getboardListMain(Criteria cri, Model model, BoardVO boardVO) {
+			cri.setPerPageNum(5);
+	      // 전체 글 개수
+	        int boardListCnt = boardService.boardListCnt(cri, boardVO);
+	        
+	        // 페이징 객체
+	        Paging paging = new Paging();
+	        paging.setCri(cri);
+	        paging.setTotalCount(boardListCnt);
+
+		
+			model.addAttribute("boardList", boardService.selectAllList(cri, boardVO));
+			model.addAttribute("paging", paging);
+			if(boardVO.getBoardType().equals("K")) {
+				return "board/boardListMainK";
+			}else {
+				return "board/boardListMain";
+			}
+			
+		}
 	
    @GetMapping("/boardList")
    public String getboardList(Criteria cri, Model model, BoardVO boardVO) {
@@ -52,6 +74,8 @@ public class BoardController {
 		
 		return "board/boardList";
 	}
+   
+
    
 	//단건조회
 	@GetMapping("/boardInfo")

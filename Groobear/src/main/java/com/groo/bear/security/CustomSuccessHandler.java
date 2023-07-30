@@ -27,6 +27,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler{
 		
 		
 		if(vo != null) {
+			session.setAttribute("EmpNo", vo.getEmpNo());
 			session.setAttribute("Id", vo.getId());
 			session.setAttribute("Name", vo.getName());
 			session.setAttribute("Rank", vo.getRank());

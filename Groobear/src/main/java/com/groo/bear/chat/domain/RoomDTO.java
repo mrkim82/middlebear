@@ -10,16 +10,16 @@ import lombok.Data;
 @Data
 public class RoomDTO {
     private Integer roomNo;
-    private String userId;
+    private String id;
     private String roomName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate roomTime;
     
     public RoomDTO() {}
     
-    public RoomDTO(Integer roomNo, String userId, String roomName, LocalDate roomTime) {
+    public RoomDTO(Integer roomNo, String id, String roomName, LocalDate roomTime) {
         this.roomNo = roomNo;
-        this.userId = userId;
+        this.id = id;
         this.roomName = roomName;
         this.roomTime = roomTime;
     }

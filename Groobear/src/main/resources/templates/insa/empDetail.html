@@ -35,8 +35,8 @@
 			<a>개인메일 : </a><input name="email" style="width:150px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.email}" readonly>
 		</fieldset>
 		<fieldset style="display: flex;justify-content: center;border:hidden;">
-			<button th:if="${session.EmpGrade=='A'}" type="submit" style="margin-right:10px;">수정</button>
-			<button th:if="${session.EmpGrade=='A'}" style="margin-right:10px;" id="delBtn">삭제</button>
+			<button th:if="${session.EmpGrade=='A'}" type="submit" style="margin-right:10px;" id="updateBtn">수정</button>
+			<button th:if="${session.EmpGrade=='A'}" style="margin-right:10px;" type="button" id="delBtn">삭제</button>
 			<button type="button" onclick="closeBtn()">닫기</button>
 		</fieldset>
 	</form>
@@ -46,28 +46,29 @@
 	function updateEmpInfo() {
 		window.opener.location.href="/empInfo";
 	}
-	$('#delBtn').on('click', function(){
-		$.ajax({
-  			    url: "deleteEmp",
-  			    method: "POST",
-  			    contentType:"application/json; charset=utf-8",
-  			    data: JSON.stringify({
-  			      empNo: [[${empInfo.empNo}]],
-  			      id: $('#id').val()
-  			    }),
-  			    success: function(data) {
-
-  			    	if(data == "success"){
-  			    		window.opener.location.href="/empInfo";
-  			    		window.close();
-  			    	} else{
-  			    		alert('삭제 오류 발생');
-  			    	}	
-  			    },
-  			    error: function(err) {
-						console.log(err);
-  			    }
-  			});
+	$(document).ready(function() {
+		$('#delBtn').on('click', function(){
+			$.ajax({
+	  			    url: "deleteEmp",
+	  			    method: "POST",
+	  			    contentType:"application/json; charset=utf-8",
+	  			    data: JSON.stringify({
+	  			      empNo: [[${empInfo.empNo}]],
+	  			      id: $('#id').val()
+	  			    }),
+	  			    success: function(data) {
+	  			    	if(data == "success"){
+	  			    		window.opener.location.href="/empInfo";
+	  			    		window.close();
+	  			    	} else{
+	  			    		alert('삭제 오류 발생');
+	  			    	}	
+	  			    },
+	  			    error: function(err) {
+							console.log(err);
+	  			    }
+	  			});
+		})
 	})
 	//팝업 Close 기능
     function closeBtn() {

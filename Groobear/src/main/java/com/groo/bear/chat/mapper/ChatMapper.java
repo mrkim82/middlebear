@@ -8,14 +8,18 @@ import com.groo.bear.chat.domain.RoomDTO;
 public interface ChatMapper {
 	
 	//채팅방 전체 조회
-	public List<RoomDTO> chatRoomList(String userId);
+	public List<RoomDTO> chatRoomList(String id);
 	
 	//채팅방 생성
 	public int createChatRoom(RoomDTO roomDTO);
 	
 	//채팅방 삭제
-	public int deleteChatRoom(int roomNo);
+	public int deleteChatRoom(RoomDTO roomDTO);
 	
 	//메세지 전체조회
-	public List<ChatMessageDTO> MessageAllList();
+	public List<ChatMessageDTO> MessageAllList(int roomNo);
+	
+	//메세지 등록
+	public int sendMessage(ChatMessageDTO msgDTO);
+	
 }

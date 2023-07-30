@@ -75,8 +75,7 @@
 				#{workEndTime,    mode=IN,  jdbcType=DATE},
 				#{workContent,    mode=IN,  jdbcType=VARCHAR}
 			    <if test="workPersonArr != null">
-			        , #{workPersonArr, mode=IN}
-			        <!-- , #{workPersonArr, mode=IN, jdbcType=ARRAY, typeHandler=com.groo.bear.pro.mapper.ArrayTypeHandler} -->
+			        , #{workPersonArr, mode=IN, typeHandler=com.groo.bear.pro.mapper.OracleArrayHandler}
 				</if>
 				<if test="workPersonArr == null">
 				    , null

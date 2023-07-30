@@ -2,8 +2,8 @@ package com.groo.bear.pro.mapper;
 
 import java.util.List;
 
-import com.groo.bear.pro.service.ProGroupVO;
 import com.groo.bear.pro.service.PublicCodeVO;
+import com.groo.bear.pro.service.provo.ProGroupVO;
 
 public interface ProPublicCodeMapper {
 	

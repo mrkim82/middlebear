@@ -3,9 +3,10 @@ package com.groo.bear.pro.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.groo.bear.pro.service.ProGroupVO;
-import com.groo.bear.pro.service.ProUsersVO;
-import com.groo.bear.pro.service.ProVO;
+import com.groo.bear.pro.service.provo.ProGroupVO;
+import com.groo.bear.pro.service.provo.ProHideVO;
+import com.groo.bear.pro.service.provo.ProUsersVO;
+import com.groo.bear.pro.service.provo.ProVO;
 
 public interface ProMapper {
 	//프로젝트 생성
@@ -59,4 +60,7 @@ public interface ProMapper {
 	
 	//프로젝트 권한 조회
 	public ProVO readProAuth(int proNo);
+	
+	//프로젝트 숨김 여부
+	public int updateProHide(ProHideVO vo);
 }

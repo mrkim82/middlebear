@@ -4,12 +4,12 @@ import lombok.Getter;
 
 @Getter
 public class ChatUsersDTO {
-	public String userId;
+	public String id;
 
 	public ChatUsersDTO() {}
 	
-    public ChatUsersDTO(String userId) {
-        this.userId = userId;
+    public ChatUsersDTO(String id) {
+        this.id = id;
     }
     
     

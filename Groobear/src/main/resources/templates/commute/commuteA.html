@@ -311,14 +311,14 @@
 			
 			     return `${year}-${month}-${day} ${dateTimeStr}`;
 			   }
-			
+		
 			
 			
 			document.querySelector('#saveBtn').addEventListener('click',function(){
-				
 				 let newWorkEnd = document.querySelector('#newWorkEnd').value;
 				 let newOverWorkEnd = document.querySelector('#newOverWorkEnd').value
 					 
+			
 				 let data = {
 						'id' : document.querySelector('#mId').value,
 						'workStart2' : document.querySelector('#mDate').value + ' ' +document.querySelector('#newWorkStart').value,
@@ -329,10 +329,6 @@
 					} 
 						
 				 
-				 console.log(data)
-					
-				  	
-				    
 					fetch('/commuteUpdate', {
 		               method : 'post',
 		               headers : {

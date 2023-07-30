@@ -43,6 +43,7 @@ public class UserController {
 	// 회원정보 페이지 이동(암호확인)
 	@GetMapping("myPageInfo")
 	public String myPageChangeInfo(@RequestParam String password, HttpServletRequest request, Model model) {
+		System.out.println(password);
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
 		EmpVO vo = new EmpVO();

@@ -15,4 +15,5 @@ public class ProPostTodoCreListVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date todoEnd;
+	private int proPostNo;
 }
