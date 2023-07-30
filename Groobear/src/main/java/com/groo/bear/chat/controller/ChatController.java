@@ -1,6 +1,9 @@
 package com.groo.bear.chat.controller;
 
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -37,42 +40,49 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
     
-    //하나의 대화방 메세지 보기
     @GetMapping("/chat/{roomNo}")
     public String rooms(HttpSession session, @PathVariable Integer roomNo, Model model, ChatMessageDTO chatDTO) {
-    	String name = (String)session.getAttribute("Name");
-    	model.addAttribute("name", name);
-    	String id = (String)session.getAttribute("Id");
-    	model.addAttribute("id", id);
-    	model.addAttribute("roomNo", roomNo);
-    	model.addAttribute("chatDTO", chatService.MessageAllList(roomNo));
-    	System.out.println("===============================");
-    	//System.out.println(chatService.MessageAllList(roomNo));
-    	System.out.println("===============================");
-    	System.out.println("2222");
-    	//나중에 서비스단도 추가될 예정
-    	return "chat/chat";
+        String name = (String)session.getAttribute("Name");
+        model.addAttribute("name", name);
+        String id = (String)session.getAttribute("Id");
+        model.addAttribute("id", id);
+        model.addAttribute("roomNo", roomNo);
+        model.addAttribute("chatDTO", chatService.MessageAllList(roomNo));
+        return "chat/chat";
     }
-    
+
     @MessageMapping("/chat/{roomNo}") 
-    //"/chat/{roomNo}" 경로로 오는 메시지를 처리
     public void send(ChatMessageDTO chatMessage, @DestinationVariable int roomNo) {
         try {
-            System.out.println("3333");
-        	messagingTemplate.convertAndSend("/topic/messages/" + roomNo , chatMessage);
-            /* 주어진 대상에 메시지를 전송합니다. 이 경우, 
-            클라이언트가 구독하고 있는 주제에 메시지를 전달합니다. 
-            즉, 해당 roomNo를 구독하고 있는 클라이언트에게 chatMessage를 보냅니다. */
-            chatService.sendMessage(chatMessage); //메세지를 데이터베이스에 저장
+            chatMessage.setMsgTime(LocalDateTime.now());
+            messagingTemplate.convertAndSend("/topic/messages/" + roomNo , chatMessage);
+            chatService.sendMessage(chatMessage); 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+    //채팅방 전체 리스트
     @GetMapping("/roomList")
     public String roomList(HttpSession session, Model model) {
+    	//빈방삭제
+    	chatService.deleteEmptyRooms();
+    	
     	String id = (String)session.getAttribute("Id");
-    	model.addAttribute("id", chatService.chatRoomList(id));
+    	List<RoomDTO> rooms = chatService.chatRoomList(id);
+        for (RoomDTO room : rooms) {
+            int count = chatService.countRoomMembers(room.getRoomNo());
+            room.setParticipantCount(count); // 참여자 수 설정
+         // 마지막 메시지 설정
+            String lastMessage = chatService.getLastMessage(room.getRoomNo());
+            if (lastMessage != null) {
+                room.setLastMessage(lastMessage);
+            } else {
+                room.setLastMessage("메세지 내용이 없습니다.");
+            }
+        }
+        model.addAttribute("rooms", rooms);
+    	//model.addAttribute("id", chatService.chatRoomList(id));
+    	
     	return "chat/rooms";
     }
     
@@ -80,24 +90,42 @@ public class ChatController {
     @PostMapping("/newChatroom")
     @ResponseBody
     public Map<String, Object> createChatroom(HttpSession session, @RequestBody RoomDTO room) {
+    	// HTTP 요청 본문의 JSON을 RoomDTO 객체로 변환.
+    	//이 메서드의 반환값을 HTTP 응답 본문으로 변환하여 클라이언트에 전송
+    	
     	String id = (String)session.getAttribute("Id");
     	room.setId(id);
-        int createdRoom = chatService.createChatRoom(room);
+    	
+    	//직원ID 목록 가져오기
+    	List<String> employeeIds = room.getEmployeeIds();
+    	room.setParticipantCount(employeeIds.size() + 1); // 참여자 수 설정
+    	
+    	chatService.createChatRoom(room);
+    	int roomNo = chatService.newJeans();
+    	room.setRoomNo(roomNo);
+        chatService.insertMem(room);
+        for(String empId : employeeIds) {
+            room.setId(empId);
+            chatService.insertMem(room);
+        }
+        System.out.println(employeeIds);
         
-        //생성된 번호를 가져오는 중간 작업 필요할 거임. 그래야 그 번호를 알아야 그 안에 사원을 넣을 수 있기 때문에
-        // 1.chatService.createChatRoom(room); 얘의 결과를 가져오거나 2. 제일 최신 번호를 가져오거나.
-        messagingTemplate.convertAndSend("/topic/chatrooms/", createdRoom);
-        return Collections.singletonMap("roomNo", createdRoom);
+        messagingTemplate.convertAndSend("/topic/chatrooms/", roomNo);
+        return Collections.singletonMap("roomNo", roomNo);
     }
+    
+
     
     //HTTP를 사용하려면 @PostMapping을, 웹소켓과 STOMP를 사용하려면 @MessageMapping
     
+    //채팅방나가기.
     @PostMapping("/deleteChatroom")
     @ResponseBody
-    public ResponseEntity<?> deleteChatroom(@RequestBody RoomDTO room) {
-        int isDeleted = chatService.deleteChatRoom(room); // chatService는 채팅방을 관리하는 서비스 객체입니다.
-
+    public ResponseEntity<?> deleteChatroom(@RequestBody RoomDTO roomDTO) {
+        int isDeleted = chatService.deleteChatRoom(roomDTO); // chatService는 채팅방을 관리하는 서비스 객체입니다.
+        System.out.println("1111");
         if (isDeleted == 1) {
+        	System.out.println("2222");
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -106,7 +134,32 @@ public class ChatController {
     
     @GetMapping("/empAllList")
     @ResponseBody
-    public List<RoomDTO> empAllList() {
-        return chatService.empAllList();
+    public List<RoomDTO> empAllList(HttpSession session) {
+    	String id = (String) session.getAttribute("Id");
+        return chatService.empAllList(id);
     }
+    //메세지방 안에서 초대하기
+    @PostMapping("/inviteEmployees")
+    @ResponseBody
+    public ResponseEntity<?> inviteEmployees(@RequestBody RoomDTO roomDTO) {
+        List<String> employeeIds = roomDTO.getEmployeeIds();
+        int roomNo = roomDTO.getRoomNo();
+        
+        for(String id : employeeIds) {
+            RoomDTO room = new RoomDTO();
+            room.setId(id);
+            room.setRoomNo(roomNo);
+            chatService.insertMem(room);
+        }
+
+        return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping("/empListExcludingRoomMembers/{roomNo}")
+    @ResponseBody
+    public List<RoomDTO> empListExcludingRoomMembers(HttpSession session, @PathVariable Integer roomNo) {
+        String id = (String) session.getAttribute("Id");
+        return chatService.empListExcludingRoomMembers(id, roomNo);
+    }
+    
 }

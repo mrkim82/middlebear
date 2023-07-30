@@ -92,7 +92,7 @@ p {
 		<span th:text="${session.Pno}"></span>
 	</p>
 	<a href="/proMain">프로젝트</a>
-	<a href="/roomList">실시간대화</a>
+	<span onclick="openChat()">실시간대화</span>
 	<div class="work">
 		
 	</div>	
@@ -126,7 +126,12 @@ p {
 
 
 
-
+<script>
+var openChat  = function() {
+	
+ window.open("/roomList", "", "_blank");
+}
+</script>
 	<script>
 	let chkCount = 0;
 	let chkCounto = 0;
