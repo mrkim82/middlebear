@@ -2,126 +2,127 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 >
-  <head>
-  	<title>Groobear</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-		
-	<link rel="stylesheet" href="/bootstrap.min.css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+	
+<link rel="stylesheet" href="/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-	<!-- 풀캘린더 -->
-	<script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
-	
-	<!-- 제이쿼리 -->
-	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-	
-	<style>
-		@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
-		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
-		
-		.dohyeon{
-			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
-			color:black;
-		}
-		
-		.dohyeonmenu{
-			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
-			font-size : 20px;
-			color:white;
-		}
-		.nanumgothic{
-			font-family: 'Nanum Gothic', serif;/*웹 폰트 지정*/
-			font-weight : 300;
-			color:white;
-		}
-		.rightPad{
-			padding-right:150px;
-		}
-		#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
-			position: fixed; /* Stay in place */
-			z-index: 1; /* Sit on top */
-			padding-top: 100px; /* Location of the box */
-			left: 0;
-			top: 0;
-			width: 100%; /* Full width */
-			height: 100%; /* Full height */
-			overflow: auto; /* Enable scroll if needed */
-			background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-			display: none;
-		}
-		
-		.horizontal-bar {
-			height: 80px;
-			width: 100%;
-			background-color: #f9f9f9;
-		}
-		
-		.horizontal-bar2 {
-			height: 40px;
-			width: 100%;
-			background-color: #f5f5f5;
-		}
-		
-		#modalFolderCreate4 {
-			position: fixed; /* Stay in place */
-			z-index: 1; /* Sit on top */
-			padding-top: 100px; /* Location of the box */
-			left: 0;
-			top: 0;
-			width: 100%; /* Full width */
-			height: 100%; /* Full height */
-			overflow: auto; /* Enable scroll if needed */
-			background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-			display: none;
-		}
-		
-		#modalBody, #modalBody2, #modalBody3 {
-			width: 500px;
-			height: 300px;
-			padding: 30px 30px;
-			margin: 0 auto;
-			border: 1px solid #777;
-			background-color: #fff;
-		}
-		
-		#closeBtn, #closeBtn2 {
-			float: right;
-			font-weight: bold;
-			color: #777;
-			font-size: 25px;
-			cursor: pointer;
-		}
-		
-		details {
-			padding: 12px;
-			text-decoration: none;
-			font-size: 16px;
-			color: #bdc3c7;
-			display: flex;
-			align-items: center;
-			transition: 0.3s;
-		}
-		
-		.square {
-			width: 50px;
-			height: 50px;
-			background-color: #000;
-			margin-left: 30px;
-			border-radius: 10px;
-		}
-		
-		.bottomLine {
-			border-bottom: 3px solid red;
-			z-index: 1050;
-		}
-		.spanCursor {
-			cursor: pointer
-		}
-	</style>
-	</head>
+<!-- 풀캘린더 -->
+<script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
+
+<!-- 제이쿼리 -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+<style>
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+
+.dohyeon{
+	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+	color:black;
+}
+
+.dohyeonmenu{
+	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+	font-size : 20px;
+	color:white;
+}
+.nanumgothic{
+	font-family: 'Nanum Gothic', serif;/*웹 폰트 지정*/
+	font-weight : 300;
+	color:white;
+}
+.rightPad{
+	padding-right:150px;
+}
+#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+	display: none;
+}
+
+.horizontal-bar {
+	height: 80px;
+	width: 100%;
+	background-color: #f9f9f9;
+}
+
+.horizontal-bar2 {
+	height: 40px;
+	width: 100%;
+	background-color: #f5f5f5;
+}
+
+#modalFolderCreate4 {
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+	display: none;
+}
+
+#modalBody, #modalBody2, #modalBody3 {
+	width: 500px;
+	height: 300px;
+	padding: 30px 30px;
+	margin: 0 auto;
+	border: 1px solid #777;
+	background-color: #fff;
+}
+
+#closeBtn, #closeBtn2 {
+	float: right;
+	font-weight: bold;
+	color: #777;
+	font-size: 25px;
+	cursor: pointer;
+}
+
+details {
+	padding: 12px;
+	text-decoration: none;
+	font-size: 16px;
+	color: #bdc3c7;
+	display: flex;
+	align-items: center;
+	transition: 0.3s;
+}
+
+.square {
+	width: 50px;
+	height: 50px;
+	background-color: #000;
+	margin-left: 30px;
+	border-radius: 10px;
+}
+
+.bottomLine {
+	border-bottom: 3px solid red;
+	z-index: 1050;
+}
+.spanCursor {
+	cursor: pointer
+}
+</style>
+
+</head>
   <body>
   	<div>
     <header class="blog-header lh-1 py-3">

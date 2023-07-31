@@ -205,7 +205,7 @@
 	</insert>
 	
 	<!-- 투표 상세 내용 등록 -->
-	<insert id="createVoteContent" parameterType="CreateVoteVO">
+	<!-- <insert id="createVoteContent" parameterType="CreateVoteVO">
 		INSERT INTO vote(vote_no, pro_post_no, vote_content, vote_end_day)
 		VALUES((SELECT NVL(MAX(vote_no), 0) + 1
 		        FROM vote),
@@ -214,12 +214,18 @@
 		        #{voteContent},
 		        TO_DATE('2023-07-22 18:00', 'YYYY-MM-DD HH24:MI')
 		)
-	</insert>
+	</insert> -->
 
 	<!-- 글 삭제  -->
 	<delete id="deleteProPost">
 		DELETE FROM pro_post
 		WHERE pro_post_no = #{proPostNo}	
-	</delete>	
+	</delete>
+	
+	<!-- 프로젝트 삭제  -->
+	<delete id="deletePro" parameterType="int">
+		DELETE FROM pro
+		WHERE pro_no = #{proNo}
+	</delete>
 	
 </mapper>
