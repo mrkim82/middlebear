@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.groo.bear.files.domain.FilesVO;
+import com.groo.bear.files.mapper.FilesMapper;
+import com.groo.bear.payment.mapper.PaymentMapper;
 import com.groo.bear.pro.mapper.ProPostMapper;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
@@ -20,10 +23,21 @@ import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 import com.groo.bear.pro.service.postvo.ProWritingUVO;
 
+import lombok.Setter;
+
 @Service
 public class ProPostServiceImpl implements ProPostService {
 	@Autowired
 	ProPostMapper ppm;
+	
+	@Autowired
+	FilesMapper file;
+	
+	@Setter(onMethod_= @Autowired)
+	private ProPostMapper mapper;
+	@Setter(onMethod_= @Autowired)
+	private FilesMapper attachMapper;
+
 	
 	@Override
 	public ProPostVO readTopMenu(int proNo, String id) {
@@ -163,5 +177,19 @@ public class ProPostServiceImpl implements ProPostService {
 		return ppm.deletePro(proNo);   
 	}
 
+	@Override
+	public List<FilesVO> readProFile(int proFileNo) {
+		return file.readProFile(proFileNo);
+	}
+
+	@Override
+	public int deleteProFile(int proFileNo) {
+		return file.deleteProFile(proFileNo);
+	}
+
+	@Override
+	public int createProFile(FilesVO vo) {
+		return file.createProFile(vo);
+	}
 
 }

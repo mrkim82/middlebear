@@ -378,22 +378,30 @@ function drawChart() {
 										<div>
 											<textarea placeholder="내용을 입력하세요." id="workWritingContent"></textarea>
 										</div>
-	
-										<!-- 하위업무 -->
+										<!-- 첨부파일 -->
 										<div>
-											<!-- 하위업무 수 -->
-											<!-- <div>
-												<p>ㄴ하위업무</p>
-											</div> -->
-											<!-- 하위업무 동적 생성 -->
-											<!-- <div>
-												<button type="button">+ 하위업무 추가</button>
-											</div> -->
-											<!-- 하위업무 입력란 -->
-											<div>
-												
-											</div>
+											<div class="uploadResult">
+					                            <ul>
+					
+					                            </ul>
+					                        </div>
+					                        <!-- 첨부파일 -->
+											<input type="file"
+												   name="uploadFile"
+												   multiple>
 										</div>
+										<!-- 하위업무 -->
+										<!-- <div>
+											하위업무 수
+											 <div>
+												<p>ㄴ하위업무</p>
+											</div>
+											하위업무 동적 생성
+											<div>
+												<button type="button">+ 하위업무 추가</button>
+											</div>
+											하위업무 입력란
+										</div> -->
 									</div>
 										<button type="button" class="btn btn-primary" id="createWorkButton">등록</button>
 								</div>
@@ -1908,7 +1916,42 @@ function drawChart() {
 				})
 		})
 		.then(response => response.json())
-		.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+		.then(res => {
+			//파일 첨부
+			console.log('업로드 스타트!')
+			let wFileArr = [];
+			
+			$(".uploadResult ul li").each(function(i, obj){
+		        console.log(obj)
+		        let wfObj = {
+					'uuid' : obj.dataset.uuid,
+					'uploadPath' : obj.dataset.path,
+					'fileName' : obj.dataset.filename,
+					'fileType' : obj.dataset.type = obj.dataset.type ? '1' : '0',
+				};
+				wFileArr.push(wfObj);
+		    });
+			
+			
+			console.log('한글로하자(전체)',wFileArr)
+			
+			$.ajax({
+    			url: "/proFileInsert",
+  			    method: "POST",
+  			    contentType:"application/json; charset=utf-8",
+  			    data: JSON.stringify(wFileArr),
+  			    async : false,
+  			    success: function(data) {
+  			    	//location.href="/proPostMain/" + projectNo + "?homeTab=2"
+  			    },
+  			    error: function(err) {
+					console.log(err);
+  			    }	
+    		});
+		    
+			//파일 첨부 끝
+			
+		});
 		
 	});
 </script>

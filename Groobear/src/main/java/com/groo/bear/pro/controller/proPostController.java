@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.comm.DateUtil;
+import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostTaskService;
@@ -38,7 +39,10 @@ import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 import com.groo.bear.pro.service.postvo.ProWritingUVO;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
+import lombok.extern.log4j.Log4j2;
+
 @Controller
+@Log4j2
 public class proPostController {
 
 	@Autowired
@@ -186,7 +190,6 @@ public class proPostController {
 	public Map<String, Object> postCreateWork(HttpServletRequest request, @RequestBody ProPostWorkVO vo) {
 		HttpSession session = request.getSession();
 		Map <String, Object> map = new HashMap<>();
-		System.out.println(vo);
 		String res = "";
 		if(vo.getWorkPersonArr().length == 0) {
 			vo.setWorkPersonArr(null);
@@ -194,7 +197,6 @@ public class proPostController {
 		vo.setId((String)session.getAttribute("Id"));
 		
 		proPostService.createPostWork(vo);
-		System.out.println(vo);
 		map.put("result", res);
 		return map;
 	}
@@ -280,7 +282,6 @@ public class proPostController {
 	@PutMapping("upProPost")
 	@ResponseBody
 	public Map<String, Object> updateProPost(@RequestBody ProWritingUVO vo) {
-		System.out.println(vo);
 		int result = proPostService.updateProWriting(vo);
 		return Collections.singletonMap("result", result);
 	}
@@ -313,9 +314,23 @@ public class proPostController {
 	@DeleteMapping("delPro")
 	@ResponseBody
 	public Map<String, Object> deletePro(@RequestBody int proNo) {
-		System.out.println(proNo);
 		int result = proPostService.deletePro(proNo);
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
+	
+	//파일 등록
+	@PostMapping("proFileInsert")
+	@ResponseBody
+	public Map<String, Object> 파일추가(@RequestBody FilesVO vo) {
+		int result = proPostService.createProFile(vo);
+		System.out.println(vo);
+		
+		return Collections.singletonMap("result", result);
+	}
+	
+	
+	
+	
+	
 	
 }

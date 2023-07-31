@@ -53,4 +53,12 @@ public interface FilesMapper {
 	
 	//메일 첨부파일 삭제
 	public int deleteMailFile(int mailNo);
+	
+	//프로젝트
+	// 프로젝트 파일 조회
+	public List<FilesVO> readProFile(int proFileNo);
+	// 프로젝트 파일 제거
+	public int deleteProFile(int proFileNo);
+	// 프로젝트 파일 등록
+	public int createProFile(FilesVO vo);
 }

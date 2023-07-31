@@ -146,4 +146,39 @@
   	<delete id="deleteMailFile" parameterType="int">
   		delete files where mail_no = #{mailNo}
   	</delete>
+  	
+  	
+  	
+  	<!-- 프로젝트 -->
+  	<insert id="createProFile">
+  		insert into files(
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,PRO_FILE_NO
+  							) 
+  					VALUES(
+  							#{uuid}
+  							,#{uploadPath}
+  							,#{fileName}
+  							,#{fileType}
+  							,sysdate
+  							,#{proFileNo}
+  					)
+  	</insert>
+  	
+  	<!-- 프로젝트 첨부파일 조회 -->
+  	<select id="readProFile" parameterType="int">
+  		select * from files
+  		where PRO_FILE_NO = #{proFileNo}
+  	</select>
+  	
+  	<!-- 프로젝트 첨부파일 삭제 -->
+  	<delete id="deleteProFile" parameterType="int">
+  		delete files
+  		where PRO_FILE_NO = #{proFileNo}
+  	</delete>
+  	
   </mapper>
