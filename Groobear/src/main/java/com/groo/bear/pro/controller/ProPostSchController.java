@@ -1,6 +1,7 @@
 package com.groo.bear.pro.controller;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +62,7 @@ public class ProPostSchController {
 		System.out.println(model);
 		model.addAttribute("readPerCalDetail", ppss.readPerCalDetail(id));
 		model.addAttribute("readPerCalCom", ppss.readPerCalCom(id));
-		
+		model.addAttribute("cTime" , new Date());
 		return "main/personalSch";
 	};
 	
@@ -72,7 +73,7 @@ public class ProPostSchController {
 		HttpSession session = request.getSession();
 		Map <String, Object> map = new HashMap<>();
 		vo.setId((String)session.getAttribute("Id"));
-		
+		System.out.println(vo);
 		ppss.createPostSch(vo);
 		
 		map.put("result", "성공했겠지");
