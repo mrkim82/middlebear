@@ -43,8 +43,11 @@
 								<label class="label">기본정보</label>
 								<div>
 									<label class="label">사번 : <span id="mEmpNo"></span> |
-									</label> <label class="label">이름 : <span id="mName"></span> |
-									</label> <label class="label">부서 : <span id="mDept"></span></label>
+									</label> <label class="label">이름 : <span id="mName"></span> | 
+									</label> <label class="label">부서 : <span id="mDept"></span> | 
+									</label> <label class="label">연차 : <span id="mOff"></span> | 
+									</label> <label class="label">월 근무 일 : <span id="mMD"></span> | 
+									</label> <label class="label">월 연장 근무 시간 : <span id="mMT"></span></label>
 								</div>
 							</div>
 
@@ -83,8 +86,6 @@
 				</div>
 			</div>
 		</div>
-
-
 
 		<div>
 			<h3 style="text-align: center;">근태관리</h3>
@@ -151,6 +152,7 @@
 						<td class="owEnd" style="display: none;">[[${#dates.format(comm.overWorkEnd,'HH:mm')}]]</td>
 						<td class="id" style="display: none;">[[${comm.id}]]</td>
 						<td class="day" style="display: none;">[[${#dates.format(comm.day,'yyyy-MM-dd')}]]</td>
+						<td class="offCount" style="display: none;">[[${comm.offCount}]]</td>
 					</tr>
 				</tbody>
 			</table>
@@ -216,8 +218,9 @@
 				let oldOwEnd = event.currentTarget.querySelector('.owEnd').innerText;
 				let id = event.currentTarget.querySelector('.id').innerText;
 				let day = event.currentTarget.querySelector('.day').innerText;
+				let oc = event.currentTarget.querySelector('.offCount').innerText;
 
-				console.log(name);
+				console.log(id);
 				console.log(oldWorkStart);
 				console.log(day);
 
@@ -230,6 +233,57 @@
 				document.querySelector('#newOverWorkEnd').value = oldOwEnd;
 				document.querySelector('#mId').value = id;
 				document.querySelector('#mDate').value = day;
+				document.querySelector('#mOff').textContent = oc + '일';
+				
+				
+				let sInfo = {
+						'id' : id
+				}
+				
+				fetch('/getMonth', {
+					method:'POST',
+					headers:{
+						'content-Type' : 'application/json'	
+					},
+					body:JSON.stringify(sInfo)
+				})
+				.then(response => response.json())
+				.then(data2 => {
+			        document.getElementById('mMD').textContent = data2.count + '일';
+			        console.log(data2)
+
+			        let number = data2.over;
+					let hours = Math.floor(number / 60);
+					if (hours < 10) {
+						hours = '0' + hours;
+					}
+					let minutes = number % 60;
+					if (minutes < 10) {
+						minutes = '0' + minutes;
+					}
+					let cal = hours + '시간' + minutes+'분';
+					document.getElementById('mMT').textContent = cal;
+			        
+			        
+			        
+			        
+			        
+			        
+			        
+			        
+				})		
+				.catch(err => {
+					console.log(err);
+				})
+				
+				
+				
+				
+				
+				
+				
+				
+				
 			}
 
 			for (let i = 0; i < document.querySelectorAll('.cml').length; i++) {
