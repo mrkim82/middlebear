@@ -48,7 +48,7 @@ public class MailController {
 		System.out.println("받은메일함 mailVO"+mailVO);
 		Paging paging = new Paging();
         paging.setCri(cri);
-        paging.setTotalCount(mailService.countReceiveMail((String) session.getAttribute("Id"),(String) session.getAttribute("Id")));
+        paging.setTotalCount(mailService.countReceiveMail(mailVO));
 		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/receiveMail";
@@ -104,7 +104,7 @@ public class MailController {
 		mailVO.setMailSet("Y");
 		Paging paging = new Paging();
         paging.setCri(cri);
-        paging.setTotalCount(mailService.countSendMail(email));
+        paging.setTotalCount(mailService.countSendMail(mailVO));
 		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/sendingMail";
