@@ -5,7 +5,155 @@
 <meta charset="UTF-8">
 <title>paymentList</title>
 </head>
-<body>
-	hi
+<body layout:fragment="content">
+	<div>
+		<h5 style="margin-top: 20px;">결재중 문서 조회</h5>
+		<button type="button" id="payDoc" onclick="location.href='/pay/paymentDoc'">결재문서작성</button>
+		<table id="list" class="table">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>문서번호</th>
+					<th>문서제목</th>
+					<th>기안자</th>
+					<th>작성일자</th>
+					<th>결재</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="pay,stat : ${InProgressList}" th:attr="onclick='window.location.href=\'/payInfoRead?payNo=' + ${pay.payNo} + '+&docType='+${pay.docType}+'\''">
+					<td>[[${paging.totalCount - stat.index}]]</td>
+					<td th:text="${pay.payNo}"></td>
+					<td>[[${pay.purpose}]]</td>
+					<td>[[${pay.id}]]</td>
+					<td th:text="${#dates.format(pay.issueDate, 'yyyy.MM.dd')}"></td>
+					<td th:if="${ 
+						(pay.approver2 == session.Id and pay.payStatus2== 'N') or 
+						(pay.approver3 == session.Id and pay.payStatus2== 'Y')}">
+						<span style="color:red">결재중</span>
+					</td>
+					<td th:unless="${ (pay.approver2 == session.Id and pay.payStatus2== 'N') or 
+						(pay.approver3 == session.Id and pay.payStatus2== 'Y')}">결재중</td>
+					<td id="docType" style="display:none;">[[${pay.docType}]]</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div>
+		<ul class="paging" th:if="${paging.endPage != 0}">
+        <li th:if="${paging.prev}">
+            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+        </li>
+        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+        </li>
+        <li th:if="${paging.next and paging.endPage > 0}">
+            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+        </li>
+    </ul>
+	</div>
+	
+	<div>
+		<h5 style="margin-top: 20px;">완료된 문서 조회</h5>
+		<table id="list" class="table">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>문서번호</th>
+					<th>문서제목</th>
+					<th>기안자</th>
+					<th>작성일자</th>
+					<th>결재</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="pay,stat : ${completePaymentList}" th:attr="onclick='window.location.href=\'/payInfoRead?payNo=' + ${pay.payNo} + '+&docType='+${pay.docType}+'\''">
+					<td>[[${paging.totalCount - stat.index}]]</td>
+					<td th:text="${pay.payNo}"></td>
+					<td>[[${pay.purpose}]]</td>
+					<td>[[${pay.id}]]</td>
+					<td th:text="${#dates.format(pay.issueDate, 'yyyy.MM.dd')}"></td>
+					<td th:if="${ 
+						(pay.payStatus2== 'F') or 
+						(pay.payStatus3== 'F')}">
+						<span style="color:red">반려</span>
+					</td>
+					<td th:unless="${ (pay.payStatus3== 'F') or 
+						(pay.payStatus2== 'F')}">완료</td>
+					<td id="docType" style="display:none;">[[${pay.docType}]]</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div>
+		<ul class="paging" th:if="${paging.endPage != 0}">
+        <li th:if="${paging.prev}">
+            <a th:href="|javascript:goPageCom([[${paging.startPage-1}]])|">이전</a>
+        </li>
+        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+            <a th:href="|javascript:goPageCom([[${num}]])|" th:text="${num}"></a>
+        </li>
+        <li th:if="${paging.next and paging.endPage > 0}">
+            <a th:href="|javascript:goPageCom([[${paging.endPage+1}]])|">다음</a>
+        </li>
+    </ul>
+	</div>
+	<div>
+		<h5 style="margin-top: 20px;">참조된 문서 조회</h5>
+		<table id="list" class="table">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>문서번호</th>
+					<th>문서제목</th>
+					<th>기안자</th>
+					<th>작성일자</th>
+					<th>결재</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="pay,stat : ${referrerList}" th:attr="onclick='window.location.href=\'/payInfoRead?payNo=' + ${pay.payNo} + '+&docType='+${pay.docType}+'\''">
+					<td>[[${paging.totalCount - stat.index}]]</td>
+					<td th:text="${pay.payNo}"></td>
+					<td>[[${pay.purpose}]]</td>
+					<td>[[${pay.id}]]</td>
+					<td th:text="${#dates.format(pay.issueDate, 'yyyy.MM.dd')}"></td>
+					<td th:if="${ 
+						(pay.payStatus2== 'F') or 
+						(pay.payStatus3== 'F')}">
+						<span style="color:red">반려</span>
+					</td>
+					<td th:unless="${ (pay.payStatus3== 'F') or 
+						(pay.payStatus2== 'F')}">완료</td>
+					<td id="docType" style="display:none;">[[${pay.docType}]]</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div>
+		<ul class="paging" th:if="${paging.endPage != 0}">
+        <li th:if="${paging.prev}">
+            <a th:href="|javascript:goPageRef([[${paging.startPage-1}]])|">이전</a>
+        </li>
+        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+            <a th:href="|javascript:goPageRef([[${num}]])|" th:text="${num}"></a>
+        </li>
+        <li th:if="${paging.next and paging.endPage > 0}">
+            <a th:href="|javascript:goPageRef([[${paging.endPage+1}]])|">다음</a>
+        </li>
+    </ul>
+	</div>
+	<script>
+	function goPage(p){
+		location.href="payMain?page="+p;
+			
+	}
+	function goPageCom(p){
+		location.href="payMain?page="+p;
+	}
+	function goPageRef(p){
+		location.href="payMain?page="+p;
+	}
+	</script>
 </body>
 </html>

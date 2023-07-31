@@ -6,6 +6,7 @@ import lombok.Data;
 public class ProPostUserVO {
 	private String name;
 	private int proNo;
+	private int empNo;
 	private String id;
 	private String profileImg;
 	private String rank;

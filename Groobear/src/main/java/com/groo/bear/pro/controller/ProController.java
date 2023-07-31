@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProService;
+import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
 import com.groo.bear.pro.service.provo.ProUsersVO;
@@ -139,8 +140,9 @@ public class ProController {
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
 		model.addAttribute("projectMainList", proService.readProjectGroupDetail(groupNo, id));
+		model.addAttribute("readPerAllPro", proService.readPerAllPro(id));//개인 전체 프로젝트 조회(이름, 멤버번호)
+		model.addAttribute("readGroupCheckPro", proService.readGroupCheckPro(groupNo, id));
 		proData(model, request);
-		System.out.println(model);
 		return "proHome/proMainSub";
 	}
 	
@@ -242,7 +244,24 @@ public class ProController {
 	public Map<String, Object> updateProHide(@RequestBody ProHideVO vo) {
 		int result = proService.updateProHide(vo);
 		
-		return Collections.singletonMap("result", result>0?"성공":"취소");
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
+	//프로젝트그룹에 프로젝트 추가
+	@PostMapping("creGroupManage")
+	@ResponseBody
+	public Map<String, Object> proGroupcrepro(@RequestBody ProGroupManageVO vo) {
+		int result = proService.createGroupProManage(vo);
+		
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	//프로젝트그룹에 프로젝트 삭제
+	@PostMapping("delGroupManage")
+	@ResponseBody
+	public Map<String, Object> proGroupdelpro(@RequestBody ProGroupManageVO vo) {
+		int result = proService.deleteGroupProManage(vo);
+		
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 }

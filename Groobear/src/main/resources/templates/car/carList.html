@@ -51,6 +51,7 @@
 					<td class="carNo">[[${car.carNo}]]</td>
 					<td>[[${car.phone}]]</td>
 					<td class="carType" style="display:none">[[${car.carType}]]</td>
+					<td class="suId" style="display:none">[[${car.id}]]</td>
 					
 				</tr>
 			</tbody>
@@ -152,10 +153,10 @@
 											<img id="carImg" style="width:300px;">											
 											
 										</div>
-										<div class="form-group mb-3" th:each="info, es:${info}"
+										<div class="form-group mb-3"
 											style="display: none;">
-											<label class="label">id</label> <input name="id" type="text"
-												th:value="${info.id}" class="form-control">
+											<label class="label">id</label> <input id="suId2" name="id" type="text"
+												 class="form-control">
 										</div>
 										<div class="form-group d-md-flex"></div>
 										<div class="form-group" style="margin-left: 30px;">
@@ -267,17 +268,23 @@ document.querySelector('#deleteBtn').addEventListener('click',function(){
 			
 			let carNo = event.currentTarget.querySelector('.carNo').innerText;
 			let carType = event.currentTarget.querySelector('.carType').innerText;
+			let id = event.currentTarget.querySelector('.suId').innerText;
+			
 			
 			console.log(carNo);
 			console.log(carType);
+			console.log(id);
 			
+			
+			
+			document.querySelector('#suId2').value = id;
 			document.querySelector('#infoCarNo').value = carNo;
 			document.querySelector('#infoCarType').value = carType;
 		}
 $('#carMInfo').on('hidden.bs.modal', function (event) {
 	 carInfoForm.reset();
 })
-	
+	/* 
 
 function checkBtn(){
 			if(document.getElementsByName('carNo')[0].value == '' || document.getElementsByName('carType')[0].value == ''){
@@ -298,21 +305,79 @@ function checkBtn(){
 					
 			}
 		}
+		 */
 		
-		
-		function checkBtn2(){
-			if(document.getElementById('newCarNo').value == ''){
-				event.preventDefault();
-				alert('차량번호를 입력해 주세요')
-			}else if(document.querySelector('#mCarNoCk').textContent != '정상'){
-				event.preventDefault();
-				document.getElementById('newCarNo').value = '';;
-				alert('차량번호를 올바른 형식으로 입력해 주세요.')
-			}else{
-				document.querySelector('.insertBtn').submit();
+		 function checkBtn2(){
+				if(document.getElementById('newCarNo').value == ''){
+					event.preventDefault();
+					alert('차량번호를 입력해 주세요')
+				}else if(document.querySelector('#mCarNoCk').textContent != '정상'){
+					alert('차량번호를 올바른 형식으로 입력해 주세요.')
+					event.preventDefault();
+					document.getElementById('newCarNo').value = '';
+				}else{
 					
+					
+					event.preventDefault();
+					let carNo = document.getElementById('newCarNo').value;
+					let carType = document.getElementById('infoCarType').value;
+					let oldCarNo = document.getElementById('infoCarNo').value;
+					let id2 = document.getElementById('suId2').value;
+					
+					
+					let carCk = {
+							'carNo' : carNo,
+							'carType' : carType,
+							'id' : id2,
+							'oldCarNo' : oldCarNo
+					}
+					
+					fetch("carChk",{
+						method : 'post',
+						headers : {
+							'Content-Type' : 'application/json'
+						},
+						body : JSON.stringify(carCk)
+					})
+					.then(response => response.text())
+					.then(result => {
+						if(result == 'true'){
+							alert('차량번호가 이미 존재합니다.')
+							location.reload();
+						}else{
+							
+
+							fetch("carUpdate",{
+								method : 'post',
+								headers : {
+									'Content-Type' : 'application/json'
+								},
+								body : JSON.stringify(carCk)
+							})
+							.then(response => response.json())
+							.then(result => {
+								if(result == null){
+									console.log('실패')
+								}else {
+								 location.reload();
+								}
+							})
+							.catch(err => console.log(err))
+							
+						}
+					})
+					.catch(err => console.log(err))
+					
+					
+					
+					
+					
+					
+					
+					
+						
+				}
 			}
-		}
 		
 		
 		

@@ -146,5 +146,83 @@
 		GROUP BY d.vote_detail_no
 	</select>
 	
+	<!-- 투표하기 -->
+	<insert id="insertVote" parameterType="ProVoteCDVO">
+		INSERT INTO vote_parti(vote_detail_no, vote_parti_no, id)
+		VALUES(#{voteDetailNo},
+		      (SELECT NVL(MAX(vote_parti_no), 0) +1
+		       FROM vote_parti),
+		       #{id})
+	</insert>
+	
+	<!-- 투표취소 -->
+	<delete id="deleteVote" parameterType="ProVoteCDVO">
+		DELETE FROM vote_parti
+		WHERE vote_detail_no = #{voteDetailNo}
+		AND id= #{id}
+	</delete>
+	
+	<!-- 투표 체크 조회하기 위한 select -->
+	<select id="readxxVote" resultType="ProVoteCDVO">
+		SELECT d.vote_detail_no, d.id
+		FROM pro_post a
+		JOIN vote b
+		ON(a.pro_post_no = b.pro_post_no)
+		JOIN vote_detail c
+		ON(b.vote_no = c.vote_no)
+		JOIN vote_parti d
+		ON(c.vote_detail_no = d.vote_detail_no)
+		WHERE d.id = #{id}
+		AND a.pro_no = #{proNo}
+	</select>
+	
+	<!-- 투표 내용변경 -->
+	<update id="updateVote" parameterType="ProUpdateVoteVO">
+		UPDATE vote
+		SET vote_content = #{voteContent},
+			vote_end_day = #{voteEndDay}
+		WHERE pro_post_no = #{proPostNo}
+	</update>
+	
+	<!-- 투표내용 추가 -->
+	<insert id="createVoteDetail">
+		INSERT INTO vote_detail(vote_detail_no, vote_detail_content, vote_no)
+		VALUES(
+			   (SELECT NVL(MAX(vote_detail_no), 0) + 1
+			   FROM vote_detail),
+			   #{voteDetailContent},
+			   #{voteNo})
+	</insert>
+	
+	<!-- 할 일 단건 조회 -->
+	<select id="readTodoDetail" resultType="ProTodoDetailVO">
+		SELECT todo_no, todo_content, todo_end, todo_check, id
+		FROM todo
+		WHERE pro_post_no = #{proPostNo}
+	</select>
+	
+	<!-- 할일 단건 삭제 -->
+	<delete id="deleteTodoDetail" parameterType="int">
+		DELETE FROM todo
+		WHERE todo_no = #{todoNo}
+	</delete>
+	
+	<!-- 할 일 항목 추가 -->
+	<insert id="createTodoDetail" parameterType="ProUpdateTodoVO">
+		INSERT INTO todo(pro_post_no, todo_no, todo_content, todo_end, id)
+		VALUES(#{proPostNo},
+		       (SELECT NVL(MAX(todo_no), 0) + 1
+        		FROM todo),
+		       #{todoContent},
+		       #{todoEnd},
+		       #{id})
+	</insert>
+	
+	<!-- 할 일 항목 수정 -->
+	<update id="updateTodoDetail" parameterType="ProUpdateTodoVO">
+		UPDATE todo
+		SET todo_content = #{todoContent}, todo_end = #{todoEnd}, id = #{id}
+		WHERE todo_no = #{todoNo}
+	</update>
 	
 </mapper>

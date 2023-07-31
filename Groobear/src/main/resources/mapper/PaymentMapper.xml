@@ -11,7 +11,7 @@
 	</select>
 	<!-- 기안자 정보 Id,emp_no,name,rank,dept_name -->
 	<select id="payEmpInfo" resultType="EmpVO">
-		SELECT u.id,u.emp_no,i.name,i.rank,d.dept_name FROM users u, user_info i, departments d
+		SELECT u.id,u.emp_no,u.sign,i.name,i.rank,d.dept_name FROM users u, user_info i, departments d
 			WHERE i.dept_no = d.dept_no
 			AND u.emp_no = i.emp_no
 			AND u.emp_no = (SELECT emp_no 
@@ -60,7 +60,7 @@
 	</insert>
 	<!-- 결재문서 운행일지 삽입 -->
 	<insert id="logDataInsert" parameterType="PaymentVO">
-		INSERT INTO payment_logbook(oper_date,destination,befored,afterd,imprest,purpose,pay_no)
+		INSERT INTO payment_logbook(oper_date,destination,befored,afterd,imprest,purpose,pay_no,com)
 					VALUES(
 							#{operDate},
 							#{destination},
@@ -68,7 +68,8 @@
 							#{afterd},
 							#{imprest},
 							#{purpose},
-							#{payNo}
+							#{payNo},
+							#{com}
 					)
 	</insert>
 	<!-- 결재문서 연차계 삽입-->
@@ -281,7 +282,8 @@
 		        befored = #{befored},
 		        afterd = #{afterd},
 		        imprest = #{imprest},
-		        purpose = #{purpose}
+		        purpose = #{purpose},
+		        com = #{com}
     		WHERE pay_no = #{payNo}
 	</update>
 	<!-- 연차계 수정 -->
@@ -316,4 +318,27 @@
 		    WHERE approver3 = #{approver3}
 		    AND pay_no = #{payNo}
 	</update>
+	<!--운행일지 코멘트 작성시 update-->
+	<update id="logCommentUpdate" parameterType="PaymentVO">
+		UPDATE payment_logbook
+			SET com = #{com}
+			WHERE pay_no = #{payNo}
+	</update>
+	<!--연차계 코멘트 작성시 update-->
+	<update id="offCommentUpdate" parameterType="PaymentVO">
+		UPDATE payment_off
+			SET com = #{com}
+			WHERE pay_no = #{payNo}
+	</update>
+	<!--품의서 코멘트 작성시 update-->
+	<update id="robinCommentUpdate" parameterType="PaymentVO">
+		UPDATE payment_robin
+			SET com = #{com}
+			WHERE pay_no = #{payNo}
+	</update>
+	<!--유저 사인가져오기-->
+	<select id="userSignGet">
+		SELECT sign FROM users
+		WHERE user_id = #{userId}
+	</select>
 </mapper>

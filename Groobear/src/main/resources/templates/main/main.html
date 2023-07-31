@@ -117,8 +117,13 @@
 							<a class="dohyeon" style="font-size:20px;" href="/perSch">캘린더</a>
 						</div>
 						<div style="text-align: center;">
+<<<<<<< HEAD
 							<img src="../img/communication.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/roomList'"><br>
 							<a class="dohyeon" style="font-size:20px;" href="/roomList">실시간대화</a>
+=======
+							<img src="../img/communication.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;"><br>
+							<a class="dohyeon" style="font-size:20px;" onclick="openChat()">실시간대화</a>
+>>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
 						</div>
 					</div>
 					<div class="row" style="width: 375px;margin:10px;">
@@ -195,18 +200,26 @@
 		</tr>
 		</tbody>
 	</table>
-   <div class="work">
-      
-   </div>   
+   <div class="work"></div>   
 	<!-- 데이터 -->
 <p class="day" style="display:none;"></p>
 <p class="startWork" style="display:none;"></p>
 <p class="endWork" style="display:none;"></p>
 <p class="startOverWork" style="display:none;"></p>
 <p class="endOverWork" style="display:none;"></p>
-<p class="monthOver" style="display:none;"></p>
+<p class="monthOver" style="display:bolck;"></p>
 
 
+
+
+
+
+<script>
+var openChat  = function() {
+	
+ window.open("/roomList", "", "_blank");
+}
+</script>
    <script>
 	// WebSocket 연결 설정
    const alarmClient = new StompJs.Client({
@@ -258,7 +271,7 @@
    		});
    }
    
-     //김도현 시작
+   
 	let chkCount = 0;
 	let chkCounto = 0;
 	let id = '[[${session.Id}]]';
@@ -343,6 +356,7 @@
 					document.getElementById('workEnd').innerText = data.workEnd.substr(-5);
 			} 
 			
+			
 			// 연장근무 시작/종료 스위치 업데이트
 			if(parseInt(document.querySelector('.monthOver').textContent) < 2401){
 				if (data.overWorkStart != null && data.overWorkEnd == null) {
@@ -365,7 +379,7 @@
 					document.getElementById('overWorkStart').innerText = data.overWorkStart.substr(-5);
 					document.getElementById('overWorkEnd').innerText = data.overWorkEnd.substr(-5);
 				} 
-			}else {
+			}else if(parseInt(document.querySelector('.monthOver').textContent) > 2402){
 				chkBoxo.checked = false;
 				let p = document.createElement('p');
 				p.innerText = '연장근무 불가능';

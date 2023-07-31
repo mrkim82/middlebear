@@ -6,6 +6,7 @@ import com.groo.bear.pro.service.task.ProPostTaskDetailVO;
 import com.groo.bear.pro.service.task.ProPostTaskVO;
 import com.groo.bear.pro.service.task.ProPostTaskWorkGroupVO;
 import com.groo.bear.pro.service.task.ProPostTaskWorkPersonVO;
+import com.groo.bear.pro.service.task.ProUpWorkVo;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
 public interface ProPostTaskService {
@@ -29,4 +30,15 @@ public interface ProPostTaskService {
 	
 	//회원 탈퇴시 work_group_person 삭제
 	public int deleteWorkPerson(String id);
+	
+	//업무 그룹 생성
+	public int createWorkGroup(ProPostTaskWorkGroupVO vo);
+	
+	//업무 그룹 삭제
+	public int deleteWorkGroup(int workGroupNo);
+	
+	//해당 work 담당자
+	public List<String> readDetailWorkPerson(int proPostNo);
+	
+	public int updateWorkPost(ProUpWorkVo vo);
 }

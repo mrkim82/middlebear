@@ -2,6 +2,9 @@ package com.groo.bear.pro.service;
 
 import java.util.List;
 
+import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
+import com.groo.bear.pro.service.postvo.ProInviteMailVO;
+import com.groo.bear.pro.service.postvo.ProPartiListVO;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostFeedVO;
@@ -9,6 +12,7 @@ import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.postvo.ProWritingUVO;
 
 public interface ProPostService {
 	//상단메뉴바
@@ -52,4 +56,20 @@ public interface ProPostService {
 	
 	// 프로필 메모 수정
 	public int updateProfileMemo(ProPostUserVO vo);
+	
+	//게시글 수정
+	// 글변경
+	public int updateProWriting(ProWritingUVO vo);
+	
+	//프로젝트 내 검색
+	public List<ProDetailSearchVO> readProInSearch(ProDetailSearchVO vo);
+	
+	//프로젝트 초대 리스트
+	public List<ProPartiListVO> readPartiListM(int proNo);
+	
+	//프로젝트 초대
+	public int createInviteMail(List<ProInviteMailVO> vo);
+	
+	//프로젝트 삭제
+	public int deletePro(int proNo);
 }

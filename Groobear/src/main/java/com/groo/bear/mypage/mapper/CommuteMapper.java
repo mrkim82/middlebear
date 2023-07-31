@@ -37,7 +37,8 @@ public interface CommuteMapper {
 	public CommuteVO calNoWork(String id, String monthDate);
 	//개인정보 조회
 	public List<CommuteVO> comInfo(String id);
-	
+	//전체 월별 정보
+	public List<CommuteVO> calAllWork(Criteria cri, String id, String monthDate);
 	//시간 수정
 	public int commuteUpdate(CommuteVO commuteVO);
 	

@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.emp.service.EmpVO;
 import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.files.mapper.FilesMapper;
+import com.groo.bear.mail.mapper.MailMapper;
 import com.groo.bear.paging.Criteria;
 import com.groo.bear.payment.mapper.PaymentMapper;
 import com.groo.bear.payment.service.PaymentService;
 import com.groo.bear.payment.service.PaymentVO;
+
+import lombok.Setter;
 
 @Service
 public class PaymentServiceImpl implements PaymentService{
@@ -21,7 +24,11 @@ public class PaymentServiceImpl implements PaymentService{
 	
 	@Autowired
 	FilesMapper filesMapper;
-	
+	@Setter(onMethod_= @Autowired)
+	private PaymentMapper mapper;
+	@Setter(onMethod_= @Autowired)
+	private FilesMapper attachMapper;
+
 	@Override
 	public List<EmpVO> payEmpList() {
 		return paymentMapper.payEmpList();
@@ -161,5 +168,25 @@ public class PaymentServiceImpl implements PaymentService{
 	@Override
 	public int deletePayImg(int payNo) {
 		return filesMapper.deletePayImg(payNo);
+	}
+
+	@Override
+	public List<FilesVO> getAtt(int payNo) {
+		return attachMapper.findByNo("pay_no", payNo);
+	}
+
+	@Override
+	public int logCommentUpdate(PaymentVO payVO) {
+		return paymentMapper.logCommentUpdate(payVO);
+	}
+
+	@Override
+	public int offCommentUpdate(PaymentVO payVO) {
+		return paymentMapper.offCommentUpdate(payVO);
+	}
+
+	@Override
+	public int robinCommentUpdate(PaymentVO payVO) {
+		return paymentMapper.robinCommentUpdate(payVO);
 	}	
 }

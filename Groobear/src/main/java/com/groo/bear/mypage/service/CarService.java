@@ -30,5 +30,8 @@ public interface CarService {
 	public int bookCnt(Criteria cri, CarVO carVO);
 	//개인 조회 
 	public List<CarVO> getBook(Criteria cri, String id,String monthDate);
-
+	//차량 번호 중복 체크
+	public int carNoChk(String carNo);
+	
+	
 }

@@ -230,4 +230,15 @@
 		}
 	</insert>
 	
+	<!-- 스케쥴 수정 -->
+	<update id="updateProSch" parameterType="ProUpdateSchVO">
+		UPDATE pro_sch
+		SET sch_content = #{schContent},
+			sch_place = #{schPlace},
+			sch_start_time = #{schStartTime},
+			sch_end_time = #{schEndTime}
+		WHERE pro_post_no = #{proPostNo}
+	</update>
+	
+	
 </mapper>
