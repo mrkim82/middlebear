@@ -47,20 +47,51 @@
 			<thead></thead>
 			<tbody>
 				<tr>
-					<td>133333333333</td>
-					<td>23333333333</td>
-					<td>33333333333333333333333</td>
-				</tr>
-				<tr>
-					<td>45555555555</td>
-					<td>55555555555</td>
-					<td>6555555555555555</td>
-				</tr>
-				<tr>
-					<td>75555555555</td>
-					<td>85555555555</td>
-					<td>9555555555555555</td>
-				</tr>
+	               <td>기안자</td>
+	               <td>결재자</td>
+	               <td>결재자</td>
+	            </tr>
+	            <tr>
+		            <th:block th:if="${not #strings.isEmpty(drafterSign)}">
+		                <td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(drafterSign.uploadPath,'\','/')}/${drafterSign.uuid}_${drafterSign.fileName}|}" 
+							th:data-uploadpath="${drafterSign.uploadPath}" th:data-uuid="${drafterSign.uuid}"
+							th:data-filename="${drafterSign.fileName}" data-type="true"  style="border:1px solid; width:100px">
+					    </td>
+					</th:block>
+					<th:block th:unless="${not #strings.isEmpty(drafterSign)}">
+						<td style="width:100px; padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+					</th:block>
+					
+						<th:block th:if="${list.payStatus2 == 'Y'} and ${not #strings.isEmpty(approver2Sign)}">
+							<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
+								th:data-uploadpath="${approver2Sign.uploadPath}" th:data-uuid="${approver2Sign.uuid}"
+								th:data-filename="${approver2Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
+							</td>
+						</th:block>
+						<th:block th:if="${list.payStatus2 == 'Y'} and ${#strings.isEmpty(approver2Sign)}">
+							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+						</th:block>
+						<th:block th:if="${list.payStatus2 == 'F'}">
+							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
+						</th:block>
+						<th:block th:if="${list.payStatus3 == 'Y'} and ${not #strings.isEmpty(approver3Sign)}">
+							<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver3Sign.uploadPath,'\','/')}/${approver3Sign.uuid}_${approver3Sign.fileName}|}" 
+								th:data-uploadpath="${approver3Sign.uploadPath}" th:data-uuid="${approver3Sign.uuid}"
+								th:data-filename="${approver3Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
+							</td>
+						</th:block>
+						<th:block th:if="${list.payStatus3 == 'Y'} and ${#strings.isEmpty(approver3Sign)}">
+							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+						</th:block>
+						<th:block th:if="${list.payStatus3 == 'F'}">
+							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
+						</th:block>
+	            </tr>
+	            <tr>
+	               <td>[[${drafterInfo.name}]] [[${drafterInfo.rank}]]</td>
+	               <td>[[${approver2Info.name}]] [[${approver2Info.rank}]]</td>
+	               <td>[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
+	            </tr>
 			</tbody>
 		</table>
 		<table style="float:left; width: 790px;">
@@ -224,7 +255,7 @@
 			let destination = document.getElementById('destination').value;
 			let befored = document.getElementById('befored').value;
 			let afterd = document.getElementById('afterd').value;
-			let imprestText = document.getElementById('imprest');
+			
 			let logCom = document.getElementById('logCom').value;
 			console.log('masterDocType',masterDocType);
 			console.log('payNo',payNo);
@@ -679,11 +710,13 @@
 	    	befored = document.getElementById('befored').value;
 			afterd = document.getElementById('afterd').value;
 			imprest = ((afterd*1)-(befored*1))*1500;
-			imprestText.value = imprest;
+			document.getElementById('imprest').value = imprest;
 	    }
 	    function delImgTag(elem){
-	    	console.log(elem);
+	    	console.log(elem.parentElement.parentElement.children[1]);
+	    	elem.parentElement.parentElement.children[1].remove(); //사진지우기
 	    	delOn= 'o';
+	    	
 	    }
 	    //운행일지1번 이미지,파일 가져와서 다운가능하고 보여주는구문
 	    if(masterDocType==='a'){

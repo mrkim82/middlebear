@@ -95,8 +95,9 @@
 					<tbody id="payNum1" style="display:none">
 						<tr><td><input type="date" id="carDate" value="sysdate"></td></tr>
 						<tr><td>행선지 : <input type="text" id="carAddr" value="addr"></td></tr>
-						<tr><td>운행전키로수 <input type="text" id="km1" value="1km"></td>
-							<td>운행후키로수 <input type="text" id="km2" value="2km"></td>
+						<tr>
+					<td>운행전 키로수 <input type="text" id="km1" onchange="kmChange()"></td>
+					<td>운행후 키로수 <input type="text" id="km2" onchange="kmChange()"></td>
 						</tr>
 						<tr><td>전도금 <input type="text" id="imprest" readonly></td></tr>
 						<tr><td>목적 <input type="text" id="purpose"></td></tr>
@@ -149,7 +150,6 @@
 						<tr><td><input type="date" id="off2">(복귀일)</td></tr>
 						<tr><td><input type="text" id="offtitle" style="width:500px"></td></tr>
 						<tr><td><textarea id="offcontent" style="width:400px; height:200px"></textarea></td></tr>
-						<tr><td><button type="button" id="offfiles">첨부파일(선택)</button></td></tr>
 						<tr><td><div class="panel-body3">
 	                        <div class="form-group uploadDiv4">
 	                            <input name="uploadFile3" type="file" multiple>
@@ -167,7 +167,6 @@
 					<tbody id="payNum3" style="display:none">
 						<tr><td><input type="text" id="robintitle" style="width:500px"></td></tr>
 						<tr><td><textarea id="robincontent" style="width:400px; height:200px"></textarea></td></tr>
-						<tr><td><button type="button" id="robinofffiles">첨부파일(선택)</button></td></tr>
 						<tr><td><div class="panel-body4">
 	                        <div class="form-group uploadDiv4">
 	                            <input name="uploadFile4" type="file" multiple>
@@ -179,7 +178,7 @@
 	                        </div>
 	                    	</div>
 	                    </td></tr>
-						<tr><td><textarea id="robincomment" style="width:400px; height:100px">코멘트(선택)</textarea></td></tr>
+						<tr><td><textarea id="robincomment" style="width:400px; height:100px"></textarea></td></tr>
 						<tr><td><button type="button" onclick="payNumSend3()">결재</button></td></tr>
 					</tbody>
 				</tbody>
@@ -240,10 +239,12 @@
 		let robinuuid = '';
 		let robinuploadPath = '';
 		let robinfileName = '';
-		//if조건에 결재자1,결재자2,참조자 데이터 있으면 받아오기
-		if(payUserList1 !== ''){
-			console.log('payUserList1 공백아님');
-		}
+		function kmChange(){
+	    	km1 = document.getElementById('km1').value;
+			km2 = document.getElementById('km2').value;
+			imprest = ((km2*1)-(km1*1))*1500;
+			document.getElementById('imprest').value = imprest;
+	    }
 		function paychange(){
 			console.log(selectPay.value);
 			if(selectPay.value == 'a'){
@@ -485,7 +486,7 @@
 	  			    async : false,
 	  			    success: function(data) {
 	  			    	console.log(data);
-	  			    	location.href="/main";
+	  			    	location.href="/pay/payMain";
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
@@ -577,7 +578,7 @@
 	  			    async : false,
 	  			    success: function(data) {
 	  			    	console.log(data);
-	  			    	location.href="/main";
+	  			    	location.href="/pay/payMain";
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
