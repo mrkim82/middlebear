@@ -482,6 +482,9 @@ $('.modal').on('hidden.bs.modal', function (e) {
 	$(this).find('input, textarea').val('');
 	//$(this).find('.collapse').removeClass('show');
 });
+$('#modal2').on('hidden.bs.modal', function (e) {
+	$(this).find('.uploadResult ul li').remove();
+});
 </script>
 <!-- 공통 js종료 -->
 
@@ -961,10 +964,12 @@ function delPro() {
 <script type="text/javascript">
 //업로드 1번
 $("input[type='file']").change(function(e) {
+	let findModal = $(e.target);
 	var formData = new FormData();
-	var inputFile = $("input[name='uploadFile']");
+//	var inputFile = $("input[name='uploadFile']");
+	var inputFile = $(e.target);
+	console.log(inputFile)
 	var files = inputFile[0].files;
-
 	//여러 파일 올라 갈 수 있기 때문에 반복문
 	for(var i=0; i<files.length; i++) {
 		//파일 검증
@@ -985,7 +990,7 @@ $("input[type='file']").change(function(e) {
 		dataType: "json",
 		success: function(result) {
 			//성공시 화면에 출력
-			showUploadResult(result);
+			showUploadResult(result, findModal);
 		},
 		error: function(error) {
 			console.log(error);
@@ -1011,13 +1016,14 @@ function checkExtension(fileName, fileSize) {
 }
 
 //파일선택으로 파일 불러올 때, 업로드 2번
-function showUploadResult(uploadResultArr){
+function showUploadResult(uploadResultArr, findModal){
 	console.log('s',uploadResultArr)
 	
 	//빈값 찾기
 	if(!uploadResultArr || uploadResultArr.length == 0){return ;}
 	
-	var uploadUL = $(".uploadResult ul");
+	var uploadUL = findModal.closest('.modal').find('.uploadResult ul');
+	
 	var str = "";
   
 	//여러건이기 때문에 반복문
@@ -1074,6 +1080,8 @@ function showUploadResult(uploadResultArr){
 <script type="text/javascript">
 //업로드중인 파일 삭제
 $(".uploadResult").on("click", "button", function(e){
+	e.stopPropagation();
+	
 	var targetFile = $(this).data("file");
 	var type = $(this).data("type");
 

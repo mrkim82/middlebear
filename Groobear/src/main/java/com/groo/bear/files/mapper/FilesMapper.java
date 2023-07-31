@@ -60,9 +60,13 @@ public interface FilesMapper {
 	public int createProFileMan(ProFileVO vo);
 	// 프로젝트 파일 조회(게시물)
 	public List<ProFileVO> readProFilePost(int proNo);
+	//프로젝트 파일 상세 조회
+	public List<ProFileVO> readProFilePostDetail(int proPostNo);
 	// 파일 업로드(최종)
 	public int createProFile(ProFileVO vo);
 	
 	// 프로젝트 파일 제거
 	public int deleteProFile(int proFileNo);
+	// 프로젝트 첨부파일 관리 삭제
+	public int deleteProFileMan(int proFileNo);
 }

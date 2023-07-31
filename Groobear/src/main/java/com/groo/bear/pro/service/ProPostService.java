@@ -75,13 +75,13 @@ public interface ProPostService {
 	
 	//프로젝트
 	// 프로젝트 파일 조회
-	public List<ProFileVO> readProFile(int proFileNo);
+	public List<ProFileVO> getWorkAttach(int proNo);
+	//프로젝트 파일 상세 조회
+	public List<ProFileVO> readProFilePostDetail(int proPostNo);
 	// 프로젝트 파일 제거
 	public int deleteProFile(int proFileNo);
 	// 프로젝트 파일 등록
 	public int createProFile(List<ProFileVO> vo);
 	
-	//첨부파일 조회
-	public List<ProFileVO> getWorkAttach(int proNo);
-	
+
 }

@@ -205,8 +205,23 @@
   	
   	<!-- 프로젝트 첨부파일 삭제 -->
   	<delete id="deleteProFile" parameterType="int">
-  		DELETE files
+  		DELETE FROM files
   		WHERE pro_file_no = #{proFileNo}
   	</delete>
+  	
+  	<!-- 프로젝트 첨부파일 관리 삭제-->
+  	<delete id="deleteProFileMan" parameterType="int">
+  		DELETE FROM pro_file
+  		WHERE pro_file_no = #{proFileNo}
+  	</delete>
+  	
+  	<!-- 파일 상세 조회 -->
+  	<select id="readProFilePostDetail" parameterType="ProFileVO">
+		SELECT a.*, b.pro_post_no
+		FROM files a
+		JOIN pro_file b
+		ON(a.pro_file_no = b.pro_file_no)
+		WHERE pro_post_no = #{proPostNo}
+  	</select>
   	
   </mapper>

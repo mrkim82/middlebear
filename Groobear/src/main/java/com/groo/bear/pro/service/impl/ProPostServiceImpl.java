@@ -176,14 +176,11 @@ public class ProPostServiceImpl implements ProPostService {
 		return ppm.deletePro(proNo);   
 	}
 
-	@Override
-	public List<ProFileVO> readProFile(int proFileNo) {
-		return file.readProFilePost(proFileNo);
-	}
 
 	@Override
 	public int deleteProFile(int proFileNo) {
-		return file.deleteProFile(proFileNo);
+		int res = file.deleteProFile(proFileNo) + file.deleteProFileMan(proFileNo);
+		return res;
 	}
 
 	@Override
@@ -206,6 +203,11 @@ public class ProPostServiceImpl implements ProPostService {
 	@Override
 	public List<ProFileVO> getWorkAttach(int proNo) {
 		return file.readProFilePost(proNo);
+	}
+
+	@Override
+	public List<ProFileVO> readProFilePostDetail(int proPostNo) {
+		return file.readProFilePostDetail(proPostNo);
 	}
 
 }

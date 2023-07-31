@@ -1327,6 +1327,17 @@ function drawChart() {
 						<textarea placeholder="내용을 입력하세요." id="updateWorkContent"></textarea>
 					</div>
 					
+					<!-- 첨부파일 수정 -->
+					<div>
+						<div class="uploadResult">
+                            <ul></ul>
+                        </div>
+                        <!-- 첨부파일 -->
+						<input type="file"
+							   name="uploadFile"
+							   multiple>
+					</div>
+					
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
@@ -3510,6 +3521,81 @@ $(document).ready(function() {
 });
 </script>
 
+<script>
+$('#modal12').on('show.bs.modal', function (e) {
+	
+	e.target.querySelectorAll('.uploadResult ul li').forEach(function(liElement) {
+		liElement.remove();
+	});
+	
+	let ppn = modal12.dataset.updatePostNo
+	var postGroups = {};
+
+	$.getJSON(`/getWorkAttachDetail?proPostNo=${ppn}`, function(arr) {
+	    console.log('세부', arr);
+	    
+	    var str = "";
+        $(arr).each(function(i, attach){
+            
+            if(attach.fileType){
+                var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
+                
+                str += "<li data-path='"+attach.uploadPath + "' data-file-pro-no='" + attach.proFileNo + "' ";
+    			str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'"
+    			str + "><div>";
+    			//파일 이름 보여주기
+    			str += "<span> "+ attach.fileName+"</span>";
+    			//파일 삭제버튼
+    			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle' onclick='delProFile(" + attach.proFileNo + ", \"" + attach.fileName + "\")'>";
+    			str += "<i class='fa fa-times'></i></button><br>";
+    			//이미지 노출
+    			str += "<img src='/display?fileName="+fileCallPath+"'>";
+    			str += "</div>";
+    			str +"</li>";
+            } else {
+                str += "<li data-path='"+attach.uploadPath + "' data-file-pro-no='" + attach.proFileNo + "' ";
+    			str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'"
+    			str + "><div>";
+    			//파일 이름 보여주기
+    			str += "<span> "+ attach.fileName+"</span>";
+    			//파일 삭제버튼
+    			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle' onclick='delProFile(" + attach.proFileNo + ", \"" + attach.fileName + "\")'>";
+    			str += "<i class='fa fa-times'></i></button><br>";
+    			//파일 노출
+    			str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+    			str += "</div>";
+    			str +"</li>";
+            }
+        });
+        
+        $("#modal12 .uploadResult ul").html(str);
+		
+	});
+	
+});
+
+function delProFile(ppn, filename) {
+	
+	fetch("/delProFile", {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(Number(ppn))
+	})
+	.then(response => response.json())
+	.then(res => {
+		console.log(ppn)
+		console.log(filename)
+		console.log(res);
+		$("[data-filename='" + filename + "']").remove();
+	})
+	.catch(error => {
+		console.error('Error: ',error);
+	});
+	
+}
+</script>
 
 </body>
 </html>

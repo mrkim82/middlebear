@@ -340,7 +340,23 @@ public class proPostController {
 		return new ResponseEntity<>(proPostService.getWorkAttach(proNo), HttpStatus.OK);
 	}
 	
+	//파일상세조회
+	@GetMapping(value ="/getWorkAttachDetail", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<ProFileVO>> 파일상세조회(@RequestParam int proPostNo) {
+		log.info("getAttachList" + proPostNo);
+		return new ResponseEntity<>(proPostService.readProFilePostDetail(proPostNo), HttpStatus.OK);
+	}
 	
+	//파일 삭제
+	@DeleteMapping("delProFile")
+	@ResponseBody
+	public Map<String, Object> delProFile(@RequestBody int proFileNo) {
+		int result = proPostService.deleteProFile(proFileNo);
+		System.out.println(proFileNo);
+		System.out.println(result);
+		return Collections.singletonMap("result", result/2 > 0 ? "성공" : "취소");
+	}
 	
 	
 }
