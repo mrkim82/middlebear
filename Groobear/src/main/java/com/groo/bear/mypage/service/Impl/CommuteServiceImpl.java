@@ -109,6 +109,12 @@ public class CommuteServiceImpl implements CommuteService {
 	}
 
 
+	@Override
+	public List<CommuteVO> getAllMonth(Criteria cri, CommuteVO commuteVO, String monthDate) {
+		return commuteMapper.calAllWork(cri, monthDate, monthDate);
+	}
+
+
 
 
 
