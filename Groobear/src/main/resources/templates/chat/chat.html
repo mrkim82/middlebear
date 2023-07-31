@@ -59,6 +59,9 @@
 .chat_wrap .chat ul li.right {
 	text-align: right;
 }
+.chat_wrap .chat ul li.middle{
+	text-align : flex;
+}	
 
 .chat_wrap .chat ul li>div {
 	font-size: 13px;
@@ -189,7 +192,7 @@
 let myName = /*[[${name}]]*/ 'name';
 let senderName = /*[[${name}]]*/ 'name';
 let realId = /*[[${id}]]*/ 'id';
-let chatDTO = /*[[${chatDTO}]]*/ 'chatDTO'; // 추가된 코드
+let chatDTO = /*[[${chatDTO}]]*/ 'chatDTO';
 var roomNo = /*[[${roomNo}]]*/ 'roomNo';
 let chatMessageDTO = /*[[${chatDTO}]]*/ 'chatDTO';
 
@@ -201,7 +204,16 @@ $(document).ready(function() {
         if (chat.name == myName) {  // 추가된 코드
             chat.id = realId;
         }
-        const LR = (chat.id != realId) ? "left" : "right";
+        //const LR = (chat.id != realId) ? "left" : "right";
+        let LR; 
+        if (!chat.hasOwnProperty('id')) {
+        	LR = "middle";
+        } else if (chat.id === realId) {
+        	LR = "right";
+        } else {
+        	LR = "left";
+        }
+        
         appendMessageTag(LR, chat.name, chat.content, chat.msgTime);
     });
 });
@@ -289,7 +301,18 @@ function clearTextarea() {
 
 //  서버에서 들렸다가 온 메세지
 function receive(data) {
-    const LR = (data.id != realId) ? "left" : "right";
+    
+	let LR;
+	console.log(data.id + "data id 확인용");
+	console.log(realId + "realId 확인용");
+    if (!data.hasOwnProperty('id')) {
+    	LR = "middle";
+    } else if(data.id == realId) {
+        LR = "right";
+    } else {
+    	LR = "left";
+    }
+    console.log(LR + "얘 먼지 확인")
     console.log(data.msgTime + "시간 나오나?");
     appendMessageTag(LR, data.name, data.content, data.msgTime);  // 서버에서 받은 시간 데이터를 사용합니다.
 }
@@ -414,8 +437,10 @@ $('#createChatroom').on('click', function() {
         body: JSON.stringify(roomDTO),
     })
     .then(response => {
-        if (response.ok) {
-            console.log('Employees invited successfully');
+        console.log(response)
+    	if (response.ok) {
+            console.log(response.ok)
+    		console.log('Employees invited successfully');
             // Here you might want to do something to reflect that the employees were added
             // For example, you could close the modal
             $('#inviteModal').modal('hide');

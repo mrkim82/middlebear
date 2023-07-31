@@ -148,9 +148,12 @@ public class ChatController {
         ChatMessageDTO chatMessage = new ChatMessageDTO();
         chatMessage.setContent(id + "님이 채팅방에서 나갔습니다. (" + formattedTime + ")");
         chatMessage.setRoomNo(roomNo);
+        System.out.println(id + "님이 채팅방에서 나갔습니다. 테스트 (" + formattedTime + ")");
         // 메시지를 채팅방에 전송
+        System.out.println(chatMessage);                                                                                                                                                         
         messagingTemplate.convertAndSend("/topic/messages/" + roomNo, chatMessage);
         // 메시지를 데이터베이스에 저장
+        System.out.println(chatMessage);
         chatService.sendMessage(chatMessage);
 
         int isDeleted = chatService.deleteChatRoom(roomDTO); // chatService는 채팅방을 관리하는 서비스 객체입니다.
