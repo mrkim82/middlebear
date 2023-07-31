@@ -265,22 +265,10 @@
 					document.getElementById('mMT').textContent = cal;
 			        
 			        
-			        
-			        
-			        
-			        
-			        
-			        
 				})		
 				.catch(err => {
 					console.log(err);
 				})
-				
-				
-				
-				
-				
-				
 				
 				
 				
@@ -371,16 +359,18 @@
 			document.querySelector('#saveBtn').addEventListener('click',function(){
 				 let newWorkEnd = document.querySelector('#newWorkEnd').value;
 				 let newOverWorkEnd = document.querySelector('#newOverWorkEnd').value
+				 let newOverWorkStart = document.querySelector('#newOverWorkStart').value
 					 
 			
 				 let data = {
 						'id' : document.querySelector('#mId').value,
 						'workStart2' : document.querySelector('#mDate').value + ' ' +document.querySelector('#newWorkStart').value,
 						'workEnd2' : newWorkEnd !== '' ? document.querySelector('#mDate').value + ' ' +newWorkEnd : null,
-						'overWorkStart2' : document.querySelector('#mDate').value + ' ' +document.querySelector('#newOverWorkStart').value,
+						'overWorkStart2' : newOverWorkStart !== '' ? document.querySelector('#mDate').value + ' ' +newOverWorkStart : null,
 						'overWorkEnd2' : newOverWorkEnd !== '' ? document.querySelector('#mDate').value + ' ' +newOverWorkEnd : null,
  						'day2' : document.querySelector('#mDate').value
-					} 
+ 						
+				 } 
 						
 				 
 					fetch('/commuteUpdate', {
