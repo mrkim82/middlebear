@@ -13,8 +13,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     //configureMessageBroker() -> 메시지 브로커 옵션을 설정
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
-        config.setApplicationDestinationPrefixes("/app"); 
+        config.enableSimpleBroker("/topic", "/alarmMan");
+        config.setApplicationDestinationPrefixes("/app", "/alarmCondition"); 
         
         // 클라이언트는 "/app"으로 시작하는 주소로 메세지를 보낼 수 있고,
         // 서버는 "/topic" 으로 시작하는 주소를 구독하는 클라이언트에게 메세지를 전송할 수 있다.

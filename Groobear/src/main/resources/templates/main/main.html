@@ -7,7 +7,8 @@
 <title>Groobear</title>
 <script type="text/javascript"
    src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
-
+<script
+         src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 
 <style>
 	/* The switch - the box around the slider */
@@ -74,7 +75,7 @@
 	p {
    margin: 0px;
    display: inline-block;
-   font-size: 15px;
+   font-size: 20px;
    font-weight: bold;
 	}
 </style>
@@ -108,26 +109,26 @@
 				<fieldset style="width: 395px; height: 280px;margin:10px;border:1px solid black;">
 					<div class="row" style="width: 375px;margin:10px;margin-top:5px;">
 						<div style="text-align: center;">
-							<img src="../img/mail.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;"><br>
-							<a class="dohyeon" style="font-size:20px;">메일</a>
+							<img src="../img/mail.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/mail/receiveMail'"><br>
+							<a class="dohyeon" style="font-size:20px;" href="/mail/receiveMail">메일</a>
 						</div>
 						<div style="text-align: center;">
-							<img src="../img/calendar.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;"><br>
-							<a class="dohyeon" style="font-size:20px;">캘린더</a>
+							<img src="../img/calendar.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/perSch'"><br>
+							<a class="dohyeon" style="font-size:20px;" href="/perSch">캘린더</a>
 						</div>
 						<div style="text-align: center;">
-							<img src="../img/communication.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;"><br>
-							<a class="dohyeon" style="font-size:20px;">실시간대화</a>
+							<img src="../img/communication.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/roomList'"><br>
+							<a class="dohyeon" style="font-size:20px;" href="/roomList">실시간대화</a>
 						</div>
 					</div>
 					<div class="row" style="width: 375px;margin:10px;">
 						<div style="text-align: center;">
-							<img src="../img/document.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;"><br>
-							<a class="dohyeon" style="font-size:20px;">전자결재</a>
+							<img src="../img/document.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/pay/payMain'"><br>
+							<a class="dohyeon" style="font-size:20px;" href="/pay/payMain">전자결재</a>
 						</div>
 						<div style="text-align: center;">
-							<img src="../img/project.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;"><br>
-							<a class="dohyeon" style="font-size:20px;">프로젝트</a>
+							<img src="../img/project.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/proMain'"><br>
+							<a class="dohyeon" style="font-size:20px;" href="/proMain">프로젝트</a>
 						</div>
 						<div style="text-align: center;">
 							<img src="../img/people.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/empInfo'"><br>
@@ -148,12 +149,13 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="6" style="width: 1215px; height: 100px;">
-				<fieldset style="width: 1211px; height: 80px;margin-top:10px;margin-bottom:10px;border:1px solid black;">
-					<div class="row">
+			<td colspan="6" style="font-size:20px;width: 1215px; height: 80px;">
+				<fieldset class="dohyeon" style="width: 1211px;height: 60px;margin-top:10px;margin-bottom:10px;border:1px solid black;">
+					<div class="row" style="display: flex;">
 					   <!-- 출근/퇴근 스위치 -->
-						<div>
-							<label class="switch"> 
+						<div style="margin-right:70px;">
+							<a style="margin:10px;margin-left:50px;">근태현황 [ <span id="day23"></span> ]</a>
+							<label class="switch" style="margin:12px;"> 
 								<input class="chkBox" type="checkbox">
 								<span class="slider round cBtn"></span>
 							</label>
@@ -165,7 +167,7 @@
 						
 						<!-- 연장근무 시작/종료 스위치 -->
 						<div>
-							<label class="switch"> 
+							<label class="switch" style="margin:12px;"> 
 								<input class="chkBoxo" type="checkbox">
 								<span class="slider round cBtno"></span>
 							</label>
@@ -175,7 +177,6 @@
 							<span id="overWorkEnd">&nbsp&nbsp:&nbsp&nbsp</span>
 						
 						</div>
-						
 					</div>
 				</fieldset>
 			</td>
@@ -207,6 +208,38 @@
 
 
    <script>
+	// WebSocket 연결 설정
+   const alarmClient = new StompJs.Client({
+   brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+   });
+
+   // 페이지 로드시 웹소켓 연결
+   window.addEventListener("load", function(event) {
+      alarmClient.activate();
+   });
+
+     // 연결 성공시
+  alarmClient.onConnect = (frame) => {
+       console.log('Connected: ' + frame);
+       // 구독(댓글등록)      
+   alarmClient.subscribe('/alarmMan/almSend/' + '[[${session.Id}]]', (alarmMsg) => {
+	    almSendMsg(JSON.parse(alarmMsg.body));
+       });
+     };
+
+   //에러
+   alarmClient.onWebSocketError = (error) => {
+         console.error('Error with websocket', error);
+   };
+
+   alarmClient.onStompError = (frame) => {
+         console.error('Broker reported error: ' + frame.headers['message']);
+         console.error('Additional details: ' + frame.body);
+   };
+   function almSendMsg() {
+	   alert('알림이 전송되었습니다.');
+   }
+   
    getProfImg();
    function getProfImg() {
 	   $.ajax({
@@ -253,6 +286,7 @@
 	        document.querySelector('.endOverWork').textContent = data.overWorkEnd;
 	        updateSwitches(data);
 	       	
+			document.getElementById('day23').textContent = data.day.substr(0,10);
 	        
 		})		
 		.catch(err => {
@@ -484,10 +518,9 @@
 		
 		
 		
-		
-		
 		}
-	
+		
+		
 		
 		
 		

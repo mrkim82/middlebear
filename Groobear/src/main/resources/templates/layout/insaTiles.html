@@ -15,22 +15,14 @@
 	<link rel="stylesheet" href="/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style>
-		@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
 		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
-		
 		.dohyeon{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 			color:black;
 		}
-		
 		.dohyeonmenu{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
-			font-size : 20px;
-			color:white;
-		}
-		.nanumgothic{
-			font-family: 'Nanum Gothic', serif;/*웹 폰트 지정*/
-			font-weight : 300;
+			font-size : 25px;
 			color:white;
 		}
 		.rightPad{
@@ -76,27 +68,29 @@
 		}
 	</style>
   </head>
-  <body>
+  <body style="width:1215px;margin: 0 auto;">
   	<div>
     <header class="blog-header lh-1 py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
             <div class="col-4 pt-1">
 	    		<img src="" title="" style="width: 200px;">
 			</div>
-            
-            <div class="col-4 text-center">
-                <a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:40px; font-weight : 500;" href="/main">Groobear</a>
+			<div class="row">
+				<img style="margin-top:10px;width:45px;height:45px;" src="https://creazilla-store.fra1.digitaloceanspaces.com/emojis/52942/paw-prints-emoji-clipart-md.png">
+	            <div class="col-4 text-center">
+	                <a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:50px; font-weight : 500;" href="/main">Groobear</a>
+	            </div>
             </div>
             <div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px;">
-                <table style="width: 300px;">
+                <table style="width: 300px;text-align:right;margin-right:30px;">
                 	<tbody>
 	                	<tr>
-	                		<td>
+	                		<td style="font-size:20px;">
 	                			<a class="dohyeon">[[${session.Name }]]님 반갑습니다</a>
 	                		</td>
 	                	</tr>
 	                	<tr>
-	                		<td><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
+	                		<td style="font-size:20px;"><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
 	                		<span><a id="commute" class="dohyeon">마이페이지</a></span></td>
 	                	</tr>
                 	</tbody>
@@ -109,22 +103,22 @@
       <div class="collapse navbar-collapse" id="navbarColor01">
       
 	        <ul class="navbar-nav mr-auto" style="display:flex; margin:auto;">
-	          <li class="nav-item active rightPad">
+	          <li class="nav-item active rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/introduce">회사소개</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/mail/receiveMail">메일</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/proMain">프로젝트</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/pay/payMain">전자결재</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/boardList?boardType=N">게시판</a>
 	          </li>
-	          <li class="nav-item">
+	          <li class="nav-item" style="padding:0px;">
 	            <a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
 	          </li>
 	        </ul>
