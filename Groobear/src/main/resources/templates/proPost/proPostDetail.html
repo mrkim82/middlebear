@@ -652,6 +652,7 @@ function drawChart() {
 								<div class="card-header" th:text="'업무 : ' + ${allPost.postTitle}">
 									<!-- 글 제목 -->
 								</div>
+								<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 								<div class="workFeedPostStatus"
 									 th:attr="data-feed-work-type=${allPost.workStatus}"
 									 style="text-align: center;">
@@ -813,6 +814,7 @@ function drawChart() {
 								<div class="card-header" th:text="'글 : ' + ${allPost.postTitle}">
 									<!-- 글 제목 -->
 								</div>
+								<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 								<div class="card-body">
 									<p th:text="${allPost.writingContent}">
 										<!-- 게시글 내용이 여기에 들어갑니다. -->
@@ -884,6 +886,7 @@ function drawChart() {
 							 th:text="'일정 : ' + ${allPost.postTitle}">
 							<!-- 글 제목 -->
 						</div>
+						 <a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 						<ul>
 							<li th:if="${allPost.schStartTime != null}"
 								 th:text="'시작일 : ' + ${#dates.format(allPost.schStartTime, 'yyyy-MM-dd HH:mm')}"
@@ -1061,6 +1064,7 @@ function drawChart() {
 						<div class="card-header" th:text="'할 일 : ' + ${allPost.postTitle}">
 							<!-- 글 제목 -->
 						</div>
+						<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 						<div class="card-body">
 							<!-- 진척도 바 -->
 							<div>
@@ -1155,9 +1159,9 @@ function drawChart() {
 					    </div>
 					    	<div class="card-header"
 					    		 th:text="'투표 : ' + ${allPost.postTitle}">
-					    
 								<!-- 글 제목 -->
 							</div>
+						<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 						<div class="card-body">
 							<!-- 투표 설명 -->
 							<ul>
