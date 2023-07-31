@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.groo.bear.emp.service.EmpVO;
 import com.groo.bear.files.domain.FilesVO;
+import com.groo.bear.pro.service.ProFileVO;
 
 public interface FilesMapper {
 	//첨부파일 추가
@@ -55,10 +56,13 @@ public interface FilesMapper {
 	public int deleteMailFile(int mailNo);
 	
 	//프로젝트
-	// 프로젝트 파일 조회
-	public List<FilesVO> readProFile(int proFileNo);
+	// 프로젝트 파일관리 테이블 추가
+	public int createProFileMan(ProFileVO vo);
+	// 프로젝트 파일 조회(게시물)
+	public List<ProFileVO> readProFilePost(int proNo);
+	// 파일 업로드(최종)
+	public int createProFile(ProFileVO vo);
+	
 	// 프로젝트 파일 제거
 	public int deleteProFile(int proFileNo);
-	// 프로젝트 파일 등록
-	public int createProFile(FilesVO vo);
 }

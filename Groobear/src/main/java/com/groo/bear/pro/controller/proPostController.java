@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,10 +21,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.comm.DateUtil;
 import com.groo.bear.files.domain.FilesVO;
+import com.groo.bear.pro.service.ProFileVO;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostTaskService;
@@ -321,14 +326,19 @@ public class proPostController {
 	//파일 등록
 	@PostMapping("proFileInsert")
 	@ResponseBody
-	public Map<String, Object> 파일추가(@RequestBody FilesVO vo) {
+	public Map<String, Object> 파일추가(@RequestBody List<ProFileVO> vo) {
 		int result = proPostService.createProFile(vo);
-		System.out.println(vo);
 		
 		return Collections.singletonMap("result", result);
 	}
 	
-	
+	//업무 파일조회
+	@GetMapping(value ="/getWorkAttach", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<ProFileVO>> 업무파일조회(@RequestParam int proNo) {
+		log.info("getAttachList" + proNo);
+		return new ResponseEntity<>(proPostService.getWorkAttach(proNo), HttpStatus.OK);
+	}
 	
 	
 	

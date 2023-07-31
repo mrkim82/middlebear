@@ -2,7 +2,6 @@ package com.groo.bear.pro.service;
 
 import java.util.List;
 
-import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
 import com.groo.bear.pro.service.postvo.ProInviteMailVO;
 import com.groo.bear.pro.service.postvo.ProPartiListVO;
@@ -76,9 +75,13 @@ public interface ProPostService {
 	
 	//프로젝트
 	// 프로젝트 파일 조회
-	public List<FilesVO> readProFile(int proFileNo);
+	public List<ProFileVO> readProFile(int proFileNo);
 	// 프로젝트 파일 제거
 	public int deleteProFile(int proFileNo);
 	// 프로젝트 파일 등록
-	public int createProFile(FilesVO vo);
+	public int createProFile(List<ProFileVO> vo);
+	
+	//첨부파일 조회
+	public List<ProFileVO> getWorkAttach(int proNo);
+	
 }

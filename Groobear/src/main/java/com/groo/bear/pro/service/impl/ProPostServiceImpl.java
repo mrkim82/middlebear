@@ -6,10 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.files.mapper.FilesMapper;
-import com.groo.bear.payment.mapper.PaymentMapper;
 import com.groo.bear.pro.mapper.ProPostMapper;
+import com.groo.bear.pro.service.ProFileVO;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
 import com.groo.bear.pro.service.postvo.ProInviteMailVO;
@@ -178,8 +177,8 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public List<FilesVO> readProFile(int proFileNo) {
-		return file.readProFile(proFileNo);
+	public List<ProFileVO> readProFile(int proFileNo) {
+		return file.readProFilePost(proFileNo);
 	}
 
 	@Override
@@ -188,8 +187,25 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public int createProFile(FilesVO vo) {
-		return file.createProFile(vo);
+	public int createProFile(List<ProFileVO> vo) {
+		int count = 0;
+		//pro_file용 마지막 pro_post_no 번호 조회
+		int lastPostNo = ppm.readProPostNo();
+		
+		for (ProFileVO proFileVO : vo) {
+			proFileVO.setProPostNo(lastPostNo);
+			
+			file.createProFileMan(proFileVO);//pro_file insert
+			file.createProFile(proFileVO);//files insert
+			count++;
+		}
+		
+		return count;
+	}
+
+	@Override
+	public List<ProFileVO> getWorkAttach(int proNo) {
+		return file.readProFilePost(proNo);
 	}
 
 }
