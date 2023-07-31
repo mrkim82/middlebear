@@ -160,7 +160,7 @@ public class ProPostServiceImpl implements ProPostService {
 
 	@Override
 	public int deletePro(int proNo) {
-		return ppm.deletePro(proNo);
+		return ppm.deletePro(proNo);   
 	}
 
 

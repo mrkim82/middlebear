@@ -62,7 +62,7 @@ public interface ProPostMapper {
 	public int updateProPostTitle(String postTitle, int proPostNo);
 	// 글 내용변경
 	public int updateProWriting(ProWritingUVO vo);
-	
+	  
 	//프로젝트 내 검색
 	public List<ProDetailSearchVO> readProInSearch(ProDetailSearchVO vo);
 	
@@ -72,5 +72,5 @@ public interface ProPostMapper {
 	public int createInviteMail(ProInviteMailVO vo);
 	
 	//프로젝트 삭제
-	public int deletePro(int proNo);
+	public int deletePro(int proNo);   
 }
