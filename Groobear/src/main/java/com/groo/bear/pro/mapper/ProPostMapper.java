@@ -3,6 +3,8 @@ package com.groo.bear.pro.mapper;
 import java.util.List;
 
 import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
+import com.groo.bear.pro.service.postvo.ProInviteMailVO;
+import com.groo.bear.pro.service.postvo.ProPartiListVO;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostFeedVO;
@@ -63,4 +65,12 @@ public interface ProPostMapper {
 	
 	//프로젝트 내 검색
 	public List<ProDetailSearchVO> readProInSearch(ProDetailSearchVO vo);
+	
+	//프로젝트 초대 리스트
+	public List<ProPartiListVO> readPartiListM(int proNo);
+	//프로젝트 초대
+	public int createInviteMail(ProInviteMailVO vo);
+	
+	//프로젝트 삭제
+	public int deletePro(int proNo);
 }

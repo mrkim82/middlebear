@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.PublicCodeService;
 import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
+import com.groo.bear.pro.service.postvo.ProInviteMailVO;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostUserVO;
@@ -88,6 +90,7 @@ public class proPostController {
 		model.addAttribute("beforeOneDay" , DateUtil.beforeOneDay());//하루전
 		model.addAttribute("afterOneDay" , DateUtil.afterOneDay());//하루뒤
 		model.addAttribute("readProAuth", proService.readProAuth(proNo));//권한 및 프로젝트 마스터 조회
+		model.addAttribute("readPartiListM", proPostService.readPartiListM(proNo));//프로젝트 초대 할 인원
 		
 		//System.out.println("게시글"+model.getAttribute("projectPartiMember"));
 		switch (homeTab) {
@@ -296,6 +299,23 @@ public class proPostController {
 		model.addAttribute("readProInSearch", proPostService.readProInSearch(vo));//검색 내용
 		
 		return "proPost/proPostSearch";
+	}
+	
+	//초대 메일 발송
+	@PostMapping("inviteMail")
+	@ResponseBody
+	public Map<String, Object> inviteMail(HttpServletRequest request, @RequestBody List<ProInviteMailVO> vo) {
+		int result = proPostService.createInviteMail(vo);
+		return Collections.singletonMap("result", result);
+	}
+	
+	//프로젝트 삭제
+	@DeleteMapping("delPro")
+	@ResponseBody
+	public Map<String, Object> deletePro(@RequestBody int proNo) {
+		System.out.println(proNo);
+		int result = proPostService.deletePro(proNo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 }

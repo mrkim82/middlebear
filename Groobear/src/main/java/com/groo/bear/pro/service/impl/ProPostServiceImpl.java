@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.pro.mapper.ProPostMapper;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
+import com.groo.bear.pro.service.postvo.ProInviteMailVO;
+import com.groo.bear.pro.service.postvo.ProPartiListVO;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostFeedVO;
@@ -139,6 +141,26 @@ public class ProPostServiceImpl implements ProPostService {
 	@Override
 	public List<ProDetailSearchVO> readProInSearch(ProDetailSearchVO vo) {
 		return ppm.readProInSearch(vo);
+	}
+
+	@Override
+	public List<ProPartiListVO> readPartiListM(int proNo) {
+		return ppm.readPartiListM(proNo);
+	}
+
+	@Override
+	public int createInviteMail(List<ProInviteMailVO> vo) {
+		int result = 0;
+		for (ProInviteMailVO dvo : vo) {
+			ppm.createInviteMail(dvo);
+			result++;
+		}
+		return result;
+	}
+
+	@Override
+	public int deletePro(int proNo) {
+		return ppm.deletePro(proNo);
 	}
 
 
