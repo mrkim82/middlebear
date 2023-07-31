@@ -18,7 +18,8 @@
 						c.car_no,
 						u.phone,
 						c.car_date,
-						c.car_type
+						c.car_type,
+						u.id
 				from users u,
 						departments d,
 						user_info ui,

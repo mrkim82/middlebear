@@ -216,22 +216,6 @@
 		</if>
 			) commute
 	</select>	
-	<!-- 달별조회 전 -->
-	<select id="calAllWork" resultType="CommuteVO">
-		SELECT id,NVL(COUNT(commute.day), 0) AS count, NVL(SUM(commute.over_work_time), 0) AS over
-			FROM (
-  				SELECT day, over_work_time,id
-  				FROM commute
-    			where work_end IS NOT NULL
-    	<if test="monthDate == null">
-       	 	and TO_CHAR(day,'yyyy-MM') = TO_CHAR(sysdate, 'yyyy-MM') 
-		</if>
-		<if test="monthDate != null">
-       	 	and TO_CHAR(day,'yyyy-MM') = #{monthDate}
-		</if>
-			) commute 
-			group by id
-	</select>
 	
 	<!-- 결근일수 -->
 	<select id="calNoWork" resultType="CommuteVO">
