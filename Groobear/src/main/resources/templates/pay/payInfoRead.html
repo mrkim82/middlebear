@@ -90,7 +90,9 @@
 	            <tr>
 	               <td>[[${drafterInfo.name}]] [[${drafterInfo.rank}]]</td>
 	               <td>[[${approver2Info.name}]] [[${approver2Info.rank}]]</td>
-	               <td>[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
+	               <th:block th:if="${not #strings.isEmpty(approver3Info)}">
+	               		<td>[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
+	               </th:block>
 	            </tr>
 			</tbody>
 		</table>
@@ -142,7 +144,7 @@
 	                    	</div>
 	                    </td></tr>
 				<tr>
-					<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+					<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:value="${list.com}"></textarea></td>
 				</tr>
 				</th:block>
 				<th:block th:if="${list.docType=='b'}">
@@ -182,7 +184,7 @@
 					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 				</tr>
 				</th:block>
-				<th:block th:if="${list.docType == 'c'}">
+				<th:block th:if="${list.docType=='c'}">
 				<tr>
 					<td style="display:none" id="robindocType" th:value="${list.docType}" readonly></td>
 				</tr>
@@ -319,6 +321,13 @@
 		}
 		function payOks(){
 			console.log('결재통과');
+			if(masterDocType=='a'){
+				com = document.getElementById('logCom').value;
+			}else if(masterDocType=='b'){
+				com = document.getElementById('offCom').value;
+			}else{
+				com = document.getElementById('robinCom').value;
+			}
 			if(approver2 === userId){
 				console.log('이전payStatus2',payStatus2);
 				payStatus2 = 'Y';
@@ -352,7 +361,7 @@
 						approver3 : approver3,
 						payStatus2 : payStatus2,
 						payStatus3 : payStatus3,
-						com : com
+						com : '[[${session.Name}]] ' + ' : ' +com 
 	  			    }),
 	  			    async : false,
 	  			  	success: function(data) {
@@ -391,6 +400,13 @@
 		}
 		function payPassed(){
 			console.log('결재반려');	
+			if(masterDocType=='a'){
+				com = document.getElementById('logCom').value;
+			}else if(masterDocType=='b'){
+				com = document.getElementById('offCom').value;
+			}else{
+				com = document.getElementById('robinCom').value;
+			}
 			if(approver2 === userId){
 				console.log('이전payStatus2',payStatus2);
 				payStatus2 = 'F';

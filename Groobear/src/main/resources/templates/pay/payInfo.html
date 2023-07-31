@@ -90,7 +90,9 @@
 	            <tr>
 	               <td>[[${drafterInfo.name}]] [[${drafterInfo.rank}]]</td>
 	               <td>[[${approver2Info.name}]] [[${approver2Info.rank}]]</td>
-	               <td>[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
+	               <th:block th:if="${not #strings.isEmpty(approver3Info)}">
+	               		<td>[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
+	               </th:block>
 	            </tr>
 			</tbody>
 		</table>
