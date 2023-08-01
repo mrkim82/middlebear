@@ -202,9 +202,8 @@ function toastActChat() {
             .then(employees => {
                 const employeeListUl = document.getElementById('employeeList');
                 employees.forEach(employee => {
-                	console.log(employee)
                     const li = document.createElement('li');
-
+					const label = document.createElement('label');
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
                     checkbox.id = 'employee-' + employee.id;
@@ -224,14 +223,22 @@ function toastActChat() {
 
                     const empDept = document.createElement('span');
                     empDept.textContent = employee.deptName;
-
-                    li.appendChild(checkbox);
+                    
+                    label.appendChild(checkbox);
+                    label.appendChild(empNo);
+                    label.appendChild(empId);
+                    label.appendChild(empName);
+                    label.appendChild(empRank);
+                    label.appendChild(empDept);
+                    
+                    /* li.appendChild(checkbox);
                     li.appendChild(empNo);
                     li.appendChild(empId);
                     li.appendChild(empName);
                     li.appendChild(empRank);
-                    li.appendChild(empDept);
+                    li.appendChild(empDept); */
                     
+                    li.appendChild(label);
                     employeeListUl.appendChild(li);
                 });
             })
@@ -279,34 +286,24 @@ window.onload = function() {
 document.getElementById('createChatroom').addEventListener('click', () => {
     const chatroomName = document.getElementById('chatroomName').value;
     const employeeIds = Array.from(document.querySelectorAll('#employeeList input:checked')).map(checkbox => checkbox.value);
-    
+    console.log(employeeIds)
+    console.log(employeeIds.length)
  // 방 제목이 없는 경우 모달창 띄우기
-    if (!chatroomName) {
+    if (!chatroomName || employeeIds.length === 0) {
         // 기존 채팅방 생성 모달 닫기
         $('#myModal').modal('hide');
         $('#alertModalLabel').text('Error');
-        $('.modal-body').text('채팅방 제목을 작성해주세요.');
+        $('.modal-body').html('채팅방 제목을 작성하셨는지 확인해주세요.<br>혹은 멤버를 선택하지 않았는지 확인해주세요.');
         $('#alertModal').modal('show');
+        $('#alertModalClose').on('click', function (e) {
+        	window.location.href = window.location.href;
+        }); 
         return;
     }
     
-    // 체크박스가 선택되지 않은 경우 모달창 띄우기
-    if (employeeIds.length === 0) {
-        // 기존 채팅방 생성 모달 닫기
-        $('#myModal').modal('hide');
-        $('#alertModalLabel').text('Error');
-        $('.modal-body').text('적어도 한 명의 사원을 선택해주세요.');
-        $('#alertModal').modal('show');
-        return;
-    }
-    $('#alertModalClose').on('hidden.bs.modal', function (e) {
-    	window.location.href = window.location.href;
-    });
     if (chatroomName) {
         const newChatroom = {
             roomName: chatroomName, 
-            //lastMessage: 'No messages yet!', 
-            //newMessages: 0,
             employeeIds: employeeIds,
         };
         fetch('/newChatroom', {

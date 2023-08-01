@@ -41,6 +41,7 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
     
+    //메세지 전체조회
     @GetMapping("/chat/{roomNo}")
     public String rooms(HttpSession session, @PathVariable Integer roomNo, Model model, ChatMessageDTO chatDTO) {
         String name = (String)session.getAttribute("Name");
@@ -54,7 +55,7 @@ public class ChatController {
 
         return "chat/chat";
     }
-
+    //메세지 받고 주기
     @MessageMapping("/chat/{roomNo}") 
     public void send(ChatMessageDTO chatMessage, @DestinationVariable int roomNo) {
         try {

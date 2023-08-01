@@ -4,6 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="com.groo.bear.chat.mapper.ChatMapper">
   	
+  	<!-- 한 유저가 가지는 채팅방 전체조회 -->
   	<select id="chatRoomList" resultType="RoomDTO">
   		select r.room_no, r.room_time, r.room_name, a.id
         from room r join (select u.id, m.room_no
@@ -14,6 +15,7 @@
         where a.id = #{id}
   	</select>
   	
+  	<!-- 채팅방 생성 -->
   	<insert id="createChatRoom" parameterType="RoomDTO">
   		<selectKey keyProperty="roomNo" order="BEFORE" resultType="int">
 		    SELECT ROOM_SEQ.NEXTVAL FROM DUAL
@@ -32,12 +34,14 @@
   				  		 )
   	</insert>
   	
+  	
   	<delete id="deleteChatRoom" parameterType="RoomDTO">
   		DELETE FROM ROOM_mem
   		WHERE ROOM_NO = #{roomNo}
   		AND id = #{id}
   	</delete>
   	
+  	<!--  -->
     <select id="getMessagesForRoom" resultType="ChatMessageDTO">
 	    SELECT msg_no, room_no, id, content, TO_CHAR(msg_time, 'YYYY-MM-DD HH24:MI:SS') AS msg_time 
 	    FROM Message
@@ -48,12 +52,26 @@
     
   	<!-- 메세지전체조회 -->
   	<select id="MessageAllList" parameterType="int">
-  		select i.name, m.content, TO_CHAR(m.msg_time, 'YY"년" MM"월" DD"일" HH24"시" MI"분"') AS msg_time
-		from message m, users u, user_info i
-		where m.id = u.id
-		AND u.emp_no = i.emp_no
-		AND room_no = #{roomNo}
-		order By msg_no asc
+  		WITH latest_room_mem AS (
+    SELECT id, room_no, mem_time,
+        ROW_NUMBER() OVER(PARTITION BY id, room_no ORDER BY mem_time DESC) as rn
+    FROM room_mem
+)
+SELECT a.id, a.room_no, a.msg_no, a.content, a.msg_time, a.room_name
+FROM (
+    SELECT m.room_no, m.msg_no, m.content, rm.id, m.msg_time, r.room_name
+    FROM message m 
+    JOIN room r ON m.room_no = r.room_no
+    JOIN latest_room_mem rm ON m.room_no = rm.room_no AND m.id = rm.id
+    WHERE rm.rn = 1
+) a 
+WHERE a.msg_time > (
+    SELECT mem_time 
+    FROM latest_room_mem 
+    WHERE id = a.id AND room_no = a.room_no AND rn = 1
+)
+AND a.room_no = #{roomNo}
+
   	</select>
   	
   	<insert id="sendMessage" parameterType="ChatMessageDTO">

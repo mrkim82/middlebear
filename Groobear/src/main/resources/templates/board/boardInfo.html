@@ -14,6 +14,10 @@
 
 <title>게시글 단건조회</title>
 <style>
+input {
+  border: none;
+  outline: none;
+}
 	.uploadResult {
 		width : 100%;
 		background-color : gray;
@@ -74,18 +78,18 @@
 			<thead>
 			<tr>
 				<td>제목:</td>
-				<td><input type="text" th:value="${board.title}" readonly /></td>
+				<td><input class="input" type="text" th:value="${board.title}" readonly /></td>
 			</tr>
 			<tr>
 				<td>작성일:</td>
-				<td><input
+				<td><input class="input"
 					th:value="${#dates.format(board.insertDate, 'yyyy.MM.dd')}"
 					readonly />
 				</td>
 				</tr>
 				<tr>
 					<td>작성자:</td>
-					<td><input type="text" th:value="${board.name}" readonly /></td>
+					<td><input class="input" type="text" th:value="${board.name}" readonly /></td>
 				</tr>
 				<tr>
 					<td>첨부파일</td>
@@ -291,8 +295,6 @@
 		  });
 		  function showImage(fileCallPath){
 			    
-		    alert(fileCallPath);
-		    
 		    $(".bigPictureWrapper").css("display","flex").show();
 		    
 		    $(".bigPicture")
