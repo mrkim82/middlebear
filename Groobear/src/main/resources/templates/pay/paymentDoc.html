@@ -376,7 +376,13 @@
 	  			    success: function(data) {
 	  			    	console.log(data);
 	  			    	location.href="/pay/payMain";
-	  			    	//알림2
+	  			    	//알림2 payUserList1(2번 결재자)
+	  			    	alarmClient.publish({
+				            destination: "/alarmCondition/payAlm/"+payUserList1,
+				            body: JSON.stringify({
+				               'id' : payUserList1
+				            })
+				      	});
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
@@ -487,8 +493,14 @@
 	  			    async : false,
 	  			    success: function(data) {
 	  			    	console.log(data);
-	  			    	//알림3
 	  			    	location.href="/pay/payMain";
+	  			    	//알림3 payUserList1(결재자2번)
+	  			    	alarmClient.publish({
+				            destination: "/alarmCondition/payAlm/"+payUserList1,
+				            body: JSON.stringify({
+				               'id' : payUserList1
+				            })
+				      	});
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
@@ -580,8 +592,14 @@
 	  			    async : false,
 	  			    success: function(data) {
 	  			    	console.log(data);
-	  			    	// 알림4
 	  			    	location.href="/pay/payMain";
+	  			   		// 알림4 payUserList1(결재자 2번)
+	  			    	alarmClient.publish({
+				            destination: "/alarmCondition/payAlm/"+payUserList1,
+				            body: JSON.stringify({
+				               'id' : payUserList1
+				            })
+				      	});
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
