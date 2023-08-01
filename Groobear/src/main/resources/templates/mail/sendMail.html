@@ -99,6 +99,8 @@
 				    }	
 			});
 		}
+		console.log('2222'+receiver);
+		console.log('3332222'+referrer);
 		$.ajax({
 			url: "/sendMail",
 			    method: "POST",
@@ -113,6 +115,7 @@
 			    }),
 			    success: function(data) {
 			    	location.href="/mail/sendingMail"
+			    	// 알림1
 			    },
 			    error: function(err) {
 				console.log(err);

@@ -16,12 +16,6 @@ public class AlarmController {
 	@Autowired
 	   SimpMessagingTemplate messagingTemplate;
 	
-	// 댓글 등록 알림
-   @MessageMapping("/almSend/{id}")
-   public void arm(AlarmVO vo, @DestinationVariable String id) throws Exception {
-      messagingTemplate.convertAndSend("/alarmMan/almSend/" + id, vo);
-   }
-   
    @MessageMapping("/proAlm/{id}")
    public void proAlm(AlarmVO vo, @DestinationVariable String id) throws Exception {
       messagingTemplate.convertAndSend("/alarmMan/proAlm/" + id, vo);
@@ -41,5 +35,5 @@ public class AlarmController {
    public void chatAlm(AlarmVO vo, @DestinationVariable String id) throws Exception {
       messagingTemplate.convertAndSend("/alarmMan/chatAlm/" + id, vo);
    }
-	
+
 }
