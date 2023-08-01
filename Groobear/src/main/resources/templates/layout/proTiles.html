@@ -100,6 +100,50 @@ details {
 	transition: 0.3s;
 }
 
+.square {
+	width: 40px;
+	height: 40px;
+	background-color: #000;
+	border-radius: 10px;
+}
+.star {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  display: inline-block;
+}
+
+.star:before {
+  content: '\2605';
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.gray:before {
+  color: gray;
+}
+
+.yellow:before {
+  color: yellow;
+}
+
+#YesStar td, #NoStar td{
+	width: 70px;
+	height: 70px;
+	margin: 10px;
+	padding: 5px;
+  	text-align:center;
+  	vertical-align: middle;
+}
+
+#YesStar td:nth-child(3), #NoStar td:nth-child(3) {
+  text-align: left;
+}
+
+details ul {
+	padding: 0px;
+}
 </style>
 
 </head>
@@ -274,7 +318,7 @@ document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate
 </script>
 
 <!-- 사이드바 -->
-<div class="row">
+<div class="row dohyeon" >
 	<nav id="sidebar"
 		 class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
 		<div class="position-sticky">
@@ -752,6 +796,8 @@ document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate
 		document.body.appendChild(modal4);
 	}
 </script>
+
+<!-- 즐겨찾기 변경 -->
 
 <!-- 태그 종료내용 종료 -->
 </div>
