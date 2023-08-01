@@ -31,6 +31,11 @@ public class AlarmController {
       messagingTemplate.convertAndSend("/alarmMan/payAlm/" + id, vo);
    }
    
+   @MessageMapping("/payComAlm/{id}")
+   public void payComAlm(AlarmVO vo, @DestinationVariable String id) throws Exception {
+      messagingTemplate.convertAndSend("/alarmMan/payComAlm/" + id, vo);
+   }
+   
    @MessageMapping("/chatAlm/{id}")
    public void chatAlm(AlarmVO vo, @DestinationVariable String id) throws Exception {
       messagingTemplate.convertAndSend("/alarmMan/chatAlm/" + id, vo);

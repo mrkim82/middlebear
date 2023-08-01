@@ -142,7 +142,18 @@
 		alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
 		    almSendMsgChat(JSON.parse(alarmMsg.body));
 	    });
-	    
+		// 메일 수신 구독
+		alarmClient.subscribe('/alarmMan/mailAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+		    almSendMsgMail(JSON.parse(alarmMsg.body));
+	    });
+		// 결재대상자 수신 구독
+		alarmClient.subscribe('/alarmMan/payAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+		    almSendMsgPay(JSON.parse(alarmMsg.body));
+	    });
+		// 결재대상자 수신 구독
+		alarmClient.subscribe('/alarmMan/payComAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+		    almSendMsgPayCom(JSON.parse(alarmMsg.body));
+	    });
 	 };
 
 	//에러
@@ -160,6 +171,15 @@
 	function almSendMsgChat() {
 		   toastActChat()	
 	}
+	function almSendMsgMail() {
+		   toastActMail()	
+	}
+	function almSendMsgPay() {
+		   toastActPay()	
+	}
+	function almSendMsgPayCom() {
+		   toastActPayCom()	
+	}
 	
 	function toastAct() {
 		  toastr.options.escapeHtml = true;
@@ -171,7 +191,7 @@
 	      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
 	      toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
 	}
-	
+
 	function toastActChat() {
 		  toastr.options.escapeHtml = true;
 	      toastr.options.closeButton = true;
@@ -181,6 +201,39 @@
 	      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
 	      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
 	      toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
+	}
+
+	function toastActMail() {
+		  toastr.options.escapeHtml = true;
+	    toastr.options.closeButton = true;
+	    toastr.options.newestOnTop = false;
+	    toastr.options.progressBar = true;
+	    toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+	    toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+	    toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+	    toastr.info('새로운 메일이 도착하였습니다.', '메일 알림', {timeOut: 5000});
+	}
+	
+	function toastActPay() {
+		  toastr.options.escapeHtml = true;
+	    toastr.options.closeButton = true;
+	    toastr.options.newestOnTop = false;
+	    toastr.options.progressBar = true;
+	    toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+	    toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+	    toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+	    toastr.info('결재 진행할 전자문서가 도착하였습니다.', '전자결재 알림', {timeOut: 5000});
+	}
+	
+	function toastActPayCom() {
+		  toastr.options.escapeHtml = true;
+	    toastr.options.closeButton = true;
+	    toastr.options.newestOnTop = false;
+	    toastr.options.progressBar = true;
+	    toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+	    toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+	    toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+	    toastr.info('결재 진행이 완료된 전자문서가 있습니다.', '전자결재 알림', {timeOut: 5000});
 	}
 	
 	var today = new Date();

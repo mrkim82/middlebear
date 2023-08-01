@@ -347,6 +347,39 @@
 				
 				//도현이형 offtable에 데이터 넣기
 			}
+			if(approver2 === userId && approver3 === ""){
+	            console.log("approver2는 있고 approver3은 공백임");
+	            $.ajax({
+	               url:"/paymentReject",
+	               method: "POST",
+	                  contentType:"application/json; charset=utf-8",
+	                  data: JSON.stringify({
+	                     payNo : payNo,
+	                  docType : masterDocType,
+	                  id : drafter,
+	                  approver2 : approver2,
+	                  approver3 : approver3,
+	                  payStatus2 : payStatus2,
+	                  payStatus3 : payStatus3,
+	                  com : '[[${session.Name}]] ' + ' : ' +com 
+	                  }),
+	                  async : false,
+	                   success: function(data) {
+	                     console.log(data);
+	                     //location.href="/pay/InProgressPay";
+	                     //알림 결재자2가 마지막 결재인 경우 (기안자 : drafter)
+	                     alarmClient.publish({
+				            destination: "/alarmCondition/payComAlm/"+drafter,
+				            body: JSON.stringify({
+				               'id' : drafter
+			            	})
+	                     });
+	                  },
+	                  error: function(err) {
+	                  console.log(err);
+	                  }
+	            });
+	         }
 			// 여기부분에 if조건으로 sessionid가 approver2면 해당아작스 approver3면 아작스 추가해서 알림빼놓기
 			if(approver2 == userId){
 				$.ajax({
@@ -365,8 +398,17 @@
 	  			    }),
 	  			    async : false,
 	  			  	success: function(data) {
+	  			  		console.log('111'+approver3)
 	  			    	console.log(data);
-	  			    	location.href="/pay/InProgressPay";
+	  			  		console.log('222');
+	  			    	//location.href="/pay/InProgressPay";
+	  			    	//알림5 결재자2 결재 진행 시 approver3
+	  			  		alarmClient.publish({
+				            destination: "/alarmCondition/payAlm/"+approver3,
+				            body: JSON.stringify({
+				               'id' : approver3
+				            })
+				      	});
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
@@ -391,6 +433,13 @@
 	  			  	success: function(data) {
 	  			    	console.log(data);
 	  			    	location.href="/pay/InProgressPay";
+	  			    	//알림 결재자3가 마지막 결재인 경우 (기안자 : drafter)
+	  			    	 alarmClient.publish({
+				            destination: "/alarmCondition/payComAlm/"+drafter,
+				            body: JSON.stringify({
+				               'id' : drafter
+			            	})
+	                     });
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
@@ -435,6 +484,13 @@
 	  			  	success: function(data) {
 	  			    	console.log(data);
 	  			    	location.href="/pay/InProgressPay";
+	  			    	//알림 결재자2가 반려한 경우 (기안자 : drafter)
+	  			    	 alarmClient.publish({
+				            destination: "/alarmCondition/payComAlm/"+drafter,
+				            body: JSON.stringify({
+				               'id' : drafter
+			            	})
+	                     });
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
@@ -459,6 +515,13 @@
 	  			  	success: function(data) {
 	  			    	console.log(data);
 	  			    	location.href="/pay/InProgressPay";
+	  			    	//알림 결재자3이 반려인 경우 (기안자 : drafter)
+	  			    	 alarmClient.publish({
+				            destination: "/alarmCondition/payComAlm/"+drafter,
+				            body: JSON.stringify({
+				               'id' : drafter
+			            	})
+	                     });
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
