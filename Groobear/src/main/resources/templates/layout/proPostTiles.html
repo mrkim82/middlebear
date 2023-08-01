@@ -1028,6 +1028,43 @@ function delPro() {
 }
 </script>
 
+<!-- 초대하기 -->
+<script>
+function inviteMail() {
+	let inputs = inviteMember.querySelectorAll('input[type="checkbox"]:checked');
+	let idArr = [];
+	
+	//체크된 체크박스의 정보 가져오기(초대받을 사람의 정보)
+	inputs.forEach(inputv=> {
+		let viteObj = {
+			'proNo' : projectNo,
+			'id' : inputv.dataset.partiMember
+		};
+		idArr.push(viteObj);
+	});
+	
+	//체크값 확인
+	if(idArr.length == 0) {
+		alert('체크된 값이 없습니다.')
+		return false;
+	}
+	
+	fetch("/inviteMail", {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(idArr)
+	})
+	.then(response => response.json())
+	.then(res => {
+		alert(res.result + '건 초대')
+		$('#inviteMember').modal('hide');//모달창 닫기
+		//모달 안의 값 초기화 시켜보기
+	});
+};
+</script>
+
 <!-- 파일 업로드 -->
 <script type="text/javascript">
 //업로드 1번
