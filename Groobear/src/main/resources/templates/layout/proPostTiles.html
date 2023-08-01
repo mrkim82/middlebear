@@ -1007,7 +1007,6 @@ proInSearch.addEventListener('keyup', function(event) {
     
 <!-- 초대하기 -->
 <script>
-<<<<<<< HEAD
 //WebSocket 연결 설정
 const alarmClient = new StompJs.Client({
 brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
@@ -1107,7 +1106,6 @@ function toastActChat() {
 			alert(res.result + '건 초대')
 			$('#inviteMember').modal('hide');//모달창 닫기
 		});
-=======
 function inviteMail() {
 	let inputs = inviteMember.querySelectorAll('input[type="checkbox"]:checked');
 	let idArr = [];
@@ -1125,7 +1123,6 @@ function inviteMail() {
 	if(idArr.length == 0) {
 		alert('체크된 값이 없습니다.')
 		return false;
->>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
 	}
 	
 	fetch("/inviteMail", {
