@@ -218,24 +218,12 @@ public class ProController {
 	}
 	
 	//프로젝트 즐겨찾기 업데이트
-	@PostMapping("proUpdate")
+	@PostMapping("proStarUpdate")
 	@ResponseBody
 	public Map<String, Object> starCheck(@RequestParam("pMN") int pMN, @RequestParam("starC") String starC) {
-		String res;
-		Map <String, Object> map = new HashMap<>();
+		int result = proService.updateStar(starC, pMN);
 		
-		if(starC.equals("N")) {
-			//프로젝트 즐겨찾기 등록
-			proService.updateStarY(pMN);
-			res = "등록";
-		} else{
-			//프로젝트 즐겨찾기 취소
-			proService.updateStarN(pMN);
-			res = "취소";
-		}
-		
-		map.put("result", res);
-		return map;
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	//프로젝트 그룹 수정

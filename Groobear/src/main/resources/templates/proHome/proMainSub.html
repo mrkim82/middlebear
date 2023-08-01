@@ -119,28 +119,28 @@
 	});
 
 	function changeStar() {
-		let dpMN = event.target.parentNode.getAttribute("data-pMN");
-		let starC = event.target.parentNode.getAttribute("data-starC");
 		let trTag = event.target.parentNode;
+		let dpMN = trTag.getAttribute("data-pMN");
+		let starC = trTag.getAttribute("data-starC");
 
 		let formData = new FormData();
         formData.append('pMN', dpMN);
         formData.append('starC', starC);
-		fetch("/proUpdate", {
+		fetch("/proStarUpdate", {
 			method: 'POST',
 			body : formData
 		})
 		.then(response => response.json())
 		.then(res => {
-				changeProOne(rC, trTag);
+				changeProOne(starC, trTag);
 			
 		})
 	};
 
 	//즐겨찾기 변경
-	function changeProOne(rC, trTag) {
+	function changeProOne(starC, trTag) {
 		
-		if (rC == '등록') {
+		if (starC == 'N') {
 			trTag.setAttribute('data-starc', 'Y');
 			trTag.getElementsByClassName('starCheck')[0].textContent = 'Y';
 		} else {

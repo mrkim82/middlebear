@@ -30,10 +30,10 @@
 					onchange="chageorderSelect()"
 					id="orderSelect"
 					style="width: 200px;">
-				<option th:selected="${userProjectFilter.proRange == 'p.pro_no DESC'}"
-						value="p.pro_no DESC">최신 순(글/댓글)</option>
-				<option th:selected="${userProjectFilter.proRange == 'p.pro_no ASC'}"
-						value="p.pro_no ASC">내가 작성한 순(글/댓글)X</option>
+				<!-- <option th:selected="${userProjectFilter.proRange == 'p.pro_no DESC'}"
+						value="p.pro_no DESC">최신 순(글/댓글)</option> -->
+				<!-- <option th:selected="${userProjectFilter.proRange == 'p.pro_no ASC'}"
+						value="p.pro_no ASC">내가 작성한 순(글/댓글)X</option> -->
 				<option th:selected="${userProjectFilter.proRange == '1 DESC'}"
 						value="1 DESC">오름차순(ㄱ~ㅎ)</option>
 				<option th:selected="${userProjectFilter.proRange == '1 ASC'}"
@@ -113,7 +113,7 @@
 
 	<script>
 		let starCheck = document.querySelectorAll(".starCheck");
-		
+		console.log(starCheck)
 		starCheck.forEach(sC => {
 			sC.addEventListener("click", function(event) {
 				event.stopPropagation();
@@ -121,16 +121,15 @@
 			});
 		});
 		
+		//즐겨찾기 상태 변경
 		function changeStar() {
-			let dpMN = event.target.closest('tr').getAttribute("data-pMN");
-			let starC = event.target.closest('tr').getAttribute("data-starC");
 			let trTag = event.target.closest('tr');
 			
 			let formData = new FormData();
-	        formData.append('pMN', dpMN);
-	        formData.append('starC', starC);
+	        formData.append('pMN', trTag.getAttribute("data-pMN"));
+	        formData.append('starC', trTag.getAttribute("data-starC"));
 
-			fetch("/proUpdate", {
+			fetch("/proStarUpdate", {
 				method: 'POST',
 				body : formData
 			})
@@ -138,7 +137,7 @@
 			.then(res => {
 					location.reload();
 			});
-		}
+		};
 		
 	</script>
 	

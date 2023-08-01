@@ -21,17 +21,25 @@
 	</select>
 	
 	<!-- 프로젝트 조회 -->
-	<!-- 나중에 orderby 알림순 추가 -->
 	<select id="readProject" resultType="ProVO" parameterType="hashMap">
 		SELECT p.pro_name, 
 		       m.pro_color, 
-		       m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no, m.home_tab, u.pro_range, u.pro_parti_filter
-		  FROM pro p, pro_mem m, users u
-		 WHERE m.id = #{id}
-		   AND p.pro_no = m.pro_no
-		   AND p.id = u.id
-		   AND m.pro_hide_check = 'N'
-		   AND m.pro_parti_check = 'Y'
+		       m.pro_star_check,
+		       m.pro_hide_check,
+		       m.pro_mem_no,
+		       p.pro_no,
+		       m.home_tab,
+		       u.pro_range,
+		       u.pro_parti_filter
+		       
+			  FROM pro p
+			  JOIN pro_mem m
+			    ON(p.pro_no = m.pro_no)
+			  JOIN users u
+			    ON(u.id = m.id)
+			 WHERE m.id = #{id}
+			   AND m.pro_hide_check = 'N'
+			   AND m.pro_parti_check = 'Y'
 		<if test="proPartiFilter != null and proPartiFilter != ''">
 		   AND p.id = #{proPartiFilter}
 	 	</if>
@@ -93,37 +101,25 @@
 		ORDER BY p.pro_no DESC
 	</select>
 	
-	<!-- 프로젝트 즐겨찾기 등록 -->
-	<update id="updateStarY" parameterType="int">
+	<!-- 프로젝트 즐겨찾기 변경 -->
+	<update id="updateStar">
 		UPDATE pro_mem
-		SET pro_star_check = 'Y'
+		SET pro_star_check = #{proStarCheck}
 		WHERE pro_mem_no = #{proMemNo}
 	</update>
-	
-	<!-- 프로젝트 즐겨찾기 취소 -->
-	<update id="updateStarN" parameterType="int">
-		UPDATE pro_mem
-		SET pro_star_check = 'N'
-		WHERE pro_mem_no = #{proMemNo}
-	</update>
-	
 	
 	<!-- 프로젝트 그룹 -->
 	<!-- 프로젝트 그룹 목록 조회 -->
 	<select id="readProjectGroup" resultType="ProGroupVO">
 		SELECT
 		    CASE
-		        WHEN LENGTH(group_name) >= 8 THEN CONCAT(SUBSTR(group_name, 1, 8), '...')
+		        WHEN LENGTH(group_name) >= 7 THEN CONCAT(SUBSTR(group_name, 1, 7), '...')
 		        ELSE group_name
 		    END AS group_name,
 		    group_no
 		FROM pro_group
-		WHERE id = 'nari123'
-		ORDER BY group_no DESC
-		<!-- SELECT group_name, group_no
-		FROM pro_group
 		WHERE id = #{id}
-		ORDER BY group_no DESC -->
+		ORDER BY group_no DESC
 	</select>
 	
 	<!-- 프로젝트 그룹 프로젝트 조회 -->
@@ -234,6 +230,7 @@
 		ON(a.pro_no = b.pro_no)
 		WHERE a.id= #{id}
 		AND a.pro_hide_check = 'N'
+		AND a.pro_parti_check = 'Y'
 	</select>
 	
 	<!-- 프로젝트 그룹의 프로젝트 체크 여부 -->
