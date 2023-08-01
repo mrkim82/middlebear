@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.groo.bear.files.mapper.FilesMapper;
 import com.groo.bear.pro.mapper.ProPostMapper;
+import com.groo.bear.pro.service.ProFileVO;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
 import com.groo.bear.pro.service.postvo.ProInviteMailVO;
@@ -20,10 +22,21 @@ import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 import com.groo.bear.pro.service.postvo.ProWritingUVO;
 
+import lombok.Setter;
+
 @Service
 public class ProPostServiceImpl implements ProPostService {
 	@Autowired
 	ProPostMapper ppm;
+	
+	@Autowired
+	FilesMapper file;
+	
+	@Setter(onMethod_= @Autowired)
+	private ProPostMapper mapper;
+	@Setter(onMethod_= @Autowired)
+	private FilesMapper attachMapper;
+
 	
 	@Override
 	public ProPostVO readTopMenu(int proNo, String id) {
@@ -163,5 +176,38 @@ public class ProPostServiceImpl implements ProPostService {
 		return ppm.deletePro(proNo);   
 	}
 
+
+	@Override
+	public int deleteProFile(int proFileNo) {
+		int res = file.deleteProFile(proFileNo) + file.deleteProFileMan(proFileNo);
+		return res;
+	}
+
+	@Override
+	public int createProFile(List<ProFileVO> vo) {
+		int count = 0;
+		//pro_file용 마지막 pro_post_no 번호 조회
+		int lastPostNo = ppm.readProPostNo();
+		
+		for (ProFileVO proFileVO : vo) {
+			proFileVO.setProPostNo(lastPostNo);
+			
+			file.createProFileMan(proFileVO);//pro_file insert
+			file.createProFile(proFileVO);//files insert
+			count++;
+		}
+		
+		return count;
+	}
+
+	@Override
+	public List<ProFileVO> getWorkAttach(int proNo) {
+		return file.readProFilePost(proNo);
+	}
+
+	@Override
+	public List<ProFileVO> readProFilePostDetail(int proPostNo) {
+		return file.readProFilePostDetail(proPostNo);
+	}
 
 }

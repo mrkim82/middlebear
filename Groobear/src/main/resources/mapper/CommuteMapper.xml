@@ -195,10 +195,10 @@
 	</select>
 			
 	<!-- 회원가입 날짜 초기지정 -->
-	<select id="insertDay" resultType="CommuteVO">
+	<insert id="insertDay" parameterType="CommuteVO">
 		insert into commute(day,work_start,work_end,over_work_start,over_work_end,over_work_time,id)
 		values(sysdate,null,null,null,null,null,#{id})
-	</select>
+	</insert>
 	
 	<!-- 달별 조회 -->
 	<select id="calWork" resultType="CommuteVO">
