@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/introTiles}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+<h2 class="dohyeon"><img style="margin-top:10px;width:45px;height:45px;" src="https://creazilla-store.fra1.digitaloceanspaces.com/emojis/52942/paw-prints-emoji-clipart-md.png">그루베어(Groobear) 인재상</h2>
+<p class="dohyeon">
+우리 회사에서 찾는 인재상<br>
+우리 회사에서는 특정한 스킬 세트 뿐만 아니라 특별한 마인드셋을 가진 인재를 찾고 있습니다. 우리가 찾는 이상적인 인재는 다음과 같은 특성을 갖추고 있어야 합니다<br>
+
+1. 협업에 탁월한: 우리 회사는 팀워크를 중요시하며, 각 팀원이 서로에게 배울 수 있고, 협력하며 문제를 해결할 수 있는 능력을 갖추고 있어야 합니다. <br>
+
+2. 지속적인 학습을 추구하는: 우리 업계는 끊임없이 변화하고 있습니다. 우리는 새로운 기술과 동향을 학습하고 적용하는 능력을 가진 사람들을 찾습니다. <br>
+
+3. 문제 해결에 능한: 우리는 신속하고 효과적으로 문제를 해결할 수 있는 인재를 찾습니다. 이는 창의적인 사고와 분석적인 접근법이 필요합니다.<br>
+
+4. 고객 중심적인: 우리는 고객이 최우선이라고 믿습니다. 우리의 인재는 고객의 요구 사항을 이해하고 만족시키는 데 뛰어난 능력이 있어야 합니다.<br>
+
+5. 열정적인: 우리는 자신의 업무에 대한 열정을 가진 사람들을 찾습니다. 이러한 열정은 우리 제품을 향상시키고 팀원 모두를 동기부여하는 데 기여합니다.<br>
+
+이러한 특성들을 가진 인재들과 함께 일하는 것을 기대합니다. 이런 인재상을 가진 분들이라면, 우리 회사는 여러분이 성장하고, 배우고, 성공할 수 있는 장소가 될 것입니다.
+</p>
+<img src="https://fpost.co.kr/board/data/editor/2010/c37783352538f54fc43b5b6cd1f3b4b2_1602377998_231.jpg">
+
+
+
+
+	<script>
+	
+	//WebSocket 연결 설정
+	const alarmClient = new StompJs.Client({
+	brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+	});
+
+	// 페이지 로드시 웹소켓 연결
+	window.addEventListener("load", function(event) {
+	   alarmClient.activate();
+	});
+
+	  // 연결 성공시
+	alarmClient.onConnect = (frame) => {
+	    console.log('Connected: ' + frame);
+	    // 프로젝트 구독     
+		alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+		    almSendMsg(JSON.parse(alarmMsg.body));
+	    });
+	    // 채팅방 생성 초대 구독
+		alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+		    almSendMsgChat(JSON.parse(alarmMsg.body));
+	    });
+	    
+	 };
+
+	//에러
+	alarmClient.onWebSocketError = (error) => {
+	      console.error('Error with websocket', error);
+	};
+
+	alarmClient.onStompError = (frame) => {
+	      console.error('Broker reported error: ' + frame.headers['message']);
+	      console.error('Additional details: ' + frame.body);
+	};
+	function almSendMsg() {
+		   toastAct()	
+	}
+	function almSendMsgChat() {
+		   toastActChat()	
+	}
+	
+	function toastAct() {
+		  toastr.options.escapeHtml = true;
+	      toastr.options.closeButton = true;
+	      toastr.options.newestOnTop = false;
+	      toastr.options.progressBar = true;
+	      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+	      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+	      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+	      toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
+	}
+	
+	function toastActChat() {
+		  toastr.options.escapeHtml = true;
+	      toastr.options.closeButton = true;
+	      toastr.options.newestOnTop = false;
+	      toastr.options.progressBar = true;
+	      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+	      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+	      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+	      toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
+	}
+	
+	
+	var today = new Date();
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var monthString = year + '-' + month;
+	const monthDate = monthString;
+	
+	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
+	
+	</script>
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=282b92204ac4aa199832dbcebe61f870&libraries=services"></script>
+</div>
+</body>
+</html>
