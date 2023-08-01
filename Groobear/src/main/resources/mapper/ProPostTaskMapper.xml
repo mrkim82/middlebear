@@ -156,4 +156,19 @@
 				 WHERE pro_post_no = #{proPostNo}),
 				#{id}) 
 	</insert>
+	
+	<!-- 간트차트 조회용 -->
+	<select id="readGantt">
+		SELECT a.pro_post_no,
+			   a.post_title,
+			   b.work_no,
+			   b.work_start_time,
+			   b. work_end_time,
+			   b.work_group_no
+		FROM pro_post a
+		JOIN pro_work b
+		ON(a.pro_post_no = b.pro_post_no)
+		WHERE a.pro_no = #{proNo}
+		AND (b.work_start_time IS NOT NULL OR b. work_end_time iS NOT NULL)
+	</select>
 </mapper>

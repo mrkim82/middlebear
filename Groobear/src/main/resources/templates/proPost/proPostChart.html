@@ -4,6 +4,9 @@
 	  layout:decorate="~{layout/proPostTiles}"
 >
 <head>
+<script>
+	let projectNo22 = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+</script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
   google.charts.load('current', {'packages':['gantt']});
@@ -19,9 +22,59 @@
     data.addColumn('date', 'End Date');
     data.addColumn('number', 'Duration');
     data.addColumn('number', 'Percent Complete');
-    data.addColumn('string', 'Dependencies');
+    //data.addColumn('string', 'Dependencies');//상위업무
 
-    data.addRows([
+    fetch("/gantt", {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(projectNo)
+	})
+	.then(response => response.json())
+	.then(res => {
+		console.log(data)
+		let rawData = res;
+		console.log(rawData)
+		
+		// 데이터 변환 함수
+		function convertToChartData(rawData) {
+		  const chartData = [];
+		  const currentTime = new Date(); // 현재 시간
+		  
+		  rawData.forEach((item) => {
+		    const startDate = new Date(item.workStartTime);
+		    const endDate = new Date(item.workEndTime);
+		    if (!isNaN(startDate) && !isNaN(endDate)) {
+		        const diffTime = currentTime - startDate; // 현재 시간과 작업 시작 시간의 차이 (밀리초)
+		        const diffDay = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // 차이를 일(day)로 변환 (내림)
+		        
+		        chartData.push([
+		          String(item.proPostNo), // 1열에 proPostNo 삽입
+		          item.postTitle, // 2열에 postTitle 삽입
+		          '긴급', // 3열에 고정 값 '긴급' 삽입
+		          startDate, // 4열에 작업 시작 시간 삽입
+		          endDate, // 5열에 작업 끝 시간 삽입
+		          diffDay, // 6열은 현재 시간과 작업 시작 시간의 차이 (일단위)
+		          100 // 7열은 고정 값 100 삽입
+		          //null // 8열은 null로 삽입
+		        ]);
+		      }
+		    console.log(chartData)
+		  });
+		  return chartData;
+		}
+
+		// 변환된 데이터
+		const chartData = convertToChartData(rawData);
+		console.log(chartData)
+		// 변환된 데이터를 data.addRows에 삽입
+		data.addRows(chartData);
+		
+	});    
+    
+    
+    /* data.addRows([
       ['2014Spring', 'Spring 2014', 'spring',
        new Date(2014, 2, 22), new Date(2014, 5, 20), null, 100, null],
       ['2014Summer', 'Summer 2014', 'summer',
@@ -46,7 +99,7 @@
        new Date(2014, 9, 28), new Date(2015, 5, 20), null, 86, null],
       ['Hockey', 'Hockey Season', 'sports',
        new Date(2014, 9, 8), new Date(2015, 5, 21), null, 89, null]
-    ]);
+    ]); */
 
     var options = {
       height: 400,
@@ -59,10 +112,12 @@
 
     chart.draw(data, options);
   }
+  
 </script>
+
 </head>
 <body layout:fragment="content">
 	<div>간트차트</div>
-	<div id="chart_div" class="float-start" style="width:1600px"></div>
+	<div id="chart_div" class="float-start" style="width:1000px"></div>
 </body>
 </html>
