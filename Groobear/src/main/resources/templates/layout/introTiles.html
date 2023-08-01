@@ -1,9 +1,8 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
   <head>
-  	<title>Groobear</title>
+ 	<title>Groobear</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -30,6 +29,56 @@
 		.rightPad{
 			padding-right:150px;
 		}
+		#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3{
+		  position: fixed; /* Stay in place */
+		  z-index: 1; /* Sit on top */
+		  padding-top: 100px; /* Location of the box */
+		  left: 0;
+		  top: 0;
+		  width: 100%; /* Full width */
+		  height: 100%; /* Full height */
+		  overflow: auto; /* Enable scroll if needed */
+		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+		  display: none;
+		}
+		
+		#modalBody, #modalBody2, #modalBody3{
+		  width: 500px;
+		  height: 300px;
+		  padding: 30px 30px;
+		  margin: 0 auto;
+		  border: 1px solid #777;
+		  background-color: #fff;
+		}
+		
+		#closeBtn, #closeBtn2{
+		  float:right;
+		  font-weight: bold;
+		  color: #777;
+		  font-size:25px;
+		  cursor: pointer;
+		}
+		details {
+	    padding: 12px;
+	    text-decoration: none;
+	    font-size: 16px;
+	    color: #bdc3c7;
+	    display: flex;
+	    align-items: center;
+	    transition: 0.3s;
+		}
+/* ul {
+	list-style:none;
+}
+
+li {
+	float: left;
+	padding: 10px;
+}
+a { 
+	text-decoration:none ;
+	color: black;
+}  */
 	</style>
   </head>
   <body style="width:1215px;margin: 0 auto;">
@@ -95,28 +144,19 @@
           <ul class="nav flex-column">
             <!-- 사이드바 메뉴 아이템들 -->
             <li class="nav-item">
-              <a href="/pay/payMain"><span class="material-icons">add_box</span>전자결재</a>
+              <a href="/intro/companyintroduce"><span class="material-icons">add_box</span>회사소개</a>
             </li>
             <li class="nav-item">
-			  <a href="/pay/paymentDoc"><span class="material-icons">add_box</span>결재문서</a>           
-			</li>
-            <li class="nav-item">
-              <a href="/pay/InProgressPay"><span class="material-icons">add_box</span>진행중결재조회</a>
+              <a href="/intro/rightpeople"><span class="material-icons">home</span>인재상</a>
             </li>
             <li class="nav-item">
-              <a href="/pay/completePay"><span class="material-icons">home</span>완료된결재조회</a>
-            </li>
-            <li class="nav-item">
-              <a href="/pay/referrerPay"><span class="material-icons">star</span>참조문서 조회</a>
-            </li>
-            <li class="nav-item">
-              <a href="/pay/payPreferences"><span class="material-icons">star</span>환경설정</a>
+              <a href="/boardList?boardType=K"><span class="material-icons">star</span>자유게시판</a>
             </li>
           </ul>
         </div>
       </nav>
-      
-       <div class="data" style="display:none">
+
+ <div class="data" style="display:none">
 	<p class="nowMon"></p>
 	
 </div>
@@ -142,18 +182,7 @@
 		alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
 		    almSendMsgChat(JSON.parse(alarmMsg.body));
 	    });
-		// 메일 수신 구독
-		alarmClient.subscribe('/alarmMan/mailAlm/' + '[[${session.Id}]]', (alarmMsg) => {
-		    almSendMsgMail(JSON.parse(alarmMsg.body));
-	    });
-		// 결재대상자 수신 구독
-		alarmClient.subscribe('/alarmMan/payAlm/' + '[[${session.Id}]]', (alarmMsg) => {
-		    almSendMsgPay(JSON.parse(alarmMsg.body));
-	    });
-		// 결재대상자 수신 구독
-		alarmClient.subscribe('/alarmMan/payComAlm/' + '[[${session.Id}]]', (alarmMsg) => {
-		    almSendMsgPayCom(JSON.parse(alarmMsg.body));
-	    });
+	    
 	 };
 
 	//에러
@@ -171,15 +200,6 @@
 	function almSendMsgChat() {
 		   toastActChat()	
 	}
-	function almSendMsgMail() {
-		   toastActMail()	
-	}
-	function almSendMsgPay() {
-		   toastActPay()	
-	}
-	function almSendMsgPayCom() {
-		   toastActPayCom()	
-	}
 	
 	function toastAct() {
 		  toastr.options.escapeHtml = true;
@@ -191,7 +211,7 @@
 	      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
 	      toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
 	}
-
+	
 	function toastActChat() {
 		  toastr.options.escapeHtml = true;
 	      toastr.options.closeButton = true;
@@ -201,39 +221,6 @@
 	      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
 	      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
 	      toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
-	}
-
-	function toastActMail() {
-		  toastr.options.escapeHtml = true;
-	    toastr.options.closeButton = true;
-	    toastr.options.newestOnTop = false;
-	    toastr.options.progressBar = true;
-	    toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
-	    toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
-	    toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
-	    toastr.info('새로운 메일이 도착하였습니다.', '메일 알림', {timeOut: 5000});
-	}
-	
-	function toastActPay() {
-		  toastr.options.escapeHtml = true;
-	    toastr.options.closeButton = true;
-	    toastr.options.newestOnTop = false;
-	    toastr.options.progressBar = true;
-	    toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
-	    toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
-	    toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
-	    toastr.info('결재 진행할 전자문서가 도착하였습니다.', '전자결재 알림', {timeOut: 5000});
-	}
-	
-	function toastActPayCom() {
-		  toastr.options.escapeHtml = true;
-	    toastr.options.closeButton = true;
-	    toastr.options.newestOnTop = false;
-	    toastr.options.progressBar = true;
-	    toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
-	    toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
-	    toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
-	    toastr.info('결재 진행이 완료된 전자문서가 있습니다.', '전자결재 알림', {timeOut: 5000});
 	}
 	
 	var today = new Date();
@@ -245,13 +232,50 @@
 	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
 	
 	</script>
-      
-      
-		<!-- 사이드바 우측의 컨텐츠 영역 -->
+
+
+      <!-- 사이드바 우측의 컨텐츠 영역 -->
       <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
         <div layout:fragment="content" ></div>
       </main>
     </div>
+    
+    <!-- modal창 -->
+    <div id="modalFolderCreate1">
+	  <div id="modalContent">
+	    <div id="modalBody">
+	      <span id="closeBtn">&times;</span>
+	      <p>프로젝트 폴더 만들기</p>
+	      <input type="text" placeholder="프로젝트 폴더명을 입력하세요" id="folderContent1">
+	      <button type="button" id="cancelBtn" class="btn btn-primary">취소</button>
+	      <button type="button" id="createFolder">확인</button>
+	    </div>
+	  </div>
+	</div>
+    <!-- modal창2 -->
+    <div id="modalFolderCreate2">
+	  <div id="modalContent2">
+	    <div id="modalBody2">
+	      <span id="closeBtn2">&times;</span>
+	      <p>프로젝트 폴더명 수정하기</p>
+	      <input type="text" placeholder="프로젝트 폴더명을 입력하세요" id="folderContent2">
+	      <button type="button" id="cancelBtn2" class="btn btn-primary">취소</button>
+	      <button type="button" id="updateFolderName">변경</button>
+	    </div>
+	  </div>
+	</div>
+    <!-- modal창3 -->
+    <div id="modalFolderCreate3">
+	  <div id="modalContent3">
+	    <div id="modalBody3">
+	      <p>프로젝트 폴더를 삭제하시겠습니까?</p>
+	      <p>프로젝트 폴더에 포함된 프로젝트는 삭제되지 않습니다.</p>
+	      <button type="button" id="cancelBtn3" class="btn btn-primary">취소</button>
+	      <button type="button" id="deleteFolder">확인</button>
+	    </div>
+	  </div>
+	</div>
+			
     <script th:inline="javascript">
     </script>
   </body>

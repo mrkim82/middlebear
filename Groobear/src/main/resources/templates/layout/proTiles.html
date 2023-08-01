@@ -129,8 +129,8 @@ details {
 }
 
 #YesStar td, #NoStar td{
-	width: 70px;
-	height: 70px;
+	width: 60px;
+	height: 60px;
 	margin: 10px;
 	padding: 5px;
   	text-align:center;
@@ -143,6 +143,11 @@ details {
 
 details ul {
 	padding: 0px;
+}
+
+.flex-column li {
+	margin-left: 10px;
+	padding: px;
 }
 </style>
 
@@ -238,87 +243,8 @@ details ul {
 	</div>
 </div>
 
-<!-- 웹소켓 -->
-<script>
-//WebSocket 연결 설정
-const alarmClient = new StompJs.Client({
-	brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
-});
-</script>
-
-<!-- 웹소캣 연결 -->
-<script>
-// 페이지 로드시 웹소켓 연결
-window.addEventListener("load", function(event) {
-	alarmClient.activate();
-});
-
-// 연결 성공시
-alarmClient.onConnect = (frame) => {
-	console.log('Connected: ' + frame);
-	
-	// 프로젝트 구독
-	alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]', (alarmMsg) => {
-		almSendMsg(JSON.parse(alarmMsg.body));
-	});
-	
-	// 채팅방 생성 초대 구독
-	alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
-		almSendMsgChat(JSON.parse(alarmMsg.body));
-	});
-};
-
-//에러
-alarmClient.onWebSocketError = (error) => {
-	console.error('Error with websocket', error);
-};
-
-alarmClient.onStompError = (frame) => {
-	console.error('Broker reported error: ' + frame.headers['message']);
-	console.error('Additional details: ' + frame.body);
-};
-
-function almSendMsg() {
-	toastAct();
-};
-
-function almSendMsgChat() {
-	toastActChat();
-};
-
-function toastAct() {
-	toastr.options.escapeHtml = true;
-	toastr.options.closeButton = true;
-	toastr.options.newestOnTop = false;
-	toastr.options.progressBar = true;
-	toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
-	toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
-	toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
-	toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
-};
-
-function toastActChat() {
-	toastr.options.escapeHtml = true;
-	toastr.options.closeButton = true;
-	toastr.options.newestOnTop = false;
-	toastr.options.progressBar = true;
-	toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
-	toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
-	toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
-	toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
-};
-
-var today = new Date();
-var year = today.getFullYear();
-var month = ('0' + (today.getMonth() + 1)).slice(-2);
-var monthString = year + '-' + month;
-const monthDate = monthString;
-
-document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate);
-</script>
-
 <!-- 사이드바 -->
-<div class="row dohyeon" >
+<div class="row dohyeon">
 	<nav id="sidebar"
 		 class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
 		<div class="position-sticky">
@@ -365,7 +291,8 @@ document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate
 						<ul id="proGroup">
 						<th:block th:each="proG : ${projectGroupList}">
 							<li><a th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
-								   th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
+								   th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}"
+								   style="overflow:hidden; width:80px">
 								   [[${proG.groupName}]]
 									<span class='material-icons moreVertIcons'
 										  >more_vert</span>
@@ -390,6 +317,7 @@ document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate
 				<button type="button" id="cancelBtn" class="btn btn-primary">취소</button>
 				<button type="button" id="createFolder">확인</button>
 			</div>
+   
 		</div>
 	</div>
 	
@@ -749,7 +677,7 @@ document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate
 		modal4.style.flexDirection = 'column';
 		modal4.style.alignItems = 'center';
 		modal4.style.justifyContent = 'center';
-		modal4.style.zIndex = '9999';
+		modal4.style.zIndex = '2';
 	
 		// 버튼 추가
 		let button1 = document.createElement('button');
@@ -797,7 +725,141 @@ document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate
 	}
 </script>
 
-<!-- 즐겨찾기 변경 -->
+<!-- 웹소켓 -->
+<script>
+	//WebSocket 연결 설정
+	const alarmClient = new StompJs.Client({
+		brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+	});
+	
+	// 페이지 로드시 웹소켓 연결
+	window.addEventListener("load", function(event) {
+		alarmClient.activate();
+	});
+	
+	// 연결 성공시
+	alarmClient.onConnect = (frame) => {
+		console.log('Connected: ' + frame);
+		
+	    // 프로젝트 구독
+		alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsg(JSON.parse(alarmMsg.body));
+		});
+	    
+	    // 채팅방 생성 초대 구독
+		alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgChat(JSON.parse(alarmMsg.body));
+	    });
+	    
+		// 메일 수신 구독
+		alarmClient.subscribe('/alarmMan/mailAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgMail(JSON.parse(alarmMsg.body));
+	    });
+		
+		// 결재대상자 수신 구독
+		alarmClient.subscribe('/alarmMan/payAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgPay(JSON.parse(alarmMsg.body));
+		});
+		
+		// 결재대상자 수신 구독
+		alarmClient.subscribe('/alarmMan/payComAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgPayCom(JSON.parse(alarmMsg.body));
+		});
+	};
+	
+	//에러
+	alarmClient.onWebSocketError = (error) => {
+		console.error('Error with websocket', error);
+	};
+	
+	alarmClient.onStompError = (frame) => {
+		console.error('Broker reported error: ' + frame.headers['message']);
+		console.error('Additional details: ' + frame.body);
+	};
+	
+	function almSendMsg() {
+		toastAct();
+	};
+	
+	function almSendMsgChat() {
+		toastActChat();
+	};
+	
+	function almSendMsgMail() {
+		toastActMail();
+	};
+	
+	function almSendMsgPay() {
+		toastActPay();
+	};
+	
+	function almSendMsgPayCom() {
+		toastActPayCom();
+	};
+	
+	function toastAct() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
+	};
+	
+	function toastActChat() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
+	};
+	
+	function toastActMail() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('새로운 메일이 도착하였습니다.', '메일 알림', {timeOut: 5000});
+	};
+	
+	function toastActPay() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('결재 진행할 전자문서가 도착하였습니다.', '전자결재 알림', {timeOut: 5000});
+	};
+	
+	function toastActPayCom() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('결재 진행이 완료된 전자문서가 있습니다.', '전자결재 알림', {timeOut: 5000});
+	};
+	
+	var today = new Date();
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var monthString = year + '-' + month;
+	const monthDate = monthString;
+	
+	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate);
+</script>
 
 <!-- 태그 종료내용 종료 -->
 </div>

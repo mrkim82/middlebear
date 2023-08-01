@@ -51,7 +51,7 @@
 				<th:block
 					th:if="${projectMainList.?[proStarCheck == 'Y'].size() > 0}">
 					<tr>
-						<th scope="col" style="font-size: large;" colspan="5">즐겨찾기</th>
+						<th scope="col" style="font-size: larger;" colspan="5">즐겨찾기</th>
 					</tr>
 				</th:block>
 			</thead>
@@ -63,7 +63,7 @@
 					<td><div class="square"
 							th:style="'background-color: ' + ${pro.proColor}"></div></td>
 					<td><div class="star yellow starCheck"></div></td>
-					<td style="width: 750px; overflow: hidden; font-size: large;" th:text="${pro.proName}"></td>
+					<td style="width: 750px; overflow: hidden; font-size: larger;" th:text="${pro.proName}"></td>
 					<td th:each="parti:${projectPartiList}"
 						th:if="${parti.proNo == pro.proNo}" th:text="${parti.count} + '명'"></td>
 					<td>
@@ -84,7 +84,7 @@
 				<th:block
 					th:if="${projectMainList.?[proStarCheck == 'N'].size() > 0}">
 					<tr>
-						<th scope="col" style="font-size: large;" colspan="5">참여중</th>
+						<th scope="col" style="font-size: larger;" colspan="5">참여중</th>
 					</tr>
 				</th:block>
 			</thead>
@@ -96,7 +96,7 @@
 					<td><div class="square"
 							th:style="'background-color: ' + ${pro.proColor}"></div></td>
 					<td><div class="star gray starCheck"></div></td>
-					<td style="width: 750px; overflow: hidden; font-size: large;" th:text="${pro.proName}"></td>
+					<td style="width: 750px; overflow: hidden; font-size: larger;" th:text="${pro.proName}"></td>
 					<td th:each="parti:${projectPartiList}"
 						th:if="${parti.proNo == pro.proNo}" th:text="${parti.count} + '명'"></td>
 					<td>
