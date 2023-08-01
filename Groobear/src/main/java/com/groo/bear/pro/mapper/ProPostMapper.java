@@ -2,6 +2,7 @@ package com.groo.bear.pro.mapper;
 
 import java.util.List;
 
+import com.groo.bear.pro.service.ProFileVO;
 import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
 import com.groo.bear.pro.service.postvo.ProInviteMailVO;
 import com.groo.bear.pro.service.postvo.ProPartiListVO;
@@ -72,5 +73,8 @@ public interface ProPostMapper {
 	public int createInviteMail(ProInviteMailVO vo);
 	
 	//프로젝트 삭제
-	public int deletePro(int proNo);   
+	public int deletePro(int proNo);
+	
+	// 프로젝트 게시물 마지막 고유번호
+	public int readProPostNo();
 }
