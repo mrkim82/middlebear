@@ -38,18 +38,12 @@
   		AND id = #{id}
   	</delete>
   	
-  	<!-- <select id="getMessagesForRoom" resultType="ChatMessageDTO">
-        SELECT *
-        FROM Message
-        WHERE room_No = #{roomNo}
-        ORDER BY msg_Time ASC
-    </select> -->
     <select id="getMessagesForRoom" resultType="ChatMessageDTO">
-    SELECT msg_no, room_no, id, content, TO_CHAR(msg_time, 'YYYY-MM-DD HH24:MI:SS') AS msg_time, name
-    FROM Message
-    WHERE room_No = #{roomNo}
-    ORDER BY msg_Time ASC
-</select>
+	    SELECT msg_no, room_no, id, content, TO_CHAR(msg_time, 'YYYY-MM-DD HH24:MI:SS') AS msg_time 
+	    FROM Message
+	    WHERE room_No = #{roomNo}
+	    ORDER BY msg_Time ASC
+	</select>
     
     
   	<!-- 메세지전체조회 -->

@@ -121,18 +121,6 @@ public class ChatController {
     
     //HTTP를 사용하려면 @PostMapping을, 웹소켓과 STOMP를 사용하려면 @MessageMapping
     
-//    //채팅방나가기.
-//    @PostMapping("/deleteChatroom")
-//    @ResponseBody
-//    public ResponseEntity<?> deleteChatroom(@RequestBody RoomDTO roomDTO) {
-//        int isDeleted = chatService.deleteChatRoom(roomDTO); // chatService는 채팅방을 관리하는 서비스 객체입니다.
-//        if (isDeleted == 1) {
-//            return ResponseEntity.ok().build();
-//        } else {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
-    
   //채팅방나가기.
     @PostMapping("/deleteChatroom")
     @ResponseBody
