@@ -189,6 +189,68 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script th:inline="javascript">
+//WebSocket 연결 설정
+const alarmClient = new StompJs.Client({
+brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+});
+
+// 페이지 로드시 웹소켓 연결
+window.addEventListener("load", function(event) {
+   alarmClient.activate();
+});
+
+  // 연결 성공시
+alarmClient.onConnect = (frame) => {
+    console.log('Connected: ' + frame);
+    // 프로젝트 구독     
+	alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+	    almSendMsg(JSON.parse(alarmMsg.body));
+    });
+    // 채팅방 생성 초대 구독
+	alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+	    almSendMsgChat(JSON.parse(alarmMsg.body));
+    });
+    
+ };
+
+//에러
+alarmClient.onWebSocketError = (error) => {
+      console.error('Error with websocket', error);
+};
+
+alarmClient.onStompError = (frame) => {
+      console.error('Broker reported error: ' + frame.headers['message']);
+      console.error('Additional details: ' + frame.body);
+};
+function almSendMsg() {
+	   toastAct()	
+}
+function almSendMsgChat() {
+	   toastActChat()	
+}
+
+function toastAct() {
+	  toastr.options.escapeHtml = true;
+      toastr.options.closeButton = true;
+      toastr.options.newestOnTop = false;
+      toastr.options.progressBar = true;
+      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+      toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
+}
+
+function toastActChat() {
+	  toastr.options.escapeHtml = true;
+      toastr.options.closeButton = true;
+      toastr.options.newestOnTop = false;
+      toastr.options.progressBar = true;
+      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+      toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
+}
+
 let myName = /*[[${name}]]*/ 'name';
 let senderName = /*[[${name}]]*/ 'name';
 let realId = /*[[${id}]]*/ 'id';
@@ -422,13 +484,12 @@ $('#createChatroom').on('click', function() {
         alert('Please select at least one employee to invite.');
         return;
     }
-
+	
     // Post request to the server
     const roomDTO = {
         roomNo: roomNo,
         employeeIds: checkedEmployeeIds,
     };
-
     fetch('/inviteEmployees', {
         method: 'POST',
         headers: {
@@ -444,6 +505,16 @@ $('#createChatroom').on('click', function() {
             // Here you might want to do something to reflect that the employees were added
             // For example, you could close the modal
             $('#inviteModal').modal('hide');
+            
+            // 알림2
+            for(let i = 0; i < checkedEmployeeIds.length ; i++){
+				alarmClient.publish({
+		            destination: "/alarmCondition/chatAlm/"+checkedEmployeeIds[i],
+		            body: JSON.stringify({
+		               'id' : checkedEmployeeIds[i]
+		            })
+		      	});
+			}
         } else {
             console.error('Failed to invite employees');
         }

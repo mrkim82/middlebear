@@ -6,56 +6,55 @@
   	<title>Groobear</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-		
+	
 	<link rel="stylesheet" href="/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style>
-		@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
 		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
-		
 		.dohyeon{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 			color:black;
 		}
-		
 		.dohyeonmenu{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
-			font-size : 20px;
-			color:white;
-		}
-		.nanumgothic{
-			font-family: 'Nanum Gothic', serif;/*웹 폰트 지정*/
-			font-weight : 300;
+			font-size : 25px;
 			color:white;
 		}
 		.rightPad{
-			padding-right:200px;
+			padding-right:150px;
 		}
 	</style>
   </head>
-  <body>
+  <body style="width:1215px;margin: 0 auto;">
   	<div>
     <header class="blog-header lh-1 py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
             <div class="col-4 pt-1">
 	    		<img src="" title="" style="width: 200px;">
 			</div>
-            
-            <div class="col-4 text-center">
-                <a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:40px; font-weight : 500;" href="/main">Groobear</a>
+			<div class="row">
+				<img style="margin-top:10px;width:45px;height:45px;" src="https://creazilla-store.fra1.digitaloceanspaces.com/emojis/52942/paw-prints-emoji-clipart-md.png">
+	            <div class="col-4 text-center">
+	                <a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:50px; font-weight : 500;" href="/main">Groobear</a>
+	            </div>
             </div>
             <div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px;">
-                <table style="width: 300px;">
+                <table style="width: 300px;text-align:right;margin-right:30px;">
                 	<tbody>
 	                	<tr>
-	                		<td>
+	                		<td style="font-size:20px;">
 	                			<a class="dohyeon">[[${session.Name }]]님 반갑습니다</a>
 	                		</td>
 	                	</tr>
 	                	<tr>
-	                		<td><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
+	                		<td style="font-size:20px;"><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
 	                		<span><a id="commute" class="dohyeon">마이페이지</a></span></td>
 	                	</tr>
                 	</tbody>
@@ -68,22 +67,22 @@
       <div class="collapse navbar-collapse" id="navbarColor01">
       
 	        <ul class="navbar-nav mr-auto" style="display:flex; margin:auto;">
-	          <li class="nav-item active rightPad">
+	          <li class="nav-item active rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/introduce">회사소개</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/mail/receiveMail">메일</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/proMain">프로젝트</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/pay/payMain">전자결재</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/boardList?boardType=N">게시판</a>
 	          </li>
-	          <li class="nav-item">
+	          <li class="nav-item" style="padding:0px;">
 	            <a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
 	          </li>
 	        </ul>
@@ -115,6 +114,67 @@
 	
 </div>
 	<script>
+	//WebSocket 연결 설정
+	const alarmClient = new StompJs.Client({
+	brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+	});
+
+	// 페이지 로드시 웹소켓 연결
+	window.addEventListener("load", function(event) {
+	   alarmClient.activate();
+	});
+
+	  // 연결 성공시
+	alarmClient.onConnect = (frame) => {
+	    console.log('Connected: ' + frame);
+	    // 프로젝트 구독     
+		alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+		    almSendMsg(JSON.parse(alarmMsg.body));
+	    });
+	    // 채팅방 생성 초대 구독
+		alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+		    almSendMsgChat(JSON.parse(alarmMsg.body));
+	    });
+	    
+	 };
+
+	//에러
+	alarmClient.onWebSocketError = (error) => {
+	      console.error('Error with websocket', error);
+	};
+
+	alarmClient.onStompError = (frame) => {
+	      console.error('Broker reported error: ' + frame.headers['message']);
+	      console.error('Additional details: ' + frame.body);
+	};
+	function almSendMsg() {
+		   toastAct()	
+	}
+	function almSendMsgChat() {
+		   toastActChat()	
+	}
+	
+	function toastAct() {
+		  toastr.options.escapeHtml = true;
+	      toastr.options.closeButton = true;
+	      toastr.options.newestOnTop = false;
+	      toastr.options.progressBar = true;
+	      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+	      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+	      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+	      toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
+	}
+	
+	function toastActChat() {
+		  toastr.options.escapeHtml = true;
+	      toastr.options.closeButton = true;
+	      toastr.options.newestOnTop = false;
+	      toastr.options.progressBar = true;
+	      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+	      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+	      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+	      toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
+	}
 	
 	var today = new Date();
 	var year = today.getFullYear();
