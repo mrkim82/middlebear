@@ -53,44 +53,46 @@
 	            </tr>
 	            <tr>
 		            <th:block th:if="${not #strings.isEmpty(drafterSign)}">
-		                <td style="width:100px;padding:0px;">1<img th:src="@{|/display?fileName=${#strings.replace(drafterSign.uploadPath,'\','/')}/${drafterSign.uuid}_${drafterSign.fileName}|}" 
+		                <td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(drafterSign.uploadPath,'\','/')}/${drafterSign.uuid}_${drafterSign.fileName}|}" 
 							th:data-uploadpath="${drafterSign.uploadPath}" th:data-uuid="${drafterSign.uuid}"
 							th:data-filename="${drafterSign.fileName}" data-type="true"  style="border:1px solid; width:100px">
 					    </td>
 					</th:block>
 					<th:block th:unless="${not #strings.isEmpty(drafterSign)}">
-						<td style="width:100px; padding:0px;">2<img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+						<td style="width:100px; padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
 					</th:block>
 					
 						<th:block th:if="${list.payStatus2 == 'Y'} and ${not #strings.isEmpty(approver2Sign)}">
-							<td style="width:100px;padding:0px;">3<img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
+							<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
 								th:data-uploadpath="${approver2Sign.uploadPath}" th:data-uuid="${approver2Sign.uuid}"
 								th:data-filename="${approver2Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
 							</td>
 						</th:block>
 						<th:block th:if="${list.payStatus2 == 'Y'} and ${#strings.isEmpty(approver2Sign)}">
-							<td style="width:100px;padding:0px;">4<img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
 						</th:block>
 						<th:block th:if="${list.payStatus2 == 'F'}">
-							<td style="width:100px;padding:0px;">4<img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
+							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
 						</th:block>
 						<th:block th:if="${list.payStatus3 == 'Y'} and ${not #strings.isEmpty(approver3Sign)}">
-							<td style="width:100px;padding:0px;">5<img th:src="@{|/display?fileName=${#strings.replace(approver3Sign.uploadPath,'\','/')}/${approver3Sign.uuid}_${approver3Sign.fileName}|}" 
+							<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver3Sign.uploadPath,'\','/')}/${approver3Sign.uuid}_${approver3Sign.fileName}|}" 
 								th:data-uploadpath="${approver3Sign.uploadPath}" th:data-uuid="${approver3Sign.uuid}"
 								th:data-filename="${approver3Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
 							</td>
 						</th:block>
 						<th:block th:if="${list.payStatus3 == 'Y'} and ${#strings.isEmpty(approver3Sign)}">
-							<td style="width:100px;padding:0px;">6<img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
 						</th:block>
 						<th:block th:if="${list.payStatus3 == 'F'}">
-							<td style="width:100px;padding:0px;">4<img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
+							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
 						</th:block>
 	            </tr>
 	            <tr>
 	               <td>[[${drafterInfo.name}]] [[${drafterInfo.rank}]]</td>
 	               <td>[[${approver2Info.name}]] [[${approver2Info.rank}]]</td>
-	               <td>[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
+	               <th:block th:if="${not #strings.isEmpty(approver3Info)}">
+	               		<td>[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
+	               </th:block>
 	            </tr>
 			</tbody>
 		</table>
@@ -142,7 +144,7 @@
 	                    	</div>
 	                    </td></tr>
 				<tr>
-					<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+					<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:value="${list.com}"></textarea></td>
 				</tr>
 				</th:block>
 				<th:block th:if="${list.docType=='b'}">
@@ -182,7 +184,7 @@
 					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 				</tr>
 				</th:block>
-				<th:block th:if="${list.docType == 'c'}">
+				<th:block th:if="${list.docType=='c'}">
 				<tr>
 					<td style="display:none" id="robindocType" th:value="${list.docType}" readonly></td>
 				</tr>
@@ -223,11 +225,11 @@
 			<button type="button" id="paymentModify" onclick="paymentModify()" style="margin-left:10px">수정페이지</button>
 		</th:block>
 		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
-							(list.approver3 == session.Id and list.payStatus3 == 'N')}">
+							(list.approver3 == session.Id and list.payStatus3 == 'N' and list.payStatus2 == 'Y')}">
 			<button type="button" id="paymentOk" onclick="payOks()" style="margin-left:10px">결재</button>
 		</th:block>
 		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
-							(list.approver3 == session.Id and list.payStatus3 == 'N')}">
+							(list.approver3 == session.Id and list.payStatus3 == 'N' and list.payStatus2 == 'Y')}">
 			<button type="button" id="paymentPass" onclick="payPassed()" style="margin-left:10px">반려</button>
 		</th:block>
 		</div>
@@ -319,6 +321,13 @@
 		}
 		function payOks(){
 			console.log('결재통과');
+			if(masterDocType=='a'){
+				com = document.getElementById('logCom').value;
+			}else if(masterDocType=='b'){
+				com = document.getElementById('offCom').value;
+			}else{
+				com = document.getElementById('robinCom').value;
+			}
 			if(approver2 === userId){
 				console.log('이전payStatus2',payStatus2);
 				payStatus2 = 'Y';
@@ -341,33 +350,66 @@
 			if(approver2 === userId && approver3 === ""){
 				console.log("approver2는 있고 approver3은 공백임");
 			}
-			$.ajax({
-				url:"/paymentReject",
-				method: "POST",
-  			    contentType:"application/json; charset=utf-8",
-  			    data: JSON.stringify({
-  			    	payNo : payNo,
-					docType : masterDocType,
-					id : drafter,
-					approver2 : approver2,
-					approver3 : approver3,
-					payStatus2 : payStatus2,
-					payStatus3 : payStatus3,
-					com : com
-  			    }),
-  			    async : false,
-  			  	success: function(data) {
-  			    	console.log(data);
-  			    	//location.href="/pay/InProgressPay";
-  			    },
-  			    error: function(err) {
-					console.log(err);
-  			    }
-			});
+			// 여기부분에 if조건으로 sessionid가 approver2면 해당아작스 approver3면 아작스 추가해서 알림빼놓기
+			if(approver2 == userId){
+				$.ajax({
+					url:"/paymentReject",
+					method: "POST",
+	  			    contentType:"application/json; charset=utf-8",
+	  			    data: JSON.stringify({
+	  			    	payNo : payNo,
+						docType : masterDocType,
+						id : drafter,
+						approver2 : approver2,
+						approver3 : approver3,
+						payStatus2 : payStatus2,
+						payStatus3 : payStatus3,
+						com : '[[${session.Name}]] ' + ' : ' +com 
+	  			    }),
+	  			    async : false,
+	  			  	success: function(data) {
+	  			    	console.log(data);
+	  			    	//location.href="/pay/InProgressPay";
+	  			    },
+	  			    error: function(err) {
+						console.log(err);
+	  			    }
+				});
+			}else if(approver3 == userId){
+				$.ajax({
+					url:"/paymentReject",
+					method: "POST",
+	  			    contentType:"application/json; charset=utf-8",
+	  			    data: JSON.stringify({
+	  			    	payNo : payNo,
+						docType : masterDocType,
+						id : drafter,
+						approver2 : approver2,
+						approver3 : approver3,
+						payStatus2 : payStatus2,
+						payStatus3 : payStatus3,
+						com : com
+	  			    }),
+	  			    async : false,
+	  			  	success: function(data) {
+	  			    	console.log(data);
+	  			    	//location.href="/pay/InProgressPay";
+	  			    },
+	  			    error: function(err) {
+						console.log(err);
+	  			    }
+				});
+			}
 		}
 		function payPassed(){
 			console.log('결재반려');	
-			console.log('결재통과');
+			if(masterDocType=='a'){
+				com = document.getElementById('logCom').value;
+			}else if(masterDocType=='b'){
+				com = document.getElementById('offCom').value;
+			}else{
+				com = document.getElementById('robinCom').value;
+			}
 			if(approver2 === userId){
 				console.log('이전payStatus2',payStatus2);
 				payStatus2 = 'F';
@@ -377,30 +419,55 @@
 				payStatus3 = 'F';
 				console.log('바뀐payStatus3',payStatus2);
 			}
-			
-			$.ajax({
-				url:"/paymentReject",
-				method: "POST",
-  			    contentType:"application/json; charset=utf-8",
-  			    data: JSON.stringify({
-  			    	payNo : payNo,
-					docType : masterDocType,
-					id : drafter,
-					approver2 : approver2,
-					approver3 : approver3,
-					payStatus2 : payStatus2,
-					payStatus3 : payStatus3,
-					com : com
-  			    }),
-  			    async : false,
-  			  	success: function(data) {
-  			    	console.log(data);
-  			    	location.href="/pay/InProgressPay";
-  			    },
-  			    error: function(err) {
-					console.log(err);
-  			    }
-			});
+			if(approver2 === userId){
+				$.ajax({
+					url:"/paymentReject",
+					method: "POST",
+	  			    contentType:"application/json; charset=utf-8",
+	  			    data: JSON.stringify({
+	  			    	payNo : payNo,
+						docType : masterDocType,
+						id : drafter,
+						approver2 : approver2,
+						approver3 : approver3,
+						payStatus2 : payStatus2,
+						payStatus3 : payStatus3,
+						com : com
+	  			    }),
+	  			    async : false,
+	  			  	success: function(data) {
+	  			    	console.log(data);
+	  			    	location.href="/pay/InProgressPay";
+	  			    },
+	  			    error: function(err) {
+						console.log(err);
+	  			    }
+				});
+			}else if(approver3 === userId){
+				$.ajax({
+					url:"/paymentReject",
+					method: "POST",
+	  			    contentType:"application/json; charset=utf-8",
+	  			    data: JSON.stringify({
+	  			    	payNo : payNo,
+						docType : masterDocType,
+						id : drafter,
+						approver2 : approver2,
+						approver3 : approver3,
+						payStatus2 : payStatus2,
+						payStatus3 : payStatus3,
+						com : com
+	  			    }),
+	  			    async : false,
+	  			  	success: function(data) {
+	  			    	console.log(data);
+	  			    	location.href="/pay/InProgressPay";
+	  			    },
+	  			    error: function(err) {
+						console.log(err);
+	  			    }
+				});
+			}
 		}
 		function payImgDel(elem){
 			olduuid = "";
@@ -591,11 +658,6 @@
 	                str += "<img src='/display?fileName=" + fileCallPath + "' style='width:200px;height:140px'>";
 	                str += "</div>";
 	                str += "</li>";
-	                if(drafter == userId){
-		                str += "<li style='margin:10px;list-style-type:none'>";
-		                str += "<button type='button' id='logImgDel' class='logImgDelete' style='width:50px; height:40px'>제거</button>";
-		                str += "</li>"
-	                }
 	            } else {
 	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
