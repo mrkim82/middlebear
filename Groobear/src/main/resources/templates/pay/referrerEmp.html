@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>참조자 등록</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 </head>
 <body>
 	<br>
@@ -13,7 +14,7 @@
 	    	</tr>
     	</thead>
     	<tbody id="EmpBody">
-    		<tr th:each="emp : ${payEmpList}" onmousedown="empInfo(this);">
+    		<tr class="payInfo" th:each="emp : ${payEmpList}" onmousedown="empInfo(this); trbackground(this);">
     			<td>
 	    			[[${emp.name}]] | [[${emp.rank}]] | [[${emp.deptName}]]
 	    			<div style="display:none">[[${emp.Id}]]</div>
@@ -63,7 +64,6 @@
     		
     	</tbody>
     </table>
-    <input type="button" value="창닫기" onclick="window.close()">
     <script>
     	var empName = '';
     	var empRank = '';
@@ -83,6 +83,9 @@
 		var referrer = document.getElementById('referrerList'); 	//html tbody
 		
     	function empInfo(e){
+			console.log("e = ",e);
+			
+			
     		console.log(e.children[0].textContent);
 			empId = e.children[0].children[0].textContent;
     		empName = e.children[0].children[1].textContent;
@@ -96,6 +99,8 @@
     	function refSet(){
     		//push pop 사용해야됨 이미 있는 유저정보는 추가할필요없음
     		console.log('refSet 클릭');
+    		$('.payInfo').css('background-color','white');
+    		$('.setInfo').css('background-color','white');
     		var str = '';
     		let trTag = document.createElement('tr');
     		let tdTag = document.createElement('td');
@@ -113,15 +118,13 @@
 		    		if(referrerList.length === 0){
 		    			console.log('값 없음');
 		    			str = '';
-		    			str += "<td>"
+		    			str += "<td  class='setInfo'>"
 		        		str += empName+" "+empRank+" "+empDept
 			    		str += "<div style='display:none'>"+empId+"</div>"
 			    	    str += "<div style='display:none'>"+empName+"</div>"
 			    	    str += "<div style='display:none'>"+empRank+"</div>"
 			    	    str += "<div style='display:none'>"+empDept+"</div>"
 			    	    str += "</td>"
-			    	    //tdTag.innerHTML += str;
-			    	    //trTag.append(tdTag);
 			    	    trTag.innerHTML += str;
 			    		referrer.append(trTag);
 		        		referrerList.push(empId);
@@ -339,6 +342,15 @@
 	    	    trTag.append(tdTag);
 	    	    referrerListShow.append(trTag);
     		}
+		}
+		function trbackground(e){
+			e.style.background = "aqua";
+			console.log("e = ",e);
+    		//$('.payInfo').css('background-color','white');
+		}
+		function tdbackground(e){
+			console.log("td e = ",e);
+			e.style.background = "gray";
 		}
     </script>
 </body>

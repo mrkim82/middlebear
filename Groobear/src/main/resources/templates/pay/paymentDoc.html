@@ -791,16 +791,36 @@
 		  
 		  var targetLi = $(this).closest("li");
 		  targetLi.remove();
-		  /* $.ajax({
-		  	url : 'deleteFile',
-		  	data : {fileName : targetFile, type : type},
-		  	dataType : 'text',
-		  	type : 'POST',
-		  		success : function(result) {
-		  			alert(result);
-		  			targetLi.remove();
-		  		}
-		  }); */
+	    });
+	    $(".uploadResult2").on("click", "button", function(e){
+		  console.log("delete file");
+		  
+		  var targetFile = $(this).data("file");
+		  var type = $(this).data("type");
+		  
+		  var targetLi = $(this).closest("li");
+		  console.log(targetLi);
+		  targetLi.remove();
+	    });
+	    $(".uploadResult3").on("click", "button", function(e){
+		  console.log("delete file");
+		  
+		  var targetFile = $(this).data("file");
+		  var type = $(this).data("type");
+		  
+		  var targetLi = $(this).closest("li");
+		  console.log(targetLi);
+		  targetLi.remove();
+	    });
+	    $(".uploadResult4").on("click", "button", function(e){
+		  console.log("delete file");
+		  
+		  var targetFile = $(this).data("file");
+		  var type = $(this).data("type");
+		  
+		  var targetLi = $(this).closest("li");
+		  console.log(targetLi);
+		  targetLi.remove();
 	    });
 	    var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
 	    var maxSize = 5242880;
