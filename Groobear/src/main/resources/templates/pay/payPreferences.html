@@ -26,6 +26,10 @@
 					</li>
 				</ul>
 			</th:block>
+			<th:block th:if="${#strings.isEmpty(userSignInfo)}">
+				<ul style="padding:0px;"></ul>
+				<li style="list-style-type: none;"><img id="profImg" style="border:1px solid;" src="../img/publicSign.png"></li>
+			</th:block>
 		</div>
 		<button type="button" id="signDelete">개인서명제거</button>
 		<button type="button" id="paySign" onclick="paySignSet()">개인서명등록</button>
@@ -43,9 +47,39 @@
 		}
 		//공용서명 등록 버튼 클릭시 db에서 가져온값 자동등록되게 설정
 		function publicSignSet(){
-			
+			var previewContainer = $("#preview-container");
+            previewContainer.empty(); // 기존 이미지 삭제
+            $("input[type='file']").val(""); // 선택한 파일 초기화
+            //ajax통신
+            $.ajax({
+           	 url: "/signdelete",
+           	 method:"POST",
+           	 contentType:"application/json; charset=utf-8",
+  			     data: signNo,
+  			  	 success: function(data) {
+  			    	 console.log(data);
+  			    	 location.href = "/pay/payPreferences";
+  			     },
+  			     error: function(err){
+  			    	 console.log(err);
+  			     }
+  			 });
+            $.ajax({
+            	url: "/signUpdate",
+            	method:"POST",
+              	 contentType:"application/json; charset=utf-8",
+     			     data: signNo,
+     			  	 success: function(data) {
+     			    	 console.log(data);
+     			    	 location.href = "/pay/payPreferences";
+     			     },
+     			     error: function(err){
+     			    	 console.log(err);
+     			     }
+     			 });
+            })
 		}
-		//공용서명 div제거
+		//개인서명 div제거
 		$("#signDelete").on("click", function(){
 			 var previewContainer = $("#preview-container");
              previewContainer.empty(); // 기존 이미지 삭제

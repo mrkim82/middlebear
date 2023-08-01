@@ -193,6 +193,7 @@ p {
 
 <!-- 달력 load -->
 <script>
+let navTop;//삭제시 바 지우기용
 var calendarEl = document.getElementById('calendar');
 let allEvents = schAllDatas;
 
@@ -216,6 +217,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 		right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
 	},
 	eventClick: function(info) {
+		navTop = event.target.closest('.fc-event');//바 위치
 		let proNo = info.event.extendedProps.proNo;
 		let proPostNo = info.event.extendedProps.proPostNo;
       
@@ -464,7 +466,6 @@ function createSchButton() {
 </script>
 
 <!-- 글 삭제 -->
-<!-- 글 삭제 -->	
 <script>
 function deletePost() {
 	let topTarget = event.target.closest('.custom-modal');
@@ -481,11 +482,13 @@ function deletePost() {
 	.then(res => {
 		if(res.result == '성공') {
 			topTarget.remove();
+			navTop.remove();
 		}
 		
 	});
 }
 </script>
+
 <!-- 시간 -->
 <script type="text/javascript">
 //현재 시간 가져오기

@@ -309,10 +309,16 @@
 		)
 	</insert>
 	
+	<!-- 프로젝트 삭제 -->
 	<delete id="deletePro">
 		DELETE FROM pro
 		WHERE pro_no =#{proNo}
 	</delete>
 	
+	<!-- 프로젝트 게시물 마지막 고유번호 -->
+	<select id="readProPostNo" resultType="int">
+		SELECT NVL(MAX(pro_post_no), 0)
+		FROM pro_post
+	</select>
 	
 </mapper>

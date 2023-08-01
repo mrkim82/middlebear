@@ -1,21 +1,22 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-  <head>
-  	<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
 
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-		
-	<link rel="stylesheet" href="/bootstrap.min.css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!-- 풀캘린더 -->
-	<script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+<link rel="stylesheet" href="/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- 풀캘린더 -->
+<script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
 	
-	<!-- 제이쿼리 -->
-	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<!-- 제이쿼리 -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 	
 	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
     <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
@@ -118,6 +119,143 @@
 	</head>
   <body style="width:1215px;margin: 0 auto;">
   	
+=======
+<style>
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+
+.dohyeon{
+	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+	color:black;
+}
+
+.dohyeonmenu{
+	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+	font-size : 20px;
+	color:white;
+}
+
+.nanumgothic{
+	font-family: 'Nanum Gothic', serif;/*웹 폰트 지정*/
+	font-weight : 300;
+	color:white;
+}
+
+.rightPad{
+	padding-right:150px;
+}
+
+#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+	display: none;
+}
+
+.horizontal-bar {
+	height: 80px;
+	width: 100%;
+	background-color: #f9f9f9;
+}
+
+.horizontal-bar2 {
+	height: 40px;
+	width: 100%;
+	background-color: #f5f5f5;
+}
+
+#modalFolderCreate4 {
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+	display: none;
+}
+
+#modalBody, #modalBody2, #modalBody3 {
+	width: 500px;
+	height: 300px;
+	padding: 30px 30px;
+	margin: 0 auto;
+	border: 1px solid #777;
+	background-color: #fff;
+}
+
+#closeBtn, #closeBtn2 {
+	float: right;
+	font-weight: bold;
+	color: #777;
+	font-size: 25px;
+	cursor: pointer;
+}
+
+details {
+	padding: 12px;
+	text-decoration: none;
+	font-size: 16px;
+	color: #bdc3c7;
+	display: flex;
+	align-items: center;
+	transition: 0.3s;
+}
+
+.square {
+	width: 50px;
+	height: 50px;
+	background-color: #000;
+	margin-left: 30px;
+	border-radius: 10px;
+}
+
+.bottomLine {
+	border-bottom: 3px solid red;
+	z-index: 1050;
+}
+
+.spanCursor {
+	cursor: pointer
+}
+
+.bigPictureWrapper{
+	position : absolute;
+	display : none;
+	justify-content : center;
+	align-items : center;
+	top : 0%;
+	width : 100%;
+	height : 100%;
+	background-color : gray;
+	z-index : 100;
+	background : rgba(255, 255, 255, 0.5);
+}
+
+.bigPicture {
+	position : relative;
+	display : flex;
+	justify-content : center;
+	align-items : center;
+}
+
+.bigPicture img {
+	width : 600px;
+}
+</style>
+
+</head>
+
+<body>
+>>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
   	<div>
     <header class="blog-header lh-1 py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
@@ -406,7 +544,7 @@
 	</div>
 
 <!-- 공통 js -->
-<!-- 프로젝트 넘버 찾기(주소) -->
+<!-- 프로젝트 넘버(proNo) (주소) -->
 <script>
 	let url = window.location.pathname;
 	let lastIndex = url.lastIndexOf('/');
@@ -415,38 +553,44 @@
 
 <!-- session값 가져오기 -->
 <script type="text/javascript" th:inline="javascript">
-	/*<![CDATA[*/
-		let selfId = /*[[${session.Id}]]*/;
-		let selfName = /*[[${session.Name}]]*/;
-	/*]]>*/
+/*<![CDATA[*/
+	let selfId = /*[[${session.Id}]]*/;
+	let selfName = /*[[${session.Name}]]*/;
+/*]]>*/
 </script>
 
 <!-- 시간 변환 -->
 <script type="text/javascript">
-	function convertToFormattedDateTime(dateTimeStr) {
-		if(dateTimeStr == '') {//빈값일때 바로 리턴
-			return;
-		}
-	  const date = new Date(dateTimeStr);
-	  const year = date.getFullYear();
-	  const month = String(date.getMonth() + 1).padStart(2, '0');
-	  const day = String(date.getDate()).padStart(2, '0');
-	  const hours = String(date.getHours()).padStart(2, '0');
-	  const minutes = String(date.getMinutes()).padStart(2, '0');
+//??
+function convertToFormattedDateTime(dateTimeStr) {
+	if(dateTimeStr == '') {//빈값일때 바로 리턴
+		return;
+	};
+	
+	const date = new Date(dateTimeStr);
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
 
-	  return `${year}-${month}-${day} ${hours}:${minutes}`;
-	}
+	return `${year}-${month}-${day} ${hours}:${minutes}`;
+};
 </script>
 
 <!-- 모달 초기화 -->
 <script>
-	$('.modal').on('hidden.bs.modal', function (e) {
-	  // 모달 내부의 모든 input 요소를 찾아 값을 초기화
-	  $(this).find('input, textarea').val('');
-	  //$(this).find('.collapse').removeClass('show');
-	});
-	
+$('.modal').on('hidden.bs.modal', function (e) {
+	// 모달 내부의 모든 input 요소를 찾아 값을 초기화
+	$(this).find('input, textarea').val('');
+	//$(this).find('.collapse').removeClass('show');
+});
+$('#modal2').on('hidden.bs.modal', function (e) {
+	$(this).find('.uploadResult ul li').remove();
+});
 </script>
+<!-- 공통 js종료 -->
+
 
 	<script th:inline="javascript">
     /*<![CDATA[*/
@@ -814,59 +958,56 @@
     /*]]>*/
     </script>
 
-    <script>
-    	let newColor;
-    	
-    	//클릭시 색상 정보 저장
-    	function saveColor() {
-    		newColor = event.target.dataset.colorCode;
-    		console.log(event.target)
-    	}
-    	
-    	function changeColor() {
-    		console.log(newColor);
-    		fetch("/updateProMemColor", {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					'proColor' : newColor,
-	   				'proNo': projectNo
-	   			})
-			})
-			.then(response => response.json())
-			.then(res => {
-				console.log(res);
-				if(res.result == '성공') {
-					$('#squareStyle').modal('hide');//모달창 닫기
-					document.getElementsByClassName('square')[0].style.backgroundColor = newColor;//색상변환
-				} else {
-					alert('실패');
-				}
-				
-			});
-    	}
-    </script>
+<!-- 색상 변경 -->
+<script>
+let newColor;
+ 	
+//클릭시 색상 정보 저장
+function saveColor() {
+	newColor = event.target.dataset.colorCode;
+}
+
+function changeColor() {
+	fetch("/updateProMemColor", {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			'proColor' : newColor,
+			'proNo': projectNo
+		})
+	})
+	.then(response => response.json())
+	.then(res => {
+		if(res.result == '성공') {
+			$('#squareStyle').modal('hide');//모달창 닫기
+			document.getElementsByClassName('square')[0].style.backgroundColor = newColor;//색상변환
+		} else {
+			alert('실패');
+		}
+	});
+}
+</script>
     
 <!-- 검색기능 -->
 <script type="text/javascript">
-	proInSearch.addEventListener('keyup', function(event) {
-		if(event.keyCode === 13) {
-			if(proInSearch.value == '') {
-				alert('빈값 허용 안함');
-				proInSearch.focus();
-				return false;
-			}
-			let searchKeyword = proInSearch.value;
-			location.href="/proSearch/" + projectNo + "?search=" + searchKeyword;
-			
+proInSearch.addEventListener('keyup', function(event) {
+	if(event.keyCode === 13) {
+		if(proInSearch.value == '') {
+			alert('빈값 허용 안함');
+			proInSearch.focus();
+			return false;
 		}
-	})
+		let searchKeyword = proInSearch.value;
+		location.href="/proSearch/" + projectNo + "?search=" + searchKeyword;
+	}
+});
 </script>
     
 <!-- 초대하기 -->
 <script>
+<<<<<<< HEAD
 //WebSocket 연결 설정
 const alarmClient = new StompJs.Client({
 brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
@@ -966,32 +1107,204 @@ function toastActChat() {
 			alert(res.result + '건 초대')
 			$('#inviteMember').modal('hide');//모달창 닫기
 		});
+=======
+function inviteMail() {
+	let inputs = inviteMember.querySelectorAll('input[type="checkbox"]:checked');
+	let idArr = [];
+	
+	//체크된 체크박스의 정보 가져오기(초대받을 사람의 정보)
+	inputs.forEach(inputv=> {
+		let viteObj = {
+				'proNo' : projectNo,
+				'id' : inputv.dataset.partiMember
+		};
+		idArr.push(viteObj);
+	});
+	
+	//체크값 확인
+	if(idArr.length == 0) {
+		alert('체크된 값이 없습니다.')
+		return false;
+>>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
 	}
+	
+	fetch("/inviteMail", {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(idArr)
+	})
+	.then(response => response.json())
+	.then(res => {
+		alert(res.result + '건 초대')
+		$('#inviteMember').modal('hide');//모달창 닫기
+		//모달 안의 값 초기화 시켜보기
+	});
+}
 </script>
     
-    
+<!-- 프로젝트 삭제 -->
 <script>
-	function delPro() {
-		
-			console.log(projectNo)
-			console.log(typeof(projectNo))
-			
-		fetch("/delPro", {
-			method: 'DELETE',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(Number(projectNo))
-		})
-		.then(response => response.json())
-		.then(res => {
-			console.log(res)
-			location.href="/proMain";
-		})
-		.catch(error => {
-			console.error('Error: ',error);
-		});
-	}
+function delPro() {
+	
+	fetch("/delPro", {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(Number(projectNo))
+	})
+	.then(response => response.json())
+	.then(res => {
+		location.href="/proMain";
+	})
+	.catch(error => {
+		console.error('Error: ',error);
+	});
+}
 </script>
-  </body>
+
+<!-- 파일 업로드 -->
+<script type="text/javascript">
+//업로드 1번
+$("input[type='file']").change(function(e) {
+	let findModal = $(e.target);
+	var formData = new FormData();
+//	var inputFile = $("input[name='uploadFile']");
+	var inputFile = $(e.target);
+	console.log(inputFile)
+	var files = inputFile[0].files;
+	//여러 파일 올라 갈 수 있기 때문에 반복문
+	for(var i=0; i<files.length; i++) {
+		//파일 검증
+	    if(!checkExtension(files[i].name, files[i].size) ){
+    	    return false;
+		}
+    	formData.append("uploadFile", files[i]);
+	}
+	
+	//console.log('폼데이터',formData.get("uploadFile"))
+	
+	$.ajax({
+		url: "/uploadAjaxAction",
+		processData: false,
+		contentType: false,
+		data: formData,
+		type: "POST",
+		dataType: "json",
+		success: function(result) {
+			//성공시 화면에 출력
+			showUploadResult(result, findModal);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+});
+
+
+//확장자 필터(1-2)
+var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
+var maxSize = 5242880;
+
+function checkExtension(fileName, fileSize) {
+	if (fileSize >= maxSize) {
+	    alert('파일 사이즈 초과');
+	    return false;
+	}
+	if (regex.test(fileName)) {
+	    alert('해당 종류의 파일은 업로드할 수 없습니다.');
+	    return false;
+	}
+	return true;
+}
+
+//파일선택으로 파일 불러올 때, 업로드 2번
+function showUploadResult(uploadResultArr, findModal){
+	console.log('s',uploadResultArr)
+	
+	//빈값 찾기
+	if(!uploadResultArr || uploadResultArr.length == 0){return ;}
+	
+	var uploadUL = findModal.closest('.modal').find('.uploadResult ul');
+	
+	var str = "";
+  
+	//여러건이기 때문에 반복문
+	$(uploadResultArr).each(function(i, obj){
+		//console.log("11:06" + i)
+		console.log("11:05",obj)
+		//console.log('이미지',obj.image);
+		//console.log('파일타입',obj.fileType);
+		
+		//image type
+		if(obj.image){
+			console.log('이미지!')
+			var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+			
+			str += "<li data-path='"+obj.uploadPath+"'";
+			str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+			str + "><div>";
+			//파일 이름 보여주기
+			str += "<span> "+ obj.fileName+"</span>";
+			//파일 삭제버튼
+			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			//이미지 노출
+			str += "<img src='/display?fileName="+fileCallPath+"'>";
+			str += "</div>";
+			str +"</li>";
+		} else {
+			console.log('파일?')
+			var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+			var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+			    
+			str += "<li data-path='"+obj.uploadPath+"'";
+			str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+			str + "><div>";
+			//파일 이름 보여주기
+			str += "<span> "+ obj.fileName+"</span>";
+			//파일 삭제버튼
+			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			//파일 노출
+			str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+			str += "</div>";
+			str +"</li>";
+		} 
+	});
+	
+	//만든 태그 붙여서 화면에 보여주기
+	uploadUL.append(str);
+}
+//화면 노출 종료
+
+//화면에서 지우기
+</script>
+
+<!-- 파일 업로드 화면에서 지우기 -->
+<script type="text/javascript">
+//업로드중인 파일 삭제
+$(".uploadResult").on("click", "button", function(e){
+	e.stopPropagation();
+	
+	var targetFile = $(this).data("file");
+	var type = $(this).data("type");
+
+	//해당 업로드 파일 li가기
+	var targetLi = $(this).closest("li");
+
+	$.ajax({
+		url : '/deleteFile',
+		data : {'fileName' : targetFile,
+				'type' : type},
+		dataType : 'text',
+		type : 'POST',
+		success : function(result) {
+			targetLi.remove();//화면에서 지우기
+		}
+	});
+});
+</script>
+
+</body>
 </html>

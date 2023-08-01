@@ -27,7 +27,7 @@
 					<td th:text="${#dates.format(pay.issueDate, 'yyyy.MM.dd')}"></td>
 					<td th:if="${ 
 						(pay.approver2 == session.Id and pay.payStatus2== 'N') or 
-						(pay.approver3 == session.Id and pay.payStatus2== 'Y')}">
+						(pay.approver3 == session.Id and pay.payStatus2== 'Y' and pay.payStatus3=='N')}">
 						<span style="color:red">결재중</span>
 					</td>
 					<td th:unless="${ (pay.approver2 == session.Id and pay.payStatus2== 'N') or 

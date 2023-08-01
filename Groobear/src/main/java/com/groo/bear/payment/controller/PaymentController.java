@@ -253,19 +253,27 @@ public class PaymentController {
 			System.out.println("docType = 운행일지");
 			PaymentVO payVO = paymentService.logList(payNo);
 			System.out.println("payVO = "+payVO);
-			//기안자
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
-			//결재자1
+			model.addAttribute("list",paymentService.logList(payNo));
+			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
 			empvo = paymentService.payEmpInfo(payVO.getApprover2());
 			model.addAttribute("approver2Info",empvo);
-			//결재자2
-			if(payVO.getApprover3() != null && payVO.getApprover3() != "" ) {
-				empvo = paymentService.payEmpInfo(payVO.getApprover3());
-				model.addAttribute("approver3Info",empvo);
-				System.out.println("approver3은 있음");
+			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			//결재자3이 있으면 보내줌
+			String approver3 = payVO.getApprover3();
+			if(approver3 == null || approver3 =="") {
+				System.out.println("조건 임시변경 테스트");
+			}else {
+				System.out.println("제대로찍힘");
+				if(empvo != null) {
+					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+					model.addAttribute("approver3Info",empvo);
+					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					System.out.println("결재자2"+empvo);
+					System.out.println(paymentService.searchSignImg(empvo.getEmpNo()));
+				}
 			}
-			model.addAttribute("list",paymentService.logList(payNo));
 		}
 		if(docType.equals("b")) {
 			System.out.println("docType = 연차계");
@@ -275,6 +283,24 @@ public class PaymentController {
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.offList(payNo));
+			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			model.addAttribute("approver2Info",empvo);
+			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			//결재자3이 있으면 보내줌
+			String approver3 = payVO.getApprover3();
+			if(approver3 == null || approver3 =="") {
+				System.out.println("조건 임시변경 테스트");
+			}else {
+				System.out.println("제대로찍힘");
+				if(empvo != null) {
+					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+					model.addAttribute("approver3Info",empvo);
+					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					System.out.println("결재자2"+empvo);
+					System.out.println(paymentService.searchSignImg(empvo.getEmpNo()));
+				}
+			}
 		}
 		if(docType.equals("c")){
 			System.out.println("docType = 품의서");
@@ -283,6 +309,24 @@ public class PaymentController {
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.robinList(payNo));
+			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			model.addAttribute("approver2Info",empvo);
+			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			//결재자3이 있으면 보내줌
+			String approver3 = payVO.getApprover3();
+			if(approver3 == null || approver3 =="") {
+				System.out.println("조건 임시변경 테스트");
+			}else {
+				System.out.println("제대로찍힘");
+				if(empvo != null) {
+					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+					model.addAttribute("approver3Info",empvo);
+					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					System.out.println("결재자2"+empvo);
+					System.out.println(paymentService.searchSignImg(empvo.getEmpNo()));
+				}
+			}
 		}
 		List<FilesVO> list = paymentService.searchPayImg(payNo);
 		System.out.println(list);
@@ -361,6 +405,7 @@ public class PaymentController {
 		String id = (String) session.getAttribute("Id");
 		EmpVO empvo = new EmpVO();
 		empvo = paymentService.payEmpInfo(id);
+		System.out.println("empvo123 = "+empvo);
 		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
 		model.addAttribute("mySign",paymentService.searchSignImg(empvo.getEmpNo()));
 		if(docType.equals("a")) {
@@ -368,10 +413,32 @@ public class PaymentController {
 			PaymentVO payVO = paymentService.logList(payNo);
 			System.out.println("payVO = "+payVO);
 			empvo = paymentService.payEmpInfo(payVO.getId());
+			System.out.println("a empvo1 = "+empvo);
 			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.logList(payNo));
+			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			System.out.println("a empvo2 = "+empvo);
+			model.addAttribute("approver2Info",empvo);
+			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			//결재자3이 있으면 보내줌
+			String approver3 = payVO.getApprover3();
+			System.out.println("a payvo1 = "+payVO);
+			System.out.println("a approver1"+approver3);
+			if(approver3 == null || approver3 =="") {
+				System.out.println("조건 임시변경 테스트");
+			}else {
+				System.out.println("제대로찍힘");
+				if(empvo != null) {
+					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+					model.addAttribute("approver3Info",empvo);
+					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					System.out.println("결재자2"+empvo);
+					System.out.println(paymentService.searchSignImg(empvo.getEmpNo()));
+				}
+			}
 		}
-		if(docType.equals("b")) {
+		else if(docType.equals("b")) {
 			System.out.println("docType = 연차계");
 			System.out.println("payNo"+payNo);
 			PaymentVO payVO = paymentService.offList(payNo);
@@ -379,18 +446,56 @@ public class PaymentController {
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.offList(payNo));
+			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			model.addAttribute("approver2Info",empvo);
+			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			//결재자3이 있으면 보내줌
+			String approver3 = payVO.getApprover3();
+			if(approver3 == null || approver3 =="") {
+				System.out.println("조건 임시변경 테스트");
+			}else {
+				System.out.println("제대로찍힘");
+				if(empvo != null) {
+					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+					model.addAttribute("approver3Info",empvo);
+					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					System.out.println("결재자2"+empvo);
+					System.out.println(paymentService.searchSignImg(empvo.getEmpNo()));
+				}
+			}
 		}
-		if(docType.equals("c")){
+		else if(docType.equals("c")){
 			System.out.println("docType = 품의서");
 			PaymentVO payVO = paymentService.robinList(payNo);
 			System.out.println("payVO = "+payVO);
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.robinList(payNo));
+			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			model.addAttribute("approver2Info",empvo);
+			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			//결재자3이 있으면 보내줌
+			String approver3 = payVO.getApprover3();
+			if(approver3 == null || approver3 =="") {
+				System.out.println("조건 임시변경 테스트");
+			}else {
+				System.out.println("제대로찍힘");
+				if(empvo != null) {
+					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+					model.addAttribute("approver3Info",empvo);
+					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					System.out.println("결재자2"+empvo);
+					System.out.println(paymentService.searchSignImg(empvo.getEmpNo()));
+				}
+			}
 		}
 		List<FilesVO> list = paymentService.searchPayImg(payNo);
 		System.out.println(list);
 		model.addAttribute("payImgInfo",list);
 		return "pay/payInfoRead";
 	}
+	//공용서명 등록
+	
 }
