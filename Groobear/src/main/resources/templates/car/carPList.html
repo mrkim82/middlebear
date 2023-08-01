@@ -13,7 +13,7 @@
 <body>
 	<div layout:fragment="content">
 		<div>
-			<form action="carInsert" method="post">
+			<form>
 				<div th:each="info, es:${info}">
 						<h3 style="text-align: center;">차량 관리</h3>
 					<div style="display: inline-block; width: 100%;">
@@ -45,7 +45,7 @@
 					    </div>
 					    <div class="form-group row" style="margin-left: 20%;">
 					      <p style="display: none;">
-							아이디 <input type="text" class="form-control-plaintext" name="id" th:value="${info.id}" readonly>
+							아이디 <input type="text" id="carId" class="form-control-plaintext" name="id" th:value="${info.id}" readonly>
 						  </p>
 					      <label class="col-form-label">차량번호 :</label>
 					      <div class="col-sm-2">
@@ -85,7 +85,7 @@
 												<option value="../img/vw.png">Volkswagen</option>
 											</select>
 					      </div>
-					      <button type="submit" class="insertBtn btn btn-primary" onclick="checkBtn()"
+					      <button type="button" class="insertBtn btn btn-primary" onclick="checkBtn()"
 							style="text-align: center; width:100px; height: 35px;">등록</button>
 							
 					    </div>
@@ -171,7 +171,7 @@
 							<div class="modal-body p-5 img d-flex align-items-center color-2">
 								<div class="text w-100 py-0 py-md-5">
 									<h3 class="mb-4">Change Car Info</h3>
-									<form action="carUpdate" method="post" class="signup-form"
+									<form class="signup-form"
 										name="carInfoForm">
 										<div class="form-group mb-3">
 											<label class="label">Old Car Number</label> <input
@@ -225,7 +225,7 @@
 										</div>
 										<div class="form-group d-md-flex"></div>
 										<div class="form-group" style="margin-left: 30px;">
-											<button type="submit" style="width: 150px; margin: 0px 5px;"
+											<button type="button" style="width: 150px; margin: 0px 5px;"
 												class="btn btn-primary rounded submit px-3" onclick="checkBtn2()">수정</button>
 											<button type="button" id="deleteBtn"
 												style="width: 150px; margin: 0px 5px;"
@@ -342,9 +342,65 @@
 				event.preventDefault();
 				document.getElementsByName('carNo')[0].value = '';
 				document.getElementsByName('carType')[0].value = '';
-			}else{
-				document.querySelector('.insertBtn').submit();
-					
+			}else{	
+				event.preventDefault();
+				let carNo = document.getElementById('carNo2').value;
+				let carType = document.getElementById('infoCarType').value;
+				let id = document.getElementById('carId').value;
+				
+				let carCk = {
+						'carNo' : carNo,
+						'carType' : carType,
+						'id' : id
+				}
+				
+				fetch("carChk",{
+					method : 'post',
+					headers : {
+						'Content-Type' : 'application/json'
+					},
+					body : JSON.stringify(carCk)
+				})
+				.then(response => response.text())
+				.then(result => {
+					if(result == 'true'){
+						alert('차량번호가 이미 존재합니다.')
+						location.reload();
+					}else{
+						
+
+						fetch("carInsert",{
+							method : 'post',
+							headers : {
+								'Content-Type' : 'application/json'
+							},
+							body : JSON.stringify(carCk)
+						})
+						.then(response => response.json())
+						.then(result => {
+							if(result == null){
+								console.log('실패')
+							}else {
+							 location.reload();
+							}
+						})
+						.catch(err => console.log(err))
+						
+						
+						
+						
+						
+						
+						
+					}
+				})
+				.catch(err => console.log(err))
+				
+				
+				
+				
+				
+				
 			}
 		}
 		
@@ -358,7 +414,64 @@
 				event.preventDefault();
 				document.getElementById('newCarNo').value = '';
 			}else{
-				document.querySelector('.insertBtn').submit();
+				
+				
+				event.preventDefault();
+				let carNo = document.getElementById('newCarNo').value;
+				let carType = document.getElementById('infoCarType2').value;
+				let id = document.getElementById('carId').value;
+				let oldCarNo = document.getElementById('infoCarNo').value;
+				
+				let carCk = {
+						'carNo' : carNo,
+						'carType' : carType,
+						'id' : id,
+						'oldCarNo' : oldCarNo
+				}
+				
+				fetch("carChk",{
+					method : 'post',
+					headers : {
+						'Content-Type' : 'application/json'
+					},
+					body : JSON.stringify(carCk)
+				})
+				.then(response => response.text())
+				.then(result => {
+					if(result == 'true'){
+						alert('차량번호가 이미 존재합니다.')
+						location.reload();
+					}else{
+						
+
+						fetch("carUpdate",{
+							method : 'post',
+							headers : {
+								'Content-Type' : 'application/json'
+							},
+							body : JSON.stringify(carCk)
+						})
+						.then(response => response.json())
+						.then(result => {
+							if(result == null){
+								console.log('실패')
+							}else {
+							 location.reload();
+							}
+						})
+						.catch(err => console.log(err))
+						
+					}
+				})
+				.catch(err => console.log(err))
+				
+				
+				
+				
+				
+				
+				
+				
 					
 			}
 		}
@@ -410,7 +523,7 @@
 			} 
 		});	
 				
-				
+		
 		let srcc = '../img/'
 		let brand = document.querySelector('.carType').textContent
 		if(brand = srcc+'ad.png'){

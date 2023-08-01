@@ -165,16 +165,16 @@ public class MailServiceImpl implements MailService{
 		return mailMapper.mailInfo(mailVO);
 	}
 	@Override
-	public int countSendMail(String sender) {
+	public int countSendMail(MailVO mailVO) {
 		// 보낸메일 총 갯수
-		System.out.println("sendmail count = "+mailMapper.countSendMail(sender));
-		return mailMapper.countSendMail(sender);
+		System.out.println("sendmail count = "+mailMapper.countSendMail(mailVO));
+		return mailMapper.countSendMail(mailVO);
 	}
 	@Override
-	public int countReceiveMail(String receiver, String referrer) {
+	public int countReceiveMail(MailVO mailVO) {
 		// 받은메일 총 갯수
-		System.out.println("receiver = "+mailMapper.countReceiveMail(receiver,referrer));
-		return mailMapper.countReceiveMail(receiver,referrer);
+		System.out.println("receiver = "+mailMapper.countReceiveMail(mailVO));
+		return mailMapper.countReceiveMail(mailVO);
 	}
 	@Override
 	public int countDeleteMail(MailVO mailVO) {

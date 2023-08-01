@@ -53,16 +53,6 @@ public class EmpController {
 	
 	private final SmsService smsService;
 	
-	// 로그아웃
-	@GetMapping("logout")
-	public String logout(HttpServletRequest request) {
-		HttpSession session = request.getSession(false); 
-        if(session != null) {
-			session.invalidate();
-		}
-		return "redirect:/";
-	}
-	
 	// SMS 인증번호 발송
 	@PostMapping("checkSms")
 	@ResponseBody

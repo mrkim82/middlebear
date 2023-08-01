@@ -10,16 +10,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.comm.DateUtil;
+import com.groo.bear.files.domain.FilesVO;
+import com.groo.bear.pro.service.ProFileVO;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
 import com.groo.bear.pro.service.ProPostTaskService;
@@ -27,6 +34,7 @@ import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.ProTodoNVoteService;
 import com.groo.bear.pro.service.PublicCodeService;
 import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
+import com.groo.bear.pro.service.postvo.ProInviteMailVO;
 import com.groo.bear.pro.service.postvo.ProPostChartVO;
 import com.groo.bear.pro.service.postvo.ProPostCommentVO;
 import com.groo.bear.pro.service.postvo.ProPostUserVO;
@@ -36,7 +44,10 @@ import com.groo.bear.pro.service.postvo.ProPostWritingVO;
 import com.groo.bear.pro.service.postvo.ProWritingUVO;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
+import lombok.extern.log4j.Log4j2;
+
 @Controller
+@Log4j2
 public class proPostController {
 
 	@Autowired
@@ -88,6 +99,7 @@ public class proPostController {
 		model.addAttribute("beforeOneDay" , DateUtil.beforeOneDay());//하루전
 		model.addAttribute("afterOneDay" , DateUtil.afterOneDay());//하루뒤
 		model.addAttribute("readProAuth", proService.readProAuth(proNo));//권한 및 프로젝트 마스터 조회
+		model.addAttribute("readPartiListM", proPostService.readPartiListM(proNo));//프로젝트 초대 할 인원
 		
 		//System.out.println("게시글"+model.getAttribute("projectPartiMember"));
 		switch (homeTab) {
@@ -183,7 +195,6 @@ public class proPostController {
 	public Map<String, Object> postCreateWork(HttpServletRequest request, @RequestBody ProPostWorkVO vo) {
 		HttpSession session = request.getSession();
 		Map <String, Object> map = new HashMap<>();
-		System.out.println(vo);
 		String res = "";
 		if(vo.getWorkPersonArr().length == 0) {
 			vo.setWorkPersonArr(null);
@@ -191,7 +202,6 @@ public class proPostController {
 		vo.setId((String)session.getAttribute("Id"));
 		
 		proPostService.createPostWork(vo);
-		System.out.println(vo);
 		map.put("result", res);
 		return map;
 	}
@@ -277,7 +287,6 @@ public class proPostController {
 	@PutMapping("upProPost")
 	@ResponseBody
 	public Map<String, Object> updateProPost(@RequestBody ProWritingUVO vo) {
-		System.out.println(vo);
 		int result = proPostService.updateProWriting(vo);
 		return Collections.singletonMap("result", result);
 	}
@@ -297,5 +306,57 @@ public class proPostController {
 		
 		return "proPost/proPostSearch";
 	}
+	
+	//초대 메일 발송
+	@PostMapping("inviteMail")
+	@ResponseBody
+	public Map<String, Object> inviteMail(HttpServletRequest request, @RequestBody List<ProInviteMailVO> vo) {
+		int result = proPostService.createInviteMail(vo);
+		return Collections.singletonMap("result", result);
+	}
+	
+	//프로젝트 삭제
+	@DeleteMapping("delPro")
+	@ResponseBody
+	public Map<String, Object> deletePro(@RequestBody int proNo) {
+		int result = proPostService.deletePro(proNo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	}
+	
+	//파일 등록
+	@PostMapping("proFileInsert")
+	@ResponseBody
+	public Map<String, Object> 파일추가(@RequestBody List<ProFileVO> vo) {
+		int result = proPostService.createProFile(vo);
+		
+		return Collections.singletonMap("result", result);
+	}
+	
+	//업무 파일조회
+	@GetMapping(value ="/getWorkAttach", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<ProFileVO>> 업무파일조회(@RequestParam int proNo) {
+		log.info("getAttachList" + proNo);
+		return new ResponseEntity<>(proPostService.getWorkAttach(proNo), HttpStatus.OK);
+	}
+	
+	//파일상세조회
+	@GetMapping(value ="/getWorkAttachDetail", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<ProFileVO>> 파일상세조회(@RequestParam int proPostNo) {
+		log.info("getAttachList" + proPostNo);
+		return new ResponseEntity<>(proPostService.readProFilePostDetail(proPostNo), HttpStatus.OK);
+	}
+	
+	//파일 삭제
+	@DeleteMapping("delProFile")
+	@ResponseBody
+	public Map<String, Object> delProFile(@RequestBody int proFileNo) {
+		int result = proPostService.deleteProFile(proFileNo);
+		System.out.println(proFileNo);
+		System.out.println(result);
+		return Collections.singletonMap("result", result/2 > 0 ? "성공" : "취소");
+	}
+	
 	
 }

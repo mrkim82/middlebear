@@ -48,7 +48,7 @@ public class MailController {
 		System.out.println("받은메일함 mailVO"+mailVO);
 		Paging paging = new Paging();
         paging.setCri(cri);
-        paging.setTotalCount(mailService.countReceiveMail((String) session.getAttribute("Id"),(String) session.getAttribute("Id")));
+        paging.setTotalCount(mailService.countReceiveMail(mailVO));
 		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/receiveMail";
@@ -75,17 +75,31 @@ public class MailController {
         mailVO.setMailNo(no);
         String email = mailVO.getReceiver();
         String id = mailService.userIdGet(email);
-        mailVO.setId(id);
-        System.out.println(mailVO);
-        mailService.insertPersonnel(mailVO);
-        if(mailVO.getReferrer()!=null) {
+        System.out.println("123123id = "+id);
+        if(id == null) {
+        	mailVO.setId(email);
+        	System.out.println(mailVO);
+        	mailService.insertPersonnel(mailVO);
+        }else {
+        	mailVO.setId(id);
+        	System.out.println(mailVO);
+        	mailService.insertPersonnel(mailVO);
+        }
+        if(mailVO.getReferrer().equals("")) {
+        	System.out.println("equals 조건 잘바꿔야됨");
+        }else {
         	String allreferrer = (String) mailVO.getReferrer();
         	String[] referrer = allreferrer.split(",");
         	for(int i=0;i<referrer.length;i++) {
         		email = referrer[i];
-        		id = mailService.userIdGet(email);
-        		System.out.println("42423"+id);
-        		mailVO.setId(id);
+        		if(id == null) {
+            		System.out.println("42423"+id);
+            		mailVO.setId(email);
+        		}else {
+        			id = mailService.userIdGet(email);
+            		System.out.println("42423"+id);
+            		mailVO.setId(id);
+        		}
         		mailService.insertPersonnel(mailVO);
         	}
         }
@@ -104,7 +118,7 @@ public class MailController {
 		mailVO.setMailSet("Y");
 		Paging paging = new Paging();
         paging.setCri(cri);
-        paging.setTotalCount(mailService.countSendMail(email));
+        paging.setTotalCount(mailService.countSendMail(mailVO));
 		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/sendingMail";

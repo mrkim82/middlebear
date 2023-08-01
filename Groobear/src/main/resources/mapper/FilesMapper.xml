@@ -146,4 +146,82 @@
   	<delete id="deleteMailFile" parameterType="int">
   		delete files where mail_no = #{mailNo}
   	</delete>
+  	
+  	
+  	
+  	<!-- 프로젝트 -->
+  	<insert id="createProFile">
+  		INSERT INTO files(
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,PRO_FILE_NO
+  							) 
+  					VALUES(
+  							#{uuid}
+  							,#{uploadPath}
+  							,#{fileName}
+  							,#{fileType}
+  							,sysdate
+  							,#{proFileNo}
+  					)
+  	</insert>
+  	
+  	<!-- 프로젝트 첨부파일 조회 -->
+  	<select id="readProFilePost" parameterType="int">
+  		SELECT a.*, b.pro_post_no
+		FROM files a
+		JOIN pro_file b
+		ON(a.pro_file_no = b.pro_file_no)
+		JOIN pro_post c
+		ON(b.pro_post_no = c.pro_post_no)
+		WHERE c.pro_no = #{proNo}
+  	</select>
+  	
+  	<!-- 프로젝트 파일관리 테이블 추가 -->
+	<insert id="createProFileMan" parameterType="ProFileVO">
+		INSERT INTO pro_file(pro_file_no, pro_post_no, com_no)
+		VALUES ((SELECT NVL(MAX(pro_file_no), 0) + 1
+		         FROM pro_file),
+		        <if test="proPostNo == 0">
+			      NULL
+			    </if>
+			    <if test="proPostNo != 0">
+			      #{proPostNo}
+			    </if>,
+			    <if test="comNo == 0">
+			      NULL
+			    </if>
+			    <if test="comNo != 0">
+			      #{comNo}
+			    </if>
+    	)
+    	<selectKey resultType="int" keyProperty="proFileNo" order="AFTER">
+			SELECT NVL(MAX(pro_file_no), 0) FROM pro_file
+	    </selectKey>
+	</insert>
+  	
+  	<!-- 프로젝트 첨부파일 삭제 -->
+  	<delete id="deleteProFile" parameterType="int">
+  		DELETE FROM files
+  		WHERE pro_file_no = #{proFileNo}
+  	</delete>
+  	
+  	<!-- 프로젝트 첨부파일 관리 삭제-->
+  	<delete id="deleteProFileMan" parameterType="int">
+  		DELETE FROM pro_file
+  		WHERE pro_file_no = #{proFileNo}
+  	</delete>
+  	
+  	<!-- 파일 상세 조회 -->
+  	<select id="readProFilePostDetail" parameterType="ProFileVO">
+		SELECT a.*, b.pro_post_no
+		FROM files a
+		JOIN pro_file b
+		ON(a.pro_file_no = b.pro_file_no)
+		WHERE pro_post_no = #{proPostNo}
+  	</select>
+  	
   </mapper>

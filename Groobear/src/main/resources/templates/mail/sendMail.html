@@ -78,6 +78,10 @@
 		console.log('4444',title);
 		console.log('5555',content);
 		console.log('123',mailuuid);
+		var arr = referrer.split(','); //참조자 구분
+		for(let i=0;i<arr.length;i++){
+			console.log(arr[i]);
+		}
 		if(mailuuid !==''){
 			$.ajax({
 				url: "/InsertMailFile",
@@ -99,6 +103,8 @@
 				    }	
 			});
 		}
+		console.log('2222'+receiver);
+		console.log('3332222'+referrer);
 		$.ajax({
 			url: "/sendMail",
 			    method: "POST",
@@ -113,6 +119,7 @@
 			    }),
 			    success: function(data) {
 			    	location.href="/mail/sendingMail"
+			    	// 알림1
 			    },
 			    error: function(err) {
 				console.log(err);

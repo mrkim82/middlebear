@@ -54,7 +54,7 @@
     
   	<!-- 메세지전체조회 -->
   	<select id="MessageAllList" parameterType="int">
-  		select i.name, m.content, m.msg_time
+  		select i.name, m.content, TO_CHAR(m.msg_time, 'YY"년" MM"월" DD"일" HH24"시" MI"분"') AS msg_time
 		from message m, users u, user_info i
 		where m.id = u.id
 		AND u.emp_no = i.emp_no

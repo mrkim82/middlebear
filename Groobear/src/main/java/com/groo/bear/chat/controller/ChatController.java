@@ -1,10 +1,11 @@
 package com.groo.bear.chat.controller;
 
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -47,16 +48,19 @@ public class ChatController {
         String id = (String)session.getAttribute("Id");
         model.addAttribute("id", id);
         model.addAttribute("roomNo", roomNo);
-        model.addAttribute("chatDTO", chatService.MessageAllList(roomNo));
+     // ChatMessageDTO로 변경하고 시간 정보를 포함한 메시지 전체 리스트를 가져옵니다.
+        List<ChatMessageDTO> chatMessageList = chatService.MessageAllList(roomNo);
+        model.addAttribute("chatDTO", chatMessageList);
+
         return "chat/chat";
     }
 
     @MessageMapping("/chat/{roomNo}") 
     public void send(ChatMessageDTO chatMessage, @DestinationVariable int roomNo) {
         try {
-            chatMessage.setMsgTime(LocalDateTime.now());
             messagingTemplate.convertAndSend("/topic/messages/" + roomNo , chatMessage);
             chatService.sendMessage(chatMessage); 
+            System.out.println(chatMessage + "chatMessage 찾기용");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,7 +85,6 @@ public class ChatController {
             }
         }
         model.addAttribute("rooms", rooms);
-    	//model.addAttribute("id", chatService.chatRoomList(id));
     	
     	return "chat/rooms";
     }
@@ -118,19 +121,49 @@ public class ChatController {
     
     //HTTP를 사용하려면 @PostMapping을, 웹소켓과 STOMP를 사용하려면 @MessageMapping
     
-    //채팅방나가기.
+//    //채팅방나가기.
+//    @PostMapping("/deleteChatroom")
+//    @ResponseBody
+//    public ResponseEntity<?> deleteChatroom(@RequestBody RoomDTO roomDTO) {
+//        int isDeleted = chatService.deleteChatRoom(roomDTO); // chatService는 채팅방을 관리하는 서비스 객체입니다.
+//        if (isDeleted == 1) {
+//            return ResponseEntity.ok().build();
+//        } else {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
+    
+  //채팅방나가기.
     @PostMapping("/deleteChatroom")
     @ResponseBody
     public ResponseEntity<?> deleteChatroom(@RequestBody RoomDTO roomDTO) {
+        String id = roomDTO.getId();
+        int roomNo = roomDTO.getRoomNo();
+
+        // 현재 시간을 가져와 원하는 문자열 형식으로 변환
+        LocalDateTime now = LocalDateTime.now();
+        String formattedTime = now.format(DateTimeFormatter.ofPattern("HH:mm"));
+
+        // 사용자가 채팅방을 나갔음을 알리는 메시지 생성
+        ChatMessageDTO chatMessage = new ChatMessageDTO();
+        chatMessage.setContent(id + "님이 채팅방에서 나갔습니다. (" + formattedTime + ")");
+        chatMessage.setRoomNo(roomNo);
+        System.out.println(id + "님이 채팅방에서 나갔습니다. 테스트 (" + formattedTime + ")");
+        // 메시지를 채팅방에 전송
+        System.out.println(chatMessage);                                                                                                                                                         
+        messagingTemplate.convertAndSend("/topic/messages/" + roomNo, chatMessage);
+        // 메시지를 데이터베이스에 저장
+        System.out.println(chatMessage);
+        chatService.sendMessage(chatMessage);
+
         int isDeleted = chatService.deleteChatRoom(roomDTO); // chatService는 채팅방을 관리하는 서비스 객체입니다.
-        System.out.println("1111");
         if (isDeleted == 1) {
-        	System.out.println("2222");
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
     
     @GetMapping("/empAllList")
     @ResponseBody
@@ -150,6 +183,19 @@ public class ChatController {
             room.setId(id);
             room.setRoomNo(roomNo);
             chatService.insertMem(room);
+            // 현재 시간을 가져와 원하는 문자열 형식으로 변환
+            LocalDateTime now = LocalDateTime.now();
+            String formattedTime = now.format(DateTimeFormatter.ofPattern("HH:mm"));
+
+            // 새로운 사용자를 초대했음을 알리는 메시지 생성
+            ChatMessageDTO chatMessage = new ChatMessageDTO();
+            chatMessage.setContent(id + "님이 채팅방에 입장하였습니다. (" + formattedTime + ")");
+            //chatMessage.setMsgTime(now);
+            chatMessage.setRoomNo(roomNo);
+            // 메시지를 채팅방에 전송
+            messagingTemplate.convertAndSend("/topic/messages/" + roomNo, chatMessage);
+            System.out.println();
+            chatService.sendMessage(chatMessage);
         }
 
         return ResponseEntity.ok().build();
