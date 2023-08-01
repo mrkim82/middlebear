@@ -8,129 +8,142 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+<!-- 부트스트랩 -->
 <link rel="stylesheet" href="/bootstrap.min.css">
+
+<!-- 구글폰트 -->
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
 <!-- 풀캘린더 -->
 <script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
-	
+
 <!-- 제이쿼리 -->
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 	
-	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
-		.dohyeon{
-			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
-			color:black;
-		}
-		.dohyeonmenu{
-			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
-			font-size : 25px;
-			color:white;
-		}
-		.rightPad{
-			padding-right:150px;
-		}
-		#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
-			position: fixed; /* Stay in place */
-			z-index: 1; /* Sit on top */
-			padding-top: 100px; /* Location of the box */
-			left: 0;
-			top: 0;
-			width: 100%; /* Full width */
-			height: 100%; /* Full height */
-			overflow: auto; /* Enable scroll if needed */
-			background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-			display: none;
-		}
-		
-		.horizontal-bar {
-			height: 80px;
-			width: 100%;
-			background-color: #f9f9f9;
-		}
-		
-		.horizontal-bar2 {
-			height: 40px;
-			width: 100%;
-			background-color: #f5f5f5;
-		}
-		
-		#modalFolderCreate4 {
-			position: fixed; /* Stay in place */
-			z-index: 1; /* Sit on top */
-			padding-top: 100px; /* Location of the box */
-			left: 0;
-			top: 0;
-			width: 100%; /* Full width */
-			height: 100%; /* Full height */
-			overflow: auto; /* Enable scroll if needed */
-			background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-			display: none;
-		}
-		
-		#modalBody, #modalBody2, #modalBody3 {
-			width: 500px;
-			height: 300px;
-			padding: 30px 30px;
-			margin: 0 auto;
-			border: 1px solid #777;
-			background-color: #fff;
-		}
-		
-		#closeBtn, #closeBtn2 {
-			float: right;
-			font-weight: bold;
-			color: #777;
-			font-size: 25px;
-			cursor: pointer;
-		}
-		
-		details {
-			padding: 12px;
-			text-decoration: none;
-			font-size: 16px;
-			color: #bdc3c7;
-			display: flex;
-			align-items: center;
-			transition: 0.3s;
-		}
-		
-		.square {
-			width: 50px;
-			height: 50px;
-			background-color: #000;
-			margin-left: 30px;
-			border-radius: 10px;
-		}
-		
-		.bottomLine {
-			border-bottom: 3px solid red;
-			z-index: 1050;
-		}
-		.spanCursor {
-			cursor: pointer
-		}
-		
-		textarea {
-		  background-color: #f1f1f1;
-		  border: 1px solid #ddd;
-		  border-radius: 4px;
-		  padding: 10px;
-		  font-family: Arial, sans-serif;
-		  font-size: 14px;
-		  padding: 10px;
-		  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-		  height: 200px;
-		  width: 100%;
-		  resize: vertical; /* 세로 조정 가능 */
-		}
-	</style>
-	</head>
+<!-- 웹소켓 -->
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+
+.dohyeon{
+	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+	color:black;
+}
+
+.dohyeonmenu{
+	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+	font-size : 25px;
+	color:white;
+}
+
+.rightPad{
+	padding-right:150px;
+}
+
+#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+	display: none;
+}
+
+.horizontal-bar {
+	height: 80px;
+	width: 100%;
+	background-color: #f9f9f9;
+}
+
+.horizontal-bar2 {
+	height: 40px;
+	width: 100%;
+	background-color: #f5f5f5;
+}
+
+#modalFolderCreate4 {
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+	display: none;
+}
+
+#modalBody, #modalBody2, #modalBody3 {
+	width: 500px;
+	height: 300px;
+	padding: 30px 30px;
+	margin: 0 auto;
+	border: 1px solid #777;
+	background-color: #fff;
+}
+
+#closeBtn, #closeBtn2 {
+	float: right;
+	font-weight: bold;
+	color: #777;
+	font-size: 25px;
+	cursor: pointer;
+}
+
+details {
+	padding: 12px;
+	text-decoration: none;
+	font-size: 16px;
+	color: #bdc3c7;
+	display: flex;
+	align-items: center;
+	transition: 0.3s;
+}
+
+.square {
+	width: 50px;
+	height: 50px;
+	background-color: #000;
+	margin-left: 30px;
+	border-radius: 10px;
+}
+
+.bottomLine {
+	border-bottom: 3px solid red;
+	z-index: 1050;
+}
+
+.spanCursor {
+	cursor: pointer
+}
+
+textarea {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 200px;
+  width: 100%;
+  resize: vertical; /* 세로 조정 가능 */
+}
+
+</style>
+
+</head>
   <body style="width:1215px;margin: 0 auto;">
   	<div>
     <header class="blog-header lh-1 py-3">
@@ -316,13 +329,11 @@
 					<p th:text="${#request.requestURI}"></p>
 					<th:block th:text="${#strings.substringAfter(#request.getQueryString(), '=')}"></th:block> -->
 				<div>
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteMember">
-					  +초대하기
-					</button>
 					<input type="text" id="proInSearch" placeholder="프로젝트 내 검색">
-					<button type="button"
-							class="btn btn-danger"
-							onclick="delPro()">프로젝트 삭제</button>
+					<span class="material-symbols-outlined spanCursor"
+						  data-toggle="modal"
+						  data-target="#inviteMember">group_add</span>
+					<span class="material-symbols-outlined spanCursor" onclick="delPro()">delete</span>
 				</div>
 				</nav>
 			</div>
@@ -1060,6 +1071,9 @@ function inviteMail() {
 	.then(res => {
 		alert(res.result + '건 초대')
 		$('#inviteMember').modal('hide');//모달창 닫기
+		$('#inviteMember input[type="checkbox"]:checked').each(function() {
+			$(this).parent().remove();
+		});
 		//모달 안의 값 초기화 시켜보기
 	});
 };
