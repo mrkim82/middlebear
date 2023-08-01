@@ -347,11 +347,8 @@
 				
 				//도현이형 offtable에 데이터 넣기
 			}
-			if(approver2 === userId && approver3 === ""){
-				console.log("approver2는 있고 approver3은 공백임");
-			}
 			// 여기부분에 if조건으로 sessionid가 approver2면 해당아작스 approver3면 아작스 추가해서 알림빼놓기
-			if(approver2 == userId){
+			if(approver2 === userId){
 				$.ajax({
 					url:"/paymentReject",
 					method: "POST",
@@ -369,13 +366,13 @@
 	  			    async : false,
 	  			  	success: function(data) {
 	  			    	console.log(data);
-	  			    	//location.href="/pay/InProgressPay";
+	  			    	location.href="/pay/InProgressPay";
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
 	  			    }
 				});
-			}else if(approver3 == userId){
+			}else if(approver3 === userId){
 				$.ajax({
 					url:"/paymentReject",
 					method: "POST",
@@ -393,7 +390,7 @@
 	  			    async : false,
 	  			  	success: function(data) {
 	  			    	console.log(data);
-	  			    	//location.href="/pay/InProgressPay";
+	  			    	location.href="/pay/InProgressPay";
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
