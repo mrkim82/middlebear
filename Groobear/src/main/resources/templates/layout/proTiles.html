@@ -366,7 +366,6 @@ details ul {
 /*<![CDATA[*/
 	//그룹 갯수 체크
   	let pGC = /*[[${projectGroupList}]]*/ [];
-  	let pGCUp = pGC.length;
 /*]]>*/
 </script>
 
@@ -448,7 +447,7 @@ details ul {
 
 	//클릭 후 그룹 폴더 만들기(모달1)
 	creFolder.onclick = function() {
-		if(pGCUp >= 10) {
+		if(groupFolderList.querySelectorAll('li').length >= 10) {
 			alert('프로젝트 폴더는 최대 10개 생성 할 수 있습니다.');
 			folderC1.value = '';
 			modal1.style.display = "none";
@@ -505,10 +504,14 @@ details ul {
 		//spanC.style = 'display : none;';
 		spanC.textContent = 'more_vert';
 		
+		if(folderC1.value.length >= 8) {
+			folderC1.value = folderC1.value.substring(0, 7) + '...';
+		};
+			
 		aC.setAttribute('href', '/proGroupD/'+ lGN);
 		aC.setAttribute('data-gN', lGN);
 		aC.setAttribute('data-fName', folderC1.value);
-		aC.textContent = folderC1.value.substring(0, 8) + '...';
+		aC.textContent = folderC1.value;
 		
 		aC.append(spanC);
 		liC.append(aC);
@@ -516,8 +519,6 @@ details ul {
 		
 		folderC1.value = '';
 		modal1.style.display = 'none';
-		
-		pGCUp++;
 	};
    
 	// 프로젝트 그룹 상태 등장 효과
@@ -554,7 +555,7 @@ details ul {
 		
 			//그룹no값 가져오기
 			let groupNo = event.target.parentNode.dataset.gn;
-			let groupName = event.target.parentNode.dataset.fname;
+			let groupName = event.target.parentElement.innerText.slice(0, -9);//
 			
 			//그룹 모달창 생성(모달4)
 			miniModal(event.target);
@@ -649,7 +650,15 @@ details ul {
 				if(rC == '성공') {
 					modal2.style.display = 'none';
 					document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].childNodes[0].textContent = folderC2.value;
-					document.getElementById('folderContent2').innerText = folderC2.value;
+					
+					console.log(folderC2.value.length)
+					//글자수 길이 제한
+					if(folderC2.value.length >= 8) {
+						folderC2.value = folderC2.value.substring(0, 7) + '...';
+					};
+					console.log(folderC2.value)
+					
+					document.getElementById('folderContent2').textContent = folderC2.value;
 				} else {
 					alert('요청이 취소 되었습니다.');
 				};
