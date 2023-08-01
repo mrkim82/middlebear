@@ -11,6 +11,7 @@
 	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
 	crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
 <title>게시글 단건조회</title>
 <style>
 	.uploadResult {
@@ -228,8 +229,8 @@
 			crossorigin="anonymous"></script>
 
 		<script th:inline="javascript">
-			$(document).ready(function() {
-    $('#deleteButton').click(function() {
+		$(document).ready(function() {
+   	$('#deleteButton').click(function() {
         let boardNo = /*[[${board.boardNo}]]*/
         console.log(boardNo)
         $.ajax({
@@ -332,7 +333,9 @@
 	   			})
 			})
 			.then(response => response.json())
-			.then(res => location.href="/boardInfo?boardNo=" + writingNo);
+			.then(res => {
+				location.href="/boardInfo?boardNo=" + writingNo
+			});
 		}
 	</script>
 	
@@ -413,8 +416,6 @@
 							targetButton.parentNode.parentNode.childNodes[3].textContent = newCom.value;
 							targetButton.parentNode.parentNode.childNodes[9].childNodes[1].textContent = '수정';
 							targetButton.parentNode.parentNode.childNodes[9].childNodes[3].textContent = 'X';
-							
-			
 						} else {
 							alert('댓글 수정 실패');
 						}
@@ -423,7 +424,6 @@
 			});
 			
 		}
-		
 	</script>
 
 	</div>

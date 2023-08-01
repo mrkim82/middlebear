@@ -1,40 +1,47 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<title>그루베어(groobear) - 예담 NO</title>
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport"
+	  content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
+	  rel="stylesheet">
+
 <link rel="stylesheet" href="/bootstrap.min.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+<script type="text/javascript"
+	src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
 <style>
-@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
-@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+@import
+	url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap')
+	;
 
-.dohyeon{
-	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
-	color:black;
+.dohyeon {
+	font-family: 'Do Hyeon', serif; /*웹 폰트 지정*/
+	color: black;
 }
 
-.dohyeonmenu{
-	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
-	font-size : 20px;
-	color:white;
+.dohyeonmenu {
+	font-family: 'Do Hyeon', serif; /*웹 폰트 지정*/
+	font-size: 25px;
+	color: white;
 }
 
-.nanumgothic{
-	font-family: 'Nanum Gothic', serif;/*웹 폰트 지정*/
-	font-weight : 300;
-	color:white;
-}
-
-.rightPad{
-	padding-right:150px;
+.rightPad {
+	padding-right: 150px;
 }
 
 #modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
@@ -91,16 +98,79 @@ details {
 }
 </style>
 </head>
-
-<body>
-<div>
-	<!-- header 영역 -->
-	<header class="blog-header lh-1 py-3">
-		<div class="row flex-nowrap justify-content-between align-items-center">
-			<div class="col-4 pt-1">
-				<img src="" title="" style="width: 200px;">
+<body style="width: 1215px; margin: 0 auto;">
+	<div>
+		<header class="blog-header lh-1 py-3">
+			<div
+				class="row flex-nowrap justify-content-between align-items-center">
+				<div class="col-4 pt-1">
+					<img src="" title="" style="width: 200px;">
+				</div>
+				<div class="row">
+					<img style="margin-top: 10px; width: 45px; height: 45px;"
+						src="https://creazilla-store.fra1.digitaloceanspaces.com/emojis/52942/paw-prints-emoji-clipart-md.png">
+					<div class="col-4 text-center">
+						<a class="blog-header-logo text-body-emphasis dohyeon"
+							style="font-size: 50px; font-weight: 500;" href="/main">Groobear</a>
+					</div>
+				</div>
+				<div class="col-6 d-flex justify-content-end align-items-center"
+					style="margin-left: -200px;">
+					<table style="width: 300px; text-align: right; margin-right: 30px;">
+						<tbody>
+							<tr>
+								<td style="font-size: 20px;"><a class="dohyeon">[[${session.Name
+										}]]님 반갑습니다</a></td>
+							</tr>
+							<tr>
+								<td style="font-size: 20px;"><span><a href="/logout"
+										class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp; <span><a
+										id="commute" class="dohyeon">마이페이지</a></span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
+		</header>
+		<nav class="navbar navbar-expand-lg"
+			style="text-align: center; background-color: #35A880;">
+			<div class="collapse navbar-collapse" id="navbarColor01">
 
+				<ul class="navbar-nav mr-auto" style="display: flex; margin: auto;">
+					<li class="nav-item active rightPad"
+						style="padding: 0px; margin-right: 90px;"><a
+						class="nav-link dohyeonmenu" href="/introduce">회사소개</a></li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;"><a
+						class="nav-link dohyeonmenu" href="/mail/receiveMail">메일</a></li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;"><a
+						class="nav-link dohyeonmenu" href="/proMain">프로젝트</a></li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;"><a
+						class="nav-link dohyeonmenu" href="/pay/payMain">전자결재</a></li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;"><a
+						class="nav-link dohyeonmenu" href="/boardList?boardType=N">게시판</a>
+					</li>
+					<li class="nav-item" style="padding: 0px;"><a
+						class="nav-link dohyeonmenu" href="/empInfo">인사관리</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="data" style="display: none">
+			<p class="nowMon"></p>
+
+		</div>
+		<script>
+	//WebSocket 연결 설정
+	const alarmClient = new StompJs.Client({
+	brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+	});
+>>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
+
+<<<<<<< HEAD
 			<div class="col-4 text-center">
 				<a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:40px; font-weight : 500;" href="/main">Groobear</a>
 			</div>
@@ -164,112 +234,146 @@ var year = today.getFullYear();
 var month = ('0' + (today.getMonth() + 1)).slice(-2);
 var monthString = year + '-' + month;
 const monthDate = monthString;
+=======
+	// 페이지 로드시 웹소켓 연결
+	window.addEventListener("load", function(event) {
+	   alarmClient.activate();
+	});
+>>>>>>> branch 'master' of https://github.com/ByungGwan27/groobearDev.git
 
+<<<<<<< HEAD
 document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
 </script>
-   
-<div class="row">
-	<!-- 사이드바 -->
-	<nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-		<div class="position-sticky">
-			<ul class="nav flex-column">
-				<!-- 사이드바 메뉴 아이템들 -->
-				<li class="nav-item">
-					<a href="/proCreate"><span class="material-icons">add_box</span>새 프로젝트 생성</a>
-				</li>
-				<li class="nav-item">
-					<a href="/proMain"><span class="material-icons">home</span>내 프로젝트</a>            
-				</li>
-				<li class="nav-item">
-					<a href="/proMainS"><span class="material-icons">star</span>즐겨찾기</a>
-				</li>
-				<li class="nav-item">
-					<a href="#"><span class="material-icons">mail</span>미확인(x)</a>
-				</li>
-				<li class="nav-item">
-					<a href="/proMainG"><span class="material-icons">drafts</span>미분류</a>
-				</li>
-				<li class="nav-item">
-					<a href="/proMainH"><span class="material-icons">visibility_off</span>숨김</a>
-					<details>
-						<summary>모아보기</summary>
-						<ul>
-							<li>전체업무</li>
-							<li>북마크</li>
-							<li>나를 언급</li>
-							<li>내 게시물</li>
-						</ul>
-					</details>
-					<details id="groupFolderList" open>
-						<summary>프로젝트 폴더
-							<span id="popupProjectBtn" class="material-icons">add</span>
-						</summary>
-					<!-- 프로젝트 그룹 리스트 -->
-						<ul id="proGroup">
-						<th:block th:each="proG : ${projectGroupList}">
-							<li>
-								<a th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
-								   th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
-								   [[${proG.groupName}]]
-									<span class='material-icons moreVertIcons'
-										  style='display: none;'>more_vert</span>
-								</a>
-							</li>
-						</th:block>
-						</ul>
-					</details>
-				</li>
-			</ul>
-		</div>
-	</nav>
+		======= // 연결 성공시 alarmClient.onConnect = (frame) => {
+		console.log('Connected: ' + frame); // 프로젝트 구독
+		alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]',
+		(alarmMsg) => { almSendMsg(JSON.parse(alarmMsg.body)); }); // 채팅방 생성
+		초대 구독 alarmClient.subscribe('/alarmMan/chatAlm/' +
+		'[[${session.Id}]]', (alarmMsg) => {
+		almSendMsgChat(JSON.parse(alarmMsg.body)); }); }; //에러
+		alarmClient.onWebSocketError = (error) => { console.error('Error with
+		websocket', error); }; alarmClient.onStompError = (frame) => {
+		console.error('Broker reported error: ' + frame.headers['message']);
+		console.error('Additional details: ' + frame.body); }; function
+		almSendMsg() { toastAct() } function almSendMsgChat() { toastActChat()
+		} function toastAct() { toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true; toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true; toastr.options.positionClass =
+		'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000}); }
 
-	<!-- sidebar modal창 -->
-	<div id="modalFolderCreate1">
-		<div id="modalContent">
-			<div id="modalBody">
-				<span id="closeBtn">&times;</span>
-				<p>프로젝트 폴더 만들기</p>
-				<input type="text" placeholder="프로젝트 폴더명을 입력하세요"
-					id="folderContent1">
-				<button type="button" id="cancelBtn" class="btn btn-primary">취소</button>
-				<button type="button" id="createFolder">확인</button>
-			</div>
-		</div>
-	</div>
-	<!-- sidebar modal창2 -->
-	<div id="modalFolderCreate2">
-		<div id="modalContent2">
-			<div id="modalBody2">
-				<span id="closeBtn2">&times;</span>
-				<p>프로젝트 폴더명 수정하기</p>
-				<input type="text" placeholder="프로젝트 폴더명을 입력하세요"
-					id="folderContent2">
-				<button type="button" id="cancelBtn2" class="btn btn-primary">취소</button>
-				<button type="button" id="updateFolderName">변경</button>
-			</div>
-		</div>
-	</div>
-	<!-- sidebar modal창3 -->
-	<div id="modalFolderCreate3">
-		<div id="modalContent3">
-			<div id="modalBody3">
-				<p>프로젝트 폴더를 삭제하시겠습니까?</p>
-				<p>프로젝트 폴더에 포함된 프로젝트는 삭제되지 않습니다.</p>
-				<button type="button" id="cancelBtn3" class="btn btn-primary">취소</button>
-				<button type="button" id="deleteFolder">확인</button>
-			</div>
-		</div>
-	</div>
+		function toastActChat() { toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true; toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true; toastr.options.positionClass =
+		'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000}); } var
+		today = new Date(); var year = today.getFullYear(); var month = ('0' +
+		(today.getMonth() + 1)).slice(-2); var monthString = year + '-' +
+		month; const monthDate = monthString;
 
-	<!-- 사이드바 우측의 컨텐츠 영역 -->
-	<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-		<div layout:fragment="content"></div>
-	</main>
-<!-- 본문 내용 종료 -->	
+		document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
 
-<!-- proTiles 스크립트 영역 -->
-<!-- 공통 데이터 -->
-<script th:inline="javascript">
+		</script>
+		>>>>>>> branch 'master' of
+		https://github.com/ByungGwan27/groobearDev.git
+
+		<div class="row">
+			<!-- 사이드바 -->
+			<nav id="sidebar"
+				class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+				<div class="position-sticky">
+					<ul class="nav flex-column">
+						<!-- 사이드바 메뉴 아이템들 -->
+						<li class="nav-item"><a href="/proCreate"><span
+								class="material-icons">add_box</span>새 프로젝트 생성</a></li>
+						<li class="nav-item"><a href="/proMain"><span
+								class="material-icons">home</span>내 프로젝트</a></li>
+						<li class="nav-item"><a href="/proMainS"><span
+								class="material-icons">star</span>즐겨찾기</a></li>
+						<li class="nav-item"><a href="#"><span
+								class="material-icons">mail</span>미확인(x)</a></li>
+						<li class="nav-item"><a href="/proMainG"><span
+								class="material-icons">drafts</span>미분류</a></li>
+						<li class="nav-item"><a href="/proMainH"><span
+								class="material-icons">visibility_off</span>숨김</a> <details>
+								<summary>모아보기</summary>
+								<ul>
+									<li>전체업무</li>
+									<li>북마크</li>
+									<li>나를 언급</li>
+									<li>내 게시물</li>
+								</ul>
+							</details> <details id="groupFolderList" open>
+								<summary>
+									프로젝트 폴더 <span id="popupProjectBtn" class="material-icons">add</span>
+								</summary>
+								<!-- 프로젝트 그룹 리스트 -->
+								<ul id="proGroup">
+									<th:block th:each="proG : ${projectGroupList}">
+										<li><a
+											th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
+											th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
+												[[${proG.groupName}]] <span
+												class='material-icons moreVertIcons' style='display: none;'>more_vert</span>
+										</a></li>
+									</th:block>
+								</ul>
+							</details></li>
+					</ul>
+				</div>
+			</nav>
+
+			<!-- sidebar modal창 -->
+			<div id="modalFolderCreate1">
+				<div id="modalContent">
+					<div id="modalBody">
+						<span id="closeBtn">&times;</span>
+						<p>프로젝트 폴더 만들기</p>
+						<input type="text" placeholder="프로젝트 폴더명을 입력하세요"
+							id="folderContent1">
+						<button type="button" id="cancelBtn" class="btn btn-primary">취소</button>
+						<button type="button" id="createFolder">확인</button>
+					</div>
+				</div>
+			</div>
+			<!-- sidebar modal창2 -->
+			<div id="modalFolderCreate2">
+				<div id="modalContent2">
+					<div id="modalBody2">
+						<span id="closeBtn2">&times;</span>
+						<p>프로젝트 폴더명 수정하기</p>
+						<input type="text" placeholder="프로젝트 폴더명을 입력하세요"
+							id="folderContent2">
+						<button type="button" id="cancelBtn2" class="btn btn-primary">취소</button>
+						<button type="button" id="updateFolderName">변경</button>
+					</div>
+				</div>
+			</div>
+			<!-- sidebar modal창3 -->
+			<div id="modalFolderCreate3">
+				<div id="modalContent3">
+					<div id="modalBody3">
+						<p>프로젝트 폴더를 삭제하시겠습니까?</p>
+						<p>프로젝트 폴더에 포함된 프로젝트는 삭제되지 않습니다.</p>
+						<button type="button" id="cancelBtn3" class="btn btn-primary">취소</button>
+						<button type="button" id="deleteFolder">확인</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- 사이드바 우측의 컨텐츠 영역 -->
+			<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+				<div layout:fragment="content"></div>
+			</main>
+			<!-- 본문 내용 종료 -->
+
+			<!-- proTiles 스크립트 영역 -->
+			<!-- 공통 데이터 -->
+			<script th:inline="javascript">
 /*<![CDATA[*/
 //그룹 갯수 체크
   	let pGC = /*[[${projectGroupList}]]*/ [];
@@ -641,7 +745,7 @@ function miniModal(target) {
 
 
 
-<!-- 태그 종료내용 종료 -->
-</div>
+			<!-- 태그 종료내용 종료 -->
+		</div>
 </body>
 </html>
