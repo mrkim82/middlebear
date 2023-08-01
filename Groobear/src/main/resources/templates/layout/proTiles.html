@@ -94,65 +94,71 @@ details {
 
 <body>
 <div>
-  <header class="blog-header lh-1 py-3">
-      <div class="row flex-nowrap justify-content-between align-items-center">
-          <div class="col-4 pt-1">
-   		<img src="" title="" style="width: 200px;">
-	</div>
-          
-          <div class="col-4 text-center">
-              <a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:40px; font-weight : 500;" href="/main">Groobear</a>
-          </div>
-          <div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px;">
-              <table style="width: 300px;">
-               	<tbody>
-                	<tr>
-                		<td>
-                			<a class="dohyeon">[[${session.Name }]]님 반갑습니다</a>
-                		</td>
-                	</tr>
-                	<tr>
-                		<td><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
-                		<span><a id="commute" class="dohyeon">마이페이지</a></span></td>
-                	</tr>
-               	</tbody>
-               </table>
-           </div>
-       </div>
-   </header>
-</div>
-<nav class="navbar navbar-expand-lg" style="text-align: center; background-color:#35A880;"> 
-    <div class="collapse navbar-collapse" id="navbarColor01">
-    
-       <ul class="navbar-nav mr-auto" style="display:flex; margin:auto;">
-         <li class="nav-item active rightPad">
-           <a class="nav-link dohyeonmenu" href="/introduce">회사소개</a>
-         </li>
-         <li class="nav-item rightPad">
-           <a class="nav-link dohyeonmenu" href="/mail/receiveMail">메일</a>
-         </li>
-         <li class="nav-item rightPad">
-           <a class="nav-link dohyeonmenu" href="/proMain">프로젝트</a>
-         </li>
-         <li class="nav-item rightPad">
-           <a class="nav-link dohyeonmenu" href="/pay/payMain">전자결재</a>
-         </li>
-         <li class="nav-item rightPad">
-           <a class="nav-link dohyeonmenu" href="/boardList?boardType=N">게시판</a>
-         </li>
-         <li class="nav-item">
-           <a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
-         </li>
-       </ul>
-      </div>
-  </nav>
-  
-   <div class="data" style="display:none">
-	<p class="nowMon"></p>
-	
-</div>
-	<script>
+	<!-- header 영역 -->
+	<header class="blog-header lh-1 py-3">
+		<div class="row flex-nowrap justify-content-between align-items-center">
+			<div class="col-4 pt-1">
+				<img src="" title="" style="width: 200px;">
+			</div>
 
+			<div class="col-4 text-center">
+				<a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:40px; font-weight : 500;" href="/main">Groobear</a>
+			</div>
+			<div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px;">
+				<table style="width: 300px;">
+					<tbody>
+						<tr>
+							<td>
+								<a class="dohyeon">[[${session.Name }]]님 반갑습니다</a>
+	                		</td>
+						</tr>
+	                	<tr>
+							<td>
+								<span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
+	                			<span><a id="commute" class="dohyeon">마이페이지</a></span>
+	                		</td>
+	                	</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</header>
+</div>
+
+<!-- nav 영역 -->
+<nav class="navbar navbar-expand-lg"
+	 style="text-align: center; background-color:#35A880;"> 
+	<div class="collapse navbar-collapse" id="navbarColor01">
+    
+    	<!-- navigation -->
+		<ul class="navbar-nav mr-auto" style="display:flex; margin:auto;">
+			<li class="nav-item active rightPad">
+				<a class="nav-link dohyeonmenu" href="/introduce">회사소개</a>
+			</li>
+			<li class="nav-item rightPad">
+				<a class="nav-link dohyeonmenu" href="/mail/receiveMail">메일</a>
+			</li>
+			<li class="nav-item rightPad">
+				<a class="nav-link dohyeonmenu" href="/proMain">프로젝트</a>
+			</li>
+			<li class="nav-item rightPad">
+				<a class="nav-link dohyeonmenu" href="/pay/payMain">전자결재</a>
+			</li>
+			<li class="nav-item rightPad">
+				<a class="nav-link dohyeonmenu" href="/boardList?boardType=N">게시판</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+  
+<div class="data" style="display:none">
+	<p class="nowMon"></p>
+</div>
+
+<script>
 var today = new Date();
 var year = today.getFullYear();
 var month = ('0' + (today.getMonth() + 1)).slice(-2);
@@ -160,88 +166,90 @@ var monthString = year + '-' + month;
 const monthDate = monthString;
 
 document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
-
 </script>
    
 <div class="row">
-     <!-- 사이드바 -->
-    <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-      <div class="position-sticky">
-        <ul class="nav flex-column">
-          <!-- 사이드바 메뉴 아이템들 -->
-          <li class="nav-item">
-            <a href="/proCreate"><span class="material-icons">add_box</span>새 프로젝트 생성</a>
-          </li>
-          <li class="nav-item">
-	  <a href="/proMain"><span class="material-icons">home</span>내 프로젝트</a>            
-	</li>
-          <li class="nav-item">
-            <a href="/proMainS"><span class="material-icons">star</span>즐겨찾기</a>
-          </li>
-          <li class="nav-item">
-            <a href="#"><span class="material-icons">mail</span>미확인(x)</a>
-          </li>
-          <li class="nav-item">
-            <a href="/proMainG"><span class="material-icons">drafts</span>미분류</a>
-          </li>
-          <li class="nav-item">
-            <a href="/proMainH"><span class="material-icons">visibility_off</span>숨김</a>
-            <details>
-		<summary>모아보기</summary>
-		<ul>
-			<li>전체업무</li>
-			<li>북마크</li>
-			<li>나를 언급</li>
-			<li>내 게시물</li>
-		</ul>
-	  </details>
-	  <details id="groupFolderList" open>
-		<summary>
-			프로젝트 폴더<span id="popupProjectBtn" class="material-icons">add</span>
-		</summary>
-		<!-- 프로젝트 그룹 리스트 -->
-		<ul id="proGroup">
-			<th:block th:each="proG : ${projectGroupList}">
-				<li><a
-					th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
-					th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
-						[[${proG.groupName}]]<span
-						class='material-icons moreVertIcons' style='display: none;'>more_vert</span>
-				</a></li>
-			</th:block>
-		</ul>
-	  </details>
-          </li>
-        </ul>
-      </div>
-    </nav>
-<!-- modal창 -->
-<div id="modalFolderCreate1">
-	<div id="modalContent">
-		<div id="modalBody">
-			<span id="closeBtn">&times;</span>
-			<p>프로젝트 폴더 만들기</p>
-			<input type="text" placeholder="프로젝트 폴더명을 입력하세요"
-				id="folderContent1">
-			<button type="button" id="cancelBtn" class="btn btn-primary">취소</button>
-			<button type="button" id="createFolder">확인</button>
+	<!-- 사이드바 -->
+	<nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+		<div class="position-sticky">
+			<ul class="nav flex-column">
+				<!-- 사이드바 메뉴 아이템들 -->
+				<li class="nav-item">
+					<a href="/proCreate"><span class="material-icons">add_box</span>새 프로젝트 생성</a>
+				</li>
+				<li class="nav-item">
+					<a href="/proMain"><span class="material-icons">home</span>내 프로젝트</a>            
+				</li>
+				<li class="nav-item">
+					<a href="/proMainS"><span class="material-icons">star</span>즐겨찾기</a>
+				</li>
+				<li class="nav-item">
+					<a href="#"><span class="material-icons">mail</span>미확인(x)</a>
+				</li>
+				<li class="nav-item">
+					<a href="/proMainG"><span class="material-icons">drafts</span>미분류</a>
+				</li>
+				<li class="nav-item">
+					<a href="/proMainH"><span class="material-icons">visibility_off</span>숨김</a>
+					<details>
+						<summary>모아보기</summary>
+						<ul>
+							<li>전체업무</li>
+							<li>북마크</li>
+							<li>나를 언급</li>
+							<li>내 게시물</li>
+						</ul>
+					</details>
+					<details id="groupFolderList" open>
+						<summary>프로젝트 폴더
+							<span id="popupProjectBtn" class="material-icons">add</span>
+						</summary>
+					<!-- 프로젝트 그룹 리스트 -->
+						<ul id="proGroup">
+						<th:block th:each="proG : ${projectGroupList}">
+							<li>
+								<a th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
+								   th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}">
+								   [[${proG.groupName}]]
+									<span class='material-icons moreVertIcons'
+										  style='display: none;'>more_vert</span>
+								</a>
+							</li>
+						</th:block>
+						</ul>
+					</details>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<!-- sidebar modal창 -->
+	<div id="modalFolderCreate1">
+		<div id="modalContent">
+			<div id="modalBody">
+				<span id="closeBtn">&times;</span>
+				<p>프로젝트 폴더 만들기</p>
+				<input type="text" placeholder="프로젝트 폴더명을 입력하세요"
+					id="folderContent1">
+				<button type="button" id="cancelBtn" class="btn btn-primary">취소</button>
+				<button type="button" id="createFolder">확인</button>
+			</div>
 		</div>
 	</div>
-</div>
-<!-- modal창2 -->
-<div id="modalFolderCreate2">
-	<div id="modalContent2">
-		<div id="modalBody2">
-			<span id="closeBtn2">&times;</span>
-			<p>프로젝트 폴더명 수정하기</p>
-			<input type="text" placeholder="프로젝트 폴더명을 입력하세요"
-				id="folderContent2">
-			<button type="button" id="cancelBtn2" class="btn btn-primary">취소</button>
-			<button type="button" id="updateFolderName">변경</button>
+	<!-- sidebar modal창2 -->
+	<div id="modalFolderCreate2">
+		<div id="modalContent2">
+			<div id="modalBody2">
+				<span id="closeBtn2">&times;</span>
+				<p>프로젝트 폴더명 수정하기</p>
+				<input type="text" placeholder="프로젝트 폴더명을 입력하세요"
+					id="folderContent2">
+				<button type="button" id="cancelBtn2" class="btn btn-primary">취소</button>
+				<button type="button" id="updateFolderName">변경</button>
+			</div>
 		</div>
 	</div>
-</div>
-<!-- modal창3 -->
+	<!-- sidebar modal창3 -->
 	<div id="modalFolderCreate3">
 		<div id="modalContent3">
 			<div id="modalBody3">
@@ -252,8 +260,17 @@ document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate
 			</div>
 		</div>
 	</div>
+
+	<!-- 사이드바 우측의 컨텐츠 영역 -->
+	<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+		<div layout:fragment="content"></div>
+	</main>
+<!-- 본문 내용 종료 -->	
+
+<!-- proTiles 스크립트 영역 -->
+<!-- 공통 데이터 -->
 <script th:inline="javascript">
-  /*<![CDATA[*/
+/*<![CDATA[*/
 //그룹 갯수 체크
   	let pGC = /*[[${projectGroupList}]]*/ [];
   	let pGCUp = pGC.length;
@@ -621,12 +638,10 @@ function miniModal(target) {
 
   /*]]>*/
   </script>
-<!-- 사이드바 우측의 컨텐츠 영역 -->
-    <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-      <div layout:fragment="content" ></div>
-    </main>
-  </div>
-  <script th:inline="javascript">
-  </script>
+
+
+
+<!-- 태그 종료내용 종료 -->
+</div>
 </body>
 </html>

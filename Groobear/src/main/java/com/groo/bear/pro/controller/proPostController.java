@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.comm.DateUtil;
-import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.pro.service.ProFileVO;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.ProPostService;
@@ -46,6 +45,7 @@ import com.groo.bear.pro.service.task.ProWorkViewVO;
 
 import lombok.extern.log4j.Log4j2;
 
+//강병관
 @Controller
 @Log4j2
 public class proPostController {
@@ -57,13 +57,10 @@ public class proPostController {
 	ProPostService proPostService;
 	
 	@Autowired
-	ProPostSchService proPostSchService;
-	
-	@Autowired
 	ProPostSchService Sch;//스케쥴
 	
 	@Autowired
-	PublicCodeService publicC;//공통 코드
+	PublicCodeService publicC;//공통 코드(색상)
 	
 	@Autowired
 	ProTodoNVoteService todoNVote;//할 일, 투표
@@ -117,7 +114,7 @@ public class proPostController {
 		case 2 :
 			//글 조회(임시)
 			model.addAttribute("readFeedPost", proPostService.readFeedPost(proNo , vo.getPostType()));
-			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
+			model.addAttribute("readSchparti", Sch.readSchparti(id));
 			model.addAttribute("readPartiList", Sch.readPartiList(proNo));
 			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
 			//업무
@@ -149,7 +146,7 @@ public class proPostController {
 			model.addAttribute("readCalDetail", Sch.readCalDetail(proNo));//일정 단건
 			model.addAttribute("readPartiList", Sch.readPartiList(proNo));//참석자 조회
 			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
-			model.addAttribute("readSchparti", proPostSchService.readSchparti(id));
+			model.addAttribute("readSchparti", Sch.readSchparti(id));
 			//System.out.println("게시글"+model.getAttribute("readWorkSchView"));
 			pagePath = "proPost/proPostSchd";
 			break;
