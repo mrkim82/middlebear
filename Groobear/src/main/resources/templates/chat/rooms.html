@@ -7,40 +7,83 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" >
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
     <style>
-    #chatlist {
-    width: 300px;
+html {
+    background-color: #35a880;
+    height: 100%;
+}
+
+body {
+    font-family: 'Do Hyeon', sans-serif;
+    min-height: 100%;
+    background-color: inherit; 
+}
+
+.modal-body {
+    font-size: 20px;
+}
+
+.outList {
+    background-color: #35a880;
+    min-height: 100vh;  /* 패딩 크기를 뺀 만큼 높이를 설정 */
+    padding: 20px;
+}
+
+.list {
+    margin: 20px;
+    background-color: white; 
+    border-radius: 10px; 
+    padding: 20px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#chatlist {
+    width: 400px;
     list-style-type: none;
     padding: 0;
     font-family: Arial, sans-serif;
 }
 
 .chatroom {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease-in-out;
+    width: 100%;
 }
 
 .chatroom:hover {
-    background-color: #eee;
-}
-
-.profile-pic {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.chatroom-name {
-    font-weight: bold;
-    margin-bottom: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .chatroom-info {
+    font-family: 'Do Hyeon', sans-serif;
     flex-grow: 1;
+    background-color: #9ad3bf;
+    border-radius: 5px; 
+    padding: 15px; 
+    border: 2px solid #ccc; 
+    color: #333; 
+    margin: 5px;
+    flex-direction: column;
+}
+
+.name-participant {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.participant-count {
+    margin-left: auto;
 }
 
 .new-message-notification {
@@ -59,24 +102,44 @@
     font-size: 24px;
     background: none;
     border: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.modal-backdrop {
+    background-color: #35a880;
+    opacity: 1 !important; 
+}
+.chatroom-name{
+    font-size: 25px;
+    font-weight: bold;
+}
+.message-content{
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.5);
 }
     </style>
 </head>
 <body>
+<div class="outList">
+<div class="list">
     <h1>채팅방목록</h1>
-    <button id="addChatroom" data-toggle="modal" data-target="#myModal">+</button>
+    <button id="addChatroom" data-toggle="modal" data-target="#myModal">채팅방생성 +</button>
     <ul id="chatlist">
         <li th:each="room : ${rooms}" class="chatroom">
             <div class="chatroom-info">
-                <div class="chatroom-name" th:text="${room.roomName}">Room Name</div>
-                <div class="participant-count" th:text="${room.participantCount} + '명 참여중'"></div> <!-- 참여인원 수 추가 -->
-                <div th:text="${room.lastMessage != null} ? ${room.lastMessage} : '메세지 내용이 없습니다.'"></div>
-
-                <!-- Add your other fields here -->
+                <div class="name-participant">
+                    <span class="chatroom-name" th:text="${room.roomName}">Room Name</span>
+                    <span class="participant-count" th:text="${room.participantCount} ">👥</span><i class="material-icons">group</i>
+                </div>
+                <div class="message-content" th:text="${room.id} + (${room.lastMessage != null ? ${room.lastMessage} : '메세지 내용이 없습니다.'})"></div>
+                <!-- <div class="message-content" th:text="${room.lastMessage != null} ? ${room.lastMessage} : '메세지 내용이 없습니다.'"></div> -->
             </div>
                 <button class="delete-chatroom" th:data-room-no="${room.roomNo}" style="display: none;">Delete</button>
         </li>
     </ul>
+</div>
 
     <!-- The Modal -->
     <div class="modal" id="myModal">
@@ -93,7 +156,7 @@
                 <div class="modal-body">
                 
                     <input type="text" id="chatroomName" placeholder="채팅방 이름">
-                    <ul id="employeeList"></ul>
+                    <ol id="employeeList"></ol>
                     <div id="userListContainer">
          <!-- 사용자 목록이 이곳에 표시됩니다 -->
     					</div>
@@ -125,6 +188,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -202,9 +266,8 @@ function toastActChat() {
             .then(employees => {
                 const employeeListUl = document.getElementById('employeeList');
                 employees.forEach(employee => {
-                	console.log(employee)
                     const li = document.createElement('li');
-
+					const label = document.createElement('label');
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
                     checkbox.id = 'employee-' + employee.id;
@@ -224,14 +287,22 @@ function toastActChat() {
 
                     const empDept = document.createElement('span');
                     empDept.textContent = employee.deptName;
-
-                    li.appendChild(checkbox);
+                    
+                    label.appendChild(checkbox);
+                    label.appendChild(empNo);
+                    label.appendChild(empId);
+                    label.appendChild(empName);
+                    label.appendChild(empRank);
+                    label.appendChild(empDept);
+                    
+                    /* li.appendChild(checkbox);
                     li.appendChild(empNo);
                     li.appendChild(empId);
                     li.appendChild(empName);
                     li.appendChild(empRank);
-                    li.appendChild(empDept);
+                    li.appendChild(empDept); */
                     
+                    li.appendChild(label);
                     employeeListUl.appendChild(li);
                 });
             })
@@ -247,7 +318,6 @@ window.onload = function() {
         let roomNo = chatrooms[i].getElementsByClassName('delete-chatroom')[0].getAttribute('data-room-no');
         let infoDiv = chatrooms[i].getElementsByClassName('chatroom-info')[0];
         infoDiv.addEventListener('click', () => {
-            //location.href = `/chat/${roomNo}`;
             window.open("/chat/" + roomNo, "", "_blank");
         });
         
@@ -279,34 +349,24 @@ window.onload = function() {
 document.getElementById('createChatroom').addEventListener('click', () => {
     const chatroomName = document.getElementById('chatroomName').value;
     const employeeIds = Array.from(document.querySelectorAll('#employeeList input:checked')).map(checkbox => checkbox.value);
-    
+    console.log(employeeIds)
+    console.log(employeeIds.length)
  // 방 제목이 없는 경우 모달창 띄우기
-    if (!chatroomName) {
+    if (!chatroomName || employeeIds.length === 0) {
         // 기존 채팅방 생성 모달 닫기
         $('#myModal').modal('hide');
         $('#alertModalLabel').text('Error');
-        $('.modal-body').text('채팅방 제목을 작성해주세요.');
+        $('.modal-body').html('채팅방 제목을 작성하셨는지 확인해주세요.<br>혹은 멤버를 선택하지 않았는지 확인해주세요.');
         $('#alertModal').modal('show');
+        $('#alertModalClose').on('click', function (e) {
+        	window.location.href = window.location.href;
+        }); 
         return;
     }
     
-    // 체크박스가 선택되지 않은 경우 모달창 띄우기
-    if (employeeIds.length === 0) {
-        // 기존 채팅방 생성 모달 닫기
-        $('#myModal').modal('hide');
-        $('#alertModalLabel').text('Error');
-        $('.modal-body').text('적어도 한 명의 사원을 선택해주세요.');
-        $('#alertModal').modal('show');
-        return;
-    }
-    $('#alertModalClose').on('hidden.bs.modal', function (e) {
-    	window.location.href = window.location.href;
-    });
     if (chatroomName) {
         const newChatroom = {
             roomName: chatroomName, 
-            //lastMessage: 'No messages yet!', 
-            //newMessages: 0,
             employeeIds: employeeIds,
         };
         fetch('/newChatroom', {
@@ -322,6 +382,7 @@ document.getElementById('createChatroom').addEventListener('click', () => {
 
             const li = document.createElement('li');
             li.classList.add('chatroom');
+            li.style.backgroundColor = '#35A880';
 
             const infoDiv = document.createElement('div');
             infoDiv.classList.add('chatroom-info');

@@ -88,6 +88,12 @@ public class ChatServiceImpl implements ChatService {
 	public String getLastMessage(int roomNo) {
 	    return chatMapper.getLastMessage(roomNo);
 	}
+
+
+	@Override
+	public List<ChatMessageDTO> MessageAllListReal(ChatMessageDTO chatMessageDTO) {
+		return chatMapper.MessageAllListReal(chatMessageDTO);
+	}
 	
 	
 }
