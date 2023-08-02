@@ -23,10 +23,12 @@
 	  rel="stylesheet">
 
 <!-- proTiles 스크립트 -->
+
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 <script type="text/javascript"
 		src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
 
 <style>
 @import
@@ -51,6 +53,24 @@
 	background-color: #35A880;
 	color: #fff;
 	border: 1px solid #35A880;
+}
+
+/* 검색 창 스타일 */
+input[type="text"] {
+	width: 150px; /* 원하는 너비 값으로 변경 */
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 20px;
+	font-size: 16px;
+	outline: none;
+	transition: width 0.3s ease-in-out;
+}
+
+/* 검색 창에 포커스되었을 때 스타일 */
+input[type="text"]:focus {
+	width: 170px; /* 포커스되었을 때 더 넓은 너비 값으로 변경 */
+	border-color: #6c63ff;
+	box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
 }
 
 #modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
@@ -257,6 +277,13 @@ details ul {
 			<ul class="nav flex-column">
 				<!-- 사이드바 메뉴 아이템들 -->
 				<li class="nav-item">
+					<button type="button"
+							class="btn btn-primary"
+							data-toggle="modal"
+							data-target="#inviteManPro">
+					  초대된 프로젝트 <span class="badge badge-light inviteCountTarget"></span>
+					</button></li>
+				<li class="nav-item">
 					<a href="/proCreate">
 						<span class="material-icons">add_box</span>
 						새 프로젝트 생성</a></li>
@@ -353,6 +380,44 @@ details ul {
 		</div>
 	</div>
 
+	<!-- 초대된 프로젝트 모달 -->
+	<div class="modal fade" id="inviteManPro" tabindex="-1" aria-labelledby="inviteManProLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="inviteManProLabel">미수락 프로젝트</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th scope="col"></th>
+								<th scope="col"></th>
+								<th scope="col">프로젝트 명</th>
+								<th scope="col">초대자</th>
+							</tr>
+						</thead>
+						<tbody class="inviteMemTarget">
+							<tr>
+								<th><input type="checkbox" data-parti-pro-mem-no="1"></th>
+								<td>테스트 프로젝트</td>
+								<td>김나리</td>
+							</tr>
+						</tbody>
+					</table>
+					
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
 	<!-- 사이드바 우측의 컨텐츠 영역 -->
 	<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 		<div layout:fragment="content"></div>
@@ -361,7 +426,6 @@ details ul {
 
 <!-- proTiles 스크립트 영역 -->
 <!-- 공통 데이터 -->
-
 <script th:inline="javascript">
 /*<![CDATA[*/
 	//그룹 갯수 체크
@@ -369,6 +433,149 @@ details ul {
 /*]]>*/
 </script>
 
+<!-- 페이지 실행시 -->
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+	makeInviteCountTarget();//프로젝트 미확인 알람
+});
+</script>
+
+<!-- 초대된 프로젝트 알람 카운트 -->
+<script type="text/javascript">
+	function makeInviteCountTarget() {
+		fetch("/readNoPartiProC", {
+			method: 'POST'
+		})
+		.then(response => response.json())
+		.then(res => {
+			
+			document.querySelector('.inviteCountTarget').textContent = res;
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+</script>
+
+<!-- 초대된 프로젝트 알람 모달 오픈시 -->
+<script>
+$('#inviteManPro').on('show.bs.modal', noInviteList);
+
+function noInviteList() {
+	let inviteList = event.target;
+	
+	fetch("/readNoPartiPro", {
+		method: 'POST'
+	})
+	.then(response => response.json())
+	.then(res => {
+		createDynamicList(res)
+	})
+	.catch(error => {
+		console.error('Error: ',error);
+	});
+}
+
+//태그 생성
+function createDynamicList(partiTagList) {
+	let inviteTbody = document.querySelector('.inviteMemTarget');
+
+	// 기존의 내용을 지우고 시작
+	inviteTbody.innerHTML = '';
+	
+	partiTagList.forEach((project) => {
+		const tr = document.createElement('tr');
+		tr.setAttribute('data-parti-pro-mem-no', project.proMemNo);
+	
+		// 수락 버튼 추가
+		const checkboxCell = document.createElement('td');
+		const button = document.createElement('button');
+		button.setAttribute('type', 'button');
+		button.setAttribute('class', 'btn btn-success');
+		button.textContent = '수락';
+		button.onclick = partiY; // onclick 이벤트 처리
+		
+		checkboxCell.appendChild(button);
+		tr.appendChild(checkboxCell);
+		
+		// 거절버튼
+		const checkboxCell2 = document.createElement('td');
+		const button2 = document.createElement('button');
+		button2.setAttribute('type', 'button');
+		button2.setAttribute('class', 'btn btn-danger');
+		button2.textContent = '거절';
+		button2.onclick = partiN; // onclick 이벤트 처리
+		
+		checkboxCell2.appendChild(button2);
+		tr.appendChild(checkboxCell2);
+		
+		// 프로젝트명 열 추가
+		const projectNameCell = document.createElement('td');
+		projectNameCell.textContent = project.proName;
+		tr.appendChild(projectNameCell);
+	
+		// 멤버명 열 추가
+		const memberNameCell = document.createElement('td');
+		memberNameCell.textContent = project.rank + ' ' +project.name;
+		tr.appendChild(memberNameCell);
+	
+		// tbody에 행 추가
+		inviteTbody.appendChild(tr);
+	});
+  }
+  
+/* $('#modal2').on('hidden.bs.modal', function (e) {
+	$(this).find('.uploadResult ul li').remove();
+}); */
+</script>
+
+<!-- 프로젝트 수락처리 -->
+<script>
+	function partiY() {
+		let proMemNo = event.target.closest('tr').dataset.partiProMemNo;
+		console.log(proMemNo)
+		
+		fetch("/upPartiY", {
+	        method: 'PUT',
+	        headers : {
+	            'Content-Type': 'application/json'
+	        },
+	        body : JSON.stringify(proMemNo)
+	    })
+		.then(response => response.json())
+		.then(res => {
+			$('#inviteManPro').modal('hide');
+			location.reload();
+			//makeInviteCountTarget();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+</script>
+
+<script>
+	function partiN() {
+		let proMemNo = event.target.closest('tr').dataset.partiProMemNo;
+		console.log(proMemNo);
+		
+		fetch("/delPartiN", {
+	        method: 'DELETE',
+	        headers : {
+	            'Content-Type': 'application/json'
+	        },
+	        body : JSON.stringify(proMemNo)
+	    })
+		.then(response => response.json())
+		.then(res => {
+			$('#inviteManPro').modal('hide');
+			makeInviteCountTarget();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+</script>
 <script>
 	//변수선언
 	let modal1 = document.getElementById('modalFolderCreate1');

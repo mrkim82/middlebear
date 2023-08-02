@@ -2,6 +2,7 @@ package com.groo.bear.pro.controller;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
+import com.groo.bear.pro.service.provo.ProPartiAlarmVO;
 import com.groo.bear.pro.service.provo.ProUsersVO;
 import com.groo.bear.pro.service.provo.ProVO;
 
@@ -250,6 +252,37 @@ public class ProController {
 		int result = proService.deleteGroupProManage(vo);
 		
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
-	}
+	};
+	
+	@PutMapping("upPartiY")
+	@ResponseBody
+	public Map<String, Object> updateProPartiY(@RequestBody int proMemNo) {
+		int result = proService.updateProPartiY(proMemNo);
+		System.out.println(proMemNo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	};
+	
+	@DeleteMapping("delPartiN")
+	@ResponseBody
+	public Map<String, Object> deleteProPartiN(@RequestBody int proMemNo) {
+		int result = proService.deleteProPartiN(proMemNo);
+		System.out.println(proMemNo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	};
+	
+	@PostMapping("readNoPartiPro")
+	@ResponseBody
+	public List<ProPartiAlarmVO> readNoPartiPro(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		return proService.readNoPartiPro((String)session.getAttribute("Id"));
+	};
+	
+	@PostMapping("readNoPartiProC")
+	@ResponseBody
+	public int readNoPartiProCount(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		return proService.readNoPartiProCount((String)session.getAttribute("Id"));
+	};
+	
 	
 }
