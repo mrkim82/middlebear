@@ -3538,6 +3538,7 @@ $('#modal12').on('show.bs.modal', function (e) {
 
 //파일 db삭제
 function delProFile(ppn, filename) {
+	
 	fetch("/delProFile", {
 		method: 'DELETE',
 		headers: {

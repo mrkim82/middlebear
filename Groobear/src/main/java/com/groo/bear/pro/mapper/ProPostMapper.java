@@ -77,4 +77,10 @@ public interface ProPostMapper {
 	
 	// 프로젝트 게시물 마지막 고유번호
 	public int readProPostNo();
+	
+	//프로젝트 나가기
+	public int delteProMemOut(int proNo, String id);
+	
+	//프로젝트 인원(단건)
+	public int readProDetailCount(int proNo);
 }

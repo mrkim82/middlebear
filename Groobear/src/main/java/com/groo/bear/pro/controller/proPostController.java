@@ -97,6 +97,7 @@ public class proPostController {
 		model.addAttribute("afterOneDay" , DateUtil.afterOneDay());//하루뒤
 		model.addAttribute("readProAuth", proService.readProAuth(proNo));//권한 및 프로젝트 마스터 조회
 		model.addAttribute("readPartiListM", proPostService.readPartiListM(proNo));//프로젝트 초대 할 인원
+		model.addAttribute("readProDetailCount", proPostService.readProDetailCount(proNo));//프로젝트 인원
 		
 		//System.out.println("게시글"+model.getAttribute("projectPartiMember"));
 		switch (homeTab) {
@@ -307,7 +308,7 @@ public class proPostController {
 	//초대 메일 발송
 	@PostMapping("inviteMail")
 	@ResponseBody
-	public Map<String, Object> inviteMail(HttpServletRequest request, @RequestBody List<ProInviteMailVO> vo) {
+	public Map<String, Object> inviteMail(@RequestBody List<ProInviteMailVO> vo) {
 		int result = proPostService.createInviteMail(vo);
 		return Collections.singletonMap("result", result);
 	}
@@ -353,6 +354,16 @@ public class proPostController {
 		System.out.println(proFileNo);
 		System.out.println(result);
 		return Collections.singletonMap("result", result/2 > 0 ? "성공" : "취소");
+	}
+	
+	//프로젝트 나가기
+	@DeleteMapping("delProMemOut")
+	@ResponseBody
+	public Map<String, Object> 프로젝트나가기(HttpServletRequest request, @RequestBody int proNo) {
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("Id");
+		int result = proPostService.delteProMemOut(proNo, id);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	

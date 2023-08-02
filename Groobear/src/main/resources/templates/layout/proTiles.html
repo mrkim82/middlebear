@@ -283,8 +283,14 @@ details ul {
 							data-target="#inviteManPro">
 					  초대된 프로젝트 <span class="badge badge-light inviteCountTarget"></span>
 					</button></li>
-				<li class="nav-item">
+				<!-- <li class="nav-item">
 					<a href="/proCreate">
+						<span class="material-icons">add_box</span>
+						새 프로젝트 생성</a></li> -->
+				<li class="nav-item"
+					data-toggle="modal"
+					data-target="#createProModal">
+					<a href="#">
 						<span class="material-icons">add_box</span>
 						새 프로젝트 생성</a></li>
 				<li class="nav-item">
@@ -418,6 +424,25 @@ details ul {
 	  </div>
 	</div>
 	
+	<!-- 프로젝트  생성 모달 -->
+	<div class="modal fade" id="createProModal" tabindex="-1" aria-labelledby="createProModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="createProModal">프로젝트 생성하기</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      
+	      	<div id="proCreateModalPage"></div>
+	      	
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
 	<!-- 사이드바 우측의 컨텐츠 영역 -->
 	<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 		<div layout:fragment="content"></div>
@@ -439,6 +464,17 @@ window.addEventListener('DOMContentLoaded', () => {
 	makeInviteCountTarget();//프로젝트 미확인 알람
 });
 </script>
+
+<!-- 생성 html 불러오기 -->
+<script>
+function proCreate() {
+	$.ajax(`/proCreate`, {dataType:"html"})
+	.done(function(result) {
+		$("#proCreateModalPage").html(result);
+	})
+}
+</script>
+
 
 <!-- 초대된 프로젝트 알람 카운트 -->
 <script type="text/javascript">
@@ -529,7 +565,7 @@ function createDynamicList(partiTagList) {
 }); */
 </script>
 
-<!-- 프로젝트 수락처리 -->
+<!-- 프로젝트 참여 수락 -->
 <script>
 	function partiY() {
 		let proMemNo = event.target.closest('tr').dataset.partiProMemNo;
@@ -554,6 +590,7 @@ function createDynamicList(partiTagList) {
 	};
 </script>
 
+<!-- 프로젝트 참여 거부 -->
 <script>
 	function partiN() {
 		let proMemNo = event.target.closest('tr').dataset.partiProMemNo;
@@ -576,6 +613,8 @@ function createDynamicList(partiTagList) {
 		});
 	};
 </script>
+
+<!-- 예전에 짠 -->
 <script>
 	//변수선언
 	let modal1 = document.getElementById('modalFolderCreate1');
@@ -620,6 +659,14 @@ function createDynamicList(partiTagList) {
 			closeModal(modal, folderInput);
 		});
 	 
+	  
+	};
+	
+	
+	window.addEventListener('click', function(event) {
+		$('[data-group-modal]').hide();
+	});
+	
 		window.addEventListener('keydown', function(e) {
 			if(event.keyCode == 27){
 				closeModal(modal, folderInput);
@@ -630,22 +677,7 @@ function createDynamicList(partiTagList) {
 				let dgmC = dgm != null ? dgm.remove() : dgm; 
 			}
 		});
-	
-		window.addEventListener('click', function(event) {
-			let dgm = document.querySelector('[data-group-modal]');
-			let dgmC = document.querySelectorAll('[data-group-modal]');
-			let moreVert = event.target.parentElement.getElementsByClassName('moreVertIcons')[0];
-	 
-			if (event.target === modal) {
-				closeModal(modal, folderInput);
-			} else if (event.target === moreVert && dgmC.length == 2) {
-				dgm.remove();
-			} else if (event.target !== moreVert && dgmC.length == 1) {
-				dgm.remove();
-			}
-		});
-	  
-	};
+		
 
 	function closeModal(modal, input) {
 	  modal.style.display = 'none';
@@ -758,7 +790,9 @@ function createDynamicList(partiTagList) {
 
 	function groupStatusModal(event) {
 		if(event.target.tagName == "SPAN") {
+			$('[data-group-modal]').hide();
 			event.preventDefault();
+			event.stopPropagation();
 		
 			//그룹no값 가져오기
 			let groupNo = event.target.parentNode.dataset.gn;
@@ -773,11 +807,12 @@ function createDynamicList(partiTagList) {
 			//프로젝트 수정창 띄우기(모달2)
 			groupNameChange.addEventListener("click", function(e) {
 				e.preventDefault();
-			
+				//debugger;
+				
 				//인풋상자 값 넣어주기
 				folderC2.value = groupName;
 				//상태 모달창 삭제
-				document.querySelector('[data-group-modal]').remove();
+				//document.querySelector('[data-group-modal]').remove();
 			
 				modal2.style.display = 'block';
 			

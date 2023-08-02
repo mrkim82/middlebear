@@ -334,6 +334,7 @@ textarea {
 						  data-toggle="modal"
 						  data-target="#inviteMember">group_add</span>
 					<span class="material-symbols-outlined spanCursor" onclick="delPro()">delete</span>
+					<span class="material-symbols-outlined spanCursor" onclick="exitProMem()">logout</span>
 				</div>
 				</nav>
 			</div>
@@ -433,6 +434,7 @@ textarea {
 /*<![CDATA[*/
 	let selfId = /*[[${session.Id}]]*/;
 	let selfName = /*[[${session.Name}]]*/;
+	let proDetailCount = /*[[${readProDetailCount}]]*/;
 /*]]>*/
 </script>
 
@@ -1218,6 +1220,29 @@ $(".uploadResult").on("click", "button", function(e){
 		}
 	});
 });
+</script>
+
+<!-- 프로젝트 나가기 -->
+<script>
+	function exitProMem() {
+		
+		if(proDetailCount == 1) {
+			alert('프로젝트 인원이 한명입니다. 프로젝트를 삭제해주세요');
+			return false;
+		}
+		
+		fetch("/delProMemOut", {
+			  method: 'DELETE',
+			  headers: {
+			    'Content-Type': 'application/json'
+			  },
+			  body: JSON.stringify(projectNo)
+			})
+		.then(response => response.json())
+		.then(res => {
+			location.href ="/proMain";
+		});
+	}
 </script>
 
 </body>
