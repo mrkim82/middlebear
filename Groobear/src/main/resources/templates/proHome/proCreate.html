@@ -5,10 +5,6 @@
 <head>
 
 <style>
-th {
-	text-align: left;
-}
-
 .mainWrite {
 	margin-top: 10px;
 	margin-left: 5px;
@@ -27,11 +23,10 @@ th {
 	  method="POST"
 	  th:object="${proVO}"
 	  onsubmit="return blankSearch()"
-		style="margin-left: 10px; margin-top: 20px;">
+		style="text-align: center; font-size: medium;">
 	
-	<h1 class="mainWrite">프로젝트 만들기</h1>
-	<div style="border: 1px solid; width: 330px; height: 130px;">
-		<div style="margin-left: 10px;">
+	<div class="d-flex justify-content-center border">
+		<div>
 			<label for="proName"
 						class="nomainWrite"
 						style="margin-top: 30px;">프로젝트 이름</label>
@@ -41,7 +36,7 @@ th {
 				   placeholder="최대 30자"
 				   maxlength="30"
 				   autocomplete="off"
-					 style="margin-left: 5px; width: 200px;">
+				   style="margin-left: 5px; width: 200px;">
 
 			<label for="proContent"
 						 class="nomainWrite"
@@ -56,7 +51,7 @@ th {
 		</div>
 	</div>
 	<!-- 설정 -->
-	<div style="margin-top: 10px; border: 1px solid; width: 330px; height: 90px;">
+	<div class="d-flex justify-content-center border">
 		<h3 class="mainWrite">홈 탭 설정</h3>
 		<div th:each="index : ${#numbers.sequence(1, 5)}"
 				 style="display: inline-block;"
