@@ -118,7 +118,7 @@
 		    END AS group_name,
 		    group_no
 		FROM pro_group
-		WHERE id = 'nari123'
+		WHERE id = #{id}
 		ORDER BY group_no DESC
 		<!-- SELECT group_name, group_no
 		FROM pro_group
