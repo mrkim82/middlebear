@@ -12,6 +12,7 @@
     position: sticky;
     top: 0px;
     background-color: gray !important;
+		text-align: center;
 }
 table#workTable th:first-child { position: sticky; top: 0; }
 //table#workTable td:first-child { position: sticky; left: 0; }
@@ -145,31 +146,31 @@ tbody tr:not(:first-child) td:not(:first-child) { text-align: center; }
   </div>
 </div>
 <!-- 테이블 크기 -->
-<div class="float-start table-responsive" style="width: 1600px; margin-left: 10px; height: 630px" >
+<div class="float-start table-responsive" style="width: 1000px; margin-left: 10px; height: 630px" >
 
 <table class="table table-bordered table-hover" id="workTable">
 
   <!-- 테이블 제목 -->
   <thead id="workTableHead">
     <tr>
-      <th scope="col" th:style="${readWorkView.workName == 'N'} ? 'display: none;' : ''">업무명</th>
-      <th scope="col" th:style="${readWorkView.workStatus == 'N'} ? 'display: none;' : ''"
+      <th scope="col" th:style="${readWorkView.workName == 'N'} ? 'display: none; width:300px;' : 'width:200px;'">업무명</th>
+      <th scope="col" th:style="${readWorkView.workStatus == 'N'} ? 'display: none; width:100px;' : 'width:100px;'"
       	  data-work-column="workStatus">상태</th>
-      <th scope="col" th:style="${readWorkView.workPri == 'N'} ? 'display: none;' : ''"
+      <th scope="col" th:style="${readWorkView.workPri == 'N'} ? 'display: none; width:100px;' : 'width:100px;'"
       	  data-work-column="workPri">우선순위</th>
-      <th scope="col" th:style="${readWorkView.workManager == 'N'} ? 'display: none;' : ''"
+      <th scope="col" th:style="${readWorkView.workManager == 'N'} ? 'display: none; width:100px;' : 'width:100px;'"
       	  data-work-column="workManager">담당자</th>
-      <th scope="col" th:style="${readWorkView.workStartDay == 'N'} ? 'display: none;' : ''"
+      <th scope="col" th:style="${readWorkView.workStartDay == 'N'} ? 'display: none; width:100px;' : 'width:100px;'"
       	  data-work-column="workStartDay">시작일</th>
-      <th scope="col" th:style="${readWorkView.workEndDay == 'N'} ? 'display: none;' : ''"
+      <th scope="col" th:style="${readWorkView.workEndDay == 'N'} ? 'display: none; width:100px;' : 'width:100px;'"
       	  data-work-column="workEndDay">마감일</th>
-      <th scope="col" th:style="${readWorkView.workDate == 'N'} ? 'display: none;' : ''"
+      <th scope="col" th:style="${readWorkView.workDate == 'N'} ? 'display: none; width:100px;' : 'width:100px;'"
       	  data-work-column="workDate">등록일</th>
-      <th scope="col" th:style="${readWorkView.workNum == 'N'} ? 'display: none;' : ''"
+      <th scope="col" th:style="${readWorkView.workNum == 'N'} ? 'display: none; width:100px;' : 'width:100px;'"
       	  data-work-column="workNum">업무번호</th>
-      <th scope="col" th:style="${readWorkView.workWriter == 'N'} ? 'display: none;' : ''"
+      <th scope="col" th:style="${readWorkView.workWriter == 'N'} ? 'display: none; width:100px;' : 'width:100px;'"
       	  data-work-column="workWriter">작성자</th>
-      <th scope="col" th:style="${readWorkView.workUpdateDay == 'N'} ? 'display: none;' : ''"
+      <th scope="col" th:style="${readWorkView.workUpdateDay == 'N'} ? 'display: none; width:100px;' : 'width:100px;'"
       	  data-work-column="workUpdateDay">수정일</th>
     </tr>
   </thead>

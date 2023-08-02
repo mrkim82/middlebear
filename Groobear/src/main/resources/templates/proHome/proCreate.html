@@ -3,11 +3,13 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/proTiles}">
 <head>
+
 <style>
 th {
 	text-align: left;
 }
 </style>
+
 </head>
 
 <div layout:fragment="content">
@@ -27,7 +29,8 @@ th {
 					   id="proName"
 					   th:field="*{proName}"
 					   placeholder="최대 30자"
-					   maxlength="30">
+					   maxlength="30"
+					   autocomplete="off">
 			</div>
 			
 			<div>
@@ -35,7 +38,9 @@ th {
 				<input type="text"
 					   id="proContent"
 					   th:field="*{proContent}"
-					   placeholder="옵션">
+					   placeholder="옵션(선택)"
+					   maxlength="160"
+					   autocomplete="off">
 			</div>
 			
 			<!-- 설정 -->
@@ -121,9 +126,9 @@ th {
 			
 			<div>
 				<button type="submit"
-						class="btn btn-success">등록</button>
+						class="btn btn-groo">등록</button>
 				<button type="button"
-						class="btn btn-success"
+						class="btn btn-groo"
 						th:onclick="|location.href='@{/proMain}'|">돌아가기</button>
 			</div>
 			
@@ -133,6 +138,7 @@ th {
 				if (proName.value === '') {
 					// 프로젝트 이름이 빈 값이거나 null인 경우
 					alert('프로젝트 이름을 입력해주세요.');
+					proName.focus();
 					return false; // 폼 제출을 막음
 				}
 				return true; // 폼 제출을 허용

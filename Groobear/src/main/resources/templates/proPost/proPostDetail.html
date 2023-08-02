@@ -10,19 +10,7 @@
 	<script
 		th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
 <style>
-textarea {
-  background-color: #f1f1f1;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 10px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 200px;
-  width: 100%;
-  resize: vertical; /* 세로 조정 가능 */
-}
+
 p {
 	margin: 0px;
 }
@@ -40,27 +28,6 @@ p {
 }
 [type="checkbox"] {
 	margin-right: 15px;
-}
-.popover {
-	position: relative;
-	display: inline-block;
-}
-
-.popover-content {
-	display: none;
-	position: absolute;
-	top: 30px;
-	left: 0;
-	width: 200px;
-	background-color: #f1f1f1;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-}
-
-/* popover-content가 보이도록 설정 */
-.show {
-	display: block;
 }
 
 /* ul li 스타일 */
@@ -149,8 +116,8 @@ function drawChart() {
 	<div>
 	
 		<!-- 중앙 -->
-		<div style="overflow-y: auto; width: 680px; height: 676px;"
-			 class="float-start">
+		<div style="overflow-y: auto; width: 680px; height: 600px;"
+			 class="float-left">
 			 
 			<!-- 업무리포트(총 업무수)(차트) -->
 			<div id="donutchart"
@@ -1498,7 +1465,7 @@ function drawChart() {
 			
 		</div>
 		<!-- 참여자공간 -->
-		<div>
+		<div class="float-right">
 			<div>
 				<th:block th:text="'참여자 ' + ${projectPartiMember.size}"></th:block>
 			</div>
@@ -2918,9 +2885,6 @@ function makeVoteUlTag(updateVoteContents, ulTag) {
 		.catch(error => {
 			console.error('Error: ',error);
 		});
-
-
-
 	}
 </script>
 
@@ -3528,7 +3492,7 @@ $('#modal12').on('show.bs.modal', function (e) {
 		liElement.remove();
 	});
 	
-	let ppn = modal12.dataset.updatePostNo
+	let ppn = modal12.dataset.updatePostNo;
 	var postGroups = {};
 
 	$.getJSON(`/getWorkAttachDetail?proPostNo=${ppn}`, function(arr) {
@@ -3574,8 +3538,8 @@ $('#modal12').on('show.bs.modal', function (e) {
 	
 });
 
+//파일 db삭제
 function delProFile(ppn, filename) {
-	
 	fetch("/delProFile", {
 		method: 'DELETE',
 		headers: {
@@ -3585,16 +3549,12 @@ function delProFile(ppn, filename) {
 	})
 	.then(response => response.json())
 	.then(res => {
-		console.log(ppn)
-		console.log(filename)
-		console.log(res);
 		$("[data-filename='" + filename + "']").remove();
 	})
 	.catch(error => {
 		console.error('Error: ',error);
-	});
-	
-}
+	});//fetch종료
+};
 </script>
 
 </body>

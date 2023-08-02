@@ -3,57 +3,71 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layout/proTiles}"
 >
-<body layout:fragment="content">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-<script
-		th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
-<!-- 그룹에 프로젝트 버튼 -->
-<div>
-	<!-- Button trigger modal -->
-<button type="button"
-		class="btn btn-primary"
-		data-toggle="modal"
-		data-target="#proFolder"
-		th:if="${readPerAllPro != null}">
-	프로젝트 폴더 설정
-</button>
 
-<!-- Modal -->
-<div class="modal fade" id="proFolder" tabindex="-1" aria-labelledby="proFolderLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="proFolderLabel">그룹에 포함시킬 프로젝트</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      	<ul>
-      		<li th:each="pro : ${readPerAllPro}">
-      			<input type="checkbox"
-      				   th:data-pro-mem-no="${pro.proMemNo}"
-      				   onclick="changeGorupStatus()">
-      			<span th:text="${pro.proName}"></span>
-    		</li>
-      	</ul>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+		
+</head>
+
+<div layout:fragment="content">
+	<!-- 그룹에 프로젝트 버튼 -->
+	<div th:if="${readPerAllPro != null}">
+		<!-- Button trigger modal -->
+		<button type="button"
+				class="btn btn-primary"
+				data-toggle="modal"
+				data-target="#proFolder">
+			프로젝트 폴더 설정
+		</button>
+
+		<!-- 프로젝트를 그룹에 포함 시키는 modal -->
+		<div class="modal fade"
+			 id="proFolder"
+			 tabindex="-1"
+			 aria-labelledby="proFolderLabel"
+			 aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="proFolderLabel">그룹에 포함시킬 프로젝트</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<!-- 본문 -->
+					<div class="modal-body">
+						<ul>
+							<li th:each="pro : ${readPerAllPro}">
+								<input type="checkbox"
+									   th:data-pro-mem-no="${pro.proMemNo}"
+									   onclick="changeGorupStatus()">
+								<span th:text="${pro.proName}"></span>
+							</li>
+						</ul>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 프로젝트를 그룹에 포함 시키는 modal 종료 -->
+	</div>
+	<!-- 버튼 종료 -->
+	
+	<!-- 프로젝트 테이블 -->
 	<div>
 		<table class="table table-hover" id="goProjectDetail">
 			<tr th:each="pro:${projectMainList}"
-					th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
-					style="cursor:pointer">
+				th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
+				style="cursor:pointer">
 				<td th:text="${pro.proColor}"></td>
 				<td th:text="${pro.proStarCheck}" class="starCheck"></td>
 				<td th:text="${pro.proName}"></td>
-				<td th:each="parti:${projectPartiList}" th:if="${parti.proNo == pro.proNo}"
+				<td th:each="parti:${projectPartiList}"
+					th:if="${parti.proNo == pro.proNo}"
 					th:text="${parti.count} + '명'"></td>
 				<td>
 					<span class="material-symbols-outlined"
@@ -64,12 +78,13 @@
 			</tr>
 		</table>
 	</div>
-	
+	<!-- 프로젝트 테이블 종료 -->
+
 <!-- 스크립트 -->
 <!-- model값 가져오기 -->
 <script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-		//투표 check하기
+		//투표 check하기(프로젝트 그룹 사용)
 		let modelGroupChecks = /*[[${readGroupCheckPro}]]*/;
 	/*]]>*/
 </script>
@@ -77,16 +92,18 @@
 <!-- group 초기 checked 정하기 -->
 <script>
 	let allGroupCheckBoxes = document.querySelectorAll('[data-pro-mem-no]');
-	modelGroupChecks.forEach(modelGroupCheck => {
+	
+	//다른 페이지 modelGroupChecks확인 불가로 조건 추가
+	if(modelGroupChecks != null) {
+		modelGroupChecks.forEach(modelGroupCheck => {
 
-		allGroupCheckBoxes.forEach(groupCheckbox => {
-			if(groupCheckbox.dataset.proMemNo == modelGroupCheck.proMemNo) {
-				groupCheckbox.checked = true;
-			};
-			
+			allGroupCheckBoxes.forEach(groupCheckbox => {
+				if(groupCheckbox.dataset.proMemNo == modelGroupCheck.proMemNo) {
+					groupCheckbox.checked = true;
+				};
+			});
 		});
-		
-	});
+	};
 </script>
 
 <script>
@@ -102,36 +119,28 @@
 	});
 
 	function changeStar() {
-		let dpMN = event.target.parentNode.getAttribute("data-pMN");
-		let starC = event.target.parentNode.getAttribute("data-starC");
 		let trTag = event.target.parentNode;
+		let dpMN = trTag.getAttribute("data-pMN");
+		let starC = trTag.getAttribute("data-starC");
 
 		let formData = new FormData();
         formData.append('pMN', dpMN);
         formData.append('starC', starC);
-		console.log(formData.get('pMN'))
-		console.log(formData.get('starC'))
-		fetch("/proUpdate", {
+		fetch("/proStarUpdate", {
 			method: 'POST',
 			body : formData
 		})
 		.then(response => response.json())
 		.then(res => {
-			let rC = res.result;
-			console.log(rC)
-			if (rC == '등록' || rC == '취소') {
-				changeProOne(rC, trTag);
-			} else {
-				alert('요청이 취소 되었습니다.');
-			} 
+				changeProOne(starC, trTag);
 			
 		})
 	};
 
 	//즐겨찾기 변경
-	function changeProOne(rC, trTag) {
+	function changeProOne(starC, trTag) {
 		
-		if (rC == '등록') {
+		if (starC == 'N') {
 			trTag.setAttribute('data-starc', 'Y');
 			trTag.getElementsByClassName('starCheck')[0].textContent = 'Y';
 		} else {
@@ -274,5 +283,5 @@ function changeGorupStatus() {
 }
 </script>
 
-</body>
+</div>
 </html>
