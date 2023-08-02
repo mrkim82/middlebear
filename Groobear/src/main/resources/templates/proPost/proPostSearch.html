@@ -73,10 +73,10 @@
 
 <script type="text/javascript">
 	function moveMove() {
-		let proNo = event.target.dataset.proNo;	
-		let proPostNo = event.target.dataset.proPostNo;
-		window.location.href = "/proPostMain/" + proNo + "?homeTab=2#" + proPostNo;
-		//window.location.href = 'http://localhost:8081/proPostMain/' + proNo + '#';
+		let proNo = event.target.closest('tr').dataset.proNo;	
+		let proPostNo = event.target.closest('tr').dataset.proPostNo;
+		let moveUrl = "/proPostMain/" + proNo + "?homeTab=2#moveMove" + proPostNo;
+		window.location.href = moveUrl;
 	}
 </script>
 </div>

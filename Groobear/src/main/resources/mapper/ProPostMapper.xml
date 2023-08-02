@@ -279,4 +279,46 @@
 		ORDER BY a.pro_post_no DESC, d.vote_no, f.todo_no
 	</select>
 	
+	<!-- 프로젝트 초대 할 인원 리스트 -->
+	<select id="readPartiListM" parameterType="ProPartiListVO">
+		SELECT a.name, a.rank, b.id, b.email
+		FROM user_info a
+		JOIN users b
+		ON(a.emp_no = b.emp_no)
+		
+		MINUS
+		
+		SELECT c.name, c.rank, a.id, b.email
+		FROM pro_mem a
+		JOIN users b
+		ON(a.id = b.id)
+		JOIN user_info c
+		ON(b.emp_no = c.emp_no)
+		WHERE a.pro_no = #{proNo}
+	</select>
+	
+	<!-- 프로젝트 초대 -->
+	<insert id="createInviteMail" parameterType="ProPartiListVO">
+		INSERT INTO pro_mem(pro_mem_no, pro_no, id, pro_parti_check, home_tab)
+		VALUES((SELECT NVL(MAX(pro_mem_no), 0) + 1
+		        FROM pro_mem),
+		        #{proNo},
+		        #{id},
+		        'N',
+		        (SELECT pro_def_tab FROM pro WHERE pro_no = #{proNo})
+		)
+	</insert>
+	
+	<!-- 프로젝트 삭제 -->
+	<delete id="deletePro">
+		DELETE FROM pro
+		WHERE pro_no =#{proNo}
+	</delete>
+	
+	<!-- 프로젝트 게시물 마지막 고유번호 -->
+	<select id="readProPostNo" resultType="int">
+		SELECT NVL(MAX(pro_post_no), 0)
+		FROM pro_post
+	</select>
+	
 </mapper>

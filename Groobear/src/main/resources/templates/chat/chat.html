@@ -59,6 +59,9 @@
 .chat_wrap .chat ul li.right {
 	text-align: right;
 }
+.chat_wrap .chat ul li.middle{
+	text-align : flex;
+}	
 
 .chat_wrap .chat ul li>div {
 	font-size: 13px;
@@ -149,7 +152,7 @@
 					</div>
 					<div class="message">
 						<span class="message-content"></span>
-    					<small class="message-time">[[${#dates.format(chatMessageDTO.msgTime, 'yyyy-MM-dd HH:mm:ss')}]]</small>
+    					<small class="message-time"></small>
 					</div>
 				</li>
 			</ul>
@@ -186,21 +189,94 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script th:inline="javascript">
+//WebSocket 연결 설정
+const alarmClient = new StompJs.Client({
+brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+});
+
+// 페이지 로드시 웹소켓 연결
+window.addEventListener("load", function(event) {
+   alarmClient.activate();
+});
+
+  // 연결 성공시
+alarmClient.onConnect = (frame) => {
+    console.log('Connected: ' + frame);
+    // 프로젝트 구독     
+	alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+	    almSendMsg(JSON.parse(alarmMsg.body));
+    });
+    // 채팅방 생성 초대 구독
+	alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+	    almSendMsgChat(JSON.parse(alarmMsg.body));
+    });
+    
+ };
+
+//에러
+alarmClient.onWebSocketError = (error) => {
+      console.error('Error with websocket', error);
+};
+
+alarmClient.onStompError = (frame) => {
+      console.error('Broker reported error: ' + frame.headers['message']);
+      console.error('Additional details: ' + frame.body);
+};
+function almSendMsg() {
+	   toastAct()	
+}
+function almSendMsgChat() {
+	   toastActChat()	
+}
+
+function toastAct() {
+	  toastr.options.escapeHtml = true;
+      toastr.options.closeButton = true;
+      toastr.options.newestOnTop = false;
+      toastr.options.progressBar = true;
+      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+      toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
+}
+
+function toastActChat() {
+	  toastr.options.escapeHtml = true;
+      toastr.options.closeButton = true;
+      toastr.options.newestOnTop = false;
+      toastr.options.progressBar = true;
+      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+      toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
+}
+
 let myName = /*[[${name}]]*/ 'name';
 let senderName = /*[[${name}]]*/ 'name';
 let realId = /*[[${id}]]*/ 'id';
-let chatDTO = /*[[${chatDTO}]]*/ 'chatDTO'; // 추가된 코드
-console.log(chatDTO.msgTime + "시간 테스트 용")
+let chatDTO = /*[[${chatDTO}]]*/ 'chatDTO';
 var roomNo = /*[[${roomNo}]]*/ 'roomNo';
+let chatMessageDTO = /*[[${chatDTO}]]*/ 'chatDTO';
 
 // 페이지가 로드될 때 chatDTO 내용을 기반으로 채팅 내용을 화면에 추가
 $(document).ready(function() {
     chatDTO.forEach(function(chat) {
+    console.log(chat)
+    	//chatMessageDTO.forEach(function(chat) {
         if (chat.name == myName) {  // 추가된 코드
             chat.id = realId;
         }
-        const LR = (chat.id != realId) ? "left" : "right";
-        appendMessageTag(LR, chat.name, chat.content, chat.time);
+        //const LR = (chat.id != realId) ? "left" : "right";
+        let LR; 
+        if (!chat.hasOwnProperty('id')) {
+        	LR = "middle";
+        } else if (chat.id === realId) {
+        	LR = "right";
+        } else {
+        	LR = "left";
+        }
+        
+        appendMessageTag(LR, chat.name, chat.content, chat.msgTime);
     });
 });
 
@@ -208,19 +284,15 @@ $(document).ready(function() {
 const stompClient = new StompJs.Client({
 	brokerURL : 'ws://localhost:8081/chatserver'
 });
+
 stompClient.activate();
 console.log("Username: ", myName);  // 로그 추가
 console.log("Room number: ", roomNo);  // 로그 추가
 stompClient.onConnect = (frame) => {
-    console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/messages/' + roomNo, (messages) => {
-        receive(JSON.parse(messages.body)
-        		);
-        
+  stompClient.subscribe('/topic/messages/' + roomNo, (messages) => {
+        receive(JSON.parse(messages.body));
     });
 };
-console.log("Username: ", myName);  // 로그 추가
-console.log("Room number: ", roomNo);  // 로그 추가
 stompClient.onWebSocketError = (error) => {
 	console.error('Error with websocket', error);
 };
@@ -257,44 +329,27 @@ deleteButton.addEventListener('click', (event) => {
         console.error('Error:', error);
     });
 });
-function getCurrentTime() {
-    const now = new Date();
-    let hours = now.getHours();
-    let minutes = now.getMinutes();
-
-    // 시간과 분이 10 미만일 경우 앞에 0을 붙여줍니다.
-    if(hours < 10) hours = '0' + hours;
-    if(minutes < 10) minutes = '0' + minutes;
-    return hours + ":" + minutes;
-}
 
 $(document).on('keydown', 'div.input-div textarea', function(e) {
     if (e.keyCode == 13 && !e.shiftKey) {
-    	console.log("이벤트타켓확인용"+event.target)
         e.preventDefault();
         const message = $(this).val();
         sendAndClear(message);
     }
 });
 
-
-function createMessageTag(LR_className, senderName, message) {
+function createMessageTag(LR_className, senderName, message, msgTime) {
     let chatLi = $('div.chat.format ul li').clone();
     chatLi.addClass(LR_className);
     chatLi.find('.sender span').text(senderName);
     chatLi.find('.message span').text(message);
-
-    // 메시지 옆에 시간 표시
-    let timeSpan = document.createElement('span');
-    timeSpan.className = 'time';
-    timeSpan.textContent = getCurrentTime();
-    chatLi.find('.message').append(timeSpan);
-
+	chatLi.find('.message small').text(msgTime);
     return chatLi;
 }
 
 function appendMessageTag(LR_className, senderName, message, msgTime) {
-    const chatLi = createMessageTag(LR_className, senderName, message, msgTime);
+    //msgTime = new Date();
+	var chatLi = createMessageTag(LR_className, senderName, message, msgTime);
     $('div.chat:not(.format) ul').append(chatLi);
     window.requestAnimationFrame(function () {
         const chatDiv = $('div.chat');
@@ -306,10 +361,22 @@ function clearTextarea() {
     $('div.input-div textarea').val('');
 }
 
-// 1. 좌우지정 2. 이름과 제목을 메세지에 달아줌.
+//  서버에서 들렸다가 온 메세지
 function receive(data) {
-    const LR = (data.id != realId) ? "left" : "right";
-    appendMessageTag(LR, data.name, data.content, data.time);  // 서버에서 받은 시간 데이터를 사용합니다.
+    
+	let LR;
+	console.log(data.id + "data id 확인용");
+	console.log(realId + "realId 확인용");
+    if (!data.hasOwnProperty('id')) {
+    	LR = "middle";
+    } else if(data.id == realId) {
+        LR = "right";
+    } else {
+    	LR = "left";
+    }
+    console.log(LR + "얘 먼지 확인")
+    console.log(data.msgTime + "시간 나오나?");
+    appendMessageTag(LR, data.name, data.content, data.msgTime);  // 서버에서 받은 시간 데이터를 사용합니다.
 }
 
 function sendAndClear(message) {
@@ -319,19 +386,29 @@ function sendAndClear(message) {
         window.opener.location.reload();
     }
 }
+function getFullYmdStr() {
+    var d = new Date();
+    var year = String(d.getFullYear()).slice(-2); // 연도의 마지막 두 자리만 가져옴
 
+    var minute = d.getMinutes();
+    // 만약 분이 한 자리 수이면 앞에 '0'을 붙임
+    minute = minute < 10 ? '0' + minute : minute;
+
+    return year + "년 " + (d.getMonth()+1) + "월 " + d.getDate() + "일 " + d.getHours() + "시 " + minute + "분 ";
+}
+//메세지 보낼 때
 function sendMessage(message) {
-	const currentTime = getCurrentTime();
+	let currentTime = getFullYmdStr()
+	
+	console.log(currentTime + "커런트타임");
     stompClient.publish({
     	destination: "/app/chat/" + roomNo,
         body: JSON.stringify({
         	'roomNo': roomNo,
-					  //'name': myName,
             'name': senderName,
             'content': message,
             'id' : realId,
-            'time' : currentTime 
-            
+            'msgTime' : currentTime 
         })
     });
 }
@@ -407,13 +484,12 @@ $('#createChatroom').on('click', function() {
         alert('Please select at least one employee to invite.');
         return;
     }
-
+	
     // Post request to the server
     const roomDTO = {
         roomNo: roomNo,
         employeeIds: checkedEmployeeIds,
     };
-
     fetch('/inviteEmployees', {
         method: 'POST',
         headers: {
@@ -422,11 +498,23 @@ $('#createChatroom').on('click', function() {
         body: JSON.stringify(roomDTO),
     })
     .then(response => {
-        if (response.ok) {
-            console.log('Employees invited successfully');
+        console.log(response)
+    	if (response.ok) {
+            console.log(response.ok)
+    		console.log('Employees invited successfully');
             // Here you might want to do something to reflect that the employees were added
             // For example, you could close the modal
             $('#inviteModal').modal('hide');
+            
+            // 알림2
+            for(let i = 0; i < checkedEmployeeIds.length ; i++){
+				alarmClient.publish({
+		            destination: "/alarmCondition/chatAlm/"+checkedEmployeeIds[i],
+		            body: JSON.stringify({
+		               'id' : checkedEmployeeIds[i]
+		            })
+		      	});
+			}
         } else {
             console.error('Failed to invite employees');
         }

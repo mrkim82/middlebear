@@ -25,11 +25,8 @@ public interface ProService {
 	//프로젝트 참가자수 조회
 	public List<ProVO> readProjectParti(String id);
 		
-	//프로젝트 즐겨찾기 등록
-	public int updateStarY(int pMN);
-	
-	//프로젝트 즐겨찾기 취소
-	public int updateStarN(int pMN);
+	//프로젝트 즐겨찾기 변경
+	public int updateStar(String proStarCheck, int proMemNo);
 	
 	//프로젝트 그룹
 	// 프로젝트 그룹 목록 조회

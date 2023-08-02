@@ -10,19 +10,7 @@
 	<script
 		th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
 <style>
-textarea {
-  background-color: #f1f1f1;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 10px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 200px;
-  width: 100%;
-  resize: vertical; /* 세로 조정 가능 */
-}
+
 p {
 	margin: 0px;
 }
@@ -40,27 +28,6 @@ p {
 }
 [type="checkbox"] {
 	margin-right: 15px;
-}
-.popover {
-	position: relative;
-	display: inline-block;
-}
-
-.popover-content {
-	display: none;
-	position: absolute;
-	top: 30px;
-	left: 0;
-	width: 200px;
-	background-color: #f1f1f1;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-}
-
-/* popover-content가 보이도록 설정 */
-.show {
-	display: block;
 }
 
 /* ul li 스타일 */
@@ -149,8 +116,8 @@ function drawChart() {
 	<div>
 	
 		<!-- 중앙 -->
-		<div style="overflow-y: auto; width: 680px; height: 676px;"
-			 class="float-start">
+		<div style="overflow-y: auto; width: 680px; height: 600px;"
+			 class="float-left">
 			 
 			<!-- 업무리포트(총 업무수)(차트) -->
 			<div id="donutchart"
@@ -378,22 +345,30 @@ function drawChart() {
 										<div>
 											<textarea placeholder="내용을 입력하세요." id="workWritingContent"></textarea>
 										</div>
-	
-										<!-- 하위업무 -->
+										<!-- 첨부파일 -->
 										<div>
-											<!-- 하위업무 수 -->
-											<!-- <div>
-												<p>ㄴ하위업무</p>
-											</div> -->
-											<!-- 하위업무 동적 생성 -->
-											<!-- <div>
-												<button type="button">+ 하위업무 추가</button>
-											</div> -->
-											<!-- 하위업무 입력란 -->
-											<div>
-												
-											</div>
+											<div class="uploadResult">
+					                            <ul>
+					
+					                            </ul>
+					                        </div>
+					                        <!-- 첨부파일 -->
+											<input type="file"
+												   name="uploadFile"
+												   multiple>
 										</div>
+										<!-- 하위업무 -->
+										<!-- <div>
+											하위업무 수
+											 <div>
+												<p>ㄴ하위업무</p>
+											</div>
+											하위업무 동적 생성
+											<div>
+												<button type="button">+ 하위업무 추가</button>
+											</div>
+											하위업무 입력란
+										</div> -->
 									</div>
 										<button type="button" class="btn btn-primary" id="createWorkButton">등록</button>
 								</div>
@@ -652,6 +627,7 @@ function drawChart() {
 								<div class="card-header" th:text="'업무 : ' + ${allPost.postTitle}">
 									<!-- 글 제목 -->
 								</div>
+								<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 								<div class="workFeedPostStatus"
 									 th:attr="data-feed-work-type=${allPost.workStatus}"
 									 style="text-align: center;">
@@ -680,6 +656,11 @@ function drawChart() {
 									
 									<!-- 게시글 내용 -->
 									<p th:text="'내용 : ' + ${allPost.workContent}"></p>
+									
+									<!-- 첨부파일 영역 -->
+									<div class = 'uploadResult'>
+										<ul></ul>
+									</div>
 									
 									<!-- 추가 항목 -->
 									<div>
@@ -813,6 +794,7 @@ function drawChart() {
 								<div class="card-header" th:text="'글 : ' + ${allPost.postTitle}">
 									<!-- 글 제목 -->
 								</div>
+								<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 								<div class="card-body">
 									<p th:text="${allPost.writingContent}">
 										<!-- 게시글 내용이 여기에 들어갑니다. -->
@@ -884,6 +866,7 @@ function drawChart() {
 							 th:text="'일정 : ' + ${allPost.postTitle}">
 							<!-- 글 제목 -->
 						</div>
+						 <a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 						<ul>
 							<li th:if="${allPost.schStartTime != null}"
 								 th:text="'시작일 : ' + ${#dates.format(allPost.schStartTime, 'yyyy-MM-dd HH:mm')}"
@@ -1061,6 +1044,7 @@ function drawChart() {
 						<div class="card-header" th:text="'할 일 : ' + ${allPost.postTitle}">
 							<!-- 글 제목 -->
 						</div>
+						<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 						<div class="card-body">
 							<!-- 진척도 바 -->
 							<div>
@@ -1155,9 +1139,9 @@ function drawChart() {
 					    </div>
 					    	<div class="card-header"
 					    		 th:text="'투표 : ' + ${allPost.postTitle}">
-					    
 								<!-- 글 제목 -->
 							</div>
+						<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 						<div class="card-body">
 							<!-- 투표 설명 -->
 							<ul>
@@ -1308,6 +1292,17 @@ function drawChart() {
 					<!-- 내용입력 -->
 					<div>
 						<textarea placeholder="내용을 입력하세요." id="updateWorkContent"></textarea>
+					</div>
+					
+					<!-- 첨부파일 수정 -->
+					<div>
+						<div class="uploadResult">
+                            <ul></ul>
+                        </div>
+                        <!-- 첨부파일 -->
+						<input type="file"
+							   name="uploadFile"
+							   multiple>
 					</div>
 					
 			      </div>
@@ -1470,7 +1465,7 @@ function drawChart() {
 			
 		</div>
 		<!-- 참여자공간 -->
-		<div>
+		<div class="float-right">
 			<div>
 				<th:block th:text="'참여자 ' + ${projectPartiMember.size}"></th:block>
 			</div>
@@ -1543,6 +1538,12 @@ function drawChart() {
 	<div>
 		<!-- 글 조회 공간 -->
 		<div></div>
+		
+		<!-- 사진창 -->
+		<div class="bigPictureWrapper">
+			<div class="bigPicture"></div>
+		</div>
+					
 	</div>
 </div>
 	
@@ -1904,7 +1905,41 @@ function drawChart() {
 				})
 		})
 		.then(response => response.json())
-		.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+		.then(res => {
+			//파일 첨부
+			console.log('업로드 스타트!')
+			let wFileArr = [];
+			
+			$("#modal2 .uploadResult ul li").each(function(i, obj){
+		        console.log(obj)
+		        let wfObj = {
+					'uuid' : obj.dataset.uuid,
+					'uploadPath' : obj.dataset.path,
+					'fileName' : obj.dataset.filename,
+					'fileType' : obj.dataset.type// = obj.dataset.type ? '1' : '0',
+				};
+				wFileArr.push(wfObj);
+		    });
+			
+			//사진 업로드
+			$.ajax({
+    			url: "/proFileInsert",
+  			    method: "POST",
+  			    contentType:"application/json; charset=utf-8",
+  			    data: JSON.stringify(wFileArr),
+  			    async : false,
+  			    success: function(data) {
+  			    	console.log(data);
+  			    	location.href="/proPostMain/" + projectNo + "?homeTab=2"
+  			    },
+  			    error: function(err) {
+					console.log(err);
+  			    }	
+    		});
+		    
+			//파일 첨부 끝
+			
+		});
 		
 	});
 </script>
@@ -2850,9 +2885,6 @@ function makeVoteUlTag(updateVoteContents, ulTag) {
 		.catch(error => {
 			console.error('Error: ',error);
 		});
-
-
-
 	}
 </script>
 
@@ -3377,6 +3409,153 @@ function chagemodal12() {
 	}
 </script>
 
+<!-- 파일 조회 -->
+<script th:inline="javascript">
+$(document).ready(function() {
+	// 객체 형태로 게시물 그룹 초기화(조회)
+	var postGroups = {};
+
+	$.getJSON(`/getWorkAttach?proNo=${projectNo}`, function(arr) {
+	    console.log('전체', arr);
+
+	    // attach.proPostNo를 기준으로 그룹화
+	    $(arr).each(function(i, attach) {
+	        var postNo = attach.proPostNo;
+
+	        // 해당 게시물 그룹이 없으면 초기화
+	        if (!postGroups[postNo]) {
+	            postGroups[postNo] = "";
+	        }
+
+	        // HTML 문자열 추가
+	        if (attach.fileType) {
+	            var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
+	            postGroups[postNo] += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='" +
+	                attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+	            postGroups[postNo] += "<img src='/display?fileName=" + fileCallPath + "'>";
+	            postGroups[postNo] += "</div>";
+	            postGroups[postNo] += "</li>";
+	        } else {
+	            postGroups[postNo] += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='" +
+	                attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+	            postGroups[postNo] += "<span>" + attach.fileName + "</span><br/>";
+	            postGroups[postNo] += "<img src='img/attach.png/'>";
+	            postGroups[postNo] += "</div>";
+	            postGroups[postNo] += "</li>";
+	        }
+	    });
+
+	    // 각 게시물 그룹별로 .uploadResult ul에 추가
+	    for (var postNo in postGroups) {
+	        $("[data-feed-post-no='" + postNo + "'] .uploadResult ul").html(postGroups[postNo]);
+	    }
+	});
+
+    
+	//업로드 결과
+	$(".uploadResult").on("click","li", function(e){
+		//console.log("view image");
+		var liObj = $(this);
+		var path = encodeURIComponent(liObj.data("path")+"/" + liObj.data("uuid")+"_" + liObj.data("filename"));
+	
+		if(liObj.data("type")){
+			showImage(path.replace(new RegExp(/\\/g),"/"));
+		}else {
+			//download 
+			self.location ="/download?fileName="+path
+		}
+	});
+
+	//이미지 크게보기
+	function showImage(fileCallPath){
+		//console.log(fileCallPath);
+		$(".bigPictureWrapper").css("display","flex").show();
+		$(".bigPicture")
+		.html("<img src='/display?fileName="+fileCallPath+"' >")
+		.animate({width:'100%', height: '100%'}, 1000);
+	}
+
+	$(".bigPictureWrapper").on("click", function(e){
+		$(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
+		setTimeout(function(){
+	    	$('.bigPictureWrapper').hide();
+		}, 1000);
+	});
+	
+});
+</script>
+
+<script>
+$('#modal12').on('show.bs.modal', function (e) {
+	
+	e.target.querySelectorAll('.uploadResult ul li').forEach(function(liElement) {
+		liElement.remove();
+	});
+	
+	let ppn = modal12.dataset.updatePostNo;
+	var postGroups = {};
+
+	$.getJSON(`/getWorkAttachDetail?proPostNo=${ppn}`, function(arr) {
+	    console.log('세부', arr);
+	    
+	    var str = "";
+        $(arr).each(function(i, attach){
+            
+            if(attach.fileType){
+                var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
+                
+                str += "<li data-path='"+attach.uploadPath + "' data-file-pro-no='" + attach.proFileNo + "' ";
+    			str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'"
+    			str + "><div>";
+    			//파일 이름 보여주기
+    			str += "<span> "+ attach.fileName+"</span>";
+    			//파일 삭제버튼
+    			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle' onclick='delProFile(" + attach.proFileNo + ", \"" + attach.fileName + "\")'>";
+    			str += "<i class='fa fa-times'></i></button><br>";
+    			//이미지 노출
+    			str += "<img src='/display?fileName="+fileCallPath+"'>";
+    			str += "</div>";
+    			str +"</li>";
+            } else {
+                str += "<li data-path='"+attach.uploadPath + "' data-file-pro-no='" + attach.proFileNo + "' ";
+    			str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'"
+    			str + "><div>";
+    			//파일 이름 보여주기
+    			str += "<span> "+ attach.fileName+"</span>";
+    			//파일 삭제버튼
+    			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle' onclick='delProFile(" + attach.proFileNo + ", \"" + attach.fileName + "\")'>";
+    			str += "<i class='fa fa-times'></i></button><br>";
+    			//파일 노출
+    			str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+    			str += "</div>";
+    			str +"</li>";
+            }
+        });
+        
+        $("#modal12 .uploadResult ul").html(str);
+		
+	});
+	
+});
+
+//파일 db삭제
+function delProFile(ppn, filename) {
+	fetch("/delProFile", {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(Number(ppn))
+	})
+	.then(response => response.json())
+	.then(res => {
+		$("[data-filename='" + filename + "']").remove();
+	})
+	.catch(error => {
+		console.error('Error: ',error);
+	});//fetch종료
+};
+</script>
 
 </body>
 </html>

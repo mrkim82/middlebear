@@ -26,9 +26,9 @@ public interface MailService {
 	//메일 상세조회
 	public MailVO mailInfo(MailVO mailVO);
 	// 보낸메일 총 갯수
-	public int countSendMail(String sender);
+	public int countSendMail(MailVO mailVO);
 	// 받은메일 총 갯수
-	public int countReceiveMail(String receiver, String referrer);
+	public int countReceiveMail(MailVO mailVO);
 	// 지운메일 총 갯수
 	public int countDeleteMail(MailVO mailVO);
 	//메일 첨부파일 등록

@@ -34,8 +34,6 @@ public class CarController {
 	//개인 차량 페이지 조회
 	@GetMapping("/carList")
 	public String getCarList(HttpServletRequest request, Model model, CarVO carVO, Criteria cri) {
-		System.out.println("111111");
-		System.out.println(cri);
 		int carListCnt = carService.carCnt(cri,carVO);
 		System.out.println(carListCnt);
 			
@@ -68,21 +66,42 @@ public class CarController {
 		
 	}
 	
+	
+	//차량 중복 체크 
+	@ResponseBody
+	@PostMapping("carChk")
+	public String carChk(@RequestBody CarVO carVO,String carNo) {
+		String result = "";
+		if(carService.carNoChk(carVO.getCarNo()) > 0) {
+			result = "true";
+		}else {
+			result = "false";
+		}
+		return result;
+	}
+	
 
 	//개인차량 등록 
-	
+	@ResponseBody
 	@PostMapping("carInsert")
-	public String addCar(Model model, CarVO carVO) {
-		carService.addCar(carVO);
-		return "redirect:carList";
+	public CarVO addCar(Model model, @RequestBody CarVO carVO, String carNo) {
+			if(carService.addCar(carVO)>0) {
+				return carVO;
+			} else {
+				return null;
+			}
 	}
 	
 	
 	//차량수정 
+	@ResponseBody
 	@PostMapping("carUpdate")
-	public String carUpdate(Model model, CarVO carVO) {
-		carService.carUpdate(carVO);
-		return "redirect:carList";
+	public CarVO carUpdate(Model model,@RequestBody CarVO carVO,String carNo) {
+		if(carService.carUpdate(carVO)>0) {
+			return carVO;
+		} else {
+			return null;
+		}
 	}
 	
 	//삭제

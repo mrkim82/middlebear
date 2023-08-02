@@ -1,6 +1,7 @@
 package com.groo.bear.pro.controller;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groo.bear.pro.service.ProPostSchService;
-import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.schvo.ProCreateSchVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.schvo.ProUpdateSchVO;
@@ -51,17 +51,16 @@ public class ProPostSchController {
 		return map;
 	}
 	
-	//개인 캘린더 조회페이지 이동
+	//개인 캘린더 조회페이지 이동(페이지)
 	@GetMapping("perSch")
 	public String proMainPage(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
 		
 		model.addAttribute("readPersonalSch", ppss.readPersonalSch(id));
-		System.out.println(model);
 		model.addAttribute("readPerCalDetail", ppss.readPerCalDetail(id));
 		model.addAttribute("readPerCalCom", ppss.readPerCalCom(id));
-		
+		model.addAttribute("cTime" , new Date());
 		return "main/personalSch";
 	};
 	
@@ -72,7 +71,6 @@ public class ProPostSchController {
 		HttpSession session = request.getSession();
 		Map <String, Object> map = new HashMap<>();
 		vo.setId((String)session.getAttribute("Id"));
-		
 		ppss.createPostSch(vo);
 		
 		map.put("result", "성공했겠지");
@@ -84,9 +82,7 @@ public class ProPostSchController {
 	@ResponseBody
 	public Map<String, Object> upSch(@RequestBody ProUpdateSchVO vo) {
 		Map <String, Object> map = new HashMap<>();
-		System.out.println(vo);
 		ppss.updateProSch(vo);
-		
 		
 		map.put("result", "성공했겠지");
 		return map;

@@ -2,39 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 >
-  <head>
-  	<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
 
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-		
-	<link rel="stylesheet" href="/bootstrap.min.css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!-- 풀캘린더 -->
-	<script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+<link rel="stylesheet" href="/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- 풀캘린더 -->
+<script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
 	
-	<!-- 제이쿼리 -->
-	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<!-- 제이쿼리 -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 	
+	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<style>
-		@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
 		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
-		
 		.dohyeon{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 			color:black;
 		}
-		
 		.dohyeonmenu{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
-			font-size : 20px;
-			color:white;
-		}
-		.nanumgothic{
-			font-family: 'Nanum Gothic', serif;/*웹 폰트 지정*/
-			font-weight : 300;
+			font-size : 25px;
 			color:white;
 		}
 		.rightPad{
@@ -120,29 +115,45 @@
 		.spanCursor {
 			cursor: pointer
 		}
+		
+		textarea {
+		  background-color: #f1f1f1;
+		  border: 1px solid #ddd;
+		  border-radius: 4px;
+		  padding: 10px;
+		  font-family: Arial, sans-serif;
+		  font-size: 14px;
+		  padding: 10px;
+		  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		  height: 200px;
+		  width: 100%;
+		  resize: vertical; /* 세로 조정 가능 */
+		}
 	</style>
 	</head>
-  <body>
+  <body style="width:1215px;margin: 0 auto;">
   	<div>
     <header class="blog-header lh-1 py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
             <div class="col-4 pt-1">
 	    		<img src="" title="" style="width: 200px;">
 			</div>
-            
-            <div class="col-4 text-center">
-                <a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:40px; font-weight : 500;" href="/main">Groobear</a>
+			<div class="row">
+				<img style="margin-top:10px;width:45px;height:45px;" src="https://creazilla-store.fra1.digitaloceanspaces.com/emojis/52942/paw-prints-emoji-clipart-md.png">
+	            <div class="col-4 text-center">
+	                <a class="blog-header-logo text-body-emphasis dohyeon" style="font-size:50px; font-weight : 500;" href="/main">Groobear</a>
+	            </div>
             </div>
             <div class="col-6 d-flex justify-content-end align-items-center" style="margin-left: -200px;">
-                <table style="width: 300px;">
+                <table style="width: 300px;text-align:right;margin-right:30px;">
                 	<tbody>
 	                	<tr>
-	                		<td>
+	                		<td style="font-size:20px;">
 	                			<a class="dohyeon">[[${session.Name }]]님 반갑습니다</a>
 	                		</td>
 	                	</tr>
 	                	<tr>
-	                		<td><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
+	                		<td style="font-size:20px;"><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
 	                		<span><a id="commute" class="dohyeon">마이페이지</a></span></td>
 	                	</tr>
                 	</tbody>
@@ -155,22 +166,22 @@
       <div class="collapse navbar-collapse" id="navbarColor01">
       
 	        <ul class="navbar-nav mr-auto" style="display:flex; margin:auto;">
-	          <li class="nav-item active rightPad">
+	          <li class="nav-item active rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/introduce">회사소개</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/mail/receiveMail">메일</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/proMain">프로젝트</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/pay/payMain">전자결재</a>
 	          </li>
-	          <li class="nav-item rightPad">
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
 	            <a class="nav-link dohyeonmenu" href="/boardList?boardType=N">게시판</a>
 	          </li>
-	          <li class="nav-item">
+	          <li class="nav-item" style="padding:0px;">
 	            <a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
 	          </li>
 	        </ul>
@@ -191,15 +202,15 @@
             <li class="nav-item">
               <a href="/proMainS"><span class="material-icons">star</span>즐겨찾기</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a href="#"><span class="material-icons">mail</span>미확인(x)</a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a href="/proMainG"><span class="material-icons">drafts</span>미분류</a>
             </li>
             <li class="nav-item">
               <a href="/proMainH"><span class="material-icons">visibility_off</span>숨김</a>
-              <details>
+              <!-- <details>
 				<summary>모아보기</summary>
 				<ul>
 					<li>전체업무</li>
@@ -207,7 +218,7 @@
 					<li>나를 언급</li>
 					<li>내 게시물</li>
 				</ul>
-			  </details>
+			  </details> -->
 			  <details id="groupFolderList" open>
 				<summary>
 					프로젝트 폴더<span id="popupProjectBtn" class="material-icons">add</span>
@@ -232,19 +243,8 @@
 	<p class="nowMon"></p>
 	
 </div>
-	<script>
-	
-	var today = new Date();
-	var year = today.getFullYear();
-	var month = ('0' + (today.getMonth() + 1)).slice(-2);
-	var monthString = year + '-' + month;
-	const monthDate = monthString;
-	
-	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate)
-	
-	</script>
 		<!-- 프로젝트 우측 컨텐츠 -->
-		<div class="col">
+		<div class="col-9">
 			<!-- 프로젝트 최 상단 바 -->
 			<div class="horizontal-bar">
 				<div>
@@ -320,11 +320,15 @@
 					  +초대하기
 					</button>
 					<input type="text" id="proInSearch" placeholder="프로젝트 내 검색">
+					<button type="button"
+							class="btn btn-danger"
+							onclick="delPro()">프로젝트 삭제</button>
 				</div>
 				</nav>
 			</div>
-			<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-		        <div layout:fragment="content" ></div>
+			<!-- <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4"> -->
+			<main>
+		        <div layout:fragment="content"></div>
 		    </main>
 		</div>
 
@@ -378,28 +382,35 @@
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="inviteMemberLabel">Modal title</h5>
+	        <h5 class="modal-title" id="inviteMemberLabel">초대 할 인원</h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	        ...
+	      	<ul class="list-group">
+			  <li class="list-group-item"
+			  	  th:each="pm : ${readPartiListM}">
+			  	<input type="checkbox"
+			  		   th:data-parti-member="${pm.id}">
+			  	<span th:text="${pm.rank}"></span>	  
+			  	<span th:text="${pm.name}"></span>	  
+			  	<span th:text="${pm.email}"></span>	  
+			  </li>
+			</ul>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-	        <button type="button" class="btn btn-primary">저장</button>
+	        <button type="button" class="btn btn-primary" onclick="inviteMail()">저장</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
 
-
-
 	</div>
 
 <!-- 공통 js -->
-<!-- 프로젝트 넘버 찾기(주소) -->
+<!-- 프로젝트 넘버(proNo) (주소) -->
 <script>
 	let url = window.location.pathname;
 	let lastIndex = url.lastIndexOf('/');
@@ -408,38 +419,44 @@
 
 <!-- session값 가져오기 -->
 <script type="text/javascript" th:inline="javascript">
-	/*<![CDATA[*/
-		let selfId = /*[[${session.Id}]]*/;
-		let selfName = /*[[${session.Name}]]*/;
-	/*]]>*/
+/*<![CDATA[*/
+	let selfId = /*[[${session.Id}]]*/;
+	let selfName = /*[[${session.Name}]]*/;
+/*]]>*/
 </script>
 
 <!-- 시간 변환 -->
 <script type="text/javascript">
-	function convertToFormattedDateTime(dateTimeStr) {
-		if(dateTimeStr == '') {//빈값일때 바로 리턴
-			return;
-		}
-	  const date = new Date(dateTimeStr);
-	  const year = date.getFullYear();
-	  const month = String(date.getMonth() + 1).padStart(2, '0');
-	  const day = String(date.getDate()).padStart(2, '0');
-	  const hours = String(date.getHours()).padStart(2, '0');
-	  const minutes = String(date.getMinutes()).padStart(2, '0');
+//??
+function convertToFormattedDateTime(dateTimeStr) {
+	if(dateTimeStr == '') {//빈값일때 바로 리턴
+		return;
+	};
+	
+	const date = new Date(dateTimeStr);
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
 
-	  return `${year}-${month}-${day} ${hours}:${minutes}`;
-	}
+	return `${year}-${month}-${day} ${hours}:${minutes}`;
+};
 </script>
 
 <!-- 모달 초기화 -->
 <script>
-	$('.modal').on('hidden.bs.modal', function (e) {
-	  // 모달 내부의 모든 input 요소를 찾아 값을 초기화
-	  $(this).find('input, textarea').val('');
-	  //$(this).find('.collapse').removeClass('show');
-	});
-	
+$('.modal').on('hidden.bs.modal', function (e) {
+	// 모달 내부의 모든 input 요소를 찾아 값을 초기화
+	$(this).find('input, textarea').val('');
+	//$(this).find('.collapse').removeClass('show');
+});
+$('#modal2').on('hidden.bs.modal', function (e) {
+	$(this).find('.uploadResult ul li').remove();
+});
 </script>
+<!-- 공통 js종료 -->
+
 
 	<script th:inline="javascript">
     /*<![CDATA[*/
@@ -807,56 +824,350 @@
     /*]]>*/
     </script>
 
-    <script>
-    	let newColor;
-    	
-    	//클릭시 색상 정보 저장
-    	function saveColor() {
-    		newColor = event.target.dataset.colorCode;
-    		console.log(event.target)
-    	}
-    	
-    	function changeColor() {
-    		console.log(newColor);
-    		fetch("/updateProMemColor", {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					'proColor' : newColor,
-	   				'proNo': projectNo
-	   			})
-			})
-			.then(response => response.json())
-			.then(res => {
-				console.log(res);
-				if(res.result == '성공') {
-					$('#squareStyle').modal('hide');//모달창 닫기
-					document.getElementsByClassName('square')[0].style.backgroundColor = newColor;//색상변환
-				} else {
-					alert('실패');
-				}
-				
-			});
-    	}
-    </script>
+<!-- 색상 변경 -->
+<script>
+let newColor;
+ 	
+//클릭시 색상 정보 저장
+function saveColor() {
+	newColor = event.target.dataset.colorCode;
+}
+
+function changeColor() {
+	fetch("/updateProMemColor", {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			'proColor' : newColor,
+			'proNo': projectNo
+		})
+	})
+	.then(response => response.json())
+	.then(res => {
+		if(res.result == '성공') {
+			$('#squareStyle').modal('hide');//모달창 닫기
+			document.getElementsByClassName('square')[0].style.backgroundColor = newColor;//색상변환
+		} else {
+			alert('실패');
+		}
+	});
+}
+</script>
     
 <!-- 검색기능 -->
 <script type="text/javascript">
-	proInSearch.addEventListener('keyup', function(event) {
-		if(event.keyCode === 13) {
-			if(proInSearch.value == '') {
-				alert('빈값 허용 안함');
-				proInSearch.focus();
-				return false;
-			}
-			let searchKeyword = proInSearch.value;
-			location.href="/proSearch/" + projectNo + "?search=" + searchKeyword;
-			
+proInSearch.addEventListener('keyup', function(event) {
+	if(event.keyCode === 13) {
+		if(proInSearch.value == '') {
+			alert('빈값 허용 안함');
+			proInSearch.focus();
+			return false;
 		}
-	})
+		let searchKeyword = proInSearch.value;
+		location.href="/proSearch/" + projectNo + "?search=" + searchKeyword;
+	}
+});
 </script>
     
-  </body>
+<!-- 웹소켓 -->
+<script>
+	//WebSocket 연결 설정
+	const alarmClient = new StompJs.Client({
+		brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+	});
+	
+	// 페이지 로드시 웹소켓 연결
+	window.addEventListener("load", function(event) {
+		alarmClient.activate();
+	});
+	
+	// 연결 성공시
+	alarmClient.onConnect = (frame) => {
+		console.log('Connected: ' + frame);
+		
+	    // 프로젝트 구독
+		alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsg(JSON.parse(alarmMsg.body));
+		});
+	    
+	    // 채팅방 생성 초대 구독
+		alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgChat(JSON.parse(alarmMsg.body));
+	    });
+	    
+		// 메일 수신 구독
+		alarmClient.subscribe('/alarmMan/mailAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgMail(JSON.parse(alarmMsg.body));
+	    });
+		
+		// 결재대상자 수신 구독
+		alarmClient.subscribe('/alarmMan/payAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgPay(JSON.parse(alarmMsg.body));
+		});
+		
+		// 결재대상자 수신 구독
+		alarmClient.subscribe('/alarmMan/payComAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgPayCom(JSON.parse(alarmMsg.body));
+		});
+	};
+	
+	//에러
+	alarmClient.onWebSocketError = (error) => {
+		console.error('Error with websocket', error);
+	};
+	
+	alarmClient.onStompError = (frame) => {
+		console.error('Broker reported error: ' + frame.headers['message']);
+		console.error('Additional details: ' + frame.body);
+	};
+	
+	function almSendMsg() {
+		toastAct();
+	};
+	
+	function almSendMsgChat() {
+		toastActChat();
+	};
+	
+	function almSendMsgMail() {
+		toastActMail();
+	};
+	
+	function almSendMsgPay() {
+		toastActPay();
+	};
+	
+	function almSendMsgPayCom() {
+		toastActPayCom();
+	};
+	
+	function toastAct() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
+	};
+	
+	function toastActChat() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
+	};
+	
+	function toastActMail() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('새로운 메일이 도착하였습니다.', '메일 알림', {timeOut: 5000});
+	};
+	
+	function toastActPay() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('결재 진행할 전자문서가 도착하였습니다.', '전자결재 알림', {timeOut: 5000});
+	};
+	
+	function toastActPayCom() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('결재 진행이 완료된 전자문서가 있습니다.', '전자결재 알림', {timeOut: 5000});
+	};
+	
+	var today = new Date();
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var monthString = year + '-' + month;
+	const monthDate = monthString;
+	
+	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate);
+</script>
+    
+<!-- 프로젝트 삭제 -->
+<script>
+function delPro() {
+	
+	fetch("/delPro", {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(Number(projectNo))
+	})
+	.then(response => response.json())
+	.then(res => {
+		location.href="/proMain";
+	})
+	.catch(error => {
+		console.error('Error: ',error);
+	});
+}
+</script>
+
+<!-- 파일 업로드 -->
+<script type="text/javascript">
+//업로드 1번
+$("input[type='file']").change(function(e) {
+	let findModal = $(e.target);
+	var formData = new FormData();
+//	var inputFile = $("input[name='uploadFile']");
+	var inputFile = $(e.target);
+	console.log(inputFile)
+	var files = inputFile[0].files;
+	//여러 파일 올라 갈 수 있기 때문에 반복문
+	for(var i=0; i<files.length; i++) {
+		//파일 검증
+	    if(!checkExtension(files[i].name, files[i].size) ){
+    	    return false;
+		}
+    	formData.append("uploadFile", files[i]);
+	}
+	
+	//console.log('폼데이터',formData.get("uploadFile"))
+	
+	$.ajax({
+		url: "/uploadAjaxAction",
+		processData: false,
+		contentType: false,
+		data: formData,
+		type: "POST",
+		dataType: "json",
+		success: function(result) {
+			//성공시 화면에 출력
+			showUploadResult(result, findModal);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+});
+
+
+//확장자 필터(1-2)
+var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
+var maxSize = 5242880;
+
+function checkExtension(fileName, fileSize) {
+	if (fileSize >= maxSize) {
+	    alert('파일 사이즈 초과');
+	    return false;
+	}
+	if (regex.test(fileName)) {
+	    alert('해당 종류의 파일은 업로드할 수 없습니다.');
+	    return false;
+	}
+	return true;
+}
+
+//파일선택으로 파일 불러올 때, 업로드 2번
+function showUploadResult(uploadResultArr, findModal){
+	console.log('s',uploadResultArr)
+	
+	//빈값 찾기
+	if(!uploadResultArr || uploadResultArr.length == 0){return ;}
+	
+	var uploadUL = findModal.closest('.modal').find('.uploadResult ul');
+	
+	var str = "";
+  
+	//여러건이기 때문에 반복문
+	$(uploadResultArr).each(function(i, obj){
+		//console.log("11:06" + i)
+		console.log("11:05",obj)
+		//console.log('이미지',obj.image);
+		//console.log('파일타입',obj.fileType);
+		
+		//image type
+		if(obj.image){
+			console.log('이미지!')
+			var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+			
+			str += "<li data-path='"+obj.uploadPath+"'";
+			str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+			str + "><div>";
+			//파일 이름 보여주기
+			str += "<span> "+ obj.fileName+"</span>";
+			//파일 삭제버튼
+			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			//이미지 노출
+			str += "<img src='/display?fileName="+fileCallPath+"'>";
+			str += "</div>";
+			str +"</li>";
+		} else {
+			console.log('파일?')
+			var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+			var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+			    
+			str += "<li data-path='"+obj.uploadPath+"'";
+			str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+			str + "><div>";
+			//파일 이름 보여주기
+			str += "<span> "+ obj.fileName+"</span>";
+			//파일 삭제버튼
+			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			//파일 노출
+			str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+			str += "</div>";
+			str +"</li>";
+		} 
+	});
+	
+	//만든 태그 붙여서 화면에 보여주기
+	uploadUL.append(str);
+}
+//화면 노출 종료
+
+//화면에서 지우기
+</script>
+
+<!-- 파일 업로드 화면에서 지우기 -->
+<script type="text/javascript">
+//업로드중인 파일 삭제
+$(".uploadResult").on("click", "button", function(e){
+	e.stopPropagation();
+	
+	var targetFile = $(this).data("file");
+	var type = $(this).data("type");
+
+	//해당 업로드 파일 li가기
+	var targetLi = $(this).closest("li");
+
+	$.ajax({
+		url : '/deleteFile',
+		data : {'fileName' : targetFile,
+				'type' : type},
+		dataType : 'text',
+		type : 'POST',
+		success : function(result) {
+			targetLi.remove();//화면에서 지우기
+		}
+	});
+});
+</script>
+
+</body>
 </html>
