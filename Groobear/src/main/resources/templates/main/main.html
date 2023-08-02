@@ -199,7 +199,7 @@
 <p class="endWork" style="display:none;"></p>
 <p class="startOverWork" style="display:none;"></p>
 <p class="endOverWork" style="display:none;"></p>
-<p class="monthOver" style="display:bolck;"></p>
+<p class="monthOver" style="display:none;"></p>
 
 
 
@@ -239,34 +239,11 @@ var openChat  = function() {
 			'id' : id
 	}
 	console.log(id);
+	
 	init();
+	
 	function init(){
 		console.log('11')
-		fetch('getWork', {
-			method:'POST',
-			headers:{
-				'content-Type' : 'application/json'	
-			},
-			body:JSON.stringify(sInfo)
-		})
-		.then(response => response.json())
-		.then(data => {
-			//console.log(data.day)
-	        document.querySelector('.day').textContent = data.day;
-	        document.querySelector('.startWork').textContent = data.workStart;
-	        document.querySelector('.endWork').textContent = data.workEnd;
-	        document.querySelector('.startOverWork').textContent = data.overWorkStart;
-	        document.querySelector('.endOverWork').textContent = data.overWorkEnd;
-	        updateSwitches(data);
-	       	
-			document.getElementById('day23').textContent = data.day.substr(0,10);
-	        
-		})		
-		.catch(err => {
-			console.log(err);
-		})		
-		
-		//22
 		fetch('getMonth', {
 			method:'POST',
 			headers:{
@@ -279,10 +256,32 @@ var openChat  = function() {
 	        document.querySelector('.monthOver').textContent = data2.over;
 	        console.log(data2)
 	        
-		})		
-		.catch(err => {
-			console.log(err);
-		})
+	        return fetch('getWork', {
+	            method: 'POST',
+	            headers: {
+	              'content-Type': 'application/json',
+	            },
+	            body: JSON.stringify(sInfo),
+	          });
+	        })
+	        .then((response) => response.json())
+	        .then((data) => {
+	          //console.log(data.day)
+	          document.querySelector('.day').textContent = data.day;
+	          document.querySelector('.startWork').textContent = data.workStart;
+	          document.querySelector('.endWork').textContent = data.workEnd;
+	          document.querySelector('.startOverWork').textContent = data.overWorkStart;
+	          document.querySelector('.endOverWork').textContent = data.overWorkEnd;
+
+	          document.getElementById('day23').textContent = data.day.substr(0, 10);
+	          updateSwitches(data);
+	        }) 
+	        .catch((err) => {
+	          console.log(err);
+	          // 에러 발생 시 사용자에게 에러 메시지 표시 등의 처리
+	        });
+		
+		//22
 		
 		
 		function updateSwitches(data) {
@@ -319,32 +318,32 @@ var openChat  = function() {
 			
 			// 연장근무 시작/종료 스위치 업데이트
 			if(parseInt(document.querySelector('.monthOver').textContent) < 2401){
-				if (data.overWorkStart != null && data.overWorkEnd == null) {
-					chkBoxo.checked = true;
-					let p = document.createElement('p');
-					p.innerText = '연장근무 시작';
-					document.querySelector('#overWorkSwitch').append(p);
-					document.getElementById('overWorkStart').innerText = data.overWorkStart.substr(-5);
-				} else if(data.overWorkEnd == null && data.overWorkStart == null){
+					if (data.overWorkStart != null && data.overWorkEnd == null) {
+						chkBoxo.checked = true;
+						let p = document.createElement('p');
+						p.innerText = '연장근무 시작';
+						document.querySelector('#overWorkSwitch').append(p);
+						document.getElementById('overWorkStart').innerText = data.overWorkStart.substr(-5);
+					} else if(data.overWorkEnd == null && data.overWorkStart == null){
+						chkBoxo.checked = false;
+						let p = document.createElement('p');
+						p.innerText = '연장근무 시작 전';
+						document.querySelector('#overWorkSwitch').append(p);
+					} else if(data.overWorkEnd != null || data.overWorkStart == null){
+						chkBoxo.checked = false;
+						let p = document.createElement('p');
+						p.innerText = '연장근무 종료';
+						document.querySelector('#overWorkSwitch').append(p);
+						console.log(data.overWorkStart)
+						document.getElementById('overWorkStart').innerText = data.overWorkStart.substr(-5);
+						document.getElementById('overWorkEnd').innerText = data.overWorkEnd.substr(-5);
+					} 
+				}else if(parseInt(document.querySelector('.monthOver').textContent) > 2402){
 					chkBoxo.checked = false;
 					let p = document.createElement('p');
-					p.innerText = '연장근무 시작 전';
+					p.innerText = '연장근무 불가능';
 					document.querySelector('#overWorkSwitch').append(p);
-				} else if(data.overWorkEnd != null || data.overWorkStart == null){
-					chkBoxo.checked = false;
-					let p = document.createElement('p');
-					p.innerText = '연장근무 종료';
-					document.querySelector('#overWorkSwitch').append(p);
-					console.log(data.overWorkStart)
-					document.getElementById('overWorkStart').innerText = data.overWorkStart.substr(-5);
-					document.getElementById('overWorkEnd').innerText = data.overWorkEnd.substr(-5);
-				} 
-			}else if(parseInt(document.querySelector('.monthOver').textContent) > 2402){
-				chkBoxo.checked = false;
-				let p = document.createElement('p');
-				p.innerText = '연장근무 불가능';
-				document.querySelector('#overWorkSwitch').append(p);
-			}
+				}
 			
 	        let check = document.querySelector('.cBtn');
 			let ocheck = document.querySelector('.cBtno');
@@ -492,13 +491,12 @@ var openChat  = function() {
 		
 		
 		
+		
+		
+		
+		
+		
 		}
-		
-		
-		
-		
-		
-		
 		
 		
 		
@@ -513,7 +511,6 @@ var openChat  = function() {
 	}//init end
 	
 	
-		
 		
 		
 	
