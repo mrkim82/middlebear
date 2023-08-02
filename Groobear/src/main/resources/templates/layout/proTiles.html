@@ -4,31 +4,41 @@
 >
 	  
 <head>
+
 <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 <meta charset="utf-8">
 <meta name="viewport"
 	  content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <!-- proTiles link -->
+<!-- 부트스트랩 -->
+<link rel="stylesheet" href="/bootstrap.min.css">
+	  
+<!-- 구글폰트 -->
 <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
 	  rel="stylesheet">
-<link rel="stylesheet" href="/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+	  rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	  rel="stylesheet">
-<link rel="stylesheet" type="text/css"
-	  href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-<link rel="stylesheet"
-	  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-	  rel="stylesheet">
+
+<!-- 풀캘린더 -->
+<script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
 
 <!-- proTiles 스크립트 -->
-
+<!-- 제이쿼리 -->
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<!-- 웹소켓 -->
 <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 <script type="text/javascript"
 		src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	  href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+
+<!-- 없으면 모달 안됨 -->
 <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+
+
 
 <style>
 @import
@@ -80,49 +90,6 @@ input[type="text"]:focus {
 	width: 170px; /* 포커스되었을 때 더 넓은 너비 값으로 변경 */
 	border-color: #6c63ff;
 	box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
-}
-
-#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	padding-top: 100px; /* Location of the box */
-	left: 0;
-	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: auto; /* Enable scroll if needed */
-	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-	display: none;
-}
-
-#modalFolderCreate4 {
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	padding-top: 100px; /* Location of the box */
-	left: 0;
-	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: auto; /* Enable scroll if needed */
-	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-	display: none;
-}
-
-#modalBody, #modalBody2, #modalBody3 {
-	width: 500px;
-	height: 300px;
-	padding: 30px 30px;
-	margin: 0 auto;
-	border: 1px solid #777;
-	background-color: #fff;
-}
-
-#closeBtn, #closeBtn2 {
-	float: right;
-	font-weight: bold;
-	color: #777;
-	font-size: 25px;
-	cursor: pointer;
 }
 
 details {
@@ -183,6 +150,36 @@ details ul {
 .flex-column li {
 	margin-left: 10px;
 	padding: px;
+}
+
+.horizontal-bar {
+	height: 80px;
+	width: 100%;
+	background-color: #f9f9f9;
+}
+
+.horizontal-bar2 {
+	height: 40px;
+	width: 100%;
+	background-color: #f5f5f5;
+}
+
+.spanCursor {
+	cursor: pointer
+}
+
+textarea {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 200px;
+  width: 100%;
+  resize: vertical; /* 세로 조정 가능 */
 }
 </style>
 

@@ -2,19 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 >
+
 <head>
 
 <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport"
+	  content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <!-- 부트스트랩 -->
 <link rel="stylesheet" href="/bootstrap.min.css">
 
 <!-- 구글폰트 -->
 <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <!-- 풀캘린더 -->
 <script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
@@ -258,86 +260,9 @@ textarea {
 </div>
 		<!-- 프로젝트 우측 컨텐츠 -->
 		<div class="col-9">
-			<!-- 프로젝트 최 상단 바 -->
-			<div class="horizontal-bar">
-				<div>
-					<ul class="nav">
-						<li>
-							<!-- 스타일을 동적으로 적용하는 네모 -->
-							<button type="button" class="btn btn-primary square" data-toggle="modal"
-									th:style="'background-color: ' + ${projectTopBar.proColor}"
-									data-target="#squareStyle"></button>
-									
-									<!-- Modal -->
-									<div class="modal fade" id="squareStyle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-									  <div class="modal-dialog">
-									    <div class="modal-content">
-									      <div class="modal-header">
-									        <h5 class="modal-title" id="squareStyleLabel">프로젝트 색상</h5>
-									        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									          <span aria-hidden="true">&times;</span>
-									        </button>
-									      </div>
-									      <div class="modal-body">
-									      	
-									      	<ul class="nav justify-content-center">
-											  <li class="nav-item" th:each="colors : ${readPublicCodeColorAll}">
-											    <!-- <a class="nav-link" href="#"></a> -->
-											    <button type="button" class="btn btn-primary square nav-link"
-														th:style="'background-color: ' + ${colors.codeName}"
-														th:data-color-code="${colors.codeName}" onclick="saveColor()"></button>
-											  </li>
-											</ul>
-									      	
-									      </div>
-									      <div class="modal-footer">
-									        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-									        <button type="button" class="btn btn-primary" onclick="changeColor()">확인</button>
-									      </div>
-									    </div>
-									  </div>
-									</div>
-									<!-- Modal끝 -->
-									
-						</li>
-						<li class="nav-item"><span class='material-icons'
-							style="cursor: pointer;">more_vert</span></li>
-						<li class="nav-item" th:text="${projectTopBar.proName}"></li>
-						<li class="nav-item" th:text="${projectTopBar.proContent}"
-							th:style="'margin-left:30px;'"></li>
-					</ul>
-				</div>
-			</div>
-			<!-- 프로젝트 탭 -->
-			<div class="horizontal-bar2">
-				
-				<nav class="nav">
-				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=1)}"
-				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '1'} ? 'bottomLine' : ''">업무</a>
-				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=2)}"
-				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '2'} ? 'bottomLine' : ''">피드</a>
-				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=3)}"
-				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '3'} ? 'bottomLine' : ''">간트차트</a>
-				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=4)}"
-				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '4'} ? 'bottomLine' : ''">캘린더</a>
-				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=5)}"
-				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '5'} ? 'bottomLine' : ''">파일</a>
-				  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=6)}"
-				    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '6'} ? 'bottomLine' : ''">알림</a>
-					<!-- 주소를 가져오는 방식 -->
-					<!-- <th:block th:text="${#strings.substringAfter((#strings.substringAfter(#request.requestURI, '/')), '/')}"></th:block>
-					<p th:text="${#request.requestURI}"></p>
-					<th:block th:text="${#strings.substringAfter(#request.getQueryString(), '=')}"></th:block> -->
-				<div>
-					<input type="text" id="proInSearch" placeholder="프로젝트 내 검색">
-					<span class="material-symbols-outlined spanCursor"
-						  data-toggle="modal"
-						  data-target="#inviteMember">group_add</span>
-					<span class="material-symbols-outlined spanCursor" onclick="delPro()">delete</span>
-					<span class="material-symbols-outlined spanCursor" onclick="exitProMem()">logout</span>
-				</div>
-				</nav>
-			</div>
+		
+			<div th:insert="~{layout/proHorizonBar :: horizonBar}"></div>
+			
 			<!-- <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4"> -->
 			<main>
 		        <div layout:fragment="content"></div>
