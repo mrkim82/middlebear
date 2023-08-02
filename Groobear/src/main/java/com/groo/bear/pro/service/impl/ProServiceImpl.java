@@ -40,13 +40,13 @@ public class ProServiceImpl implements ProService {
 	}
 	
 	@Override
-	public int updateStarY(int pMN) {
-		return proMapper.updateStarY(pMN);
-	}
-
-	@Override
-	public int updateStarN(int pMN) {
-		return proMapper.updateStarN(pMN);
+	public int updateStar(String proStarCheck, int proMemNo) {
+		if(proStarCheck.equals("Y")) {
+			proStarCheck = "N";
+		} else {
+			proStarCheck = "Y";
+		}
+		return proMapper.updateStar(proStarCheck, proMemNo);
 	}
 
 	@Override

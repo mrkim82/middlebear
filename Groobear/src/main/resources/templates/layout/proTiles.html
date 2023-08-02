@@ -47,6 +47,12 @@
 	padding-right: 150px;
 }
 
+.btn-groo {
+	background-color: #35A880;
+	color: #fff;
+	border: 1px solid #35A880;
+}
+
 #modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
 	position: fixed; /* Stay in place */
 	z-index: 1; /* Sit on top */
@@ -496,13 +502,13 @@ details ul {
 		let spanC = document.createElement('span');
 		
 		spanC.className = 'material-icons moreVertIcons';
-		spanC.style = 'display : none;';
+		//spanC.style = 'display : none;';
 		spanC.textContent = 'more_vert';
 		
 		aC.setAttribute('href', '/proGroupD/'+ lGN);
 		aC.setAttribute('data-gN', lGN);
 		aC.setAttribute('data-fName', folderC1.value);
-		aC.textContent = folderC1.value;
+		aC.textContent = folderC1.value.substring(0, 8) + '...';
 		
 		aC.append(spanC);
 		liC.append(aC);
