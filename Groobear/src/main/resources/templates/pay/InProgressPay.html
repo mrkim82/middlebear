@@ -20,7 +20,7 @@
 			</thead>
 			<tbody>
 				<tr th:each="pay,stat : ${InProgressList}" th:attr="onclick='window.location.href=\'/payInfoRead?payNo=' + ${pay.payNo} + '+&docType='+${pay.docType}+'\''">
-					<td>[[${paging.totalCount - stat.index}]]</td>
+					<td th:text="${paging.totalCount - ((paging.cri.page-1) * paging.cri.perPageNum) - stat.index}"></td>
 					<td th:text="${pay.payNo}"></td>
 					<td>[[${pay.purpose}]]</td>
 					<td>[[${pay.id}]]</td>

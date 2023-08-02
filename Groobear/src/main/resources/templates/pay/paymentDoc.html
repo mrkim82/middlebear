@@ -9,73 +9,33 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 	<div>
 		<form style="width:1200px; height:2000px">
-			<table style="float:right">
-				<thead>
-					<tr style="display:inline-block">
-						<td style="width:130px">기안자</td>
-						<td style="width:130px">결재자1</td>
-						<td style="width:100px">결재자2</td>
-					</tr>
-				</thead>
+			
+			<table style="float:left;width:600px;height:1000px">
 				<tbody>
-					<tr style="display:inline-block">
-						<td style="width:130px; height:100px; background-color:aquamarine">기안자사인1</td>
-					</tr>
-					<tr style="display:inline-block">
-						<td style="width:130px; height:100px; background-color:MediumOrchid">결재자사인1</td>
-					</tr>
-					<tr style="display:inline-block">
-						<td style="width:130px; height:100px; background-color:DeepSkyBlue">결재자사인2</td>
-					</tr>
-					<tr id="drafter">
-						<td></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-					</tr>
-					<tr id="payUserList1">
-						<td></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-					</tr>
-					<tr id="payUserList2">
-						<td></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-					</tr>
-				</tbody>
-			</table>
-			<table style="float:left">
-				<tbody>
-					<tr>
+					<tr style="height:50px;">
 						<td>문서번호 : [[${paymentNo}]]</td>
 					</tr>
-					<tr>
+					<tr  style="width:400px;height:50px;">
 						<td id="drafter">기안자 : [[${userInfo.name}]] [[${userInfo.rank}]] [[${userInfo.deptName}]]</td>
 					</tr>
-					<tr>
+					<tr style="height:50px;">
 						<td><button id="childClick" type="button" onclick="payUserSelect();">결재자선택</button></td>
 					</tr>
-					<tr>
+					<tr style="height:50px;">
 						<td><button id="referrerClick" type="button" onclick="referrerSelect();">참조자선택</button></td>
 					</tr>
 					<tr id="referrerList" >
-						<td style="width:150px" ></td>
+						<td style="width:50px" ></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
-						<td style="width:150px"></td>
+						<td style="width:50px"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
-						<td style="width:150px"></td>
+						<td style="width:50px"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
@@ -181,6 +141,47 @@
 						<tr style="display: none;"><td><textarea id="robincomment" style="width:400px; height:100px"></textarea></td></tr>
 						<tr><td><button type="button" onclick="payNumSend3()">결재</button></td></tr>
 					</tbody>
+				</tbody>
+			</table>
+			<table style="float:right;margin-right:200px">
+				<thead>
+					<tr style="display:inline-block">
+						<td style="width:130px">기안자</td>
+						<td style="width:130px">결재자1</td>
+						<td style="width:100px">결재자2</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="display:inline-block">
+						<td style="width:130px; height:100px; background-color:aquamarine">기안자사인1</td>
+					</tr>
+					<tr style="display:inline-block">
+						<td style="width:130px; height:100px; background-color:MediumOrchid">결재자사인1</td>
+					</tr>
+					<tr style="display:inline-block">
+						<td style="width:130px; height:100px; background-color:DeepSkyBlue">결재자사인2</td>
+					</tr>
+					<tr id="drafter" style="display:inline-block">
+						<td></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+					</tr>
+					<tr id="payUserList1" style="display:inline-block">
+						<td></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+					</tr>
+					<tr id="payUserList2" style="display:inline-block">
+						<td></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+					</tr>
 				</tbody>
 			</table>
 		</form>

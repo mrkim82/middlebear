@@ -69,21 +69,19 @@
                   <if test="mailVO.receiver != null and mailVO.referrer != null">
                  		AND (d.receiver = #{mailVO.receiver}
                   		OR d.referrer = #{mailVO.referrer})
-						AND d.id = #{mailVO.id}
                  	</if>
 			<if test="mailVO.sender != null and mailVO.receiver == null">
 					AND d.sender = #{mailVO.sender}
-					AND d.id = #{mailVO.id}
 			</if>
 			<if test="mailVO.receiver != null and mailVO.sender != null">
 					AND (d.receiver = #{mailVO.receiver}
 					 OR d.sender = #{mailVO.sender}
 					 OR d.referrer = #{mailVO.referrer})
-					 AND d.id = #{mailVO.id}
 			</if>
 			<if test="mailVO.deleteDate != null">
                   			AND c.delete_date = #{mailVO.deleteDate}
   	        	</if>
+  	        	AND d.id = #{mailVO.id}
               )g
           )
           <![CDATA[

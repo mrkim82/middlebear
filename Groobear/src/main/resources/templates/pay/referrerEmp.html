@@ -2,18 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>참조자 등록</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 </head>
 <body>
 	<br>
-    <table style="width:200px; height:500px; display:inline-block">
+    <table style="width:200px; height:500px; float:left;">
     	<thead>
 	    	<tr>
 	    		<th><font size="3" color="gray">구성원</font></th>
 	    	</tr>
     	</thead>
     	<tbody id="EmpBody">
-    		<tr th:each="emp : ${payEmpList}" onmousedown="empInfo(this);">
+    		<tr class="payInfo" th:each="emp : ${payEmpList}" onmousedown="empInfo(this); trbackground(this);">
     			<td>
 	    			[[${emp.name}]] | [[${emp.rank}]] | [[${emp.deptName}]]
 	    			<div style="display:none">[[${emp.Id}]]</div>
@@ -25,7 +26,7 @@
     	</tbody>
     	
     </table>
-    <table>
+    <table style="float:left; margin-left:100px ;margin-top:100px;">
     	<tbody>
     		<tr>
     			<td><button type="button" id="referrer" onclick="refSet()">참조자</button></td>
@@ -53,7 +54,7 @@
     		</tr>
     	</tbody>
     </table>
-    <table style="width:300px; height:200px;">
+    <table style="width:200px; height:150px; float:right;">
     	<thead>
     		<tr>
 	    		<th><font size="3" color="gray">참조자</font></th>
@@ -63,7 +64,6 @@
     		
     	</tbody>
     </table>
-    <input type="button" value="창닫기" onclick="window.close()">
     <script>
     	var empName = '';
     	var empRank = '';
@@ -83,6 +83,10 @@
 		var referrer = document.getElementById('referrerList'); 	//html tbody
 		
     	function empInfo(e){
+			console.log("e = ",e);
+			$('.payInfo').css('background-color','white');
+    		$('.setInfo').css('background-color','white');
+			
     		console.log(e.children[0].textContent);
 			empId = e.children[0].children[0].textContent;
     		empName = e.children[0].children[1].textContent;
@@ -96,6 +100,8 @@
     	function refSet(){
     		//push pop 사용해야됨 이미 있는 유저정보는 추가할필요없음
     		console.log('refSet 클릭');
+    		$('.payInfo').css('background-color','white');
+    		$('.setInfo').css('background-color','white');
     		var str = '';
     		let trTag = document.createElement('tr');
     		let tdTag = document.createElement('td');
@@ -113,15 +119,13 @@
 		    		if(referrerList.length === 0){
 		    			console.log('값 없음');
 		    			str = '';
-		    			str += "<td>"
+		    			str += "<td class='setInfo'; onclick='tdbackground(this)';>"
 		        		str += empName+" "+empRank+" "+empDept
 			    		str += "<div style='display:none'>"+empId+"</div>"
 			    	    str += "<div style='display:none'>"+empName+"</div>"
 			    	    str += "<div style='display:none'>"+empRank+"</div>"
 			    	    str += "<div style='display:none'>"+empDept+"</div>"
 			    	    str += "</td>"
-			    	    //tdTag.innerHTML += str;
-			    	    //trTag.append(tdTag);
 			    	    trTag.innerHTML += str;
 			    		referrer.append(trTag);
 		        		referrerList.push(empId);
@@ -138,11 +142,12 @@
 			        			if(referrerList[i] === empId){
 			        				console.log(referrerList[i]);
 			        				alert('이미 참조자명단에 있는 사원입니다.');
+			        				return;
 			        			}else{
 			        				console.log('조회중입니다.');
 			        				console.log('현재 있는 참조자 리스트 = ',referrerList);
 			        				str = '';
-			        				str += "<td>"
+			        				str += "<td class='setInfo'; onclick='tdbackground(this)';>"
 			        	    		str += empName+" "+empRank+" "+empDept
 						    		str += "<div style='display:none'>"+empId+"</div>"
 						    	    str += "<div style='display:none'>"+empName+"</div>"
@@ -165,6 +170,7 @@
 			        		}
 		    			}else{
 		    				alert('참조자는 이미 3명입니다. 추가가 불가능합니다.')
+		    				return;
 		    			}
 		    		}
     			}else{
@@ -172,6 +178,7 @@
     			}
     		}else{
     			alert('기안자는 참조자에 등록 할 수 없습니다.');
+    			return
     		}
     		console.log(referrerList);
     		console.log('length',referrerList.length);
@@ -339,6 +346,15 @@
 	    	    trTag.append(tdTag);
 	    	    referrerListShow.append(trTag);
     		}
+		}
+		function trbackground(e){
+			e.style.background = "aqua";
+			console.log("e = ",e);
+    		//$('.payInfo').css('background-color','white');
+		}
+		function tdbackground(e){
+			console.log("td e = ",e);
+			e.style.background = "gray";
 		}
     </script>
 </body>
