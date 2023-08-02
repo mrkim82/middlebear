@@ -1,11 +1,9 @@
 package com.groo.bear.chat.controller;
 
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +39,21 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
     
-    //메세지 전체조회
+//    //메세지 전체조회1
+//    @GetMapping("/chat/{roomNo}")
+//    public String rooms(HttpSession session, @PathVariable Integer roomNo, Model model, ChatMessageDTO chatDTO) {
+//        String name = (String)session.getAttribute("Name");
+//        model.addAttribute("name", name);
+//        String id = (String)session.getAttribute("Id");
+//        model.addAttribute("id", id);
+//        model.addAttribute("roomNo", roomNo);
+//     // ChatMessageDTO로 변경하고 시간 정보를 포함한 메시지 전체 리스트를 가져옵니다.
+//        List<ChatMessageDTO> chatMessageList = chatService.MessageAllList(roomNo);
+//        model.addAttribute("chatDTO", chatMessageList);
+//
+//        return "chat/chat";
+//    }
+  //메세지 전체조회2
     @GetMapping("/chat/{roomNo}")
     public String rooms(HttpSession session, @PathVariable Integer roomNo, Model model, ChatMessageDTO chatDTO) {
         String name = (String)session.getAttribute("Name");
@@ -50,11 +62,12 @@ public class ChatController {
         model.addAttribute("id", id);
         model.addAttribute("roomNo", roomNo);
      // ChatMessageDTO로 변경하고 시간 정보를 포함한 메시지 전체 리스트를 가져옵니다.
-        List<ChatMessageDTO> chatMessageList = chatService.MessageAllList(roomNo);
+        List<ChatMessageDTO> chatMessageList = chatService.MessageAllListReal(chatDTO);
         model.addAttribute("chatDTO", chatMessageList);
 
         return "chat/chat";
     }
+    
     //메세지 받고 주기
     @MessageMapping("/chat/{roomNo}") 
     public void send(ChatMessageDTO chatMessage, @DestinationVariable int roomNo) {
@@ -74,6 +87,7 @@ public class ChatController {
     	
     	String id = (String)session.getAttribute("Id");
     	List<RoomDTO> rooms = chatService.chatRoomList(id);
+    	System.out.println(rooms);
         for (RoomDTO room : rooms) {
             int count = chatService.countRoomMembers(room.getRoomNo());
             room.setParticipantCount(count); // 참여자 수 설정

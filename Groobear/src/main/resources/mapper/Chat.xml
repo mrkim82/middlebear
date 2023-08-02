@@ -52,27 +52,22 @@
     
   	<!-- 메세지전체조회 -->
   	<select id="MessageAllList" parameterType="int">
-  		WITH latest_room_mem AS (
-    SELECT id, room_no, mem_time,
-        ROW_NUMBER() OVER(PARTITION BY id, room_no ORDER BY mem_time DESC) as rn
-    FROM room_mem
-)
-SELECT a.id, a.room_no, a.msg_no, a.content, a.msg_time, a.room_name
-FROM (
-    SELECT m.room_no, m.msg_no, m.content, rm.id, m.msg_time, r.room_name
-    FROM message m 
-    JOIN room r ON m.room_no = r.room_no
-    JOIN latest_room_mem rm ON m.room_no = rm.room_no AND m.id = rm.id
-    WHERE rm.rn = 1
-) a 
-WHERE a.msg_time > (
-    SELECT mem_time 
-    FROM latest_room_mem 
-    WHERE id = a.id AND room_no = a.room_no AND rn = 1
-)
-AND a.room_no = #{roomNo}
-
+  		select i.name, m.content, m.msg_time
+		from message m, users u, user_info i
+		where m.id = u.id
+		AND u.emp_no = i.emp_no
+		AND room_no = #{roomNo}
+		order By msg_no asc
   	</select>
+  	<!-- 추가된 멤버는 이전 대화 안보이게 하는 용 -->
+  	<select id="MessageAllListReal" parameterType="ChatMessageDTO">
+  	select m.msg_no,m.content, m.room_no, m.id,m.msg_time
+	from message m join room r
+	on m.room_no = r.room_no
+	where m.msg_time > (select mem_time from room_mem where id = #{id})
+	and m.room_no= #{roomNo}
+	</select>
+  	
   	
   	<insert id="sendMessage" parameterType="ChatMessageDTO">
   		<selectKey keyProperty="msgNo" order="BEFORE" resultType="int">
@@ -103,8 +98,6 @@ AND a.room_no = #{roomNo}
 		AND i.emp_no = u.emp_no
 		AND u.id != #{id}
   	</select>
-  	
-  	
   	
   	<select id="newJeans">
   		SELECT MAX(room_no) room_no
@@ -160,10 +153,20 @@ AND a.room_no = #{roomNo}
 	</select>
   	
   	<!-- 맨 마지막 채팅 보이게 하기 위함 -->
-  	<select id="getLastMessage" parameterType="int">
+  	<!-- <select id="getLastMessage" parameterType="int">
 	    SELECT SUBSTR(CONTENT, 1, LEAST(10, LENGTH(CONTENT))) AS CONTENT
 	    FROM (
 	        SELECT CONTENT
+	        FROM MESSAGE
+	        WHERE ROOM_NO = #{roomNo}
+	        ORDER BY MSG_TIME DESC
+	    )
+	    WHERE ROWNUM = 1
+	</select> -->
+	<select id="getLastMessage" parameterType="int">
+	    SELECT CONTENT, id
+	    FROM (
+	        SELECT CONTENT, id
 	        FROM MESSAGE
 	        WHERE ROOM_NO = #{roomNo}
 	        ORDER BY MSG_TIME DESC

@@ -50,4 +50,7 @@ public interface ChatMapper {
 	
 	//가장 최신 내용 가져오기
 	public String getLastMessage(int roomNo);
+	
+	//MessageAllListReal
+	public List<ChatMessageDTO> MessageAllListReal(ChatMessageDTO chatMessageDTO);
 }
