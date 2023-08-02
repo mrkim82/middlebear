@@ -104,8 +104,8 @@
 						th:each="car, es:${carPList}" data-toggle="modal" data-target="#carMInfo">
 			  <div class="card-header"></div>
 			  <div class="card-body">
-			  	<div style="height:220px">
-			  	<img id="carImg3" th:src="${car.carType}" style="width:200px;">
+			  	<div style="height:220px; position:relative;">
+			  		<img id="carImg3" th:src="${car.carType}" style="width:200px; position:absolute; top:10%">
 			  	</div>
 			    <p class="card-title" style="margin-top:15px;">차량번호 : <span class="carNo">[[${car.carNo}]]</span></p>
 			    <p class="card-text">자동차 브랜드 : 
@@ -254,15 +254,14 @@
 
 			let carNo = event.currentTarget.querySelector('.carNo').innerText;
 			let carType = event.currentTarget.querySelector('.carType').innerText;
+			let infoCar = document.getElementById('infoCarType2');
 			
 			console.log(carNo);
 			console.log(carType);
 			
-			document.querySelector('#infoCarType2').children.value = carType;
-			
+			infoCar.options[infoCar.selectedIndex].innerText = carType;
 			
 			document.querySelector('#infoCarNo').value = carNo;
-			document.querySelector('#infoCarType').value = carType;
 		}
 		
 		
