@@ -76,14 +76,14 @@
 	</div>
 <div>
 		<ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
-		<li class="page-item"><a class="page-link"
-					th:href="|javascript:goPage(1)|">&laquo;</a></li>
+		<li class="page-item"><a class="page-link" 
+					th:href="|javascript:goPage(1)|" style="border-radius: 5px 0px 0px 5px;">&laquo;</a></li>
 		<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
 			th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
 			<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
 			th:text="${num}"></a>
 		</li>
-		<li class="page-item"><a class="page-link"
+		<li class="page-item"><a class="page-link" style="border-radius: 0px 5px 5px 0px;"
 			th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
 		</li>
     </ul>
@@ -134,7 +134,11 @@ for(let i = 0 ; i < document.querySelectorAll('.cml').length;i++){
 	
 }
 
+
 var number3 = document.getElementById('owt2').textContent;
+
+if(number3 != 0){
+	
 
 var hours3 = Math.floor(number2/60);
 if(hours3 < 10){
@@ -148,8 +152,12 @@ if(minutes3 < 10){
 var cal3 = 
 	hours3 + ':' + minutes3;
 
-document.getElementById('owtIn').textContent = cal3;
 
+document.getElementById('owtIn').textContent = cal3;
+}
+else {
+	document.getElementById('owtIn').textContent = '00:00';
+}
 
 
 var mon = document.querySelector('#monthDate').value
@@ -164,7 +172,9 @@ var prevMonth = ('0' + (nowMon.getMonth())).slice(-2);
 var nextMonthString = year + '-' + nextMonth;
 var prevMonthString = year + '-' + prevMonth;
 
+
 console.log(nextMonthString);
+
 
 function nextMon(){
 	location.href ='/commuteList/'+nextMonthString;
