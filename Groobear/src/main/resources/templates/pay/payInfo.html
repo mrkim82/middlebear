@@ -129,21 +129,30 @@
 						</div>
 						<!-- end panel -->
 					</div>
-					</td>
-						<tr><td><div class="panel-body1">
+					</td><tr><td><div class="panel-body1">
 	                        <div class="form-group uploadDiv1 row">
 	                            <input name="uploadFile1" type="file" multiple>
-	                            <button name="delImg" type="button" onclick="delImgTag(this)">제거</button>
 	                        </div>
-	                        <div class="uploadResult9">
+	                        <div class="uploadResult1">
 	                            <ul>
 	
 	                            </ul>
 	                        </div>
 	                    	</div>
 	                    </td></tr>
-	                <tr>
-					<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+	                    <tr><td><div class="panel-body2">
+	                        <div class="form-group uploadDiv2 row">
+	                            <input name="uploadFile2" type="file" multiple>
+	                        </div>
+	                        <div class="uploadResult2">
+	                            <ul>
+	
+	                            </ul>
+	                        </div>
+	                    	</div>
+	                    </td></tr>
+	                <tr th:if="${list.id != session.Id}">
+						<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 					</tr>
 				</th:block>
 				<th:block th:if="${list.docType=='b'}">
@@ -179,7 +188,7 @@
 						<!-- end panel -->
 					</div>
 					</td>
-				<tr>
+				<tr th:if="${list.id != session.Id}">
 					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 				</tr>
 				</th:block>
@@ -193,16 +202,16 @@
 				<tr>
 					<td>내용 <textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}"></textarea></td>
 				</tr>
-					<td><div class="bigPictureWrapper3">
-					<div class="bigPicture3">
+					<td><div class="bigPictureWrapper4">
+					<div class="bigPicture4">
 					</div>
 					</div>
 		     		<div class = "row">
 						<div class = "col-lg-12">
-							<div class = "panel-heading3">Files</div>
+							<div class = "panel-heading4">Files</div>
 							<!-- /.panel-heading -->
-							<div class = "panel-body3">
-								<div class = 'uploadResult3'>
+							<div class = "panel-body4">
+								<div class = 'uploadResult4'>
 									<ul>
 									</ul>
 								</div>
@@ -212,7 +221,7 @@
 						<!-- end panel -->
 					</div>
 					</td>
-				<tr>
+				<tr th:if="${list.id != session.Id}">
 					<td>코멘트 <textarea id="robinCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 				</tr>
 			</th:block>
@@ -232,6 +241,9 @@
 		let approver3 = document.getElementById('approver3').value;
 		let payStatus2 = document.getElementById('payStatus2').value;
 		let payStatus3 = document.getElementById('payStatus3').value;
+		let logCom ="";
+		let offCom ="";
+		let robinCom ="";
 		//이미지 제거용 구이미지 값 저장용
 		let olduuid = "";
 		let olduploadPath = "";
@@ -257,8 +269,9 @@
 			let destination = document.getElementById('destination').value;
 			let befored = document.getElementById('befored').value;
 			let afterd = document.getElementById('afterd').value;
-			
-			let logCom = document.getElementById('logCom').value;
+			if(document.getElementById('logCom')){
+				let logCom = document.getElementById('logCom').value;
+			}
 			console.log('masterDocType',masterDocType);
 			console.log('payNo',payNo);
 			console.log('userId',userId);
@@ -300,7 +313,9 @@
 				let befored = document.getElementById('befored').value;
 				let afterd = document.getElementById('afterd').value;
 				let imprest = ((afterd*1)-(befored*1))*1500;
-				logCom = document.getElementById('logCom').value;
+				if(document.getElementById('logCom')){
+					logCom = document.getElementById('logCom').value;
+				}
 				console.log('masterDocType',masterDocType);
 				console.log('payNo',payNo);
 				console.log('userId',userId);
@@ -345,7 +360,8 @@
 		  			      payNo : payNo,
 		  			      uuid : car1uuid,
 		  			      uploadPath : car1uploadPath,
-		  			      fileName : car1fileName
+		  			      fileName : car1fileName,
+		  			      fileType : 1
 		  			    }),
 		  			    success: function(data) {
 		  			    	console.log(data);
@@ -365,7 +381,8 @@
 		  			      payNo : payNo,
 		  			      uuid : car2uuid,
 		  			      uploadPath : car2uploadPath,
-		  			      fileName : car2fileName
+		  			      fileName : car2fileName,
+		  			      fileType : 1
 		  			    }),
 		  			    success: function(data) {
 		  			    	console.log(data);
@@ -409,7 +426,9 @@
 				let returnDate = document.getElementById('returnDate').value;
 				let offTitle = document.getElementById('offTitle').value;
 				let offContent = document.getElementById('offContent').value;
-				let offCom = document.getElementById('offCom').value;
+				if(document.getElementById('offCom')){
+					let offCom = document.getElementById('offCom').value;
+				}
 				console.log('useDate',useDate);
 				console.log('returnDate',returnDate);
 				console.log('offTitle',offTitle);
@@ -446,7 +465,8 @@
 		  			    	payNo : payNo,
 		  			    	uuid : offuuid,
 		  			    	uploadPath : offuploadPath,
-		  			    	fileName : offfileName
+		  			    	fileName : offfileName,
+		  			    	fileType : 1
 		  			    }),
 		  			    success: function(data) {
 		  			    	console.log(data);
@@ -486,7 +506,9 @@
 			}else{
 				let robinTitle = document.getElementById('robinTitle').value;
 				let robinContent = document.getElementById('robinContent').value;
-				let robinCom = document.getElementById('robinCom').value;
+				if(document.getElementById('robinCom')){
+					let robinCom = document.getElementById('robinCom').value;
+				}
 				console.log('robinTitle',robinTitle);
 				console.log('robinContent',robinContent);
 				console.log('robinCom',robinCom);
@@ -518,7 +540,8 @@
 		  			      payNo : payNo,
 		  			      uuid : robinuuid,
 		  			      uploadPath : robinuploadPath,
-		  			      fileName : robinfileName
+		  			      fileName : robinfileName,
+		  			      fileType : 1
 		  			    }),
 		  			    success: function(data) {
 		  			    	console.log(data);
@@ -578,7 +601,7 @@
 				dataType: "json",
 				success: function(result) {
 	                console.log('result = ',result);
-	                showUploadResult1(result);
+	                //showUploadResult1(result);
 	                car1uuid = result[0].uuid;
 	                car1fileName = result[0].fileName;
 	                car1uploadPath = result[0].uploadPath;
@@ -612,7 +635,7 @@
 				dataType: "json",
 				success: function(result) {
 	                console.log('result = ',result);
-	                showUploadResult2(result);
+	                //showUploadResult2(result);
 	                car2uuid = result[0].uuid;
 	                car2fileName = result[0].fileName;
 	                car2uploadPath = result[0].uploadPath;
@@ -646,7 +669,7 @@
 				dataType: "json",
 				success: function(result) {
 	                console.log('result = ',result);
-	                showUploadResult3(result);
+	                //showUploadResult3(result);
 	                offuuid = result[0].uuid;
 	        		offuploadPath = result[0].uploadPath;
 	        		offfileName = result[0].fileName;
@@ -683,7 +706,7 @@
 				dataType: "json",
 				success: function(result) {
 	                console.log('result = ',result);
-	                showUploadResult4(result);
+	                //showUploadResult4(result);
 	                robinuuid = result[0].uuid;
 	                robinfileName = result[0].fileName;
 	                robinuploadPath = result[0].uploadPath;
@@ -714,12 +737,6 @@
 			imprest = ((afterd*1)-(befored*1))*1500;
 			document.getElementById('imprest').value = imprest;
 	    }
-	    function delImgTag(elem){
-	    	console.log(elem.parentElement.parentElement.children[1]);
-	    	elem.parentElement.parentElement.children[1].remove(); //사진지우기
-	    	delOn= 'o';
-	    	
-	    }
 	    //운행일지1번 이미지,파일 가져와서 다운가능하고 보여주는구문
 	    if(masterDocType==='a'){
 	    $.getJSON(`/getAtt?payNo=[[${list.payNo}]]`, function(arr) {
@@ -731,6 +748,7 @@
 	                var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
 	                str += "<li style='list-style-type:none' data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+	                str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
 	                str += "<img src='/display?fileName=" + fileCallPath + "' style='width:200px;height:140px'>";
 	                str += "</div>";
 	                str += "</li>";
@@ -742,11 +760,17 @@
 	                str += "</div>";
 	                str += "</li>";
 	            }
+		        if(i===0){
+		        	$(".uploadResult1 ul").html(str);
+		        	str = "";
+		        }
+		        else if(i===1){
+		        	$(".uploadResult2 ul").html(str);
+		        }
 	        });
-	        
-	        $(".uploadResult9 ul").html(str);
 	    });
-			$(".uploadResult9").on("click","li", function(e){
+	    if(car1uuid !== ''){
+			$(".uploadResult1").on("click","li", function(e){
 		      
 			    console.log("view image");
 			    
@@ -755,30 +779,30 @@
 			    var path = encodeURIComponent(liObj.data("path")+"/" + liObj.data("uuid")+"_" + liObj.data("filename"));
 			    
 			    if(liObj.data("type")){
-			      showImage1(path.replace(new RegExp(/\\/g),"/"));
 			    }else {
 			      //download 
 			      self.location ="/download?fileName="+path
 			    }
 			  });
-			function showImage1(fileCallPath){
-			    
-			    alert(fileCallPath);
-			    
-			    $(".bigPictureWrapper2").css("display","flex").show();
-			    
-			    $(".bigPicture2")
-			    .html("<img src='/display?fileName="+fileCallPath+"' >")
-			    .animate({width:'100%', height: '100%'}, 1000);
-			  }
-			  $(".bigPictureWrapper2").on("click", function(e){
-			    $(".bigPicture2").animate({width:'0%', height: '0%'}, 1000);
-			    setTimeout(function(){
-			      $('.bigPictureWrapper2').hide();
-			    }, 1000);
-			  });
-	    
 	    }
+	    else if(car2uuid !== ''){
+	    	$(".uploadResult2").on("click","li", function(e){
+			      
+			    console.log("view image");
+			    
+			    var liObj = $(this);
+			    
+			    var path = encodeURIComponent(liObj.data("path")+"/" + liObj.data("uuid")+"_" + liObj.data("filename"));
+			    
+			    if(liObj.data("type")){
+			    }else {
+			      //download 
+			      self.location ="/download?fileName="+path
+			    }
+			  });
+		    }
+	    }
+	    
 	    //연차계 이미지,파일 가져와서 다운가능하게 하는구문
 	    if(masterDocType==='b'){
 	    $.getJSON(`/getAtt?payNo=[[${list.payNo}]]`, function(arr) {
@@ -791,6 +815,7 @@
 	            } else {
 	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+	                str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
 	                str += "<span>" + attach.fileName + "</span><br/>";
 	                str += "</div>";
 	                str += "</li>";
@@ -831,6 +856,88 @@
 			    }, 1000);
 			  });
 	    }
+	  //품의서 파일 다운로드
+	    if(masterDocType=='c'){
+	    	$.getJSON(`/getAtt?payNo=[[${list.payNo}]]`, function(arr) {
+		        var str = "";
+		        $(arr).each(function(i, attach){
+		            if(attach.fileType){
+		                var fileCallPath = "";
+		            } else {
+		                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
+		                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+		                str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		                str += "<span>" + attach.fileName + "</span><br/>";
+		                str += "</div>";
+		                str += "</li>";
+		            }
+		        });
+		        $(".uploadResult4 ul").html(str);
+		    });
+			$(".uploadResult4").on("click","li", function(e){
+			    var liObj = $(this);
+			    var path = encodeURIComponent(liObj.data("path")+"/" + liObj.data("uuid")+"_" + liObj.data("filename"));
+			    
+			    if(liObj.data("type")){
+			      //showImage3(path.replace(new RegExp(/\\/g),"/"));
+			    }else {
+			      //download 
+			      self.location ="/download?fileName="+path
+			    }
+			  });
+			function showImage(fileCallPath){
+			    
+			    alert(fileCallPath);
+			    
+			    $(".bigPictureWrapper4").css("display","flex").show();
+			    
+			    $(".bigPicture4")
+			    .html("<img src='/display?fileName="+fileCallPath+"' >")
+			    .animate({width:'100%', height: '100%'}, 1000);
+			  }
+			  $(".bigPictureWrapper4").on("click", function(e){
+			    $(".bigPicture4").animate({width:'0%', height: '0%'}, 1000);
+			    setTimeout(function(){
+			      $('.bigPictureWrapper4').hide();
+			    }, 1000);
+			  });
+	    }
+	    $(".uploadResult1").on("click", "button", function(e){
+		  console.log("delete file");
+		  delOn === 'o'
+		  var targetFile = $(this).data("file");
+		  var type = $(this).data("type");
+		  
+		  var targetLi = $(this).closest("li");
+		  targetLi.remove();
+	    });
+        $(".uploadResult2").on("click", "button", function(e){
+  		  console.log("delete file");
+  		  delOn === 'o'
+  		  var targetFile = $(this).data("file");
+  		  var type = $(this).data("type");
+  		  
+  		  var targetLi = $(this).closest("li");
+  		  targetLi.remove();
+  	    });
+        $(".uploadResult3").on("click", "button", function(e){
+  		  console.log("delete file");
+  		  delOn === 'o'
+  		  var targetFile = $(this).data("file");
+  		  var type = $(this).data("type");
+  		  
+  		  var targetLi = $(this).closest("li");
+  		  targetLi.remove();
+  	    });
+        $(".uploadResult4").on("click", "button", function(e){
+  		  console.log("delete file");
+  		  delOn === 'o'
+  		  var targetFile = $(this).data("file");
+  		  var type = $(this).data("type");
+  		  
+  		  var targetLi = $(this).closest("li");
+  		  targetLi.remove();
+  	    });
 	/*]]>*/
 	</script>
 </body>
