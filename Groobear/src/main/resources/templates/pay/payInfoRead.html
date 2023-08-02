@@ -348,7 +348,6 @@
 				//도현이형 offtable에 데이터 넣기
 			}
 			if(approver2 === userId && approver3 === ""){
-	            console.log("approver2는 있고 approver3은 공백임");
 	            $.ajax({
 	               url:"/paymentReject",
 	               method: "POST",
@@ -398,10 +397,7 @@
 	  			    }),
 	  			    async : false,
 	  			  	success: function(data) {
-	  			  		console.log('111'+approver3)
-	  			    	console.log(data);
-	  			  		console.log('222');
-	  			    	//location.href="/pay/InProgressPay";
+	  			    	location.href="/pay/InProgressPay";
 	  			    	//알림5 결재자2 결재 진행 시 approver3
 	  			  		alarmClient.publish({
 				            destination: "/alarmCondition/payAlm/"+approver3,
