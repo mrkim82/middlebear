@@ -22,6 +22,7 @@
 	#ulId li.active a.page-link {
     	background-color: #35A880;
    		border: 1px solid #35A880;
+   		color: #fff;
   	}
 </style>
 </head>
@@ -57,7 +58,7 @@
     <ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
 		<li class="page-item"><a class="page-link"
 					th:href="|javascript:goPage(1)|">&laquo;</a></li>
-		<li class="page-item active"
+		<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
 			th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
 			<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
 			th:text="${num}"></a>
