@@ -44,13 +44,13 @@
 				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
 			</if>
 			<if test="commuteVO.startDay != null and commuteVO.endDay != null">
-                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN #{commuteVO.startDay} AND #{commuteVO.endDay}
+                AND to_date(cm.day) BETWEEN #{commuteVO.startDay} AND #{commuteVO.endDay}
             </if>
-            <if test="commuteVO.startDay != null and commuteVO.endDay == null">
-                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN #{commuteVO.startDay} AND to_char(sysdate, 'YYYY-MM-DD')
+            <if test="commuteVO.startDay != null and commuteVO.endDay == null and commuteVO.endDay == ''">
+                AND to_date(cm.day) BETWEEN #{commuteVO.startDay} AND to_date(sysdate, 'YYYY-MM-DD')
             </if>
-            <if test="commuteVO.startDay == null and commuteVO.endDay == null">
-                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN to_char(sysdate, 'YYYY-MM-DD') AND to_char(sysdate, 'YYYY-MM-DD')
+            <if test="commuteVO.startDay == null and commuteVO.startDay == '' and commuteVO.endDay == null and commuteVO.endDay == ''">
+                AND to_date(cm.day) BETWEEN to_date(sysdate, 'YYYY-MM-DD') AND to_date(sysdate, 'YYYY-MM-DD')
             </if>
 			
 		order by cm.day desc
