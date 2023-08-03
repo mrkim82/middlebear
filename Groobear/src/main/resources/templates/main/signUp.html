@@ -229,6 +229,7 @@
     //아이디 중복체크
     let checkId = '';
     $('#checkId').on('click', function(){
+		console.log('11111111')    	
     	let id = $('#id').val() + $('#bear').val();
     	checkId = $('#id').val();
     	if(checkId.length > 3){
@@ -237,6 +238,7 @@
 	    	    data: {id},  // HTTP 요청과 함께 서버로 보낼 데이터
 	    	    method: "GET",   // HTTP 요청 메소드(GET, POST 등)
 			    success: function(data) {
+					console.log('22222' + data)			    	
 			      if(data == 'X'){
 			    	  $('#spantext').text('이미 존재하는 아이디입니다.');
 			    	  $('#id').val('');

@@ -208,8 +208,8 @@
 
 <script>
 var openChat  = function() {
-	
- window.open("/roomList", "", "_blank");
+	var status = "toolbar=no, scrollbars=yes,resizable=yes,status=no,menubar=no, width=480, height=400, top=0,left=0"; 
+ window.open("/roomList", "", status, "_blank");
 }
 </script>
    <script>
@@ -223,7 +223,6 @@ var openChat  = function() {
 		      if(data.uuid != null){
 		    	  $('#profImg').attr('src', '/display?fileName='+data.uploadPath.replace(/\\/g, '/')+'/s_'+data.uuid+'_'+data.fileName);
 		      }
-		      
 		    },
 		    error: function(err) {
 		      console.log(err);
