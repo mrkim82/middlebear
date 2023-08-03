@@ -748,12 +748,14 @@ textarea {
 			projectNameCell.textContent = project.proName;
 			projectNameCell.style.fontSize = '15px';
 			projectNameCell.style.paddingLeft = '20px';
+			projectNameCell.style.verticalAlign = 'middle';
 			tr.appendChild(projectNameCell);
 			
 			// 멤버명 열 추가
 			const memberNameCell = document.createElement('td');
 			memberNameCell.textContent = project.rank + ' ' +project.name;
 			memberNameCell.style.fontSize = '15px';
+			memberNameCell.style.verticalAlign = 'middle';
 			tr.appendChild(memberNameCell);
 	
 			// 수락 버튼 추가
