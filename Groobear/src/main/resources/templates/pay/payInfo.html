@@ -142,10 +142,14 @@
 	                        </div>
 	                    	</div>
 	                    </td></tr>
-	                <tr>
-					<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
-					</tr>
-				</th:block>
+	                    </th:block>
+	                    <th:block th:if="${list.docType=='a' AND ((list.approver2 == session.Id and list.payStatus2 == 'N') OR
+							(list.approver3 == session.Id and list.payStatus3 == 'N' and list.payStatus2 == 'Y'))}">
+			                <tr>
+							<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+							</tr>
+						</th:block>
+				
 				<th:block th:if="${list.docType=='b'}">
 				<tr>
 					<td style="display:none" id="offdocType" th:value="${list.docType}"></td>
@@ -179,9 +183,12 @@
 						<!-- end panel -->
 					</div>
 					</td>
-				<tr>
-					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
-				</tr>
+				</th:block>
+				<th:block th:if="${list.docType=='b' AND (list.approver2 == session.Id and list.payStatus2 == 'N') OR
+							(list.approver3 == session.Id and list.payStatus3 == 'N' and list.payStatus2 == 'Y')}">
+			                <tr>
+								<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+							</tr>
 				</th:block>
 				<th:block th:if="${list.docType == 'c'}">
 				<tr>
@@ -735,10 +742,10 @@
 	                str += "</div>";
 	                str += "</li>";
 	            } else {
-	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
+	               	str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
 	                str += "<span>" + attach.fileName + "</span><br/>";
-	                str += "<img src='img/attach.png/'>";
+	                str += "<img style='display:none' src='img/attach.png/'>";
 	                str += "</div>";
 	                str += "</li>";
 	            }
@@ -791,7 +798,7 @@
 	            } else {
 	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
-	                str += "<span>" + attach.fileName + "</span><br/>";
+	                str += "<span style='display:none'>" + attach.fileName + "</span><br/>";
 	                str += "</div>";
 	                str += "</li>";
 	            }

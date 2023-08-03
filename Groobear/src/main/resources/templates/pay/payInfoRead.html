@@ -143,9 +143,9 @@
 	                        </div>
 	                    	</div>
 	                    </td></tr>
-				<tr>
-					<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:value="${list.com}"></textarea></td>
-				</tr>
+					<tr>
+						<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:value="${list.com}"></textarea></td>
+					</tr>
 				</th:block>
 				<th:block th:if="${list.docType=='b'}">
 				<tr>
@@ -180,9 +180,12 @@
 						<!-- end panel -->
 					</div>
 					</td>
-				<tr>
-					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
-				</tr>
+				</th:block>
+				<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
+							(list.approver3 == session.Id and list.payStatus3 == 'N' and list.payStatus2 == 'Y')}">
+						<tr>
+							<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+						</tr>
 				</th:block>
 				<th:block th:if="${list.docType=='c'}">
 				<tr>
@@ -220,9 +223,8 @@
 			</tbody>
 		</table>
 		<div>
-		<th:block th:if="${(list.id == session.Id and list.payStatus3 == 'N') OR
-							(list.id == session.Id and list.payStatus2 == 'N') }">
-			<button type="button" id="paymentModify" onclick="paymentModify()" style="margin-left:10px">수정페이지</button>
+		<th:block th:if="${list.id == session.Id and list.payStatus2 == 'N'}">
+			<button type="button" id="paymentModify" onclick="payModify()" style="margin-left:10px">수정페이지</button>
 		</th:block>
 		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
 							(list.approver3 == session.Id and list.payStatus3 == 'N' and list.payStatus2 == 'Y')}">
@@ -309,7 +311,7 @@
 			console.log('robinContent',robinContent);
 			console.log('com',com);
 		}
-		function paymentModify(){
+		function payModify(){
 			//각 버튼들은 공용이기때문에 if조건으로 문서값에 맞추어 값을 유지
 			if(masterDocType==='a'){
 				location.href='payInfo?payNo='+payNo+'&docType='+masterDocType;
@@ -771,7 +773,12 @@
 	        $(arr).each(function(i, attach){
 	            console.log("여기도 들어와짐");
 	            if(attach.fileType){
-	                var fileCallPath = "";
+	                var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
+	                str += "<li style='list-style-type:none' data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
+	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+	                str += "<img src='/display?fileName=" + fileCallPath + "' style='width:200px;height:140px'>";
+	                str += "</div>";
+	                str += "</li>";
 	            } else {
 	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
