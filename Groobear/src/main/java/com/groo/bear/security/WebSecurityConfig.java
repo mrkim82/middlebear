@@ -35,7 +35,7 @@ public class WebSecurityConfig {
 		http
 			.csrf().disable()
 			.authorizeHttpRequests()
-			.antMatchers("/forgotId", "/forgotPw", "/signUp", "/signUpInfo").permitAll()
+			.antMatchers("/forgotId", "/forgotPw", "/changePw", "/signUp", "/signUpInfo","/checkId", "/checkSms", "/checkEmp", "/checkPhone", "/empSignUp").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.headers().frameOptions().sameOrigin()

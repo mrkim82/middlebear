@@ -223,7 +223,6 @@ var openChat  = function() {
 		      if(data.uuid != null){
 		    	  $('#profImg').attr('src', '/display?fileName='+data.uploadPath.replace(/\\/g, '/')+'/s_'+data.uuid+'_'+data.fileName);
 		      }
-		      
 		    },
 		    error: function(err) {
 		      console.log(err);
