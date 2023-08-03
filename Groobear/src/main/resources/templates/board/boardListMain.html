@@ -141,6 +141,7 @@ function goPage(p) {
     document.searchForm.boardType.value = /*[[${boardVO.boardType}]]*/
     document.searchForm.page.value = p;
     document.searchForm.submit();
+    $(event.target).attr('class', 'aaaa');
 }
 //날짜포맷 맞춰주는 함수 
 //https://carrotweb.tistory.com/160 참고사이트.
