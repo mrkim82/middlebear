@@ -28,5 +28,6 @@ public class RoomDTO {
     
     private int participantCount;
     private String lastMessage;
+    private String content;
     
 }

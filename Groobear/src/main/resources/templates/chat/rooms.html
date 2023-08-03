@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" >
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="chatjs.js"></script>
 
     <style>
 html {
@@ -119,6 +120,23 @@ body {
     font-size: 20px;
     color: rgba(0, 0, 0, 0.5);
 }
+.message-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-title {
+    text-align: center;
+    font-size: 40px; /* 조절하고 싶은 크기로 설정하세요 */
+}
+.chat-modal-label {
+    text-align: left; /* 왼쪽 정렬 */
+    margin-bottom: 15px; /* 텍스트 아래 간격 설정 */
+}
+.text-center{
+    margin-left: 20px;
+}
+
     </style>
 </head>
 <body>
@@ -133,10 +151,24 @@ body {
                     <span class="chatroom-name" th:text="${room.roomName}">Room Name</span>
                     <span class="participant-count" th:text="${room.participantCount} ">👥</span><i class="material-icons">group</i>
                 </div>
-                <div class="message-content" th:text="${room.id} + (${room.lastMessage != null ? ${room.lastMessage} : '메세지 내용이 없습니다.'})"></div>
-                <!-- <div class="message-content" th:text="${room.lastMessage != null} ? ${room.lastMessage} : '메세지 내용이 없습니다.'"></div> -->
+                <div class="message-content">
+				    <th:block th:if="${room.lastMessage != '메시지 내용이 없습니다.' and #strings.length(room.lastMessage) > 13}">
+				        <div class="message-content" th:text="${room.name} + '&nbsp&nbsp&nbsp&nbsp' + (${room.lastMessage}+'...')"></div>
+				    </th:block>
+				
+				    <th:block th:if="${room.lastMessage != '메시지 내용이 없습니다.' and #strings.length(room.lastMessage) <= 13}">
+				        <div class="message-content" th:text="${room.name} + '&nbsp&nbsp&nbsp&nbsp' + ${room.lastMessage}"></div>
+				    </th:block>
+				
+				    <th:block th:if="${room.lastMessage == '메시지 내용이 없습니다.' && room.name == null}">
+				        <div class="message-content">메세지 내용이 없습니다.</div>
+				    </th:block>
+                    
+                    <button class="delete-chatroom" th:data-room-no="${room.roomNo}" style="display: none;">Delete</button>
+                    <a href="#" class="exit-chatroom" th:data-room-no="${room.roomNo}" th:data-id="${realId}"><i class="material-icons" style="color: black;">exit_to_app</i></a>
+				</div>
             </div>
-                <button class="delete-chatroom" th:data-room-no="${room.roomNo}" style="display: none;">Delete</button>
+                <!-- <a href="#" id="deleteChatroomButton"><i class="material-icons">exit_to_app</i></a>  Exit Icon -->
         </li>
     </ul>
 </div>
@@ -146,21 +178,29 @@ body {
         <div class="modal-dialog">
             <div class="modal-content">
 
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">새 채팅방 만들기</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
+<!-- Modal Header -->
+<div class="modal-header">
+    <h4 class="modal-title text-center">채팅방 생성</h4>
+    <button type="button" class="close ml-auto" data-dismiss="modal">&times;</button>
+</div>
 
                 <!-- Modal body -->
-                <div class="modal-body">
-                
-                    <input type="text" id="chatroomName" placeholder="채팅방 이름">
-                    <ol id="employeeList"></ol>
-                    <div id="userListContainer">
-         <!-- 사용자 목록이 이곳에 표시됩니다 -->
-    					</div>
-                </div>
+<div class="modal-body">
+    <div class="text-center">
+        <p class="chat-modal-label">채팅방이름 : <input type="text" id="chatroomName" placeholder="채팅방 이름"></p>
+        
+    </div>
+    <div class="text-center">
+        <p class="chat-modal-label">대화상대 초대</p>
+    </div>
+    <div style="border-radius : 10px ; border: 1px solid lightgray; padding: 10px;">
+    <ol id="employeeList"></ol>
+    <div id="userListContainer">
+        <!-- 사용자 목록이 이곳에 표시됩니다 -->
+    </div>
+    </div>
+</div>
+
 				
                 <!-- Modal footer -->
                 <div class="modal-footer">
@@ -229,6 +269,41 @@ alarmClient.onStompError = (frame) => {
       console.error('Broker reported error: ' + frame.headers['message']);
       console.error('Additional details: ' + frame.body);
 };
+
+//채팅방목록에서 나가기 이모티콘.
+const exitButtons = document.querySelectorAll('.exit-chatroom');
+
+exitButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const roomNo = button.getAttribute('data-room-no');
+        const realId = button.getAttribute('data-id');
+        
+        fetch('/deleteChatroom', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ roomNo: roomNo, id: realId }),
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Chatroom deleted successfully');
+                //window.close();
+
+                //window.opener.location.href="/roomList";
+                location.reload();
+                
+            } else {
+                console.error('Failed to delete chatroom');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+});
 function almSendMsg() {
 	   toastAct()	
 }
@@ -295,13 +370,6 @@ function toastActChat() {
                     label.appendChild(empRank);
                     label.appendChild(empDept);
                     
-                    /* li.appendChild(checkbox);
-                    li.appendChild(empNo);
-                    li.appendChild(empId);
-                    li.appendChild(empName);
-                    li.appendChild(empRank);
-                    li.appendChild(empDept); */
-                    
                     li.appendChild(label);
                     employeeListUl.appendChild(li);
                 });
@@ -335,7 +403,7 @@ window.onload = function() {
                 if (response.ok) {
                     console.log('Chatroom deleted successfully');
                     chatrooms[i].remove();
-                    location.reload();
+                    //location.reload();
                 } else {
                     console.error('Failed to delete chatroom');
                 }
