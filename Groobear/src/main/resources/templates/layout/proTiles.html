@@ -59,6 +59,10 @@
 	box-shadow: 2px 4px 3px 3px darkgray;
 }
 
+html {
+	height: 1300px;
+}
+
 th {
 	font-size: large;
 	text-align: center;
@@ -72,6 +76,13 @@ th {
 	background-color: #35A880;
 	color: #fff;
 	border: 1px solid #35A880;
+}
+
+.btn-groob {
+	background-color: #35A880;
+	color: #fff;
+	border: 1px solid #35A880;
+	border-radius: 12px;
 }
 
 .square {
@@ -149,11 +160,6 @@ details ul {
 	padding: 0px;
 }
 
-.flex-column li {
-	margin-left: 10px;
-	padding: px;
-}
-
 .horizontal-bar {
 	height: 80px;
 	width: 100%;
@@ -225,7 +231,8 @@ textarea {
 							<td style="font-size: 20px;">
 								<span>
 									<a href="/logout"
-									   class="dohyeon">로그아웃</a>
+									   class="dohyeon"
+									   >로그아웃</a>
 								</span>&nbsp;&nbsp;&nbsp;&nbsp;
 								<span>
 									<a id="commute"
@@ -401,16 +408,16 @@ textarea {
 		<!-- 프로젝트 상세 상단 바 proPostMain으로 시작하는 경우 horizonBar 프래그먼트 포함 -->
 		<th:block th:if="${#strings.containsIgnoreCase(firstURI,'proPostMain')} or
 						 ${#strings.containsIgnoreCase(firstURI,'proSearch')}">
-			<div th:insert="~{layout/proHorizonBar :: horizonBar}" class="dohyeon"></div>
+			<div th:insert="~{layout/proHorizonBar :: horizonBar}" class="dohyeon" style="padding: 0px;"></div>
 		</th:block>
 		
 		<!-- 프로젝트 메인 상단 바 proPostMain으로 시작하지 않는 경우 horizonBarsub 프래그먼트 포함 -->
 		<th:block th:if="${!#strings.containsIgnoreCase(firstURI,'proPostMain')} and
 						 ${!#strings.containsIgnoreCase(firstURI,'proSearch')}">
-			<div th:insert="~{layout/proMainBar :: mainTopBar}" class="dohyeon"></div>
+			<div th:insert="~{layout/proMainBar :: mainTopBar}" class="dohyeon"  style="padding: 0px;"></div>
 		</th:block>
 		<main>
-	        <div layout:fragment="content" class="dohyeon"></div>
+	        <div layout:fragment="content" class="dohyeon" style="padding: 0px;"></div>
 	    </main>
 	</div>
 	<!-- 본문 내용 종료 -->
@@ -505,7 +512,7 @@ textarea {
 	<!-- 그룹 관리 모달  -->
 	<div class="modal fade" id="makeGroupManModal" tabindex="-1" aria-labelledby="makeGroupManModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
-			<div class="modal-content"
+			<div class="modal-content dohyeonModalContent"
 					 style="width: 300px;">
 				<div class="modal-header">
 					<h5 class="modal-title" id="makeGroupManModalLabel"></h5>
@@ -514,15 +521,15 @@ textarea {
 					</button>
 				</div>
 				<div class="modal-body" style="text-align: center;">
-					<button type="button" class="btn btn-secondary"
-									style="width: 100px;border-radius: 5px;"
+					<button type="button" class="btn btn-groo"
+									style="width: 80px;border-radius: 12px;"
 									id="groupNameChangeBtn"
 									onclick="updateManButton()">수정</button>
-					<button type="button" class="btn btn-secondary"
-									style="width: 100px;border-radius: 5px;"
+					<button type="button" class="btn btn-groo"
+									style="width: 80px;border-radius: 12px;"
 									id="groupNameDeleteBtn"
 									onclick="deleteGroupFolder()">즉시삭제</button>
-					<h6>그룹안에 프로젝트는 삭제되지 않습니다</h6>
+					<h6 style="font-size: x-small; text-align: right; margin-top: 7px;">* 그룹안의 프로젝트는 삭제되지 않습니다!</h6>
 				</div>
 			</div>
 		</div>
@@ -531,23 +538,24 @@ textarea {
 	<!-- 프로젝트 그룹 수정 모달 -->
 	<div class="modal fade" id="updateManButton" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="updateManButtonLabel" aria-hidden="true">
 		<div class="modal-dialog">
-			<div class="modal-content">
+			<div class="modal-content dohyeonModalContent"  style="width: 434px;">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateManButtonLabel">수정화면</h5>
+					<h5 class="modal-title" id="updateManButtonLabel">그룹 폴더명 수정</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-			<div class="modal-body">
+			<div class="modal-body" style="text-align: center;">
 				<input type="text"
 					   placeholder="프로젝트 폴더명을 입력하세요"
 					   id="folderContentChange"
 					   autocomplete="off"
-					   maxlength="30">
+					   maxlength="30"
+						 style="width: 372px;">
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-	        	<button type="button" class="btn btn-primary" onclick="changeGroupFolderName()">수정</button>
+				<button type="button" class="btn btn-groob" onclick="changeGroupFolderName()">수정</button>
+				<button type="button" class="btn btn-groob" data-dismiss="modal">닫기</button>
 			</div>
 			</div>
 		</div>
@@ -781,16 +789,13 @@ textarea {
 	
 	function makeGroupFolder() {
 		//폴더 갯수 확인
-		console.log(groupFolderList.querySelectorAll('li').length)
 		if(groupFolderList.querySelectorAll('li').length >= 10) {
 			alert('프로젝트 폴더는 최대 10개 생성 할 수 있습니다.');
-			folderContent.value = '';
+			$('#createGroupFolderModal').modal('hide');
 		} else {
 			//폴더명 확인
 			checkGroupFolderName();
 		}
-		//그룹 생성 모달 값 초기화
-		$('#createGroupFolderModal').modal('hide');
 	};
 	
 	//폴더명 확인
@@ -816,6 +821,7 @@ textarea {
 				if(res.result == '성공') {
 					//동적 폴더 생성
 					createFolder(res.pGN);				
+					$('#createGroupFolderModal').modal('hide');
 				} else {
 					alert('요청이 취소 되었습니다.');
 				}
@@ -830,27 +836,28 @@ textarea {
 	function createFolder(lGN) {
 		let pG = document.getElementById('proGroup');
 		let liC = document.createElement('li');
+		liC.setAttribute('data-gn', lGN);
+		liC.setAttribute('data-fname' , folderContent.value);
 		let aC = document.createElement('a');
-		let spanC = document.createElement('span');
+		aC.style.overflow = 'hidden';
+		aC.style.width = '80px';
 		
+		let spanC = document.createElement('span');
 		spanC.className = 'material-icons moreVertIcons';
 		//spanC.style = 'display : none;';
 		spanC.textContent = 'more_vert';
+		spanC.onclick = makeGroupMan;
 		
 		if(folderContent.value.length >= 8) {
 			folderContent.value = folderContent.value.substring(0, 7) + '...';
 		};
 			
 		aC.setAttribute('href', '/proGroupD/'+ lGN);
-		aC.setAttribute('data-gN', lGN);
-		aC.setAttribute('data-fName', folderContent.value);
 		aC.textContent = folderContent.value;
 		
 		aC.append(spanC);
 		liC.append(aC);
 		pG.prepend(liC);
-		
-		folderContent.value = '';
 	};
 </script>
 
