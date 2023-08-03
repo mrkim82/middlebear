@@ -106,4 +106,9 @@ public class ProPostTaskServiceImpl implements ProPostTaskService {
 		return 0;
 	}
 
+	@Override
+	public List<ProPostTaskVO> readGantt(int proNo) {
+		return task.readGantt(proNo);
+	}
+
 }

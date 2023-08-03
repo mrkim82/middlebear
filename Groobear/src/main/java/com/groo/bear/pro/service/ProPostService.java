@@ -83,5 +83,9 @@ public interface ProPostService {
 	// 프로젝트 파일 등록
 	public int createProFile(List<ProFileVO> vo);
 	
-
+	//프로젝트 나가기
+	public int delteProMemOut(int proNo, String id);
+	
+	//프로젝트 인원(단건)
+	public int readProDetailCount(int proNo);
 }

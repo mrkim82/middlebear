@@ -11,6 +11,7 @@ import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
+import com.groo.bear.pro.service.provo.ProPartiAlarmVO;
 import com.groo.bear.pro.service.provo.ProUsersVO;
 import com.groo.bear.pro.service.provo.ProVO;
 
@@ -144,6 +145,26 @@ public class ProServiceImpl implements ProService {
 	@Override
 	public int deleteGroupProManage(ProGroupManageVO vo) {
 		return proMapper.deleteGroupProManage(vo);
+	}
+
+	@Override
+	public List<ProPartiAlarmVO> readNoPartiPro(String id) {
+		return proMapper.readNoPartiPro(id);
+	}
+
+	@Override
+	public int updateProPartiY(int proMemNo) {
+		return proMapper.updateProPartiY(proMemNo);
+	}
+
+	@Override
+	public int deleteProPartiN(int proMemNo) {
+		return proMapper.deleteProPartiN(proMemNo);
+	}
+
+	@Override
+	public int readNoPartiProCount(String id) {
+		return proMapper.readNoPartiProCount(id);
 	}
 
 }

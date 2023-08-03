@@ -53,6 +53,19 @@ p {
 .spanCursor {
 	cursor: pointer
 }
+
+textarea {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 200px;
+  width: 100%;
+  resize: vertical; /* 세로 조정 가능 */
 </style>
 
 <h1 th:text="${session.Name} + '의 개인 캘린더'"></h1>
@@ -203,7 +216,7 @@ let formattedEvents = allEvents.map(eventData => ({
 	start: eventData.start,
 	end: eventData.end,
 	color: eventData.proNo == 7 ? '#6198d3' : '#35A880',
-	classNames: 'sideWork',
+	classNames: 'sideWork spanCursor',
 	extendedProps: {
 		proNo: eventData.proNo,
 		proPostNo : eventData.proPostNo
@@ -412,20 +425,29 @@ function createSchButton() {
 	if(schTitle.value == '') {
 		alert('제목 입력');
 		return;
-	}
+	};
 
 	let schStartDate = creSchModal.querySelector('#startSchDate');
 	let schEndDate = creSchModal.querySelector('#endSchDate');
 	let schPlace = creSchModal.querySelector('.schPlace');
 	let schText = creSchModal.querySelector('.schText');
 	
-	if(schEndDate.value == '' && schStartDate.value == '') {
-		alert('날짜 하나는 선택해주세요');
+	if(schStartDate.value == '' && schEndDate.value == '') {
+		alert('시작 날짜는 선택해주세요');
 		return false;
-		
-	}
+	};
 	
-	//날짜 강제 삽입
+	if((schStartDate.value > schEndDate.value) && schEndDate.value != '') {
+		alert('시작 날짜는 끝날짜보다 작아야함');
+		return false;
+	};
+	
+	//FullCalendar allDay 속성은 컬럼이 필요해서 임의 값 넣어주기로 설정
+	if(schStartDate.value == '') {
+		schStartDate.value = schEndDate.value;
+	};
+	
+	/* //날짜 강제 삽입
 	if(schStartDate.value == '') {
 		schStartDate = bDay(schEndDate.value);
 		schEndDate = convertToFormattedDateTime(schEndDate.value);
@@ -435,33 +457,33 @@ function createSchButton() {
 	} else {
 		schStartDate = convertToFormattedDateTime(schStartDate.value);
 		schEndDate = convertToFormattedDateTime(schEndDate.value);
-	}
+	} */
 	
 	let schObj = {  'proNo' : 7,//개인 일정 관리자 프로젝트
 					'postTitle' : schTitle.value,
-					'schStartDay' : schStartDate,
-					'schStartTime' : schStartDate,
-					'schEndDay' : schEndDate,
-					'schEndTime' : schEndDate,
+					'schStartDay' : convertToFormattedDateTime(schStartDate.value),
+					'schStartTime' : convertToFormattedDateTime(schStartDate.value),
+					'schEndDay' : convertToFormattedDateTime(schEndDate.value),
+					'schEndTime' : convertToFormattedDateTime(schEndDate.value),
 					'schPlace' : schPlace.value,
 					'schContent' : schText.value,
 					'personalSch' : 'Y',//개인 일정은 Y
 					};
-
-		fetch("/creSch", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(schObj)
-		})
-		.then(response => response.json())
-		.then(res => {
-			location.reload();
-		})
-		.catch(error => {
-			console.error('Error: ',error);
-		});
+		
+	fetch("/creSch", {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(schObj)
+	})
+	.then(response => response.json())
+	.then(res => {
+		location.reload();
+	})
+	.catch(error => {
+		console.error('Error: ',error);
+	});
 }
 </script>
 

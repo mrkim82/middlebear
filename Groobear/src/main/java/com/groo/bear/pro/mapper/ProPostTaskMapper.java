@@ -46,4 +46,7 @@ public interface ProPostTaskMapper {
 	public void deleteWorkMemberAll(ProUpWorkVo vo);
 	// 업무 담당자 추가(단건)
 	public int createWorkMember(int proPostNo, String id);
+	
+	//간트차트 조회용
+	public List<ProPostTaskVO> readGantt(int proNo);
 }

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -74,7 +76,10 @@ public class proPostController {
 		
 		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
 		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));//프로젝트 참가자 수
-		
+		String currentURI = request.getRequestURI();
+		System.out.println(currentURI);
+		model.addAttribute("firstURI", firstURI(currentURI));//첫번쨰 주소
+		System.out.println("ps주소"+firstURI(currentURI));
 		return model;
 	}
 	
@@ -97,6 +102,7 @@ public class proPostController {
 		model.addAttribute("afterOneDay" , DateUtil.afterOneDay());//하루뒤
 		model.addAttribute("readProAuth", proService.readProAuth(proNo));//권한 및 프로젝트 마스터 조회
 		model.addAttribute("readPartiListM", proPostService.readPartiListM(proNo));//프로젝트 초대 할 인원
+		model.addAttribute("readProDetailCount", proPostService.readProDetailCount(proNo));//프로젝트 인원
 		
 		//System.out.println("게시글"+model.getAttribute("projectPartiMember"));
 		switch (homeTab) {
@@ -169,7 +175,15 @@ public class proPostController {
 		return pagePath;
 	}
 	
-	
+	//주소 가져오기
+	public static String firstURI(String input) {
+		Pattern pattern = Pattern.compile("/([^/]+)/[^/]*");
+		Matcher matcher = pattern.matcher(input);
+		if (matcher.find()) {
+			return matcher.group(1);
+		};
+		return input;
+    };
 	
 	//글 생성
 	@PostMapping("postCreateWriting")
@@ -307,7 +321,7 @@ public class proPostController {
 	//초대 메일 발송
 	@PostMapping("inviteMail")
 	@ResponseBody
-	public Map<String, Object> inviteMail(HttpServletRequest request, @RequestBody List<ProInviteMailVO> vo) {
+	public Map<String, Object> inviteMail(@RequestBody List<ProInviteMailVO> vo) {
 		int result = proPostService.createInviteMail(vo);
 		return Collections.singletonMap("result", result);
 	}
@@ -353,6 +367,16 @@ public class proPostController {
 		System.out.println(proFileNo);
 		System.out.println(result);
 		return Collections.singletonMap("result", result/2 > 0 ? "성공" : "취소");
+	}
+	
+	//프로젝트 나가기
+	@DeleteMapping("delProMemOut")
+	@ResponseBody
+	public Map<String, Object> 프로젝트나가기(HttpServletRequest request, @RequestBody int proNo) {
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("Id");
+		int result = proPostService.delteProMemOut(proNo, id);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	}
 	
 	
