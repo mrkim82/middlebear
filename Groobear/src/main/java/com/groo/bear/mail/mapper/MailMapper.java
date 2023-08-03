@@ -40,4 +40,6 @@ public interface MailMapper {
 	public int personnelNo();
 	//이메일로 유저아이디 받아오기
 	public String userIdGet(String email);
+	//서버에서 받아온 이메일 넣는구문
+	public int serverGetInsertMail(MailVO mailVO);
 }

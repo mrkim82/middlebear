@@ -69,19 +69,21 @@
                   <if test="mailVO.receiver != null and mailVO.referrer != null">
                  		AND (d.receiver = #{mailVO.receiver}
                   		OR d.referrer = #{mailVO.referrer})
+						AND d.id = #{mailVO.id}
                  	</if>
 			<if test="mailVO.sender != null and mailVO.receiver == null">
 					AND d.sender = #{mailVO.sender}
+					AND d.id = #{mailVO.id}
 			</if>
 			<if test="mailVO.receiver != null and mailVO.sender != null">
 					AND (d.receiver = #{mailVO.receiver}
 					 OR d.sender = #{mailVO.sender}
 					 OR d.referrer = #{mailVO.referrer})
+					 AND d.id = #{mailVO.id}
 			</if>
 			<if test="mailVO.deleteDate != null">
                   			AND c.delete_date = #{mailVO.deleteDate}
   	        	</if>
-  	        	AND d.id = #{mailVO.id}
               )g
           )
           <![CDATA[
@@ -172,4 +174,62 @@
 		select id FROM users
 		where email=#{email}
 	</select>
+	<!-- mailsever에서 받아온 session 유저에게온 메일을 저장 -->
+	<insert id="serverGetInsertMail" parameterType="MailVO">
+		INSERT INTO getmail(mail_no
+							,title
+							,content
+							,sender
+							,receiver
+							,referrer
+							,referrer2
+							,referrer3
+							,send_date
+							,receive_date
+							,mail_check
+							,mail_type
+							,mail_type2
+							,mail_type3
+							,mail_type4
+							,mail_type5)
+					VALUES(
+							(SELECT NVL(MAX(mail_no),0)+1 FROM getmail)
+							,#{title}
+							,#{content}
+							,#{sender}
+							,#{receiver}
+							<choose>
+							<when test="referrer != null and !referrer.equals('')">
+					 		,#{referrer}
+					 		</when>
+					 		<otherwise>
+					 		,''
+					 		</otherwise>
+					 		</choose>
+					 		<choose>
+					 		<when test="referrer2 != null and !referrer3.equals('')">
+					 		,#{referrer2}
+					 		</when>
+					 		<otherwise>
+					 		,''
+					 		</otherwise>
+					 		</choose>
+					 		<choose>
+							<when test="referrer3 != null and !referrer3.equals('')">
+					 		,#{referrer3}
+					 		</when>
+					 		<otherwise>
+					 		,''
+					 		</otherwise>
+					 		</choose>
+							,sysdate
+							,sysdate
+							,'N'
+							,'R'
+							,'R'
+							,'R'
+							,'R'
+							,'R'
+							)
+	</insert>
 </mapper>
