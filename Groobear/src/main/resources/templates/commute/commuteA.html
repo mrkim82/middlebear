@@ -29,7 +29,7 @@
 			<div class="modal-dialog">
 				<div class="modal-content" style="border: 1px solid #00000021; border-radius: 20px; box-shadow: 2px 4px 3px 3px darkgray;">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">근태 정보 수정</h5>
+						<h5 class="modal-title" id="exampleModalLabel" style="font-size: 25px;">근태 정보 수정</h5>
 						<button type="button" class="btn-close" data-mdb-dismiss="modal"
 							aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;">X</button>
 					</div>
@@ -38,30 +38,30 @@
 						name="commuteInfoForm">
 						<div class="modal-body" style="text-align: center;">
 							<div class="form-group mb-3">
-								<label class="label" style="font-size: 25px;">기본정보</label>
-								<div style="font-size: 15px;">
-									<label class="label">사번 : <span id="mEmpNo"></span> |
-									</label> <label class="label">이름 : <span id="mName"></span> | 
-									</label> <label class="label">부서 : <span id="mDept"></span> | 
+
+								<div style="font-size: 20px;">
+									<label class="label">사번 : <span id="mEmpNo"></span> &nbsp;
+									</label> <label class="label">이름 : <span id="mName"></span> &nbsp;
+									</label> <label class="label">부서 : <span id="mDept"></span> &nbsp; 
 									</label> <label class="label">연차 : <span id="mOff"></span>
-									</label><br> <label class="label">월 근무 일 : <span id="mMD"></span> | 
+									</label><br> <label class="label">월 근무 일 : <span id="mMD"></span> &nbsp;
 									</label> <label class="label">월 연장 근무 시간 : <span id="mMT"></span></label>
 								</div>
 							</div>
 
 							<div class="form-group mb-3" style="display: flex; justify-content: space-evenly; margin-top:35px;">
-								<label class="label">출근 시간 <input name="workStart"
+								<label class="label"style="font-size: 20px;">출근 시간 <input name="workStart" style="font-size: 20px;"
 									id="newWorkStart" type="time" value="" class="form-control"></label>
 									
-									<label class="label">퇴근 시간 <input name="workEnd"
+									<label class="label"style="font-size: 20px;">퇴근 시간 <input name="workEnd" style="font-size: 20px;"
 									id="newWorkEnd" type="time" value="" class="form-control"></label>
 							</div>
 							
 							<div class="form-group mb-3" style="display: flex; justify-content: space-evenly; margin-top:30px;">
-								<label class="label">연장근무 시작 시간 <input name="overWorkStart"
+								<label class="label" style="font-size: 20px;">연장근무 시작 시간 <input name="overWorkStart" style="font-size: 20px;"
 									id="newOverWorkStart" type="time" value="" class="form-control"></label>
 									
-								<label class="label">연장근무 종료 시간 <input name="overWorkEnd"
+								<label class="label" style="font-size: 20px;">연장근무 종료 시간 <input name="overWorkEnd" style="font-size: 20px;"
 									id="newOverWorkEnd" type="time" value="" class="form-control"></label>
 							</div>
 							<div class="form-group mb-3" style="display: none;">
@@ -75,8 +75,8 @@
 
 						</div>
 						<div class="modal-footer">
-							<button type="button" id="saveBtn" class="btn btn-primary" style="border-radius:12px;background-color:#399f61;">저장</button>
-							<button type="button" class="btn btn-secondary" style="border-radius:12px;"
+							<button type="button" id="saveBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f61;box-shadow:1.5px 1.5px 1.5px 1.5px gray;color: #fff;width: 50px; height:35px;">저장</button>
+							<button type="button" class="" style="border-radius:12px;font-size: 20px;"
 								data-mdb-dismiss="modal">취소</button>
 						</div>
 					</form>
@@ -102,7 +102,7 @@
 					name="endDay" id="endDate" onchange="changeDate()">
 				<div style="position: absolute; display: inline-block; right: 25px;">
 					<select
-						style="border: 1px solid gray;border-radius: 5px;height: 35px;"
+						style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;"
 						name="type" id="selectBox" onchange="boxRe()">
 						<option value='' selected id="base">선택</option>
 						<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
@@ -110,9 +110,9 @@
 						<option value='deptName'
 							th:selected="${criteria.type == 'deptName'}">부서</option>
 					</select> <input id="textBox"
-						style="border: 1px solid gray;border-radius: 5px;height: 35px;"
+						style="border: 1px solid gray;border-radius: 5px;height: 35px; width:150px;"
 						type="text" name="keyword" th:value="${criteria.keyword}" />
-					<button type="submit" id="searchBtn" class="btn btn-primary" style="border-radius: 10px;background-color: #399f61;border-color: #399f61; box-shadow:1.5px 1.5px 1.5px 1.5px gray;">검색</button>
+					<button type="submit" id="searchBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f61;box-shadow:1.5px 1.5px 1.5px 1.5px gray;color: #fff;width: 50px; height:35px;">검색</button>
 				</div>
 			</form>
 		</div>
@@ -158,17 +158,17 @@
 		</div>
 		<div>
 			<ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
-		<li class="page-item"><a class="page-link" style="border-radius: 5px 0px 0px 5px;"
-					th:href="|javascript:goPage(1)|">&laquo;</a></li>
-		<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
-			th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-			<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
-			th:text="${num}"></a>
-		</li>
-		<li class="page-item"><a class="page-link" style="border-radius: 0px 5px 5px 0px;"
-			th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
-		</li>
-    </ul>
+				<li class="page-item"><a class="page-link" style="border-radius: 5px 0px 0px 5px;"
+							th:href="|javascript:goPage(1)|">&laquo;</a></li>
+				<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
+					th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+					<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+					th:text="${num}"></a>
+				</li>
+				<li class="page-item"><a class="page-link" style="border-radius: 0px 5px 5px 0px;"
+					th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+				</li>
+		    </ul>
 		</div>
 
 

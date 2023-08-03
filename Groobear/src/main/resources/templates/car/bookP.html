@@ -93,18 +93,18 @@
 
 
 		<div>
-			<h3 style="text-align: center;">운행 일지 관리</h3>
+			<h2 style="margin-top: 25px;">운행일지 관리</h2>
 		</div>
-		<div style="display: block">
+		<div style="position: absolute;margin-left: 6px;right: 25px;top: 25px;">
 			<form name="searchForm" action="bookList">
 				<div>
-					<button type="button" onclick="prevMon()" class="btn btn-primary">
+					<button type="button" onclick="prevMon()" class="btn btn-primary" style="border-radius: 10px;padding: 5px 7px 5px 5px;color: black;background-color: #fff;border-color: #399f61;">
 						&laquo;</button>
 					<input
-						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+						style="border: 1px solid rgba(0, 0, 0, 0.1);border-radius: 10px;height: 35px;border-color: #399f61;text-align: center;"
 						type="month" name="monthDate" id="monthDate"
 						onchange="changeMon()" th:value="${monthDate}">
-					<button type="button" onclick="nextMon()" class="btn btn-primary">
+					<button type="button" onclick="nextMon()" class="btn btn-primary" style="border-radius: 10px;padding: 5px 5px 5px 7px;color: black;background-color: #fff;border-color: #399f61;">
 						&raquo;</button>
 				</div>
 			</form>
