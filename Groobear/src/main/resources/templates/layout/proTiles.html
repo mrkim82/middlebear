@@ -331,7 +331,7 @@ textarea {
 						</ul>
 					</details>
 				</li> -->
-				<li>
+				<li><div th:text="${currentURI}"></div>
 					<details id="groupFolderList" open>
 						<summary>프로젝트 폴더
 							<span onclick="makeGroupFolderModal()"
@@ -345,10 +345,11 @@ textarea {
 								   style="overflow:hidden; width:80px">
 								   [[${proG.groupName}]]
 									<span class='material-icons moreVertIcons'
-												onclick="makeGroupMan()"
-										  >more_vert</span>
-										  <!-- style='display: none;' -->
-										</a></li>
+										  onclick="makeGroupMan()">more_vert
+									</span>
+									<!-- style='display: none;' -->
+								</a>
+							</li>
 						</th:block>
 						</ul>
 					</details>
@@ -357,10 +358,27 @@ textarea {
 		</div>
 	</nav>
 
-	<!-- 사이드바 우측의 컨텐츠 영역 -->
-	<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+	<!-- 본문 영역(사이드바 우측의 컨텐츠) -->
+	<!-- <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 		<div layout:fragment="content"></div>
-	</main>
+	</main> -->
+	<div class="col-9">
+	
+		<!-- 프로젝트 상세 상단 바 proPostMain으로 시작하는 경우 horizonBar 프래그먼트 포함 -->
+		<th:block th:if="${#strings.containsIgnoreCase(firstURI,'proPostMain')} or
+						 ${#strings.containsIgnoreCase(firstURI,'proSearch')}">
+			<div th:insert="~{layout/proHorizonBar :: horizonBar}" class="dohyeon"></div>
+		</th:block>
+		
+		<!-- 프로젝트 메인 상단 바 proPostMain으로 시작하지 않는 경우 horizonBarsub 프래그먼트 포함 -->
+		<th:block th:if="${!#strings.containsIgnoreCase(firstURI,'proPostMain')} and
+						 ${!#strings.containsIgnoreCase(firstURI,'proSearch')}">
+			<div th:insert="~{layout/proMainBar :: mainTopBar}" class="dohyeon"></div>
+		</th:block>
+		<main>
+	        <div layout:fragment="content" class="dohyeon"></div>
+	    </main>
+	</div>
 	<!-- 본문 내용 종료 -->
 
 </div>
@@ -507,7 +525,33 @@ textarea {
 /*<![CDATA[*/
 	//그룹 갯수 체크
   	let pGC = /*[[${projectGroupList}]]*/ [];
+  	let selfId = /*[[${session.Id}]]*/;
+	let selfName = /*[[${session.Name}]]*/;
+	let proDetailCount = /*[[${readProDetailCount}]]*/;
+	
+  	let url = window.location.pathname;
+	let lastIndex = url.lastIndexOf('/');
+	let projectNo = url.substring(lastIndex + 1);
 /*]]>*/
+</script>
+
+<!-- 시간 변환 -->
+<script type="text/javascript">
+//??
+function convertToFormattedDateTime(dateTimeStr) {
+	if(dateTimeStr == '') {//빈값일때 바로 리턴
+		return;
+	};
+	
+	const date = new Date(dateTimeStr);
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	return `${year}-${month}-${day} ${hours}:${minutes}`;
+};
 </script>
 
 <!-- 페이지 실행시 -->
@@ -523,6 +567,16 @@ window.addEventListener('DOMContentLoaded', () => {
 	//닫길때 input 값 초기화
 	$('#createGroupFolderModal').on('hidden.bs.modal', function (event) {
 		$('#folderContent').val('');
+	});
+	
+	//postTiles꺼
+	$('.modal').on('hidden.bs.modal', function (e) {
+		// 모달 내부의 모든 input 요소를 찾아 값을 초기화
+		$(this).find('input, textarea').val('');
+		//$(this).find('.collapse').removeClass('show');
+	});
+	$('#modal2').on('hidden.bs.modal', function (e) {
+		$(this).find('.uploadResult ul li').remove();
 	});
 </script>
 
@@ -852,6 +906,147 @@ function createDynamicList(partiTagList) {
 			console.error('Error: ',error);
 		});
 	};
+</script>
+
+<!-- 파일 업로드 -->
+<script type="text/javascript">
+//업로드 1번
+$("input[type='file']").change(function(e) {
+	let findModal = $(e.target);
+	var formData = new FormData();
+//	var inputFile = $("input[name='uploadFile']");
+	var inputFile = $(e.target);
+	console.log(inputFile)
+	var files = inputFile[0].files;
+	//여러 파일 올라 갈 수 있기 때문에 반복문
+	for(var i=0; i<files.length; i++) {
+		//파일 검증
+	    if(!checkExtension(files[i].name, files[i].size) ){
+    	    return false;
+		}
+    	formData.append("uploadFile", files[i]);
+	}
+	
+	//console.log('폼데이터',formData.get("uploadFile"))
+	
+	$.ajax({
+		url: "/uploadAjaxAction",
+		processData: false,
+		contentType: false,
+		data: formData,
+		type: "POST",
+		dataType: "json",
+		success: function(result) {
+			//성공시 화면에 출력
+			showUploadResult(result, findModal);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+});
+
+
+//확장자 필터(1-2)
+var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
+var maxSize = 5242880;
+
+function checkExtension(fileName, fileSize) {
+	if (fileSize >= maxSize) {
+	    alert('파일 사이즈 초과');
+	    return false;
+	}
+	if (regex.test(fileName)) {
+	    alert('해당 종류의 파일은 업로드할 수 없습니다.');
+	    return false;
+	}
+	return true;
+}
+
+//파일선택으로 파일 불러올 때, 업로드 2번
+function showUploadResult(uploadResultArr, findModal){
+	console.log('s',uploadResultArr)
+	
+	//빈값 찾기
+	if(!uploadResultArr || uploadResultArr.length == 0){return ;}
+	
+	var uploadUL = findModal.closest('.modal').find('.uploadResult ul');
+	
+	var str = "";
+  
+	//여러건이기 때문에 반복문
+	$(uploadResultArr).each(function(i, obj){
+		//console.log("11:06" + i)
+		console.log("11:05",obj)
+		//console.log('이미지',obj.image);
+		//console.log('파일타입',obj.fileType);
+		
+		//image type
+		if(obj.image){
+			console.log('이미지!')
+			var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+			
+			str += "<li data-path='"+obj.uploadPath+"'";
+			str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+			str + "><div>";
+			//파일 이름 보여주기
+			str += "<span> "+ obj.fileName+"</span>";
+			//파일 삭제버튼
+			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			//이미지 노출
+			str += "<img src='/display?fileName="+fileCallPath+"'>";
+			str += "</div>";
+			str +"</li>";
+		} else {
+			console.log('파일?')
+			var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+			var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+			    
+			str += "<li data-path='"+obj.uploadPath+"'";
+			str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+			str + "><div>";
+			//파일 이름 보여주기
+			str += "<span> "+ obj.fileName+"</span>";
+			//파일 삭제버튼
+			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			//파일 노출
+			str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+			str += "</div>";
+			str +"</li>";
+		} 
+	});
+	
+	//만든 태그 붙여서 화면에 보여주기
+	uploadUL.append(str);
+};
+//화면 노출 종료
+
+//화면에서 지우기
+</script>
+
+<!-- 파일 업로드 화면에서 지우기 -->
+<script type="text/javascript">
+//업로드중인 파일 삭제
+$(".uploadResult").on("click", "button", function(e){
+	e.stopPropagation();
+	
+	var targetFile = $(this).data("file");
+	var type = $(this).data("type");
+
+	//해당 업로드 파일 li가기
+	var targetLi = $(this).closest("li");
+
+	$.ajax({
+		url : '/deleteFile',
+		data : {'fileName' : targetFile,
+				'type' : type},
+		dataType : 'text',
+		type : 'POST',
+		success : function(result) {
+			targetLi.remove();//화면에서 지우기
+		}
+	});
+});
 </script>
 
 <!-- 웹소켓 -->

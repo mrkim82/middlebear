@@ -3,17 +3,10 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/proTiles}">
 <head>
-	<style>
-	</style>
 </head>
 
-<div layout:fragment="content"
-	 style="margin-left: 30px;"
-	 class="dohyeon">
-	<!-- 최상단 -->
-	<div style="margin-top: 30px;">
-		<h2>[[${session.Name}]]의 프로젝트</h2>
-		<div style="text-align: end;">
+<div layout:fragment="content">
+	<div style="text-align: end;">
 			<select class="custom-select"
 					name="parti"
 					onchange="chagepartiSelect()"
@@ -40,9 +33,6 @@
 						value="1 ASC">내림차순(ㅎ~ㄱ)</option>
 			</select>
 		</div>
-	</div>
-	<!-- 최상단 종료 -->
-
 	<!-- 모든 테이블 -->
 	<div>
 		<!-- 즐겨찾기 테이블 -->
@@ -113,7 +103,6 @@
 
 	<script>
 		let starCheck = document.querySelectorAll(".starCheck");
-		console.log(starCheck)
 		starCheck.forEach(sC => {
 			sC.addEventListener("click", function(event) {
 				event.stopPropagation();

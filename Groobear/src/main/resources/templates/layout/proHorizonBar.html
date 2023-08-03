@@ -116,6 +116,136 @@
 	</div>
 	<!-- 인원 초대 모달 종료 -->
 
+	<!-- 검색기능 -->
+	<script type="text/javascript">
+		proInSearch.addEventListener('keyup', function(event) {
+			if(event.keyCode === 13) {
+				if(proInSearch.value == '') {
+					alert('빈값 허용 안함');
+					proInSearch.focus();
+					return false;
+				}
+				let searchKeyword = proInSearch.value;
+				location.href="/proSearch/" + projectNo + "?search=" + searchKeyword;
+			}
+		});
+	</script>
+	
+	<!-- 색상 변경 -->
+	<script>
+		let newColor;
+		 	
+		//클릭시 색상 정보 저장
+		function saveColor() {
+			newColor = event.target.dataset.colorCode;
+		}
+		
+		function changeColor() {
+			fetch("/updateProMemColor", {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					'proColor' : newColor,
+					'proNo': projectNo
+				})
+			})
+			.then(response => response.json())
+			.then(res => {
+				if(res.result == '성공') {
+					$('#squareStyle').modal('hide');//모달창 닫기
+					document.getElementsByClassName('square')[0].style.backgroundColor = newColor;//색상변환
+				} else {
+					alert('실패');
+				}
+			});
+		};
+	</script>
+	
+	<!-- 프로젝트 나가기 -->
+	<script>
+		function exitProMem() {
+			
+			if(proDetailCount == 1) {
+				alert('프로젝트 인원이 한명입니다. 프로젝트를 삭제해주세요');
+				return false;
+			}
+			
+			fetch("/delProMemOut", {
+				  method: 'DELETE',
+				  headers: {
+				    'Content-Type': 'application/json'
+				  },
+				  body: JSON.stringify(projectNo)
+				})
+			.then(response => response.json())
+			.then(res => {
+				location.href ="/proMain";
+			});
+		};
+	</script>
+	
+	<!-- 프로젝트 삭제 -->
+	<script>
+		function delPro() {
+			
+			fetch("/delPro", {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(Number(projectNo))
+			})
+			.then(response => response.json())
+			.then(res => {
+				location.href="/proMain";
+			})
+			.catch(error => {
+				console.error('Error: ',error);
+			});
+		};
+	</script>
+	
+	<!-- 프로젝트 초대하기 -->
+	<script>
+		function inviteMail() {
+			let inputs = inviteMember.querySelectorAll('input[type="checkbox"]:checked');
+			let idArr = [];
+			
+			//체크된 체크박스의 정보 가져오기(초대받을 사람의 정보)
+			inputs.forEach(inputv=> {
+				let viteObj = {
+					'proNo' : projectNo,
+					'id' : inputv.dataset.partiMember
+				};
+				idArr.push(viteObj);
+			});
+			
+			//체크값 확인
+			if(idArr.length == 0) {
+				alert('체크된 값이 없습니다.')
+				return false;
+			}
+			
+			fetch("/inviteMail", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(idArr)
+			})
+			.then(response => response.json())
+			.then(res => {
+				alert(res.result + '건 초대')
+				$('#inviteMember').modal('hide');//모달창 닫기
+				$('#inviteMember input[type="checkbox"]:checked').each(function() {
+					$(this).parent().remove();
+				});
+				//모달 안의 값 초기화 시켜보기
+			});
+		};
+	</script>
 </div>	
 </body>
 </html>
