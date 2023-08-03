@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/mailTiles}">
+<head>
+<meta charset="UTF-8">
+<title>메일 발송 페이지</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+</head>
+<body layout:fragment="content">
+	<form method="post">
+		<button id="send" type="button" onclick="sendMail()">메일보내기</button>
+		<table>
+		<tbody>
+			<tr><td><input type="text" id="mailNo" th:value="${mailNo}" style="display:none"></td></tr>
+			<tr>
+				<td>보내는사람 <input id="sender" type="text" name="sender" th:value="${id}" readonly></td>
+			</tr>
+			<tr>
+				<td>받는사람 <input id="receiver" type="text" name="receiver"></td>
+			</tr>
+			<tr>
+				<td>참조자 <input id="referrer" type="text" name="referrer"></td>
+			</tr>
+			<tr>
+				<td>제목 <input id="title" type="text" name="title"></td>
+			</tr>
+			<tr>
+				<td>내용 <textarea id="content" style="width:1000px; height:1000px" name="content"></textarea></td>
+			</tr>
+			<tr><td><div class="panel-body1">
+                     <div class="form-group uploadDiv1">
+                         <input name="uploadFile1" type="file" multiple>
+                     </div>
+                      <!-- foreach써서 조회하는걸로 변경 -->
+				<div class="uploadResult0">
+			       <ul th:each="pay : ${payImgInfo}">
+					<li th:data-path="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
+					th:data-fileName="${pay.fileName}" data-type="true" style="list-style-type:none">
+					<button type="button" id="logImgDel" onclick="payImgDel(this)">제거</button>
+						<div>
+							<img th:src="@{|/display?fileName=${#strings.replace(pay.uploadPath,'\','/')}/${pay.uuid}_${pay.fileName}|}" 
+							th:data-uploadpath="${pay.uploadPath}" th:data-uuid="${pay.uuid}"
+							th:data-fileName="${pay.fileName}" data-type="true"  style="border:1px solid;">
+						</div>
+					</li>
+				   </ul>
+				</div>
+                     <div class="uploadResult1">
+                         <ul>
+
+                         </ul>
+                     </div>
+                 	</div>
+                 </td></tr>
+		</tbody>
+		</table>
+	</form>
+<script>
+	let mailNo = document.getElementById('mailNo').value;
+    let mailuuid ="";
+    let mailuploadPath = "";
+    let mailfileName = "";
+	console.log(mailNo);
+	let sender = "";
+	let receiver = "";
+	let referrer = "";
+	let title=""
+	let content="";
+	function sendMail(){
+		sender = document.getElementById('sender').value;
+		receiver = document.getElementById('receiver').value;
+		referrer = document.getElementById('referrer').value;
+		title = document.getElementById('title').value;
+		content = document.getElementById('content').value;
+		console.log('1111',sender);
+		console.log('2222',receiver);
+		console.log('333',referrer);
+		console.log('4444',title);
+		console.log('5555',content);
+		console.log('123',mailuuid);
+		var arr = referrer.split(','); //참조자 구분
+		for(let i=0;i<arr.length;i++){
+			console.log(arr[i]);
+		}
+		if(mailuuid !==''){
+			$.ajax({
+				url: "/InsertMailFile",
+				    method: "POST",
+				    contentType:"application/json; charset=utf-8",
+				    data: JSON.stringify({
+				      mailNo : mailNo,
+				      uuid : mailuuid,
+				      uploadPath : mailuploadPath,
+				      fileName : mailfileName
+				    }),
+				    async : false,
+				    success: function(data) {
+				    	console.log(data);
+				    	console.log('파일전송성공')
+				    },
+				    error: function(err) {
+					console.log(err);
+				    }	
+			});
+		}
+		console.log('2222'+receiver);
+		console.log('3332222'+referrer);
+		referrer = document.getElementById('referrer').value;
+      	var referrerList = referrer.split(",");
+      	console.log(referrerList);
+		$.ajax({
+			url: "/sendMail",
+			    method: "POST",
+			    contentType:"application/json; charset=utf-8",
+			    data: JSON.stringify({
+			      sender : sender,
+			      receiver : receiver,
+			      referrer : referrer,
+			      title : title,
+			      content : content,
+			      id : sender
+			    }),
+			    success: function(data) {
+			    	location.href="/mail/sendingMail";
+			    	// 알림1 receiver(받는사람) referrerList(참조자 배열)
+			    	alarmClient.publish({
+			            destination: "/alarmCondition/mailAlm/"+receiver,
+			            body: JSON.stringify({
+			               'id' : receiver
+			            })
+			      	});
+			    	for(let i = 0; i < referrerList.length ; i++){
+						alarmClient.publish({
+				            destination: "/alarmCondition/mailAlm/"+referrerList[i],
+				            body: JSON.stringify({
+				               'id' : referrerList[i]
+				            })
+				      	});
+					}
+			    	
+			    },
+			    error: function(err) {
+				console.log(err);
+			    }	
+		});
+	}
+	function showUploadResult1(uploadResultArr){
+        console.log(uploadResultArr)
+	  if(!uploadResultArr || uploadResultArr.length == 0){return ;}
+	  var uploadUL1 = $(".uploadResult1 ul");
+	  var str = "";
+	  
+	  $(uploadResultArr).each(function(i, obj){
+        console.log("11:06" + i)
+		  console.log("11:05" + obj)
+          console.log(obj.image)
+          console.log(obj.fileType)
+		   //image type
+	        if(obj.image){
+	          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+	          str += "<li data-path='"+obj.uploadPath+"'";
+              str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+              str + "><div>";
+	          str += "<span> "+ obj.fileName+"</span>";
+	          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+	          str += "<img src='/display?fileName="+fileCallPath+"'>";
+	          str += "</div>";
+	          str +"</li>";
+	        }else{
+	          var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+	          var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+	              
+              str += "<li data-path='"+obj.uploadPath+"'";
+              str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+              str + "><div>";
+	          str += "<span> "+ obj.fileName+"</span>";
+	          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+	          str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+	          str += "</div>";
+	          str +"</li>";
+	        } 
+	  });
+	  uploadUL1.append(str);
+    }
+	$(".uploadResult1").on("click", "button", function(e){
+		  console.log("delete file");
+		  
+		  var targetFile = $(this).data("file");
+		  var type = $(this).data("type");
+		  
+		  var targetLi = $(this).closest("li");
+		  targetLi.remove();
+    });
+	var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
+    var maxSize = 5242880;
+
+    function checkExtension(fileName, fileSize) {
+        if (fileSize >= maxSize) {
+            alert('파일 사이즈 초과');
+            return false;
+        }
+        if (regex.test(fileName)) {
+            alert('해당 종류의 파일은 업로드할 수 없습니다.');
+            return false;
+        }
+        return true;
+    }
+    $("input[name='uploadFile1']").change(function(e) {
+        var formData = new FormData();
+        var inputFile1 = $("input[name='uploadFile1']");
+        var files = inputFile1[0].files;
+
+        for(var i=0; i<files.length; i++) {
+
+            if(!checkExtension(files[i].name, files[i].size) ){
+                return false;
+            }
+            formData.append("uploadFile", files[i]);
+
+        }
+        $.ajax({
+			url: "/uploadAjaxAction",
+			processData: false,
+			contentType: false,
+			data: formData,
+			type: "POST",
+			dataType: "json",
+			success: function(result) {
+                console.log('result = ',result);
+                showUploadResult1(result);
+                mailuuid = result[0].uuid;
+                mailfileName = result[0].fileName;
+                mailuploadPath = result[0].uploadPath;
+                console.log(mailuuid)
+                console.log(mailfileName)
+                console.log(mailuploadPath)
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
+    });
+</script>
+</body>
+</html>

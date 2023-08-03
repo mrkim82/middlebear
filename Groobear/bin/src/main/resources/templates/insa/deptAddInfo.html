@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사원 목록</title>
+	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<style>
+	body {
+            font-family: Arial, sans-serif;
+        }
+
+        main {
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        /* 이름과 직급의 간격을 조절합니다 */
+        td:nth-child(1), td:nth-child(2) {
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+
+        /* 메일의 간격을 조절합니다 */
+        td:nth-child(3) {
+            padding-right: 40px;
+            padding-left: 40px;
+        }
+/* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+    
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%; /* Could be more or less, depending on screen size */ 
+</style>
+</head>
+<body>   
+    <main>
+        <div class="free">
+            <table>
+            	<thead>
+	                <tr>
+	                	<th>사번</th>
+	                    <th>이름</th>
+	                    <th>직급</th>
+	                    <th>메일</th>
+	                </tr>
+                </thead>
+                <tbody id="body">
+                	<th:block th:if="${memList != null}">
+						<tr th:each="mem, stat : ${memList}" th:ondblclick="addMem()">
+								<td>[[${mem.empNo}]]</td>
+								<td>[[${mem.name}]]</td>
+								<td>[[${mem.rank}]]</td>
+								<td>[[${mem.id}]]</td>
+						</tr>
+					</th:block>
+				</tbody>
+            </table>
+        </div>
+    </main>
+	<script type="text/javascript">
+	function addMem(){
+		let empNo = $(event.target).closest('tr').find('td:eq(0)').text();
+		let deptNo = [[${deptNum}]];
+		
+		$.ajax({
+			    url: "updateDeptMem",
+			    method: "POST",
+			    contentType:"application/json; charset=utf-8",
+			    data: JSON.stringify({
+			      empNo: empNo,
+			      deptNo: deptNo
+			    }),
+			    success: function(data) {
+			    	if(data == "success"){
+			    		window.opener.location.href="/deptDetailInfo?deptNo="+deptNo;
+			    		window.close();
+			    	} else{
+			    		alert('구성원 추가 오류 발생');
+			    	}	
+			    },
+			    error: function(err) {
+					console.log(err);
+			    }
+			});
+	}
+	</script>
+</body>
+</html>
+</body>
+</html>

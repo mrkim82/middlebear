@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Groobear 부서 상세조회</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<style>
+	body {
+		font-family: Arial, sans-serif;
+		background-color: #f7f7f7;
+	}
+	
+	form {
+		height: 400px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 20px;
+	}
+	
+	h3 {
+		text-align: center;
+		margin-bottom: 20px;
+	}
+	
+	fieldset {
+		border: 1px solid #ccc;
+		padding: 10px;
+		margin-bottom: 10px;
+		width: 400px;
+	}
+	
+	a {
+		font-weight: bold;
+	}
+	
+	input[type="text"] {
+		width: 120px;
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		margin-bottom: 10px;
+	}
+	
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		border: 1px solid #ccc; /* Add border around the table */
+	}
+	
+	th, td {
+		padding: 8px;
+		text-align: left;
+		border-bottom: 1px solid #ccc;
+		font-size: 14px; /* Set font size for table cells */
+	}
+	
+	.blueone th {
+		background-color: #f0f8ff;
+	}
+	
+	button {
+		padding: 10px 20px;
+		background-color: #4CAF50;
+		color: white;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	
+	button:not(:last-child) {
+		margin-right: 10px;
+	}
+	
+	/* Add margin between "구성원" and the table */
+	.members-table {
+		margin-top: 30px;
+	}
+	/* Reduce vertical spacing between table rows */
+	table tbody tr {
+		line-height: 1; /* Adjust the value as per your preference */
+	}
+</style>
+</head>
+<body>
+	<form style="height: 400px;" action="/updateForm" method="GET">
+		<h3 style="text-align:center; margin-top:50px;">Groobear 부서 상세조회</h3>
+		<fieldset>
+			<a>부서명 : </a><input name="deptName" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo[0].deptName}" readonly><br>
+			<a>팀장 : </a><input name="deptHead" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo[0].deptHead}" readonly><br>
+			<a>부서권한 : </a><input name="deptAuth" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo[0].deptAuth}" readonly><br>
+		</fieldset>
+		<fieldset style="margin-bottom:10px;height:250px;">
+			<a>구성원</a>
+			<button style="float: right;margin-bottom:5px;padding:5px;" type="button" id="addMem" onclick="memPopUp()">추가</button>
+			<button style="float: right;margin-bottom:5px;padding:5px;" type="button" id="delMem">제외</button>
+			<br>
+			<table id="tList" class="blueone">
+				<thead>
+					<tr>
+						<th><input type="checkbox" id="allChk"></th>
+						<th>사번</th>
+						<th>이름</th>
+						<th>직급</th>
+						<th>메일</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="dept, stat : ${deptInfo}">
+						<td><input type="checkbox" class="sel"></td>
+						<td th:if="${dept.empNo != 0}">[[${dept.empNo}]]</td>
+						<td th:unless="${dept.empNo != 0}"></td>
+						<td>[[${dept.name}]]</td>
+						<td>[[${dept.rank}]]</td>
+						<td>[[${dept.id}]]</td>
+					</tr>
+				</tbody>
+			</table>
+			<input style="display:none;" type="text" id="deptNo" name="deptNo" th:value="${deptInfo[0].deptNo}">
+		</fieldset>
+		<fieldset style="display: flex;justify-content: center;border:hidden;">
+			<button type="submit" style="margin-right:10px;">수정</button>
+			<button type="button" style="margin-right:10px;" id="delBtn">삭제</button>
+			<button type="button" onclick="closeBtn()">닫기</button>
+		</fieldset>
+	</form>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		window.opener.location.href="/deptList";
+		// 체크박스 전체선택 및 해제
+		$('#allChk').on('click', function(){
+			if($('#allChk').is(':checked')){
+				$('input:checkbox').attr('checked','true');	
+			} else{
+				$('input:checkbox').attr('checked',!$('input:checkbox').attr('checked','true'));
+			}
+		})
+		
+		// 제외 버튼
+		$('#delMem').on('click', function(){
+			let list = [];
+			let obj = {};
+			let chk = '';
+			let deptHead = '[[${deptInfo[0].deptHead}]]'; 
+			$("[class='sel']:checked").each(function(i, checkbox){
+				obj={};
+				obj["empNo"] = $(checkbox.closest('tr')).children('td:eq(1)').text();
+				obj["deptNo"] = [[${deptInfo[0].deptNo}]];
+				list.push(obj);
+				if($(checkbox.closest('tr')).children('td:eq(2)').text() == deptHead){
+					$.ajax({
+		                  url: "delHead",
+		                  method: "POST",
+		                  contentType: "application/json; charset=utf-8",
+		                  data:JSON.stringify({
+		                	  deptNo : [[${deptInfo[0].deptNo}]]
+		                  }),
+		                  success: function(data){
+		                     console.log(data);
+		                  },
+		                  error : function(error){
+		                     console.log(error);
+		                  }
+		               });
+				}
+			})
+			$.ajax({
+                  url: "delDeptMem",
+                  method: "POST",
+                  contentType: "application/json; charset=utf-8",
+                  data:JSON.stringify(list),
+                  success: function(data){
+                     console.log(data);
+                     if(data == 'success'){
+                    	window.opener.location.href="/deptList";
+                        location.href="/deptDetailInfo?deptNo="+[[${deptInfo[0].deptNo}]]
+                     }else{
+						alert('구성원 제외 과정에서 오류 발생');
+                     }
+                  },
+                  error : function(error){
+                     console.log(error);
+                  }
+               });   
+		})
+	})
+	console.log([[${deptInfo[0].deptNo}]]);
+	// 삭제 버튼
+	$('#delBtn').on('click', function(){
+		let deptNo = $('#deptNo').val();
+		$.ajax({
+                 url: "delDept",
+                 method: "POST",
+                 contentType: "application/json; charset=utf-8",
+                 data:JSON.stringify({
+                	 deptNo: deptNo
+                	 }),
+                 success: function(data){
+                    console.log(data);
+                    if(data == 'success'){
+                    	window.close();
+                   		window.opener.location.href="/deptList";
+                    }else{
+						alert('부서삭제 과정에서 오류 발생');
+                    }
+                 },
+                 error : function(error){
+                    console.log(error);
+                 }
+              });   
+		})
+
+	// 팝업창
+    let checkPop = '';
+    let openWin;
+	
+    function memPopUp() {
+    	// window.name = "부모창 이름"; 
+        window.name = "deptDetail";   
+        // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+        openWin = window.open("/deptAddInfo?deptNo="+[[${deptInfo[0].deptNo}]], "deptAddInfo", "width=450, height=480, resizable = no, scrollbars = no");    	
+    }
+	//팝업 Close 기능
+    function closeBtn() {
+    	window.close();
+    }; 
+	</script>
+</body>
+</html>

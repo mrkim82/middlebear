@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/proPostTiles}">
+<head>
+<link rel="stylesheet" href="/DataTables/datatables.css" />
+
+<script src="/DataTables/datatables.js"></script>
+</head>
+<div layout:fragment="content" style="margin-top:30px;">
+
+	<table class="table table-hover" id="dataTable">
+		<thead>
+			<tr>
+				<th scope="col">No.</th>
+				<th scope="col">글 유형</th>
+				<th scope="col">제목</th>
+				<th scope="col">내용</th>
+				<th scope="col">작성자</th>
+				<th scope="col">날짜</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="con, conStat : ${readProInSearch}"
+				onclick="moveMove()"
+				th:data-pro-no="${con.proNo}"
+				th:data-pro-post-no="${con.proPostNo}"
+				>
+				
+				<th scope="row" th:text="${conStat.count}"></th>
+				
+				<!-- 유형 -->
+				<td th:switch="${con.postType}">
+				    <span th:case="1">업무</span>
+				    <span th:case="2">글</span>
+				    <span th:case="3">일정</span>
+				    <span th:case="4">할일</span>
+				    <span th:case="5">투표</span>
+				</td>
+				
+				<!-- 제목 -->
+				<td th:text="${con.postTitle}"></td>
+				
+				<!-- 내용 -->
+				<td th:if="${con.writingContent != null}"
+					th:text="${con.writingContent}"></td>
+				<td th:if="${con.schContent != null}"
+					th:text="${con.schContent}"></td>
+				<td th:if="${con.voteContent != null}"
+					th:text="${con.voteContent}"></td>
+				<td th:if="${con.workContent != null}"
+					th:text="${con.workContent}"></td>
+				<td th:if="${con.todoContent != null}"
+					th:text="${con.todoContent}"></td>
+				<td th:if="${con.writingContent == null} and
+						   ${con.schContent == null} and
+						   ${con.voteContent == null} and
+						   ${con.workContent == null} and
+						   ${con.todoContent == null}"
+					th:text="'-'">
+				</td>
+				
+				<!-- 작성자 -->
+				<td th:text="${con.name}"></td>
+				
+				<!-- 작성일 -->
+				<td th:text="${#dates.format(con.postDate, 'yyyy-MM-dd')}"></td>
+				
+				<td th:if="${conStat.size == 0}"
+					th:text="'검색조건에 맞는 게시물이 없습니다.'"></td>
+
+			</tr>
+		</tbody>
+	</table>
+
+
+<script type="text/javascript">
+	function moveMove() {
+		let proNo = event.target.closest('tr').dataset.proNo;	
+		let proPostNo = event.target.closest('tr').dataset.proPostNo;
+		let moveUrl = "/proPostMain/" + proNo + "?homeTab=2#moveMove" + proPostNo;
+		window.location.href = moveUrl;
+	}
+$(document).ready( function () {
+	$('#dataTable').DataTable();
+} );
+
+</script>
+</div>
+</html>

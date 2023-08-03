@@ -138,7 +138,6 @@ public class MailController {
         paging.setCri(cri);
         paging.setTotalCount(mailService.countDeleteMail(mailVO));
 		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
-		System.out.println(mailService.deletedMail(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/deleteMail";
 	}
@@ -190,6 +189,7 @@ public class MailController {
 	    	MailVO mailVO = new MailVO();
 	    	mailVO.setId((String) session.getAttribute("Id"));
 	    	mailVO.setMailNo(delList.get(i));
+	    	System.out.println("realdelete = "+mailVO);
 	        mailService.realDeleteMail(mailVO);
 	        mailService.deleteMailFile(delList.get(i));
 	        count++;
