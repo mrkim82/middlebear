@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<div th:fragment="mainTopBar">
+	<!-- 최상단 -->
+	<div style="margin-top: 30px;">
+	<th:block th:if="${firstURI == '/proMain'}">
+		<h2>[[${session.Name}]]의 프로젝트</h2>
+	</th:block>
+	<th:block th:if="${#strings.containsIgnoreCase(firstURI,'proMainS')}">
+		<h2>[[${session.Name}]]의 즐겨찾기 프로젝트</h2>
+	</th:block>
+	<th:block th:if="${#strings.containsIgnoreCase(firstURI,'proMainG')}">
+		<h2>[[${session.Name}]]의 미분류 프로젝트</h2>
+	</th:block>
+	<th:block th:if="${#strings.containsIgnoreCase(firstURI,'proMainH')}">
+		<h2>[[${session.Name}]]의 숨김 프로젝트</h2>
+	</th:block>
+	</div>
+	<!-- 최상단 종료 -->
+	
+	</div>	
+</body>
+</html>

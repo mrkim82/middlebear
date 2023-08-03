@@ -6,6 +6,7 @@ import java.util.Map;
 import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
+import com.groo.bear.pro.service.provo.ProPartiAlarmVO;
 import com.groo.bear.pro.service.provo.ProUsersVO;
 import com.groo.bear.pro.service.provo.ProVO;
 
@@ -66,4 +67,13 @@ public interface ProService {
 	//프로젝트 숨김 여부
 	public int updateProHide(ProHideVO vo);
 	
+	//프로젝트 초대 알람
+	// 미수락 프로젝트
+	public List<ProPartiAlarmVO> readNoPartiPro(String id);
+	// 프로젝트 참가 수락
+	public int updateProPartiY(int proMemNo);
+	// 프로젝트 참가 거절
+	public int deleteProPartiN(int proMemNo);
+	// 미수락 프로젝트 수
+	public int readNoPartiProCount(String id);
 }

@@ -91,19 +91,20 @@
 
 
 		<div>
-			<h3 style="text-align: center;">운행 일지 관리</h3>
+			<h2 style="text-align: left; margin-top:25px;" class="dohyeon">운행 일지 관리</h2>
 		</div>
 		<div style="display: block">
 			<form name="searchForm" action="bookList">
-				<div>
+				<div style="margin-bottom: 8px;">
 					
 					<input type="hidden" name="page" value="1" /> <input
-					style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;"
 					type="date"
 					th:value="${#dates.format(carVO.startDay, 'yyyy-MM-dd')}"
 					name="startDay" id="startDate" onchange="mindate(); changeDate();">
+					-
 				<input
-					style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;"
 					type="date"
 					th:value="${#dates.format(carVO.endDay, 'yyyy-MM-dd')}"
 					name="endDay" id="endDate" onchange="changeDate()">
@@ -112,9 +113,9 @@
 
 				</div>
 				<div
-					style="position: absolute; display: inline-block; right: 25px; top: 40px;">
+					style="position: absolute; display: inline-block; right: 25px; top: 69px;">
 					<select
-						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+						style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;"
 						name="type" id="selectBox" onchange="boxRe()">
 						<option value='' selected>선택</option>
 						<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
@@ -123,9 +124,9 @@
 						<option value='deptName'
 							th:selected="${criteria.type == 'deptName'}">부서</option>
 					</select> <input id="textBox"
-						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+						style="border: 1px solid gray;border-radius: 5px;height: 35px; width:150px;"
 						type="text" name="keyword" th:value="${criteria.keyword}" />
-					<button type="submit" id="searchBtn" class="btn btn-primary">검색</button>
+					<button type="submit" id="searchBtn" class="btn btn-primary" style="border-radius: 10px;background-color: #399f61;border-color: #399f61; box-shadow:1.5px 1.5px 1.5px 1.5px gray;">검색</button>
 				</div>
 			</form>
 		</div>

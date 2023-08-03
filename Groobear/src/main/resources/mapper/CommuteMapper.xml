@@ -151,7 +151,8 @@
 	<update id="overWorkTime" parameterType="CommuteVO">
 		update commute 
 		set over_work_time = NVL(to_number(trunc((over_work_end - over_work_start)*24*60)) ,0)
-		where id = #{id} and to_char(day,'yyyy-MM-DD') = to_char(sysdate,'yyyy-MM-DD')
+			where id = #{id} 
+			and to_char(day,'yyyy-MM-DD') = #{day2}
 	</update>
 	
 	

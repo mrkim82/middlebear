@@ -210,4 +210,14 @@ public class ProPostServiceImpl implements ProPostService {
 		return file.readProFilePostDetail(proPostNo);
 	}
 
+	@Override
+	public int delteProMemOut(int proNo, String id) {
+		return ppm.delteProMemOut(proNo, id);
+	}
+
+	@Override
+	public int readProDetailCount(int proNo) {
+		return ppm.readProDetailCount(proNo);
+	}
+
 }
