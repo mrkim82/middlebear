@@ -113,12 +113,11 @@
 	</select>
 	<!-- 받은메일 갯수 출력 -->
 	<select id="countReceiveMail" resultType="int">
-		SELECT COUNT(*) FROM mail a, mail_personnel b
-			WHERE a.mail_no = b.mail_no
-            AND b.mail_type = 'S'
-            AND (b.receiver = #{receiver}
-            OR b.referrer = #{referrer})
-            AND b.id = #{id}
+		SELECT COUNT(*) FROM getmail
+			WHERE (receiver = #{receiver} OR
+			referrer = #{receiver} OR
+			referrer2 = #{receiver} OR
+			referrer3 = #{receiver})
 	</select>
 	
 	<!-- 메일삭제(지운메일함으로) -->
@@ -232,4 +231,18 @@
 							,'R'
 							)
 	</insert>
+	<!-- 받은메일함 -->
+	<select id="getMailList" resultType="MailVO">
+       SELECT a.* FROM 
+        (SELECT mail_no,title,content,sender,receiver,referrer,referrer2,referrer3,send_date,receive_date,mail_check,mail_type,mail_type2,mail_type3,mail_type4,mail_type5, rownum as rn
+            FROM getmail
+            where ((receiver = #{mailVO.receiver} and mail_type2=#{mailVO.mailType2}) OR
+                (referrer = #{mailVO.referrer} and mail_type3=#{mailVO.mailType3}) OR
+                (referrer2 = #{mailVO.referrer2} and mail_type4=#{mailVO.mailType4}) OR
+                (referrer3 = #{mailVO.referrer3} and mail_type5=#{mailVO.mailType5}))
+            ) a
+		  <![CDATA[
+          	WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+          ]]>
+	</select>
 </mapper>

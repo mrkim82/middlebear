@@ -229,5 +229,9 @@ public class MailServiceImpl implements MailService{
 	public int serverGetInsertMail(MailVO mailVO) {
 		return mailMapper.serverGetInsertMail(mailVO);
 	}
+	@Override
+	public List<MailVO> getMailList(Criteria cri, MailVO mailVO) {
+		return mailMapper.getMailList(cri, mailVO);
+	}
 	
 }

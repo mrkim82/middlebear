@@ -52,25 +52,26 @@ public class MailController {
         System.out.println(list);
 		System.out.println("receive 메일함 체크");
         //위에서 가져온 메일을 db에 저장하고 뿌려줌
-		for(int i=0; i < list.size();i++) {
-			System.out.println("list.get(i)첵 = "+list.get(i));
-			int result = mailService.serverGetInsertMail(list.get(i));
-	        System.out.println("몇건 처리됨? "+result);
+		if(list.size() > 0) {
+			for(int i=0; i < list.size();i++) {
+				System.out.println("list.get(i)첵 = "+list.get(i));
+				int result = mailService.serverGetInsertMail(list.get(i));
+		        System.out.println("몇건 처리됨? "+result);
+			}
 		}
-		
 		
 		mailVO.setReceiver((String) session.getAttribute("Id"));
 		mailVO.setReferrer((String) session.getAttribute("Id"));
-		mailVO.setId((String) session.getAttribute("Id"));
-		String S = "S";
-		mailVO.setMailType(S);
-		System.out.println("11111111111"+mailVO);
-		//cri.setPerPageNum(2); //페이징 2개로 끊어서 보려고 임시로 적어둔것
-		System.out.println("받은메일함 mailVO"+mailVO);
+		mailVO.setReferrer2((String) session.getAttribute("Id"));
+		mailVO.setReferrer3((String) session.getAttribute("Id"));
+		mailVO.setMailType2("R");
+		mailVO.setMailType3("R");
+		mailVO.setMailType4("R");
+		mailVO.setMailType5("R");
+		System.out.println("메일VO"+mailVO);
 		Paging paging = new Paging();
         paging.setCri(cri);
-        paging.setTotalCount(mailService.countReceiveMail(mailVO));
-		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
+		model.addAttribute("mailList",mailService.getMailList(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/receiveMail";
 	}

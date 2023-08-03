@@ -84,7 +84,7 @@ public class EmailReader {
                 Message msg = arrayMessages[i];
                 System.out.println("msg = "+msg.getContent());
                 Address[] fromAddress = msg.getFrom();
-                String from = fromAddress[0].toString();
+                String from = fromAddress[0].toString()+"@bear.com";
                 // 메일 내용 변수에 담기
                 receiver = printRecipientsAndTo(msg);
                 referrerList = printRecipientsAndCc(msg);
@@ -187,7 +187,7 @@ public class EmailReader {
                 System.out.println("수신자"+internetAddress.getAddress());
             }
         }
-        return internetAddress.getAddress();
+        return internetAddress.getAddress()+"@bear.com";
 
     }
     public List<String> printRecipientsAndCc(Message msg) throws MessagingException {
@@ -206,7 +206,7 @@ public class EmailReader {
 						referrer = internetAddress.getAddress().substring(0,internetAddress.getAddress().indexOf("@"));
 						System.out.println(referrer);
 					}
-					list.add(referrer);
+					list.add(referrer+"@bear.com");
 				}
     		}
     		System.out.println("참조자 리스트 = "+list);

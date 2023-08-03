@@ -51,4 +51,6 @@ public interface MailService {
 	public List<FilesVO> getAttach(int mailNo);
 	//서버에서 받아온 이메일 넣는구문
 	public int serverGetInsertMail(MailVO mailVO);
+	//서버에서 받아온 메일 받은메일함
+	public List<MailVO> getMailList(Criteria cri, MailVO mailVO);
 }
