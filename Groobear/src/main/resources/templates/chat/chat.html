@@ -38,7 +38,6 @@
 }
 .chat_wrap .chat {
 	padding-top: 60px;
-	padding-bottom: 100px;
 	height: calc(100vh - 160px);  
     overflow-y: scroll; 
 }
@@ -127,7 +126,7 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <body>
 	<div class="chat_wrap">
-		<div class="header">MESSAGE
+		<div class="header" >[[${roomDTO.roomName}]]
         <a href="#"data-toggle="modal" data-target="#inviteModal" ><i class="material-icons">group_add</i></a>  <!-- Invite Icon -->
         <a href="#" id="deleteChatroomButton"><i class="material-icons">exit_to_app</i></a>  <!-- Exit Icon -->
         </div>
@@ -257,6 +256,7 @@ let realId = /*[[${id}]]*/ 'id';
 let chatDTO = /*[[${chatDTO}]]*/ 'chatDTO';
 var roomNo = /*[[${roomNo}]]*/ 'roomNo';
 let chatMessageDTO = /*[[${chatDTO}]]*/ 'chatDTO';
+
 
 // 페이지가 로드될 때 chatDTO 내용을 기반으로 채팅 내용을 화면에 추가
 $(document).ready(function() {

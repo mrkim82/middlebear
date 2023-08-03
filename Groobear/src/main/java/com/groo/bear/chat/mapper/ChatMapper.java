@@ -21,7 +21,7 @@ public interface ChatMapper {
 	public int deleteChatRoom(RoomDTO roomDTO);
 	
 	//메세지 전체조회
-	public List<ChatMessageDTO> MessageAllList(int roomNo);
+	public List<ChatMessageDTO> MessageAllList(ChatMessageDTO chatMessageDTO);
 	
 	//메세지 등록
 	public int sendMessage(ChatMessageDTO msgDTO);
@@ -49,8 +49,11 @@ public interface ChatMapper {
 	public int countRoomMem(int roomNo);
 	
 	//가장 최신 내용 가져오기
-	public String getLastMessage(int roomNo);
+	public RoomDTO getLastMessage(int roomNo);
 	
 	//MessageAllListReal
 	public List<ChatMessageDTO> MessageAllListReal(ChatMessageDTO chatMessageDTO);
+	
+	//방 이름 확인용
+	public RoomDTO getRoomName(int roomNo);
 }
