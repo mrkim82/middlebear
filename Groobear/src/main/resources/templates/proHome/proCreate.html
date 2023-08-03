@@ -18,41 +18,43 @@
 
 </head>
 
-<!-- <div layout:fragment="content"> -->
 <form th:action="@{/proCreate}"
 	  method="POST"
 	  th:object="${proVO}"
 	  onsubmit="return blankSearch()"
 		style="text-align: center; font-size: medium;">
 	
-	<div class="d-flex justify-content-center border">
-		<div>
-			<label for="proName"
-						class="nomainWrite"
-						style="margin-top: 30px;">프로젝트 이름</label>
-			<input type="text"
-				   id="proName"
-				   th:field="*{proName}"
-				   placeholder="최대 30자"
-				   maxlength="30"
-				   autocomplete="off"
-				   style="margin-left: 5px; width: 200px;">
-
-			<label for="proContent"
-						 class="nomainWrite"
-						 style="margin-top: 20px;">프로젝트 설명</label>
-			<input type="text"
-				   id="proContent"
-				   th:field="*{proContent}"
-				   placeholder="옵션(선택)"
-				   maxlength="160"
-				   autocomplete="off"
-					 style="margin-left: 5px; width: 200px;">
+		<div class="border" style="border-radius: 8px;">
+			<div class="d-flex justify-content-left" style="margin-top: 6px; margin-left: 2px;">
+				<label for="proName"
+						class="nomainWrite">프로젝트 이름</label>
+				<input type="text"
+						id="proName"
+						th:field="*{proName}"
+						placeholder="최대 30자"
+						maxlength="30"
+						autocomplete="off"
+						style="margin-left: 5px; width: 350px;">
+			</div>
+			
+			<div class="d-flex justify-content-left" style="margin-top: 6px; margin-left: 2px; margin-bottom: 6px;">
+				<label for="proContent"
+							class="nomainWrite">프로젝트 설명</label>
+				<textarea
+						id="proContent"
+						th:field="*{proContent}"
+						placeholder="옵션(선택)"
+						maxlength="160"
+						autocomplete="off"
+						style="margin-left: 5px; width: 350px; height: 200px; border-radius: 20px;"></textarea>
+			</div>
 		</div>
-	</div>
+	
 	<!-- 설정 -->
-	<div class="d-flex justify-content-center border">
-		<h3 class="mainWrite">홈 탭 설정</h3>
+	<div class="border" style="margin-top: 10px; border-radius: 8px;">
+		<h5 class="mainWrite d-flex justify-content-left"
+				style="text-align: left; margin-top: 10px; margin-left: 10px;
+							 margin-bottom: 6px; font-size: medium;">홈 탭 설정</h5>
 		<div th:each="index : ${#numbers.sequence(1, 5)}"
 				 style="display: inline-block;"
 				 class="nomainWrite">
@@ -73,7 +75,7 @@
 		</div>
 	</div>
 
-	<!-- 권한 제외 -->
+	<!-- 권한 영역 -->
 	<div style="display: none;">
 		<h3>권한 설정</h3>
 		<table>
@@ -133,14 +135,15 @@
 		</table>
 	</div>
 	
-	<div style="margin-top: 10px; width: 330px; text-align: center;">
+	<!-- 버튼 -->
+	<div class="d-flex justify-content-center" style="margin-top: 10px;">
 		<button type="submit"
 				class="btn btn-groo"
-				style="border-radius: 5px;">등록</button>
+				style="border-radius: 12px; margin-right: 6px;">등록</button>
 		<button type="button"
 				class="btn btn-groo"
 				th:onclick="|location.href='@{/proMain}'|"
-				style="border-radius: 5px;">돌아가기</button>
+				style="border-radius: 12px; margin-left: 6px;">닫기</button>
 	</div>
 	
 <!-- 제목 빈값 거르기 -->
@@ -158,5 +161,4 @@ function blankSearch() {
 		
 </form>
 
-<!-- </div> -->
 </html>

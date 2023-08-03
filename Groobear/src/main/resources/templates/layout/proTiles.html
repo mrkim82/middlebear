@@ -53,13 +53,15 @@
 	color: white;
 }
 
+.dohyeonModalContent {
+	border: 1px solid #00000021;
+	border-radius: 20px;
+	box-shadow: 2px 4px 3px 3px darkgray;
+}
+
 th {
 	font-size: large;
 	text-align: center;
-}
-
-td {
-	font-size: large;
 }
 
 .rightPad {
@@ -182,7 +184,8 @@ textarea {
   resize: vertical; /* 세로 조정 가능 */
 }
 
-.bottomLine {//탭 밑에 줄
+/* 탭 밑에 줄 */
+.bottomLine {
 	border-bottom: 3px solid red;
 	z-index: 50;
 }
@@ -418,24 +421,25 @@ textarea {
 <!-- 모달 영역 -->
 <!-- 초대된 프로젝트 모달 -->
 <div class="row dohyeon">
+
 	<div class="modal fade" id="inviteManPro" tabindex="-1" aria-labelledby="inviteManProLabel" aria-hidden="true">
 	  <div class="modal-dialog">
-	    <div class="modal-content">
+	    <div class="modal-content dohyeonModalContent">
 	      <div class="modal-header">
-	        <h1 class="modal-title" id="inviteManProLabel">미수락 프로젝트</h1>
+	        <h5 class="modal-title" id="inviteManProLabel">미수락 프로젝트</h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
 	      </div>
-	      <div class="modal-body" style="padding:0px;">
+	      <div class="modal-body" style="padding:0px; text-align: center;">
 	
-					<table class="table table-hover">
+					<table class="table table-hover" style="margin: 0px;">
 						<thead>
 							<tr>
-								<th scope="col"></th>
-								<th scope="col"></th>
-								<th scope="col">프로젝트 명</th>
-								<th scope="col">초대자</th>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 250px;">프로젝트 명</th>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 120px;">초대자</th>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 75px;"></th>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 75px; padding-left: 0px;"></th>
 							</tr>
 						</thead>
 						<tbody class="inviteMemTarget">
@@ -447,7 +451,8 @@ textarea {
 					
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-groo" data-dismiss="modal">닫기</button>
+	        <button type="button" class="btn btn-groo" data-dismiss="modal"
+									style="border-radius:12px;">닫기</button>
 	      </div>
 	    </div>
 	  </div>
@@ -456,9 +461,9 @@ textarea {
 	<!-- 프로젝트 생성 모달(새 프로젝트 생성) -->
 	<div class="modal fade" id="createProModal" tabindex="-1" aria-labelledby="createProModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
-			<div class="modal-content">
+			<div class="modal-content dohyeonModalContent">
 				<div class="modal-header">
-					<h1 class="modal-title" id="createProModal">프로젝트 생성하기</h1>
+					<h5 class="modal-title" id="createProModal">프로젝트 생성하기</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 					</button>
@@ -474,7 +479,7 @@ textarea {
 	<!-- 프로젝트 폴더 생성 모달 -->
 	<div class="modal fade" id="createGroupFolderModal" tabindex="-1" aria-labelledby="createGroupFolderModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
-			<div class="modal-content">
+			<div class="modal-content dohyeonModalContent" style="width: 434px;">
 				<div class="modal-header">
 					<h5 class="modal-title" id="createGroupFolderModallLabel">그룹 폴더 생성</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -486,11 +491,12 @@ textarea {
 						   placeholder="프로젝트 폴더명을 입력하세요"
 						   id="folderContent"
 						   autocomplete="off"
-						   maxlength="30">
+						   maxlength="30"
+							 style="width: 372px;">
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-	        		<button type="button" class="btn btn-primary" onclick="makeGroupFolder()">저장</button>
+				<div class=" d-flex justify-content-center" style="margin: 0 auto; padding-top: 6px; padding-bottom: 6px; margin-bottom: 5px;">
+					<button type="button" class="btn btn-groo" onclick="makeGroupFolder()" style="border-radius:12px; margin-right: 6px;">저장</button>
+					<button type="button" class="btn btn-groo" data-dismiss="modal" style="border-radius:12px; margin-left: 6px;">닫기</button>
 				</div>
 			</div>
 		</div>
@@ -568,28 +574,28 @@ textarea {
 
 <!-- 시간 변환 -->
 <script type="text/javascript">
-//??
-function convertToFormattedDateTime(dateTimeStr) {
-	if(dateTimeStr == '') {//빈값일때 바로 리턴
-		return;
-	};
+	//??
+	function convertToFormattedDateTime(dateTimeStr) {
+		if(dateTimeStr == '') {//빈값일때 바로 리턴
+			return;
+		};
+		
+		const date = new Date(dateTimeStr);
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
 	
-	const date = new Date(dateTimeStr);
-	const year = date.getFullYear();
-	const month = String(date.getMonth() + 1).padStart(2, '0');
-	const day = String(date.getDate()).padStart(2, '0');
-	const hours = String(date.getHours()).padStart(2, '0');
-	const minutes = String(date.getMinutes()).padStart(2, '0');
-
-	return `${year}-${month}-${day} ${hours}:${minutes}`;
-};
+		return `${year}-${month}-${day} ${hours}:${minutes}`;
+	};
 </script>
 
 <!-- 페이지 실행시 -->
 <script>
-window.addEventListener('DOMContentLoaded', () => {
-	makeInviteCountTarget();//프로젝트 미확인 알람
-});
+	window.addEventListener('DOMContentLoaded', () => {
+		makeInviteCountTarget();//프로젝트 미확인 알람
+	});
 </script>
 
 <!-- 기본 모달 이벤트 정리 -->
@@ -611,12 +617,12 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
 </script>
 
-<!-- 생성 html 불러오기 -->
+<!-- 생성 html 불러오기(프로젝트 생성) -->
 <script>
-$.ajax(`/proCreate`, {dataType:"html"})
-	.done(function(result) {
-		$("#proCreateModalPage").html(result);
-});
+	$.ajax(`/proCreate`, {dataType:"html"})
+		.done(function(result) {
+			$("#proCreateModalPage").html(result);
+	});
 </script>
 
 <!-- 초대된 프로젝트 알람 카운트 -->
@@ -636,76 +642,83 @@ $.ajax(`/proCreate`, {dataType:"html"})
 	};
 </script>
 
-<!-- 초대된 프로젝트 알람 모달 오픈시 -->
+<!-- 초대된 프로젝트 모달 오픈시 -->
 <script>
-$('#inviteManPro').on('show.bs.modal', noInviteList);
-
-function noInviteList() {
-	let inviteList = event.target;
+	$('#inviteManPro').on('show.bs.modal', noInviteList);
 	
-	fetch("/readNoPartiPro", {
-		method: 'POST'
-	})
-	.then(response => response.json())
-	.then(res => {
-		createDynamicList(res)
-	})
-	.catch(error => {
-		console.error('Error: ',error);
-	});
-}
-
-//태그 생성
-function createDynamicList(partiTagList) {
-	let inviteTbody = document.querySelector('.inviteMemTarget');
-
-	// 기존의 내용을 지우고 시작
-	inviteTbody.innerHTML = '';
-	
-	partiTagList.forEach((project) => {
-		const tr = document.createElement('tr');
-		tr.setAttribute('data-parti-pro-mem-no', project.proMemNo);
-	
-		// 수락 버튼 추가
-		const checkboxCell = document.createElement('td');
-		const button = document.createElement('button');
-		button.setAttribute('type', 'button');
-		button.setAttribute('class', 'btn btn-success');
-		button.textContent = '수락';
-		button.onclick = partiY; // onclick 이벤트 처리
+	function noInviteList() {
+		let inviteList = event.target;
 		
-		checkboxCell.appendChild(button);
-		tr.appendChild(checkboxCell);
-		
-		// 거절버튼
-		const checkboxCell2 = document.createElement('td');
-		const button2 = document.createElement('button');
-		button2.setAttribute('type', 'button');
-		button2.setAttribute('class', 'btn btn-outline-danger');
-		button2.textContent = '거절';
-		button2.onclick = partiN; // onclick 이벤트 처리
-		
-		checkboxCell2.appendChild(button2);
-		tr.appendChild(checkboxCell2);
-		
-		// 프로젝트명 열 추가
-		const projectNameCell = document.createElement('td');
-		projectNameCell.textContent = project.proName;
-		tr.appendChild(projectNameCell);
+		fetch("/readNoPartiPro", {
+			method: 'POST'
+		})
+		.then(response => response.json())
+		.then(res => {
+			createDynamicList(res)
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
 	
-		// 멤버명 열 추가
-		const memberNameCell = document.createElement('td');
-		memberNameCell.textContent = project.rank + ' ' +project.name;
-		tr.appendChild(memberNameCell);
+	//태그 생성
+	function createDynamicList(partiTagList) {
+		let inviteTbody = document.querySelector('.inviteMemTarget');
 	
-		// tbody에 행 추가
-		inviteTbody.appendChild(tr);
-	});
-  }
-  
-/* $('#modal2').on('hidden.bs.modal', function (e) {
-	$(this).find('.uploadResult ul li').remove();
-}); */
+		// 기존의 내용을 지우고 시작
+		inviteTbody.innerHTML = '';
+		
+		partiTagList.forEach((project) => {
+			const tr = document.createElement('tr');
+			tr.setAttribute('data-parti-pro-mem-no', project.proMemNo);
+			
+			// 프로젝트명 열 추가
+			const projectNameCell = document.createElement('td');
+			projectNameCell.textContent = project.proName;
+			projectNameCell.style.fontSize = '15px';
+			projectNameCell.style.paddingLeft = '20px';
+			tr.appendChild(projectNameCell);
+			
+			// 멤버명 열 추가
+			const memberNameCell = document.createElement('td');
+			memberNameCell.textContent = project.rank + ' ' +project.name;
+			memberNameCell.style.fontSize = '15px';
+			tr.appendChild(memberNameCell);
+	
+			// 수락 버튼 추가
+			const checkboxCell = document.createElement('td');
+			checkboxCell.style.paddingRight = '6px';
+			const button = document.createElement('button');
+			button.setAttribute('type', 'button');
+			button.setAttribute('class', 'btn btn-success');
+			button.textContent = '수락';
+			button.style.borderRadius = '12px';
+			button.onclick = partiY; // onclick 이벤트 처리
+			
+			checkboxCell.appendChild(button);
+			tr.appendChild(checkboxCell);
+			
+			// 거절버튼
+			const checkboxCell2 = document.createElement('td');
+			checkboxCell2.style.paddingLeft = '6px';
+			const button2 = document.createElement('button');
+			button2.setAttribute('type', 'button');
+			button2.setAttribute('class', 'btn btn-outline-danger');
+			button2.textContent = '거절';
+			button2.style.borderRadius = '12px';
+			button2.onclick = partiN; // onclick 이벤트 처리
+			
+			checkboxCell2.appendChild(button2);
+			tr.appendChild(checkboxCell2);
+		
+			// tbody에 행 추가
+			inviteTbody.appendChild(tr);
+		});
+	  };
+	  
+	/* $('#modal2').on('hidden.bs.modal', function (e) {
+		$(this).find('.uploadResult ul li').remove();
+	}); */
 </script>
 
 <!-- 프로젝트 참여 수락 -->
@@ -851,7 +864,7 @@ function createDynamicList(partiTagList) {
 			alert('폴더 이름은 최대 30자 까지 가능합니다!');
 			return;
 		} else {
-			
+			let groupNo = folderContentChange.dataset.targetNo;
 			fetch("/proGroupNameC", {
 				method: 'PUT',
 				headers: {
@@ -859,7 +872,7 @@ function createDynamicList(partiTagList) {
 				},
 				body: JSON.stringify({
 					groupName: folderContentChange.value,
-					groupNo: folderContentChange.dataset.targetNo
+					groupNo: groupNo
 				})
   			})
 			.then(response => response.json())
@@ -941,143 +954,143 @@ function createDynamicList(partiTagList) {
 
 <!-- 파일 업로드 -->
 <script type="text/javascript">
-//업로드 1번
-$("input[type='file']").change(function(e) {
-	let findModal = $(e.target);
-	var formData = new FormData();
-//	var inputFile = $("input[name='uploadFile']");
-	var inputFile = $(e.target);
-	console.log(inputFile)
-	var files = inputFile[0].files;
-	//여러 파일 올라 갈 수 있기 때문에 반복문
-	for(var i=0; i<files.length; i++) {
-		//파일 검증
-	    if(!checkExtension(files[i].name, files[i].size) ){
-    	    return false;
+	//업로드 1번
+	$("input[type='file']").change(function(e) {
+		let findModal = $(e.target);
+		var formData = new FormData();
+	//	var inputFile = $("input[name='uploadFile']");
+		var inputFile = $(e.target);
+		console.log(inputFile)
+		var files = inputFile[0].files;
+		//여러 파일 올라 갈 수 있기 때문에 반복문
+		for(var i=0; i<files.length; i++) {
+			//파일 검증
+		    if(!checkExtension(files[i].name, files[i].size) ){
+	    	    return false;
+			}
+	    	formData.append("uploadFile", files[i]);
 		}
-    	formData.append("uploadFile", files[i]);
-	}
-	
-	//console.log('폼데이터',formData.get("uploadFile"))
-	
-	$.ajax({
-		url: "/uploadAjaxAction",
-		processData: false,
-		contentType: false,
-		data: formData,
-		type: "POST",
-		dataType: "json",
-		success: function(result) {
-			//성공시 화면에 출력
-			showUploadResult(result, findModal);
-		},
-		error: function(error) {
-			console.log(error);
-		}
-	});
-});
-
-
-//확장자 필터(1-2)
-var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
-var maxSize = 5242880;
-
-function checkExtension(fileName, fileSize) {
-	if (fileSize >= maxSize) {
-	    alert('파일 사이즈 초과');
-	    return false;
-	}
-	if (regex.test(fileName)) {
-	    alert('해당 종류의 파일은 업로드할 수 없습니다.');
-	    return false;
-	}
-	return true;
-}
-
-//파일선택으로 파일 불러올 때, 업로드 2번
-function showUploadResult(uploadResultArr, findModal){
-	console.log('s',uploadResultArr)
-	
-	//빈값 찾기
-	if(!uploadResultArr || uploadResultArr.length == 0){return ;}
-	
-	var uploadUL = findModal.closest('.modal').find('.uploadResult ul');
-	
-	var str = "";
-  
-	//여러건이기 때문에 반복문
-	$(uploadResultArr).each(function(i, obj){
-		//console.log("11:06" + i)
-		console.log("11:05",obj)
-		//console.log('이미지',obj.image);
-		//console.log('파일타입',obj.fileType);
 		
-		//image type
-		if(obj.image){
-			console.log('이미지!')
-			var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
-			
-			str += "<li data-path='"+obj.uploadPath+"'";
-			str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
-			str + "><div>";
-			//파일 이름 보여주기
-			str += "<span> "+ obj.fileName+"</span>";
-			//파일 삭제버튼
-			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
-			//이미지 노출
-			str += "<img src='/display?fileName="+fileCallPath+"'>";
-			str += "</div>";
-			str +"</li>";
-		} else {
-			console.log('파일?')
-			var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
-			var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
-			    
-			str += "<li data-path='"+obj.uploadPath+"'";
-			str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
-			str + "><div>";
-			//파일 이름 보여주기
-			str += "<span> "+ obj.fileName+"</span>";
-			//파일 삭제버튼
-			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
-			//파일 노출
-			str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
-			str += "</div>";
-			str +"</li>";
-		} 
+		//console.log('폼데이터',formData.get("uploadFile"))
+		
+		$.ajax({
+			url: "/uploadAjaxAction",
+			processData: false,
+			contentType: false,
+			data: formData,
+			type: "POST",
+			dataType: "json",
+			success: function(result) {
+				//성공시 화면에 출력
+				showUploadResult(result, findModal);
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
 	});
 	
-	//만든 태그 붙여서 화면에 보여주기
-	uploadUL.append(str);
-};
-//화면 노출 종료
-
-//화면에서 지우기
+	
+	//확장자 필터(1-2)
+	var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
+	var maxSize = 5242880;
+	
+	function checkExtension(fileName, fileSize) {
+		if (fileSize >= maxSize) {
+		    alert('파일 사이즈 초과');
+		    return false;
+		}
+		if (regex.test(fileName)) {
+		    alert('해당 종류의 파일은 업로드할 수 없습니다.');
+		    return false;
+		}
+		return true;
+	}
+	
+	//파일선택으로 파일 불러올 때, 업로드 2번
+	function showUploadResult(uploadResultArr, findModal){
+		console.log('s',uploadResultArr)
+		
+		//빈값 찾기
+		if(!uploadResultArr || uploadResultArr.length == 0){return ;}
+		
+		var uploadUL = findModal.closest('.modal').find('.uploadResult ul');
+		
+		var str = "";
+	  
+		//여러건이기 때문에 반복문
+		$(uploadResultArr).each(function(i, obj){
+			//console.log("11:06" + i)
+			console.log("11:05",obj)
+			//console.log('이미지',obj.image);
+			//console.log('파일타입',obj.fileType);
+			
+			//image type
+			if(obj.image){
+				console.log('이미지!')
+				var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+				
+				str += "<li data-path='"+obj.uploadPath+"'";
+				str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+				str + "><div>";
+				//파일 이름 보여주기
+				str += "<span> "+ obj.fileName+"</span>";
+				//파일 삭제버튼
+				str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				//이미지 노출
+				str += "<img src='/display?fileName="+fileCallPath+"'>";
+				str += "</div>";
+				str +"</li>";
+			} else {
+				console.log('파일?')
+				var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+				    
+				str += "<li data-path='"+obj.uploadPath+"'";
+				str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+				str + "><div>";
+				//파일 이름 보여주기
+				str += "<span> "+ obj.fileName+"</span>";
+				//파일 삭제버튼
+				str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				//파일 노출
+				str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+				str += "</div>";
+				str +"</li>";
+			} 
+		});
+		
+		//만든 태그 붙여서 화면에 보여주기
+		uploadUL.append(str);
+	};
+	//화면 노출 종료
+	
+	//화면에서 지우기
 </script>
 
 <!-- 파일 업로드 화면에서 지우기 -->
 <script type="text/javascript">
-//업로드중인 파일 삭제
-$(".uploadResult").on("click", "button", function(e){
-	e.stopPropagation();
+	//업로드중인 파일 삭제
+	$(".uploadResult").on("click", "button", function(e){
+		e.stopPropagation();
+		
+		var targetFile = $(this).data("file");
+		var type = $(this).data("type");
 	
-	var targetFile = $(this).data("file");
-	var type = $(this).data("type");
-
-	//해당 업로드 파일 li가기
-	var targetLi = $(this).closest("li");
-
-	$.ajax({
-		url : '/deleteFile',
-		data : {'fileName' : targetFile,
-				'type' : type},
-		dataType : 'text',
-		type : 'POST',
-		success : function(result) {
-			targetLi.remove();//화면에서 지우기
-		}
+		//해당 업로드 파일 li가기
+		var targetLi = $(this).closest("li");
+	
+		$.ajax({
+			url : '/deleteFile',
+			data : {'fileName' : targetFile,
+					'type' : type},
+			dataType : 'text',
+			type : 'POST',
+			success : function(result) {
+				targetLi.remove();//화면에서 지우기
+			}
+		});
 	});
-});
 </script>
 
 <!-- 웹소켓 -->
