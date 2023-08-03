@@ -5,6 +5,34 @@
 >
 
 <div layout:fragment="content">
+<!-- 필터, 정렬 -->
+<div style="text-align: end; margin-bottom: 15px;">
+	<select class="custom-select"
+			name="parti"
+			onchange="chagepartiSelect()"
+			id="partiSelect"
+			style="width: 170px;">
+		<option 
+				value=""
+				>내가 참여중인 프로젝트</option>
+		<option 
+				th:value="${session.Id}">내가 관리자인 프로젝트</option>
+	</select>
+	<select class="custom-select"
+			name="parti"
+			onchange="chageorderSelect()"
+			id="orderSelect"
+			style="width: 130px;">
+		<option 
+				value="1 DESC">오름차순(ㄱ~ㅎ)</option>
+		<option 
+				value="1 ASC">내림차순(ㅎ~ㄱ)</option>
+	</select>
+</div>
+<!-- 필터, 정렬 끝 -->
+
+<!-- 프로젝트 리스트 -->
+<div>
 	<table class="table table-hover"
 		   id="goProjectDetail">
 		<tr th:each="pro:${projectMainList}"
@@ -12,16 +40,27 @@
 			th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck},
 					 data-homeTab=${pro.homeTab}, data-proNo=${pro.proNo}"
 			style="cursor:pointer">
-			<td th:text="${pro.proColor}"></td>
-			<td th:text="${pro.proStarCheck}" class="starCheck"></td>
-			<td th:text="${pro.proName}"></td>
+			<td>
+				<div class="square"
+					 th:style="'background-color: ' + ${pro.proColor}"></div></td>
+			<td><div class="star yellow starCheck"></div></td>
+			<td style="width: 750px; overflow: hidden; font-size: larger; padding-left: 15px;"
+				th:text="${pro.proName}"></td>
 			<td th:each="parti:${projectPartiList}"
 				th:if="${parti.proNo == pro.proNo}"
 				th:text="${parti.count} + '명'"></td>
+			<td>
+				<span class="material-symbols-outlined"
+					  onclick="hideProject()"
+					  th:data-pro-hide="${pro.proHideCheck}"
+					  th:text="${pro.proHideCheck == 'Y'} ? 'visibility_off' : 'visibility'"></span>
+			</td>
 		</tr>
 	</table>
-	
+</div>
+<!-- 프로젝트 리스트 종료 -->
 
+<!-- 즐겨찾기 변경 -->
 <script>
 	let starCheck = document.querySelectorAll(".starCheck");
 	
@@ -33,9 +72,9 @@
 	});
 
 	function changeStar() {
-		let dpMN = event.target.closest('tr').getAttribute("data-pMN");
-		let starC = event.target.closest('tr').getAttribute("data-starC");
 		let trTag = event.target.closest('tr');
+		let dpMN = trTag.getAttribute("data-pMN");
+		let starC = trTag.getAttribute("data-starC");
 
 		let formData = new FormData();
         formData.append('pMN', dpMN);
@@ -57,14 +96,12 @@
 	//프로젝트 master여부
 	function chagepartiSelect() {
 		let partiSelectId = document.getElementById('partiSelect').value;
-		console.log(partiSelectId);
 	};
 </script>
 	
 <!-- 프로젝트 홈에서 상세 페이지 이동 -->
 <script>
 	let gPList = document.querySelectorAll('#goProjectDetail tr');
-	console.log(gPList);
 	
 	gPList.forEach(gPDetail => {
 		let homeTabNum = gPDetail.dataset.hometab;
@@ -78,5 +115,84 @@
 		location.href="/proPostMain/" + proNo + "?homeTab=" + homeTNum;
 	};
 </script>
+
+<!-- 프로젝트 필터 -->
+<script>
+	function chagepartiSelect() {
+		let partiSelectId = document.getElementById('partiSelect').value;
+		
+		fetch("/proMainO", {
+			method: 'POST',
+			headers: {
+   			    'Content-Type': 'application/json'
+   			  },
+   			body: JSON.stringify({
+   				'proPartiFilter': partiSelectId
+   			})
+		})
+		.then(response => response.json())
+		.then(res => {
+			if (res.result == '성공') {
+				location.reload();
+			} else {
+				alert('요청 실패');
+			};
+		});
+	};
+</script>
+
+<!-- 프로젝트 정렬 -->
+<script>
+	function chageorderSelect() {
+		let proRange = document.getElementById('orderSelect').value;
+		
+		fetch("/proMainO", {
+			method: 'POST',
+			headers: {
+   			    'Content-Type': 'application/json'
+   			  },
+   			body: JSON.stringify({
+   				'proRange': proRange
+   			})
+		})
+		.then(response => response.json())
+		.then(res => {
+			if (res.result == '성공') {
+				location.reload();
+			} else {
+				alert('요청 실패');
+			};
+		});
+	};
+</script>
+
+<!-- 프로젝트 숨김 -->
+<script>
+function hideProject() {
+	event.stopPropagation();
+	let hideC = event.target.dataset.proHide;
+	hideC = hideC == 'N' ? 'Y' : 'N';
+	let trTag = event.target.closest('tr');
+	let proMemNo = trTag.dataset.pmn;
+	
+	fetch("/updateProHide", {
+		  method: 'PUT',
+		  headers: {
+		    'Content-Type': 'application/json'
+		  },
+		  body: JSON.stringify({
+			  	proMemNo: proMemNo,
+			  	proHideCheck: hideC
+			  })
+		})
+		.then(response => response.json())
+		.then(res => {
+			let rC = res.result;
+			if(rC == '성공') {
+				trTag.remove();
+			}
+		});
+};
+</script>	
 </div>
 </html>
