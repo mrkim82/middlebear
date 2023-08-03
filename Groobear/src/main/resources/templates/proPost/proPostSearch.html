@@ -3,10 +3,13 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/proPostTiles}">
 <head>
-</head>
-<div layout:fragment="content">
+<link rel="stylesheet" href="/DataTables/datatables.css" />
 
-	<table class="table table-hover">
+<script src="/DataTables/datatables.js"></script>
+</head>
+<div layout:fragment="content" style="margin-top:30px;">
+
+	<table class="table table-hover" id="dataTable">
 		<thead>
 			<tr>
 				<th scope="col">No.</th>
@@ -78,6 +81,10 @@
 		let moveUrl = "/proPostMain/" + proNo + "?homeTab=2#moveMove" + proPostNo;
 		window.location.href = moveUrl;
 	}
+$(document).ready( function () {
+	$('#dataTable').DataTable();
+} );
+
 </script>
 </div>
 </html>

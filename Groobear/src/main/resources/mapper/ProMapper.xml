@@ -111,16 +111,16 @@
 	<!-- 프로젝트 그룹 -->
 	<!-- 프로젝트 그룹 목록 조회 -->
 	<select id="readProjectGroup" resultType="ProGroupVO">
-      SELECT
-          CASE
-              WHEN LENGTH(group_name) >= 8 THEN CONCAT(SUBSTR(group_name, 1, 7), '...')
-              ELSE group_name
-          END AS group_name,
-          group_no
-      FROM pro_group
-      WHERE id = #{id}
-      ORDER BY group_no DESC
-   </select>
+		SELECT
+		    CASE
+		        WHEN LENGTH(group_name) >= 8 THEN CONCAT(SUBSTR(group_name, 1, 7), '...')
+		        ELSE group_name
+		    END AS group_name,
+		    group_no
+		FROM pro_group
+		WHERE id = #{id}
+		ORDER BY group_no DESC
+	</select>
 	
 	<!-- 프로젝트 그룹 프로젝트 조회 -->
 	<select id="readProjectGroupDetail" resultType="ProGroupVO">
@@ -260,4 +260,44 @@
 		WHERE group_no = #{groupNo}
 		AND pro_mem_no = #{proMemNo}
 	</delete>
+	
+	<!-- 미수락 프로젝트 -->
+	<select id="readNoPartiPro" parameterType="String" resultType="ProPartiAlarmVO">
+		SELECT b.pro_name,--프로젝트이름
+		       i.name,--초대장
+		       a.pro_mem_no,
+		       i.rank
+		
+		FROM pro_mem a
+		JOIN pro b
+		ON(a.pro_no = b.pro_no)
+		JOIN users u
+		ON(b.id = u.id)
+		JOIN user_info i
+		ON(u.emp_no = i.emp_no)
+		WHERE a.pro_parti_check = 'N'
+		AND a.id = #{id}
+	</select>
+	
+	<!-- 프로젝트 참가 수락 -->
+	<update id="updateProPartiY" parameterType="int">
+		UPDATE pro_mem
+		SET pro_parti_check = 'Y'
+		WHERE pro_mem_no = #{proMemNo}
+	</update>
+	
+	<!-- 프로젝트 참가 거절 -->
+	<delete id="deleteProPartiN" parameterType="int">
+		DELETE FROM pro_mem
+		WHERE pro_mem_no = #{proMemNo}
+	</delete>
+	
+	<!-- 미수락 프로젝트 수 -->
+	<select id="readNoPartiProCount" resultType="int" parameterType="String">
+		SELECT COUNT(*)
+		FROM pro_mem
+		WHERE pro_parti_check = 'N'
+		AND id = #{id}
+	</select>
+	
 </mapper>
