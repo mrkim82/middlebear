@@ -22,6 +22,7 @@
 	#ulId li.active a.page-link {
     	background-color: #35A880;
     	border: 1px solid #35A880;
+    	color:#fff
   	}
 </style>
 </head>
@@ -58,8 +59,8 @@
 		<li class="page-item"><a class="page-link"
 					th:href="|javascript:goPage(1)|">&laquo;</a></li>
 		<li class="page-item active"
-			th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-			<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+			th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}" >
+			<a class="page-link" th:href="|javascript:goPage([[${num}]])|" 
 			th:text="${num}"></a>
 		</li>
 		<li class="page-item"><a class="page-link"
@@ -140,6 +141,14 @@ function goPage(p) {
     document.searchForm.boardType.value = /*[[${boardVO.boardType}]]*/
     document.searchForm.page.value = p;
     document.searchForm.submit();
+    /* 
+	let now = event.currentTarget.querySelector('now')
+    if($(now).hasClass('active')){
+    	$(now).removeClass('active');
+    }else{
+    	$(now).parent().addClass('active');
+    } */
+    
 }
 //날짜포맷 맞춰주는 함수 
 //https://carrotweb.tistory.com/160 참고사이트.

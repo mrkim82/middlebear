@@ -4,6 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="com.groo.bear.chat.mapper.ChatMapper">
   	
+  	<!-- 한 유저가 가지는 채팅방 전체조회 -->
   	<select id="chatRoomList" resultType="RoomDTO">
   		select r.room_no, r.room_time, r.room_name, a.id
         from room r join (select u.id, m.room_no
@@ -14,6 +15,7 @@
         where a.id = #{id}
   	</select>
   	
+  	<!-- 채팅방 생성 -->
   	<insert id="createChatRoom" parameterType="RoomDTO">
   		<selectKey keyProperty="roomNo" order="BEFORE" resultType="int">
 		    SELECT ROOM_SEQ.NEXTVAL FROM DUAL
@@ -32,35 +34,40 @@
   				  		 )
   	</insert>
   	
+  	
   	<delete id="deleteChatRoom" parameterType="RoomDTO">
   		DELETE FROM ROOM_mem
   		WHERE ROOM_NO = #{roomNo}
   		AND id = #{id}
   	</delete>
   	
-  	<!-- <select id="getMessagesForRoom" resultType="ChatMessageDTO">
-        SELECT *
-        FROM Message
-        WHERE room_No = #{roomNo}
-        ORDER BY msg_Time ASC
-    </select> -->
+  	<!--  -->
     <select id="getMessagesForRoom" resultType="ChatMessageDTO">
-    SELECT msg_no, room_no, id, content, TO_CHAR(msg_time, 'YYYY-MM-DD HH24:MI:SS') AS msg_time, name
-    FROM Message
-    WHERE room_No = #{roomNo}
-    ORDER BY msg_Time ASC
-</select>
+	    SELECT msg_no, room_no, id, content, TO_CHAR(msg_time, 'YYYY-MM-DD HH24:MI:SS') AS msg_time 
+	    FROM Message
+	    WHERE room_No = #{roomNo}
+	    ORDER BY msg_Time ASC
+	</select>
     
     
   	<!-- 메세지전체조회 -->
   	<select id="MessageAllList" parameterType="int">
-  		select i.name, m.content, TO_CHAR(m.msg_time, 'YY"년" MM"월" DD"일" HH24"시" MI"분"') AS msg_time
+  		select i.name, m.content, m.msg_time
 		from message m, users u, user_info i
 		where m.id = u.id
 		AND u.emp_no = i.emp_no
 		AND room_no = #{roomNo}
 		order By msg_no asc
   	</select>
+  	<!-- 추가된 멤버는 이전 대화 안보이게 하는 용 -->
+  	<select id="MessageAllListReal" parameterType="ChatMessageDTO">
+  	select m.msg_no,m.content, m.room_no, m.id,m.msg_time
+	from message m join room r
+	on m.room_no = r.room_no
+	where m.msg_time > (select mem_time from room_mem where id = #{id})
+	and m.room_no= #{roomNo}
+	</select>
+  	
   	
   	<insert id="sendMessage" parameterType="ChatMessageDTO">
   		<selectKey keyProperty="msgNo" order="BEFORE" resultType="int">
@@ -91,8 +98,6 @@
 		AND i.emp_no = u.emp_no
 		AND u.id != #{id}
   	</select>
-  	
-  	
   	
   	<select id="newJeans">
   		SELECT MAX(room_no) room_no
@@ -148,10 +153,20 @@
 	</select>
   	
   	<!-- 맨 마지막 채팅 보이게 하기 위함 -->
-  	<select id="getLastMessage" parameterType="int">
+  	<!-- <select id="getLastMessage" parameterType="int">
 	    SELECT SUBSTR(CONTENT, 1, LEAST(10, LENGTH(CONTENT))) AS CONTENT
 	    FROM (
 	        SELECT CONTENT
+	        FROM MESSAGE
+	        WHERE ROOM_NO = #{roomNo}
+	        ORDER BY MSG_TIME DESC
+	    )
+	    WHERE ROWNUM = 1
+	</select> -->
+	<select id="getLastMessage" parameterType="int">
+	    SELECT CONTENT, id
+	    FROM (
+	        SELECT CONTENT, id
 	        FROM MESSAGE
 	        WHERE ROOM_NO = #{roomNo}
 	        ORDER BY MSG_TIME DESC

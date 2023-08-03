@@ -11,9 +11,7 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
 	rel="stylesheet" />
 <!-- MDB -->
-<link
-	href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css"
-	rel="stylesheet" />
+
 
 
 
@@ -29,41 +27,40 @@
 		<div class="modal fade" id="commuteModal" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
-				<div class="modal-content">
+				<div class="modal-content" style="border: 1px solid #00000021; border-radius: 20px; box-shadow: 2px 4px 3px 3px darkgray;">
 					<div class="modal-header">
 						<h5 class="modal-title" id="exampleModalLabel">근태 정보 수정</h5>
 						<button type="button" class="btn-close" data-mdb-dismiss="modal"
-							aria-label="Close"></button>
+							aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;">X</button>
 					</div>
 
 					<form class="signup-form"
 						name="commuteInfoForm">
-						<div class="modal-body">
+						<div class="modal-body" style="text-align: center;">
 							<div class="form-group mb-3">
-								<label class="label">기본정보</label>
-								<div>
+								<label class="label" style="font-size: 25px;">기본정보</label>
+								<div style="font-size: 15px;">
 									<label class="label">사번 : <span id="mEmpNo"></span> |
 									</label> <label class="label">이름 : <span id="mName"></span> | 
 									</label> <label class="label">부서 : <span id="mDept"></span> | 
-									</label> <label class="label">연차 : <span id="mOff"></span> | 
-									</label> <label class="label">월 근무 일 : <span id="mMD"></span> | 
+									</label> <label class="label">연차 : <span id="mOff"></span>
+									</label><br> <label class="label">월 근무 일 : <span id="mMD"></span> | 
 									</label> <label class="label">월 연장 근무 시간 : <span id="mMT"></span></label>
 								</div>
 							</div>
 
-							<div class="form-group mb-3">
+							<div class="form-group mb-3" style="display: flex; justify-content: space-evenly; margin-top:35px;">
 								<label class="label">출근 시간 <input name="workStart"
 									id="newWorkStart" type="time" value="" class="form-control"></label>
-							</div>
-							<div class="form-group mb-3">
-								<label class="label">퇴근 시간 <input name="workEnd"
+									
+									<label class="label">퇴근 시간 <input name="workEnd"
 									id="newWorkEnd" type="time" value="" class="form-control"></label>
 							</div>
-							<div class="form-group mb-3">
+							
+							<div class="form-group mb-3" style="display: flex; justify-content: space-evenly; margin-top:30px;">
 								<label class="label">연장근무 시작 시간 <input name="overWorkStart"
 									id="newOverWorkStart" type="time" value="" class="form-control"></label>
-							</div>
-							<div class="form-group mb-3">
+									
 								<label class="label">연장근무 종료 시간 <input name="overWorkEnd"
 									id="newOverWorkEnd" type="time" value="" class="form-control"></label>
 							</div>
@@ -78,9 +75,9 @@
 
 						</div>
 						<div class="modal-footer">
-							<button type="button" id="saveBtn" class="btn btn-primary">Save</button>
-							<button type="button" class="btn btn-secondary"
-								data-mdb-dismiss="modal">Close</button>
+							<button type="button" id="saveBtn" class="btn btn-primary" style="border-radius:12px;background-color:#399f61;">저장</button>
+							<button type="button" class="btn btn-secondary" style="border-radius:12px;"
+								data-mdb-dismiss="modal">취소</button>
 						</div>
 					</form>
 				</div>
@@ -88,23 +85,24 @@
 		</div>
 
 		<div>
-			<h3 style="text-align: center;">근태관리</h3>
+			<h2 style="margin-top: 25px;">근태관리</h2>
 		</div>
 		<div>
-			<form name="searchForm" action="commuteList">
+			<form name="searchForm" action="commuteList" style="margin-bottom: 10px;">
 				<input type="hidden" name="page" value="1" /> <input
-					style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;"
 					type="date"
 					th:value="${#dates.format(commuteVO.startDay, 'yyyy-MM-dd')}"
 					name="startDay" id="startDate" onchange="mindate(); changeDate();">
+					 - 
 				<input
-					style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;"
 					type="date"
 					th:value="${#dates.format(commuteVO.endDay, 'yyyy-MM-dd')}"
 					name="endDay" id="endDate" onchange="changeDate()">
 				<div style="position: absolute; display: inline-block; right: 25px;">
 					<select
-						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+						style="border: 1px solid gray;border-radius: 5px;height: 35px;"
 						name="type" id="selectBox" onchange="boxRe()">
 						<option value='' selected id="base">선택</option>
 						<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
@@ -112,9 +110,9 @@
 						<option value='deptName'
 							th:selected="${criteria.type == 'deptName'}">부서</option>
 					</select> <input id="textBox"
-						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+						style="border: 1px solid gray;border-radius: 5px;height: 35px;"
 						type="text" name="keyword" th:value="${criteria.keyword}" />
-					<button type="submit" id="searchBtn" class="btn btn-primary">검색</button>
+					<button type="submit" id="searchBtn" class="btn btn-primary" style="border-radius: 10px;background-color: #399f61;border-color: #399f61; box-shadow:1.5px 1.5px 1.5px 1.5px gray;">검색</button>
 				</div>
 			</form>
 		</div>
@@ -159,24 +157,18 @@
 
 		</div>
 		<div>
-			<ul class="paging pagination pagination-sm"
-				th:if="${paging.endPage != 0}">
-
-				<li class="page-item disabled"><a class="page-link"
+			<ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
+		<li class="page-item"><a class="page-link" style="border-radius: 5px 0px 0px 5px;"
 					th:href="|javascript:goPage(1)|">&laquo;</a></li>
-				<li th:if="${paging.prev}" class="page-item disabled"><a
-					th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a></li>
-				<li class="page-item active"
-					th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-					<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
-					th:text="${num}"></a>
-				</li>
-				<li th:if="${paging.next and paging.endPage > 0}"><a
-					th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a></li>
-				<li class="page-item"><a class="page-link"
-					th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
-				</li>
-			</ul>
+		<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
+			th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+			<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+			th:text="${num}"></a>
+		</li>
+		<li class="page-item"><a class="page-link" style="border-radius: 0px 5px 5px 0px;"
+			th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+		</li>
+    </ul>
 		</div>
 
 
