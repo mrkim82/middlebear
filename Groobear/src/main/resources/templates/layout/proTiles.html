@@ -38,8 +38,6 @@
 <!-- 없으면 모달 안됨 -->
 <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
 
-
-
 <style>
 @import
 	url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
@@ -74,6 +72,14 @@ td {
 	border: 1px solid #35A880;
 }
 
+.square {
+	width: 40px;
+	height: 40px;
+	background-color: #000;
+	margin-left: 30px;
+	border-radius: 10px;
+}
+
 /* 검색 창 스타일 */
 input[type="text"] {
 	width: 150px; /* 원하는 너비 값으로 변경 */
@@ -102,12 +108,6 @@ details {
 	transition: 0.3s;
 }
 
-.square {
-	width: 40px;
-	height: 40px;
-	background-color: #000;
-	border-radius: 10px;
-}
 .star {
   width: 0;
   height: 0;
@@ -180,6 +180,11 @@ textarea {
   height: 200px;
   width: 100%;
   resize: vertical; /* 세로 조정 가능 */
+}
+
+.bottomLine {//탭 밑에 줄
+	border-bottom: 3px solid red;
+	z-index: 50;
 }
 </style>
 
@@ -329,7 +334,7 @@ textarea {
 				<li>
 					<details id="groupFolderList" open>
 						<summary>프로젝트 폴더
-							<span data-toggle="modal" data-target="#createGroupFolderModal"
+							<span onclick="makeGroupFolderModal()"
 								  class="material-icons">add</span>
 						</summary>
 						<!-- 프로젝트 그룹 리스트 -->
@@ -352,7 +357,18 @@ textarea {
 		</div>
 	</nav>
 
+	<!-- 사이드바 우측의 컨텐츠 영역 -->
+	<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+		<div layout:fragment="content"></div>
+	</main>
+	<!-- 본문 내용 종료 -->
+
+</div>
+<!-- 사이드바 내용 종료 -->
+
+<!-- 모달 영역 -->
 <!-- 초대된 프로젝트 모달 -->
+<div class="row dohyeon">
 	<div class="modal fade" id="inviteManPro" tabindex="-1" aria-labelledby="inviteManProLabel" aria-hidden="true">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -363,7 +379,7 @@ textarea {
 	        </button>
 	      </div>
 	      <div class="modal-body" style="padding:0px;">
-
+	
 					<table class="table table-hover">
 						<thead>
 							<tr>
@@ -387,7 +403,7 @@ textarea {
 	    </div>
 	  </div>
 	</div>
-
+	
 	<!-- 프로젝트 생성 모달(새 프로젝트 생성) -->
 	<div class="modal fade" id="createProModal" tabindex="-1" aria-labelledby="createProModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -456,8 +472,8 @@ textarea {
 			</div>
 		</div>
 	</div>
-
-	<!-- 프로젝트 그룹 수정 -->
+	
+	<!-- 프로젝트 그룹 수정 모달 -->
 	<div class="modal fade" id="updateManButton" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="updateManButtonLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -482,11 +498,8 @@ textarea {
 		</div>
 	</div>
 
-	<!-- 사이드바 우측의 컨텐츠 영역 -->
-	<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-		<div layout:fragment="content"></div>
-	</main>
-	<!-- 본문 내용 종료 -->
+</div>
+<!-- 모달 종료 -->
 
 <!-- proTiles 스크립트 영역 -->
 <!-- 공통 데이터 -->
@@ -504,10 +517,13 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<!-- 기본 모달 이벤트 정리 -->
 <script>
+	//그룹 폴더 생성 모달
+	//닫길때 input 값 초기화
 	$('#createGroupFolderModal').on('hidden.bs.modal', function (event) {
-			$('#folderContent').val('');
-		});
+		$('#folderContent').val('');
+	});
 </script>
 
 <!-- 생성 html 불러오기 -->
@@ -580,7 +596,7 @@ function createDynamicList(partiTagList) {
 		const checkboxCell2 = document.createElement('td');
 		const button2 = document.createElement('button');
 		button2.setAttribute('type', 'button');
-		button2.setAttribute('class', 'btn btn-danger');
+		button2.setAttribute('class', 'btn btn-outline-danger');
 		button2.textContent = '거절';
 		button2.onclick = partiN; // onclick 이벤트 처리
 		
@@ -656,8 +672,15 @@ function createDynamicList(partiTagList) {
 	};
 </script>
 
-<!-- 프로젝트 그룹 생성 -->
+<!-- 프로젝트 그룹 폴더 생성 -->
 <script>
+	//그룹 폴더 생성 모달 열기
+	function makeGroupFolderModal() {
+		event.stopPropagation;
+		event.preventDefault();
+		$('#createGroupFolderModal').modal('show');
+	};
+	
 	function makeGroupFolder() {
 		//폴더 갯수 확인
 		console.log(groupFolderList.querySelectorAll('li').length)
@@ -669,8 +692,7 @@ function createDynamicList(partiTagList) {
 			checkGroupFolderName();
 		}
 		//그룹 생성 모달 값 초기화
-		$('#createGroupFolderModal').modal('hide')
-		console.log('ss');
+		$('#createGroupFolderModal').modal('hide');
 	};
 	
 	//폴더명 확인
@@ -968,7 +990,7 @@ function createDynamicList(partiTagList) {
 	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate);
 </script>
 
-<!-- 태그 종료내용 종료 -->
-</div>
+<!-- 스크립트 종료 -->
+
 </body>
 </html>
