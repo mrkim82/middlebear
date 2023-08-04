@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>	
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<style>
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.chat_wrap .header {
+	font-size: 14px;
+	padding: 15px 0;
+	background: #35a880;
+	color: white;
+	text-align: center;
+	position: fixed;
+	width: 100%;
+	z-index: 100;
+}
+.header a i {
+    color: white;  /* Icon color */
+    font-size: 24px;  /* Icon size */
+}
+
+.header .header-buttons {
+    display: flex;
+}
+
+.header .header-buttons a {
+    margin-left: 10px;
+}
+.chat_wrap .chat {
+	padding-top: 60px;
+	height: calc(100vh - 160px);  
+    overflow-y: scroll; 
+}
+
+.chat_wrap .chat ul {
+	width: 100%;
+	list-style: none;
+}
+
+.chat_wrap .chat ul li {
+	width: 100%;
+}
+
+.chat_wrap .chat ul li.left {
+	text-align: left;
+}
+
+.chat_wrap .chat ul li.right {
+	text-align: right;
+}
+.chat_wrap .chat ul li.middle{
+	text-align : flex;
+}	
+
+.chat_wrap .chat ul li>div {
+	font-size: 13px;
+}
+
+.chat_wrap .chat ul li>div.sender {
+	margin: 10px 20px 0 20px;
+	font-weight: bold;
+}
+
+.chat_wrap .chat ul li>div.message {
+	display: inline-block;
+	word-break: break-all;
+	margin: 5px 20px;
+	max-width: 75%;
+	border: 1px solid #888;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #FCFCFC;
+	color: #555;
+	text-align: left;
+}
+
+.chat_wrap .input-div {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background-color: #FFF;
+	text-align: center;
+	border-top: 1px solid #F18C7E;
+	padding: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.chat_wrap .input-div>textarea {
+	flex-grow: 1;
+	height: 40px;
+	border: none;
+	padding: 10px;
+	margin-right: 10px;
+}
+
+.chat_wrap .input-div>button {
+	width: 100px;
+	height: 60px;
+	background-color: #35a880;
+	color: white;
+	border: none;
+	border-radius: 5px;
+}
+
+.format {
+	display: none;
+}
+.message-time {
+    font-size: 0.7em;  /* 시간을 작게 표시합니다. */
+    color: #777;      /* 시간 텍스트의 색상을 설정합니다. */
+}
+</style>
+</head>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<body>
+	<div class="chat_wrap">
+		<div class="header" >[[${roomDTO.roomName}]]
+        <a href="#"data-toggle="modal" data-target="#inviteModal" ><i class="material-icons">group_add</i></a>  <!-- Invite Icon -->
+        <a href="#" id="deleteChatroomButton"><i class="material-icons">exit_to_app</i></a>  <!-- Exit Icon -->
+        </div>
+		<div class="chat">
+			<ul>
+				<!-- 동적 생성 -->
+			</ul>
+		</div>
+		
+		<div class="input-div">
+			<textarea placeholder="Press Enter for send message."></textarea>
+			<button id="sendMessageBtn">Send</button>
+		</div>
+		
+		<!-- format -->
+
+		<div class="chat format">
+			<ul>
+				<li>
+					<div class="sender">
+						<span></span>
+					</div>
+					<div class="message">
+						<span class="message-content"></span>
+    					<small class="message-time"></small>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- The Modal -->
+    <div class="modal" id="inviteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">초대하기</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                
+                    <ul id="employeeList"></ul>
+                    <div id="userListContainer">
+         <!-- 사용자 목록이 이곳에 표시됩니다 -->
+    					</div>
+                </div>
+				
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="createChatroom">생성</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script th:inline="javascript">
+//WebSocket 연결 설정
+const alarmClient = new StompJs.Client({
+brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+});
+
+// 페이지 로드시 웹소켓 연결
+window.addEventListener("load", function(event) {
+   alarmClient.activate();
+});
+
+  // 연결 성공시
+alarmClient.onConnect = (frame) => {
+    console.log('Connected: ' + frame);
+    // 프로젝트 구독     
+	alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+	    almSendMsg(JSON.parse(alarmMsg.body));
+    });
+    // 채팅방 생성 초대 구독
+	alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+	    almSendMsgChat(JSON.parse(alarmMsg.body));
+    });
+    
+ };
+
+//에러
+alarmClient.onWebSocketError = (error) => {
+      console.error('Error with websocket', error);
+};
+
+alarmClient.onStompError = (frame) => {
+      console.error('Broker reported error: ' + frame.headers['message']);
+      console.error('Additional details: ' + frame.body);
+};
+function almSendMsg() {
+	   toastAct()	
+}
+function almSendMsgChat() {
+	   toastActChat()	
+}
+
+function toastAct() {
+	  toastr.options.escapeHtml = true;
+      toastr.options.closeButton = true;
+      toastr.options.newestOnTop = false;
+      toastr.options.progressBar = true;
+      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+      toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
+}
+
+function toastActChat() {
+	  toastr.options.escapeHtml = true;
+      toastr.options.closeButton = true;
+      toastr.options.newestOnTop = false;
+      toastr.options.progressBar = true;
+      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+      toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
+}
+
+let myName = /*[[${name}]]*/ 'name';
+let senderName = /*[[${name}]]*/ 'name';
+let realId = /*[[${id}]]*/ 'id';
+let chatDTO = /*[[${chatDTO}]]*/ 'chatDTO';
+var roomNo = /*[[${roomNo}]]*/ 'roomNo';
+let chatMessageDTO = /*[[${chatDTO}]]*/ 'chatDTO';
+
+
+// 페이지가 로드될 때 chatDTO 내용을 기반으로 채팅 내용을 화면에 추가
+$(document).ready(function() {
+    chatDTO.forEach(function(chat) {
+    console.log(chat)
+    	//chatMessageDTO.forEach(function(chat) {
+        if (chat.name == myName) {  // 추가된 코드
+            chat.id = realId;
+        }
+        //const LR = (chat.id != realId) ? "left" : "right";
+        let LR; 
+        if (!chat.hasOwnProperty('id')) {
+        	LR = "middle";
+        } else if (chat.id === realId) {
+        	LR = "right";
+        } else {
+        	LR = "left";
+        }
+        
+        appendMessageTag(LR, chat.name, chat.content, chat.msgTime);
+    });
+});
+
+
+const stompClient = new StompJs.Client({
+	brokerURL : 'ws://localhost:8081/chatserver'
+});
+
+stompClient.activate();
+console.log("Username: ", myName);  // 로그 추가
+console.log("Room number: ", roomNo);  // 로그 추가
+stompClient.onConnect = (frame) => {
+  stompClient.subscribe('/topic/messages/' + roomNo, (messages) => {
+        receive(JSON.parse(messages.body));
+    });
+};
+stompClient.onWebSocketError = (error) => {
+	console.error('Error with websocket', error);
+};
+
+stompClient.onStompError = (frame) => {
+	console.error('Broker reported error : ' + frame.headers['message']);
+	console.error('Additional details : ' + frame.body);
+};
+stompClient.onWebSocketClose = (event) => {
+    console.error('Websocket closed', event);
+};
+//채팅방 나가기
+const deleteButton = document.getElementById('deleteChatroomButton');
+deleteButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    fetch('/deleteChatroom', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ roomNo: roomNo, id: realId }),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Chatroom deleted successfully');
+            //location.reload();
+            window.close();
+            window.opener.location.href="/roomList";
+        } else {
+            console.error('Failed to delete chatroom');
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+
+$(document).on('keydown', 'div.input-div textarea', function(e) {
+    if (e.keyCode == 13 && !e.shiftKey) {
+        e.preventDefault();
+        const message = $(this).val();
+        sendAndClear(message);
+    }
+});
+
+function createMessageTag(LR_className, senderName, message, msgTime) {
+    let chatLi = $('div.chat.format ul li').clone();
+    chatLi.addClass(LR_className);
+    chatLi.find('.sender span').text(senderName);
+    chatLi.find('.message span').text(message);
+	chatLi.find('.message small').text(msgTime);
+    return chatLi;
+}
+
+function appendMessageTag(LR_className, senderName, message, msgTime) {
+    //msgTime = new Date();
+	var chatLi = createMessageTag(LR_className, senderName, message, msgTime);
+    $('div.chat:not(.format) ul').append(chatLi);
+    window.requestAnimationFrame(function () {
+        const chatDiv = $('div.chat');
+        chatDiv.scrollTop(chatDiv.prop('scrollHeight'));
+    });
+}
+
+function clearTextarea() {
+    $('div.input-div textarea').val('');
+}
+
+//  서버에서 들렸다가 온 메세지
+function receive(data) {
+    
+	let LR;
+	console.log(data.id + "data id 확인용");
+	console.log(realId + "realId 확인용");
+    if (!data.hasOwnProperty('id')) {
+    	LR = "middle";
+    } else if(data.id == realId) {
+        LR = "right";
+    } else {
+    	LR = "left";
+    }
+    console.log(LR + "얘 먼지 확인")
+    console.log(data.msgTime + "시간 나오나?");
+    appendMessageTag(LR, data.name, data.content, data.msgTime);  // 서버에서 받은 시간 데이터를 사용합니다.
+}
+
+function sendAndClear(message) {
+    if (message.trim() !== "") {
+        sendMessage(message);
+        clearTextarea();
+        window.opener.location.reload();
+    }
+}
+function getFullYmdStr() {
+    var d = new Date();
+    var year = String(d.getFullYear()).slice(-2); // 연도의 마지막 두 자리만 가져옴
+
+    var minute = d.getMinutes();
+    // 만약 분이 한 자리 수이면 앞에 '0'을 붙임
+    minute = minute < 10 ? '0' + minute : minute;
+
+    return year + "년 " + (d.getMonth()+1) + "월 " + d.getDate() + "일 " + d.getHours() + "시 " + minute + "분 ";
+}
+//메세지 보낼 때
+function sendMessage(message) {
+	let currentTime = getFullYmdStr()
+	
+	console.log(currentTime + "커런트타임");
+    stompClient.publish({
+    	destination: "/app/chat/" + roomNo,
+        body: JSON.stringify({
+        	'roomNo': roomNo,
+            'name': senderName,
+            'content': message,
+            'id' : realId,
+            'msgTime' : currentTime 
+        })
+    });
+}
+
+$('#sendMessageBtn').on('click', function() {
+    const message = $('div.input-div textarea').val();
+    sendAndClear(message);
+});
+
+$(window).on('beforeunload', function(){
+    disconnect();
+});
+function fetchEmployees(roomNo) {
+console.log(roomNo + "룸방번호 확인")
+    fetch('/empListExcludingRoomMembers/' + roomNo)
+    .then(response => response.json())
+    .then(employees => {
+        const employeeListUl = document.getElementById('employeeList');
+        // Clear the list before appending new items
+        employeeListUl.innerHTML = '';
+        employees.forEach(employee => {
+            const li = document.createElement('li');
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = 'employee-' + employee.id;
+            checkbox.value = employee.id;
+
+            const empNo = document.createElement('span');
+            empNo.textContent = employee.empNo + ' ';
+            
+            const empId = document.createElement('span');
+            empId.textContent = employee.id + ' ';
+            
+            const empName = document.createElement('span');
+            empName.textContent = employee.name + ' ';
+
+            const empRank = document.createElement('span');
+            empRank.textContent = employee.rank + ' ';
+
+            const empDept = document.createElement('span');
+            empDept.textContent = employee.deptName;
+
+            li.appendChild(checkbox);
+            li.appendChild(empNo);
+            li.appendChild(empId);
+            li.appendChild(empName);
+            li.appendChild(empRank);
+            li.appendChild(empDept);
+
+            employeeListUl.appendChild(li);
+        });
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+$('#inviteModal').on('shown.bs.modal', function (event) {
+	console.log(roomNo);
+    fetchEmployees(roomNo);
+});
+
+//채팅멤버 추가하는 로직
+$('#createChatroom').on('click', function() {
+    // Checked checkboxes
+    const checkedEmployeeIds = [];
+    $('#employeeList input[type="checkbox"]:checked').each(function () {
+        checkedEmployeeIds.push($(this).val());
+    });
+
+    if (checkedEmployeeIds.length === 0) {
+        alert('Please select at least one employee to invite.');
+        return;
+    }
+	
+    // Post request to the server
+    const roomDTO = {
+        roomNo: roomNo,
+        employeeIds: checkedEmployeeIds,
+    };
+    fetch('/inviteEmployees', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(roomDTO),
+    })
+    .then(response => {
+        console.log(response)
+    	if (response.ok) {
+            console.log(response.ok)
+    		console.log('Employees invited successfully');
+            // Here you might want to do something to reflect that the employees were added
+            // For example, you could close the modal
+            $('#inviteModal').modal('hide');
+            
+            // 알림2
+            for(let i = 0; i < checkedEmployeeIds.length ; i++){
+				alarmClient.publish({
+		            destination: "/alarmCondition/chatAlm/"+checkedEmployeeIds[i],
+		            body: JSON.stringify({
+		               'id' : checkedEmployeeIds[i]
+		            })
+		      	});
+			}
+        } else {
+            console.error('Failed to invite employees');
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+</script>
+</body>
+</html>

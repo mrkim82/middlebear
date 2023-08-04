@@ -1,7 +1,11 @@
 package com.groo.bear.mail.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -17,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.groo.bear.board.controller.BoardRestController;
 import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.mail.service.MailService;
 import com.groo.bear.mail.service.MailVO;
+import com.groo.bear.mail.service.impl.EmailReader;
 import com.groo.bear.paging.Criteria;
 import com.groo.bear.paging.Paging;
 
@@ -37,19 +41,38 @@ public class MailController {
 	//받은메일함
 	@GetMapping("mail/receiveMail")
 	public String receiveMailForm(Criteria cri ,Model model, MailVO mailVO, HttpSession session ,  @RequestParam(value="nowPage", required=false)String nowPage
-			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) throws ParseException, MessagingException {
+		//여기서 EmailReader 내용 들어와야하고, db에 넣는부분 필요하고, db에 넣고나면 그거 읽어와서 화면에 뿌려줘야됨
+		String id = (String) session.getAttribute("Id");
+        Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-01-31");
+        Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-08-31");
+        id = id.substring(0,id.indexOf("@"));
+        EmailReader receiver = new EmailReader();
+        List<MailVO> list = receiver.receiveMailAttachedFile(id, id, startDate, endDate);
+        System.out.println(list);
+		System.out.println("receive 메일함 체크");
+        //위에서 가져온 메일을 db에 저장하고 뿌려줌
+		if(list.size() > 0) {
+			for(int i=0; i < list.size();i++) {
+				System.out.println("list.get(i)첵 = "+list.get(i));
+				int result = mailService.serverGetInsertMail(list.get(i));
+		        System.out.println("몇건 처리됨? "+result);
+			}
+		}
+		
 		mailVO.setReceiver((String) session.getAttribute("Id"));
 		mailVO.setReferrer((String) session.getAttribute("Id"));
-		mailVO.setId((String) session.getAttribute("Id"));
-		String S = "S";
-		mailVO.setMailType(S);
-		System.out.println("11111111111"+mailVO);
-		//cri.setPerPageNum(2); //페이징 2개로 끊어서 보려고 임시로 적어둔것
-		System.out.println("받은메일함 mailVO"+mailVO);
+		mailVO.setReferrer2((String) session.getAttribute("Id"));
+		mailVO.setReferrer3((String) session.getAttribute("Id"));
+		mailVO.setMailType2("R");
+		mailVO.setMailType3("R");
+		mailVO.setMailType4("R");
+		mailVO.setMailType5("R");
+		System.out.println("메일VO"+mailVO);
 		Paging paging = new Paging();
         paging.setCri(cri);
         paging.setTotalCount(mailService.countReceiveMail(mailVO));
-		model.addAttribute("mailList",mailService.deletedMail(cri,mailVO));
+		model.addAttribute("mailList",mailService.getMailList(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/receiveMail";
 	}
@@ -71,38 +94,39 @@ public class MailController {
 		mailService.sendMail(mailVO);
 		System.out.println("메일발송용"+mailVO);
 		System.out.println("메일 전송 완료");
-        int no = mailService.personnelNo();
-        mailVO.setMailNo(no);
-        String email = mailVO.getReceiver();
-        String id = mailService.userIdGet(email);
-        System.out.println("123123id = "+id);
-        if(id == null) {
-        	mailVO.setId(email);
-        	System.out.println(mailVO);
-        	mailService.insertPersonnel(mailVO);
-        }else {
-        	mailVO.setId(id);
-        	System.out.println(mailVO);
-        	mailService.insertPersonnel(mailVO);
-        }
-        if(mailVO.getReferrer().equals("")) {
-        	System.out.println("equals 조건 잘바꿔야됨");
-        }else {
-        	String allreferrer = (String) mailVO.getReferrer();
-        	String[] referrer = allreferrer.split(",");
-        	for(int i=0;i<referrer.length;i++) {
-        		email = referrer[i];
-        		if(id == null) {
-            		System.out.println("42423"+id);
-            		mailVO.setId(email);
-        		}else {
-        			id = mailService.userIdGet(email);
-            		System.out.println("42423"+id);
-            		mailVO.setId(id);
-        		}
-        		mailService.insertPersonnel(mailVO);
-        	}
-        }
+		
+//        int no = mailService.personnelNo();
+//        mailVO.setMailNo(no);
+//        String email = mailVO.getReceiver();
+//        String id = mailService.userIdGet(email);
+//        System.out.println("123123id = "+id);
+//        if(id == null) {
+//        	mailVO.setId(email);
+//        	System.out.println(mailVO);
+//        	mailService.insertPersonnel(mailVO);
+//        }else {
+//        	mailVO.setId(id);
+//        	System.out.println(mailVO);
+//        	mailService.insertPersonnel(mailVO);
+//        }
+//        if(mailVO.getReferrer().equals("")) {
+//        	System.out.println("equals 조건 잘바꿔야됨");
+//        }else {
+//        	String allreferrer = (String) mailVO.getReferrer();
+//        	String[] referrer = allreferrer.split(",");
+//        	for(int i=0;i<referrer.length;i++) {
+//        		email = referrer[i];
+//        		if(id == null) {
+//            		System.out.println("42423"+id);
+//            		mailVO.setId(email);
+//        		}else {
+//        			id = mailService.userIdGet(email);
+//            		System.out.println("42423"+id);
+//            		mailVO.setId(id);
+//        		}
+//        		mailService.insertPersonnel(mailVO);
+//        	}
+//        }
 		return "redirect:mail/sendingMail";
 	}
 	//보낸메일함

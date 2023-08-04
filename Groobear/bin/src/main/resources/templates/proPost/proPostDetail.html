@@ -1,0 +1,3560 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/proTiles}">
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js}"></script>
+<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+<style>
+
+p {
+	margin: 0px;
+}
+.spanCursor {
+	cursor: pointer
+}
+
+.gray {
+	color: gray;
+}
+
+.grayC {
+	color: gray;
+	text-decoration:line-through;
+}
+[type="checkbox"] {
+	margin-right: 15px;
+}
+
+/* ul li 스타일 */
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	padding: 5px;
+}
+</style>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<!-- 차트 -->
+<script type="text/javascript">
+  google.charts.load("current", {packages:["corechart"]});
+  google.charts.setOnLoadCallback(drawChart);
+  //차트에 들어갈 데이터 불러오기
+function drawChart() {
+
+    fetch("/googleChart", {
+        method: 'POST',
+        headers : {
+            'Content-Type': 'application/json'
+        },
+        body : JSON.stringify(projectNo)
+    })
+    .then(response => response.json())
+    .then(res => {
+        var chartData = new google.visualization.DataTable();
+        chartData.addColumn('string', 'workStatus');
+        chartData.addColumn('number', 'count');
+        res.forEach(item => {
+            // workStatus 값에 따라 이름을 변경
+            let workStatusName = '';
+            
+            if (item.workStatus === '1') {
+                workStatusName = '요청' + item.count + '%';
+            } else if (item.workStatus === '2') {
+                workStatusName = '진행' + item.count + '%';
+            } else if (item.workStatus === '3') {
+                workStatusName = '피드백' + item.count + '%';
+            } else if (item.workStatus === '4') {
+                workStatusName = '완료' + item.count + '%';
+            } else if (item.workStatus === '5') {
+                workStatusName = '보류' + item.count + '%';
+            } 
+
+            chartData.addRow([workStatusName, parseInt(item.count)]);
+        });
+
+        var options = {
+            title: '업무 리포트',
+            pieHole: 0.8,
+            legend: {
+                textStyle: {
+                    fontSize: 14 // 폰트 크기를 12px로 설정
+                },
+                //position: 'bottom'//중앙정렬
+            },
+            series: {
+                0: { color: '#2780e3' },
+                1: { color: '#ff7518' },
+                2: { color: '#ff0039' },
+                3: { color: '#3fb618' },
+                4: { color: '#373a3c' }
+            },
+            
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(chartData, options);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>	
+
+</head>
+<body layout:fragment="content" style="background-color: #fbfbfb">
+
+	<!-- 중앙 + 참여자 -->
+	<div>
+	
+		<!-- 중앙 -->
+		<div style="overflow-y: auto; width: 680px; height: 600px;"
+			 class="float-left">
+			 
+			<!-- 업무리포트(총 업무수)(차트) -->
+			<div id="donutchart"
+				 style="width: 643px; height: 178px;">
+			</div>
+			
+			<!-- 글 생성 nav -->
+			<div>
+				<ul class="nav justify-content-center"
+					style="background-color: #faf9f9; margin: 10px;color: silver;">
+					<li class="nav-item"
+						data-post-code="1">
+						<a class="nav-link"
+						   data-toggle="modal"
+						   data-target="#modal1"
+						   href="#">
+						   <span>글</span>
+						</a>
+					</li>
+					<li class="nav-item"
+						data-post-code="2">
+						<a class="nav-link"
+						   data-toggle="modal"
+						   data-target="#modal2"
+						   href="#">
+						   <span>업무</span>
+						</a>
+					</li>
+					<li class="nav-item"
+						data-post-code="3">
+						<a class="nav-link"
+						   data-toggle="modal"
+						   data-target="#modal3"
+						   href="#">
+						   <span>일정</span>
+						</a>
+					</li>
+					<li class="nav-item"
+						data-post-code="4">
+						<a class="nav-link"
+						   data-toggle="modal"
+						   data-target="#modal4"
+						   href="#">
+						   <span>할일</span>
+						</a>
+					</li>
+					<li class="nav-item"
+						data-post-code="5">
+						<a class="nav-link"
+						   data-toggle="modal"
+						   data-target="#modal5"
+						   href="#">
+						   <span>투표</span>
+						</a>
+					</li>
+				</ul>
+
+				<!-- 글 작성 모달 공간 -->
+				<div>
+					<div class="container">
+
+						<!-- 1. 글 작성-->
+						<div class="modal fade modal-dialog-scrollable"
+							 id="modal1"
+							 tabindex="-1"
+							 role="dialog"
+							 aria-labelledby="modal1Label"
+							 aria-hidden="true"
+							 style="display:none">
+							<div class="modal-dialog"
+								 role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title"
+											id="modal1Label">글</h5>
+										<button type="button"
+												class="close"
+												data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<!-- 태그 선택 -->
+									<div>
+										<ul class="nav justify-content-center">
+											<li class="nav-item" data-post-code="1"><a class="nav-link"
+												href="#"><span>글</span></a></li>
+											<li class="nav-item" data-post-code="2"><a class="nav-link"
+												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
+											<li class="nav-item" data-post-code="3"><a class="nav-link"
+												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
+											<li class="nav-item" data-post-code="4"><a class="nav-link"
+												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
+											<li class="nav-item" data-post-code="5"><a class="nav-link"
+												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+										</ul>
+									</div>
+									<div class="modal-body">
+										<div>
+											<input type="text"
+												   placeholder="제목을 입력하세요."
+												   class="postTitle">
+										</div>
+										<div>
+											<textarea placeholder="내용을 입력하세요."
+													  id="writingContent"></textarea>
+										</div>
+									</div>
+									<button type="button"
+											class="btn btn-primary"
+											id="createWritingButton">등록</button>
+								</div>
+							</div>
+						</div>
+						
+						<!-- 2.업무 작성 -->
+						<div class="modal fade modal-dialog-scrollable" id="modal2" tabindex="-1" role="dialog"
+							aria-labelledby="modal2Label" aria-hidden="true" style="display:none">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="modal2Label">업무</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<!-- 태그 선택 -->
+									<div>
+										<ul class="nav justify-content-center">
+											<li class="nav-item" data-post-code="1"><a class="nav-link"
+												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
+											<li class="nav-item" data-post-code="2"><a class="nav-link"
+												href="#"><span>업무</span></a></li>
+											<li class="nav-item" data-post-code="3"><a class="nav-link"
+												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
+											<li class="nav-item" data-post-code="4"><a class="nav-link"
+												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
+											<li class="nav-item" data-post-code="5"><a class="nav-link"
+												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+										</ul>
+									</div>
+									<div class="modal-body">
+										<div>
+											<input type="text" placeholder="제목을 입력하세요." class="postTitle">
+										</div>
+										<!-- 업무상태 -->
+										<div id="workPostStatus">
+											<button type="button" class="btn btn-primary" id="workTypeButtonToggle"
+													data-work-type-status="1" onclick="toggleButtonStyle(this)">요청</button>
+											<button type="button" class="btn btn-outline-warning"
+													data-work-type-status="2" onclick="toggleButtonStyle(this)">진행</button>
+											<button type="button" class="btn btn-outline-danger"
+													data-work-type-status="3" onclick="toggleButtonStyle(this)">피드백</button>
+											<button type="button" class="btn btn-outline-success"
+													data-work-type-status="4" onclick="toggleButtonStyle(this)">완료</button>
+											<button type="button" class="btn btn-outline-secondary"
+													data-work-type-status="5" onclick="toggleButtonStyle(this)">보류</button>
+										</div>
+										<!-- 담당자 추가 -->
+										<div>
+											<p>담당자 추가(Ctrl을 누르면 중복 처리 가능)</p>
+											<select class="form-select" multiple name="workMember" size=5 id="workPostPerson"
+													onchange="workPostPeople(this)">
+												<th:block th:each="member : ${projectPartiMember}">
+														<!-- <option th:text="${member.name}" th:value="${member.id}"
+														th:if="${member.id == session.Id}" style="background-color: #eee;"></option> -->
+														<option th:text="${member.name} +'(나)'" th:value="${member.id}"
+														th:if="${member.id == session.Id}"></option>
+														<option th:text="${member.name}" th:value="${member.id}"
+														th:if="${member.id != session.Id}"></option>
+												</th:block>
+											</select>
+										</div>
+										<!-- 항목 추가입력 -->
+										<div>
+											<p>
+											  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+											  			aria-expanded="false" aria-controls="collapseExample">
+											    + 항목추가입력
+											  </button>
+											</p>
+											<div class="collapse" id="collapseExample">
+											  <div class="card card-body">
+											  	<!-- 시작일 추가 -->
+											  	<ul>
+											  		<li>
+											  			<p>시작일</p>
+											  			<input type="datetime-local"
+											  				   id="startWorkDate">
+											  		</li>
+											  		<li>
+											  			<p>마감일</p>
+											  			<input type="datetime-local"
+											  				   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
+											  				   id="endWorkDate">
+											  		</li>
+											  		<li>
+											  			<p>우선순위</p>
+														<select class="custom-select" name="workPri" id="workPostPriPost">
+															<option value="0">없음</option>
+															<option value="1">낮음</option>
+															<option value="2">보통</option>
+															<option value="3">높음</option>
+															<option value="4">긴급</option>
+														</select>
+											  		</li>
+											  		<li>
+											  			<p>업무 그룹</p>
+														<select class="form-select" name="workGroup" id="workPostGroup">
+															<th:block th:each="group : ${readWorkGroup}">
+																	<option th:text="${group.workGroupName}"
+																			th:value="${group.workGroupNo}"
+																			th:selected="${group.workGroupSeq == 1}"></option>
+															</th:block>
+														</select>
+											  		</li>
+											  	</ul>
+											  	
+											  </div>
+											</div>
+										</div>
+										
+										<!-- 내용입력 -->
+										<div>
+											<textarea placeholder="내용을 입력하세요." id="workWritingContent"></textarea>
+										</div>
+										<!-- 첨부파일 -->
+										<div>
+											<div class="uploadResult">
+					                            <ul>
+					
+					                            </ul>
+					                        </div>
+					                        <!-- 첨부파일 -->
+											<input type="file"
+												   name="uploadFile"
+												   multiple>
+										</div>
+										<!-- 하위업무 -->
+										<!-- <div>
+											하위업무 수
+											 <div>
+												<p>ㄴ하위업무</p>
+											</div>
+											하위업무 동적 생성
+											<div>
+												<button type="button">+ 하위업무 추가</button>
+											</div>
+											하위업무 입력란
+										</div> -->
+									</div>
+										<button type="button" class="btn btn-primary" id="createWorkButton">등록</button>
+								</div>
+							</div>
+						</div>
+						
+						<!-- 3.일정 작성 -->
+						<div class="modal fade modal-dialog-scrollable" id="modal3" tabindex="-1" role="dialog"
+							aria-labelledby="modal3Label" aria-hidden="true" style="display:none">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="modal3Label">일정</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<!-- 태그 선택 -->
+									<div>
+										<ul class="nav justify-content-center">
+											<li class="nav-item" data-post-code="1"><a class="nav-link"
+												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
+											<li class="nav-item" data-post-code="2"><a class="nav-link"
+												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
+											<li class="nav-item" data-post-code="3"><a class="nav-link"
+												href="#"><span>일정</span></a></li>
+											<li class="nav-item" data-post-code="4"><a class="nav-link"
+												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
+											<li class="nav-item" data-post-code="5"><a class="nav-link"
+												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+										</ul>
+									</div>
+									<div class="modal-body">
+										<div>
+											<input type="text" placeholder="제목을 입력하세요." class="postTitle">
+										</div>
+										<!-- 시작일 -->
+										<div>
+											<p>시작일</p>
+											<input type="datetime-local" id="startSchDate">
+										</div>
+										
+										<!-- 마감일 -->
+										<div>
+											<p>마감일</p>
+											<input type="datetime-local" th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}" id="endSchDate">
+										</div>
+										<!-- 참석자 -->
+										<div>
+											<p>참석자 추가(Ctrl을 누르면 중복 처리 가능)</p>
+											<select class="form-select schPartiMembers"
+													multiple name="workMember"
+													size=5>
+												<th:block th:each="member : ${projectPartiMember}">
+														<!-- <option th:text="${member.name}" th:value="${member.id}"
+														th:if="${member.id == session.Id}" style="background-color: #eee;"></option> -->
+														<option th:text="${member.name}" th:value="${member.id}"
+														th:if="${member.id == session.Id}"></option>
+														<option th:text="${member.name}" th:value="${member.id}"
+														th:if="${member.id != session.Id}"></option>
+												</th:block>
+											</select>
+										</div>
+										<!-- 장소 -->
+										<div>
+											<p>장소</p>
+											<input type="text" class="schPlace">
+										</div>
+										<!-- 내용 -->
+										<div>
+											<textarea placeholder="내용을 입력하세요." class="schText"></textarea>
+										</div>
+									</div>
+										<button type="button" class="btn btn-primary" onclick="createSchButton()">등록</button>
+								</div>
+							</div>
+						</div>
+	
+						<!-- 4.할 일 작성 -->
+						<div class="modal fade modal-dialog-scrollable" id="modal4" tabindex="-1" role="dialog"
+							aria-labelledby="modal4Label" aria-hidden="true" style="display:none">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="modal4Label">할 일</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<!-- 태그 선택 -->
+									<div>
+										<ul class="nav justify-content-center">
+											<li class="nav-item" data-post-code="1"><a class="nav-link"
+												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
+											<li class="nav-item" data-post-code="2"><a class="nav-link"
+												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
+											<li class="nav-item" data-post-code="3"><a class="nav-link"
+												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
+											<li class="nav-item" data-post-code="4"><a class="nav-link"
+												href="#"><span>할일</span></a></li>
+											<li class="nav-item" data-post-code="5"><a class="nav-link"
+												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+										</ul>
+									</div>
+									<div class="modal-body">
+										<div>
+											<input type="text" placeholder="제목을 입력하세요." class="postTitle">
+										</div>
+										<br>
+										<!-- 할 일 입력 -->
+										<div>
+											<ul class="list-group" data-todo-make-list="todoTarget">
+	
+											</ul>
+	
+											<div>
+												<input id="todoContent"
+													   type="text"
+													   class="js-todo-content-input"
+													   placeholder="할 일 추가 (Enter) / 최대 60자"
+													   autocomplete="off"
+													   maxlength="60">
+												<div class="todo-menu">
+												<span>
+														<input type="date"
+																	 data-input-todo-date="todoDate">
+														<select class="form-select"
+																		name="todoMember"
+																		data-input-todo-select="todoSelect">
+															<option value="">없음</option>
+															<th:block th:each="member : ${projectPartiMember}">
+																<option th:text="${member.name}" th:value="${member.id}"
+																th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+																<option th:text="${member.name}" th:value="${member.id}"
+																th:if="${member.id != session.Id}"></option>
+															</th:block>
+														</select>
+												</span>
+	
+												</div>
+											</div>
+	
+	
+										</div>
+										<!-- 할 일 입력 종료 -->
+									</div>
+									<!-- modal body end -->
+									<button type="button" class="btn btn-primary" onclick="blankSearchTodo()">등록</button>
+								</div>
+							</div>
+						</div>
+	
+						<!-- 5. 투표 작성 -->
+							<div class="modal fade modal-dialog-scrollable" id="modal5" tabindex="-1" role="dialog"
+								aria-labelledby="modal5Label" aria-hidden="true" style="display:none">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="modal5Label">투표</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<!-- 태그 선택 -->
+										<div>
+											<ul class="nav justify-content-center">
+												<li class="nav-item" data-post-code="1"><a class="nav-link"
+													data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
+												<li class="nav-item" data-post-code="2"><a class="nav-link"
+													data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
+												<li class="nav-item" data-post-code="3"><a class="nav-link"
+													data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
+												<li class="nav-item" data-post-code="4"><a class="nav-link"
+													data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
+												<li class="nav-item" data-post-code="5"><a class="nav-link"
+													href="#"><span>투표</span></a></li>
+											</ul>
+										</div>
+										<div class="modal-body">
+											<ul>
+												<!-- 투표 내용 -->
+												<li><input type="text" placeholder="제목을 입력하세요." class="postTitle"></li>
+												<!-- 투표 설명 -->
+												<li><input type="text" placeholder="투표에 관한 설명 입력(옵션)"></li>
+											</ul>
+											<!-- 투표내용 -->
+											<p>Enter를 입력하면 최대 10개까지 창이 추가 됩니다.</p>
+											<ul>
+												<li><input type="text" class="plusVoteInput" placeholder="항목 추가"></li>
+												<li><input type="text" class="plusVoteInput" placeholder="항목 추가"></li>
+												<!-- 투표 항목 추가 -->
+											</ul>
+											<!-- 투표 마감일 -->
+											<div>
+												<p>투표 마감일</p>
+												<input type="date" id="endVoteDate">
+											</div>
+											<!--  -->
+										</div>
+										<button type="button" class="btn btn-primary" onclick="blankSearch()">등록</button>
+									</div>
+								</div>
+							</div>
+						<!-- 투표 모달 종료 -->
+
+				</div>
+
+				</div>
+				<!-- 글 작성 모달 종료 -->
+
+			</div>
+
+			<!-- 미확인 알림(후순위) -->
+			<div>
+			
+			</div>
+			<!-- 상단고정(후순위) 업무 이후 -->
+			<div>
+			
+			</div>
+			
+			<!-- 게시물 공간 -->
+			<div>
+				<div>
+					<select name="postTypeFilter" id="postTypeFilter" onchange="chagePostType()">
+						<option value="0">전체</option>
+						<option value="2" th:selected="${proPostVO.postType == 2}">글</option>
+						<option value="1" th:selected="${proPostVO.postType == 1}">업무</option>
+						<option value="3" th:selected="${proPostVO.postType == 3}">일정</option>
+						<option value="4" th:selected="${proPostVO.postType == 4}">할 일</option>
+						<option value="5" th:selected="${proPostVO.postType == 5}">투표</option>
+						<!-- ${param.postType} 방식으로 값을 가져 올 수 도 있음 -->
+					</select>
+				</div>
+				<div class="container">
+					<th:block th:each="allPost : ${readFeedPost}">
+					
+						<!-- 1.업무 -->
+						<th:block th:if="${allPost.postType == '1'}">
+							<div class="card"
+								 style="margin-bottom: 15px; background-color: #fff"
+								 th:attr="data-feed-post-no=${allPost.proPostNo}, data-feed-work-no=${allPost.workNo}, data-post-type=${allPost.postType}">
+								 <!-- th:classappend="${allPost.workStatus == '4' ? 'grayC' : ''}"> -->
+								<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
+								<div>
+							        <span th:text="${allPost.profileImg}"></span>
+							        <span th:text="'작성자 : ' + ${allPost.name}"></span>
+							        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
+							        <span th:text="업무번호 + ${allPost.workNo}"></span>
+							        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
+							        <span onclick="deletePost()" style="cursor: pointer;">X</span>
+							    </div>
+								<div class="card-header" th:text="'업무 : ' + ${allPost.postTitle}">
+									<!-- 글 제목 -->
+								</div>
+								<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
+								<div class="workFeedPostStatus"
+									 th:attr="data-feed-work-type=${allPost.workStatus}"
+									 style="text-align: center;">
+								    <button type="button" class="btn"
+								    		th:classappend="${allPost.workStatus == '1' ? 'btn-primary' : 'btn-outline-primary'}"
+								            data-work-type-status="1" onclick="toggleFeedButtonStyle(this)">요청</button>
+								    <button type="button" class="btn"
+								    		th:classappend="${allPost.workStatus == '2' ? 'btn-warning' : 'btn-outline-warning'}"
+								            data-work-type-status="2" onclick="toggleFeedButtonStyle(this)">진행</button>
+								    <button type="button" class="btn"
+								    		th:classappend="${allPost.workStatus == '3' ? 'btn-danger' : 'btn-outline-danger'}"
+								            data-work-type-status="3" onclick="toggleFeedButtonStyle(this)">피드백</button>
+								    <button type="button" class="btn"
+								    		th:classappend="${allPost.workStatus == '4' ? 'btn-success' : 'btn-outline-success'}"
+								            data-work-type-status="4" onclick="toggleFeedButtonStyle(this)">완료</button>
+								    <button type="button" class="btn"
+								    		th:classappend="${allPost.workStatus == '5' ? 'btn-secondary' : 'btn-outline-secondary'}"
+								            data-work-type-status="5" onclick="toggleFeedButtonStyle(this)">보류</button>
+								</div>
+								<div class="card-body">
+									<!-- 업무 담당자 -->
+									<div th:each="wPerson : ${readTaskWorkPerson}"
+										 th:if="${allPost.workNo == wPerson.workNo}"
+										 th:text="'담당자 : ' + ${wPerson.name}">
+									</div>
+									
+									<!-- 게시글 내용 -->
+									<p th:text="'내용 : ' + ${allPost.workContent}"></p>
+									
+									<!-- 첨부파일 영역 -->
+									<div class = 'uploadResult'>
+										<ul></ul>
+									</div>
+									
+									<!-- 추가 항목 -->
+									<div>
+										<p>
+										  <button class="btn btn-primary"
+										  		  type="button"
+										  		  data-toggle="collapse"
+										  		  th:data-target="'#collapseExample' + ${allPost.workNo}"
+										  		  aria-expanded="false"
+										  		  aria-controls="collapseExample">
+										    + 항목추가입력
+										  </button>
+										</p>
+										<!-- 하위업무 생성 공간 -->
+										<div>
+
+										</div>
+										<div class="collapse" th:id="'collapseExample' + ${allPost.workNo}">
+										  <div class="card card-body">
+										  	<!-- 시작일 추가 -->
+										  	<div>
+										  		<p>시작일</p>
+													<input type="datetime-local" id="startWorkDate2"
+														   th:value="${#dates.format(allPost.workStartTime, 'yyyy-MM-dd HH:mm')}">
+										  	</div>
+										  	<!-- 마감일 추가 -->
+										  	<div>
+										  		<p>마감일</p>
+										  		<input type="datetime-local" id="endWorkDate2"
+										  			   th:min="${#dates.format(cTime)}"
+										  			   th:value="${#dates.format(allPost.workEndTime, 'yyyy-MM-dd HH:mm')}">
+										  	</div>
+										  	<!-- 우선순위 추가 -->
+										  	<div>
+													<p>우선순위</p>
+													<select class="custom-select" name="workPri" id="workPostPri">
+														<option value="0" th:selected="${allPost.workStatus == '0'}">없음</option>
+														<option value="1" th:selected="${allPost.workStatus == '1'}">낮음</option>
+														<option value="2" th:selected="${allPost.workStatus == '2'}">보통</option>
+													    <option value="3" th:selected="${allPost.workStatus == '3'}">높음</option>
+													    <option value="4" th:selected="${allPost.workStatus == '4'}">긴급</option>
+													</select>
+										  	</div>
+										  	<!-- 그룹 추가 -->
+										  	<div>
+										  	
+										  	<p>업무 그룹</p>
+											<select class="form-select" name="workGroup" id="workPostGroup2">
+												<th:block th:each="group : ${readWorkGroup}">
+														<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}"
+																th:selected="${allPost.workGroupNo == group.workGroupNo}"></option>
+												</th:block>
+											</select>
+										  	</div>
+										  </div>
+										</div>
+									</div>
+									<!-- 항목추가 종료 -->
+									<div class="collapse" id="moreContent">
+										<p>
+											<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
+										</p>
+										<a class="btn btn-link" data-toggle="collapse" href="#moreContent" role="button"
+											aria-expanded="false" aria-controls="moreContent">더보기</a>
+									</div>
+									<div class="card-footer">
+										<!-- 하위업무 -->
+										<div>
+											<!-- 하위업무 수 -->
+											<!-- <div>
+												<p>ㄴ하위업무</p>
+											</div> -->
+											<!-- 하위업무 동적 생성 -->
+											<!-- <div>
+												<button type="button">+ 하위업무 추가</button>
+											</div> -->
+											<!-- 하위업무 입력란 -->
+											<div>
+												
+											</div>
+										</div>
+										<!-- 북마크, 댓글수 -->
+										<div>
+										
+										</div>
+										<div class="row">
+											<div class="col-md-8">
+												<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
+												<h6 th:text="댓글"></h6>
+												<ul class="list-unstyled">
+													<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+														th:if="${allPost.proPostNo == com.proPostNo}">
+														<span th:utext="${com.profileImg}"></span>
+														<span th:text="${com.name}"></span>
+														<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
+														<span th:text="${com.comContent}"></span>
+														<th:block th:if="${com.id == session.Id}">
+															<span onclick="UpdateWritingComment()" class="spanCursor"
+																  style="color: red">수정</span>
+															<span></span>
+															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+														</th:block>
+													</li>
+												</ul>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="댓글 작성">
+												</div>
+												<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+														th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</th:block>
+						
+						<!-- 2.글 -->
+						<th:block th:if="${allPost.postType == '2'}">
+							<div class="card" style="margin-bottom: 15px; background-color: #fff;"
+									 th:attr="data-feed-post-no=${allPost.proPostNo}, data-feed-writing-no=${allPost.writingNo}, data-post-type=${allPost.postType}">
+								<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
+								<div>
+							        <span th:text="${allPost.profileImg}"></span>
+							        <span th:text="'작성자 : ' + ${allPost.name}"></span>
+							        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
+							        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
+							        <span onclick="deletePost()" style="cursor: pointer;">X</span>
+							    </div>
+								<div class="card-header" th:text="'글 : ' + ${allPost.postTitle}">
+									<!-- 글 제목 -->
+								</div>
+								<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
+								<div class="card-body">
+									<p th:text="${allPost.writingContent}">
+										<!-- 게시글 내용이 여기에 들어갑니다. -->
+									</p>
+									<div class="collapse" id="moreContent">
+										<p>
+											<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
+										</p>
+										<a class="btn btn-link" data-toggle="collapse" href="#moreContent" role="button"
+											aria-expanded="false" aria-controls="moreContent">더보기</a>
+									</div>
+									<div class="card-footer">
+										<!-- 북마크, 댓글수 -->
+										<div>
+										
+										</div>
+										<div class="row">
+											<div class="col-md-8">
+												<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
+												<h6 th:text="댓글"></h6>
+												<ul class="list-unstyled">
+													<li th:each="com : ${projectWritingDetaisComment}"
+														th:data-post-code="${com.comNo}"
+														th:if="${allPost.proPostNo == com.proPostNo}">
+														<span th:utext="${com.profileImg}"></span>
+														<span th:text="${com.name}"></span>
+														<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
+														<span th:text="${com.comContent}"></span>
+														<th:block th:if="${com.id == session.Id}">
+															<span onclick="UpdateWritingComment()" class="spanCursor"
+																  style="color: red">수정</span>
+															<span></span>
+															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+														</th:block>
+													</li>
+												</ul>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="댓글 작성">
+												</div>
+												<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+														th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 2종료 -->
+						</th:block>
+			
+				<!-- 3.일정 -->
+				<th:block th:if="${allPost.postType == '3'}">
+					<div class="card" style="margin-bottom: 15px; background-color: #fff;"
+						 th:data-feed-post-no="${allPost.proPostNo}"
+						 th:data-feed-sch-no="${allPost.schNo}"
+						 th:data-post-type="${allPost.postType}">
+						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
+						<div>
+								<span th:text="${allPost.profileImg}"></span>
+								<span th:text="'작성자 : ' + ${allPost.name}"></span>
+								<span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
+								<span onclick="updatePost()"
+									  style="cursor: pointer;">수정</span>
+						        <span onclick="deletePost()"
+						        	  style="cursor: pointer;">X</span>
+							</div>
+						<div class="card-header"
+							 th:text="'일정 : ' + ${allPost.postTitle}">
+							<!-- 글 제목 -->
+						</div>
+						 <a th:name="'moveMove' + ${allPost.proPostNo}"></a>
+						<ul>
+							<li th:if="${allPost.schStartTime != null}"
+								 th:text="'시작일 : ' + ${#dates.format(allPost.schStartTime, 'yyyy-MM-dd HH:mm')}"
+								 class="targetStart"></li>
+							<li th:if="${allPost.schEndTime != null}"
+								 th:text="'종료일 : ' + ${#dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm')}"
+								 class="targetEnd"></li>
+						</ul>
+						<div class="card-body">
+							<!-- 참석자 존 -->
+							<div>
+								<th:block th:each="rpl : ${readPartiZone}"
+										  th:if="${rpl.schNo == allPost.schNo}">
+									<div th:text="${rpl.name}"
+										 th:data-sch-user-id="${rpl.id == session.Id ? rpl.id : ''}"
+									 	 th:data-sch-list-id="${rpl.id}"></div>
+									<th:block th:switch="${rpl.partiCheck}">
+										<nav class="nav">
+											<span th:case="Y" style="color: green;">참석</span>
+											<span th:case="N" style="color: red;">불참</span>
+											<span th:case="A" style="color: gray;">미정</span>
+										</nav>
+									</th:block>
+								</th:block>
+							</div>
+							
+								<!-- 참석자 리스트 버튼 -->
+								<div>
+									<button type="button" class="btn btn-light" data-toggle="modal"
+											th:data-target="'#schPartiListModal' + ${allPost.proPostNo}"
+											th:if="${#dates.format(allPost.schEndTime) >= #dates.format(cTime)}">
+													참석자 변경
+									</button>
+									<!-- 참석자 리스트 Modal -->
+									<form>
+										<div class="modal fade" th:id="'schPartiListModal' + ${allPost.proPostNo}" tabindex="-1"
+												aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog modal-dialog-centered">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h1 class="modal-title fs-5" id="exampleModalLabel">참석자 변경</h1>
+														<button type="button" class="btn-close" data-dismiss="modal"
+																aria-label="Close"></button>
+													</div>
+													<!-- 내용 -->
+													<div class="modal-body">
+														<ul>
+															<li style="border-bottom: 1px solid gray; list-style-type: none;">
+																<div>
+																	<input type="checkbox" value="selectAll2" id="selectAll"
+																		onclick='' /><label for="selectAll"
+																		style="cursor: pointer;">전체선택</label>
+																		<input type="text" placeholder="참석자명 검색">
+																</div>
+															</li>
+															<!-- 참가자 목록 -->
+															<th:block th:each="member : ${projectPartiMember}">
+																<li style="list-style-type: none">
+																	<nav class="nav">
+																			
+																		<th:block th:each="rpl : ${readPartiList}"
+																				  th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck != null}">
+																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
+																				th:checked="${rpl.id == member.id}"
+																				th:data-sch-status="${rpl.partiCheck}"
+																				th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
+																		</th:block>
+																		<th:block th:each="rpl : ${readPartiList}"
+																				  th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck == null}">
+																			<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
+																				th:data-sch-status="${rpl.partiCheck}"
+																				th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
+																		</th:block>
+																		
+																		<label th:for="'schPartiList' + ${member.id}">
+																			<a class="nav-link" th:utext="${member.profileImg}"></a>
+																			<a class="nav-link" th:text="${member.name}"></a>
+																		</label>
+																	</nav>
+																</li>
+															</th:block>
+														</ul>
+													</div>
+													<div class="modal-body">
+													
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+														<button type="button" class="btn btn-primary" onclick="changeSchParti()">확인</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
+									<!-- 모달 끝 -->
+							</div>
+							<!-- 장소 -->
+							<div>
+								<div th:text="'장소 : ' + ${allPost.schPlace != null ? allPost.schPlace : ''}"
+									 class="targetPlace">
+								</div>
+							</div>
+							<div th:text="'내용 : ' + ${allPost.schContent == null ? '' : allPost.schContent}"
+								 class="targetContent">
+								<!-- 내용이 여기에 들어갑니다. -->
+							</div>
+							<!-- 참석 여부 버튼 -->
+							<th:block th:each="rparti : ${readSchparti}"
+									  th:if="${rparti.schNo == allPost.schNo and #dates.format(allPost.schEndTime) >= #dates.format(cTime)}">
+								<div th:attr="data-feed-sch-type=${rparti.partiCheck}" style="text-align: center;">
+									<button type="button" class="btn"
+										th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
+										data-sch-type-status="Y" onclick="toggleFeedSchButtonStyle(this)">참석</button>
+									<button type="button" class="btn"
+										th:classappend="${rparti.partiCheck == 'N' ? 'btn-danger' : 'btn-outline-danger'}"
+										data-sch-type-status="N" onclick="toggleFeedSchButtonStyle(this)">불참</button>
+									<button type="button" class="btn"
+										th:classappend="${rparti.partiCheck == 'A' ? 'btn-secondary' : 'btn-outline-secondary'}"
+										data-sch-type-status="A" onclick="toggleFeedSchButtonStyle(this)">미정</button>
+								</div>
+							</th:block>
+							<div class="card-footer">
+								<!-- 북마크, 댓글수 -->
+								<div>
+								
+								</div>
+								<div class="row">
+									<div class="col-md-8">
+										<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
+										<h6 th:text="댓글"></h6>
+										<ul class="list-unstyled">
+											<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+												th:if="${allPost.proPostNo == com.proPostNo}">
+												<span th:utext="${com.profileImg}"></span>
+												<span th:text="${com.name}"></span>
+												<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
+												<span th:text="${com.comContent}"></span>
+												<th:block th:if="${com.id == session.Id}">
+													<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+													<span></span>
+													<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+												</th:block>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<input type="text" class="form-control" placeholder="댓글 작성">
+										</div>
+										<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+												th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 3종료 -->
+				</th:block>
+
+
+				<!-- 4.할 일 -->
+				<th:block th:if="${allPost.postType == '4'}">
+					<div class="card" style="margin-bottom: 15px;
+						 background-color: #fff;"
+						 th:data-feed-post-no="${allPost.proPostNo}"
+						 th:data-post-type="${allPost.postType}">
+						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
+						<div>
+					        <span th:text="${allPost.profileImg}"></span>
+					        <span th:text="'작성자 : ' + ${allPost.name}"></span>
+					        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
+					        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
+					        <span onclick="deletePost()" style="cursor: pointer;">X</span>
+					    </div>
+						<div class="card-header" th:text="'할 일 : ' + ${allPost.postTitle}">
+							<!-- 글 제목 -->
+						</div>
+						<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
+						<div class="card-body">
+							<!-- 진척도 바 -->
+							<div>
+								<div class="progress">
+									<th:block th:each="prog : ${readAllTodoListPer}"
+											  th:if="${prog.proPostNo == allPost.proPostNo}">
+										<div class="progress-bar bg-info" role="progressbar"
+											 th:style="'width: ' + ${prog.per} + '%'" aria-valuemin="0" aria-valuemax="100"></div>
+									<th:block>
+								</div>
+							</div>
+							<!-- 할 일 체크 공간 -->
+							<div>
+								<ul class="list-group">
+								  <li th:class="${rt.todoCheck == 'Y'} ? 'list-group-item grayC' : 'list-group-item'"
+								  	  th:each="rt : ${readTodoList}"
+								  	  th:if="${rt.proPostNo == allPost.proPostNo}"
+											th:data-post-todo-no="${rt.todoNo}">
+								    <input class="form-check-input me-1"
+								    	   type="checkbox"
+								    	   th:data-todo-no="${rt.todoNo}"
+								    	   th:checked="${rt.todoCheck == 'Y'}"
+								    	   style="cursor: pointer;"
+										   onclick="changeTodoStatus()">
+								    	   <!-- th:value="${rt.todoNo}" th:id="'firstCheckboxStretched' + ${rt.todoNo}" -->
+								   	<span th:text="'Todo : ' + ${rt.todoContent}"></span>
+									<span th:text="${rt.todoEnd == null} ? '' : '마감일 : ' + ${#dates.format(rt.todoEnd, 'MM/dd')}"
+										  th:style="${rt.todoEnd >= #dates.format(currentTime, 'MM/dd') ? 'color: red' : ''}"></span>
+									<span th:text="${rt.name == null} ? '' : '담당자 : ' + ${rt.name}"></span>
+								  </li>
+								</ul>
+							</div>
+							<div class="card-footer">
+								
+								<!-- 북마크, 댓글수 -->
+								<div class="row">
+									<div class="col-md-8">
+										<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
+										<h6 th:text="댓글"></h6>
+										<ul class="list-unstyled">
+											<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+												th:if="${allPost.proPostNo == com.proPostNo}">
+												<span th:utext="${com.profileImg}"></span>
+												<span th:text="${com.name}"></span>
+												<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
+												<span th:text="${com.comContent}"></span>
+												<th:block th:if="${com.id == session.Id}">
+													<span onclick="UpdateWritingComment()" class="spanCursor"
+														  style="color: red">수정</span>
+													<span></span>
+													<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+												</th:block>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<input type="text" class="form-control" placeholder="댓글 작성">
+										</div>
+										<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+												th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 4종료 -->
+				</th:block>
+				
+				<!-- 5.투표 -->
+				<th:block th:if="${allPost.postType == '5'}">
+					<div class="card"
+						 style="margin-bottom: 15px; background-color: #fff;"
+						 th:data-feed-post-no="${allPost.proPostNo}"
+						 th:data-feed-vote-no="${allPost.voteNo}"
+						 th:data-post-type="${allPost.postType}">
+						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
+						<div>
+					        <span th:text="${allPost.profileImg}"></span>
+					        <span th:text="'작성자 : ' + ${allPost.name}"></span>
+					        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
+					        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
+					        <span onclick="deletePost()" style="cursor: pointer;">X</span>
+					    </div>
+					    <div>
+						    <th:block th:if="${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')} and ${allPost.voteEndCheck == 'N'}">
+						        <button type="button" class="btn btn-outline-danger">진행중</button>
+						    </th:block>
+						    <th:block th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') < #dates.format(cTime, 'yyyy-MM-dd')}) or ${allPost.voteEndCheck == 'Y'}">
+						        <button type="button" class="btn btn-outline-secondary">투표 종료</button>
+						    </th:block>
+					    </div>
+					    	<div class="card-header"
+					    		 th:text="'투표 : ' + ${allPost.postTitle}">
+								<!-- 글 제목 -->
+							</div>
+						<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
+						<div class="card-body">
+							<!-- 투표 설명 -->
+							<ul>
+								<li th:text="'투표 마감일 : ' + ${allPost.voteEndDay == null ? '미정' : #dates.format(allPost.voteEndDay, 'yyyy-MM-dd') + ' 까지'}"></li>
+								<li th:text="'투표 설명 : ' + ${allPost.voteContent == null ? '' : allPost.voteContent}"></li>
+							</ul>
+							<!-- 투표창 -->
+							<ul class="list-group">
+							  <li class="list-group-item" th:each="vtCheck : ${readVoteListCheck}"
+							  	  th:if="${vtCheck.voteNo == allPost.voteNo}">
+							  	  
+							  	<span th:utext="${vtCheck.voteDetailImg}"
+							  		  th:data-vote-detail-img="${vtCheck.voteDetailImg}"></span>
+							  		  
+ 								    <input class="form-check-input me-1"
+								    	   type="checkbox"
+								    	   th:data-vote-detail-no="${vtCheck.voteDetailNo}"
+										   onclick="changeVoteStatus()"
+ 										   th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')}) and ${allPost.voteEndCheck == 'N'}">
+ 										   
+								<span class="voteContent"
+									  th:text="${vtCheck.voteDetailContent}"></span>
+								<span th:each="vC : ${readVotePartiCount}"
+									  th:if="${vtCheck.voteDetailNo == vC.voteDetailNo}"
+									  class="spanCursor voteCount"
+									  th:text="${vC.count} + '명'"> 
+								</span>
+								
+							  </li>
+							</ul>
+								<!-- <span th:each="vpl : ${readVoteListParti}"
+									  th:if="${vtCheck.voteDetailNo == vpl.voteDetailNo}"
+									  th:data-vote-parti-person-id="${vpl.votePartiNo}">
+									  <span th:text="${vpl.name} + ' '"></span>
+								</span> -->
+							<!-- 투표 종료 버튼 -->
+							<th:block th:if="${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')} and ${allPost.voteEndCheck == 'N'}">
+						        <button type="button" class="btn btn-danger" onclick="voteEnd()">투표 마감</button>
+						    </th:block>
+							<!-- 하단 -->
+							<div class="card-footer">
+								
+								<!-- 북마크, 댓글수 -->
+								<div class="row">
+									<div class="col-md-8">
+										<h6 th:text="댓글"></h6>
+										<ul class="list-unstyled">
+											<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+												th:if="${allPost.proPostNo == com.proPostNo}">
+												<span th:utext="${com.profileImg}"></span>
+												<span th:text="${com.name}"></span>
+												<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
+												<span th:text="${com.comContent}"></span>
+												<th:block th:if="${com.id == session.Id}">
+													<span onclick="UpdateWritingComment()" class="spanCursor"
+														  style="color: red">수정</span>
+													<span></span>
+													<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+												</th:block>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<input type="text" class="form-control" placeholder="댓글 작성">
+										</div>
+										<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+												th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 5종료 -->
+				</th:block>
+				
+				
+				
+
+				<!-- 포스트 종료 -->
+			</th:block>
+		</div>
+			</div>
+			
+			<!-- 글 수정 모달 공간 -->
+			
+			<!-- 1. 글 수정-->
+			<div class="modal fade" id="modal11" tabindex="-1" aria-labelledby="modal11lLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="modal11Label">글 수정</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			        <div>
+						<input type="text" placeholder="제목을 입력하세요." id="updateNormalPostTitle">
+					</div>
+					<div>
+						<textarea placeholder="내용을 입력하세요." id="updateNormalPostContent"></textarea>
+					</div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+			        <button type="button" class="btn btn-primary" onclick="chagemodal11()">수정</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			
+			<!-- 2.업무 수정 -->
+			<div class="modal fade" id="modal12" tabindex="-1" aria-labelledby="modal12Label" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="modal12Label">업무 수정</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			      	<div>
+						<input type="text" placeholder="제목을 입력하세요." id="updateWorkTitle">
+						<!-- <input type="text" placeholder="제목을 입력하세요." class="postTitle"> -->
+					</div>
+					<!-- 담당자 추가 -->
+					<div>
+						<p>담당자 수정(Ctrl을 누르면 중복 처리 가능)</p>
+						<select class="form-select"
+								multiple
+								name="workMember"
+								size=5 id="updateWorkPostPerson">
+							<th:block th:each="member : ${projectPartiMember}">
+									<option th:text="${member.name} +'(나)'"
+											th:value="${member.id}"
+											th:if="${member.id == session.Id}">
+									</option>
+									<option th:text="${member.name}"
+											th:value="${member.id}"
+											th:if="${member.id != session.Id}">
+									</option>
+							</th:block>
+						</select>
+					</div>
+					
+					<!-- 내용입력 -->
+					<div>
+						<textarea placeholder="내용을 입력하세요." id="updateWorkContent"></textarea>
+					</div>
+					
+					<!-- 첨부파일 수정 -->
+					<div>
+						<div class="uploadResult">
+                            <ul></ul>
+                        </div>
+                        <!-- 첨부파일 -->
+						<input type="file"
+							   name="uploadFile"
+							   multiple>
+					</div>
+					
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+			        <button type="button" class="btn btn-primary" onclick="chagemodal12()">저장</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+				
+			<!-- 3.일정 수정 -->
+			<div class="modal fade" id="modal13" tabindex="-1" aria-labelledby="modal13Label" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="modal13Label">일정 수정</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			     	 <div>
+						<input type="text" placeholder="제목을 입력하세요." id="updateSchTitle">
+					</div>
+					<!-- 시작일 -->
+					<div>
+						<p>시작일</p>
+						<input type="datetime-local" id="updateSchStart">
+					</div>
+					
+					<!-- 마감일 -->
+					<div>
+						<p>마감일</p>
+						<input type="datetime-local"
+							   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
+							   id="updateSchEnd">
+					</div>
+					<!-- 장소 -->
+					<div>
+						<p>장소</p>
+						<input type="text" id="updateSchPlace">
+					</div>
+					<!-- 내용 -->
+					<div>
+						<textarea placeholder="내용을 입력하세요."  id="updateSchContent"></textarea>
+					</div>
+					
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+			        <button type="button" class="btn btn-primary" onclick="chagemodal13()">수정</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			
+			<!-- 4.할 일 수정 -->					
+			<div class="modal fade" id="modal14" tabindex="-1" aria-labelledby="modal14Label" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="modal14Label">할 일 수정</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			      	<div>
+						<input type="text" placeholder="제목을 입력하세요." id="updateTodoTitle">
+					</div>
+					<br>
+					<!-- 할 일 입력 -->
+					<div>
+						<ul class="list-group" data-todo-make-list="todoTarget">
+
+						</ul>
+
+						<div>
+							<input id="todoContent2"
+								   type="text"
+								   class="js-todo-content-input"
+								   placeholder="할 일 추가 (Enter) / 최대 60자"
+								   autocomplete="off"
+								   maxlength="60">
+							<div class="todo-menu">
+							<span>
+									<input type="date"
+												 data-input-todo-date="todoDate">
+									<select class="form-select"
+													name="todoMember"
+													data-input-todo-select="todoSelect">
+										<option value="">없음</option>
+										<th:block th:each="member : ${projectPartiMember}">
+											<option th:text="${member.name}" th:value="${member.id}"
+											th:if="${member.id == session.Id}" style="background-color: #eee;"></option>
+											<option th:text="${member.name}" th:value="${member.id}"
+											th:if="${member.id != session.Id}"></option>
+										</th:block>
+									</select>
+							</span>
+
+							</div>
+						</div>
+
+
+					</div>
+					<!-- 할 일 입력 종료 -->
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+			        <button type="button" class="btn btn-primary" onclick="chagemodal14()">수정</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+
+			<!-- 5. 투표 수정 -->
+			<div class="modal fade" id="modal15" tabindex="-1" aria-labelledby="modal15Label" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="modal15Label">투표 수정</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			      	<ul>
+						<!-- 투표 내용 -->
+						<li><input type="text" placeholder="제목을 입력하세요." class="postTitle"></li>
+						<!-- 투표 설명 -->
+						<li><input type="text" placeholder="투표에 관한 설명 입력(옵션)" class="postContent"></li>
+					</ul>
+					<!-- 투표내용 -->
+					<p>Enter를 입력하면 최대 10개까지 창이 추가 됩니다.</p>
+					<ul>
+						<!-- 기존 내용 들어올 곳 -->
+					</ul>
+					<ul>
+						<li><input type="text" class="plusChangeVoteInput" placeholder="항목 추가"></li>
+						<!-- 투표 항목 추가 -->
+					</ul>
+					<!-- 투표 마감일 -->
+					<div>
+						<p>투표 마감일</p>
+						<input type="date" class="endVoteDate">
+					</div>
+					
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+			        <button type="button" class="btn btn-primary" onclick="chagemodal15()">수정</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			<!-- 투표 모달 종료 -->
+			
+			
+		</div>
+		<!-- 참여자공간 -->
+		<div class="float-right">
+			<div>
+				<th:block th:text="'참여자 ' + ${projectPartiMember.size}"></th:block>
+			</div>
+			<div class="card" style="width: 18rem;">
+			  <!-- 관리자 -->
+			  <div class="card-header openModalInfo"
+			  	   th:each="pUser : ${projectPartiMember}"
+			  	   th:if="${pUser.id == readProAuth.id}"
+			  	   th:data-user-id="${pUser.id}"
+			  	   data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.empNo}"
+			  	   style="background-color: rgb(161, 204, 239)">
+			  	   <span th:text="'프로젝트 관리자 : '"></span>
+			       <span th:utext="${pUser.profileImg}"></span>
+			       <span th:text="${pUser.name}"></span>
+			  	   <span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
+			  </div>
+			  <ul class="list-group list-group-flush">
+			    <li class="list-group-item openModalInfo" th:each="pUser : ${projectPartiMember}"
+			    	th:if="${pUser.id != readProAuth.id}"
+			    	th:data-user-id="${pUser.id}"
+			    	data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.empNo}">
+			    	<span th:utext="${pUser.profileImg}"></span>
+			    	<span th:text="${pUser.name}"></span>
+			    	<span th:if="${session.Id == pUser.id}" th:text="(나)"></span>
+		    	</li>
+			  </ul>
+				<!-- 유저 인포 모달창 -->
+				<div th:each="mem : ${projectPartiMember}">
+					<div class="modal fade modal-dialog-centere" th:id="'proUserInfoDetail' + ${mem.empNo}"
+						 tabindex="-1" aria-labelledby="proUserInfoDetailLabel" aria-hidden="true"
+						 th:data-user-info-id="${mem.id}">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+				        <div class="card-deck">
+						  <div class="card">
+						  <!-- 프사 -->
+						  	<!-- <img th:src="@{|/display?fileName=${#strings.replace(mem.uploadPath,'\','/')}/s_${mem.uuid}_${mem.fileName}|}"
+						  		 class="card-img-top" alt="프로필 이미지"> -->
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					          <span aria-hidden="true">&times;</span>
+					        </button>
+						    <div class="card-body">
+						    	<ul>
+						    		<li th:text="'부서명 : ' + ${mem.deptName}"></li>
+						    		<li th:text="'직급 : ' + ${mem.rank}"></li>
+						    		<li th:text="'이름 : ' + ${mem.name}"></li>
+						    		<li th:text="'이메일 : ' + ${mem.email}"></li>
+						    		<li th:text="'전화번호 : ' + ${mem.phone}"></li>
+						    		<li th:text="'메모 : ' + (${mem.profileNote == null} ? '-' : ${mem.profileNote})"
+						    			class="profileMemoTag"></li>
+						    		
+						    	</ul>
+						    </div>
+						    <div class="card-footer">
+						    	<button type="button"
+						    			class="btn btn-primary"
+						    			onclick="changeProfileNote()"
+						    			th:if="${mem.id == session.Id}">상태메세지 변경</button>
+						    </div>
+						  </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+			</div>
+			<!-- 유저 인포 모달창 -->
+			
+		</div>
+	</div>
+	<div>
+		<!-- 글 조회 공간 -->
+		<div></div>
+		
+		<!-- 사진창 -->
+		<div class="bigPictureWrapper">
+			<div class="bigPicture"></div>
+		</div>
+					
+	</div>
+</div>
+	
+	
+<!-- model값 가져오기 -->
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		//투표 check하기
+		let modelVoteChecks = /*[[${readxxVote}]]*/;
+		let proAllMember = /*[[${projectPartiMember}]]*/;
+	/*]]>*/
+</script>
+
+<!-- 버튼 상태 변경(업무상태, 작성 모달창) -->	
+<script>
+	let selectedButton = workTypeButtonToggle;
+
+	function toggleButtonStyle(button) {
+		
+		if (selectedButton !== button) {
+			if (selectedButton) {
+				console.log('selectedButton찾기',selectedButton);
+				resetButtonStyle(selectedButton);
+			}
+			
+			let className = button.classList.item(1);
+	
+			if (className.startsWith('btn-outline')) {
+				let filledClassName = className.replace('btn-outline', 'btn');
+				button.classList.remove(className);
+				button.classList.add(filledClassName);
+			} else {
+				let outlineClassName = className.replace('btn', 'btn-outline');
+				button.classList.remove(className);
+				button.classList.add(outlineClassName);
+			}
+	
+			selectedButton = button;
+		} else {
+			//버튼 초기화
+			// resetButtonStyle(button);
+			// selectedButton = null;
+		}
+	}
+	
+	//버튼 초기화
+	function resetButtonStyle(button) {
+		let className = button.classList.item(1);
+		//console.log(className);
+		if (className.startsWith('btn-outline')) {
+			let outlineClassName = className.replace('btn-outline', 'btn');
+			button.classList.remove(className);
+			button.classList.add(outlineClassName);
+		} else {
+			let filledClassName = className.replace('btn', 'btn-outline');
+			button.classList.remove(className);
+			button.classList.add(filledClassName);
+		}
+	}
+	
+</script>
+
+<!-- 버튼 상태 변경(업무 상태, 게시물 조회) -->
+<script>
+	let selectedFeedButton = new Map();
+
+	function toggleFeedButtonStyle(button) {
+		let postWorkNo = button.closest('.card').dataset.feedPostNo;// 글 번호
+		let workNo = button.closest('.card').dataset.feedWorkNo;
+		//let newStatus = button.parentNode.dataset.feedWorkType;//신규 선택 버튼 번호
+		let newStatus = button.dataset.workTypeStatus;
+		let oldStatusNo = selectedFeedButton.get(postWorkNo);//선택했던 기존 버튼 번호 null or 존재
+
+		//기존 상태 버튼 찾기
+		let oldButton;
+		if(oldStatusNo == null) {//선택했던 기존 버튼이 없다면
+			let firstButtonStatusNo = button.parentNode.dataset.feedWorkType;//최초 버튼 찾기
+			oldButton = button.closest(".card").querySelector('[data-work-type-status="' + firstButtonStatusNo + '" ]');//최초 버튼 상태 찾기
+		} else {//선택했던 기존 버튼이 있다면
+			oldButton = button.closest(".card").querySelector('[data-work-type-status="' + oldStatusNo + '" ]');//구 버튼 상태를 찾기
+		}
+
+		selectedFeedButton.set(postWorkNo, newStatus);//신규 번호 삽입
+		
+		fetch("/updateWorkPostStatus", {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'workStatus' : newStatus,
+							'workNo': workNo
+						})
+				})
+				.then(response => response.json())
+				.then(res => {
+					console.log(res);
+					if(res.result == '성공') {
+						
+							if (oldButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
+								if (oldButton) {
+									resetButtonStyle(oldButton);
+								}
+								
+								let className = button.classList.item(1);
+						
+								if (className.startsWith('btn-outline')) {
+									let filledClassName = className.replace('btn-outline', 'btn');
+									button.classList.remove(className);
+									button.classList.add(filledClassName);
+								} else {
+									let outlineClassName = className.replace('btn', 'btn-outline');
+									button.classList.remove(className);
+									button.classList.add(outlineClassName);
+								}
+						
+								oldButton = button;
+							}
+							
+							//차트 재호출
+							google.charts.setOnLoadCallback(drawChart);
+							
+					} else {
+						alert('상태 수정 실패');
+					}
+				});
+		
+	}
+	
+	//버튼 초기화
+	function resetButtonStyle(button) {
+		let className = button.classList.item(1);
+		//console.log(className);
+		if (className.startsWith('btn-outline')) {
+			let outlineClassName = className.replace('btn-outline', 'btn');
+			button.classList.remove(className);
+			button.classList.add(outlineClassName);
+		} else {
+			let filledClassName = className.replace('btn', 'btn-outline');
+			button.classList.remove(className);
+			button.classList.add(filledClassName);
+		}
+	}
+	
+</script>
+	
+<!-- 버튼 상태(일정) 참가 상황 -->
+<script>
+	let selectedSchButton = new Map();
+
+	function toggleFeedSchButtonStyle(button) {
+		let postSchNo = button.closest('.card').dataset.feedPostSchNo;// 글 번호(map용)
+		let schNo = button.closest('.card').dataset.feedSchNo;//sch 고유번호, update용
+		let newStatus = button.dataset.schTypeStatus;//선택한 번호
+		let oldSchStatusNo = selectedSchButton.get(postSchNo);//선택했던 기존 버튼 번호 null or 존재
+
+		//기존 상태 버튼 찾기
+		let oldSchButton;
+		if(oldSchStatusNo == null) {//선택했던 기존 버튼이 없다면
+			let firstButtonSchStatusNo = button.parentNode.dataset.feedSchType;//최초 버튼 찾기
+			oldSchButton = button.closest(".card").querySelector('[data-sch-type-status="' + firstButtonSchStatusNo + '" ]');//최초 버튼 상태 찾기
+		} else {//선택했던 기존 버튼이 있다면
+			oldSchButton = button.closest(".card").querySelector('[data-sch-type-status="' + oldSchStatusNo + '" ]');//구 버튼 상태를 찾기
+		}
+
+		selectedSchButton.set(postSchNo, newStatus);//신규 번호 삽입
+		
+		//console.log('신규상태',newStatus);//새 번호 찾기
+		//console.log('고유번호',schNo);
+		
+		fetch("/updateSchPartiCheck", {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				'partiCheck' : newStatus,
+					'schNo': schNo
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res);
+			if(res.result == '성공') {
+				
+				if (oldSchButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
+					if (oldSchButton) {
+						resetButtonStyle(oldSchButton);
+					}
+					
+					let className = button.classList.item(1);
+			
+					if (className.startsWith('btn-outline')) {
+						let filledClassName = className.replace('btn-outline', 'btn');
+						button.classList.remove(className);
+						button.classList.add(filledClassName);
+					} else {
+						let outlineClassName = className.replace('btn', 'btn-outline');
+						button.classList.remove(className);
+						button.classList.add(outlineClassName);
+					}
+			
+					oldSchButton = button;
+				}
+				/* else {//버튼취소하는기능
+					resetButtonStyle(button);
+					selectedSchButton.set(postSchNo, null);
+					newStatus = 'B';
+				} */
+				
+				changeSchStatus(button, newStatus);
+				
+			} else {
+				alert('상태 수정 실패');
+			}
+		});
+		
+	}
+	
+	//버튼 초기화
+	function resetButtonStyle(button) {
+		let className = button.classList.item(1);
+		//console.log(className);
+		if (className.startsWith('btn-outline')) {
+			let outlineClassName = className.replace('btn-outline', 'btn');
+			button.classList.remove(className);
+			button.classList.add(outlineClassName);
+		} else {
+			let filledClassName = className.replace('btn', 'btn-outline');
+			button.classList.remove(className);
+			button.classList.add(filledClassName);
+		}
+	}
+	
+	//글자 바꾸기
+	function changeSchStatus(button, newStatus) {
+		let schPartiChange = button.closest(".card").querySelector('[data-sch-user-id]').nextElementSibling;//상태창 위치
+		console.log('ss',button.closest(".card").querySelector('[data-sch-user-id]'))
+		console.log('sss',schPartiChange);
+		
+		if(newStatus == 'Y') {
+			schPartiChange.textContent ='참석';
+			button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'Y';
+			schPartiChange.style.color = 'green';
+		} else if(newStatus == 'N') {
+			schPartiChange.textContent ='불참';
+			button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'N';
+			schPartiChange.style.color = 'red';
+		} else if(newStatus == 'A') {
+			schPartiChange.textContent ='미정';
+			button.closest(".card").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'A';
+			schPartiChange.style.color = 'gray';
+		}
+	}
+</script>
+
+
+
+<!-- 글 작성 -->
+<script>
+	
+	createWritingButton.addEventListener('click', function () {
+		//제목 빈값 검사
+		let titles = document.getElementsByClassName('postTitle');
+		if(titles[0].value == '') {
+			titles[0].focus();
+			alert('제목을 입력하세요');
+			return;
+		}
+		
+		//내용 빈값 검사
+		if(writingContent.value == '') {
+			alert('내용을 입력하세요');
+			writingContent.focus();
+			return;
+		}
+		
+		fetch("/postCreateWriting", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'postTitle': titles[0].value,
+					'writingContent': writingContent.value,
+					'proNo': projectNo
+				})
+		})
+		.then(response => response.json())
+		.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+		
+	});
+
+</script>
+	
+<!-- 업무 작성 -->
+<script>
+	//담당자 값 가져오기
+	let workPersonArr = [];
+	function workPostPeople(e) {
+		workPersonArr = [];
+
+		for(let i=0; i < e.options.length; i++) {
+			let option = e.options[i];
+			if(option.selected) {
+				workPersonArr.push(option.value);
+			}
+		};
+		
+		return workPersonArr;
+	}
+	
+	//등록 버튼 클릭
+	createWorkButton.addEventListener('click', function () {
+		//제목 빈값 검사
+		let titles = document.getElementsByClassName('postTitle');
+		if(titles[1].value == '') {
+			titles[1].focus();
+			alert('제목을 입력하세요');
+			return;
+		}
+		
+		//내용 빈값 검사
+		if(workWritingContent.value == '') {
+			alert('내용을 입력하세요');
+			workWritingContent.focus();
+			return;
+		}
+		
+		// console.log(titles[1].value);
+		// console.log('업무그룹',workPostGroup.value);
+		// console.log('업무상태',selectedButton.dataset.workTypeStatus);
+		 //console.log('우선순위',workPostPriPost.value);
+			//console.log(startWorkDate.value);
+		//	console.log(endWorkDate.value);
+		// console.log('내용',workWritingContent.value);
+		// console.log('참여자', workPersonArr);
+		
+		let newStartDate = startWorkDate.value == '' ? startWorkDate.value : convertToFormattedDateTime(startWorkDate.value);
+		let newEndDate = endWorkDate.value == '' ? endWorkDate.value : convertToFormattedDateTime(endWorkDate.value);
+		
+		fetch("/postCreateWork", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'proNo': projectNo,
+					'postTitle': titles[1].value,
+					'workGroupNo': workPostGroup.value,
+					'workStatus': selectedButton.dataset.workTypeStatus,
+					'workPri': workPostPriPost.value,
+					'workStartDay': newStartDate,
+					'workStartTime': newStartDate,
+					'workEndDay': newEndDate,
+					'workEndTime': newEndDate,
+					'workContent': workWritingContent.value,
+					'workPersonArr': workPersonArr
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			//파일 첨부
+			console.log('업로드 스타트!')
+			let wFileArr = [];
+			
+			$("#modal2 .uploadResult ul li").each(function(i, obj){
+		        console.log(obj)
+		        let wfObj = {
+					'uuid' : obj.dataset.uuid,
+					'uploadPath' : obj.dataset.path,
+					'fileName' : obj.dataset.filename,
+					'fileType' : obj.dataset.type// = obj.dataset.type ? '1' : '0',
+				};
+				wFileArr.push(wfObj);
+		    });
+			
+			//사진 업로드
+			$.ajax({
+    			url: "/proFileInsert",
+  			    method: "POST",
+  			    contentType:"application/json; charset=utf-8",
+  			    data: JSON.stringify(wFileArr),
+  			    async : false,
+  			    success: function(data) {
+  			    	console.log(data);
+  			    	location.href="/proPostMain/" + projectNo + "?homeTab=2"
+  			    },
+  			    error: function(err) {
+					console.log(err);
+  			    }	
+    		});
+		    
+			//파일 첨부 끝
+			
+		});
+		
+	});
+</script>
+	
+<!-- 댓글 등록 -->
+<script>
+	function createCommentButton() {
+		let targetButton = event.target;//버튼 동적 확인
+		let com = targetButton.parentNode.children[0].children[0]; //텍스트값 찾기
+		if(com.value == '') {
+			com.focus();
+			alert('댓글을 입력하세요');
+			return;
+		}
+		
+		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
+		
+		// let url = window.location.pathname;
+		// let lastIndex = url.lastIndexOf('/');
+		// let projectNo = url.substring(lastIndex + 1);
+		
+		fetch("/postCreateComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'proPostNo': writingNo,
+					'comContent': com.value
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res)
+			let insertComment = targetButton.closest('.card').getElementsByClassName('list-unstyled')[0];
+			console.log('여기',insertComment)
+			
+			insertComment.insertAdjacentHTML('beforeend', 
+				'<li data-post-code="' + res.result + '">'+
+					'<span></span>'+
+					'<span>' + selfName + '</span>'+
+					'<span>' + currentTime + '</span>'+
+					'<span>' + com.value + '</span>'+
+					'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
+					'<span></span>'+
+					'<span onclick="deleteWritingComment()" class="spanCursor">X</span>'+
+				'</li>'
+			);
+			com.focus();
+			com.value = '';
+		});
+	}
+	
+	//현재시간 구하기
+	const currentTime = formatDate();
+	
+	function formatDate() {
+		let date = new Date();
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		
+		return `${year}/${month}/${day} ${hours}:${minutes}`;
+	}
+</script>
+	
+<!-- 댓글 삭제  -->
+<script>
+	function deleteWritingComment() {
+		let targetButton = event.target;
+		//console.log(targetButton.parentNode.dataset.postCode);
+		
+		// let url = window.location.pathname;
+		// let lastIndex = url.lastIndexOf('/');
+		// let projectNo = url.substring(lastIndex + 1);
+		
+		fetch("/postDeleteComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'comNo': targetButton.parentNode.dataset.postCode
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			targetButton.parentNode.remove()
+		});
+	}
+</script>
+	
+<!-- 댓글 수정  -->
+<script>
+	function UpdateWritingComment() {
+		let targetButton = event.target;
+		let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
+		
+		let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
+		let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
+		
+		//초기화
+		targetButton.parentNode.children[2].textContent = '';//날짜 초기화
+		targetButton.parentNode.children[3].textContent = '';//댓글 초기화
+		targetButton.parentNode.children[4].textContent = '';//수정 초기화
+		targetButton.parentNode.children[6].textContent = '';//X 초기화
+		
+		if(document.getElementById('newComment') != null) {
+			let nC = document.getElementById('newComment').parentNode.parentNode;
+			nC.childNodes[5].textContent = document.getElementById('newComment').dataset.comDate;
+			nC.childNodes[7].textContent = document.getElementById('newComment').value;
+			nC.childNodes[9].textContent = '수정';
+			nC.childNodes[11].textContent = '';
+			nC.childNodes[13].textContent = 'X';
+		}
+		
+		// 댓글 수정 폼 생성
+		targetButton.parentNode.children[5].innerHTML = 
+				'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
+				+'<span id="ooo" class="spanCursor">수정</span>'
+				+'<span id="xxx" class="spanCursor">취소</span>';
+				
+		// 취소버튼
+		document.getElementById('xxx').addEventListener('click', function() {
+			targetButton.parentNode.children[2].textContent = oldDate;
+			targetButton.parentNode.children[3].textContent = oldCom;
+			targetButton.parentNode.children[4].textContent = '수정';
+			targetButton.parentNode.children[5].textContent = '';
+			targetButton.parentNode.children[6].textContent = 'X';
+		});
+		
+		// 수정버튼
+		document.getElementById('ooo').addEventListener('click', function() {
+			let newCom = document.getElementById('newComment');
+			if(newCom.value == '') {
+				newCom.focus();
+				alert('댓글을 수정하세요');
+			} else {
+				
+				fetch("/postUpdateComment", {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'comContent' : newCom.value,
+							'comNo': comNo
+						})
+				})
+				.then(response => response.json())
+				.then(res => {
+					
+					if(res.result == '성공') {
+						targetButton.parentNode.children[2].textContent = oldDate;
+						targetButton.parentNode.children[3].textContent = newCom.value;
+						targetButton.parentNode.children[4].textContent = '수정';
+						targetButton.parentNode.children[6].textContent = 'X';
+						targetButton.parentNode.children[5].textContent = '';
+						
+						// let url = window.location.pathname;
+						// let lastIndex = url.lastIndexOf('/');
+						// let projectNo = url.substring(lastIndex + 1);
+						
+					} else {
+						alert('댓글 수정 실패');
+					}
+				});
+			}
+		});
+		
+	}
+	
+</script>
+	
+<!-- 참석자 선택 처리 -->
+<script>
+	function changeSchParti() {
+		let inputValues = event.target.closest('.modal-content').children[1].children[0].querySelectorAll('input[type="checkbox"]:checked');
+		let formData = new FormData();
+		let formDataDel = new FormData();
+		let updatePartiList = [];
+		let updateObj = {};
+		
+		let schPlNo = event.target.closest('.card').dataset.feedSchNo;//스케줄 고유번호
+		
+		inputValues.forEach(inputValue => {
+			updateObj.schNo = schPlNo;
+			updateObj.partiCheck = inputValue.dataset.schStatus == null ? 'A' : inputValue.dataset.schStatus;
+			updateObj.id = inputValue.dataset.schListId;
+			updatePartiList.push(updateObj);
+			updateObj = {};
+			});
+		let noSchNo = [{'schNo' : schPlNo}];
+		formData = updatePartiList.length == 0 ? noSchNo : updatePartiList;
+		console.log(formData);
+		
+		//console.log(formDataDel.get('schNo'))
+				
+		//기존 & 추가 인원 추가
+		fetch("/insertPartiMemberAll", {
+			method: 'POST',
+			headers : {
+				'Content-Type': 'application/json'
+			},
+			body : JSON.stringify(formData)
+		})
+		.then(response => response.json())
+		.then(res => {
+			let rC = res.result;
+			
+			if(rC == -1) {
+				console.log('0명');
+				const currentURL = window.location.href;
+				window.location.href = currentURL;
+			} else if (rC >= 1) {
+				console.log(rC + '명 업데이트');
+				const currentURL = window.location.href;
+				window.location.href = currentURL;
+			}else {
+				alert('알 수 없는 접근')
+			}
+		});
+		
+	}
+</script>
+	
+<!-- todo 버튼 상태 변경 -->
+<script>
+	function changeTodoStatus() {
+		let todoNo = event.target.dataset.todoNo;
+		let checkedYN = event.target.checked ? 'Y' : 'N';
+		let totalInputExp = event.target.parentNode.parentNode;
+		let liTag = event.target.parentElement;
+		liTag.classList.toggle("grayC");
+		
+		fetch("/updateTotoStatus", {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'todoNo' : todoNo,
+					'todoCheck': checkedYN
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			let totalInput = totalInputExp.querySelectorAll('input').length;//총 input 수
+			let countInput = 0;
+			let inputs = totalInputExp.querySelectorAll('input');
+			inputs.forEach(input => {
+				input.checked ? countInput++ : 0;
+			});
+			let per = countInput / totalInput * 100;
+			//console.log(per)
+			
+			//퍼센트 변경
+			totalInputExp.closest('.card-body').children[0].children[0].children[0].style.width = per + '%';
+			
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+		
+	}
+</script>
+
+<!-- 프로필 메모 변경 -->
+<script>
+function changeProfileNote() {
+	let oldProfileMemoTag = event.target.closest('.card').querySelector('.profileMemoTag');
+	console.log(event.target.closest('.card'))
+	let oldProfileMemoText = oldProfileMemoTag.textContent;
+	let profileId = event.target.closest('.fade').dataset.userInfoId;
+	let profileChangeButton = event.target;
+	
+	oldProfileMemoTag.innerHTML =
+				'<input type="text" placeholder="프로필 수정" id="newMemo">'
+				+'<span id="memoUpdate" class="spanCursor">수정</span>'
+				+'<span id="memoCancle" class="spanCursor">취소</span>';
+	
+	// 취소버튼
+	document.getElementById('memoCancle').addEventListener('click', function() {
+		event.target.parentNode.innerHTML='';
+		oldProfileMemoTag.textContent = oldProfileMemoText;
+	});
+
+	//수정 버튼
+	document.getElementById('memoUpdate').addEventListener('click', function() {
+		let newMemo = event.target.parentElement.children[0].value;
+		console.log(newMemo)
+		
+		if(newMemo == '') {
+			alert('값 입력');
+		} else {
+		fetch("/updateProfileMemo", {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					'profileNote' : newMemo,
+					'id' : profileId
+					 })
+			})
+			.then(response => response.json())
+			.then(res => {
+				console.log(res.result)
+				profileChangeButton.parentNode.innerHTML='';
+				oldProfileMemoTag.textContent = '메모 : ' + newMemo;
+			})
+		}
+
+	});
+
+
+}
+</script>	
+
+<!-- 포스트 타입 필터 -->
+<script>
+	function chagePostType() {
+		let postType = Number(event.target.value);
+		let url = window.location.pathname;
+		console.log(postType)
+		if(postType == 0) {
+			window.location.href = url + "?homeTab=2";
+		} else {
+			window.location.href = url + "?homeTab=2&postType=" + postType;
+		}
+	}
+</script>
+
+<!-- 글 삭제 -->	
+<script>
+	function deletePost() {
+		let delProPostNo = Number(event.target.closest('.card').dataset.feedPostNo);
+		let delTarget = event.target.closest('.card');
+		let proWorkCheck = event.target.closest('.card').dataset.feedWorkNo;
+
+		fetch('/delProPost', {
+			method: 'POST',
+	        headers : {
+	            'Content-Type': 'application/json'
+	        },
+	        body : JSON.stringify(delProPostNo)
+		})
+		.then(response => response.json())
+		.then(res => {
+			if(res.result == '성공') {
+				delTarget.remove();
+				//차트 재호출
+				proWorkCheck == null ? '' : google.charts.setOnLoadCallback(drawChart);
+			}
+		});
+		
+	}
+</script>
+
+<!-- 글 수정 uuu-->
+<script type="text/javascript">
+function updatePost() {
+	let postTarget = event.target;
+	let postTargetTop = event.target.closest('.card');
+	let postTypeCheck = event.target.closest('.card').dataset.postType;
+	let updateFeedPostNo = event.target.closest('.card').dataset.feedPostNo;
+	
+	if(postTypeCheck == 1) {//업무
+		changeWorkPost(postTargetTop, updateFeedPostNo);
+	} else if (postTypeCheck == 2) {//일반 글
+		changeNormalBoardPost(postTargetTop, updateFeedPostNo);
+	} else if (postTypeCheck == 3) {//일정
+		changeSchPost(postTargetTop, updateFeedPostNo);
+	} else if (postTypeCheck == 4) {//할 일
+		changeTodoPost(postTargetTop, updateFeedPostNo);
+	} else if (postTypeCheck == 5) {//투표
+		changeVotePost(postTargetTop, updateFeedPostNo);
+	} else {
+		alert('알 수 없음')
+	}
+}
+
+// 일반 글 수정
+function changeNormalBoardPost(topTag, updateFeedPostNo){
+	modal11.setAttribute("data-update-post-no", updateFeedPostNo);
+	let updateTitle = topTag.querySelector('.card-header').textContent;
+	let updateContent = topTag.querySelector('.card-body p').textContent;
+	updateNormalPostTitle.value = updateTitle.substr(4);
+	updateNormalPostContent.value = updateContent;
+	$('#modal11').modal('toggle');
+}
+
+//업무 수정
+function changeWorkPost(topTag, updateFeedPostNo){
+	modal12.setAttribute("data-update-post-no", updateFeedPostNo);
+
+	let updateTitle = topTag.querySelector('.card-header').textContent;
+	let updateContent = topTag.querySelector('.card-body p').textContent;
+	updateWorkTitle.value = updateTitle.substr(5);
+	updateWorkContent.value = updateContent.substr(5);
+
+	//셀렉트 박스 선택
+	fetch("/readDetailWorkMem", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(updateFeedPostNo)
+		})
+		.then(response => response.json())
+		.then(res => {
+			if(res.length > 0) {
+				res.forEach(value => {
+			      for (let i = 0; i < updateWorkPostPerson.options.length; i++) {
+			        if (updateWorkPostPerson.options[i].value === value) {
+			        	updateWorkPostPerson.options[i].selected = true;
+			          //break; // 중복 체크가 허용되면 여기를 지우세요.
+			        }
+			      }
+			    });
+			}
+		});
+
+	$('#modal12').modal('toggle');
+	$('#modal12').on('hidden.bs.modal', function (e) {
+	  $(this).find('select').val('');
+	});
+}
+
+//일정 수정
+function changeSchPost(topTag, updateFeedPostNo) {
+	modal13.setAttribute("data-update-post-no", updateFeedPostNo);
+	let updateTitle = topTag.querySelector('.card-header').textContent;
+	let updateContent = topTag.querySelector('.targetContent').textContent;
+	let updatePlace = topTag.querySelector('.targetPlace').textContent;
+	let updateStart = topTag.querySelector('.targetStart').textContent;
+	let updateEnd = topTag.querySelector('.targetEnd').textContent;
+	
+	updateSchTitle.value = updateTitle.substr(5);
+	updateSchContent.value = updateContent.substr(5);
+	updateSchPlace.value = updatePlace.substr(5);
+	updateSchStart.value = updateStart.substr(6);
+	updateSchEnd.value = updateEnd.substr(6);
+	
+	$('#modal13').modal('toggle');
+}
+
+//할 일 수정
+function changeTodoPost(topTag, updateFeedPostNo) {
+	modal14.setAttribute("data-update-post-no", updateFeedPostNo);
+	let updateTitle = topTag.querySelector('.card-header').textContent;
+	updateTodoTitle.value = updateTitle.substr(6);
+	let ulTag = modal14.querySelector('.list-group');
+
+	fetch("/deVote", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(updateFeedPostNo)
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res)
+			makeUlTag(res, ulTag, topTag)
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+
+	 let updateUlTag = topTag.querySelector('.list-group');
+	$('#modal14 .list-group').empty();
+	
+	$('#modal14').modal('toggle');
+}
+
+//li태그 생성
+function makeUlTag(results, ulTag, topTag) {
+	results.forEach(result => {
+		let newLi = document.createElement('li');
+		newLi.classList.add('list-group-item');
+		newLi.setAttribute('data-change-todo-no', result.todoNo);;
+
+		// 할 일 내용
+		let input1 = document.createElement('input');
+		input1.type = 'text';
+		input1.value = result.todoContent;
+		
+		//시간
+		let input2 = document.createElement('input');
+		input2.type = 'date';
+		let newTodoDate = result.todoEnd == null ? '' : MMdd(result.todoEnd);
+		input2.value = newTodoDate;
+
+		// 세 번째 <input> 요소를 생성하고 설정합니다.
+		let select = document.createElement('select');//projectPartiMember
+		
+		let noneOption = document.createElement('option');
+		noneOption.textContent = '없음';
+		noneOption.value = '';
+		select.appendChild(noneOption);
+		  
+		proAllMember.forEach(pMember => {
+			let optionElement = document.createElement('option');
+			optionElement.textContent = pMember .name;
+			optionElement.value = pMember.id;
+
+			// 변수3 값과 선택된 값이 같을 경우, 해당 옵션을 선택함
+			if (pMember.id === result.id) {
+				optionElement.selected = true;
+    		}
+			
+			select.appendChild(optionElement);
+		});
+
+		let newSpan = document.createElement('span');
+		newSpan.className = 'spanCursor';
+		newSpan.textContent = 'X';
+
+		//x시 삭제
+		newSpan.addEventListener('click', function(e) {
+			fetch("/delDetailTodo", {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(result.todoNo)
+			})
+			.then(response => response.json())
+			.then(res => {
+				console.log(res);
+				if(res.result == '성공') {
+					topTag.querySelector('[data-post-todo-no="' + result.todoNo + '"]').remove();
+					e.target.parentElement.remove();
+				}
+			})
+			.catch(error => {
+				console.error('Error: ',error);
+			});
+
+		});
+
+		newLi.appendChild(input1);
+		newLi.appendChild(input2);
+		newLi.appendChild(select);
+		newLi.appendChild(newSpan);
+		
+		ulTag.appendChild(newLi);
+	});
+}
+
+//할 일 시간 변환(MM/dd -> yyyy-MM-dd)
+function newDate(inputDate) {
+  const dateArr = inputDate.split('/'); // MM/dd 형식의 입력 날짜를 '/'로 분리합니다.
+  const year = new Date().getFullYear(); // 현재 년도를 가져옵니다.
+  const month = parseInt(dateArr[0], 10); // 입력 날짜의 월을 정수로 변환합니다.
+  const day = parseInt(dateArr[1], 10); // 입력 날짜의 일을 정수로 변환합니다.
+
+  // 입력 날짜의 월과 일을 기반으로 새로운 날짜 객체를 생성합니다.
+  const dateObj = new Date(year, month - 1, day);
+
+  const formattedDate = `${dateObj.getFullYear()}-${(dateObj.getMonth() + 1).toString().padStart(2, '0')}-${dateObj.getDate().toString().padStart(2, '0')}`;
+  return formattedDate;
+}
+
+//시간 변환(yyyy-MM-dd -> MM/dd)
+function MMdd(dateTimeStr) {
+  const dateObj = new Date(dateTimeStr);
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObj.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
+  return formattedDate;
+}
+//투표 수정
+function changeVotePost(topTag, updateFeedPostNo) {
+	modal15.setAttribute("data-update-post-no", updateFeedPostNo);
+	modal15.setAttribute("data-update-vote-no", topTag.dataset.feedVoteNo);
+	let updateTitle = topTag.querySelector('.card-header').textContent;
+	let updateDate = topTag.querySelector('.card-body ul li:nth-child(1)').textContent;
+	let updateContent = topTag.querySelector('.card-body ul li:nth-child(2)').textContent;
+	
+	//value값 넣기
+	modal15.querySelector('.postTitle').value = updateTitle.substr(5);
+	modal15.querySelector('.postContent').value = updateContent.substr(8);
+	modal15.querySelector('.endVoteDate').value = updateDate.split(' : ')[1].split(' 까지')[0];
+	
+	let ulTag = modal15.querySelector('.modal-body').children[2];
+	let updateVoteContents = topTag.querySelectorAll('.list-group-item');
+	$('#modal15 .modal-body ul:eq(1)').empty();
+	makeVoteUlTag(updateVoteContents, ulTag);
+
+	$('#modal15').modal('toggle');
+}
+
+//투표 수정 ul 만들기
+function makeVoteUlTag(updateVoteContents, ulTag) {
+	updateVoteContents.forEach(updateVoteContent => {
+				// 새로운 <li> 요소 생성
+		const newLi = document.createElement('li');
+					//console.log('내용',updateVoteContent.querySelector('.voteContent').textContent)
+		// <input> 요소 생성
+		const newInput = document.createElement('input');
+		newInput.setAttribute('type', 'text');
+		newInput.setAttribute('class', 'plusChangeVoteInput');
+		newInput.setAttribute('disabled', true);
+		newInput.setAttribute('value', updateVoteContent.querySelector('.voteContent').textContent);
+
+		// <input> 요소를 <li> 요소 안에 추가
+		newLi.appendChild(newInput);
+
+		ulTag.append(newLi);
+	})
+
+}
+</script>
+
+<!-- 투표 항목 추가 -->
+<script type="text/javascript">
+	let voteInputs = document.querySelectorAll('.plusVoteInput');
+	voteInputs.forEach(voteInput => {
+		voteInput.addEventListener('keypress', function (e) {
+			
+			if (e.key === 'Enter') {
+				//값 확인
+				if(document.querySelectorAll('.plusVoteInput')[0].value == '') {
+					alert('첫번째 값을 넣어주세요.')
+					document.querySelectorAll('.plusVoteInput')[0].focus();
+					return
+				}
+				if(document.querySelectorAll('.plusVoteInput')[1].value == '') {
+					alert('두번째 값을 넣어주세요.')
+					document.querySelectorAll('.plusVoteInput')[1].focus();
+					return
+				}
+				
+				makeVoteInput(event.target);
+
+				//enter 성공시 focus이동
+				let FirstNextInput = voteInput.parentElement.parentElement.lastElementChild.children[0].focus();
+
+    	}
+		});
+	});
+	
+	//태그만들기
+	function makeVoteInput (enterTarget) {
+		let ulTag = enterTarget.parentElement.parentElement;
+
+		let newLi = document.createElement('li');
+
+		let newInput = document.createElement('input');
+		newInput.type = 'text';
+		newInput.className = 'plusVoteInput';
+		newInput.placeholder = '항목 추가';
+
+		let newSpan = document.createElement('span');
+		newSpan.className = 'spanCursor';
+		newSpan.textContent = 'X';
+		
+		newLi.appendChild(newInput);
+		newLi.appendChild(newSpan);
+
+		ulTag.appendChild(newLi);
+		
+		//2번째 인풋값에 대한 x버튼 설정
+		voteInputXButton(newInput);
+
+		newInput.addEventListener('keypress', function (e) {
+			
+			if (e.key === 'Enter') {
+						//값 확인
+						if(newInput.value == '') {
+							alert('값을 넣어주세요.')
+							newInput.focus();
+							return
+						}
+			
+						//input상자 갯수 확인
+						if (document.querySelectorAll('.plusVoteInput').length == 10) {
+								alert('10개 까지만');
+								return;
+						}
+	            makeVoteInput(event.target);
+							let nextInput = newInput.parentElement.parentElement.lastElementChild.children[0];
+	            nextInput.focus();
+							voteInputXButton(nextInput);
+	        }
+	    });
+	}
+
+	//삭제
+	function voteInputXButton(nextInput) {
+		let voteSpanX = nextInput.parentElement.children[1];
+		voteSpanX.addEventListener('click', function(e) {
+			e.target.parentElement.remove();
+		})
+
+	}
+</script>
+
+<!-- 투표 빈값 막기 -->
+<script>
+	function blankSearch() {
+		let voteModal = event.target.closest('#modal5');
+		let count = 0;
+		let inputValues = voteModal.querySelectorAll('input');
+		let voteObj = {};
+		let iLength = inputValues.length - 1;
+		let voteDetailArr = []
+		
+		//날짜값 제외하고 input값 검사
+		for (let i = 0; i < inputValues.length -1; i++) {
+			if(inputValues[i].value == '') {
+				count++;
+			}
+			//제목
+			if(i == 0) {
+				voteObj['postTitle'] = inputValues[0].value;
+			}
+			//투표 설명
+			if(i == 1) {
+				voteObj['voteContent'] = inputValues[1].value;
+			}
+			if(i >= 2) {
+				let voteDetailObj = {};
+				voteDetailObj['voteDetailContent'] = inputValues[i].value;
+				//voteDetailObj['voteDetailImg'] = '';
+				//voteDetailArr.push(inputValues[i].value);
+				voteDetailArr.push(voteDetailObj);
+			}
+		}
+		
+		if(count > 0 ) {
+			alert('빈값이 있습니다');
+			return false;
+		}
+		voteObj['proNo'] = projectNo;
+		voteObj['voteDetail'] = voteDetailArr;
+		voteObj['voteEndDay'] = convertToFormattedDateTime(inputValues[iLength].value);
+		
+		console.log(voteObj);
+		
+		fetch("/creVotePost", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(voteObj)
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res);
+			location.reload();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+
+	}
+</script>
+
+<!-- 할일 인풋 생성 -->
+<script>
+	let todoInput = document.querySelector('#todoContent');
+
+	todoInput.addEventListener('keypress', function (e) {
+		if (e.key === 'Enter') {
+			let todoL = document.querySelector('[data-todo-make-list]');
+			if(todoL.querySelectorAll('.list-group-item').length == 10) {
+				alert('최대 10개')
+				return;
+			}
+
+			if(todoInput.value == '') {
+				alert('값을 넣어주세요.')
+				todoInput.focus();
+				return;//event종료
+			}
+			
+			let todoValue = todoInput.value;
+			//console.log(event.target);
+			let oldVoteDate = document.querySelector('[data-input-todo-date]');
+			let oldSelectDate = document.querySelector('[data-input-todo-select]'); 
+
+			let oldVoteDateV = oldVoteDate.value;
+			let oldVoteSelectVName = oldSelectDate.options[oldSelectDate.selectedIndex].text;
+			let oldVoteSelectVId = oldSelectDate.value;
+
+			let newTodoListItem = makeTodoInputList(todoValue, oldVoteDateV, oldVoteSelectVName, oldVoteSelectVId);
+			document.querySelector('[data-todo-make-list]').append(newTodoListItem);
+
+			
+			//값 초기화
+			todoInput.value = '';
+			oldVoteDate.value ='';
+			oldSelectDate.value = '';
+
+		}
+
+	});
+
+	function makeTodoInputList(con, date, selN, selId) {
+		const li = document.createElement('li');
+		li.className = 'list-group-item';
+
+		const inputTodo = document.createElement('input');
+		inputTodo.type = 'text';
+		inputTodo.value = con;
+
+		const inputVoteDate = document.createElement('input');
+		inputVoteDate.type = 'date';
+		inputVoteDate.value = date;
+
+		const inputSelectDate = document.createElement('input');
+		inputSelectDate.type = 'text';
+		inputSelectDate.value = selN;
+		inputSelectDate.readOnly = true;
+
+		const inputSelectDate2 = document.createElement('input');
+		inputSelectDate2.type = 'text';
+		inputSelectDate2.value = selId;
+		inputSelectDate2.type= 'hidden';
+
+		let newSpan = document.createElement('span');
+		newSpan.className = 'spanCursor';
+		newSpan.textContent = 'X';
+
+		//x시 삭제
+		newSpan.addEventListener('click', function(e) {
+			e.target.parentElement.remove();
+		});
+
+		li.appendChild(inputTodo);
+		li.appendChild(inputVoteDate);
+		li.appendChild(inputSelectDate);
+		li.appendChild(inputSelectDate2);
+		li.appendChild(newSpan);
+
+		return li;
+	}
+</script>
+
+<!-- 할일 생성(4번) -->
+<script>
+	function blankSearchTodo() {
+		let todoInsertPost = document.getElementById('modal4');
+		let postVoteTitle = todoInsertPost.querySelector('.postTitle');
+		if(postVoteTitle.value == '') {
+			alert('제목 입력');
+			return;
+		}
+		
+		//인풋값 찾기
+		let todoInputValuesList = todoInsertPost.querySelector('[data-todo-make-list]').querySelectorAll('input');
+		//인풋값 검사
+		if(todoInputValuesList.length == 0) {
+			alert('내용 하나라도 있어야 함');
+			return;
+		}
+		
+		let todoInputArrSub = [];
+		//인풋값 라인 넣기
+		for (let i = 0; i < todoInputValuesList.length; i += 4) {
+			let todoObj = {}; // 새로운 객체 생성
+			todoObj['todoContent'] = todoInputValuesList[i].value;
+			todoObj['todoEnd'] = todoInputValuesList[i + 1].value;
+			todoObj['id'] = todoInputValuesList[i + 3].value;
+			todoInputArrSub.push(todoObj); // 배열에 객체 추가
+		}
+		
+		//총 인풋 넣기
+		let todoTotalInput = {'postTitle' : postVoteTitle.value,//제목 넣기
+											 'proNo' : projectNo,//프로젝트 번호 넣기
+											 'pptcl' : todoInputArrSub};//인풋값 총 라인 넣기
+		console.log(todoTotalInput)
+
+		fetch("/creTodoPost", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(todoTotalInput)
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res);
+			location.reload();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	}
+</script>
+
+<!-- 스케줄(3번) 생성 -->
+<script>
+	function createSchButton() {
+		let topCreateSch = document.getElementById('modal3');
+		let schTitle = topCreateSch.querySelector('.postTitle');
+		if(schTitle.value == '') {
+			alert('제목 입력');
+			return;
+		}
+
+		let schStartDate = topCreateSch.querySelector('#startSchDate');
+		let schEndDate = topCreateSch.querySelector('#endSchDate');
+		let schMembers = topCreateSch.querySelector('.schPartiMembers');
+		let schPlace = topCreateSch.querySelector('.schPlace');
+		let schText = topCreateSch.querySelector('.schText');
+		
+		//참석자 추가
+		let schPersonArr = Array.from(schMembers.selectedOptions).map(option => option.value);
+		
+		let schObj = {'proNo' : projectNo,
+									'postTitle' : schTitle.value,
+									'schStartDay' : convertToFormattedDateTime(schStartDate.value),
+									'schStartTime' : convertToFormattedDateTime(schStartDate.value),
+									'schEndDay' : convertToFormattedDateTime(schEndDate.value),
+									'schEndTime' : convertToFormattedDateTime(schEndDate.value),
+									'schPlace' : schPlace.value,
+									'schContent' : schText.value,
+									'personalSch' : 'N',
+									'schPersonArr' : schPersonArr
+									};
+
+ 		console.log(schObj);
+ 		
+ 		fetch("/creSch", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(schObj)
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res);
+			location.reload();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	}
+</script>
+
+<!-- 투표 강제마감 -->
+<script>
+	function voteEnd() {
+		let changeVoteStatusNo = event.target.closest('.card').dataset.feedVoteNo;
+		console.log(changeVoteStatusNo)
+		
+		fetch("/updateVoteStatus", {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(changeVoteStatusNo)
+		})
+		.then(response => response.json())
+		.then(res => {
+			if(res.result == '성공')
+				location.reload();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	}
+</script>
+
+<!-- 투표 변경 -->
+<script>
+	function changeVoteStatus() {
+		let checkedStatus = event.target.checked;
+		let voteDetailNo = event.target.dataset.voteDetailNo;
+		let liTag = event.target.parentElement;
+		
+		//투표 등록
+		if(checkedStatus) {
+
+			fetch("/insertVote", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({'voteDetailNo' : voteDetailNo})
+			})
+			.then(response => response.json())
+			.then(res => {
+				createUpCount(liTag);
+			})
+			.catch(error => {
+				console.error('Error: ',error);
+			});
+			
+			//투표 삭제
+		} else {
+			
+			fetch("/deleteVote", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({'voteDetailNo' : voteDetailNo})
+			})
+			.then(response => response.json())
+			.then(res => {
+				deleteDowunCount(liTag);
+			})
+			.catch(error => console.error('Error: ',error));
+
+		}
+	}
+
+	//투표 숫자 증가 및 생성
+	function createUpCount(liTag) {
+		let countWrite = liTag.children[3];
+
+		if(countWrite == null) {
+			let newSpan = document.createElement('span');
+			newSpan.className = 'voteCount spanCursor';
+			newSpan.textContent = '1명';
+
+			liTag.appendChild(newSpan);
+		} else {
+			let countWriteV = Number(countWrite.textContent.substr(0, 1)) + 1;
+			countWrite.textContent = countWriteV + '명';
+		}
+	}
+
+	//투표 숫자 감소 및 삭제
+	function deleteDowunCount(liTag) {
+		let countWrite = liTag.children[3];
+		let countWriteV = Number(countWrite.textContent.substr(0, 1));
+		if(countWriteV == 1) {
+			countWrite.remove();
+		} else {
+			countWrite.textContent = (countWriteV - 1) + '명';
+		}
+	}
+</script>
+
+<!-- vote 초기 checked 정하기 -->
+<script>
+	let allVoteCheckBoxes = document.querySelectorAll('[data-vote-detail-no]');
+	modelVoteChecks.forEach(modelVoteCheck => {
+
+		allVoteCheckBoxes.forEach(voteCheckbox => {
+			if(voteCheckbox.dataset.voteDetailNo == modelVoteCheck.voteDetailNo) {
+				voteCheckbox.checked = true;
+			};
+			
+		});
+		
+	});
+</script>
+
+<!-- 글 수정 -->
+<script>
+	function chagemodal11() {
+		let upn = modal11.dataset.updatePostNo;
+		let title = updateNormalPostTitle.value;
+		let content = updateNormalPostContent.value;
+
+		if(title == '') {
+			updateNormalPostTitle.focus();
+			alert('제목을 입력하세요');
+			return;
+		}
+		//내용 빈값 검사
+		if(content == '') {
+			alert('내용을 입력하세요');
+			updateNormalPostContent.focus();
+			return;
+		}
+		
+		fetch("/upProPost", {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'postTitle': title,
+					'writingContent' : content,
+					'proPostNo' : upn
+				})
+		})
+		.then(response => response.json())
+		.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+	}
+</script>
+
+<!-- 업무 수정 -->
+<script>
+function chagemodal12() {
+	let upn = modal12.dataset.updatePostNo;
+	let title = updateWorkTitle.value;
+	let content = updateWorkContent.value;
+	console.log(upn)
+	console.log(title)
+	console.log(content)
+	
+	//제목 빈값 검사
+	if(title == '') {
+		updateWorkTitle.focus();
+		alert('제목을 입력하세요');
+		return;
+	}
+	
+	//내용 빈값 검사
+	if(content == '') {
+		alert('내용을 입력하세요');
+		updateWorkContent.focus();
+		return;
+	}
+	
+	//셀렉트 값 가져오기
+	let selectedOptions = $('#updateWorkPostPerson option:selected');
+	let selectedValues = [];
+	selectedOptions.each(function() {
+	  selectedValues.push($(this).val());
+	});
+	
+	console.log(selectedValues)
+		
+	fetch("/upWork", {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+				'proPostNo': upn,
+				'postTitle': title,
+				'workContent': content,
+				'ids': selectedValues
+			})
+	})
+	.then(response => response.json())
+	.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+		
+}
+</script>
+
+<script type="text/javascript">
+	function chagemodal13() {
+		let upn = modal13.dataset.updatePostNo;
+		let title = updateSchTitle.value;
+		let content = updateSchContent.value;
+		let startSch = updateSchStart.value
+		let endSch = updateSchEnd.value
+		let placeSch = updateSchPlace.value
+		
+		//제목 빈값 검사
+		if(title == '') {
+			updateSchTitle.focus();
+			alert('제목을 입력하세요');
+			return;
+		}
+		
+		fetch("/upSch", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'proPostNo': upn,
+					'postTitle': title,
+					'schPlace' : placeSch,
+					'schContent': content,
+					'schStartTime' : convertToFormattedDateTime(startSch),
+					'schEndTime' : convertToFormattedDateTime(endSch)
+				})
+		})
+		.then(response => response.json())
+		.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=2");
+		
+	}
+</script>
+
+<!-- 투표 항목 추가 (수정)-->
+<script type="text/javascript">
+	let changeVoteInput = document.querySelector('.plusChangeVoteInput');
+	
+		changeVoteInput.addEventListener('keypress', function (e) {
+			
+		if (e.key === 'Enter') {
+			//값 확인
+			if(changeVoteInput.value == '') {
+				alert('값을 넣어주세요.')
+				changeVoteInput.focus();
+				return
+			}
+			
+			makeVoteInput(event.target);
+
+			//enter 성공시 focus이동
+			let FirstNextInput = changeVoteInput.parentElement.parentElement.lastElementChild.children[0].focus();
+
+    	}
+		});
+	
+	//태그만들기
+	function makeVoteInput (enterTarget) {
+		let ulTag = enterTarget.parentElement.parentElement;
+
+		let newLi = document.createElement('li');
+
+		let newInput = document.createElement('input');
+		newInput.type = 'text';
+		newInput.className = 'plusChangeVoteInput';
+		newInput.placeholder = '항목 추가';
+
+		let newSpan = document.createElement('span');
+		newSpan.className = 'spanCursor';
+		newSpan.textContent = 'X';
+		
+		newLi.appendChild(newInput);
+		newLi.appendChild(newSpan);
+
+		ulTag.appendChild(newLi);
+		
+		//2번째 인풋값에 대한 x버튼 설정
+		voteInputXButton(newInput);
+
+		newInput.addEventListener('keypress', function (e) {
+			
+			if (e.key === 'Enter') {
+				//값 확인
+				if(newInput.value == '') {
+					alert('값을 넣어주세요.')
+					newInput.focus();
+					return
+				}
+	
+				//input상자 갯수 확인
+				if (document.querySelectorAll('.plusChangeVoteInput').length == 10) {
+						alert('10개 까지만');
+						return;
+				}
+	            makeVoteInput(event.target);
+				let nextInput = newInput.parentElement.parentElement.lastElementChild.children[0];
+	            nextInput.focus();
+				voteInputXButton(nextInput);
+	        }
+	    });
+	}
+
+	//삭제
+	function voteInputXButton(nextInput) {
+		let voteSpanX = nextInput.parentElement.children[1];
+		voteSpanX.addEventListener('click', function(e) {
+			e.target.parentElement.remove();
+		})
+
+	}
+</script>
+
+<!-- 투표 빈값 막기 -->
+<script>
+	function chagemodal15() {
+		let upn = modal15.dataset.updatePostNo;
+		let title = modal15.querySelector('.postTitle').value;
+		let content = modal15.querySelector('.postContent').value;
+		let endDate = modal15.querySelector('.endVoteDate').value;
+		if(endDate != '') {
+			endDate = convertToFormattedDateTime(endDate);
+		}
+		let voteObj = {};
+		if(title == ''){
+			alert('제목이 비었소');
+			modal15.querySelector('.postTitle').focus();
+			return false;
+		}
+		
+		let upVoteInputs = modal15.querySelectorAll('.plusChangeVoteInput');
+		let voteCDetailArr = [];
+		
+		upVoteInputs.forEach(upVoteInput => {
+			 if (!upVoteInput.disabled && upVoteInput.value.trim() != '') {
+				voteCDetailArr.push(upVoteInput.value);
+			 }
+		});
+		
+		voteObj['postTitle'] = title;
+		voteObj['proPostNo'] = upn;
+		voteObj['voteContent'] = content;
+		voteObj['voteEndDay'] = convertToFormattedDateTime(endDate);
+		voteObj['voteDetailContents'] = voteCDetailArr;
+		voteObj['voteNo'] = modal15.dataset.updateVoteNo;
+		
+		console.log(voteObj)
+		fetch("/upVote", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(voteObj)
+		})
+		.then(response => response.json())
+		.then(res => {
+			location.href="/proPostMain/" + projectNo + "?homeTab=2"
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+
+	}
+</script>
+
+<!-- 할일 인풋 생성(수정) -->
+<script>
+	todoContent2.addEventListener('keypress', function (e) {
+		if (e.key === 'Enter') {
+			let todoL = modal14.querySelector('[data-todo-make-list]');
+
+			if(todoL.querySelectorAll('.list-group-item').length == 10) {
+				alert('최대 10개')
+				return;
+			}
+
+			if(todoContent2.value == '') {
+				alert('값을 넣어주세요.')
+				todoContent2.focus();
+				return;
+			}
+			
+			let todoValue = todoContent2.value;
+			let oldVoteDate = modal14.querySelector('[data-input-todo-date]');
+			let oldSelectDate = modal14.querySelector('[data-input-todo-select]'); 
+
+			let oldVoteDateV = oldVoteDate.value;
+			let oldVoteSelectVName = oldSelectDate.options[oldSelectDate.selectedIndex].text;
+			let oldVoteSelectVId = oldSelectDate.value;
+
+			let newTodoListItem = makeTodoInputList(todoValue, oldVoteDateV, oldVoteSelectVName, oldVoteSelectVId);
+			modal14.querySelector('[data-todo-make-list]').append(newTodoListItem);
+			
+			//값 초기화
+			todoContent2.value = '';
+			oldVoteDate.value ='';
+			oldSelectDate.value = '';
+
+		}
+
+	});
+
+	function makeTodoInputList(con, date, selN, selId) {
+		const li = document.createElement('li');
+		li.className = 'list-group-item';
+
+		const inputTodo = document.createElement('input');
+		inputTodo.type = 'text';
+		inputTodo.value = con;
+
+		const inputVoteDate = document.createElement('input');
+		inputVoteDate.type = 'date';
+		inputVoteDate.value = date;
+
+		//3요소
+		let select = document.createElement('select');//projectPartiMember
+		
+		let noneOption = document.createElement('option');
+		noneOption.textContent = '없음';
+		noneOption.value = '';
+		select.appendChild(noneOption);
+
+		proAllMember.forEach(pMember => {
+			let optionElement = document.createElement('option');
+			optionElement.textContent = pMember .name;
+			optionElement.value = pMember.id;
+
+			// 변수3 값과 선택된 값이 같을 경우, 해당 옵션을 선택함
+			if (pMember.id === selId) {
+				optionElement.selected = true;
+    		}
+			
+			select.appendChild(optionElement);
+		});
+
+		let newSpan = document.createElement('span');
+		newSpan.className = 'spanCursor';
+		newSpan.textContent = 'X';
+
+		//x시 삭제
+		newSpan.addEventListener('click', function(e) {
+			e.target.parentElement.remove();
+		});
+
+		li.appendChild(inputTodo);
+		li.appendChild(inputVoteDate);
+		li.appendChild(select);
+		li.appendChild(newSpan);
+
+		return li;
+	}
+</script>
+
+<!-- 할일 생성(4번) -->
+<script>
+	function chagemodal14() {
+		let postTodoTitle = modal14.querySelector('#updateTodoTitle');
+		if(postTodoTitle.value == '') {
+			postTodoTitle.focus()
+			alert('제목 입력');
+			return;
+		}
+		
+		//인풋값 찾기
+		let todoInputValuesList = modal14.querySelector('[data-todo-make-list]').querySelectorAll('input');
+		let todoSelectValuesList = modal14.querySelector('[data-todo-make-list]').querySelectorAll('select');
+		console.log('s',todoInputValuesList)
+		console.log('s',todoSelectValuesList)
+
+		//제목 빈값 찾기
+		for (let i = 0; i < todoInputValuesList.length; i+=2) {
+			let oldTitle = todoInputValuesList[i].value;
+			if(oldTitle == '') {
+				alert('빈 제목이 있습니다.');
+				todoInputValuesList[i].focus();
+				return false;
+			}
+		}
+
+		let updateTodoList = modal14.querySelectorAll('[data-todo-make-list] li');
+		let oldTodoArr = [];
+
+		for (let i = 0; i < updateTodoList.length; i++) {
+			let todoObj = {}; // 새로운 객체 생성
+			todoObj['todoContent'] = updateTodoList[i].children[0].value;
+			let todoDate = updateTodoList[i].children[1].value;
+			// if(todoDate != '') {
+			// 	todoDate = MMdd(todoDate);
+			// }
+			todoObj['todoEnd'] = todoDate;
+			todoObj['id'] = updateTodoList[i].children[2].value;
+			todoObj['todoNo'] = updateTodoList[i].dataset.changeTodoNo;
+			todoObj['proPostNo'] = modal14.dataset.updatePostNo;
+
+			oldTodoArr.push(todoObj); // 배열에 객체 추가
+		}
+
+		let subObj = {
+			'proPostNo' : modal14.dataset.updatePostNo,
+			'postTitle' : postTodoTitle.value
+		}
+		oldTodoArr.push(subObj)
+
+		console.log('배열',oldTodoArr)
+
+		fetch("/upTodo", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(oldTodoArr)
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res);
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+
+	}
+</script>
+
+<!-- 파일 조회 -->
+<script th:inline="javascript">
+$(document).ready(function() {
+	// 객체 형태로 게시물 그룹 초기화(조회)
+	var postGroups = {};
+
+	$.getJSON(`/getWorkAttach?proNo=${projectNo}`, function(arr) {
+	    console.log('전체', arr);
+
+	    // attach.proPostNo를 기준으로 그룹화
+	    $(arr).each(function(i, attach) {
+	        var postNo = attach.proPostNo;
+
+	        // 해당 게시물 그룹이 없으면 초기화
+	        if (!postGroups[postNo]) {
+	            postGroups[postNo] = "";
+	        }
+
+	        // HTML 문자열 추가
+	        if (attach.fileType) {
+	            var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
+	            postGroups[postNo] += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='" +
+	                attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+	            postGroups[postNo] += "<img src='/display?fileName=" + fileCallPath + "'>";
+	            postGroups[postNo] += "</div>";
+	            postGroups[postNo] += "</li>";
+	        } else {
+	            postGroups[postNo] += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='" +
+	                attach.fileName + "' data-type='" + attach.fileType + "'><div>";
+	            postGroups[postNo] += "<span>" + attach.fileName + "</span><br/>";
+	            postGroups[postNo] += "<img src='img/attach.png/'>";
+	            postGroups[postNo] += "</div>";
+	            postGroups[postNo] += "</li>";
+	        }
+	    });
+
+	    // 각 게시물 그룹별로 .uploadResult ul에 추가
+	    for (var postNo in postGroups) {
+	        $("[data-feed-post-no='" + postNo + "'] .uploadResult ul").html(postGroups[postNo]);
+	    }
+	});
+
+    
+	//업로드 결과
+	$(".uploadResult").on("click","li", function(e){
+		//console.log("view image");
+		var liObj = $(this);
+		var path = encodeURIComponent(liObj.data("path")+"/" + liObj.data("uuid")+"_" + liObj.data("filename"));
+	
+		if(liObj.data("type")){
+			showImage(path.replace(new RegExp(/\\/g),"/"));
+		}else {
+			//download 
+			self.location ="/download?fileName="+path
+		}
+	});
+
+	//이미지 크게보기
+	function showImage(fileCallPath){
+		//console.log(fileCallPath);
+		$(".bigPictureWrapper").css("display","flex").show();
+		$(".bigPicture")
+		.html("<img src='/display?fileName="+fileCallPath+"' >")
+		.animate({width:'100%', height: '100%'}, 1000);
+	}
+
+	$(".bigPictureWrapper").on("click", function(e){
+		$(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
+		setTimeout(function(){
+	    	$('.bigPictureWrapper').hide();
+		}, 1000);
+	});
+	
+});
+</script>
+
+<script>
+$('#modal12').on('show.bs.modal', function (e) {
+	
+	e.target.querySelectorAll('.uploadResult ul li').forEach(function(liElement) {
+		liElement.remove();
+	});
+	
+	let ppn = modal12.dataset.updatePostNo;
+	var postGroups = {};
+
+	$.getJSON(`/getWorkAttachDetail?proPostNo=${ppn}`, function(arr) {
+	    console.log('세부', arr);
+	    
+	    var str = "";
+        $(arr).each(function(i, attach){
+            
+            if(attach.fileType){
+                var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
+                
+                str += "<li data-path='"+attach.uploadPath + "' data-file-pro-no='" + attach.proFileNo + "' ";
+    			str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'"
+    			str + "><div>";
+    			//파일 이름 보여주기
+    			str += "<span> "+ attach.fileName+"</span>";
+    			//파일 삭제버튼
+    			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle' onclick='delProFile(" + attach.proFileNo + ", \"" + attach.fileName + "\")'>";
+    			str += "<i class='fa fa-times'></i></button><br>";
+    			//이미지 노출
+    			str += "<img src='/display?fileName="+fileCallPath+"'>";
+    			str += "</div>";
+    			str +"</li>";
+            } else {
+                str += "<li data-path='"+attach.uploadPath + "' data-file-pro-no='" + attach.proFileNo + "' ";
+    			str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'"
+    			str + "><div>";
+    			//파일 이름 보여주기
+    			str += "<span> "+ attach.fileName+"</span>";
+    			//파일 삭제버튼
+    			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle' onclick='delProFile(" + attach.proFileNo + ", \"" + attach.fileName + "\")'>";
+    			str += "<i class='fa fa-times'></i></button><br>";
+    			//파일 노출
+    			str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+    			str += "</div>";
+    			str +"</li>";
+            }
+        });
+        
+        $("#modal12 .uploadResult ul").html(str);
+		
+	});
+	
+});
+
+//파일 db삭제
+function delProFile(ppn, filename) {
+	
+	fetch("/delProFile", {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(Number(ppn))
+	})
+	.then(response => response.json())
+	.then(res => {
+		$("[data-filename='" + filename + "']").remove();
+	})
+	.catch(error => {
+		console.error('Error: ',error);
+	});//fetch종료
+};
+</script>
+
+</body>
+</html>

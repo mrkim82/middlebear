@@ -3,7 +3,7 @@
  layout:decorate="~{layout/paymentTiles}">
 <head>
 <meta charset="UTF-8">
-<title>payPreferences</title>
+<title>전자서명 등록페이지</title>
 </head>
 <body layout:fragment="content">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
@@ -76,9 +76,9 @@
      			     error: function(err){
      			    	 console.log(err);
      			     }
-     			 });
-            })
+ 			 });
 		}
+		
 		//개인서명 div제거
 		$("#signDelete").on("click", function(){
 			 var previewContainer = $("#preview-container");

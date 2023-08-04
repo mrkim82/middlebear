@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.pro.mapper.ProMapper">
+	
+	<!-- 프로젝트 생성 -->
+	<select id="createPro" statementType="CALLABLE" parameterType="hashMap">
+		{call cre_project(
+				#{v_pro_name, 		  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_pro_content, 	  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_pro_def_tab,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				1,
+				2,
+				1,
+				1,
+				1,
+				#{v_id, 			  mode=IN, jdbcType=VARCHAR,   javaType=String}
+			)
+		}
+	</select>
+	<!-- 프로젝트 생성 -->
+	<!-- <select id="createPro" statementType="CALLABLE" parameterType="hashMap">
+		{call cre_project(
+				#{v_pro_name, 		  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_pro_content, 	  mode=IN, jdbcType=VARCHAR,   javaType=String},
+				#{v_pro_def_tab,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_post_write_auth,  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_post_update_auth, mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_post_view_auth,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_com_write_auth,	  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_file_auth, 		  mode=IN, jdbcType=CHAR, 	   javaType=String},
+				#{v_id, 			  mode=IN, jdbcType=VARCHAR,   javaType=String}
+			)
+		}
+	</select> -->
+	
+	<!-- 프로젝트 조회 -->
+	<select id="readProject" resultType="ProVO" parameterType="hashMap">
+		SELECT p.pro_name, 
+		       m.pro_color, 
+		       m.pro_star_check,
+		       m.pro_hide_check,
+		       m.pro_mem_no,
+		       p.pro_no,
+		       m.home_tab,
+		       u.pro_range,
+		       u.pro_parti_filter
+		       
+			  FROM pro p
+			  JOIN pro_mem m
+			    ON(p.pro_no = m.pro_no)
+			  JOIN users u
+			    ON(u.id = m.id)
+			 WHERE m.id = #{id}
+			   AND m.pro_hide_check = 'N'
+			   AND m.pro_parti_check = 'Y'
+		<if test="proPartiFilter != null and proPartiFilter != ''">
+		   AND p.id = #{proPartiFilter}
+	 	</if>
+		 ORDER BY ${proRange}
+	</select>
+	
+	<!-- 정렬 조회 -->
+	<select id="readOrder" resultType="ProUsersVO">
+		SELECT pro_range, pro_parti_filter
+		FROM users
+		WHERE id = #{id}
+	</select>
+	
+	<!-- 프로젝트 참가자 수 -->
+	<select id="readProjectParti" resultType="ProVO">
+		SELECT m1.pro_no, 
+		       COUNT(m1.pro_mem_no) AS count
+		FROM pro_mem m1 INNER JOIN (SELECT pro_no 
+		                              FROM pro_mem 
+		                             WHERE id = #{id}) m2
+		ON m1.pro_no = m2.pro_no
+		WHERE pro_parti_check = 'Y'
+		GROUP BY m1.pro_no
+		ORDER BY 1
+	</select>
+	
+	<!-- 프로젝트 숨김 조회 -->
+	<select id="readProjectHide" resultType="ProVO">
+		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no, m.home_tab
+		FROM pro p, pro_mem m
+		WHERE m.id = #{id}
+		AND p.pro_no = m.pro_no
+		AND m.pro_hide_check = 'Y'
+		ORDER BY p.pro_no DESC
+	</select>
+	
+	<!-- 프로젝트 즐겨찾기 조회 -->
+	<select id="readProjectStar" resultType="ProVO">
+		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no, m.home_tab
+		FROM pro p, pro_mem m
+		WHERE m.id = #{id}
+		AND p.pro_no = m.pro_no
+		AND m.pro_star_check = 'Y'
+		AND m.pro_hide_check = 'N'
+		ORDER BY p.pro_no DESC
+	</select>
+	
+	<!-- 프로젝트 미분류 조회 -->
+	<select id="readProjectNoGroup" resultType="ProVO">
+		SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no, m.home_tab
+		FROM pro p JOIN pro_mem m
+		ON p.pro_no = m.pro_no
+		FULL OUTER JOIN pro_group_management g
+		ON m.pro_mem_no = g.pro_mem_no
+		WHERE m.id = #{id}
+		AND m.pro_hide_check = 'N'
+		AND m.pro_parti_check = 'Y'
+		AND group_no IS NULL
+		ORDER BY p.pro_no DESC
+	</select>
+	
+	<!-- 프로젝트 즐겨찾기 변경 -->
+	<update id="updateStar">
+		UPDATE pro_mem
+		SET pro_star_check = #{proStarCheck}
+		WHERE pro_mem_no = #{proMemNo}
+	</update>
+	
+	<!-- 프로젝트 그룹 -->
+	<!-- 프로젝트 그룹 목록 조회 -->
+	<select id="readProjectGroup" resultType="ProGroupVO">
+		SELECT
+		    CASE
+		        WHEN LENGTH(group_name) >= 8 THEN CONCAT(SUBSTR(group_name, 1, 7), '...')
+		        ELSE group_name
+		    END AS group_name,
+		    group_no
+		FROM pro_group
+		WHERE id = #{id}
+		ORDER BY group_no DESC
+	</select>
+	
+	<!-- 프로젝트 그룹 프로젝트 조회 -->
+	<select id="readProjectGroupDetail" resultType="ProGroupVO">
+		SELECT g.group_no,
+			   g.pro_mem_no,
+			   k.pro_name,
+			   k.pro_color,
+			   k.pro_star_check,
+			   k.pro_hide_check,
+			   k.pro_no,
+			   u.group_name,
+			   u.id,
+			   k.home_tab
+		FROM pro_group_management g
+		    JOIN (SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no, m.home_tab
+		          FROM pro p JOIN pro_mem m
+		          ON p.pro_no = m.pro_no) k
+		    ON g.pro_mem_no = k.pro_mem_no
+		    JOIN pro_group u
+		    ON g.group_no = u.group_no
+		WHERE u.group_no = #{groupNo}
+		AND u.id = #{id}
+		AND k.pro_hide_check = 'N'
+	</select>
+	
+	<!-- 프로젝트 그룹 생성 -->
+	<insert id="createProjectGroup" parameterType="String">
+		INSERT INTO pro_group 
+		VALUES((SELECT NVL(MAX(group_no), 0) + 1
+		        FROM pro_group), 
+		        #{groupName}, 
+		        #{id})
+	</insert>
+	
+	<!-- 프로젝트 그룹 생성 후 번호 조회 -->
+	<select id="readProjectGroupNo" resultType="int">
+		SELECT MAX(group_no)
+		FROM pro_group
+	</select>
+	
+	<!-- 프로젝트 그룹 이름 수정 -->
+	<update id="updateGroupName" parameterType="ProGroupVO">
+		UPDATE pro_group
+		SET group_name = #{groupName}
+		WHERE group_no = #{groupNo}
+	</update>
+	
+	<!-- 프로젝트 그룹 삭제 -->
+	<delete id="deleteGroup" parameterType="int">
+		DELETE FROM pro_group
+		WHERE group_no = #{groupNo}
+	</delete>
+	
+	<!-- 프로젝트 필터 수정 -->
+	<update id="updateProjectFilter" parameterType="ProUsersVO">
+		UPDATE users
+		SET pro_parti_filter = #{proPartiFilter}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 프로젝트 정렬 수정 -->
+	<update id="updateProjectOrder" parameterType="ProUsersVO">
+		UPDATE users
+		SET pro_range = #{proRange}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 회원 가입시 프로젝트 그룹 생성 -->
+	<insert id="createProGroup" parameterType="String">
+		INSERT ALL
+		INTO pro_group(group_no, group_name, id)
+		VALUES((SELECT NVL(MAX(group_no), 0) + 1
+		        FROM pro_group), '기본 그룹3', #{id})
+		INTO pro_group(group_no, group_name, id)
+		VALUES((SELECT NVL(MAX(group_no), 0) + 2
+		        FROM pro_group), '기본 그룹2', #{id})
+		INTO pro_group(group_no, group_name, id)
+		VALUES((SELECT NVL(MAX(group_no), 0) + 3
+		        FROM pro_group), '기본 그룹', #{id})
+		SELECT * FROM DUAL
+	</insert>
+	
+	<!-- 프로젝트 권한 조회 -->
+	<select id="readProAuth" resultType="proVO">
+		SELECT pro_def_tab
+			 , post_write_auth
+			 , post_update_auth
+			 , post_view_auth
+			 , file_auth
+			 , id
+		FROM pro
+		WHERE pro_no = #{proNo}
+	</select>
+	
+	<!-- 프로젝트 숨김 여부 -->
+	<update id="updateProHide" parameterType="ProHideVO">
+		UPDATE pro_mem
+		SET pro_hide_check = #{proHideCheck}
+		WHERE pro_mem_no = #{proMemNo}
+	</update>
+	
+	<!-- 개인 전체 프로젝트 조회(그룹용)  -->
+	<select id="readPerAllPro" resultType="ProGroupManageVO">
+		SELECT a.pro_mem_no, b.pro_name
+		FROM pro_mem a
+		JOIN pro b
+		ON(a.pro_no = b.pro_no)
+		WHERE a.id= #{id}
+		AND a.pro_hide_check = 'N'
+		AND a.pro_parti_check = 'Y'
+	</select>
+	
+	<!-- 프로젝트 그룹의 프로젝트 체크 여부 -->
+	<select id="readGroupCheckPro" parameterType="ProGroupManageVO" resultType="ProGroupManageVO">
+		SELECT b.pro_mem_no
+		FROM pro_group a
+		JOIN pro_group_management b
+		ON(a.group_no = b.group_no)
+		JOIN pro_mem c
+		ON(b.pro_mem_no = c.pro_mem_no)
+		JOIN pro d
+		ON(c.pro_no = d.pro_no)
+		WHERE c.id = #{id}
+		AND c.pro_hide_check = 'N'
+		AND a.group_no = #{groupNo}
+	</select>
+	
+	<!-- 그룹에 프로젝트 추가 -->
+	<insert id="createGroupProManage" parameterType="ProGroupManageVO">
+		INSERT INTO pro_group_management(group_no, pro_mem_no)
+		VALUES (#{groupNo}, #{proMemNo})
+	</insert>
+	
+	<!-- 그룹에 프로젝트 제거 -->
+	<delete id="deleteGroupProManage" parameterType="ProGroupManageVO">
+		DELETE pro_group_management
+		WHERE group_no = #{groupNo}
+		AND pro_mem_no = #{proMemNo}
+	</delete>
+	
+	<!-- 미수락 프로젝트 -->
+	<select id="readNoPartiPro" parameterType="String" resultType="ProPartiAlarmVO">
+		SELECT b.pro_name,--프로젝트이름
+		       i.name,--초대장
+		       a.pro_mem_no,
+		       i.rank
+		
+		FROM pro_mem a
+		JOIN pro b
+		ON(a.pro_no = b.pro_no)
+		JOIN users u
+		ON(b.id = u.id)
+		JOIN user_info i
+		ON(u.emp_no = i.emp_no)
+		WHERE a.pro_parti_check = 'N'
+		AND a.id = #{id}
+	</select>
+	
+	<!-- 프로젝트 참가 수락 -->
+	<update id="updateProPartiY" parameterType="int">
+		UPDATE pro_mem
+		SET pro_parti_check = 'Y'
+		WHERE pro_mem_no = #{proMemNo}
+	</update>
+	
+	<!-- 프로젝트 참가 거절 -->
+	<delete id="deleteProPartiN" parameterType="int">
+		DELETE FROM pro_mem
+		WHERE pro_mem_no = #{proMemNo}
+	</delete>
+	
+	<!-- 미수락 프로젝트 수 -->
+	<select id="readNoPartiProCount" resultType="int" parameterType="String">
+		SELECT COUNT(*)
+		FROM pro_mem
+		WHERE pro_parti_check = 'N'
+		AND id = #{id}
+	</select>
+	
+</mapper>
