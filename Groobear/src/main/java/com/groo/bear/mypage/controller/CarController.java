@@ -35,32 +35,24 @@ public class CarController {
 	@GetMapping("/carList")
 	public String getCarList(HttpServletRequest request, Model model, CarVO carVO, Criteria cri) {
 		int carListCnt = carService.carCnt(cri,carVO);
-		System.out.println(carListCnt);
 			
 		Paging paging = new Paging();
 		paging.setCri(cri);
 		paging.setTotalCount(carListCnt);    
 		
-		System.out.println(paging);
-
 		HttpSession session = request.getSession();
 		
 		String id = (String)session.getAttribute("Id");
 		String empG = (String)session.getAttribute("EmpGrade");
-		System.out.println(empG);
-		//String empG = userService.checkGrade(id).getEmpGrade();
         
 		if(empG.equals("A")) {
 			model.addAttribute("carList",carService.getAllCarList(cri, carVO));
 		    model.addAttribute("paging",paging);
-		    System.out.println(model);
 			return "car/carList";
 			
 		}else {
 			model.addAttribute("info",carService.getMyCarInfo(id));
-			System.out.println(model);
 			model.addAttribute("carPList",carService.getMyCarList(id));
-			System.out.println(model);
 			return "car/carPList";
 		}
 		
@@ -108,7 +100,6 @@ public class CarController {
 	@ResponseBody
 	@PostMapping("carDelete")
 	public String carDelete(@RequestBody CarVO carVO) {
-		System.out.println(carVO.getCarNo());
 		String result = "";
 		if(carService.carDelete(carVO.getCarNo())>0) {
 			result = "true";
@@ -124,19 +115,15 @@ public class CarController {
 	public String carBook(HttpServletRequest request, Model model, CarVO carVO, Criteria cri,@PathVariable String monthDate) {
 		
 		int bookListCnt = carService.bookCnt(cri, carVO);
-		System.out.println(bookListCnt);
 			
 		Paging paging = new Paging();
 		paging.setCri(cri);
 		paging.setTotalCount(bookListCnt);    
 		
-		System.out.println(paging);
-
 		HttpSession session = request.getSession();
 		
 		String id = (String)session.getAttribute("Id");
 		String empG = (String)session.getAttribute("EmpGrade");
-		System.out.println(empG);
 		
 		Date date = new Date();
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -146,13 +133,11 @@ public class CarController {
 		if(empG.equals("A")) {
 			model.addAttribute("bookList",carService.allBook(cri, carVO));
 			model.addAttribute("paging",paging);
-			System.out.println(model);
 			
 			return "car/bookA";
 		}else {
 			model.addAttribute("bookList",carService.getBook(cri,id, monthDate));
 			model.addAttribute("paging",paging);
-			System.out.println(model);
 			return "car/bookP";
 		}
 	
