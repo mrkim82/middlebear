@@ -6,7 +6,7 @@
 	<div th:fragment="horizonBar">
 	<!-- 프로젝트 최 상단 바 -->
 	<div class="horizontal-bar">
-		<div style="padding-top: 12.5px;">
+		<div style="padding-top: 17.5px;">
 			<ul class="nav">
 				<li>
 					<!-- 스타일을 동적으로 적용하는 네모 -->
@@ -52,11 +52,11 @@
 					style="cursor: pointer;">more_vert</span></li> -->
 				<li class="nav-item"
 					th:text="${projectTopBar.proName}"
-					style="margin-left:15px; font-size:25px; margin-top:6px"></li>
+					style="margin-left:15px; font-size:25px; margin-top:6px;"></li>
 				<li class="nav-item"
 					th:if ="${projectTopBar.proContent != null}"
-					th:text="'프로젝트 설명 : ' + ${projectTopBar.proContent}"
-					style="margin-left:30px; display: block !important; font-size:14px;"></li>
+					th:text="${projectTopBar.proContent}"
+					style="margin-left:30px; display: block !important; font-size:16px; margin-top:12px; width:650px; height:50px; overflow-y: hidden;"></li>
 			</ul>
 		</div>
 	</div>
@@ -145,31 +145,33 @@
 		//클릭시 색상 정보 저장
 		function saveColor() {
 			newColor = event.target.dataset.colorCode;
-		}
+		};
 		
 		function changeColor() {
 			console.log(newColor)
-			fetch("/updateProMemColor", {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					'proColor' : newColor,
-					'proNo': projectNo
+			if(newColor != null) {
+				fetch("/updateProMemColor", {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'proColor' : newColor,
+						'proNo': projectNo
+					})
 				})
-			})
-			.then(response => response.json())
-			.then(res => {
-				console.log(res)
-				console.log(newColor)
-				if(res.result == '성공') {
-					$('#squareStyle').modal('hide');//모달창 닫기
-					document.getElementsByClassName('square2')[0].style.backgroundColor = newColor;//색상변환
-				} else {
-					alert('실패');
-				}
-			});
+				.then(response => response.json())
+				.then(res => {
+					if(res.result == '성공') {
+						$('#squareStyle').modal('hide');//모달창 닫기
+						document.getElementsByClassName('square2')[0].style.backgroundColor = newColor;//색상변환
+					} else {
+						alert('실패');
+					}
+				});
+			} else {
+				alert('색상이 선택되지 않았습니다.')
+			}
 		};
 	</script>
 	

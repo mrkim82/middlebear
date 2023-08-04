@@ -1469,24 +1469,27 @@ function drawChart() {
 			<div>
 				<th:block th:text="'참여자 ' + ${projectPartiMember.size}"></th:block>
 			</div>
-			<div class="card" style="width: 18rem;">
+			<div class="card" style="width: 230px;">
 			  <!-- 관리자 -->
 			  <div class="card-header openModalInfo"
 			  	   th:each="pUser : ${projectPartiMember}"
 			  	   th:if="${pUser.id == readProAuth.id}"
 			  	   th:data-user-id="${pUser.id}"
-			  	   data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.empNo}"
-			  	   style="background-color: rgb(161, 204, 239)">
+			  	   data-toggle="modal"
+			  	   th:data-target="'#proUserInfoDetail' + ${pUser.empNo}"
+			  	   style="background-color: rgb(161, 204, 239); border-top-right-radius: 15px; border-top-left-radius: 15px;">
 			  	   <span th:text="'프로젝트 관리자 : '"></span>
 			       <span th:utext="${pUser.profileImg}"></span>
 			       <span th:text="${pUser.name}"></span>
 			  	   <span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
 			  </div>
 			  <ul class="list-group list-group-flush">
-			    <li class="list-group-item openModalInfo" th:each="pUser : ${projectPartiMember}"
+			    <li class="list-group-item openModalInfo" th:each="pUser, pUserStat : ${projectPartiMember}"
 			    	th:if="${pUser.id != readProAuth.id}"
 			    	th:data-user-id="${pUser.id}"
-			    	data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.empNo}">
+			    	data-toggle="modal"
+			    	th:data-target="'#proUserInfoDetail' + ${pUser.empNo}"
+			    	th:style="${pUserStat == last} = '' ? ''">
 			    	<span th:utext="${pUser.profileImg}"></span>
 			    	<span th:text="${pUser.name}"></span>
 			    	<span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>

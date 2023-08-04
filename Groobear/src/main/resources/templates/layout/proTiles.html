@@ -59,8 +59,9 @@
 	box-shadow: 2px 4px 3px 3px darkgray;
 }
 
-html {
-	height: 1300px;
+html ::-webkit-scrollbar{
+ display: none;
+	/* height: 900px; */
 }
 
 th {
@@ -99,6 +100,7 @@ th {
 	background-color: #000;
 	margin-left: 30px;
 	border-radius: 10px;
+	border: 0px;
 }
 
 /* 검색 창 스타일 */
@@ -277,16 +279,30 @@ textarea {
 #sidebar .nav li{
 	transition: 0.5s;
 }
+
 #sidebar details a:link, #sidebar details a:visited, #sidebar details a:hover, #sidebar details a:active {
 	text-decoration : none !important;
 	color: #35A880;
 	font-size: 16px;
 }
+.blog-header-logo {
+	text-decoration : none !important;
+}
+
+.blog-header table a{
+	text-decoration : none !important;
+}
+
 #sidebar details>summary {
 	font-size: 19px;
 	text-decoration: none;
 	color: #29ac7f;
 }
+
+.horizontal-bar2 a {
+	color: black;
+}
+
 </style>
 
 </head>
@@ -427,7 +443,7 @@ textarea {
 							data-toggle="modal"
 							data-target="#inviteManPro"
 							style=" font-size:20px; height: 44px; margin-bottom:10px;">
-					  초대된 프로젝트 <span class="badge badge-light inviteCountTarget"></span>
+					  초대된 프로젝트 <span class="badge badge-light inviteCountTarget">0</span>
 					</button></li>
 				<!-- <li class="nav-item">
 					<a href="/proCreate">
