@@ -87,12 +87,13 @@
 	<table class="table table-hover"
 		   id="goProjectDetail">
 		<tr th:each="pro:${projectMainList}"
-			th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
+			th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}, data-proNo=${pro.proNo}"
 			style="cursor:pointer">
 			<td>
 				<div class="square"
 					 th:style="'background-color: ' + ${pro.proColor}"></div></td>
-			<td><div class="star yellow starCheck"></div></td>
+			<td><div class="star starCheck"
+					 th:classappend="${pro.proStarCheck == 'Y' ? 'yellow' : 'gray'}"></div></td>
 			<td style="width: 750px; overflow: hidden; font-size: larger; padding-left: 15px;"
 				th:text="${pro.proName}"></td>
 			<td th:each="parti:${projectPartiList}"
@@ -160,7 +161,6 @@
 		})
 		.then(response => response.json())
 		.then(res => {
-			console.log(res);
 			changeProOne(starC, trTag);
 			
 		})
@@ -170,8 +170,12 @@
 	function changeProOne(starC, trTag) {
 		if (starC == 'N') {
 			trTag.setAttribute('data-starc', 'Y');
+			trTag.querySelector('.star').classList.remove('gray');
+			trTag.querySelector('.star').classList.add('yellow');
 		} else {
 			trTag.setAttribute('data-starc', 'N');
+			trTag.querySelector('.star').classList.remove('yellow');
+			trTag.querySelector('.star').classList.add('gray');
 		}
 
 	}
@@ -190,14 +194,17 @@
 	
 	gPList.forEach(gPDetail => {
 		let homeTabNum = gPDetail.dataset.hometab;
+		let proNo = gPDetail.dataset.prono;
 		gPDetail.addEventListener('click', function() {
-			projectDetail(homeTabNum);
+			console.log('홈',homeTabNum)
+			console.log(proNo)
+			projectDetail(homeTabNum, proNo);
 		});
 	});
 
-	function projectDetail(homeTNum) {
-		location.href="/proPostMain/" + homeTNum;
-	}
+	function projectDetail(homeTNum, proNo) {
+		location.href="/proPostMain/" + proNo + "?homeTab=" + homeTNum;
+	};
 </script>
 	
 <!-- 프로젝트 숨김 해제 -->
@@ -275,8 +282,6 @@ function changeGorupStatus() {
 			newTr.setAttribute('data-pmn', proMemNo);
 			newTr.setAttribute('data-starc', 'N');
 			newTr.setAttribute('data-hometab', '4');
-
-
 			
 			let aTbody = document.querySelector('#goProjectDetail');
 			aTbody.append(newTr);
