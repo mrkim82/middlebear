@@ -74,7 +74,6 @@ public class EmpController {
 	// 비밀번호 변경 화면 이동
 	@GetMapping("changePw")
 	public String changePwForm(@RequestParam String id, Model model) {
-		System.out.println(id);
 		model.addAttribute("empInfo", id);
 		return "main/changePw";
 	}
@@ -107,14 +106,12 @@ public class EmpController {
 	@ResponseBody
 	@GetMapping("checkId")
 	public String checkId(@RequestParam String id) {
-		System.out.println(id);
 		String result = "";
 		if(empService.checkId(id)>0) {
 			result = "X";
 		}else {
 			result = "O";
 		}
-		System.out.println("111"+result);
 		return result;
 	}
 	
@@ -122,7 +119,6 @@ public class EmpController {
 	@ResponseBody
 	@GetMapping("checkPhone")
 	public String checkPhone(@RequestParam String phone) {
-		System.out.println(phone);
 		String result = "";
 		if(empService.checkPhone(phone)>0) {
 			result = "X";
@@ -137,9 +133,7 @@ public class EmpController {
 	@ResponseBody
 	public String signUp(@RequestBody EmpVO vo) {
 		BCryptPasswordEncoder scpwd = new BCryptPasswordEncoder(); 
-		System.out.println("기존 비밀번호 : "+vo.getPassword());
 		String password = scpwd.encode(vo.getPassword());
-		System.out.println("암호화 비밀번호 : "+password);
 		vo.setPassword(password);
 		OffVO offvo = new OffVO();
 		offvo.setId(vo.getId());

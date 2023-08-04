@@ -26,7 +26,6 @@ public class UserController {
 	public String checkGrade(HttpServletRequest request, EmpVO empVO) {
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
-		System.out.println(userService.checkGrade(id).getEmpGrade());
 		String empG = userService.checkGrade(id).getEmpGrade();
 		
 		if(empG.equals("A")) {
@@ -43,7 +42,6 @@ public class UserController {
 	// 회원정보 페이지 이동(암호확인)
 	@GetMapping("myPageInfo")
 	public String myPageChangeInfo(@RequestParam String password, HttpServletRequest request, Model model) {
-		System.out.println(password);
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
 		EmpVO vo = new EmpVO();
