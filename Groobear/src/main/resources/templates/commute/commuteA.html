@@ -68,11 +68,11 @@ html {
 								<label class="label" style="font-size: 20px;">연장근무 종료 시간 <input name="overWorkEnd" style="font-size: 20px;width: 155px;border-radius: 20px;"
 									id="newOverWorkEnd" type="time" value="" class="form-control"></label>
 							</div>
-							<div class="form-group mb-3" style="display: none;">
+							<div class="form-group mb-3" style="display: block;">
 								<label>id<input name="id" type="text" id="mId"
 									class="form-control">
-								</label> <label>day<input name="day" type="date" id="mDate"
-									class="form-control">
+								</label> <label>day<span id="mDate"
+									class="form-control"></span>
 								</label>
 							</div>
 							<div class="form-group d-md-flex"></div>
@@ -229,12 +229,13 @@ html {
 				document.querySelector('#newOverWorkStart').value = oldOwStart;
 				document.querySelector('#newOverWorkEnd').value = oldOwEnd;
 				document.querySelector('#mId').value = id;
-				document.querySelector('#mDate').value = day;
+				document.querySelector('#mDate').textContent = day;
 				document.querySelector('#mOff').textContent = oc + '일';
 				
 				
 				let sInfo = {
-						'id' : id
+						'id' : id,
+						'monthDate' : day
 				}
 				
 				fetch('/getMonth', {
