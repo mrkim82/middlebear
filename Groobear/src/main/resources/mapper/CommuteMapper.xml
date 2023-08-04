@@ -50,7 +50,7 @@
                 AND to_date(cm.day) BETWEEN #{commuteVO.startDay} AND to_date(sysdate, 'YYYY-MM-DD')
             </if>
             <if test="commuteVO.startDay == null and commuteVO.startDay == '' and commuteVO.endDay == null and commuteVO.endDay == ''">
-                AND to_date(cm.day) BETWEEN to_date(sysdate, 'YYYY-MM-DD') AND to_date(sysdate, 'YYYY-MM-DD')
+                AND trunc(cm.day) trunc(sysdate)
             </if>
 			
 		order by cm.day desc

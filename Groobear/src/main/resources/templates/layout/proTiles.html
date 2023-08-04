@@ -195,7 +195,19 @@ textarea {
 	border-bottom: 3px solid red;
 	z-index: 50;
 }
-
+.nav li:hover{
+  			background-color: #4fc09961;
+  			border-radius:15px;
+  		}
+  		.nav li:hover a{
+  			color:black;
+  		}
+  		.nav li{
+  			transition: 0.5s;
+  		}
+  		a {
+  			text-decoration : none !important;
+  		}
 /* 체크박스 커스텀 */
 .custom-checkbox {
   position: relative;
@@ -382,9 +394,9 @@ textarea {
 <!-- 사이드바 -->
 <div class="row dohyeon">
 	<nav id="sidebar"
-		 class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-		<div class="position-sticky">
-			<ul class="nav flex-column">
+		 class="col-md-3 col-lg-2 d-md-block sidebar" style="margin-left: 15px;margin-top: 10px;width: 230px;height: 100%;">
+		<div class="position-sticky" style="text-align: left;">
+			<ul class="nav flex-column" style="width:200px;">
 				<!-- 사이드바 메뉴 아이템들 -->
 				<li class="nav-item"
 					style="text-align: center;">
@@ -401,24 +413,24 @@ textarea {
 				<li class="nav-item"
 					data-toggle="modal"
 					data-target="#createProModal">
-					<a href="#">
+					<a href="#"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
 						<span class="material-icons">add_box</span>
 						새 프로젝트 생성</a></li>
 				<li class="nav-item">
-					<a href="/proMain">
+					<a href="/proMain"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
 						<span class="material-icons">home</span>
 						내 프로젝트</a></li>
 				<li class="nav-item">
-					<a href="/proMainS">
+					<a href="/proMainS"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
 						<span class="material-icons">star</span>즐겨찾기</a></li>
 				<!-- <li class="nav-item">
 					<a href="#">
 						<span class="material-icons">mail</span>미확인(x)</a></li> -->
 				<li class="nav-item">
-					<a href="/proMainG">
+					<a href="/proMainG"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
 						<span class="material-icons">drafts</span>미분류</a></li>
 				<li class="nav-item">
-					<a href="/proMainH">
+					<a href="/proMainH"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
 						<span class="material-icons">visibility_off</span>숨김</a></li>
 				<!-- <li>
 					<details>
