@@ -152,8 +152,8 @@ public class CommuteController {
 		@ResponseBody
 		@PostMapping("/getMonth")
 		public CommuteVO monthData2(@RequestBody CommuteVO vo) {
-			System.out.println("1111"+vo.getId());
-			vo = (CommuteVO) commuteService.monthWork(vo.getId(), null);
+			System.out.println("1111"+vo);
+			vo = (CommuteVO) commuteService.monthWork(vo.getId(),vo.getMonthDate());
 			System.out.println(vo);
 			return vo;
 		}

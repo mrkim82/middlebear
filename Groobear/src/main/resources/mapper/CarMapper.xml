@@ -183,15 +183,20 @@
 			</if><if test="cri.type != null and cri.type.equals('deptName')">
 				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
 			</if>
-			<if test="carVO.startDay != null and carVO.endDay != null">
-                AND to_date(p.issue_date) BETWEEN #{carVO.startDay} AND #{carVO.endDay}
-            </if>
-            <if test="carVO.startDay != null and carVO.endDay == null and carVO.endDay == ''">
-                AND to_date(p.issue_date) BETWEEN #{carVO.startDay} AND to_date(sysdate, 'YYYY-MM-DD')
-            </if>
-            <if test="carVO.startDay == null and carVO.startDay == '' and carVO.endDay == null and carVO.endDay == ''">
-                AND trunc(p.issue_date) = trunc(sysdate)
-            </if>
+			<choose>
+				<when test="carVO.startDay != null and carVO.endDay != null">
+	                AND to_date(p.issue_date) BETWEEN #{carVO.startDay} AND #{carVO.endDay}
+	            </when>
+	            <when test="carVO.startDay != null and carVO.endDay == null and carVO.endDay == ''">
+	                AND to_date(p.issue_date) BETWEEN #{carVO.startDay} AND to_date(sysdate, 'YYYY-MM-DD')
+	            </when>
+	            <when test="carVO.startDay == null and carVO.startDay == '' and carVO.endDay == null and carVO.endDay == ''">
+	                AND trunc(p.issue_date) = trunc(sysdate)
+	            </when>
+	            <otherwise>
+	            	AND trunc(p.issue_date) = trunc(sysdate)
+	            </otherwise>
+			</choose>
 			
 		order by p.issue_date desc
 		) t
