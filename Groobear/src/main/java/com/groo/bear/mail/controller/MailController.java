@@ -52,9 +52,9 @@ public class MailController {
         //위에서 가져온 메일을 db에 저장하고 뿌려줌
 		if(list.size() > 0) {
 			for(int i=0; i < list.size();i++) {
-				//System.out.println("list.get(i)첵 = "+list.get(i));
-				//int result = mailService.serverGetInsertMail(list.get(i));
-		        //System.out.println("몇건 처리됨? "+result);
+				System.out.println("list.get(i)첵 = "+list.get(i));
+				int result = mailService.serverGetInsertMail(list.get(i));
+		        System.out.println("몇건 처리됨? "+result);
 			}
 		}
 		
