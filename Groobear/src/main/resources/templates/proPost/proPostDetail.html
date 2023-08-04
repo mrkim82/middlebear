@@ -1489,7 +1489,7 @@ function drawChart() {
 			    	th:data-user-id="${pUser.id}"
 			    	data-toggle="modal"
 			    	th:data-target="'#proUserInfoDetail' + ${pUser.empNo}"
-			    	th:style="${pUserStat == last} = '' ? ''">
+			    	th:style="${pUserStat == last} ? 'border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;' : ''">
 			    	<span th:utext="${pUser.profileImg}"></span>
 			    	<span th:text="${pUser.name}"></span>
 			    	<span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>

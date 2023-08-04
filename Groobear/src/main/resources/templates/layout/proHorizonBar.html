@@ -14,7 +14,7 @@
 							th:style="'background-color: ' + ${projectTopBar.proColor}"
 							data-target="#squareStyle"></button>
 							
-						<!-- Modal -->
+						<!-- 프로젝트 색상 Modal -->
 						<div class="modal fade" id="squareStyle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog" style="width: 434px;">
 								<div class="modal-content dohyeonModalContent"
@@ -81,13 +81,13 @@
 			<!-- <th:block th:text="${#strings.substringAfter((#strings.substringAfter(#request.requestURI, '/')), '/')}"></th:block>
 			<p th:text="${#request.requestURI}"></p>
 			<th:block th:text="${#strings.substringAfter(#request.getQueryString(), '=')}"></th:block> -->
-		<div>
-			<input type="text" id="proInSearch" placeholder="프로젝트 내 검색" style="height:30px;">
+			<input type="text" id="proInSearch" placeholder="프로젝트 내 검색" style="height:30px; margin-top: 5.5px;">
+		<div style="position: absolute; right: 89px; top: 264px;">
 			<span class="material-symbols-outlined spanCursor"
 				  data-toggle="modal"
 				  data-target="#inviteMember">group_add</span>
-			<span class="material-symbols-outlined spanCursor" onclick="delPro()">delete</span>
-			<span class="material-symbols-outlined spanCursor" onclick="exitProMem()">logout</span>
+					<span class="material-symbols-outlined spanCursor" onclick="exitProMem()">logout</span>
+					<span class="material-symbols-outlined spanCursor" onclick="delPro()">delete</span>
 		</div>
 		</nav>
 	</div>
@@ -110,7 +110,7 @@
 								   th:data-parti-member="${pm.id}">
 								<span th:text="${pm.rank}"></span>	  
 								<span th:text="${pm.name}"></span>	  
-								<span th:text="${pm.email}"></span>	  
+								<span th:text="${pm.id}"></span>	  
 						</li>
 					</ul>
 				</div>
