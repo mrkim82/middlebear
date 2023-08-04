@@ -77,7 +77,6 @@ public class proPostController {
 		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
 		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));//프로젝트 참가자 수
 		String currentURI = request.getRequestURI();
-		System.out.println(currentURI);
 		model.addAttribute("firstURI", firstURI(currentURI));//첫번쨰 주소
 		System.out.println("ps주소"+firstURI(currentURI));
 		return model;
