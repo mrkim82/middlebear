@@ -56,4 +56,7 @@ public interface ChatMapper {
 	
 	//방 이름 확인용
 	public RoomDTO getRoomName(int roomNo);
+	
+	//방에 있는 이름
+	public List<RoomDTO> getUsersName(int roomNo);
 }
