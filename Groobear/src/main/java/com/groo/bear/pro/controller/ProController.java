@@ -43,7 +43,6 @@ public class ProController {
 		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
 		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
 		String currentURI = request.getRequestURI();
-		System.out.println(currentURI);
 		model.addAttribute("firstURI", firstURI(currentURI));//첫번쨰 주소
 		System.out.println("주소" + firstURI(currentURI));
 		return model;
@@ -151,7 +150,7 @@ public class ProController {
 	}
 	
 	//프로젝트 그룹 상세 리스트 보기
-	@GetMapping("/proGroupD/{groupNo}")
+	@GetMapping("proGroupD/{groupNo}")
 	public String proGroupDetailList(Model model, @PathVariable int groupNo, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
@@ -160,7 +159,7 @@ public class ProController {
 		model.addAttribute("readGroupCheckPro", proService.readGroupCheckPro(groupNo, id));
 		proData(model, request);
 		return "proHome/proMainSub";
-	}
+	};
 	
 	//프로젝트 그룹 생성
 	@PostMapping("proGroupC")
