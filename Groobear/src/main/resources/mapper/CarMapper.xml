@@ -184,16 +184,16 @@
 				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
 			</if>
 			<if test="carVO.startDay != null and carVO.endDay != null">
-                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN #{carVO.startDay} AND #{carVO.endDay}
+                AND to_date(p.issue_date) BETWEEN #{carVO.startDay} AND #{carVO.endDay}
             </if>
-            <if test="carVO.startDay != null and carVO.endDay == null">
-                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN #{carVO.startDay} AND to_char(sysdate, 'YYYY-MM-DD')
+            <if test="carVO.startDay != null and carVO.endDay == null and carVO.endDay == ''">
+                AND to_date(p.issue_date) BETWEEN #{carVO.startDay} AND to_date(sysdate, 'YYYY-MM-DD')
             </if>
-            <if test="carVO.startDay == null and carVO.endDay == null">
-                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN to_char(sysdate, 'YYYY-MM-DD') AND to_char(sysdate, 'YYYY-MM-DD')
+            <if test="carVO.startDay == null and carVO.startDay == '' and carVO.endDay == null and carVO.endDay == ''">
+                AND trunc(p.issue_date) = trunc(sysdate)
             </if>
 			
-		order by pl.oper_date desc
+		order by p.issue_date desc
 		) t
             )
             <![CDATA[
@@ -215,8 +215,8 @@
 			  and u.emp_no = ui.emp_no
 			  and d.dept_no = ui.dept_no
 					
-			<if test="cri.type != null and cri.type.equals('name')">
-				and ui.name LIKE '%${cri.keyword}%'
+			<if test="cri.type != null and cri.type.equals('empNo')">
+				and u.emp_no LIKE '%${cri.keyword}%'
 			</if>
 			<if test="cri.type != null and cri.type.equals('destination')">
 				and pl.destination LIKE '%${cri.keyword}%'
@@ -224,13 +224,13 @@
 				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
 			</if>
 			<if test="carVO.startDay != null and carVO.endDay != null">
-                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN #{carVO.startDay} AND #{carVO.endDay}
+                AND to_date(p.issue_date) BETWEEN #{carVO.startDay} AND #{carVO.endDay}
             </if>
-            <if test="carVO.startDay != null and carVO.endDay == null">
-                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN #{carVO.startDay} AND to_char(sysdate, 'YYYY-MM-DD')
+            <if test="carVO.startDay != null and carVO.endDay == null and carVO.endDay == ''">
+                AND to_date(p.issue_date) BETWEEN #{carVO.startDay} AND to_date(sysdate, 'YYYY-MM-DD')
             </if>
-            <if test="carVO.startDay == null and carVO.endDay == null">
-                AND to_char(pl.oper_date, 'YYYY-MM-DD') BETWEEN to_char(sysdate, 'YYYY-MM-DD') AND to_char(sysdate, 'YYYY-MM-DD')
+            <if test="carVO.startDay == null and carVO.startDay == '' and carVO.endDay == null and carVO.endDay == ''">
+                AND trunc(p.issue_date) = to_date(sysdate, 'YYYY-MM-DD')
             </if>
 	</select>
 		
@@ -271,7 +271,7 @@
 				     and d.dept_no = ui.dept_no
 				     and p.id = #{id}
 				<if test="monthDate != null">
-	                AND to_char(issue_date, 'YYYY-MM') = #{monthDate}
+	                AND to_char(p.issue_date, 'YYYY-MM') = #{monthDate}
 				</if>
 		order by pl.oper_date desc
 		) t

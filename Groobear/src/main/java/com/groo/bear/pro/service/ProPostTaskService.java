@@ -41,4 +41,7 @@ public interface ProPostTaskService {
 	public List<String> readDetailWorkPerson(int proPostNo);
 	
 	public int updateWorkPost(ProUpWorkVo vo);
+	
+	//간트차트 조회용
+	public List<ProPostTaskVO> readGantt(int proNo);
 }

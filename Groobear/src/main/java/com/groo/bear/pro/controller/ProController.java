@@ -2,7 +2,10 @@ package com.groo.bear.pro.controller;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,6 +26,7 @@ import com.groo.bear.pro.service.ProService;
 import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
+import com.groo.bear.pro.service.provo.ProPartiAlarmVO;
 import com.groo.bear.pro.service.provo.ProUsersVO;
 import com.groo.bear.pro.service.provo.ProVO;
 
@@ -36,13 +40,24 @@ public class ProController {
 	//공통 데이터(사이드바) 전달
 	private Model proData(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		
 		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
 		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
-		
+		String currentURI = request.getRequestURI();
+		model.addAttribute("firstURI", firstURI(currentURI));//첫번쨰 주소
+		System.out.println("주소" + firstURI(currentURI));
 		return model;
 	}
 	
+	//주소 가져오기
+	public static String firstURI(String input) {
+        Pattern pattern = Pattern.compile("/([^/]+)/[^/]*");
+        Matcher matcher = pattern.matcher(input);
+        if (matcher.find()) {
+            return matcher.group(1);
+        };
+        return input;
+    };
+    
 	//프로젝트 메인 페이지 이동
 	@GetMapping("proMain")
 	public String proMainPage(Model model, HttpServletRequest request) {
@@ -135,7 +150,7 @@ public class ProController {
 	}
 	
 	//프로젝트 그룹 상세 리스트 보기
-	@GetMapping("/proGroupD/{groupNo}")
+	@GetMapping("proGroupD/{groupNo}")
 	public String proGroupDetailList(Model model, @PathVariable int groupNo, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
@@ -144,7 +159,7 @@ public class ProController {
 		model.addAttribute("readGroupCheckPro", proService.readGroupCheckPro(groupNo, id));
 		proData(model, request);
 		return "proHome/proMainSub";
-	}
+	};
 	
 	//프로젝트 그룹 생성
 	@PostMapping("proGroupC")
@@ -250,6 +265,37 @@ public class ProController {
 		int result = proService.deleteGroupProManage(vo);
 		
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
-	}
+	};
+	
+	@PutMapping("upPartiY")
+	@ResponseBody
+	public Map<String, Object> updateProPartiY(@RequestBody int proMemNo) {
+		int result = proService.updateProPartiY(proMemNo);
+		System.out.println(proMemNo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	};
+	
+	@DeleteMapping("delPartiN")
+	@ResponseBody
+	public Map<String, Object> deleteProPartiN(@RequestBody int proMemNo) {
+		int result = proService.deleteProPartiN(proMemNo);
+		System.out.println(proMemNo);
+		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	};
+	
+	@PostMapping("readNoPartiPro")
+	@ResponseBody
+	public List<ProPartiAlarmVO> readNoPartiPro(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		return proService.readNoPartiPro((String)session.getAttribute("Id"));
+	};
+	
+	@PostMapping("readNoPartiProC")
+	@ResponseBody
+	public int readNoPartiProCount(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		return proService.readNoPartiProCount((String)session.getAttribute("Id"));
+	};
+	
 	
 }

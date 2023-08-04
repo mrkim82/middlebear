@@ -9,31 +9,35 @@
 		<link rel="stylesheet" href="modal6/css/flaticon.css">
 		<link rel="stylesheet" href="modal6/css/style.css">
 		<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-		
+		<style>
+html {
+	height : 100%;
+}
+</style>
 </head>
 <body>
 <div layout:fragment="content">
 	<div>
-		<h3 style="text-align: center;">차량관리</h3>
+		<h2 class="dohyeon" style="text-align: left; margin-top:25px; font-size:1.875rem;">차량관리</h2>
 	</div>
 	<div>
-		<div style="text-align: right;" class="form-group">
-		<form name="searchForm" action="carList" >
-			<input type="hidden" name="page" value="1"/>
-			<select name="type" style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px;height:35px;" id="selectBox" onchange="boxRe()">
-				<option value='' selected>선택</option>
-				<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
-				<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
-				<option value='carNo' th:selected="${criteria.type == 'carNo'}">차량번호</option>
-			</select>
-			<input type="text" id="textBox" name="keyword" th:value="${criteria.keyword}" style="border:1px solid rgba(0, 0, 0, 0.1); border-radius:5px;height:35px;"/>
-			<button type="submit" id="searchBtn" class="btn btn-primary">검색</button>
-		</form>
-	</div>
+		<div style="text-align: right;margin-bottom:5px;position: absolute;right: 25px;top: 35px;" class="form-group dohyeon">
+			<form name="searchForm" action="carList" >
+				<input type="hidden" name="page" value="1"/>
+				<select name="type" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;" id="selectBox" onchange="boxRe()">
+					<option value='' selected >선택</option>
+					<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
+					<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
+					<option value='carNo' th:selected="${criteria.type == 'carNo'}">차량번호</option>
+				</select>
+				<input type="text" id="textBox" name="keyword" th:value="${criteria.keyword}" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:150px;"/>
+				<button type="submit" id="searchBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 50px;height:35px;">검색</button>
+			</form>
+		</div>
 
 
 
-		<table class="table table-hover">
+		<table class="table table-hover dohyeon">
 			<thead>
 				<tr>
 					<th>사번</th>
@@ -44,7 +48,7 @@
 				</tr> 
 			</thead>
 			<tbody>
-				<tr class="cml table-default" th:if="${carList != null}" th:each="car, stat:${carList}" th:onclick="carInfofo()" id="carIn" data-toggle="modal" data-target="#carMInfo">
+				<tr class="cml table-default dohyeon" th:if="${carList != null}" th:each="car, stat:${carList}" th:onclick="carInfofo()" id="carIn" data-toggle="modal" data-target="#carMInfo">
 					<td>[[${car.empNo}]]</td>
 					<td>[[${car.deptName}]]</td>
 					<td>[[${car.name}]]</td>
@@ -59,30 +63,24 @@
 		
 	</div>
 	<div>
-			<ul class="paging pagination pagination-sm"
-				th:if="${paging.endPage != 0}">
-
-				<li class="page-item disabled"><a class="page-link"
-					th:href="|javascript:goPage(1)|">&laquo;</a></li>
-				<li th:if="${paging.prev}" class="page-item disabled"><a
-					th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a></li>
-				<li class="page-item active"
+			<ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
+				<li class="page-item"><a class="page-link" style="border-radius: 5px 0px 0px 5px;"
+							th:href="|javascript:goPage(1)|">&laquo;</a></li>
+				<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
 					th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
 					<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
 					th:text="${num}"></a>
 				</li>
-				<li th:if="${paging.next and paging.endPage > 0}"><a
-					th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a></li>
-				<li class="page-item"><a class="page-link"
+				<li class="page-item"><a class="page-link" style="border-radius: 0px 5px 5px 0px;"
 					th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
 				</li>
-			</ul>
+		    </ul>
 		</div>
 	
 	
 		<div class="modal fade" id="carMInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		  <div class="modal-dialog modal-dialog-centered" role="document">
-		    <div class="modal-content">
+		    <div class="modal-content" style="border-radius:20px;">
 		      <div class="modal-header">
 		        <button type="button" class="close d-flex align-items-center justify-content-center" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true" class="ion-ios-close"></span>
@@ -90,18 +88,18 @@
 		      </div>
 		      <div class="row no-gutters">
 			      <div class="col-md-6 d-flex">
-				      <div class="modal-body p-5 img d-flex color-1 text-center d-flex align-items-center">
+				      <div class="modal-body p-5 img d-flex color-1 text-center d-flex align-items-center" style="border-radius: 20px 0px 0px 20px;">
 				      	<div class="text w-100">
 				      		<span class="icon-2 ion-ios-car"></span>
-					      	<h5>차량 정보만 변경 가능합니다.</h5>
+					      	<h5 class="dohyeon">차량 정보만 변경 가능합니다.</h5>
 					      	<div class="icon">
-					      		<span class="ion-ios-car"></span>
+					      		<img id="CTI" src="" style="width:200px">
 					      	</div>
 					      </div>
 				      </div>
 				    </div>
 				    <div class="col-md-6 d-flex">
-				      <div class="modal-body p-5 img d-flex align-items-center color-2">
+				      <div class="modal-body p-5 img d-flex align-items-center color-2" style="border-radius: 0px 20px 20px 0px;">
 								<div class="text w-100 py-0 py-md-5">
 									<h3 class="mb-4">Change Car Info</h3>
 									<form action="carUpdate" method="post" class="signup-form"
@@ -160,7 +158,7 @@
 										</div>
 										<div class="form-group d-md-flex"></div>
 										<div class="form-group" style="margin-left: 30px;">
-											<button type="submit" style="width: 150px; margin: 0px 5px;"
+											<button type="submit" style="width: 150px;"
 												class="btn btn-primary rounded submit px-3" onclick="checkBtn2()">수정</button>
 											<button type="button" id="deleteBtn"
 												style="width: 150px; margin: 0px 5px;"
@@ -196,7 +194,7 @@ $('#carMInfo').on('hidden.bs.modal', function (event) {
 })
 
  		let changeimg = document.getElementById("infoCarType");
-        let carImg = document.getElementById("carImg");
+        let carImg = document.getElementById("CTI");
         document.getElementById('infoCarType').children[0].selected = true;
         function changeImage(){
             let index = changeimg.selectedIndex;
@@ -269,17 +267,14 @@ document.querySelector('#deleteBtn').addEventListener('click',function(){
 			let carNo = event.currentTarget.querySelector('.carNo').innerText;
 			let carType = event.currentTarget.querySelector('.carType').innerText;
 			let id = event.currentTarget.querySelector('.suId').innerText;
-			
-			
-			console.log(carNo);
-			console.log(carType);
-			console.log(id);
-			
-			
+			let CTI = event.currentTarget.querySelector('.carType').innerText;
+
+			console.log(CTI);
 			
 			document.querySelector('#suId2').value = id;
 			document.querySelector('#infoCarNo').value = carNo;
 			document.querySelector('#infoCarType').value = carType;
+			document.querySelector('#CTI').src = CTI;
 		}
 $('#carMInfo').on('hidden.bs.modal', function (event) {
 	 carInfoForm.reset();

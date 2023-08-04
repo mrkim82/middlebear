@@ -48,7 +48,7 @@
 	}
 	
 	input:checked+.slider {
-	   background-color: #2196F3;
+	   background-color: #35A880;
 	}
 	
 	input:focus+.slider {
@@ -74,6 +74,10 @@
    display: inline-block;
    font-size: 20px;
    font-weight: bold;
+	}
+	a {
+		text-decoration:none !important;
+		cursor : pointer;
 	}
 </style>
 </head>
@@ -208,8 +212,8 @@
 
 <script>
 var openChat  = function() {
-	
- window.open("/roomList", "", "_blank");
+	var status = "toolbar=no, scrollbars=yes,resizable=yes,status=no,menubar=no, width=600, height=500, top=0,left=0"; 
+ window.open("/roomList", "", status, "_blank");
 }
 </script>
    <script>
@@ -223,7 +227,6 @@ var openChat  = function() {
 		      if(data.uuid != null){
 		    	  $('#profImg').attr('src', '/display?fileName='+data.uploadPath.replace(/\\/g, '/')+'/s_'+data.uuid+'_'+data.fileName);
 		      }
-		      
 		    },
 		    error: function(err) {
 		      console.log(err);
@@ -275,7 +278,7 @@ var openChat  = function() {
 
 	          document.getElementById('day23').textContent = data.day.substr(0, 10);
 	          updateSwitches(data);
-	        })
+	        }) 
 	        .catch((err) => {
 	          console.log(err);
 	          // 에러 발생 시 사용자에게 에러 메시지 표시 등의 처리

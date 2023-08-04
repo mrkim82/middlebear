@@ -10,14 +10,13 @@
 <link
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
 	rel="stylesheet" />
-<!-- MDB -->
-<link
-	href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css"
-	rel="stylesheet" />
 
 
-
-
+<style>
+html {
+	height : 100%;
+}
+</style>
 
 </head>
 <body>
@@ -29,17 +28,18 @@
 		<div class="modal fade" id="bookModal" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
-				<div class="modal-content">
+				<div class="modal-content" style=" border-radius: 25px; box-shadow: 2px 3px 1px 1px #d3d3d37a;">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">운행 일지 수정</h5>
+						<h5 class="modal-title" id="exampleModalLabel" style="font-size:30px;">운행 일지</h5>
 						<button type="button" class="btn-close" data-mdb-dismiss="modal"
-							aria-label="Close"></button>
+						style="border-radius: 10px;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: gray;width: 30px;height:25px;"
+							aria-label="Close">X</button>
 					</div>
 
 					<form class="signup-form" name="commuteInfoForm">
 						<div class="modal-body" style="display:inline-block;">
 							<div class="form-group mb-3" style="display:inline-block;width: 470px;border:1px solid black;border-radius: 2px;">
-								<table style="float: left; width: 400px; ">
+								<table style="float: left; width: 400px; font-size:20px;">
 									<thead></thead>
 									<tbody>
 										<tr><td>문서 번호 : <span id="mPayNo"></span></td></tr>
@@ -48,27 +48,27 @@
 										<tr><td id="sessionId" style="display: none;">[[${session.Id}]]</td></tr>
 									</tbody>
 								</table>
-								<table style="float: left; width: 380px;">
+								<table style="float: left; width: 380px; font-size:20px">
 									<thead></thead>
 									<tbody>
 										<tr>
-											<td>133333333333</td>
-											<td>23333333333</td>
-											<td>33333333333333333333333</td>
+											<td>13333</td>
+											<td>23333</td>
+											<td>33333</td>
 										</tr>
 										<tr>
-											<td>45555555555</td>
-											<td>55555555555</td>
-											<td>6555555555555555</td>
+											<td>45555</td>
+											<td>55555</td>
+											<td>65555</td>
 										</tr>
 										<tr>
-											<td>75555555555</td>
-											<td>85555555555</td>
-											<td>9555555555555555</td>
+											<td>75555</td>
+											<td>85555</td>
+											<td>95555</td>
 										</tr>
 									</tbody>
 								</table>
-								<table style="float: left; width: 790px;">
+								<table style="float: left; width: 790px; font-size:20px;">
 									<thead></thead>
 									<tbody>
 										<tr><td>사유 : <span id="mPurpose"></span>
@@ -84,8 +84,8 @@
 						</div>
 
 						<div class="modal-footer">
-							<button type="button" id="saveBtn" class="btn btn-primary">수정</button>
-							<button type="button" class="btn btn-secondary"
+							<button type="button" id="saveBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 50px;height:35px;">수정</button>
+							<button type="button" class="" style="border-radius: 10px; border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: gray;width: 50px;height:35px;"
 								data-mdb-dismiss="modal">닫기</button>
 						</div>
 					</form>
@@ -96,19 +96,20 @@
 
 
 		<div>
-			<h3 style="text-align: center;">운행 일지 관리</h3>
+			<h2 style="text-align: left; margin-top:25px;" class="dohyeon">운행 일지 관리</h2>
 		</div>
 		<div style="display: block">
 			<form name="searchForm" action="bookList">
-				<div>
+				<div style="margin-bottom: 8px;">
 					
 					<input type="hidden" name="page" value="1" /> <input
-					style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;"
 					type="date"
 					th:value="${#dates.format(carVO.startDay, 'yyyy-MM-dd')}"
 					name="startDay" id="startDate" onchange="mindate(); changeDate();">
+					-
 				<input
-					style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;"
 					type="date"
 					th:value="${#dates.format(carVO.endDay, 'yyyy-MM-dd')}"
 					name="endDay" id="endDate" onchange="changeDate()">
@@ -117,9 +118,9 @@
 
 				</div>
 				<div
-					style="position: absolute; display: inline-block; right: 25px; top: 40px;">
+					style="position: absolute; display: inline-block; right: 25px; top: 69px;">
 					<select
-						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+						style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;"
 						name="type" id="selectBox" onchange="boxRe()">
 						<option value='' selected>선택</option>
 						<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
@@ -128,9 +129,9 @@
 						<option value='deptName'
 							th:selected="${criteria.type == 'deptName'}">부서</option>
 					</select> <input id="textBox"
-						style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;"
+						style="border: 1px solid gray;border-radius: 5px;height: 35px; width:150px;"
 						type="text" name="keyword" th:value="${criteria.keyword}" />
-					<button type="submit" id="searchBtn" class="btn btn-primary">검색</button>
+					<button type="submit" id="searchBtn" class="btn btn-primary" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 50px;height:35px;">검색</button>
 				</div>
 			</form>
 		</div>
@@ -181,24 +182,18 @@
 
 		</div>
 		<div>
-			<ul class="paging pagination pagination-sm"
-				th:if="${paging.endPage != 0}">
-
-				<li class="page-item disabled"><a class="page-link"
-					th:href="|javascript:goPage(1)|">&laquo;</a></li>
-				<li th:if="${paging.prev}" class="page-item disabled"><a
-					th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a></li>
-				<li class="page-item active"
+			<ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
+				<li class="page-item"><a class="page-link" style="border-radius: 5px 0px 0px 5px;"
+							th:href="|javascript:goPage(1)|">&laquo;</a></li>
+				<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
 					th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
 					<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
 					th:text="${num}"></a>
 				</li>
-				<li th:if="${paging.next and paging.endPage > 0}"><a
-					th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a></li>
-				<li class="page-item"><a class="page-link"
+				<li class="page-item"><a class="page-link" style="border-radius: 0px 5px 5px 0px;"
 					th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
 				</li>
-			</ul>
+		    </ul>
 		</div>
 
 

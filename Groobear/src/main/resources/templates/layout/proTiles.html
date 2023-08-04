@@ -4,29 +4,39 @@
 >
 	  
 <head>
+
 <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 <meta charset="utf-8">
 <meta name="viewport"
 	  content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <!-- proTiles link -->
+<!-- 부트스트랩 -->
+<link rel="stylesheet" href="/bootstrap.min.css">
+	  
+<!-- 구글폰트 -->
 <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
 	  rel="stylesheet">
-<link rel="stylesheet" href="/bootstrap.min.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-	  rel="stylesheet">
-<link rel="stylesheet" type="text/css"
-	  href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-<link rel="stylesheet"
-	  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+	  rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	  rel="stylesheet">
 
+<!-- 풀캘린더 -->
+<script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
+
 <!-- proTiles 스크립트 -->
+<!-- 제이쿼리 -->
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<!-- 웹소켓 -->
 <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 <script type="text/javascript"
 		src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	  href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+
+<!-- 없으면 모달 안됨 -->
+<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
 
 <style>
 @import
@@ -43,6 +53,21 @@
 	color: white;
 }
 
+.dohyeonModalContent {
+	border: 1px solid #00000021;
+	border-radius: 20px;
+	box-shadow: 2px 4px 3px 3px darkgray;
+}
+
+html {
+	height: 1300px;
+}
+
+th {
+	font-size: large;
+	text-align: center;
+}
+
 .rightPad {
 	padding-right: 150px;
 }
@@ -53,47 +78,37 @@
 	border: 1px solid #35A880;
 }
 
-#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3 {
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	padding-top: 100px; /* Location of the box */
-	left: 0;
-	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: auto; /* Enable scroll if needed */
-	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-	display: none;
+.btn-groob {
+	background-color: #35A880;
+	color: #fff;
+	border: 1px solid #35A880;
+	border-radius: 12px;
 }
 
-#modalFolderCreate4 {
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	padding-top: 100px; /* Location of the box */
-	left: 0;
-	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: auto; /* Enable scroll if needed */
-	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-	display: none;
+.square {
+	width: 35px;
+	height: 35px;
+	background-color: #000;
+	margin-left: 30px;
+	border-radius: 10px;
 }
 
-#modalBody, #modalBody2, #modalBody3 {
-	width: 500px;
-	height: 300px;
-	padding: 30px 30px;
-	margin: 0 auto;
-	border: 1px solid #777;
-	background-color: #fff;
+/* 검색 창 스타일 */
+input[type="text"] {
+	width: 150px; /* 원하는 너비 값으로 변경 */
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 20px;
+	font-size: 16px;
+	outline: none;
+	transition: width 0.3s ease-in-out;
 }
 
-#closeBtn, #closeBtn2 {
-	float: right;
-	font-weight: bold;
-	color: #777;
-	font-size: 25px;
-	cursor: pointer;
+/* 검색 창에 포커스되었을 때 스타일 */
+input[type="text"]:focus {
+	width: 170px; /* 포커스되었을 때 더 넓은 너비 값으로 변경 */
+	border-color: #6c63ff;
+	box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
 }
 
 details {
@@ -106,12 +121,6 @@ details {
 	transition: 0.3s;
 }
 
-.square {
-	width: 40px;
-	height: 40px;
-	background-color: #000;
-	border-radius: 10px;
-}
 .star {
   width: 0;
   height: 0;
@@ -127,7 +136,7 @@ details {
 }
 
 .gray:before {
-  color: gray;
+  color: #ccc;
 }
 
 .yellow:before {
@@ -151,16 +160,118 @@ details ul {
 	padding: 0px;
 }
 
-.flex-column li {
-	margin-left: 10px;
-	padding: px;
+.horizontal-bar {
+	height: 80px;
+	width: 100%;
+	background-color: #f9f9f9;
+}
+
+.horizontal-bar2 {
+	height: 40px;
+	width: 100%;
+	background-color: #f5f5f5;
+}
+
+.spanCursor {
+	cursor: pointer
+}
+
+textarea {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 200px;
+  width: 100%;
+  resize: vertical; /* 세로 조정 가능 */
+}
+
+/* 탭 밑에 줄 */
+.bottomLine {
+	border-bottom: 3px solid red;
+	z-index: 50;
+}
+.nav li:hover{
+  			background-color: #4fc09961;
+  			border-radius:15px;
+  		}
+  		.nav li:hover a{
+  			color:black;
+  		}
+  		.nav li{
+  			transition: 0.5s;
+  		}
+  		a {
+  			text-decoration : none !important;
+  		}
+/* 체크박스 커스텀 */
+.custom-checkbox {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 16px;
+  padding-left: 30px;
+  margin-right: 15px;
+  user-select: none;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.custom-checkbox input:checked + .checkmark {
+  background-color: #2196F3;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox input:checked + .checkmark:after {
+  display: block;
+}
+
+.custom-checkbox .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+/* Optional: Hover effect */
+.custom-checkbox:hover .checkmark {
+  background-color: #ccc;
 }
 </style>
 
 </head>
 <body style="width: 1215px; margin: 0 auto;">
+
+<!-- header 영역 -->
 <div>
-	<!-- header 영역 -->
 	<header class="blog-header lh-1 py-3">
 		<div class="row flex-nowrap justify-content-between align-items-center">
 			<div class="col-4 pt-1">
@@ -171,7 +282,7 @@ details ul {
 			<div class="row">
 				<img style="margin-top: 10px; width: 45px; height: 45px;"
 					 src="https://creazilla-store.fra1.digitaloceanspaces.com/emojis/52942/paw-prints-emoji-clipart-md.png">
-				<div class="col-4 text-center">
+				<div class="col-4 text-center" style="z-index: 1000;">
 					<a class="blog-header-logo text-body-emphasis dohyeon"
 					   style="font-size: 50px; font-weight: 500;"
 					   href="/main">Groobear</a>
@@ -190,7 +301,8 @@ details ul {
 							<td style="font-size: 20px;">
 								<span>
 									<a href="/logout"
-									   class="dohyeon">로그아웃</a>
+									   class="dohyeon"
+									   >로그아웃</a>
 								</span>&nbsp;&nbsp;&nbsp;&nbsp;
 								<span>
 									<a id="commute"
@@ -204,77 +316,121 @@ details ul {
 		</div>
 	</header>
 	
-	<!-- nav 영역 -->
-	<nav class="navbar navbar-expand-lg"
-		 style="text-align: center; background-color: #35A880;">
-		<div class="collapse navbar-collapse" id="navbarColor01">
-
-			<!-- nav items -->
-			<ul class="navbar-nav mr-auto" style="display: flex; margin: auto;">
-				<li class="nav-item active rightPad"
-					style="padding: 0px; margin-right: 90px;">
-					<a class="nav-link dohyeonmenu"
-					   href="/introduce">회사소개</a>
-				</li>
-				<li class="nav-item rightPad"
-					style="padding: 0px; margin-right: 90px;">
-					<a class="nav-link dohyeonmenu"
-					   href="/mail/receiveMail">메일</a>
-				</li>
-				<li class="nav-item rightPad"
-					style="padding: 0px; margin-right: 90px;">
-					<a class="nav-link dohyeonmenu"
-					   href="/proMain">프로젝트</a>
-				</li>
-				<li class="nav-item rightPad"
-					style="padding: 0px; margin-right: 90px;">
-					<a class="nav-link dohyeonmenu"
-					   href="/pay/payMain">전자결재</a>
-				</li>
-				<li class="nav-item rightPad"
-					style="padding: 0px; margin-right: 90px;">
-					<a class="nav-link dohyeonmenu"
-					   href="/boardList?boardType=N">게시판</a>
-				</li>
-				<li class="nav-item"
-					style="padding: 0px;">
-					<a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
-				</li>
-			</ul>
-		</div>
-	</nav>
-
-	<div class="data" style="display: none">
+	<nav class="navbar navbar-expand-lg" style="text-align: center; background-color:#35A880;"> 
+      <div class="collapse navbar-collapse" id="navbarColor01">
+      
+	        <ul class="navbar-nav mr-auto" style="display:flex; margin:auto;">
+	          <li class="nav-item active rightPad" style="padding:0px; margin-right:90px;">
+	            <a class="nav-link dohyeonmenu" href="/intro/companyintroduce">회사소개</a>
+	          </li>
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
+	            <a class="nav-link dohyeonmenu" href="/mail/receiveMail">메일</a>
+	          </li>
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
+	            <a class="nav-link dohyeonmenu" href="/proMain">프로젝트</a>
+	          </li>
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
+	            <a class="nav-link dohyeonmenu" href="/pay/payMain">전자결재</a>
+	          </li>
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
+	            <a class="nav-link dohyeonmenu" href="/boardList?boardType=N">게시판</a>
+	          </li>
+	          <li class="nav-item" style="padding:0px;">
+	            <a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
+	          </li>
+	        </ul>
+        </div>
+    </nav>
+  
+	<div class="data" style="display:none">
 		<p class="nowMon"></p>
+	
+		<!-- nav 영역 -->
+		<nav class="navbar navbar-expand-lg"
+			 style="text-align: center; background-color: #35A880;">
+			<div class="collapse navbar-collapse" id="navbarColor01">
+	
+				<!-- nav items -->
+				<ul class="navbar-nav mr-auto" style="display: flex; margin: auto;">
+					<li class="nav-item active rightPad"
+						style="padding: 0px; margin-right: 90px;">
+						<a class="nav-link dohyeonmenu"
+						   href="/introduce">회사소개</a>
+					</li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;">
+						<a class="nav-link dohyeonmenu"
+						   href="/mail/receiveMail">메일</a>
+					</li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;">
+						<a class="nav-link dohyeonmenu"
+						   href="/proMain">프로젝트</a>
+					</li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;">
+						<a class="nav-link dohyeonmenu"
+						   href="/pay/payMain">전자결재</a>
+					</li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;">
+						<a class="nav-link dohyeonmenu"
+						   href="/boardList?boardType=N">게시판</a>
+					</li>
+					<li class="nav-item"
+						style="padding: 0px;">
+						<a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="data" style="display: none">
+			<p class="nowMon"></p>
+		</div>
 	</div>
 </div>
 
 <!-- 사이드바 -->
 <div class="row dohyeon">
 	<nav id="sidebar"
-		 class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-		<div class="position-sticky">
-			<ul class="nav flex-column">
+		 class="col-md-3 col-lg-2 d-md-block sidebar" style="margin-left: 15px;margin-top: 10px;width: 230px;height: 100%;">
+		<div class="position-sticky" style="text-align: left;">
+			<ul class="nav flex-column" style="width:200px;">
 				<!-- 사이드바 메뉴 아이템들 -->
-				<li class="nav-item">
+				<li class="nav-item"
+					style="text-align: center;">
+					<button type="button"
+							class="btn btn-primary"
+							data-toggle="modal"
+							data-target="#inviteManPro">
+					  초대된 프로젝트 <span class="badge badge-light inviteCountTarget"></span>
+					</button></li>
+				<!-- <li class="nav-item">
 					<a href="/proCreate">
+						<span class="material-icons">add_box</span>
+						새 프로젝트 생성</a></li> -->
+				<li class="nav-item"
+					data-toggle="modal"
+					data-target="#createProModal">
+					<a href="#"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
 						<span class="material-icons">add_box</span>
 						새 프로젝트 생성</a></li>
 				<li class="nav-item">
-					<a href="/proMain">
+					<a href="/proMain"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
 						<span class="material-icons">home</span>
 						내 프로젝트</a></li>
 				<li class="nav-item">
-					<a href="/proMainS">
+					<a href="/proMainS"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
 						<span class="material-icons">star</span>즐겨찾기</a></li>
 				<!-- <li class="nav-item">
 					<a href="#">
 						<span class="material-icons">mail</span>미확인(x)</a></li> -->
 				<li class="nav-item">
-					<a href="/proMainG">
+					<a href="/proMainG"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
 						<span class="material-icons">drafts</span>미분류</a></li>
 				<li class="nav-item">
-					<a href="/proMainH">
+					<a href="/proMainH"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
 						<span class="material-icons">visibility_off</span>숨김</a></li>
 				<!-- <li>
 					<details>
@@ -287,23 +443,25 @@ details ul {
 						</ul>
 					</details>
 				</li> -->
-				<li>
+				<li><div th:text="${currentURI}"></div>
 					<details id="groupFolderList" open>
 						<summary>프로젝트 폴더
-							<span id="popupProjectBtn"
+							<span onclick="makeGroupFolderModal()"
 								  class="material-icons">add</span>
 						</summary>
 						<!-- 프로젝트 그룹 리스트 -->
 						<ul id="proGroup">
 						<th:block th:each="proG : ${projectGroupList}">
-							<li><a th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}"
-								   th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}"
+							<li th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}">
+								<a th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}"
 								   style="overflow:hidden; width:80px">
 								   [[${proG.groupName}]]
 									<span class='material-icons moreVertIcons'
-										  >more_vert</span>
-										  <!-- style='display: none;' -->
-										</a></li>
+										  onclick="makeGroupMan()">more_vert
+									</span>
+									<!-- style='display: none;' -->
+								</a>
+							</li>
 						</th:block>
 						</ul>
 					</details>
@@ -312,164 +470,418 @@ details ul {
 		</div>
 	</nav>
 
-	<!-- sidebar modal창(그룹 생성) -->
-	<div id="modalFolderCreate1">
-		<div id="modalContent">
-			<div id="modalBody">
-				<span id="closeBtn">&times;</span>
-				<p>프로젝트 폴더 만들기</p>
-				<input type="text" placeholder="프로젝트 폴더명을 입력하세요"
-					   id="folderContent1">
-				<button type="button" id="cancelBtn" class="btn btn-primary">취소</button>
-				<button type="button" id="createFolder">확인</button>
+	<!-- 본문 영역(사이드바 우측의 컨텐츠) -->
+	<!-- <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+		<div layout:fragment="content"></div>
+	</main> -->
+	<div  style="padding: 0px; width:1007.5px">
+	
+		<!-- 프로젝트 상세 상단 바 proPostMain으로 시작하는 경우 horizonBar 프래그먼트 포함 -->
+		<th:block th:if="${#strings.containsIgnoreCase(firstURI,'proPostMain')} or
+						 ${#strings.containsIgnoreCase(firstURI,'proSearch')}">
+			<div th:insert="~{layout/proHorizonBar :: horizonBar}" class="dohyeon"></div>
+		</th:block>
+		
+		<!-- 프로젝트 메인 상단 바 proPostMain으로 시작하지 않는 경우 horizonBarsub 프래그먼트 포함 -->
+		<th:block th:if="${!#strings.containsIgnoreCase(firstURI,'proPostMain')} and
+						 ${!#strings.containsIgnoreCase(firstURI,'proSearch')}">
+			<div th:insert="~{layout/proMainBar :: mainTopBar}" class="dohyeon"></div>
+		</th:block>
+		
+		<main>
+	        <div layout:fragment="content" class="dohyeon"></div>
+	    </main>
+	</div>
+	<!-- 본문 내용 종료 -->
+
+</div>
+<!-- 사이드바 내용 종료 -->
+
+<!-- 모달 영역 -->
+<div class="row dohyeon">
+
+	<!-- 초대된 프로젝트 모달 -->
+	<div class="modal fade" id="inviteManPro" tabindex="-1" aria-labelledby="inviteManProLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content dohyeonModalContent">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="inviteManProLabel">미수락 프로젝트</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body" style="padding:0px; text-align: center;">
+	
+					<table class="table table-hover" style="margin: 0px;">
+						<thead>
+							<tr>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 250px;">프로젝트 명</th>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 120px;">초대자</th>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 75px;"></th>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 75px; padding-left: 0px;"></th>
+							</tr>
+						</thead>
+						<tbody class="inviteMemTarget">
+							<tr>
+								<!-- 미수락 프로젝트 목록 -->
+							</tr>
+						</tbody>
+					</table>
+					
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-groo" data-dismiss="modal"
+									style="border-radius:12px;">닫기</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- 프로젝트 생성 모달(새 프로젝트 생성) -->
+	<div class="modal fade" id="createProModal" tabindex="-1" aria-labelledby="createProModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content dohyeonModalContent">
+				<div class="modal-header">
+					<h5 class="modal-title" id="createProModal">프로젝트 생성하기</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- proCreate.html 불러오는 곳 -->
+					<div id="proCreateModalPage"></div>
+				</div>
 			</div>
-   
 		</div>
 	</div>
 	
-	<!-- sidebar modal창2(그룹 수정) -->
-	<div id="modalFolderCreate2">
-		<div id="modalContent2">
-			<div id="modalBody2">
-				<span id="closeBtn2">&times;</span>
-				<p>프로젝트 폴더명 수정하기</p>
-				<input type="text" placeholder="프로젝트 폴더명을 입력하세요"
-					   id="folderContent2">
-				<button type="button" id="cancelBtn2" class="btn btn-primary">취소</button>
-				<button type="button" id="updateFolderName">변경</button>
+	<!-- 프로젝트 폴더 생성 모달 -->
+	<div class="modal fade" id="createGroupFolderModal" tabindex="-1" aria-labelledby="createGroupFolderModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content dohyeonModalContent" style="width: 434px;">
+				<div class="modal-header">
+					<h5 class="modal-title" id="createGroupFolderModallLabel">그룹 폴더 생성</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="text-align: center;">
+					<input type="text"
+						   placeholder="프로젝트 폴더명을 입력하세요"
+						   id="folderContent"
+						   autocomplete="off"
+						   maxlength="30"
+							 style="width: 372px;">
+				</div>
+				<div class=" d-flex justify-content-center" style="margin: 0 auto; padding-top: 6px; padding-bottom: 6px; margin-bottom: 5px;">
+					<button type="button" class="btn btn-groo" onclick="makeGroupFolder()" style="border-radius:12px; margin-right: 6px;">저장</button>
+					<button type="button" class="btn btn-groo" data-dismiss="modal" style="border-radius:12px; margin-left: 6px;">닫기</button>
+				</div>
 			</div>
 		</div>
 	</div>
 	
-	<!-- sidebar modal창3(그룹 삭제) -->
-	<div id="modalFolderCreate3">
-		<div id="modalContent3">
-			<div id="modalBody3">
-				<p>프로젝트 폴더를 삭제하시겠습니까?</p>
-				<p>프로젝트 폴더에 포함된 프로젝트는 삭제되지 않습니다.</p>
-				<button type="button" id="cancelBtn3" class="btn btn-primary">취소</button>
-				<button type="button" id="deleteFolder">확인</button>
+	<!-- 그룹 관리 모달  -->
+	<div class="modal fade" id="makeGroupManModal" tabindex="-1" aria-labelledby="makeGroupManModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content dohyeonModalContent"
+					 style="width: 300px;">
+				<div class="modal-header">
+					<h5 class="modal-title" id="makeGroupManModalLabel"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="text-align: center;">
+					<button type="button" class="btn btn-groo"
+									style="width: 80px;border-radius: 12px;"
+									id="groupNameChangeBtn"
+									onclick="updateManButton()">수정</button>
+					<button type="button" class="btn btn-groo"
+									style="width: 80px;border-radius: 12px;"
+									id="groupNameDeleteBtn"
+									onclick="deleteGroupFolder()">즉시삭제</button>
+					<h6 style="font-size: x-small; text-align: right; margin-top: 7px;">* 그룹안의 프로젝트는 삭제되지 않습니다!</h6>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 프로젝트 그룹 수정 모달 -->
+	<div class="modal fade" id="updateManButton" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="updateManButtonLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content dohyeonModalContent"  style="width: 434px;">
+				<div class="modal-header">
+					<h5 class="modal-title" id="updateManButtonLabel">그룹 폴더명 수정</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			<div class="modal-body" style="text-align: center;">
+				<input type="text"
+					   placeholder="프로젝트 폴더명을 입력하세요"
+					   id="folderContentChange"
+					   autocomplete="off"
+					   maxlength="30"
+						 style="width: 372px;">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-groob" onclick="changeGroupFolderName()">수정</button>
+				<button type="button" class="btn btn-groob" data-dismiss="modal">닫기</button>
+			</div>
 			</div>
 		</div>
 	</div>
 
-	<!-- 사이드바 우측의 컨텐츠 영역 -->
-	<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-		<div layout:fragment="content"></div>
-	</main>
-	<!-- 본문 내용 종료 -->
+</div>
+<!-- 모달 종료 -->
 
 <!-- proTiles 스크립트 영역 -->
 <!-- 공통 데이터 -->
-
 <script th:inline="javascript">
 /*<![CDATA[*/
 	//그룹 갯수 체크
   	let pGC = /*[[${projectGroupList}]]*/ [];
-  	let pGCUp = pGC.length;
+  	let selfId = /*[[${session.Id}]]*/;
+	let selfName = /*[[${session.Name}]]*/;
+	let proDetailCount = /*[[${readProDetailCount}]]*/;
+	
+  	let url = window.location.pathname;
+	let lastIndex = url.lastIndexOf('/');
+	let projectNo = url.substring(lastIndex + 1);
 /*]]>*/
 </script>
 
+<!-- 시간 변환 -->
+<script type="text/javascript">
+	//??
+	function convertToFormattedDateTime(dateTimeStr) {
+		if(dateTimeStr == '') {//빈값일때 바로 리턴
+			return;
+		};
+		
+		const date = new Date(dateTimeStr);
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+	
+		return `${year}-${month}-${day} ${hours}:${minutes}`;
+	};
+</script>
+
+<!-- 페이지 실행시 -->
 <script>
-	//변수선언
-	let modal1 = document.getElementById('modalFolderCreate1');
-	let modal2 = document.getElementById('modalFolderCreate2');
-	let modal3 = document.getElementById('modalFolderCreate3');
-	let closeBtn1 = document.getElementById('closeBtn');
-	let closeBtn2 = document.getElementById('closeBtn2');
-	let cancelBtn1 = document.getElementById('cancelBtn');
-	let cancelBtn2 = document.getElementById('cancelBtn2');
-	let cancelBtn3 = document.getElementById('cancelBtn3');
-	let folderC1 = document.getElementById('folderContent1');
-	let folderC2 = document.getElementById('folderContent2');
-	//변수선언2
-	let popupBtn = document.getElementById('popupProjectBtn');
-	let creFolder = document.getElementById('createFolder');
-	let uFolderName = document.getElementById('updateFolderName');
-	let dFolder = document.getElementById('deleteFolder');
-	
-	//취소 공통
-	let modals = [modal1, modal2];
-	let closeBtns = [closeBtn1, closeBtn2];
-	let cancelBtns = [cancelBtn1, cancelBtn2];
-	let folderInputs = [folderC1, folderC2];
-	
-	//그룹 생성 모달창 띄우기
-	popupBtn.addEventListener("click",function(e) { 
-		e.preventDefault();
-		modal1.style.display = 'block';
+	window.addEventListener('DOMContentLoaded', () => {
+		makeInviteCountTarget();//프로젝트 미확인 알람
+	});
+</script>
+
+<!-- 기본 모달 이벤트 정리 -->
+<script>
+	//그룹 폴더 생성 모달
+	//닫길때 input 값 초기화
+	$('#createGroupFolderModal').on('hidden.bs.modal', function (event) {
+		$('#folderContent').val('');
+	});
+	$('#updateManButton').on('hidden.bs.modal', function (e) {
+		$(this).find('.input').val('');
 	});
 	
-	for (let i = 0; i < modals.length; i++) {
-		let modal = modals[i];
-		let closeBtn = closeBtns[i];
-		let cancelBtn = cancelBtns[i];
-		let folderInput = folderInputs[i];
-	
-		closeBtn.addEventListener('click', function() {
-			closeModal(modal, folderInput);
+	//postTiles꺼
+	$('.modal').on('hidden.bs.modal', function (e) {
+		// 모달 내부의 모든 input 요소를 찾아 값을 초기화
+		$(this).find('input, textarea').val('');
+		//$(this).find('.collapse').removeClass('show');
+	});
+	$('#modal2').on('hidden.bs.modal', function (e) {
+		$(this).find('.uploadResult ul li').remove();
+	});
+</script>
+
+<!-- 생성 html 불러오기(프로젝트 생성) -->
+<script>
+	$.ajax(`/proCreate`, {dataType:"html"})
+		.done(function(result) {
+			$("#proCreateModalPage").html(result);
+	});
+</script>
+
+<!-- 초대된 프로젝트 알람 카운트 -->
+<script type="text/javascript">
+	function makeInviteCountTarget() {
+		fetch("/readNoPartiProC", {
+			method: 'POST'
+		})
+		.then(response => response.json())
+		.then(res => {
+			
+			document.querySelector('.inviteCountTarget').textContent = res;
+		})
+		.catch(error => {
+			console.error('Error: ',error);
 		});
-	
-		cancelBtn.addEventListener('click', function() {
-			closeModal(modal, folderInput);
-		});
-	 
-		window.addEventListener('keydown', function(e) {
-			if(event.keyCode == 27){
-				closeModal(modal, folderInput);
-				modal3.style.display = "none";
-		
-				//modal4처리
-				let dgm = document.querySelector('[data-group-modal]');
-				let dgmC = dgm != null ? dgm.remove() : dgm; 
-			}
-		});
-	
-		window.addEventListener('click', function(event) {
-			let dgm = document.querySelector('[data-group-modal]');
-			let dgmC = document.querySelectorAll('[data-group-modal]');
-			let moreVert = event.target.parentElement.getElementsByClassName('moreVertIcons')[0];
-	 
-			if (event.target === modal) {
-				closeModal(modal, folderInput);
-			} else if (event.target === moreVert && dgmC.length == 2) {
-				dgm.remove();
-			} else if (event.target !== moreVert && dgmC.length == 1) {
-				dgm.remove();
-			}
-		});
-	  
 	};
+</script>
 
-	function closeModal(modal, input) {
-	  modal.style.display = 'none';
-	  input.value = '';
-	}
+<!-- 초대된 프로젝트 모달 오픈시 -->
+<script>
+	$('#inviteManPro').on('show.bs.modal', noInviteList);
+	
+	function noInviteList() {
+		let inviteList = event.target;
+		
+		fetch("/readNoPartiPro", {
+			method: 'POST'
+		})
+		.then(response => response.json())
+		.then(res => {
+			createDynamicList(res)
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+	
+	//태그 생성
+	function createDynamicList(partiTagList) {
+		let inviteTbody = document.querySelector('.inviteMemTarget');
+	
+		// 기존의 내용을 지우고 시작
+		inviteTbody.innerHTML = '';
+		
+		partiTagList.forEach((project) => {
+			const tr = document.createElement('tr');
+			tr.setAttribute('data-parti-pro-mem-no', project.proMemNo);
+			
+			// 프로젝트명 열 추가
+			const projectNameCell = document.createElement('td');
+			projectNameCell.textContent = project.proName;
+			projectNameCell.style.fontSize = '15px';
+			projectNameCell.style.paddingLeft = '20px';
+			projectNameCell.style.verticalAlign = 'middle';
+			tr.appendChild(projectNameCell);
+			
+			// 멤버명 열 추가
+			const memberNameCell = document.createElement('td');
+			memberNameCell.textContent = project.rank + ' ' +project.name;
+			memberNameCell.style.fontSize = '15px';
+			memberNameCell.style.verticalAlign = 'middle';
+			tr.appendChild(memberNameCell);
+	
+			// 수락 버튼 추가
+			const checkboxCell = document.createElement('td');
+			checkboxCell.style.paddingRight = '6px';
+			const button = document.createElement('button');
+			button.setAttribute('type', 'button');
+			button.setAttribute('class', 'btn btn-success');
+			button.textContent = '수락';
+			button.style.borderRadius = '12px';
+			button.onclick = partiY; // onclick 이벤트 처리
+			
+			checkboxCell.appendChild(button);
+			tr.appendChild(checkboxCell);
+			
+			// 거절버튼
+			const checkboxCell2 = document.createElement('td');
+			checkboxCell2.style.paddingLeft = '6px';
+			const button2 = document.createElement('button');
+			button2.setAttribute('type', 'button');
+			button2.setAttribute('class', 'btn btn-outline-danger');
+			button2.textContent = '거절';
+			button2.style.borderRadius = '12px';
+			button2.onclick = partiN; // onclick 이벤트 처리
+			
+			checkboxCell2.appendChild(button2);
+			tr.appendChild(checkboxCell2);
+		
+			// tbody에 행 추가
+			inviteTbody.appendChild(tr);
+		});
+	  };
+</script>
 
-	//클릭 후 그룹 폴더 만들기(모달1)
-	creFolder.onclick = function() {
-		if(pGCUp >= 10) {
+<!-- 프로젝트 참여 수락 -->
+<script>
+	function partiY() {
+		let proMemNo = event.target.closest('tr').dataset.partiProMemNo;
+		console.log(proMemNo)
+		
+		fetch("/upPartiY", {
+	        method: 'PUT',
+	        headers : {
+	            'Content-Type': 'application/json'
+	        },
+	        body : JSON.stringify(proMemNo)
+	    })
+		.then(response => response.json())
+		.then(res => {
+			$('#inviteManPro').modal('hide');
+			location.reload();
+			//makeInviteCountTarget();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+</script>
+
+<!-- 프로젝트 참여 거부 -->
+<script>
+	function partiN() {
+		let proMemNo = event.target.closest('tr').dataset.partiProMemNo;
+		console.log(proMemNo);
+		
+		fetch("/delPartiN", {
+	        method: 'DELETE',
+	        headers : {
+	            'Content-Type': 'application/json'
+	        },
+	        body : JSON.stringify(proMemNo)
+	    })
+		.then(response => response.json())
+		.then(res => {
+			$('#inviteManPro').modal('hide');
+			makeInviteCountTarget();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+</script>
+
+<!-- 프로젝트 그룹 폴더 생성 -->
+<script>
+	//그룹 폴더 생성 모달 열기
+	function makeGroupFolderModal() {
+		event.stopPropagation;
+		event.preventDefault();
+		$('#createGroupFolderModal').modal('show');
+	};
+	
+	function makeGroupFolder() {
+		//폴더 갯수 확인
+		if(groupFolderList.querySelectorAll('li').length >= 10) {
 			alert('프로젝트 폴더는 최대 10개 생성 할 수 있습니다.');
-			folderC1.value = '';
-			modal1.style.display = "none";
+			$('#createGroupFolderModal').modal('hide');
 		} else {
 			//폴더명 확인
 			checkGroupFolderName();
 		}
-		
-	}
-   
+	};
+	
 	//폴더명 확인
 	function checkGroupFolderName() {
-		if(folderC1.value == '') {
+		if(folderContent.value == '') {
 			alert('폴더 이름은 공백을 허용하지 않습니다!');
 			return;
-		} else if (folderC1.value.length > 30) {
+		} else if (folderContent.value.length > 30) {
 			alert('폴더 이름은 최대 30자 까지 가능합니다!');
 			return;
 		} else {
 			let formData = new FormData();
-			formData.append('gN', folderC1.value);
+			formData.append('gN', folderContent.value);
 			
 			//db정보 삽입
 			fetch("/proGroupC", {
@@ -478,12 +890,11 @@ details ul {
 			})
 			.then(response => response.json())
 			.then(res => {
-				let rC = res.result;
-				let latelyGroupNum = res.pGN;
 				
-				if(rC == '성공') {
+				if(res.result == '성공') {
 					//동적 폴더 생성
-					createFolder(latelyGroupNum);				
+					createFolder(res.pGN);				
+					$('#createGroupFolderModal').modal('hide');
 				} else {
 					alert('요청이 취소 되었습니다.');
 				}
@@ -492,164 +903,76 @@ details ul {
 				console.error('Error: ',error);
 			});
    		};//else 종료
-   };
+	};
    
 	//동적 폴더 생성
 	function createFolder(lGN) {
 		let pG = document.getElementById('proGroup');
 		let liC = document.createElement('li');
+		liC.setAttribute('data-gn', lGN);
+		liC.setAttribute('data-fname' , folderContent.value);
 		let aC = document.createElement('a');
-		let spanC = document.createElement('span');
+		aC.style.overflow = 'hidden';
+		aC.style.width = '80px';
 		
+		let spanC = document.createElement('span');
 		spanC.className = 'material-icons moreVertIcons';
 		//spanC.style = 'display : none;';
 		spanC.textContent = 'more_vert';
+		spanC.onclick = makeGroupMan;
 		
+		if(folderContent.value.length >= 8) {
+			folderContent.value = folderContent.value.substring(0, 7) + '...';
+		};
+			
 		aC.setAttribute('href', '/proGroupD/'+ lGN);
-		aC.setAttribute('data-gN', lGN);
-		aC.setAttribute('data-fName', folderC1.value);
-		aC.textContent = folderC1.value.substring(0, 8) + '...';
+		aC.textContent = folderContent.value;
 		
 		aC.append(spanC);
 		liC.append(aC);
 		pG.prepend(liC);
-		
-		folderC1.value = '';
-		modal1.style.display = 'none';
-		
-		pGCUp++;
 	};
-   
-	// 프로젝트 그룹 상태 등장 효과
-	let groupFolderUL = document.querySelector('#groupFolderList>ul');
-	
-	//그룹 폴더 등장 이벤트
-	//groupFolderUL.addEventListener("mouseover", makeGroupStatus);
-	//groupFolderUL.addEventListener("mouseout", deleteGroupStatus);
+</script>
 
-	//상태 등장
-	function makeGroupStatus() {
-		if(event.target.tagName == "A") {
-			event.target.childNodes[1].style.display = 'block';
-		} else if (event.target.tagName == "SPAN") {
-			event.target.style.display = 'block';
-		};
-	};
-
-	//상태 숨김
-	function deleteGroupStatus() {
-		if(event.target.tagName == "A") {
-			event.target.childNodes[1].style.display = 'none';
-		} else if (event.target.tagName == "SPAN") {
-			event.target.style.display = 'none';
-		};
-	};
-
-	//프로젝트 그룹 상태 클릭 속성(모달4)
-	groupFolderUL.addEventListener("click", groupStatusModal);
-
-	function groupStatusModal(event) {
-		if(event.target.tagName == "SPAN") {
-			event.preventDefault();
-		
-			//그룹no값 가져오기
-			let groupNo = event.target.parentNode.dataset.gn;
-			let groupName = event.target.parentNode.dataset.fname;
-			
-			//그룹 모달창 생성(모달4)
-			miniModal(event.target);
-			
-			let groupNameChange = document.getElementById('groupNameChange' + groupNo);
-			let groupDelte = document.getElementById('groupDelte' + groupNo);
-		
-			//프로젝트 수정창 띄우기(모달2)
-			groupNameChange.addEventListener("click", function(e) {
-				e.preventDefault();
-			
-				//인풋상자 값 넣어주기
-				folderC2.value = groupName;
-				//상태 모달창 삭제
-				document.querySelector('[data-group-modal]').remove();
-			
-				modal2.style.display = 'block';
-			
-				//디비 수정, 중복값 막기 위해 onclick 사용
-				uFolderName.onclick = function() {
-					groupNameChangeDb(groupNo);
-				};
-			});//프로젝트 수정창 띄우기(모달2) 종료
-		
-			//프로젝트 삭제창(모달3)
-			groupDelte.addEventListener("click", function(e) {
-				e.preventDefault();
-				//상태 모달창 삭제
-				document.querySelector('[data-group-modal]').remove();
-				
-				modal3.style.display = 'block';
-				
-				window.onclick = function(event) {
-					if (event.target == modal3) {
-						modal3.style.display = "none";
-					};
-				};//윈도우 이벤트 종료
-			
-				cancelBtn3.onclick = function() {
-					modal3.style.display = 'none';
-				}
-				
-				//dFolder 이벤트
-				dFolder.onclick = function() {
-					fetch("/FolderGroupD/" + groupNo, {
-						method: 'DELETE'
-						})
-					.then(response => response.json())
-					.then(res => {
-						let rC = res.result;
-					
-					    if (rC == '성공') {
-							document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].parentNode.remove();
-					        modal3.style.display = 'none';
-					    } else {
-					        alert('요청이 취소 되었습니다.');
-					    };
-					})
-					.catch(error => {
-						console.error('Error: ',error);
-					});
-				};//dFolder 이벤트 종료
-			});//프로젝트 삭제창(모달3) 종료
-		};//if문 종료
-	};//프로젝트 그룹 상태 클릭 속성(모달4) 종료
-
-
-	//그룹명 디비 수정
-	function groupNameChangeDb(groupNo) {
-		if(folderC2.value == '') {
+<!-- 그룹폴더명 수정 -->
+<script>
+	function changeGroupFolderName() {
+		if(folderContentChange.value == '') {
 			alert('폴더 이름은 공백을 허용하지 않습니다!');
 			return;
-		} else if (folderC2.value.length > 30) {
+		} else if (folderContentChange.value.length > 30) {
 			alert('폴더 이름은 최대 30자 까지 가능합니다!');
 			return;
 		} else {
-			
+			let groupNo = folderContentChange.dataset.targetNo;
 			fetch("/proGroupNameC", {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					groupName: folderC2.value,
+					groupName: folderContentChange.value,
 					groupNo: groupNo
 				})
   			})
 			.then(response => response.json())
 			.then(res => {
-				let rC = res.result;
-				
-				if(rC == '성공') {
-					modal2.style.display = 'none';
-					document.querySelectorAll(`[data-gN="${groupNo}"]`)[0].childNodes[0].textContent = folderC2.value;
-					document.getElementById('folderContent2').innerText = folderC2.value;
+				if(res.result == '성공') {
+					let targetGroupFolder = document.querySelector(`[data-gN="${groupNo}"]`);
+					targetGroupFolder.setAttribute('data-fname', folderContentChange.value);
+					console.log(targetGroupFolder.children[0])
+					targetGroupFolder.children[0].innerHTML = `
+						${folderContentChange.value}
+							<span class='material-icons moreVertIcons'
+							  onclick="makeGroupMan()">more_vert
+						</span>
+					`;
+
+					//글자수 길이 제한
+					if(folderContentChange.value.length >= 8) {
+						folderContentChange.value = folderContentChange.value.substring(0, 7) + '...';
+					};
+					$('#updateManButton').modal('hide');
 				} else {
 					alert('요청이 취소 되었습니다.');
 				};
@@ -658,77 +981,203 @@ details ul {
 				console.error('Error: ',error);
 			});//fetch 종료
 		};
+	}
+</script>
+
+<!-- 프로젝트 그룹 수정 및 삭제 -->
+<script>
+	//프로젝트 수정/삭제 관리창 열기
+	function makeGroupMan() {
+		event.stopPropagation;
+		event.preventDefault();
+		let liTag = event.target.closest('li');
+		let groupNo = liTag.dataset.gn;
+		let groupName = liTag.dataset.fname;
+		makeGroupManModalLabel.textContent = '그룹폴더명 : ' + liTag.dataset.fname;
+
+		let groupModalMan = document.getElementById('makeGroupManModal');
+		groupModalMan.querySelector('#groupNameChangeBtn').setAttribute('data-group-no', groupNo);
+		groupModalMan.querySelector('#groupNameChangeBtn').setAttribute('data-group-name', groupName);
+
+		groupModalMan.querySelector('#groupNameDeleteBtn').setAttribute('data-group-no', groupNo);
+		$('#makeGroupManModal').modal('show');
+	}
+
+	//수정창
+	function updateManButton() {
+		$('#makeGroupManModal').modal('hide');
+		$('#updateManButton').modal('show');
+		//닫길때 값 초기화
+		$('#updateManButton').on('hidden.bs.modal', function (event) {
+			$('#folderContentChange').val();
+		});
+		let nooo = event.target.dataset.groupNo;
+		let nameee = event.target.dataset.groupName;
+		folderContentChange.value = nameee;
+		folderContentChange.setAttribute('data-target-no', nooo);
 	};
 
+	//삭제실행
+	function deleteGroupFolder() {
+		let gn = event.target.dataset.groupNo;
 
-	//그룹 모달창 생성
-	function miniModal(target) {
-		// 선택한 요소
-		let targetElement = target.parentNode;
-		let groupNum = targetElement.dataset.gn;
+		fetch("/FolderGroupD/" + gn, {
+			method: 'DELETE'
+			})
+		.then(response => response.json())
+		.then(res => {
+				if (res.result == '성공') {
+				document.querySelector(`[data-gN="${gn}"]`).remove();
+				$('#makeGroupManModal').modal('hide');
+				} else {
+						alert('요청이 취소 되었습니다.');
+				};
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+</script>
+
+<!-- 파일 업로드 -->
+<script type="text/javascript">
+	//업로드 1번
+	$("input[type='file']").change(function(e) {
+		let findModal = $(e.target);
+		var formData = new FormData();
+	//	var inputFile = $("input[name='uploadFile']");
+		var inputFile = $(e.target);
+		console.log(inputFile)
+		var files = inputFile[0].files;
+		//여러 파일 올라 갈 수 있기 때문에 반복문
+		for(var i=0; i<files.length; i++) {
+			//파일 검증
+		    if(!checkExtension(files[i].name, files[i].size) ){
+	    	    return false;
+			}
+	    	formData.append("uploadFile", files[i]);
+		}
+		
+		//console.log('폼데이터',formData.get("uploadFile"))
+		
+		$.ajax({
+			url: "/uploadAjaxAction",
+			processData: false,
+			contentType: false,
+			data: formData,
+			type: "POST",
+			dataType: "json",
+			success: function(result) {
+				//성공시 화면에 출력
+				showUploadResult(result, findModal);
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
+	});
 	
-		// 모달 창 생성
-		let modal4 = document.createElement('div');
-		modal4.dataset.groupModal = groupNum;
-		modal4.style.maxWidth = '100%';
-		modal4.style.width = '68px';
-		modal4.style.height = '58px';
-		modal4.style.backgroundColor = 'lightgray';
-		modal4.style.padding = '10px';
-		modal4.style.position = 'absolute';
-		modal4.style.top = targetElement.offsetTop + targetElement.offsetHeight + 68 + 'px';
-		modal4.style.left = (targetElement.offsetLeft + 190) + 'px';
-		modal4.style.marginTop = '4px';
-		modal4.style.display = 'flex';
-		modal4.style.flexDirection = 'column';
-		modal4.style.alignItems = 'center';
-		modal4.style.justifyContent = 'center';
-		modal4.style.zIndex = '2';
 	
-		// 버튼 추가
-		let button1 = document.createElement('button');
-		button1.type = 'button';
-		button1.id = 'groupNameChange' + groupNum;
-		button1.style.backgroundColor = 'transparent';
-		button1.style.border = 'none';
-		button1.style.display = '-webkit-box';
-		button1.style.webkitLineClamp = '2';
-		button1.style.webkitBoxOrient = 'vertical';
-		button1.style.overflow = 'hidden';
-		button1.style.textOverflow = 'ellipsis';
-		button1.style.maxHeight = '2.8em';
-		button1.style.lineHeight = '1.4em';
-		button1.style.fontSize = '12px';
-		
-		// 버튼 내용 추가
-		let content1 = document.createTextNode('수정');
-		button1.appendChild(content1);
-		
-		// 버튼 생성
-		let button2 = document.createElement('button');
-		button2.type = 'button';
-		button2.id = 'groupDelte' + groupNum;
-		button2.style.backgroundColor = 'transparent';
-		button2.style.border = 'none';
-		button2.style.display = '-webkit-box';
-		button2.style.webkitLineClamp = '2';
-		button2.style.webkitBoxOrient = 'vertical';
-		button2.style.overflow = 'hidden';
-		button2.style.textOverflow = 'ellipsis';
-		button2.style.maxHeight = '2.8em';
-		button2.style.lineHeight = '1.4em';
-		button2.style.fontSize = '12px';
-		
-		// 버튼 내용 추가
-		let content2 = document.createTextNode('삭제');
-		button2.appendChild(content2);
+	//확장자 필터(1-2)
+	var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
+	var maxSize = 5242880;
 	
-		// 버튼을 모달 창에 추가
-		modal4.appendChild(button1);
-		modal4.appendChild(button2);
-		
-		document.body.appendChild(modal4);
+	function checkExtension(fileName, fileSize) {
+		if (fileSize >= maxSize) {
+		    alert('파일 사이즈 초과');
+		    return false;
+		}
+		if (regex.test(fileName)) {
+		    alert('해당 종류의 파일은 업로드할 수 없습니다.');
+		    return false;
+		}
+		return true;
 	}
+	
+	//파일선택으로 파일 불러올 때, 업로드 2번
+	function showUploadResult(uploadResultArr, findModal){
+		console.log('s',uploadResultArr)
+		
+		//빈값 찾기
+		if(!uploadResultArr || uploadResultArr.length == 0){return ;}
+		
+		var uploadUL = findModal.closest('.modal').find('.uploadResult ul');
+		
+		var str = "";
+	  
+		//여러건이기 때문에 반복문
+		$(uploadResultArr).each(function(i, obj){
+			//console.log("11:06" + i)
+			console.log("11:05",obj)
+			//console.log('이미지',obj.image);
+			//console.log('파일타입',obj.fileType);
+			
+			//image type
+			if(obj.image){
+				console.log('이미지!')
+				var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+				
+				str += "<li data-path='"+obj.uploadPath+"'";
+				str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+				str + "><div>";
+				//파일 이름 보여주기
+				str += "<span> "+ obj.fileName+"</span>";
+				//파일 삭제버튼
+				str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				//이미지 노출
+				str += "<img src='/display?fileName="+fileCallPath+"'>";
+				str += "</div>";
+				str +"</li>";
+			} else {
+				console.log('파일?')
+				var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+				    
+				str += "<li data-path='"+obj.uploadPath+"'";
+				str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+				str + "><div>";
+				//파일 이름 보여주기
+				str += "<span> "+ obj.fileName+"</span>";
+				//파일 삭제버튼
+				str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				//파일 노출
+				str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+				str += "</div>";
+				str +"</li>";
+			} 
+		});
+		
+		//만든 태그 붙여서 화면에 보여주기
+		uploadUL.append(str);
+	};
+	//화면 노출 종료
+	
+	//화면에서 지우기
+</script>
+
+<!-- 파일 업로드 화면에서 지우기 -->
+<script type="text/javascript">
+	//업로드중인 파일 삭제
+	$(".uploadResult").on("click", "button", function(e){
+		e.stopPropagation();
+		
+		var targetFile = $(this).data("file");
+		var type = $(this).data("type");
+	
+		//해당 업로드 파일 li가기
+		var targetLi = $(this).closest("li");
+	
+		$.ajax({
+			url : '/deleteFile',
+			data : {'fileName' : targetFile,
+					'type' : type},
+			dataType : 'text',
+			type : 'POST',
+			success : function(result) {
+				targetLi.remove();//화면에서 지우기
+			}
+		});
+	});
 </script>
 
 <!-- 웹소켓 -->
@@ -867,7 +1316,7 @@ details ul {
 	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate);
 </script>
 
-<!-- 태그 종료내용 종료 -->
-</div>
+<!-- 스크립트 종료 -->
+
 </body>
 </html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/proTiles}"
+>
+
+<div layout:fragment="content">
+	<h2>즐겨찾기</h2>
+	<table class="table table-hover"
+		   id="goProjectDetail">
+		<tr th:each="pro:${projectMainList}"
+			th:if="${pro.proStarCheck == 'Y'}"
+			th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck},
+					 data-homeTab=${pro.homeTab}, data-proNo=${pro.proNo}"
+			style="cursor:pointer">
+			<td th:text="${pro.proColor}"></td>
+			<td th:text="${pro.proStarCheck}" class="starCheck"></td>
+			<td th:text="${pro.proName}"></td>
+			<td th:each="parti:${projectPartiList}"
+				th:if="${parti.proNo == pro.proNo}"
+				th:text="${parti.count} + '명'"></td>
+		</tr>
+	</table>
+	
+
+<script>
+	let starCheck = document.querySelectorAll(".starCheck");
+	
+	starCheck.forEach(sC => {
+		sC.addEventListener("click", function(event) {
+			event.stopPropagation();
+			changeStar();
+		});
+	});
+
+	function changeStar() {
+		let dpMN = event.target.closest('tr').getAttribute("data-pMN");
+		let starC = event.target.closest('tr').getAttribute("data-starC");
+		let trTag = event.target.closest('tr');
+
+		let formData = new FormData();
+        formData.append('pMN', dpMN);
+        formData.append('starC', starC);
+
+		fetch("/proStarUpdate", {
+			method: 'POST',
+			body : formData
+		})
+		.then(response => response.json())
+		.then(res => {
+			trTag.remove();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+	
+	//프로젝트 master여부
+	function chagepartiSelect() {
+		let partiSelectId = document.getElementById('partiSelect').value;
+		console.log(partiSelectId);
+	};
+</script>
+	
+<!-- 프로젝트 홈에서 상세 페이지 이동 -->
+<script>
+	let gPList = document.querySelectorAll('#goProjectDetail tr');
+	console.log(gPList);
+	
+	gPList.forEach(gPDetail => {
+		let homeTabNum = gPDetail.dataset.hometab;
+		let pn = gPDetail.dataset.prono;
+		gPDetail.addEventListener('click', function() {
+			projectDetail(homeTabNum, pn);
+		});
+	});
+
+	function projectDetail(homeTNum, proNo) {
+		location.href="/proPostMain/" + proNo + "?homeTab=" + homeTNum;
+	};
+</script>
+</div>
+</html>

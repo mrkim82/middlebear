@@ -13,7 +13,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
    @Override
    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
        registry.addResourceHandler("/upload/**")
-               .addResourceLocations("file:///c:/upload/")
+               .addResourceLocations("file:/home/ec2-user/upload/")
                .setCacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES));
    }
 }

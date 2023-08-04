@@ -225,5 +225,13 @@ public class MailServiceImpl implements MailService{
 		//log.info("get Attach list by boardNo" + boardNo);
 		return attachMapper.findByNo("mail_no",mailNo);
 	}
+	@Override
+	public int serverGetInsertMail(MailVO mailVO) {
+		return mailMapper.serverGetInsertMail(mailVO);
+	}
+	@Override
+	public List<MailVO> getMailList(Criteria cri, MailVO mailVO) {
+		return mailMapper.getMailList(cri, mailVO);
+	}
 	
 }

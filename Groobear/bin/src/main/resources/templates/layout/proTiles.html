@@ -1,0 +1,1235 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+	  
+<head>
+
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	  content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- proTiles link -->
+<!-- 부트스트랩 -->
+<link rel="stylesheet" href="/bootstrap.min.css">
+	  
+<!-- 구글폰트 -->
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
+	  rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+	  rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	  rel="stylesheet">
+
+<!-- 풀캘린더 -->
+<script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
+
+<!-- proTiles 스크립트 -->
+<!-- 제이쿼리 -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<!-- 웹소켓 -->
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+<script type="text/javascript"
+		src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	  href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+
+<!-- 없으면 모달 안됨 -->
+<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+
+<style>
+@import
+	url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+
+.dohyeon {
+	font-family: 'Do Hyeon', serif; /*웹 폰트 지정*/
+	color: black;
+}
+
+.dohyeonmenu {
+	font-family: 'Do Hyeon', serif; /*웹 폰트 지정*/
+	font-size: 25px;
+	color: white;
+}
+
+.dohyeonModalContent {
+	border: 1px solid #00000021;
+	border-radius: 20px;
+	box-shadow: 2px 4px 3px 3px darkgray;
+}
+
+th {
+	font-size: large;
+	text-align: center;
+}
+
+.rightPad {
+	padding-right: 150px;
+}
+
+.btn-groo {
+	background-color: #35A880;
+	color: #fff;
+	border: 1px solid #35A880;
+}
+
+.square {
+	width: 40px;
+	height: 40px;
+	background-color: #000;
+	margin-left: 30px;
+	border-radius: 10px;
+}
+
+/* 검색 창 스타일 */
+input[type="text"] {
+	width: 150px; /* 원하는 너비 값으로 변경 */
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 20px;
+	font-size: 16px;
+	outline: none;
+	transition: width 0.3s ease-in-out;
+}
+
+/* 검색 창에 포커스되었을 때 스타일 */
+input[type="text"]:focus {
+	width: 170px; /* 포커스되었을 때 더 넓은 너비 값으로 변경 */
+	border-color: #6c63ff;
+	box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+}
+
+details {
+	padding: 12px;
+	text-decoration: none;
+	font-size: 16px;
+	color: #bdc3c7;
+	display: flex;
+	align-items: center;
+	transition: 0.3s;
+}
+
+.star {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  display: inline-block;
+}
+
+.star:before {
+  content: '\2605';
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.gray:before {
+  color: gray;
+}
+
+.yellow:before {
+  color: yellow;
+}
+
+#YesStar td, #NoStar td{
+	width: 60px;
+	height: 60px;
+	margin: 10px;
+	padding: 5px;
+  	text-align:center;
+  	vertical-align: middle;
+}
+
+#YesStar td:nth-child(3), #NoStar td:nth-child(3) {
+  text-align: left;
+}
+
+details ul {
+	padding: 0px;
+}
+
+.flex-column li {
+	margin-left: 10px;
+	padding: px;
+}
+
+.horizontal-bar {
+	height: 80px;
+	width: 100%;
+	background-color: #f9f9f9;
+}
+
+.horizontal-bar2 {
+	height: 40px;
+	width: 100%;
+	background-color: #f5f5f5;
+}
+
+.spanCursor {
+	cursor: pointer
+}
+
+textarea {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 200px;
+  width: 100%;
+  resize: vertical; /* 세로 조정 가능 */
+}
+
+/* 탭 밑에 줄 */
+.bottomLine {
+	border-bottom: 3px solid red;
+	z-index: 50;
+}
+</style>
+
+</head>
+<body style="width: 1215px; margin: 0 auto;">
+
+<!-- header 영역 -->
+<div>
+	<header class="blog-header lh-1 py-3">
+		<div class="row flex-nowrap justify-content-between align-items-center">
+			<div class="col-4 pt-1">
+				<img src=""
+					 title=""
+					 style="width: 200px;">
+			</div>
+			<div class="row">
+				<img style="margin-top: 10px; width: 45px; height: 45px;"
+					 src="https://creazilla-store.fra1.digitaloceanspaces.com/emojis/52942/paw-prints-emoji-clipart-md.png">
+				<div class="col-4 text-center" style="z-index: 1000;">
+					<a class="blog-header-logo text-body-emphasis dohyeon"
+					   style="font-size: 50px; font-weight: 500;"
+					   href="/main">Groobear</a>
+				</div>
+			</div>
+			<div class="col-6 d-flex justify-content-end align-items-center"
+				 style="margin-left: -200px;">
+				<table style="width: 300px; text-align: right; margin-right: 30px;">
+					<tbody>
+						<tr>
+							<td style="font-size: 20px;">
+								<a class="dohyeon">[[${session.Name}]]님 반갑습니다</a>
+							</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;">
+								<span>
+									<a href="/logout"
+									   class="dohyeon">로그아웃</a>
+								</span>&nbsp;&nbsp;&nbsp;&nbsp;
+								<span>
+									<a id="commute"
+									   class="dohyeon">마이페이지</a>
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</header>
+	
+	<nav class="navbar navbar-expand-lg" style="text-align: center; background-color:#35A880;"> 
+      <div class="collapse navbar-collapse" id="navbarColor01">
+      
+	        <ul class="navbar-nav mr-auto" style="display:flex; margin:auto;">
+	          <li class="nav-item active rightPad" style="padding:0px; margin-right:90px;">
+	            <a class="nav-link dohyeonmenu" href="/intro/companyintroduce">회사소개</a>
+	          </li>
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
+	            <a class="nav-link dohyeonmenu" href="/mail/receiveMail">메일</a>
+	          </li>
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
+	            <a class="nav-link dohyeonmenu" href="/proMain">프로젝트</a>
+	          </li>
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
+	            <a class="nav-link dohyeonmenu" href="/pay/payMain">전자결재</a>
+	          </li>
+	          <li class="nav-item rightPad" style="padding:0px; margin-right:90px;">
+	            <a class="nav-link dohyeonmenu" href="/boardList?boardType=N">게시판</a>
+	          </li>
+	          <li class="nav-item" style="padding:0px;">
+	            <a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
+	          </li>
+	        </ul>
+        </div>
+    </nav>
+  
+	<div class="data" style="display:none">
+		<p class="nowMon"></p>
+	
+		<!-- nav 영역 -->
+		<nav class="navbar navbar-expand-lg"
+			 style="text-align: center; background-color: #35A880;">
+			<div class="collapse navbar-collapse" id="navbarColor01">
+	
+				<!-- nav items -->
+				<ul class="navbar-nav mr-auto" style="display: flex; margin: auto;">
+					<li class="nav-item active rightPad"
+						style="padding: 0px; margin-right: 90px;">
+						<a class="nav-link dohyeonmenu"
+						   href="/introduce">회사소개</a>
+					</li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;">
+						<a class="nav-link dohyeonmenu"
+						   href="/mail/receiveMail">메일</a>
+					</li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;">
+						<a class="nav-link dohyeonmenu"
+						   href="/proMain">프로젝트</a>
+					</li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;">
+						<a class="nav-link dohyeonmenu"
+						   href="/pay/payMain">전자결재</a>
+					</li>
+					<li class="nav-item rightPad"
+						style="padding: 0px; margin-right: 90px;">
+						<a class="nav-link dohyeonmenu"
+						   href="/boardList?boardType=N">게시판</a>
+					</li>
+					<li class="nav-item"
+						style="padding: 0px;">
+						<a class="nav-link dohyeonmenu" href="/empInfo">인사관리</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="data" style="display: none">
+			<p class="nowMon"></p>
+		</div>
+	</div>
+</div>
+
+<!-- 사이드바 -->
+<div class="row dohyeon">
+	<nav id="sidebar"
+		 class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+		<div class="position-sticky">
+			<ul class="nav flex-column">
+				<!-- 사이드바 메뉴 아이템들 -->
+				<li class="nav-item">
+					<button type="button"
+							class="btn btn-primary"
+							data-toggle="modal"
+							data-target="#inviteManPro">
+					  초대된 프로젝트 <span class="badge badge-light inviteCountTarget"></span>
+					</button></li>
+				<!-- <li class="nav-item">
+					<a href="/proCreate">
+						<span class="material-icons">add_box</span>
+						새 프로젝트 생성</a></li> -->
+				<li class="nav-item"
+					data-toggle="modal"
+					data-target="#createProModal">
+					<a href="#">
+						<span class="material-icons">add_box</span>
+						새 프로젝트 생성</a></li>
+				<li class="nav-item">
+					<a href="/proMain">
+						<span class="material-icons">home</span>
+						내 프로젝트</a></li>
+				<li class="nav-item">
+					<a href="/proMainS">
+						<span class="material-icons">star</span>즐겨찾기</a></li>
+				<!-- <li class="nav-item">
+					<a href="#">
+						<span class="material-icons">mail</span>미확인(x)</a></li> -->
+				<li class="nav-item">
+					<a href="/proMainG">
+						<span class="material-icons">drafts</span>미분류</a></li>
+				<li class="nav-item">
+					<a href="/proMainH">
+						<span class="material-icons">visibility_off</span>숨김</a></li>
+				<!-- <li>
+					<details>
+						<summary>모아보기</summary>
+						<ul>
+							<li>전체업무</li>
+							<li>북마크</li>
+							<li>나를 언급</li>
+							<li>내 게시물</li>
+						</ul>
+					</details>
+				</li> -->
+				<li><div th:text="${currentURI}"></div>
+					<details id="groupFolderList" open>
+						<summary>프로젝트 폴더
+							<span onclick="makeGroupFolderModal()"
+								  class="material-icons">add</span>
+						</summary>
+						<!-- 프로젝트 그룹 리스트 -->
+						<ul id="proGroup">
+						<th:block th:each="proG : ${projectGroupList}">
+							<li th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}">
+								<a th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}"
+								   style="overflow:hidden; width:80px">
+								   [[${proG.groupName}]]
+									<span class='material-icons moreVertIcons'
+										  onclick="makeGroupMan()">more_vert
+									</span>
+									<!-- style='display: none;' -->
+								</a>
+							</li>
+						</th:block>
+						</ul>
+					</details>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<!-- 본문 영역(사이드바 우측의 컨텐츠) -->
+	<!-- <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+		<div layout:fragment="content"></div>
+	</main> -->
+	<div class="col-9">
+	
+		<!-- 프로젝트 상세 상단 바 proPostMain으로 시작하는 경우 horizonBar 프래그먼트 포함 -->
+		<th:block th:if="${#strings.containsIgnoreCase(firstURI,'proPostMain')} or
+						 ${#strings.containsIgnoreCase(firstURI,'proSearch')}">
+			<div th:insert="~{layout/proHorizonBar :: horizonBar}" class="dohyeon"></div>
+		</th:block>
+		
+		<!-- 프로젝트 메인 상단 바 proPostMain으로 시작하지 않는 경우 horizonBarsub 프래그먼트 포함 -->
+		<th:block th:if="${!#strings.containsIgnoreCase(firstURI,'proPostMain')} and
+						 ${!#strings.containsIgnoreCase(firstURI,'proSearch')}">
+			<div th:insert="~{layout/proMainBar :: mainTopBar}" class="dohyeon"></div>
+		</th:block>
+		<main>
+	        <div layout:fragment="content" class="dohyeon"></div>
+	    </main>
+	</div>
+	<!-- 본문 내용 종료 -->
+
+</div>
+<!-- 사이드바 내용 종료 -->
+
+<!-- 모달 영역 -->
+<!-- 초대된 프로젝트 모달 -->
+<div class="row dohyeon">
+
+	<div class="modal fade" id="inviteManPro" tabindex="-1" aria-labelledby="inviteManProLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content dohyeonModalContent">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="inviteManProLabel">미수락 프로젝트</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body" style="padding:0px; text-align: center;">
+	
+					<table class="table table-hover" style="margin: 0px;">
+						<thead>
+							<tr>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 250px;">프로젝트 명</th>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 120px;">초대자</th>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 75px;"></th>
+								<th scope="col" style="font-size: 20px; font-weight: 100; width: 75px; padding-left: 0px;"></th>
+							</tr>
+						</thead>
+						<tbody class="inviteMemTarget">
+							<tr>
+								<!-- 미수락 프로젝트 목록 -->
+							</tr>
+						</tbody>
+					</table>
+					
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-groo" data-dismiss="modal"
+									style="border-radius:12px;">닫기</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- 프로젝트 생성 모달(새 프로젝트 생성) -->
+	<div class="modal fade" id="createProModal" tabindex="-1" aria-labelledby="createProModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content dohyeonModalContent">
+				<div class="modal-header">
+					<h5 class="modal-title" id="createProModal">프로젝트 생성하기</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- proCreate.html 불러오는 곳 -->
+					<div id="proCreateModalPage"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 프로젝트 폴더 생성 모달 -->
+	<div class="modal fade" id="createGroupFolderModal" tabindex="-1" aria-labelledby="createGroupFolderModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content dohyeonModalContent" style="width: 434px;">
+				<div class="modal-header">
+					<h5 class="modal-title" id="createGroupFolderModallLabel">그룹 폴더 생성</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="text-align: center;">
+					<input type="text"
+						   placeholder="프로젝트 폴더명을 입력하세요"
+						   id="folderContent"
+						   autocomplete="off"
+						   maxlength="30"
+							 style="width: 372px;">
+				</div>
+				<div class=" d-flex justify-content-center" style="margin: 0 auto; padding-top: 6px; padding-bottom: 6px; margin-bottom: 5px;">
+					<button type="button" class="btn btn-groo" onclick="makeGroupFolder()" style="border-radius:12px; margin-right: 6px;">저장</button>
+					<button type="button" class="btn btn-groo" data-dismiss="modal" style="border-radius:12px; margin-left: 6px;">닫기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 그룹 관리 모달  -->
+	<div class="modal fade" id="makeGroupManModal" tabindex="-1" aria-labelledby="makeGroupManModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content"
+					 style="width: 300px;">
+				<div class="modal-header">
+					<h5 class="modal-title" id="makeGroupManModalLabel"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="text-align: center;">
+					<button type="button" class="btn btn-secondary"
+									style="width: 100px;border-radius: 5px;"
+									id="groupNameChangeBtn"
+									onclick="updateManButton()">수정</button>
+					<button type="button" class="btn btn-secondary"
+									style="width: 100px;border-radius: 5px;"
+									id="groupNameDeleteBtn"
+									onclick="deleteGroupFolder()">즉시삭제</button>
+					<h6>그룹안에 프로젝트는 삭제되지 않습니다</h6>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 프로젝트 그룹 수정 모달 -->
+	<div class="modal fade" id="updateManButton" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="updateManButtonLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="updateManButtonLabel">수정화면</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			<div class="modal-body">
+				<input type="text"
+					   placeholder="프로젝트 폴더명을 입력하세요"
+					   id="folderContentChange"
+					   autocomplete="off"
+					   maxlength="30">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	        	<button type="button" class="btn btn-primary" onclick="changeGroupFolderName()">수정</button>
+			</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+<!-- 모달 종료 -->
+
+<!-- proTiles 스크립트 영역 -->
+<!-- 공통 데이터 -->
+<script th:inline="javascript">
+/*<![CDATA[*/
+	//그룹 갯수 체크
+  	let pGC = /*[[${projectGroupList}]]*/ [];
+  	let selfId = /*[[${session.Id}]]*/;
+	let selfName = /*[[${session.Name}]]*/;
+	let proDetailCount = /*[[${readProDetailCount}]]*/;
+	
+  	let url = window.location.pathname;
+	let lastIndex = url.lastIndexOf('/');
+	let projectNo = url.substring(lastIndex + 1);
+/*]]>*/
+</script>
+
+<!-- 시간 변환 -->
+<script type="text/javascript">
+	//??
+	function convertToFormattedDateTime(dateTimeStr) {
+		if(dateTimeStr == '') {//빈값일때 바로 리턴
+			return;
+		};
+		
+		const date = new Date(dateTimeStr);
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+	
+		return `${year}-${month}-${day} ${hours}:${minutes}`;
+	};
+</script>
+
+<!-- 페이지 실행시 -->
+<script>
+	window.addEventListener('DOMContentLoaded', () => {
+		makeInviteCountTarget();//프로젝트 미확인 알람
+	});
+</script>
+
+<!-- 기본 모달 이벤트 정리 -->
+<script>
+	//그룹 폴더 생성 모달
+	//닫길때 input 값 초기화
+	$('#createGroupFolderModal').on('hidden.bs.modal', function (event) {
+		$('#folderContent').val('');
+	});
+	
+	//postTiles꺼
+	$('.modal').on('hidden.bs.modal', function (e) {
+		// 모달 내부의 모든 input 요소를 찾아 값을 초기화
+		$(this).find('input, textarea').val('');
+		//$(this).find('.collapse').removeClass('show');
+	});
+	$('#modal2').on('hidden.bs.modal', function (e) {
+		$(this).find('.uploadResult ul li').remove();
+	});
+</script>
+
+<!-- 생성 html 불러오기(프로젝트 생성) -->
+<script>
+	$.ajax(`/proCreate`, {dataType:"html"})
+		.done(function(result) {
+			$("#proCreateModalPage").html(result);
+	});
+</script>
+
+<!-- 초대된 프로젝트 알람 카운트 -->
+<script type="text/javascript">
+	function makeInviteCountTarget() {
+		fetch("/readNoPartiProC", {
+			method: 'POST'
+		})
+		.then(response => response.json())
+		.then(res => {
+			
+			document.querySelector('.inviteCountTarget').textContent = res;
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+</script>
+
+<!-- 초대된 프로젝트 모달 오픈시 -->
+<script>
+	$('#inviteManPro').on('show.bs.modal', noInviteList);
+	
+	function noInviteList() {
+		let inviteList = event.target;
+		
+		fetch("/readNoPartiPro", {
+			method: 'POST'
+		})
+		.then(response => response.json())
+		.then(res => {
+			createDynamicList(res)
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+	
+	//태그 생성
+	function createDynamicList(partiTagList) {
+		let inviteTbody = document.querySelector('.inviteMemTarget');
+	
+		// 기존의 내용을 지우고 시작
+		inviteTbody.innerHTML = '';
+		
+		partiTagList.forEach((project) => {
+			const tr = document.createElement('tr');
+			tr.setAttribute('data-parti-pro-mem-no', project.proMemNo);
+			
+			// 프로젝트명 열 추가
+			const projectNameCell = document.createElement('td');
+			projectNameCell.textContent = project.proName;
+			projectNameCell.style.fontSize = '15px';
+			projectNameCell.style.paddingLeft = '20px';
+			tr.appendChild(projectNameCell);
+			
+			// 멤버명 열 추가
+			const memberNameCell = document.createElement('td');
+			memberNameCell.textContent = project.rank + ' ' +project.name;
+			memberNameCell.style.fontSize = '15px';
+			tr.appendChild(memberNameCell);
+	
+			// 수락 버튼 추가
+			const checkboxCell = document.createElement('td');
+			checkboxCell.style.paddingRight = '6px';
+			const button = document.createElement('button');
+			button.setAttribute('type', 'button');
+			button.setAttribute('class', 'btn btn-success');
+			button.textContent = '수락';
+			button.style.borderRadius = '12px';
+			button.onclick = partiY; // onclick 이벤트 처리
+			
+			checkboxCell.appendChild(button);
+			tr.appendChild(checkboxCell);
+			
+			// 거절버튼
+			const checkboxCell2 = document.createElement('td');
+			checkboxCell2.style.paddingLeft = '6px';
+			const button2 = document.createElement('button');
+			button2.setAttribute('type', 'button');
+			button2.setAttribute('class', 'btn btn-outline-danger');
+			button2.textContent = '거절';
+			button2.style.borderRadius = '12px';
+			button2.onclick = partiN; // onclick 이벤트 처리
+			
+			checkboxCell2.appendChild(button2);
+			tr.appendChild(checkboxCell2);
+		
+			// tbody에 행 추가
+			inviteTbody.appendChild(tr);
+		});
+	  };
+	  
+	/* $('#modal2').on('hidden.bs.modal', function (e) {
+		$(this).find('.uploadResult ul li').remove();
+	}); */
+</script>
+
+<!-- 프로젝트 참여 수락 -->
+<script>
+	function partiY() {
+		let proMemNo = event.target.closest('tr').dataset.partiProMemNo;
+		console.log(proMemNo)
+		
+		fetch("/upPartiY", {
+	        method: 'PUT',
+	        headers : {
+	            'Content-Type': 'application/json'
+	        },
+	        body : JSON.stringify(proMemNo)
+	    })
+		.then(response => response.json())
+		.then(res => {
+			$('#inviteManPro').modal('hide');
+			location.reload();
+			//makeInviteCountTarget();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+</script>
+
+<!-- 프로젝트 참여 거부 -->
+<script>
+	function partiN() {
+		let proMemNo = event.target.closest('tr').dataset.partiProMemNo;
+		console.log(proMemNo);
+		
+		fetch("/delPartiN", {
+	        method: 'DELETE',
+	        headers : {
+	            'Content-Type': 'application/json'
+	        },
+	        body : JSON.stringify(proMemNo)
+	    })
+		.then(response => response.json())
+		.then(res => {
+			$('#inviteManPro').modal('hide');
+			makeInviteCountTarget();
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+</script>
+
+<!-- 프로젝트 그룹 폴더 생성 -->
+<script>
+	//그룹 폴더 생성 모달 열기
+	function makeGroupFolderModal() {
+		event.stopPropagation;
+		event.preventDefault();
+		$('#createGroupFolderModal').modal('show');
+	};
+	
+	function makeGroupFolder() {
+		//폴더 갯수 확인
+		console.log(groupFolderList.querySelectorAll('li').length)
+		if(groupFolderList.querySelectorAll('li').length >= 10) {
+			alert('프로젝트 폴더는 최대 10개 생성 할 수 있습니다.');
+			folderContent.value = '';
+		} else {
+			//폴더명 확인
+			checkGroupFolderName();
+		}
+		//그룹 생성 모달 값 초기화
+		$('#createGroupFolderModal').modal('hide');
+	};
+	
+	//폴더명 확인
+	function checkGroupFolderName() {
+		if(folderContent.value == '') {
+			alert('폴더 이름은 공백을 허용하지 않습니다!');
+			return;
+		} else if (folderContent.value.length > 30) {
+			alert('폴더 이름은 최대 30자 까지 가능합니다!');
+			return;
+		} else {
+			let formData = new FormData();
+			formData.append('gN', folderContent.value);
+			
+			//db정보 삽입
+			fetch("/proGroupC", {
+				method: 'POST',
+				body : formData
+			})
+			.then(response => response.json())
+			.then(res => {
+				
+				if(res.result == '성공') {
+					//동적 폴더 생성
+					createFolder(res.pGN);				
+				} else {
+					alert('요청이 취소 되었습니다.');
+				}
+			})
+			.catch(error => {
+				console.error('Error: ',error);
+			});
+   		};//else 종료
+	};
+   
+	//동적 폴더 생성
+	function createFolder(lGN) {
+		let pG = document.getElementById('proGroup');
+		let liC = document.createElement('li');
+		let aC = document.createElement('a');
+		let spanC = document.createElement('span');
+		
+		spanC.className = 'material-icons moreVertIcons';
+		//spanC.style = 'display : none;';
+		spanC.textContent = 'more_vert';
+		
+		if(folderContent.value.length >= 8) {
+			folderContent.value = folderContent.value.substring(0, 7) + '...';
+		};
+			
+		aC.setAttribute('href', '/proGroupD/'+ lGN);
+		aC.setAttribute('data-gN', lGN);
+		aC.setAttribute('data-fName', folderContent.value);
+		aC.textContent = folderContent.value;
+		
+		aC.append(spanC);
+		liC.append(aC);
+		pG.prepend(liC);
+		
+		folderContent.value = '';
+	};
+</script>
+
+<!-- 그룹폴더명 수정 -->
+<script>
+	function changeGroupFolderName() {
+		if(folderContentChange.value == '') {
+			alert('폴더 이름은 공백을 허용하지 않습니다!');
+			return;
+		} else if (folderContentChange.value.length > 30) {
+			alert('폴더 이름은 최대 30자 까지 가능합니다!');
+			return;
+		} else {
+			let groupNo = folderContentChange.dataset.targetNo;
+			fetch("/proGroupNameC", {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					groupName: folderContentChange.value,
+					groupNo: groupNo
+				})
+  			})
+			.then(response => response.json())
+			.then(res => {
+				if(res.result == '성공') {
+					let targetGroupFolder = document.querySelector(`[data-gN="${groupNo}"]`);
+					targetGroupFolder.setAttribute('data-fname', folderContentChange.value);
+					targetGroupFolder.children[0].textContent = folderContentChange.value;
+
+					//글자수 길이 제한
+					if(folderContentChange.value.length >= 8) {
+						folderContentChange.value = folderContentChange.value.substring(0, 7) + '...';
+					};
+				} else {
+					alert('요청이 취소 되었습니다.');
+				};
+			})
+			.catch(error => {
+				console.error('Error: ',error);
+			});//fetch 종료
+		};
+	}
+</script>
+
+<!-- 프로젝트 그룹 수정 및 삭제 -->
+<script>
+	//프로젝트 수정/삭제 관리창 열기
+	function makeGroupMan() {
+		event.stopPropagation;
+		event.preventDefault();
+		let liTag = event.target.closest('li');
+		let groupNo = liTag.dataset.gn;
+		let groupName = liTag.dataset.fname;
+		makeGroupManModalLabel.textContent = '그룹폴더명 : ' + liTag.dataset.fname;
+
+		let groupModalMan = document.getElementById('makeGroupManModal');
+		groupModalMan.querySelector('#groupNameChangeBtn').setAttribute('data-group-no', groupNo);
+		groupModalMan.querySelector('#groupNameChangeBtn').setAttribute('data-group-name', groupName);
+
+		groupModalMan.querySelector('#groupNameDeleteBtn').setAttribute('data-group-no', groupNo);
+		$('#makeGroupManModal').modal('show');
+	}
+
+	//수정창
+	function updateManButton() {
+		$('#makeGroupManModal').modal('hide');
+		$('#updateManButton').modal('show');
+		//닫길때 값 초기화
+		$('#updateManButton').on('hidden.bs.modal', function (event) {
+			$('#folderContentChange').val();
+		});
+		let nooo = event.target.dataset.groupNo;
+		let nameee = event.target.dataset.groupName;
+		folderContentChange.value = nameee;
+		folderContentChange.setAttribute('data-target-no', nooo);
+	};
+
+	//삭제실행
+	function deleteGroupFolder() {
+		let gn = event.target.dataset.groupNo;
+
+		fetch("/FolderGroupD/" + gn, {
+			method: 'DELETE'
+			})
+		.then(response => response.json())
+		.then(res => {
+				if (res.result == '성공') {
+				document.querySelector(`[data-gN="${gn}"]`).remove();
+				$('#makeGroupManModal').modal('hide');
+				} else {
+						alert('요청이 취소 되었습니다.');
+				};
+		})
+		.catch(error => {
+			console.error('Error: ',error);
+		});
+	};
+</script>
+
+<!-- 파일 업로드 -->
+<script type="text/javascript">
+	//업로드 1번
+	$("input[type='file']").change(function(e) {
+		let findModal = $(e.target);
+		var formData = new FormData();
+	//	var inputFile = $("input[name='uploadFile']");
+		var inputFile = $(e.target);
+		console.log(inputFile)
+		var files = inputFile[0].files;
+		//여러 파일 올라 갈 수 있기 때문에 반복문
+		for(var i=0; i<files.length; i++) {
+			//파일 검증
+		    if(!checkExtension(files[i].name, files[i].size) ){
+	    	    return false;
+			}
+	    	formData.append("uploadFile", files[i]);
+		}
+		
+		//console.log('폼데이터',formData.get("uploadFile"))
+		
+		$.ajax({
+			url: "/uploadAjaxAction",
+			processData: false,
+			contentType: false,
+			data: formData,
+			type: "POST",
+			dataType: "json",
+			success: function(result) {
+				//성공시 화면에 출력
+				showUploadResult(result, findModal);
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
+	});
+	
+	
+	//확장자 필터(1-2)
+	var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
+	var maxSize = 5242880;
+	
+	function checkExtension(fileName, fileSize) {
+		if (fileSize >= maxSize) {
+		    alert('파일 사이즈 초과');
+		    return false;
+		}
+		if (regex.test(fileName)) {
+		    alert('해당 종류의 파일은 업로드할 수 없습니다.');
+		    return false;
+		}
+		return true;
+	}
+	
+	//파일선택으로 파일 불러올 때, 업로드 2번
+	function showUploadResult(uploadResultArr, findModal){
+		console.log('s',uploadResultArr)
+		
+		//빈값 찾기
+		if(!uploadResultArr || uploadResultArr.length == 0){return ;}
+		
+		var uploadUL = findModal.closest('.modal').find('.uploadResult ul');
+		
+		var str = "";
+	  
+		//여러건이기 때문에 반복문
+		$(uploadResultArr).each(function(i, obj){
+			//console.log("11:06" + i)
+			console.log("11:05",obj)
+			//console.log('이미지',obj.image);
+			//console.log('파일타입',obj.fileType);
+			
+			//image type
+			if(obj.image){
+				console.log('이미지!')
+				var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+				
+				str += "<li data-path='"+obj.uploadPath+"'";
+				str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+				str + "><div>";
+				//파일 이름 보여주기
+				str += "<span> "+ obj.fileName+"</span>";
+				//파일 삭제버튼
+				str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				//이미지 노출
+				str += "<img src='/display?fileName="+fileCallPath+"'>";
+				str += "</div>";
+				str +"</li>";
+			} else {
+				console.log('파일?')
+				var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+				    
+				str += "<li data-path='"+obj.uploadPath+"'";
+				str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+				str + "><div>";
+				//파일 이름 보여주기
+				str += "<span> "+ obj.fileName+"</span>";
+				//파일 삭제버튼
+				str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				//파일 노출
+				str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+				str += "</div>";
+				str +"</li>";
+			} 
+		});
+		
+		//만든 태그 붙여서 화면에 보여주기
+		uploadUL.append(str);
+	};
+	//화면 노출 종료
+	
+	//화면에서 지우기
+</script>
+
+<!-- 파일 업로드 화면에서 지우기 -->
+<script type="text/javascript">
+	//업로드중인 파일 삭제
+	$(".uploadResult").on("click", "button", function(e){
+		e.stopPropagation();
+		
+		var targetFile = $(this).data("file");
+		var type = $(this).data("type");
+	
+		//해당 업로드 파일 li가기
+		var targetLi = $(this).closest("li");
+	
+		$.ajax({
+			url : '/deleteFile',
+			data : {'fileName' : targetFile,
+					'type' : type},
+			dataType : 'text',
+			type : 'POST',
+			success : function(result) {
+				targetLi.remove();//화면에서 지우기
+			}
+		});
+	});
+</script>
+
+<!-- 웹소켓 -->
+<script>
+	//WebSocket 연결 설정
+	const alarmClient = new StompJs.Client({
+		brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+	});
+	
+	// 페이지 로드시 웹소켓 연결
+	window.addEventListener("load", function(event) {
+		alarmClient.activate();
+	});
+	
+	// 연결 성공시
+	alarmClient.onConnect = (frame) => {
+		console.log('Connected: ' + frame);
+		
+	    // 프로젝트 구독
+		alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsg(JSON.parse(alarmMsg.body));
+		});
+	    
+	    // 채팅방 생성 초대 구독
+		alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgChat(JSON.parse(alarmMsg.body));
+	    });
+	    
+		// 메일 수신 구독
+		alarmClient.subscribe('/alarmMan/mailAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgMail(JSON.parse(alarmMsg.body));
+	    });
+		
+		// 결재대상자 수신 구독
+		alarmClient.subscribe('/alarmMan/payAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgPay(JSON.parse(alarmMsg.body));
+		});
+		
+		// 결재대상자 수신 구독
+		alarmClient.subscribe('/alarmMan/payComAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+			almSendMsgPayCom(JSON.parse(alarmMsg.body));
+		});
+	};
+	
+	//에러
+	alarmClient.onWebSocketError = (error) => {
+		console.error('Error with websocket', error);
+	};
+	
+	alarmClient.onStompError = (frame) => {
+		console.error('Broker reported error: ' + frame.headers['message']);
+		console.error('Additional details: ' + frame.body);
+	};
+	
+	function almSendMsg() {
+		toastAct();
+	};
+	
+	function almSendMsgChat() {
+		toastActChat();
+	};
+	
+	function almSendMsgMail() {
+		toastActMail();
+	};
+	
+	function almSendMsgPay() {
+		toastActPay();
+	};
+	
+	function almSendMsgPayCom() {
+		toastActPayCom();
+	};
+	
+	function toastAct() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
+	};
+	
+	function toastActChat() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
+	};
+	
+	function toastActMail() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('새로운 메일이 도착하였습니다.', '메일 알림', {timeOut: 5000});
+	};
+	
+	function toastActPay() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('결재 진행할 전자문서가 도착하였습니다.', '전자결재 알림', {timeOut: 5000});
+	};
+	
+	function toastActPayCom() {
+		toastr.options.escapeHtml = true;
+		toastr.options.closeButton = true;
+		toastr.options.newestOnTop = false;
+		toastr.options.progressBar = true;
+		toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+		toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+		toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+		toastr.info('결재 진행이 완료된 전자문서가 있습니다.', '전자결재 알림', {timeOut: 5000});
+	};
+	
+	var today = new Date();
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var monthString = year + '-' + month;
+	const monthDate = monthString;
+	
+	document.getElementById('commute').setAttribute('href','/commuteList/'+monthDate);
+</script>
+
+<!-- 스크립트 종료 -->
+
+</body>
+</html>
