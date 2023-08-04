@@ -44,34 +44,29 @@ public class ChatController {
     public String rooms(HttpSession session, @PathVariable Integer roomNo, Model model, ChatMessageDTO chatDTO) {
         String name = (String)session.getAttribute("Name");
         model.addAttribute("name", name);
+        
         String id = (String)session.getAttribute("Id");
         model.addAttribute("id", id);
         model.addAttribute("roomNo", roomNo);
+        
         chatDTO.setRoomNo(roomNo);
         chatDTO.setId(id);
         List<ChatMessageDTO> chatMessageList = chatService.MessageAllList(chatDTO);
         model.addAttribute("chatDTO", chatMessageList);
+        
         RoomDTO updatedRoomDTO = chatService.getRoomName(roomNo);
         model.addAttribute("roomDTO", updatedRoomDTO);
-        System.out.println(updatedRoomDTO + "roomDTO 확인용");
+        
+        RoomDTO usersNameDTO = new RoomDTO();
+        usersNameDTO.setRoomNo(roomNo);
+        List<RoomDTO> roomDTO = chatService.getUsersName(roomNo);
+        model.addAttribute("usersName", roomDTO);
+        
+        System.out.println(roomDTO + "뭐가 찍히는지 보자");
+        
         return "chat/chat";
     }
 
-  //메세지 전체조회2
-//    @GetMapping("/chat/{roomNo}")
-//    public String rooms(HttpSession session, @PathVariable Integer roomNo, Model model, ChatMessageDTO chatDTO) {
-//        String name = (String)session.getAttribute("Name");
-//        model.addAttribute("name", name);
-//        String id = (String)session.getAttribute("Id");
-//        model.addAttribute("id", id);
-//        model.addAttribute("roomNo", roomNo);
-//     // ChatMessageDTO로 변경하고 시간 정보를 포함한 메시지 전체 리스트를 가져옵니다.
-//        List<ChatMessageDTO> chatMessageList = chatService.MessageAllListReal(chatDTO);
-//        model.addAttribute("chatDTO", chatMessageList);
-//
-//        return "chat/chat";
-//    }
-    
     //메세지 받고 주기
     @MessageMapping("/chat/{roomNo}") 
     public void send(ChatMessageDTO chatMessage, @DestinationVariable int roomNo) {
@@ -137,8 +132,6 @@ public class ChatController {
         return Collections.singletonMap("roomNo", roomNo);
     }
     
-
-    
     //HTTP를 사용하려면 @PostMapping을, 웹소켓과 STOMP를 사용하려면 @MessageMapping
     
   //채팅방나가기.
@@ -174,7 +167,6 @@ public class ChatController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
     
     @GetMapping("/empAllList")
     @ResponseBody

@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -59,7 +61,7 @@ public class BoardController {
 		}
 	
    @GetMapping("/boardList")
-   public String getboardList(Criteria cri, Model model, BoardVO boardVO) {
+   public String getboardList(HttpSession session, Criteria cri, Model model, BoardVO boardVO) {
       // 전체 글 개수
         int boardListCnt = boardService.boardListCnt(cri, boardVO);
         
@@ -67,7 +69,11 @@ public class BoardController {
         Paging paging = new Paging();
         paging.setCri(cri);
         paging.setTotalCount(boardListCnt);
-
+        
+        String id = (String)session.getAttribute("Id");
+        System.out.println("확인용" + boardService.authCheck(id));
+        
+        model.addAttribute("checkId", boardService.authCheck(id));
 	
 		model.addAttribute("boardList", boardService.selectAllList(cri, boardVO));
 		model.addAttribute("paging", paging);
