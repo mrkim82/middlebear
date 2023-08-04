@@ -19,12 +19,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler{
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
-		System.out.println("handler 실행");
 		HttpSession session = request.getSession();
 		SecurityVO vo = (SecurityVO) authentication.getPrincipal();
-		System.out.println(vo.getName());
-
-		
 		
 		if(vo != null) {
 			session.setAttribute("EmpNo", vo.getEmpNo());

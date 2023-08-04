@@ -218,7 +218,6 @@ public class InsaController {
 	
 	@PostMapping("updateDept")
 	public String updateDept(EmpVO vo) {
-		System.out.println(vo);
 		insaService.deptUpdate(vo);
 		return "redirect:deptDetailInfo?deptNo="+vo.getDeptNo();	
 	}
