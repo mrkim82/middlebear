@@ -187,9 +187,9 @@ public class PaymentController {
         model.addAttribute("paging",paging);
 		
 		//참조된 문서조회
-		id = (String) session.getAttribute("Id");
+        id = (String) session.getAttribute("Id");
 		payVO.setId(id);
-		cri.setPerPageNum(5);
+		cri.setPerPageNum(10);
 		paging = new Paging();
         paging.setCri(cri);
         paging.setTotalCount(paymentService.referrerPayCount(id));
@@ -324,7 +324,6 @@ public class PaymentController {
 		}else {
 			paymentService.robinCommentUpdate(payVO);
 		}
-		
 		return "pay/InProgressPay";
 	}
 	//결재문서 파일삭제
