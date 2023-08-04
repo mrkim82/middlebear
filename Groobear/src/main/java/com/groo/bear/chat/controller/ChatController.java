@@ -73,7 +73,6 @@ public class ChatController {
         try {
             messagingTemplate.convertAndSend("/topic/messages/" + roomNo , chatMessage);
             chatService.sendMessage(chatMessage); 
-            System.out.println(chatMessage + "chatMessage 찾기용");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,7 +85,6 @@ public class ChatController {
     	
     	String id = (String)session.getAttribute("Id");
     	List<RoomDTO> rooms = chatService.chatRoomList(id);
-    	System.out.println(rooms);
         for (RoomDTO room : rooms) {
             int count = chatService.countRoomMembers(room.getRoomNo());
             room.setParticipantCount(count); // 참여자 수 설정
@@ -152,12 +150,9 @@ public class ChatController {
         ChatMessageDTO chatMessage = new ChatMessageDTO();
         chatMessage.setContent(id + "님이 채팅방에서 나갔습니다. (" + formattedTime + ")");
         chatMessage.setRoomNo(roomNo);
-        System.out.println(id + "님이 채팅방에서 나갔습니다. 테스트 (" + formattedTime + ")");
         // 메시지를 채팅방에 전송
-        System.out.println(chatMessage);                                                                                                                                                         
         messagingTemplate.convertAndSend("/topic/messages/" + roomNo, chatMessage);
         // 메시지를 데이터베이스에 저장
-        System.out.println(chatMessage);
         chatService.sendMessage(chatMessage);
 
         int isDeleted = chatService.deleteChatRoom(roomDTO); // chatService는 채팅방을 관리하는 서비스 객체입니다.
@@ -197,7 +192,6 @@ public class ChatController {
             chatMessage.setRoomNo(roomNo);
             // 메시지를 채팅방에 전송
             messagingTemplate.convertAndSend("/topic/messages/" + roomNo, chatMessage);
-            System.out.println();
             chatService.sendMessage(chatMessage);
         }
 

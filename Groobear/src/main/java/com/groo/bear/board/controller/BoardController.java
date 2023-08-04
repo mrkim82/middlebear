@@ -71,7 +71,6 @@ public class BoardController {
         paging.setTotalCount(boardListCnt);
         
         String id = (String)session.getAttribute("Id");
-        System.out.println("확인용" + boardService.authCheck(id));
         
         model.addAttribute("checkId", boardService.authCheck(id));
 	

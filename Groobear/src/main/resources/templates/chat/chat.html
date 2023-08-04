@@ -27,18 +27,19 @@
         width: 100%;
         z-index: 100;
     }
-.header {
+    .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px; /* 좌우 패딩을 추가해서 요소들이 화면 끝에 너무 붙지 않게 합니다. */
+    padding: 0 10px;
+    position: relative; /* 상대 위치 지정 */
 }
 
-  .header .room-title {
-         display: flex;
-         margin-left: 600px;
-         
-    }
+.header .room-title {
+    position: absolute; /* 절대 위치 지정 */
+    left: 50%; /* 왼쪽으로부터 50% 위치에 배치 */
+    transform: translateX(-50%); /* 자신의 너비의 절반만큼 왼쪽으로 이동해서 정확히 중앙에 배치 */
+}
 
 .header .header-icons {
     display: flex;
@@ -49,6 +50,7 @@
         color: white;  /* Icon color */
         font-size: 24px;  /* Icon size */
     }
+    
     
     .header .header-buttons {
         display: flex;
@@ -189,6 +191,8 @@
     margin: 5px 0;  /* 위아래 마진을 5px로 설정 */
     padding: 0;  /* 패딩을 0으로 설정 */
 }
+
+
     </style>
 </head>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
