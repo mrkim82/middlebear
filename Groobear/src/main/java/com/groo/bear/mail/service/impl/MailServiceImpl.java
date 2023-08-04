@@ -233,5 +233,46 @@ public class MailServiceImpl implements MailService{
 	public List<MailVO> getMailList(Criteria cri, MailVO mailVO) {
 		return mailMapper.getMailList(cri, mailVO);
 	}
+	@Override
+	public MailVO getMailInfo(int mailNo) {
+		return mailMapper.getMailInfo(mailNo);
+	}
+	@Override
+	public int getMailInfoUpdate(MailVO mailVO) {
+		return mailMapper.getMailInfoUpdate(mailVO);
+	}
+	@Override
+	public List<MailVO> getMaildelete(Criteria cri, MailVO mailVO) {
+		return mailMapper.getMaildelete(cri, mailVO);
+	}
+	@Override
+	public int getMailType1Del(MailVO mailVO) {
+		int result = mailMapper.getMailType1Del(mailVO);
+		return result;
+	}
+	@Override
+	public int getMailType2Del(MailVO mailVO) {
+		int result = mailMapper.getMailType2Del(mailVO);
+		return result;
+	}
+	@Override
+	public int getMailType3Del(MailVO mailVO) {
+		int result = mailMapper.getMailType3Del(mailVO);
+		return result;
+	}
+	@Override
+	public int getMailType4Del(MailVO mailVO) {
+		int result = mailMapper.getMailType4Del(mailVO);
+		return result;
+	}
+	@Override
+	public int getMailType5Del(MailVO mailVO) {
+		int result = mailMapper.getMailType5Del(mailVO);
+		return result;
+	}
+	@Override
+	public List<MailVO> getMailSend(Criteria cri, MailVO mailVO) {
+		return mailMapper.getMailSend(cri, mailVO);
+	}
 	
 }
