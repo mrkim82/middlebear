@@ -9,7 +9,11 @@
 		<link rel="stylesheet" href="modal6/css/flaticon.css">
 		<link rel="stylesheet" href="modal6/css/style.css">
 		<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-		
+		<style>
+html {
+	height : 100%;
+}
+</style>
 </head>
 <body>
 <div layout:fragment="content">
@@ -27,7 +31,7 @@
 					<option value='carNo' th:selected="${criteria.type == 'carNo'}">차량번호</option>
 				</select>
 				<input type="text" id="textBox" name="keyword" th:value="${criteria.keyword}" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:150px;"/>
-				<button type="submit" id="searchBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f61;box-shadow:1.5px 1.5px 1.5px 1.5px gray;color: #fff;width: 50px; height:35px;">검색</button>
+				<button type="submit" id="searchBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 50px;height:35px;">검색</button>
 			</form>
 		</div>
 
@@ -87,7 +91,7 @@
 				      <div class="modal-body p-5 img d-flex color-1 text-center d-flex align-items-center" style="border-radius: 20px 0px 0px 20px;">
 				      	<div class="text w-100">
 				      		<span class="icon-2 ion-ios-car"></span>
-					      	<h5>차량 정보만 변경 가능합니다.</h5>
+					      	<h5 class="dohyeon">차량 정보만 변경 가능합니다.</h5>
 					      	<div class="icon">
 					      		<img id="CTI" src="" style="width:200px">
 					      	</div>

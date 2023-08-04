@@ -30,6 +30,19 @@
 		.rightPad{
 			padding-right:150px;
 		}
+		.nav li:hover{
+  			background-color: #4fc09961;
+  			border-radius:15px;
+  		}
+  		.nav li:hover a{
+  			color:black;
+  		}
+  		.nav li{
+  			transition: 0.5s;
+  		}
+  		a {
+  			text-decoration : none !important;
+  		}
 	</style>
   </head>
   <body style="width:1215px;margin: 0 auto;">
@@ -90,21 +103,21 @@
     </nav>
     <div class="row">
       <!-- 사이드바 -->
-      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-        <div class="position-sticky">
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar dohyeon" style="margin-left: 15px;margin-top: 10px;width: 200px;position: absolute;height: 100%;">
+        <div class="position-sticky" style="text-align: center;">
           <ul class="nav flex-column">
             <!-- 사이드바 메뉴 아이템들 -->
             <li class="nav-item">
-              <a href="/mail/receiveMail"><span class="material-icons">add_box</span>받은메일함</a>
+              <a href="/mail/receiveMail" style="font-size: 25px; text-decoration: none; color: #29ac7f;">받은메일함</a>
             </li>
             <li class="nav-item">
-			  <a href="/mail/sendingMail"><span class="material-icons">home</span>보낸메일함</a>
+			  <a href="/mail/sendingMail" style="font-size: 25px; text-decoration: none; color: #29ac7f;">보낸메일함</a>
 			</li>
             <li class="nav-item">
-              <a href="/mail/sendMail"><span class="material-icons">star</span>메일쓰기</a>
+              <a href="/mail/sendMail" style="font-size: 25px; text-decoration: none; color: #29ac7f;">메일쓰기</a>
             </li>
             <li class="nav-item">
-              <a href="/mail/deleteMail"><span class="material-icons">star</span>지운메일함</a>
+              <a href="/mail/deleteMail" style="font-size: 25px; text-decoration: none; color: #29ac7f;">지운메일함</a>
             </li>
           </ul>
         </div>
