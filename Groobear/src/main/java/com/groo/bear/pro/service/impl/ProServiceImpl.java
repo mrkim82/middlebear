@@ -12,6 +12,7 @@ import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
 import com.groo.bear.pro.service.provo.ProPartiAlarmVO;
+import com.groo.bear.pro.service.provo.ProPerSettingVO;
 import com.groo.bear.pro.service.provo.ProUsersVO;
 import com.groo.bear.pro.service.provo.ProVO;
 
@@ -138,8 +139,10 @@ public class ProServiceImpl implements ProService {
 	}
 
 	@Override
-	public int createGroupProManage(ProGroupManageVO vo) {
-		return proMapper.createGroupProManage(vo);
+	public ProPerSettingVO createGroupProManage(ProGroupManageVO vo) {
+		proMapper.createGroupProManage(vo);
+		
+		return proMapper.readProPerSetting(vo.getProMemNo());
 	}
 
 	@Override

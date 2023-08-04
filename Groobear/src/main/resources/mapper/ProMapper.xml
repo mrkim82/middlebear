@@ -315,4 +315,12 @@
 		AND id = #{id}
 	</select>
 	
+	<!-- 프로젝트 개인 설정 조회 -->
+	<select id="readProPerSetting" resultType="ProPerSettingVO">
+		SELECT a.pro_mem_no, a.pro_color, a.pro_star_check, a.home_tab, a.pro_no, b.pro_name
+		FROM pro_mem a
+		JOIN pro b
+		ON(a.pro_no = b.pro_no)
+		WHERE pro_mem_no = #{proMemNo}
+	</select>
 </mapper>

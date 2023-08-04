@@ -27,6 +27,7 @@ import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
 import com.groo.bear.pro.service.provo.ProPartiAlarmVO;
+import com.groo.bear.pro.service.provo.ProPerSettingVO;
 import com.groo.bear.pro.service.provo.ProUsersVO;
 import com.groo.bear.pro.service.provo.ProVO;
 
@@ -253,10 +254,9 @@ public class ProController {
 	//프로젝트그룹에 프로젝트 추가
 	@PostMapping("creGroupManage")
 	@ResponseBody
-	public Map<String, Object> proGroupcrepro(@RequestBody ProGroupManageVO vo) {
-		int result = proService.createGroupProManage(vo);
-		
-		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	public ProPerSettingVO proGroupcrepro(@RequestBody ProGroupManageVO vo) {
+		System.out.println("테"+vo);
+		return proService.createGroupProManage(vo);
 	}
 	//프로젝트그룹에 프로젝트 삭제
 	@PostMapping("delGroupManage")

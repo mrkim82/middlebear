@@ -37,7 +37,8 @@
 	<button type="button"
 			class="btn btn-groob"
 			data-toggle="modal"
-			data-target="#proFolder">
+			data-target="#proFolder"
+			style="margin-bottom: 15px">
 		프로젝트 폴더 설정
 	</button>
 
@@ -56,18 +57,20 @@
 					</button>
 				</div>
 				<!-- 본문 -->
-				<div class="modal-body">
+				<div class="modal-body"
+					 style="padding-bottom: 0px;">
 					<ul style="padding-left: 10px;">
 						<li th:each="pro : ${readPerAllPro}"
 							style="list-style-type: none;">
-							<label class="custom-checkbox">
+							<label class="custom-checkbox"
+								   style="margin-bottom: 15px">
 								<input type="checkbox"
 									   th:data-pro-mem-no="${pro.proMemNo}"
 									   onclick="changeGorupStatus()">
 								<span class="checkmark"></span>
 							</label>
 							<span th:text="${pro.proName}"
-								  style="padding-left: 10px; font-size: 18px;"></span>
+								  style="padding-left: 5px; font-size: 18px;"></span>
 						</li>
 					</ul>
 				</div>
@@ -88,12 +91,14 @@
 		   id="goProjectDetail">
 		<tr th:each="pro:${projectMainList}"
 			th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}, data-proNo=${pro.proNo}"
-			style="cursor:pointer">
+			style="cursor:pointer"
+			onclick="projectDetail()">
 			<td>
 				<div class="square"
 					 th:style="'background-color: ' + ${pro.proColor}"></div></td>
 			<td><div class="star starCheck"
-					 th:classappend="${pro.proStarCheck == 'Y' ? 'yellow' : 'gray'}"></div></td>
+					 th:classappend="${pro.proStarCheck == 'Y' ? 'yellow' : 'gray'}"
+					 onclick="changeStar()"></div></td>
 			<td style="width: 750px; overflow: hidden; font-size: larger; padding-left: 15px;"
 				th:text="${pro.proName}"></td>
 			<td th:each="parti:${projectPartiList}"
@@ -138,16 +143,8 @@
 
 <!-- 즐겨찾기 -->
 <script>
-	let starCheck = document.querySelectorAll(".starCheck");
-	
-	starCheck.forEach(sC => {
-		sC.addEventListener("click", function(event) {
-			event.stopPropagation();
-			changeStar();
-		});
-	});
-
 	function changeStar() {
+		event.stopPropagation();
 		let trTag = event.target.closest('tr');
 		let dpMN = trTag.getAttribute("data-pMN");
 		let starC = trTag.getAttribute("data-starC");
@@ -162,8 +159,7 @@
 		.then(response => response.json())
 		.then(res => {
 			changeProOne(starC, trTag);
-			
-		})
+		});
 	};
 
 	//즐겨찾기 변경
@@ -176,34 +172,23 @@
 			trTag.setAttribute('data-starc', 'N');
 			trTag.querySelector('.star').classList.remove('yellow');
 			trTag.querySelector('.star').classList.add('gray');
-		}
+		};
 
-	}
+	};
 	
 	//프로젝트 master여부
 	function chagepartiSelect() {
 		let partiSelectId = document.getElementById('partiSelect').value;
-		console.log(partiSelectId);
-		
-	}
+		console.log('마스터!!',partiSelectId);
+	};
 </script>
 	
 <!-- 프로젝트 홈에서 상세 페이지 이동 -->
 <script>
-	let gPList = document.querySelectorAll('#goProjectDetail tr');
-	
-	gPList.forEach(gPDetail => {
-		let homeTabNum = gPDetail.dataset.hometab;
-		let proNo = gPDetail.dataset.prono;
-		gPDetail.addEventListener('click', function() {
-			console.log('홈',homeTabNum)
-			console.log(proNo)
-			projectDetail(homeTabNum, proNo);
-		});
-	});
-
-	function projectDetail(homeTNum, proNo) {
-		location.href="/proPostMain/" + proNo + "?homeTab=" + homeTNum;
+	function projectDetail() {
+		let homeTabNum = event.target.closest('tr').dataset.hometab;
+		let proNo = event.target.closest('tr').dataset.prono;
+		location.href="/proPostMain/" + proNo + "?homeTab=" + homeTabNum;
 	};
 </script>
 	
@@ -213,7 +198,6 @@
 		event.stopPropagation();
 		let hideC = event.target.dataset.proHide;
 		hideC = hideC == 'N' ? 'Y' : 'N';
-		console.log(hideC)
 		let trTag = event.target.closest('tr');
 		let proMemNo = trTag.dataset.pmn;
 		
@@ -232,9 +216,10 @@
 				let rC = res.result;
 				if(rC == '성공') {
 					trTag.remove();
+					let sss = document.querySelector('[data-pro-mem-no="' + proMemNo + '"]').closest('li').remove();
 				}
 			});
-	}
+	};
 </script>
 
 <!-- 그룹 추가/ 삭제 -->
@@ -247,8 +232,6 @@ function changeGorupStatus() {
 	const url = window.location.href;
 	const parts = url.split('/');
 	const lastPart = parts[parts.length - 1];
-	
-	console.log(lastPart);
 	
 	//그룹 추가
 	if(checkedStatus) {
@@ -266,13 +249,14 @@ function changeGorupStatus() {
 		.then(response => response.json())
 		.then(res => {
 			let newTr = document.createElement("tr");
-			
 			//tr생성
+			let starColro = res.proStarCheck == 'Y' ? 'yellow' : 'gray';
 			newTr.innerHTML = `
-			    <tr style="cursor:pointer" data-pmn="${proMemNo}" data-starc="N" data-hometab="4">
-			        <td>red</td>
-			        <td class="starCheck">N</td>
-			        <td>${mainCont}</td>
+			    <tr>
+			        <td><div class="square"
+						 style="background-color: ${res.proColor}"></div></td>
+			        <td><div class="star ${starColro} starCheck" onclick="changeStar()"></div></td>
+			        <td style="width: 750px; overflow: hidden; font-size: larger; padding-left: 15px;">${res.proName}</td>
 			        <td>1명</td>
 			        <td>
 			            <span class="material-symbols-outlined" onclick="hideProject()" data-pro-hide="N">visibility</span>
@@ -280,8 +264,11 @@ function changeGorupStatus() {
 			    </tr>
 			`;
 			newTr.setAttribute('data-pmn', proMemNo);
-			newTr.setAttribute('data-starc', 'N');
-			newTr.setAttribute('data-hometab', '4');
+			newTr.setAttribute('data-starc', res.proStarCheck);
+			newTr.setAttribute('data-hometab', res.homeTab);
+			newTr.setAttribute('data-proNo', res.proNo);
+			newTr.style.cursor = 'pointer';
+			newTr.onclick = projectDetail;
 			
 			let aTbody = document.querySelector('#goProjectDetail');
 			aTbody.append(newTr);

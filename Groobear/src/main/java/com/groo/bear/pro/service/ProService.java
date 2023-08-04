@@ -7,6 +7,7 @@ import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
 import com.groo.bear.pro.service.provo.ProPartiAlarmVO;
+import com.groo.bear.pro.service.provo.ProPerSettingVO;
 import com.groo.bear.pro.service.provo.ProUsersVO;
 import com.groo.bear.pro.service.provo.ProVO;
 
@@ -48,7 +49,7 @@ public interface ProService {
 	// 프로젝트 그룹의 프로젝트 체크 여부
 	public List<ProGroupManageVO> readGroupCheckPro(int groupNo, String id);
 	// 그룹에 프로젝트 추가
-	public int createGroupProManage(ProGroupManageVO vo);
+	public ProPerSettingVO createGroupProManage(ProGroupManageVO vo);
 	// 그룹에 프로젝트 제거
 	public int deleteGroupProManage(ProGroupManageVO vo);
 	
@@ -76,4 +77,5 @@ public interface ProService {
 	public int deleteProPartiN(int proMemNo);
 	// 미수락 프로젝트 수
 	public int readNoPartiProCount(String id);
+	
 }
