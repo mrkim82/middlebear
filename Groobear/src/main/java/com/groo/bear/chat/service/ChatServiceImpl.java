@@ -100,6 +100,12 @@ public class ChatServiceImpl implements ChatService {
 	public RoomDTO getRoomName(int roomNo) {
 		return chatMapper.getRoomName(roomNo);
 	}
+
+
+	@Override
+	public List<RoomDTO> getUsersName(int roomNo) {
+		return chatMapper.getUsersName(roomNo);
+	}
 	
 	
 	

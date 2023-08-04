@@ -13,6 +13,17 @@
 html {
 	height : 100%;
 }
+.modal__background{
+  position: fixed;
+  top:0; left: 0; bottom: 0; right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index : 1000;
+  transition: background-color 0.5s;
+}
+.modal_att{
+	transition-property: all;
+  	transition-duration: 4s;
+}
 </style>
 </head>
 <body>
@@ -151,7 +162,7 @@ html {
 	
 		<div class="modal fade" id="carMInfo" tabindex="-1" role="dialog"
 			aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
+			<div id="carMo" class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content" style="border-radius:20px;">
 					<div class="modal-header">
 						<button type="button"
@@ -246,7 +257,40 @@ html {
 			</div>
 		</div>
 
-		
+	<!-- <div id="backG "class="">
+		 <div id="myModal" class="modal fade show modal__background">
+      Modal content
+	      <div class="modal-content" style=" width: 400px;  top: 30%; left: 35%; border-radius: 35px; border: 1px solid lightgray; box-shadow: 4px 7px 2px 1px #b5b3b396; ">
+	                <p style="text-align: center;line-height: 1.5;margin: 70px 0px;"><span style="font-size: 23px;" id="spantext"></span></p>
+	            	<div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;border-radius: 0px 0px 35px 35px;" onClick="close_pop();" id="goLogin">
+	                <span class="pop_bt" style="font-size: 20px;" id="closeModal">
+	                     닫기
+	                </span>
+	            </div>
+	      </div>
+	    </div>
+	</div> -->
+
+
+
+		<div class="modal fade" id="myModal" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content" style="border: 1px solid #00000021; border-radius: 20px; box-shadow: 2px 4px 3px 3px darkgray;">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel" style="font-size: 25px;">근태 정보 수정</h5>
+						<button type="button" class="btn-close" data-mdb-dismiss="modal"
+							aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;">X</button>
+					</div>
+					
+					
+				</div>
+			</div>
+		</div>
+
+
+
+
 
 
 		<script src="modal6/js/jquery.min.js"></script>
@@ -255,6 +299,13 @@ html {
 		<script src="modal6/js/main.js"></script>
 
 		<script>
+		function close_pop(flag) {
+	        $('#myModal').hide();
+	   	};
+		
+	   	
+	   	
+		
 		function carInfofo(){
 			console.log("hi");
 
@@ -340,7 +391,10 @@ html {
 		function checkBtn(){
 			if(document.getElementsByName('carNo')[0].value == '' || document.getElementsByName('carType')[0].value == ''){
 				event.preventDefault();
-				alert('차량번호와 차종 모두 작성해주세요')
+				 //$('#spantext').text('차량번호와 차종 모두 작성해주세요.');
+				$('#myModal').modal('show');
+		          
+		          
 			}else if($('.card-body').length > 2){
 				alert('3대이상 등록 금지')
 				event.preventDefault();

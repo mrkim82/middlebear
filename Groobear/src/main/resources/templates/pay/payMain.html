@@ -4,11 +4,31 @@
 <head>
 <meta charset="UTF-8">
 <title>결재 메인페이지</title>
+<style>
+	ul {
+			list-style:none;
+	}
+		
+	li {
+		float: left;
+		padding: 10px;
+	}
+	a { 
+		text-decoration:none ;
+		color: black;
+	}
+	.paging .active a {
+		    background-color: #f00;
+		    color: #fff;
+	}
+</style>
 </head>
-<body layout:fragment="content">
+<body>
+<div layout:fragment="content">
 	<div>
+	  <h3>Groobear 전자결재</h3>
 		<h5 style="margin-top: 20px;">결재중 문서 조회</h5>
-		<button type="button" id="payDoc" onclick="location.href='/pay/paymentDoc'">결재문서작성</button>
+		<button style="float:right" type="button" id="payDoc" onclick="location.href='/pay/paymentDoc'">결재문서작성</button>
 		<table id="list" class="table">
 			<thead>
 				<tr>
@@ -39,18 +59,24 @@
 			</tbody>
 		</table>
 	</div>
-	<div>
+	<div style="display: flex;justify-content: center;height:30px;">
 		<ul class="paging" th:if="${paging.endPage != 0}">
-        <li th:if="${paging.prev}">
-            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
-        </li>
-        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
-        </li>
-        <li th:if="${paging.next and paging.endPage > 0}">
-            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
-        </li>
-    </ul>
+			<li>
+				<a th:href="|javascript:goPage(1)|">처음</a>
+			</li>
+	        <li th:if="${paging.prev}">
+	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+	        </li>
+	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
+            	<a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+        	</li>
+	        <li th:if="${paging.next and paging.endPage > 0}">
+	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+	        </li>
+	        <li>
+				<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
+			</li>
+	    </ul>
 	</div>
 	
 	<div>
@@ -85,18 +111,24 @@
 			</tbody>
 		</table>
 	</div>
-	<div>
+	<div style="display: flex;justify-content: center;height:30px;">
 		<ul class="paging" th:if="${paging.endPage != 0}">
-        <li th:if="${paging.prev}">
-            <a th:href="|javascript:goPageCom([[${paging.startPage-1}]])|">이전</a>
-        </li>
-        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-            <a th:href="|javascript:goPageCom([[${num}]])|" th:text="${num}"></a>
-        </li>
-        <li th:if="${paging.next and paging.endPage > 0}">
-            <a th:href="|javascript:goPageCom([[${paging.endPage+1}]])|">다음</a>
-        </li>
-    </ul>
+			<li>
+				<a th:href="|javascript:goPage(1)|">처음</a>
+			</li>
+	        <li th:if="${paging.prev}">
+	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+	        </li>
+	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
+            	<a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+        	</li>
+	        <li th:if="${paging.next and paging.endPage > 0}">
+	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+	        </li>
+	        <li>
+				<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
+			</li>
+	    </ul>
 	</div>
 	<div>
 		<h5 style="margin-top: 20px;">참조된 문서 조회</h5>
@@ -130,19 +162,26 @@
 			</tbody>
 		</table>
 	</div>
-	<div>
+	<div style="display: flex;justify-content: center;height:30px;">
 		<ul class="paging" th:if="${paging.endPage != 0}">
-        <li th:if="${paging.prev}">
-            <a th:href="|javascript:goPageRef([[${paging.startPage-1}]])|">이전</a>
-        </li>
-        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-            <a th:href="|javascript:goPageRef([[${num}]])|" th:text="${num}"></a>
-        </li>
-        <li th:if="${paging.next and paging.endPage > 0}">
-            <a th:href="|javascript:goPageRef([[${paging.endPage+1}]])|">다음</a>
-        </li>
-    </ul>
+			<li>
+				<a th:href="|javascript:goPage(1)|">처음</a>
+			</li>
+	        <li th:if="${paging.prev}">
+	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+	        </li>
+	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
+            	<a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+        	</li>
+	        <li th:if="${paging.next and paging.endPage > 0}">
+	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+	        </li>
+	        <li>
+				<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
+			</li>
+	    </ul>
 	</div>
+</div>
 	<script>
 	function goPage(p){
 		location.href="payMain?page="+p;

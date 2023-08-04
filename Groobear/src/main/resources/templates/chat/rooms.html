@@ -17,6 +17,7 @@ html {
     height: 100%;
 }
 
+
 body {
     font-family: 'Do Hyeon', sans-serif;
     min-height: 100%;
@@ -194,8 +195,8 @@ body {
         <p class="chat-modal-label">대화상대 초대</p>
     </div>
     <div style="border-radius : 10px ; border: 1px solid lightgray; padding: 10px;">
-    <ol id="employeeList"></ol>
-    <div id="userListContainer">
+        <div id="userListContainer">
+        <ol id="employeeList"></ol>
         <!-- 사용자 목록이 이곳에 표시됩니다 -->
     </div>
     </div>
@@ -385,10 +386,10 @@ window.onload = function() {
     for(let i = 0; i < chatrooms.length; i++) {
         let roomNo = chatrooms[i].getElementsByClassName('delete-chatroom')[0].getAttribute('data-room-no');
         let infoDiv = chatrooms[i].getElementsByClassName('chatroom-info')[0];
+            
         infoDiv.addEventListener('click', () => {
-            window.open("/chat/" + roomNo, "", "_blank");
+            window.open("/chat/" + roomNo, "", "width=600,height=700,top=100,left=100,scrollbars=yes");
         });
-        
         let deleteButton = chatrooms[i].getElementsByClassName('delete-chatroom')[0];
         deleteButton.addEventListener('click', (event) => {
             event.stopPropagation(); 

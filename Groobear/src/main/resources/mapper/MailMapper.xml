@@ -92,24 +92,20 @@
 	</select>
 	<!-- 지운메일 갯수 출력 -->
 	<select id="countDeleteMail" resultType="int">
-		SELECT COUNT(*) FROM mail a, mail_personnel b
-			WHERE a.mail_no = b.mail_no
-	        AND b.mail_type = #{mailType}
-	        AND (b.sender = #{sender}
-	        OR b.receiver = #{receiver})
-	        AND b.id = #{id}
-	        <if test="deleteDate != null">
-              AND e.delete_date = #{deleteDate}
-  	        </if>
+		SELECT COUNT(*)
+        FROM getmail
+            where ( 
+            	(sender = #{sender} and mail_type=#{mailType}) OR
+	                (receiver = #{receiver} and mail_type2=#{mailType}) OR
+	                (referrer = #{referrer} and mail_type3=#{mailType}) OR
+	                (referrer2 = #{referrer2} and mail_type4=#{mailType}) OR
+	                (referrer3 = #{referrer3} and mail_type5=#{mailType}) )
+            ORDER BY send_date
 	</select>
 	<!-- 보낸메일 갯수 출력 -->
 	<select id="countSendMail" resultType="int">
-		SELECT COUNT(*) FROM mail a, mail_personnel b
-			WHERE a.mail_no = b.mail_no
-            AND b.mail_type = 'S'
-            AND a.mail_set = 'Y'
-            AND b.sender = #{sender}
-            AND b.id = #{sender}
+		SELECT COUNT(*) FROM getmail
+			WHERE (sender = #{sender})
 	</select>
 	<!-- 받은메일 갯수 출력 -->
 	<select id="countReceiveMail" resultType="int">
@@ -146,12 +142,6 @@
 	<select id="mailNo" resultType="int">
 		SELECT NVL(MAX(mail_no),0)+1 as mail_no FROM mail
 	</select>
-	<!-- 확인한메일 -->
-	<update id="mailCheck" parameterType="int">
-		UPDATE mail
-		SET read_check = 'Y'
-		WHERE mail_no = #{mailNo}
-	</update>
 	<!-- 메일 작성시 personnel에 추가용도 -->
 	<insert id="insertPersonnel" parameterType="MailVO">
 		INSERT INTO mail_personnel(sender,receiver,referrer,mail_no,id,mail_type)
@@ -233,16 +223,91 @@
 	</insert>
 	<!-- 받은메일함 -->
 	<select id="getMailList" resultType="MailVO">
-       SELECT a.* FROM 
-        (SELECT mail_no,title,content,sender,receiver,referrer,referrer2,referrer3,send_date,receive_date,mail_check,mail_type,mail_type2,mail_type3,mail_type4,mail_type5, rownum as rn
-            FROM getmail
-            where ((receiver = #{mailVO.receiver} and mail_type2=#{mailVO.mailType2}) OR
-                (referrer = #{mailVO.referrer} and mail_type3=#{mailVO.mailType3}) OR
-                (referrer2 = #{mailVO.referrer2} and mail_type4=#{mailVO.mailType4}) OR
-                (referrer3 = #{mailVO.referrer3} and mail_type5=#{mailVO.mailType5}))
-            ) a
+     	 SELECT b.* FROM 
+			(SELECT a.*,ROWNUM as rn FROM 
+			(SELECT mail_no,title,content,sender,receiver,referrer,referrer2,referrer3,send_date,
+			        receive_date,mail_check,mail_type,mail_type2,mail_type3,mail_type4,mail_type5
+			        FROM getmail
+			            where ((receiver = #{mailVO.receiver} and mail_type2=#{mailVO.mailType2}) OR
+			                (referrer = #{mailVO.referrer} and mail_type3=#{mailVO.mailType3}) OR
+			                (referrer2 = #{mailVO.referrer2} and mail_type4=#{mailVO.mailType4}) OR
+			                (referrer3 = #{mailVO.referrer3} and mail_type5=#{mailVO.mailType5}))
+			            ORDER BY mail_check
+            ) a 
+         )b
 		  <![CDATA[
           	WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
           ]]>
 	</select>
+	<!-- 새 테이블(서버에서 받은 메일함) 상세조회 -->
+	<select id="getMailInfo" resultType="MailVO">
+		SELECT * FROM getmail
+		where mail_no = #{mailNo}
+	</select>
+	<!-- 새 테이블(서버에서 받은 메일함) 상세조회 시 읽은메일로 변경 -->
+	<update id="getMailInfoUpdate" parameterType="MailVO">
+		UPDATE getmail
+		set mail_check = #{readCheck}
+		where mail_no = #{mailNo}
+	</update>
+	<!-- 새 테이블(서버에서 받은 메일함) 보낸메일함 조회 -->
+	<select id="getMailSend" parameterType="MailVO">
+		SELECT b.* FROM 
+			(SELECT a.mail_no,a.title,a.content,a.sender,a.receiver,a.referrer,a.referrer2,a.referrer3,a.send_date,
+			        a.receive_date,a.mail_check,a.mail_type,a.mail_type2,a.mail_type3,a.mail_type4,a.mail_type5,ROWNUM as rn FROM 
+			(SELECT mail_no,title,content,sender,receiver,referrer,referrer2,referrer3,send_date,
+		        receive_date,mail_check,mail_type,mail_type2,mail_type3,mail_type4,mail_type5
+		        FROM getmail
+		            where ( sender = #{mailVO.sender} and mail_type=#{mailVO.mailType}  )
+		            ORDER BY mail_no desc
+		            ) a )b
+		     <![CDATA[
+          	WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+          ]]>
+	</select>
+	<!-- 새 테이블(서버에서 받은 메일함) 지운메일함 조회 -->
+	<select id="getMaildelete" parameterType="MailVO">
+		SELECT b.* FROM 
+			(SELECT a.mail_no,a.title,a.content,a.sender,a.receiver,a.referrer,a.referrer2,a.referrer3,a.send_date,
+			        a.receive_date,a.mail_check,a.mail_type,a.mail_type2,a.mail_type3,a.mail_type4,a.mail_type5,ROWNUM as rn FROM 
+			(SELECT mail_no,title,content,sender,receiver,referrer,referrer2,referrer3,send_date,
+		        receive_date,mail_check,mail_type,mail_type2,mail_type3,mail_type4,mail_type5
+		        FROM getmail
+		            where ( (sender = #{mailVO.sender} and mail_type=#{mailVO.mailType}) OR
+		                (receiver = #{mailVO.receiver} and mail_type2=#{mailVO.mailType}) OR
+		                (referrer = #{mailVO.referrer} and mail_type3=#{mailVO.mailType}) OR
+		                (referrer2 = #{mailVO.referrer2} and mail_type4=#{mailVO.mailType}) OR
+		                (referrer3 = #{mailVO.referrer3} and mail_type5=#{mailVO.mailType}) )
+		            ORDER BY mail_no desc
+		            ) a )b
+		    <![CDATA[
+          	WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+          ]]>
+	</select>
+	<!-- 새 테이블(서버에서 받은 메일함) 지우기 -->
+	<update id="getMailType1Del" parameterType="MailVO">
+		UPDATE getmail
+		set mail_type = #{mailType}
+		where mail_no = #{mailNo}
+	</update>
+	<update id="getMailType2Del" parameterType="MailVO">
+		UPDATE getmail
+		set mail_type2 = #{mailType}
+		where mail_no = #{mailNo}
+	</update>
+	<update id="getMailType3Del" parameterType="MailVO">
+		UPDATE getmail
+		set mail_type3 = #{mailType}
+		where mail_no = #{mailNo}
+	</update>
+	<update id="getMailType4Del" parameterType="MailVO">
+		UPDATE getmail
+		set mail_type4 = #{mailType}
+		where mail_no = #{mailNo}
+	</update>
+	<update id="getMailType5Del" parameterType="MailVO">
+		UPDATE getmail
+		set mail_type5 = #{mailType}
+		where mail_no = #{mailNo}
+	</update>
 </mapper>
