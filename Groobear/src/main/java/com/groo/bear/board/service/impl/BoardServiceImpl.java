@@ -134,5 +134,10 @@ public class BoardServiceImpl implements BoardService{
 		
 		return modifyResult;
 	}
+
+	@Override
+	public BoardVO authCheck(String id) {
+		return boardMapper.authCheck(id);
+	}
 	
 }

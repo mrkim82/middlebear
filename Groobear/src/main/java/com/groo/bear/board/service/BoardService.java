@@ -44,6 +44,7 @@ public interface BoardService {
 	//첨부파일 폴더안 파일 삭제 처리
 	public boolean remove(int boardNo);
 	
-
+	// 로그인 한 사람의 부서 권한 확인
+	public BoardVO authCheck(String id);
 	
 }
