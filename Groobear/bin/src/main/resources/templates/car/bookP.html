@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/myPageATiles}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<!-- Font Awesome -->
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+	rel="stylesheet" />
+
+
+
+
+
+
+</head>
+<body>
+	<div layout:fragment="content">
+		<script type="text/javascript"
+			src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+
+		<!-- Modal -->
+		<div class="modal fade" id="bookModal" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">운행 일지 수정</h5>
+						<button type="button" class="btn-close" data-mdb-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+
+					<form class="signup-form" name="commuteInfoForm">
+						<div class="modal-body" style="display:inline-block;">
+							<div class="form-group mb-3" style="display:inline-block;width: 470px;border:1px solid black;border-radius: 2px;">
+								<table style="float: left; width: 400px; ">
+									<thead></thead>
+									<tbody>
+										<tr><td>문서 번호 : <span id="mPayNo"></span></td></tr>
+										<tr><td>작성자 : <span id="mName"></span> / <span id="mDept"></span></td></tr>
+										<tr><td>작성일자 : <span id="mIssueDate"></span></td></tr>
+										<tr><td id="sessionId" style="display: none;">[[${session.Id}]]</td></tr>
+									</tbody>
+								</table>
+								<table style="float: left; width: 380px;">
+									<thead></thead>
+									<tbody>
+										<tr>
+											<td>133333333333</td>
+											<td>23333333333</td>
+											<td>33333333333333333333333</td>
+										</tr>
+										<tr>
+											<td>45555555555</td>
+											<td>55555555555</td>
+											<td>6555555555555555</td>
+										</tr>
+										<tr>
+											<td>75555555555</td>
+											<td>85555555555</td>
+											<td>9555555555555555</td>
+										</tr>
+									</tbody>
+								</table>
+								<table style="float: left; width: 790px;">
+									<thead></thead>
+									<tbody>
+										<tr><td>사유 : <span id="mPurpose"></span>
+										<tr><td>행선지 : <span id="mDestination"></span>
+										<tr><td>운행일자 : <span id="mOperDate"></span>
+										<tr><td>운행전 키로수 : <span id="mBefored"></span>
+										<tr><td>운행후 키로수 : <span id="mAfterd"></span>
+										<tr><td>전도금 : <span id="mImprest"></span>
+										<tr style="display:none;"><td><input id="mDocType" style="border:none;"></td></tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" id="saveBtn" class="btn btn-primary">수정</button>
+							<button type="button" class="btn btn-secondary"
+								data-mdb-dismiss="modal">닫기</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+
+		<div>
+			<h2 style="margin-top: 25px;">운행일지 관리</h2>
+		</div>
+		<div style="position: absolute;margin-left: 6px;right: 25px;top: 25px;">
+			<form name="searchForm" action="bookList">
+				<div>
+					<button type="button" onclick="prevMon()" class="btn btn-primary" style="border-radius: 10px;padding: 5px 7px 5px 5px;color: black;background-color: #fff;border-color: #399f61;">
+						&laquo;</button>
+					<input
+						style="border: 1px solid rgba(0, 0, 0, 0.1);border-radius: 10px;height: 35px;border-color: #399f61;text-align: center;"
+						type="month" name="monthDate" id="monthDate"
+						onchange="changeMon()" th:value="${monthDate}">
+					<button type="button" onclick="nextMon()" class="btn btn-primary" style="border-radius: 10px;padding: 5px 5px 5px 7px;color: black;background-color: #fff;border-color: #399f61;">
+						&raquo;</button>
+				</div>
+			</form>
+		</div>
+		<div>
+			<table class="table table-hover" style="margin-top: 5px;">
+				<thead>
+					<tr>
+						<th>작성일</th>
+						<th>사번</th>
+						<th>부서</th>
+						<th>이름</th>
+						<th>행선지</th>
+						<th>운행 키로수</th>
+						<th>진행 상태</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="cml table-default" th:if="${bookList != null}"
+						th:each="bk, stat:${bookList}" th:onclick="bookInfo()"
+						data-mdb-toggle="modal" data-mdb-target="#bookModal">
+						<td>[[${#dates.format(bk.issueDate,'MM/dd')}]]</td>
+						<td class="empNo">[[${bk.empNo}]]</td>
+						<td class="dept">[[${bk.deptName}]]</td>
+						<td class="name">[[${bk.name}]]</td>
+						<td class="destination">[[${bk.destination}]]</td>
+						<td class="driveKM">[[${bk.afterd}-${bk.befored}]]</td>
+						<td th:if="${bk.payStatus2 == 'F' || bk.payStatus3 == 'F'}">반려</td>
+						<td
+							th:if="${bk.payStatus2 == 'N' || bk.payStatus3 == 'N'} and ${bk.payStatus2 != 'F'}">진행중</td>
+						<td th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'Y'}">지급
+							완료</td>
+						<td
+							th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'N'} and ${bk.approver3 == ''}">지급
+							완료</td>
+						<td class="day" style="display: none;">[[${#dates.format(bk.day,'yyyy-MM-dd')}]]</td>
+						<td class="operDate" style="display: none;">[[${#dates.format(bk.operDate,'yyyy-MM-dd')}]]</td>
+						<td class="issueDate" style="display: none;">[[${#dates.format(bk.issueDate,'yyyy-MM-dd')}]]</td>
+						<td class="id" style="display: none;">[[${bk.id}]]</td>
+						<td class="payNo" style="display: none;">[[${bk.payNo}]]</td>
+						<td class="docType" style="display: none;">[[${bk.docType}]]</td>
+						<td class="befored" style="display: none;">[[${bk.befored}]]</td>
+						<td class="afterd" style="display: none;">[[${bk.afterd}]]</td>
+						<td class="purpose" style="display: none;">[[${bk.purpose}]]</td>
+						<td class="destination" style="display: none;">[[${bk.destination}]]</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+		<div>
+			<ul class="paging pagination pagination-sm"
+				th:if="${paging.endPage != 0}">
+
+				<li class="page-item disabled"><a class="page-link"
+					th:href="|javascript:goPage(1)|">&laquo;</a></li>
+				<li th:if="${paging.prev}" class="page-item disabled"><a
+					th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a></li>
+				<li class="page-item active"
+					th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+					<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+					th:text="${num}"></a>
+				</li>
+				<li th:if="${paging.next and paging.endPage > 0}"><a
+					th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a></li>
+				<li class="page-item"><a class="page-link"
+					th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+				</li>
+			</ul>
+		</div>
+
+
+		<script th:inline="javascript">
+			function goPage(p) {
+				searchForm.page.value = p;
+
+				searchForm.submit();
+			}
+
+
+				function bookInfo() {
+				console.log("hi");
+
+				let operDate = event.currentTarget.querySelector('.operDate').innerText;
+				let empNo = event.currentTarget.querySelector('.empNo').innerText;
+				let dept = event.currentTarget.querySelector('.dept').innerText;
+				let name = event.currentTarget.querySelector('.name').innerText;
+				let id = event.currentTarget.querySelector('.id').innerText;
+				let payNo = event.currentTarget.querySelector('.payNo').innerText;
+				let befored = event.currentTarget.querySelector('.befored').innerText;
+				let afterd = event.currentTarget.querySelector('.afterd').innerText;
+				let issueDate = event.currentTarget.querySelector('.issueDate').innerText;
+				let purpose = event.currentTarget.querySelector('.purpose').innerText;
+				let destination = event.currentTarget.querySelector('.destination').innerText;
+				let docType = event.currentTarget.querySelector('.docType').innerText;
+				let imprest = (parseInt(afterd) - parseInt(befored)) * 1500;
+				
+				
+				console.log(destination);
+				console.log(payNo);
+				console.log(empNo);
+				
+				
+				document.querySelector('#mOperDate').textContent = operDate;
+				//document.querySelector('#mEmpNo').textContent = empNo;
+				document.querySelector('#mDept').textContent = dept;
+				document.querySelector('#mName').textContent = name;
+				//document.querySelector('#mId').value = id;
+				document.querySelector('#mPayNo').textContent = payNo;
+				document.querySelector('#mBefored').textContent = befored;
+				document.querySelector('#mAfterd').textContent = afterd;
+				document.querySelector('#mIssueDate').textContent = issueDate;
+				document.querySelector('#mPurpose').textContent = purpose;
+				document.querySelector('#mDestination').textContent = destination;
+				document.querySelector('#mImprest').textContent = imprest;
+				document.querySelector('#mDocType').textContent = docType;
+				
+				
+				
+				
+			}
+
+			
+			
+			var today = new Date();
+
+			var year = today.getFullYear();
+			var month = ('0' + (today.getMonth() + 1)).slice(-2);
+			var day = ('0' + today.getDate()).slice(-2);
+
+			var dateString = year + '-' + month + '-' + day;
+
+
+			$('#commuteModal').on('hidden.bs.modal', function(event) {
+				commuteInfoForm.reset();
+			})
+
+			
+
+			var mon = document.querySelector('#monthDate').value
+
+			console.log(mon);
+
+			var nowMon = new Date(mon);
+
+			var nextMonth = ('0' + (nowMon.getMonth() + 2)).slice(-2);
+			var prevMonth = ('0' + (nowMon.getMonth())).slice(-2);
+
+			var nextMonthString = year + '-' + nextMonth;
+			var prevMonthString = year + '-' + prevMonth;
+
+			console.log(prevMonthString);
+			console.log(nextMonthString);
+
+			function nextMon() {
+				location.href = '/bookList/' + nextMonthString;
+			}
+			function prevMon() {
+				location.href = '/bookList/' + prevMonthString;
+				
+			}
+			function changeMon() {
+				let monthDate = document.querySelector('#monthDate').value;
+				location.href = '/bookList/' + monthDate;
+			}
+			function changeKM(){
+				let befored = document.querySelector('#mBefored').value;
+				let afterd = document.querySelector('#mAfterd').value;
+				let imprest = document.querySelector('#mImprest');
+
+				console.log(befored)
+				console.log(parseInt(befored))
+				console.log(((parseInt(afterd)-parseInt(befored)))*1500)
+				
+				imprest.value = ((parseInt(afterd)-parseInt(befored)))*1500;
+				
+			}
+			
+			
+			document.querySelector('#saveBtn').addEventListener('click',function(){
+			let issueDate = document.querySelector('#mIssueDate').textContent;	
+				
+		
+				let data = {
+						'operDate' : document.getElementById('mOperDate').value,
+						'destination' : document.getElementById('mDestination').value,
+						'befored' : document.getElementById('mBefored').value,
+						'afterd' : document.getElementById('mAfterd').value,
+						'imprest' : document.getElementById('mImprest').value,
+						'purpose' : document.getElementById('mPurpose').value,
+						'payNo' : document.getElementById('mPayNo').textContent,
+						'docType' : document.getElementById('mDocType').value
+						}
+				location.href="/payInfo?payNo="+document.getElementById('mPayNo').textContent+"&docType="+document.getElementById('mDocType').textContent		
+				
+				/* console.log(data);
+					fetch('/paymentUpdate', {
+			           method : 'post',
+			           headers : {
+			              'Content-Type' : 'application/json'
+			           },
+			           body : JSON.stringify(data)
+					})
+			        .then(response => response.text())
+			        .then(result => {
+			           if(result == 'success'){
+			        	   console.log('success')
+			        	   alert('success');
+			        	   location.reload();
+			           } else if(result == 'fail'){
+			        	   console.log('fail')
+			        	   alert('fail')
+			           }else {
+			        	   console.log('etc')
+			           }
+			       		})
+			        .catch(err => console.log(err))
+					
+					location.href="/bookList/"+issueDate.substr(0,7); */
+			})
+										
+		</script>
+
+	</div>
+
+</body>
+</html>

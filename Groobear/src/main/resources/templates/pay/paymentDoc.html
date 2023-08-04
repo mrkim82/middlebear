@@ -3,79 +3,39 @@
  layout:decorate="~{layout/paymentTiles}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>결재문서 작성 페이지</title>
 </head>
-<body layout:fragment="content">
+<body>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-	<div>
+	<div layout:fragment="content">
 		<form style="width:1200px; height:2000px">
-			<table style="float:right">
-				<thead>
-					<tr style="display:inline-block">
-						<td style="width:130px">기안자</td>
-						<td style="width:130px">결재자1</td>
-						<td style="width:100px">결재자2</td>
-					</tr>
-				</thead>
+			
+			<table style="float:left;width:600px;height:1000px" class="table">
 				<tbody>
-					<tr style="display:inline-block">
-						<td style="width:130px; height:100px; background-color:aquamarine">기안자사인1</td>
-					</tr>
-					<tr style="display:inline-block">
-						<td style="width:130px; height:100px; background-color:MediumOrchid">결재자사인1</td>
-					</tr>
-					<tr style="display:inline-block">
-						<td style="width:130px; height:100px; background-color:DeepSkyBlue">결재자사인2</td>
-					</tr>
-					<tr id="drafter">
-						<td></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-					</tr>
-					<tr id="payUserList1">
-						<td></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-					</tr>
-					<tr id="payUserList2">
-						<td></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-					</tr>
-				</tbody>
-			</table>
-			<table style="float:left">
-				<tbody>
-					<tr>
+					<tr style="height:50px;">
 						<td>문서번호 : [[${paymentNo}]]</td>
 					</tr>
-					<tr>
+					<tr  style="width:400px;height:50px;">
 						<td id="drafter">기안자 : [[${userInfo.name}]] [[${userInfo.rank}]] [[${userInfo.deptName}]]</td>
 					</tr>
-					<tr>
+					<tr style="height:50px;">
 						<td><button id="childClick" type="button" onclick="payUserSelect();">결재자선택</button></td>
 					</tr>
-					<tr>
+					<tr style="height:50px;">
 						<td><button id="referrerClick" type="button" onclick="referrerSelect();">참조자선택</button></td>
 					</tr>
 					<tr id="referrerList" >
-						<td style="width:150px" ></td>
+						<td style="width:50px" ></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
-						<td style="width:150px"></td>
+						<td style="width:50px"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
-						<td style="width:150px"></td>
+						<td style="width:50px"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
@@ -181,6 +141,47 @@
 						<tr style="display: none;"><td><textarea id="robincomment" style="width:400px; height:100px"></textarea></td></tr>
 						<tr><td><button type="button" onclick="payNumSend3()">결재</button></td></tr>
 					</tbody>
+				</tbody>
+			</table>
+			<table style="float:right;margin-right:200px">
+				<thead>
+					<tr style="display:inline-block">
+						<td style="width:130px">기안자</td>
+						<td style="width:130px">결재자1</td>
+						<td style="width:100px">결재자2</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="display:inline-block">
+						<td style="width:130px; height:100px; background-color:aquamarine">기안자사인1</td>
+					</tr>
+					<tr style="display:inline-block">
+						<td style="width:130px; height:100px; background-color:MediumOrchid">결재자사인1</td>
+					</tr>
+					<tr style="display:inline-block">
+						<td style="width:130px; height:100px; background-color:DeepSkyBlue">결재자사인2</td>
+					</tr>
+					<tr id="drafter" style="display:inline-block">
+						<td></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+					</tr>
+					<tr id="payUserList1" style="display:inline-block">
+						<td></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+					</tr>
+					<tr id="payUserList2" style="display:inline-block">
+						<td></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+						<td style="display:none"></td>
+					</tr>
 				</tbody>
 			</table>
 		</form>
@@ -304,29 +305,35 @@
 			km2 = document.getElementById('km2').value;
 			imprest = ((km2)*1 - (km1)*1)*1500;
 			purpose = document.getElementById('purpose').value;
-			console.log(carDate);
-			console.log(carAddr);
-			console.log(km1);
-			console.log(km2);
-			console.log(imprest);
 			payUserList1 = document.getElementById('payUserList1').children[1].textContent;
 			payUserList2 = document.getElementById('payUserList2').children[1].textContent;
 			if(payUserList1 === ''){
 				alert('결재자1이 없습니다 반드시 등록하세요');
 				return;
 			}
+			if(carDate === ''){
+				alert('운행일자를 지정하지 않았습니다 반드시 등록하세요');
+				return;
+			}
+			if(carAddr === ''){
+				alert('행선지를 등록하지 않았습니다 반드시 등록하세요');
+				return;
+			}
+			if((km1 ==='') || (km2 ==='') ){
+				alert('운행 전,후 등의 값을 넣지 않았습니다 반드시 등록하세요');
+				return;
+			}
+			if(purpose === ''){
+				alert('사유를 적지 않앗습니다 반드시 등록하세요');
+				return;
+			}
 			if(referrerList.children[1].textContent !== '' && 
 					referrerList.children[6].textContent !== '' &&
 					referrerList.children[11].textContent !== ''){
-					console.log('11번째는 있음');
 					referrer1 = referrerList.children[1].textContent;
 					referrer2 = referrerList.children[6].textContent;
 					referrer3 = referrerList.children[11].textContent;
 					referrerInfo = referrer1+','+referrer2+','+referrer3;
-					console.log(referrer1);
-					console.log(referrer2);
-					console.log(referrer3);
-					console.log(referrerInfo);
 			}
 			if(referrerList.children[1].textContent !== '' && 
 				referrerList.children[6].textContent !== '' &&
@@ -334,23 +341,12 @@
 				referrer1 = referrerList.children[1].textContent;
 				referrer2 = referrerList.children[6].textContent;
 				referrerInfo = referrer1+','+referrer2;
-				console.log(referrer1);
-				console.log(referrer2);
-				console.log(referrerInfo);
 			}
 			if(referrerList.children[1].textContent !== '' && 
 				referrerList.children[6].textContent === '' && 
 				referrerList.children[11].textContent === ''){
 				referrerInfo = referrerList.children[1].textContent;
-				console.log(referrerInfo);
 			}
-			console.log('payNo',payNo);
-			console.log('carDate',carDate);
-			console.log('selectPay',selectPay.value);
-			console.log('id',drafter);
-			console.log('approver2',payUserList1);
-			console.log('approver3',payUserList2);
-			console.log('referrer',referrerInfo);
 			//파일 보내는 ajax 따로써야됨
 			if(payUserList1 !==''){
 				//controller에 전송하는 운행일지 데이터 값
@@ -441,18 +437,29 @@
 				alert('결재자1이 없습니다 반드시 등록하세요');
 				return;
 			}
+			if(off1 === ''){
+				alert('시작일을 등록하지 않았습니다 반드시 등록하세요');
+				return;
+			}
+			if(off2 === ''){
+				alert('복귀일을 등록하지 않았습니다 반드시 등록하세요');
+				return;
+			}
+			if(offtitle === ''){
+				alert('제목을 등록하지 않았습니다 반드시 등록하세요');
+				return;
+			}
+			if(offcontent === ''){
+				alert('내용을 등록하지 않았습니다 반드시 등록하세요');
+				return;
+			}
 			if(referrerList.children[1].textContent !== '' && 
 				referrerList.children[6].textContent !== '' &&
 				referrerList.children[11].textContent !== ''){
-				console.log('11번째는 있음');
 				referrer1 = referrerList.children[1].textContent;
 				referrer2 = referrerList.children[6].textContent;
 				referrer3 = referrerList.children[11].textContent;
 				referrerInfo = referrer1+','+referrer2+','+referrer3;
-				console.log(referrer1);
-				console.log(referrer2);
-				console.log(referrer3);
-				console.log(referrerInfo);
 			}
 			if(referrerList.children[1].textContent !== '' && 
 				referrerList.children[6].textContent !== '' &&
@@ -460,15 +467,11 @@
 				referrer1 = referrerList.children[1].textContent;
 				referrer2 = referrerList.children[6].textContent;
 				referrerInfo = referrer1+','+referrer2;
-				console.log(referrer1);
-				console.log(referrer2);
-				console.log(referrerInfo);
 			}
 			if(referrerList.children[1].textContent !== '' && 
 				referrerList.children[6].textContent === '' && 
 				referrerList.children[11].textContent === ''){
 				referrerInfo = referrerList.children[1].textContent;
-				console.log(referrerInfo);
 			}
 			
 			if(payUserList1 !==''){
@@ -507,9 +510,6 @@
 	  			    }	
 	    		});
 				//controller에 전송하는 운행일지 첨부파일 1번
-				console.log('offuuid',offuuid);
-				console.log('offuploadPath',offuploadPath);
-				console.log('offfileName',offfileName);
 				$.ajax({
 	    			url: "/logInsert",
 	  			    method: "POST",
@@ -528,8 +528,6 @@
 	  			    }	
 	    		});
 			}
-			console.log(payUserList1);
-			console.log(payUserList2);
 		}
 		//품의서
 		function payNumSend3(){
@@ -542,18 +540,21 @@
 				alert('결재자1이 없습니다 반드시 등록하세요');
 				return;
 			}
+			if(robintitle === ''){
+				alert('제목을 입력하지 않았습니다 반드시 입력하세요');
+				return;
+			}
+			if(robintitle === ''){
+				alert('내용을 입력하지 않았습니다 반드시 입력하세요');
+				return;
+			}
 			if(referrerList.children[1].textContent !== '' && 
 					referrerList.children[6].textContent !== '' &&
 					referrerList.children[11].textContent !== ''){
-					console.log('11번째는 있음');
 					referrer1 = referrerList.children[1].textContent;
 					referrer2 = referrerList.children[6].textContent;
 					referrer3 = referrerList.children[11].textContent;
 					referrerInfo = referrer1+','+referrer2+','+referrer3;
-					console.log(referrer1);
-					console.log(referrer2);
-					console.log(referrer3);
-					console.log(referrerInfo);
 			}
 			if(referrerList.children[1].textContent !== '' && 
 				referrerList.children[6].textContent !== '' &&
@@ -561,17 +562,12 @@
 				referrer1 = referrerList.children[1].textContent;
 				referrer2 = referrerList.children[6].textContent;
 				referrerInfo = referrer1+','+referrer2;
-				console.log(referrer1);
-				console.log(referrer2);
-				console.log(referrerInfo);
 			}
 			if(referrerList.children[1].textContent !== '' && 
 				referrerList.children[6].textContent === '' && 
 				referrerList.children[11].textContent === ''){
 				referrerInfo = referrerList.children[1].textContent;
-				console.log(referrerInfo);
 			}
-			
 			if(payUserList1 !==''){
 				//controller에 전송하는 운행일지 데이터 값
 				$.ajax({
@@ -624,21 +620,14 @@
 	  			    }	
 	    		});
 			}
-			console.log(payUserList1);
-			console.log(payUserList2);
 		}
 		//넣은 파일 미리 보여주는 함수
 		function showUploadResult1(uploadResultArr){
-            console.log(uploadResultArr)
 		  if(!uploadResultArr || uploadResultArr.length == 0){return ;}
 		  var uploadUL1 = $(".uploadResult1 ul");
 		  var str = "";
 		  
 		  $(uploadResultArr).each(function(i, obj){
-            console.log("11:06" + i)
-			  console.log("11:05" + obj)
-              console.log(obj.image)
-              console.log(obj.fileType)
 			   //image type
 		        if(obj.image){
 		          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
@@ -667,16 +656,11 @@
 		  uploadUL1.append(str);
 	    }
 		function showUploadResult2(uploadResultArr){
-            console.log(uploadResultArr)
 		  if(!uploadResultArr || uploadResultArr.length == 0){return ;}
 		  var uploadUL2 = $(".uploadResult2 ul");
 		  var str = "";
 		  
 		  $(uploadResultArr).each(function(i, obj){
-            console.log("11:06" + i)
-			  console.log("11:05" + obj)
-              console.log(obj.image)
-              console.log(obj.fileType)
 			   //image type
 		        if(obj.image){
 		          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
@@ -706,16 +690,11 @@
 	    }
 		
 		function showUploadResult3(uploadResultArr){
-            console.log(uploadResultArr)
 		  if(!uploadResultArr || uploadResultArr.length == 0){return ;}
 		  var uploadUL3 = $(".uploadResult3 ul");
 		  var str = "";
 		  
 		  $(uploadResultArr).each(function(i, obj){
-            console.log("11:06" + i)
-			  console.log("11:05" + obj)
-              console.log(obj.image)
-              console.log(obj.fileType)
 			   //image type
 		        if(obj.image){
 		          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
@@ -791,17 +770,34 @@
 		  
 		  var targetLi = $(this).closest("li");
 		  targetLi.remove();
-		  /* $.ajax({
-		  	url : 'deleteFile',
-		  	data : {fileName : targetFile, type : type},
-		  	dataType : 'text',
-		  	type : 'POST',
-		  		success : function(result) {
-		  			alert(result);
-		  			targetLi.remove();
-		  		}
-		  }); */
 	    });
+        $(".uploadResult2").on("click", "button", function(e){
+  		  console.log("delete file");
+  		  
+  		  var targetFile = $(this).data("file");
+  		  var type = $(this).data("type");
+  		  
+  		  var targetLi = $(this).closest("li");
+  		  targetLi.remove();
+  	    });
+        $(".uploadResult3").on("click", "button", function(e){
+  		  console.log("delete file");
+  		  
+  		  var targetFile = $(this).data("file");
+  		  var type = $(this).data("type");
+  		  
+  		  var targetLi = $(this).closest("li");
+  		  targetLi.remove();
+  	    });
+        $(".uploadResult4").on("click", "button", function(e){
+  		  console.log("delete file");
+  		  
+  		  var targetFile = $(this).data("file");
+  		  var type = $(this).data("type");
+  		  
+  		  var targetLi = $(this).closest("li");
+  		  targetLi.remove();
+  	    });
 	    var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
 	    var maxSize = 5242880;
 	
@@ -818,6 +814,9 @@
 	    }
 	    //운행전 첨부파일
 	    $("input[name='uploadFile1']").change(function(e) {
+	    	car1uuid = "";
+            car1fileName = "";
+            car1uploadPath = "";
 	        var formData = new FormData();
 	        var inputFile1 = $("input[name='uploadFile1']");
 	        var files = inputFile1[0].files;
@@ -851,6 +850,9 @@
 	    });
 	    //운행후 첨부파일
 	    $("input[name='uploadFile2']").change(function(e) {
+	    	car2uuid = "";
+            car2fileName = "";
+            car2uploadPath = "";
 	        var formData = new FormData();
 	        var inputFile2 = $("input[name='uploadFile2']");
 	        var files = inputFile2[0].files;
@@ -884,6 +886,9 @@
 	    });
 	    //연차계 첨부파일
 	    $("input[name='uploadFile3']").change(function(e) {
+	    	offuuid = "";
+    		offuploadPath = "";
+    		offfileName = "";
 	        var formData = new FormData();
 	        var inputFile3 = $("input[name='uploadFile3']");
 	        var files = inputFile3[0].files;

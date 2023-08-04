@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.board.mapper.BoardMapper">
+	<sql id="cri">
+		    <where>
+	        BOARD_TYPE = #{boardVO.boardType}
+	        <if test="cri.type != null and cri.type.equals('title')">
+	            AND b.title LIKE '%${cri.keyword}%'
+	        </if>
+	        <if test="cri.type != null and cri.type.equals('name')">
+	            AND a.name LIKE '%${cri.keyword}%'
+	        </if>
+	        <if test="cri.type != null and cri.type.equals('content')">
+	            AND b.content LIKE '%${cri.keyword}%'
+	        </if>
+	    </where>
+	 </sql>
+	 
+<select id="selectAllList" resultType="BoardVO">
+	     SELECT * 
+            FROM (
+              SELECT t.*, ROWNUM AS rn
+              FROM (SELECT * 
+	    FROM BOARD b JOIN (SELECT *
+	                        FROM  user_info i JOIN users u
+	                        ON i.emp_no = u.emp_no) a
+	    ON b.id = a.id
+		<include refid="cri"></include>
+	    ORDER BY b.board_no DESC
+	    ) t
+            )
+            <![CDATA[
+            WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+            ]]>
+	</select>
+	
+		<!-- 파일첨부 시 게시글 번호를 알기 위함  -->
+	<select id="boardNoSequence" resultType="int">
+    	SELECT BOARD_SEQ.NEXTVAL FROM DUAL
+	</select>
+	
+	
+	<!-- 페이징 -->
+	<select id="boardListCnt" resultType="int">
+	        SELECT count(*)
+	        FROM board b JOIN (SELECT *
+	                        FROM  user_info i JOIN users u
+	                        ON i.emp_no = u.emp_no) a
+	    ON b.id = a.id
+	        <include refid="cri"/>
+	</select>
+	
+
+	<select id="selectBoard" resultType="BoardVO" parameterType="int">
+		SELECT * 
+	    FROM BOARD b JOIN (SELECT *
+	                        FROM  user_info i JOIN users u
+	                        ON i.emp_no = u.emp_no) a
+	    ON b.id = a.id
+		WHERE  BOARD_NO = #{boardNo}
+	</select>
+	<insert id="insertBoard" parameterType="BoardVO">
+	
+	   INSERT INTO BOARD (
+	   			ID
+	   		  , BOARD_NO
+	   		  , BOARD_TYPE
+	   		  , TITLE
+	   		  , CONTENT
+	   		  , INSERT_DATE
+	   		  , BT_NO
+	   		  
+	   ) VALUES (
+	   			#{id}
+	   		  , #{boardNo}
+	   		  , #{boardType}
+	   		  , #{title}
+	   		  , #{content}
+	   		  , sysdate
+	   		  , (	SELECT NVL(MAX(bt_no),0) +1
+					FROM   BOARD
+					WHERE BOARD_TYPE = #{boardType})
+	   		  
+	   )
+	</insert>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateCount" parameterType="BoardVO" >
+		update board 
+		set count=count+1 where BOARD_NO = #{boardNo}
+	</update>
+	
+	<update id="updateBoard" parameterType="BoardVO">
+		UPDATE BOARD
+		<set>
+			<if test="title != null and !title.equals('')">
+				TITLE = #{title},
+			</if>
+			<if test="content != null and !content.equals('')">
+				content = #{content},
+			</if>
+			UPDATE_DATE = #{updateDate}
+		</set>
+		WHERE BOARD_NO = #{boardNo}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM BOARD
+		WHERE BOARD_NO = #{boardNo}
+	</delete>
+	
+	<!-- 댓글 -->
+	<select id="readBoardComment" resultType="BoardVO">
+      SELECT a.com_no, a.com_content, TO_CHAR(a.com_date, 'yyyy/MM/dd HH24:mi') AS com_Date,
+            c.name, u.profile_img, a.id, b.board_no
+      FROM com a JOIN users u
+      ON(a.id=u.id)
+      JOIN user_info c
+      ON(u.emp_no = c.emp_no)
+      JOIN board b
+      ON(a.board_no = b.board_no)
+      WHERE b.board_no = #{boardNo}
+      and b.board_Type IN ('N', 'K')
+   </select>
+	
+	<insert id="createBoardComment" parameterType="BoardVO">
+		INSERT INTO 
+				com
+				(com_no, board_no, com_content, id)
+		VALUES (
+				(SELECT NVL(MAX(com_no), 0) +1
+		         FROM com),
+		         #{boardNo},
+		         #{comContent},
+		         #{id}
+		)
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteBoardComment" parameterType="int">
+		DELETE FROM com
+		WHERE com_no = #{comNo}
+	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateBoardComment" parameterType="BoardVO">
+		UPDATE com
+		SET com_content = #{comContent}
+		WHERE com_no = #{comNo}
+	</update>
+	
+	<delete id="deleteCommentByBoardId" parameterType="int">
+		delete from com
+		where board_no = #{boardNo}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<div th:fragment="horizonBar">
+	<!-- 프로젝트 최 상단 바 -->
+	<div class="horizontal-bar">
+		<div>
+			<ul class="nav">
+				<li>
+					<!-- 스타일을 동적으로 적용하는 네모 -->
+					<button type="button" class="btn btn-primary square" data-toggle="modal"
+							th:style="'background-color: ' + ${projectTopBar.proColor}"
+							data-target="#squareStyle"></button>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="squareStyle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="squareStyleLabel">프로젝트 색상</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									
+									<div class="modal-body">
+										<ul class="nav justify-content-center">
+											<li class="nav-item" th:each="colors : ${readPublicCodeColorAll}">
+											<!-- <a class="nav-link" href="#"></a> -->
+									    <button type="button" class="btn btn-primary square nav-link"
+												th:style="'background-color: ' + ${colors.codeName}"
+												th:data-color-code="${colors.codeName}" onclick="saveColor()"></button>
+											</li>
+										</ul>
+									</div>
+									
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+										<button type="button" class="btn btn-primary" onclick="changeColor()">확인</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Modal끝 -->
+							
+				</li>
+				<li class="nav-item"><span class='material-icons'
+					style="cursor: pointer;">more_vert</span></li>
+				<li class="nav-item" th:text="${projectTopBar.proName}"></li>
+				<li class="nav-item" th:text="${projectTopBar.proContent}"
+					th:style="'margin-left:30px;'"></li>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- 프로젝트 탭 -->
+	<div class="horizontal-bar2">
+		
+		<nav class="nav">
+		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=1)}"
+		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '1'} ? 'bottomLine' : ''">업무</a>
+		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=2)}"
+		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '2'} ? 'bottomLine' : ''">피드</a>
+		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=3)}"
+		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '3'} ? 'bottomLine' : ''">간트차트</a>
+		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=4)}"
+		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '4'} ? 'bottomLine' : ''">캘린더</a>
+		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=5)}"
+		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '5'} ? 'bottomLine' : ''">파일</a>
+		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=6)}"
+		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '6'} ? 'bottomLine' : ''">알림</a>
+			<!-- 주소를 가져오는 방식 -->
+			<!-- <th:block th:text="${#strings.substringAfter((#strings.substringAfter(#request.requestURI, '/')), '/')}"></th:block>
+			<p th:text="${#request.requestURI}"></p>
+			<th:block th:text="${#strings.substringAfter(#request.getQueryString(), '=')}"></th:block> -->
+		<div>
+			<input type="text" id="proInSearch" placeholder="프로젝트 내 검색">
+			<span class="material-symbols-outlined spanCursor"
+				  data-toggle="modal"
+				  data-target="#inviteMember">group_add</span>
+			<span class="material-symbols-outlined spanCursor" onclick="delPro()">delete</span>
+			<span class="material-symbols-outlined spanCursor" onclick="exitProMem()">logout</span>
+		</div>
+		</nav>
+	</div>
+	
+	<!-- 인원 초대 모달 -->
+	<div class="modal fade" id="inviteMember" tabindex="-1" aria-labelledby="inviteMemberLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="inviteMemberLabel">초대 할 인원</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<ul class="list-group">
+						<li class="list-group-item"
+							th:each="pm : ${readPartiListM}">
+							<input type="checkbox"
+								   th:data-parti-member="${pm.id}">
+								<span th:text="${pm.rank}"></span>	  
+								<span th:text="${pm.name}"></span>	  
+								<span th:text="${pm.email}"></span>	  
+						</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-primary" onclick="inviteMail()">저장</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 인원 초대 모달 종료 -->
+
+	<!-- 검색기능 -->
+	<script type="text/javascript">
+		proInSearch.addEventListener('keyup', function(event) {
+			if(event.keyCode === 13) {
+				if(proInSearch.value == '') {
+					alert('빈값 허용 안함');
+					proInSearch.focus();
+					return false;
+				}
+				let searchKeyword = proInSearch.value;
+				location.href="/proSearch/" + projectNo + "?search=" + searchKeyword;
+			}
+		});
+	</script>
+	
+	<!-- 색상 변경 -->
+	<script>
+		let newColor;
+		 	
+		//클릭시 색상 정보 저장
+		function saveColor() {
+			newColor = event.target.dataset.colorCode;
+		}
+		
+		function changeColor() {
+			fetch("/updateProMemColor", {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					'proColor' : newColor,
+					'proNo': projectNo
+				})
+			})
+			.then(response => response.json())
+			.then(res => {
+				if(res.result == '성공') {
+					$('#squareStyle').modal('hide');//모달창 닫기
+					document.getElementsByClassName('square')[0].style.backgroundColor = newColor;//색상변환
+				} else {
+					alert('실패');
+				}
+			});
+		};
+	</script>
+	
+	<!-- 프로젝트 나가기 -->
+	<script>
+		function exitProMem() {
+			
+			if(proDetailCount == 1) {
+				alert('프로젝트 인원이 한명입니다. 프로젝트를 삭제해주세요');
+				return false;
+			}
+			
+			fetch("/delProMemOut", {
+				  method: 'DELETE',
+				  headers: {
+				    'Content-Type': 'application/json'
+				  },
+				  body: JSON.stringify(projectNo)
+				})
+			.then(response => response.json())
+			.then(res => {
+				location.href ="/proMain";
+			});
+		};
+	</script>
+	
+	<!-- 프로젝트 삭제 -->
+	<script>
+		function delPro() {
+			
+			fetch("/delPro", {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(Number(projectNo))
+			})
+			.then(response => response.json())
+			.then(res => {
+				location.href="/proMain";
+			})
+			.catch(error => {
+				console.error('Error: ',error);
+			});
+		};
+	</script>
+	
+	<!-- 프로젝트 초대하기 -->
+	<script>
+		function inviteMail() {
+			let inputs = inviteMember.querySelectorAll('input[type="checkbox"]:checked');
+			let idArr = [];
+			
+			//체크된 체크박스의 정보 가져오기(초대받을 사람의 정보)
+			inputs.forEach(inputv=> {
+				let viteObj = {
+					'proNo' : projectNo,
+					'id' : inputv.dataset.partiMember
+				};
+				idArr.push(viteObj);
+			});
+			
+			//체크값 확인
+			if(idArr.length == 0) {
+				alert('체크된 값이 없습니다.')
+				return false;
+			}
+			
+			fetch("/inviteMail", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(idArr)
+			})
+			.then(response => response.json())
+			.then(res => {
+				alert(res.result + '건 초대')
+				$('#inviteMember').modal('hide');//모달창 닫기
+				$('#inviteMember input[type="checkbox"]:checked').each(function() {
+					$(this).parent().remove();
+				});
+				//모달 안의 값 초기화 시켜보기
+			});
+		};
+	</script>
+</div>	
+</body>
+</html>

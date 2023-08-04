@@ -35,6 +35,7 @@ public class CommuteVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date endDay;
 	
+	
 	private String monthDate;
 	
 	private int overWorkTime;

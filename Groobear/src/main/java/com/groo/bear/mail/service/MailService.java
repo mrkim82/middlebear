@@ -49,5 +49,23 @@ public interface MailService {
 	public String userIdGet(String email);
 	//첨부파일 조회
 	public List<FilesVO> getAttach(int mailNo);
+	//서버에서 받아온 이메일 넣는구문
+	public int serverGetInsertMail(MailVO mailVO);
+	//서버에서 받아온 메일 받은메일함
+	public List<MailVO> getMailList(Criteria cri, MailVO mailVO);
+	//서버에서 받아온 메일 상세조회
+	public MailVO getMailInfo(int mailNo);
+	//서버에서 받아온 메일 상세조회시 읽은메일로 변경
+	public int getMailInfoUpdate(MailVO mailVO);
+	//서버에서 받아온 메일 보낸메일함
+	public List<MailVO> getMailSend(Criteria cri, MailVO mailVO);
+	//서버에서 받아온 메일 지운메일함
+	public List<MailVO> getMaildelete(Criteria cri, MailVO mailVO);
+	//메일 삭제(지운메일함으로 보내는 업데이트문)
+	public int getMailType1Del(MailVO mailVO);
+	public int getMailType2Del(MailVO mailVO);
+	public int getMailType3Del(MailVO mailVO);
+	public int getMailType4Del(MailVO mailVO);
+	public int getMailType5Del(MailVO mailVO);
 	
 }

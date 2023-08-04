@@ -32,8 +32,8 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public List<ChatMessageDTO> MessageAllList(int roomNo) {
-		return chatMapper.MessageAllList(roomNo);
+	public List<ChatMessageDTO> MessageAllList(ChatMessageDTO chatMessageDTO) {
+		return chatMapper.MessageAllList(chatMessageDTO);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class ChatServiceImpl implements ChatService {
 
 
 	@Override
-	public String getLastMessage(int roomNo) {
+	public RoomDTO getLastMessage(int roomNo) {
 	    return chatMapper.getLastMessage(roomNo);
 	}
 
@@ -94,6 +94,19 @@ public class ChatServiceImpl implements ChatService {
 	public List<ChatMessageDTO> MessageAllListReal(ChatMessageDTO chatMessageDTO) {
 		return chatMapper.MessageAllListReal(chatMessageDTO);
 	}
+
+
+	@Override
+	public RoomDTO getRoomName(int roomNo) {
+		return chatMapper.getRoomName(roomNo);
+	}
+
+
+	@Override
+	public List<RoomDTO> getUsersName(int roomNo) {
+		return chatMapper.getUsersName(roomNo);
+	}
+	
 	
 	
 }

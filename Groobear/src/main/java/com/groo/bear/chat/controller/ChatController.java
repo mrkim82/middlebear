@@ -39,42 +39,40 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
     
-//    //메세지 전체조회1
-//    @GetMapping("/chat/{roomNo}")
-//    public String rooms(HttpSession session, @PathVariable Integer roomNo, Model model, ChatMessageDTO chatDTO) {
-//        String name = (String)session.getAttribute("Name");
-//        model.addAttribute("name", name);
-//        String id = (String)session.getAttribute("Id");
-//        model.addAttribute("id", id);
-//        model.addAttribute("roomNo", roomNo);
-//     // ChatMessageDTO로 변경하고 시간 정보를 포함한 메시지 전체 리스트를 가져옵니다.
-//        List<ChatMessageDTO> chatMessageList = chatService.MessageAllList(roomNo);
-//        model.addAttribute("chatDTO", chatMessageList);
-//
-//        return "chat/chat";
-//    }
-  //메세지 전체조회2
+  //메세지 전체조회1
     @GetMapping("/chat/{roomNo}")
     public String rooms(HttpSession session, @PathVariable Integer roomNo, Model model, ChatMessageDTO chatDTO) {
         String name = (String)session.getAttribute("Name");
         model.addAttribute("name", name);
+        
         String id = (String)session.getAttribute("Id");
         model.addAttribute("id", id);
         model.addAttribute("roomNo", roomNo);
-     // ChatMessageDTO로 변경하고 시간 정보를 포함한 메시지 전체 리스트를 가져옵니다.
-        List<ChatMessageDTO> chatMessageList = chatService.MessageAllListReal(chatDTO);
+        
+        chatDTO.setRoomNo(roomNo);
+        chatDTO.setId(id);
+        List<ChatMessageDTO> chatMessageList = chatService.MessageAllList(chatDTO);
         model.addAttribute("chatDTO", chatMessageList);
-
+        
+        RoomDTO updatedRoomDTO = chatService.getRoomName(roomNo);
+        model.addAttribute("roomDTO", updatedRoomDTO);
+        
+        RoomDTO usersNameDTO = new RoomDTO();
+        usersNameDTO.setRoomNo(roomNo);
+        List<RoomDTO> roomDTO = chatService.getUsersName(roomNo);
+        model.addAttribute("usersName", roomDTO);
+        
+        System.out.println(roomDTO + "뭐가 찍히는지 보자");
+        
         return "chat/chat";
     }
-    
+
     //메세지 받고 주기
     @MessageMapping("/chat/{roomNo}") 
     public void send(ChatMessageDTO chatMessage, @DestinationVariable int roomNo) {
         try {
             messagingTemplate.convertAndSend("/topic/messages/" + roomNo , chatMessage);
             chatService.sendMessage(chatMessage); 
-            System.out.println(chatMessage + "chatMessage 찾기용");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,16 +85,16 @@ public class ChatController {
     	
     	String id = (String)session.getAttribute("Id");
     	List<RoomDTO> rooms = chatService.chatRoomList(id);
-    	System.out.println(rooms);
         for (RoomDTO room : rooms) {
             int count = chatService.countRoomMembers(room.getRoomNo());
             room.setParticipantCount(count); // 참여자 수 설정
          // 마지막 메시지 설정
-            String lastMessage = chatService.getLastMessage(room.getRoomNo());
-            if (lastMessage != null) {
-                room.setLastMessage(lastMessage);
+            RoomDTO lastMessageRoom = chatService.getLastMessage(room.getRoomNo());
+            if (lastMessageRoom != null && lastMessageRoom.getContent() != null) {
+                room.setLastMessage(lastMessageRoom.getContent());
+                room.setName(lastMessageRoom.getName());
             } else {
-                room.setLastMessage("메세지 내용이 없습니다.");
+                room.setLastMessage("메시지 내용이 없습니다.");
             }
         }
         model.addAttribute("rooms", rooms);
@@ -132,15 +130,16 @@ public class ChatController {
         return Collections.singletonMap("roomNo", roomNo);
     }
     
-
-    
     //HTTP를 사용하려면 @PostMapping을, 웹소켓과 STOMP를 사용하려면 @MessageMapping
     
   //채팅방나가기.
     @PostMapping("/deleteChatroom")
     @ResponseBody
-    public ResponseEntity<?> deleteChatroom(@RequestBody RoomDTO roomDTO) {
-        String id = roomDTO.getId();
+    public ResponseEntity<?> deleteChatroom(HttpSession session, @RequestBody RoomDTO roomDTO) {
+    	String id = (String)session.getAttribute("Id");
+    	roomDTO.setId(id);
+    	
+    	//String id = roomDTO.getId();
         int roomNo = roomDTO.getRoomNo();
 
         // 현재 시간을 가져와 원하는 문자열 형식으로 변환
@@ -151,12 +150,9 @@ public class ChatController {
         ChatMessageDTO chatMessage = new ChatMessageDTO();
         chatMessage.setContent(id + "님이 채팅방에서 나갔습니다. (" + formattedTime + ")");
         chatMessage.setRoomNo(roomNo);
-        System.out.println(id + "님이 채팅방에서 나갔습니다. 테스트 (" + formattedTime + ")");
         // 메시지를 채팅방에 전송
-        System.out.println(chatMessage);                                                                                                                                                         
         messagingTemplate.convertAndSend("/topic/messages/" + roomNo, chatMessage);
         // 메시지를 데이터베이스에 저장
-        System.out.println(chatMessage);
         chatService.sendMessage(chatMessage);
 
         int isDeleted = chatService.deleteChatRoom(roomDTO); // chatService는 채팅방을 관리하는 서비스 객체입니다.
@@ -166,7 +162,6 @@ public class ChatController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
     
     @GetMapping("/empAllList")
     @ResponseBody
@@ -197,7 +192,6 @@ public class ChatController {
             chatMessage.setRoomNo(roomNo);
             // 메시지를 채팅방에 전송
             messagingTemplate.convertAndSend("/topic/messages/" + roomNo, chatMessage);
-            System.out.println();
             chatService.sendMessage(chatMessage);
         }
 

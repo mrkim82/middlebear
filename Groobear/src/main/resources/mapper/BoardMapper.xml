@@ -18,7 +18,7 @@
 	    </where>
 	 </sql>
 	 
-<select id="selectAllList" resultType="BoardVO">
+<!-- <select id="selectAllList" resultType="BoardVO">
 	     SELECT * 
             FROM (
               SELECT t.*, ROWNUM AS rn
@@ -31,6 +31,25 @@
 	    ORDER BY b.board_no DESC
 	    ) t
             )
+            <![CDATA[
+            WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+            ]]>
+	</select> -->
+	
+	<select id="selectAllList" resultType="BoardVO">
+	     SELECT * 
+            FROM ( 
+              SELECT t.*, ROWNUM AS rn
+              FROM (select c.id, c.dept_auth, c.emp_no, c.name, b.board_no, b.board_type, b.title, b.content, b.insert_date, b.update_date, count, bt_no 
+from board b join (select u.id, a.dept_auth, a.emp_no, a.name
+                    from users u join (select d.dept_auth, i.emp_no, i.name
+                                        from departments d join user_info i
+                                        on d.dept_no = i.dept_no) a
+                    on u.emp_no = a.emp_no) c
+on b.id = c.id
+		<include refid="cri"></include>
+	    ORDER BY b.board_no DESC
+	    ) t)
             <![CDATA[
             WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
             ]]>
@@ -155,5 +174,13 @@
 		delete from com
 		where board_no = #{boardNo}
 	</delete>
+	
+	<select id="authCheck" resultType="BoardVO">
+		select u.id, i.name, d.dept_auth
+		from users u, user_info i, departments d
+		where i.dept_no = d.dept_no
+		and u.emp_no = i.emp_no
+		and u.id = #{id}
+	</select>
 	
 </mapper>

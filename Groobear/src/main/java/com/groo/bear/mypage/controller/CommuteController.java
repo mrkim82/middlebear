@@ -37,9 +37,7 @@ public class CommuteController {
 		
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
-		System.out.println(id);
 		String empG = userService.checkGrade(id).getEmpGrade();
-		System.out.println(empG);
 		
 		
 		int commuteListCnt = commuteService.commuteCnt(cri, commuteVO);
@@ -48,11 +46,9 @@ public class CommuteController {
 		paging.setCri(cri);
         paging.setTotalCount(commuteListCnt);    
         
-        System.out.println(paging);
         
 		if(empG.equals("A")) {
 			model.addAttribute("commuteList",commuteService.getAllCommuteList(cri, commuteVO));
-			System.out.println(model);
 			model.addAttribute("paging",paging);
 			return "commute/commuteA";
 			
@@ -66,8 +62,6 @@ public class CommuteController {
 			paging2.setCri(cri);
 			paging2.setTotalCount(commuteListCnt2);
 			model.addAttribute("paging",paging2);
-			System.out.println(paging2);
-			System.out.println(model);
 			return "commute/commuteP";
 		}
 		
@@ -77,9 +71,7 @@ public class CommuteController {
 	@ResponseBody
 	@PostMapping("getWork")
 	public CommuteVO getWork(@RequestBody CommuteVO vo) {
-		System.out.println("1111"+vo.getId());
 		vo = (CommuteVO) commuteService.chkWork(vo.getId());
-		System.out.println(vo);
 		return vo;
 	}
 	
@@ -87,8 +79,6 @@ public class CommuteController {
 	@ResponseBody
 	@PostMapping("workStart")
 	public CommuteVO workStart(@RequestBody CommuteVO commuteVO) {
-		
-		System.out.println(commuteVO);
 		commuteService.startWork(commuteVO);
 		return commuteVO;
 	}
@@ -107,7 +97,6 @@ public class CommuteController {
 	public CommuteVO overWorkStart(@RequestBody CommuteVO commuteVO, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		Date workEnd = (Date)session.getAttribute("WorkEnd");
-		System.out.println(workEnd);
 		if(workEnd != null) {
 			commuteService.startOverWork(commuteVO);	
 		}else {
@@ -122,9 +111,7 @@ public class CommuteController {
 	@ResponseBody
 	@PostMapping("overWorkEnd")
 	public CommuteVO overWorkEnd(@RequestBody CommuteVO commuteVO) {
-		System.out.println(commuteVO);
 		commuteService.endOverWork(commuteVO);
-		
 		return commuteVO;
 	}
 	
@@ -133,16 +120,12 @@ public class CommuteController {
 	@ResponseBody
 	@PostMapping("/commuteUpdate")
 	public String commuteUpdate(@RequestBody CommuteVO commuteVO) {
-		System.out.println("11111");
-		System.out.println(commuteVO);
 		String result;
 		
 		if(commuteService.commuteUpdate(commuteVO)>0) {
-			System.out.println("2221");
 			result = "success";
 			return result;
 		} else {
-			System.out.println("333");
 			result = "fail";
 			return result;
 		}
@@ -152,9 +135,7 @@ public class CommuteController {
 		@ResponseBody
 		@PostMapping("/getMonth")
 		public CommuteVO monthData2(@RequestBody CommuteVO vo) {
-			System.out.println("1111"+vo.getId());
-			vo = (CommuteVO) commuteService.monthWork(vo.getId(), null);
-			System.out.println(vo);
+			vo = (CommuteVO) commuteService.monthWork(vo.getId(),vo.getMonthDate());
 			return vo;
 		}
 	

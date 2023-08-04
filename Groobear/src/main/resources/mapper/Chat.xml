@@ -2,175 +2,192 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  <mapper namespace="com.groo.bear.chat.mapper.ChatMapper">
-  	
-  	<!-- 한 유저가 가지는 채팅방 전체조회 -->
-  	<select id="chatRoomList" resultType="RoomDTO">
-  		select r.room_no, r.room_time, r.room_name, a.id
-        from room r join (select u.id, m.room_no
-                            from users u join room_mem m
-                            on u.id = m.id
-                            ) a
-        on r.room_no = a.room_no
-        where a.id = #{id}
-  	</select>
-  	
-  	<!-- 채팅방 생성 -->
-  	<insert id="createChatRoom" parameterType="RoomDTO">
-  		<selectKey keyProperty="roomNo" order="BEFORE" resultType="int">
-		    SELECT ROOM_SEQ.NEXTVAL FROM DUAL
-  		</selectKey>
-  		INSERT INTO ROOM (
-  						  ROOM_NO
-  						 ,ROOM_NAME
-  						 ,ROOM_TIME
-  						 
-  						 )
-  				  VALUES (
-  				  		  #{roomNo}
-  				  		 ,#{roomName}
-  				  		 ,sysdate
-  				  		 
-  				  		 )
-  	</insert>
-  	
-  	
-  	<delete id="deleteChatRoom" parameterType="RoomDTO">
-  		DELETE FROM ROOM_mem
-  		WHERE ROOM_NO = #{roomNo}
-  		AND id = #{id}
-  	</delete>
-  	
-  	<!--  -->
-    <select id="getMessagesForRoom" resultType="ChatMessageDTO">
-	    SELECT msg_no, room_no, id, content, TO_CHAR(msg_time, 'YYYY-MM-DD HH24:MI:SS') AS msg_time 
-	    FROM Message
-	    WHERE room_No = #{roomNo}
-	    ORDER BY msg_Time ASC
-	</select>
-    
-    
-  	<!-- 메세지전체조회 -->
-  	<select id="MessageAllList" parameterType="int">
-  		select i.name, m.content, m.msg_time
-		from message m, users u, user_info i
-		where m.id = u.id
-		AND u.emp_no = i.emp_no
-		AND room_no = #{roomNo}
-		order By msg_no asc
-  	</select>
-  	<!-- 추가된 멤버는 이전 대화 안보이게 하는 용 -->
-  	<select id="MessageAllListReal" parameterType="ChatMessageDTO">
-  	select m.msg_no,m.content, m.room_no, m.id,m.msg_time
-	from message m join room r
-	on m.room_no = r.room_no
-	where m.msg_time > (select mem_time from room_mem where id = #{id})
-	and m.room_no= #{roomNo}
-	</select>
-  	
-  	
-  	<insert id="sendMessage" parameterType="ChatMessageDTO">
-  		<selectKey keyProperty="msgNo" order="BEFORE" resultType="int">
-		    SELECT MESSAGE_SEQ.NEXTVAL FROM DUAL
-  		</selectKey>
-  		INSERT INTO MESSAGE (
-  						  ROOM_NO
-  						 ,ID
-  						 ,CONTENT
-  						 ,MSG_TIME
-  						 ,MSG_NO
-  						 
-  						 )
-  				  VALUES (
-  				  		  #{roomNo}
-  				  		 ,#{id}
-  				  		 ,#{content}
-  				  		 ,sysdate
-  				  		 ,#{msgNo}
-  				  		 )
-  	</insert>
-  	
-  	<!-- 사원전체조회 -> 모달에서 보기 위함 -->
-  	<select id="empAllList" resultType="RoomDTO"> 
-  		select i.emp_no, u.id, i.name, i.rank, d.dept_name
-		FROM user_info i, departments d, users u
-		where i.dept_no = d.dept_no
-		AND i.emp_no = u.emp_no
-		AND u.id != #{id}
-  	</select>
-  	
-  	<select id="newJeans">
-  		SELECT MAX(room_no) room_no
-		FROM room
-  	</select>
-  	
-  	<insert id="insertMem" parameterType="RoomDTO">
-  		INSERT INTO ROOM_MEM 
-					  		(
-					  		MEM_TIME      
-							,ID                
-							,ROOM_NO
-				  			)
-  					VALUES (
-  							sysdate
-  							,#{id}
-  							,#{roomNo}
-							)
-  	</insert>
-  	
-  	<select id="findEmptyRooms" resultType="Integer">
-        SELECT r.room_no 
-        FROM room r 
-        LEFT JOIN room_mem m ON r.room_no = m.room_no
-        GROUP BY r.room_no 
-        HAVING COUNT(m.id) = 0
-    </select>
+<mapper namespace="com.groo.bear.chat.mapper.ChatMapper">
 
-    <delete id="deleteRoom">
-        DELETE FROM room WHERE room_no = #{roomNo}
-    </delete>
-  	
-  	<!-- 방에 속해있지 않은 사원 조회 -> 모달에서 보기 위함 -->
-	<select id="empListExcludingRoomMembers" resultType="RoomDTO">
-	    SELECT i.emp_no, u.id, i.name, i.rank, d.dept_name
-		FROM user_info i
-		JOIN departments d ON i.dept_no = d.dept_no
-		JOIN users u ON i.emp_no = u.emp_no
-		WHERE u.id != #{id}
-		AND u.id NOT IN (
-		    SELECT rm.id 
-		    FROM room_mem rm
-		    WHERE rm.room_no = #{roomNo}
+	<!-- 한 유저가 가지는 채팅방 전체조회 -->
+	<select id="chatRoomList" resultType="RoomDTO">
+		select r.room_no, r.room_time, r.room_name, a.id
+		from room r join (select u.id, m.room_no
+		from users u join room_mem m
+		on u.id = m.id
+		) a
+		on r.room_no = a.room_no
+		where a.id = #{id}
+	</select>
+
+	<!-- 채팅방 생성 -->
+	<insert id="createChatRoom" parameterType="RoomDTO">
+		<selectKey keyProperty="roomNo" order="BEFORE"
+			resultType="int">
+			SELECT ROOM_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO ROOM (
+		ROOM_NO
+		,ROOM_NAME
+		,ROOM_TIME
+
 		)
+		VALUES (
+		#{roomNo}
+		,#{roomName}
+		,sysdate
+
+		)
+	</insert>
+
+
+	<delete id="deleteChatRoom" parameterType="RoomDTO">
+		DELETE FROM ROOM_mem
+		WHERE ROOM_NO = #{roomNo}
+		AND id = #{id}
+	</delete>
+
+	<!-- -->
+	<select id="getMessagesForRoom" resultType="ChatMessageDTO">
+		SELECT msg_no, room_no, id, content, TO_CHAR(msg_time, 'YYYY-MM-DD
+		HH24:MI:SS') AS msg_time
+		FROM Message
+		WHERE room_No = #{roomNo}
+		ORDER BY msg_Time ASC
 	</select>
 	
+	<!-- 메세지전체조회 추가된 멤버는 이전 대화 안보이게 하는 용 -->
+	<select id="MessageAllList" parameterType="ChatMessageDTO">
+		select a.name, b.msg_no, b.content, b.room_no, b.msg_time
+from (select i.name, u.id
+        from user_info i join users u
+        on i.emp_no = u.emp_no) a
+        join
+    (select m.msg_no,m.content, m.room_no, m.id,m.msg_time
+		from message m join room r
+		on m.room_no = r.room_no
+		where m.msg_time > (select mem_time from room_mem where id = #{id} and room_no= #{roomNo})
+		and m.room_no= #{roomNo}
+		order by msg_no asc) b
+        on a.id = b.id
+	</select>
+
+	<insert id="sendMessage" parameterType="ChatMessageDTO">
+		<selectKey keyProperty="msgNo" order="BEFORE"
+			resultType="int">
+			SELECT MESSAGE_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO MESSAGE (
+		ROOM_NO
+		,ID
+		,CONTENT
+		,MSG_TIME
+		,MSG_NO
+
+		)
+		VALUES (
+		#{roomNo}
+		,#{id}
+		,#{content}
+		,sysdate
+		,#{msgNo}
+		)
+	</insert>
+
+	<!-- 사원전체조회 -> 모달에서 보기 위함 -->
+	<select id="empAllList" resultType="RoomDTO">
+		select i.emp_no, u.id, i.name, i.rank, d.dept_name
+		FROM user_info i,
+		departments d, users u
+		where i.dept_no = d.dept_no
+		AND i.emp_no =
+		u.emp_no
+		AND u.id != #{id}
+	</select>
+
+	<select id="newJeans">
+		SELECT MAX(room_no) room_no
+		FROM room
+	</select>
+
+	<insert id="insertMem" parameterType="RoomDTO">
+		INSERT INTO ROOM_MEM
+		(
+		MEM_TIME
+		,ID
+		,ROOM_NO
+		)
+		VALUES (
+		sysdate
+		,#{id}
+		,#{roomNo}
+		)
+	</insert>
+
+	<select id="findEmptyRooms" resultType="Integer">
+		SELECT r.room_no
+		FROM room r
+		LEFT JOIN room_mem m ON r.room_no = m.room_no
+		GROUP BY r.room_no
+		HAVING COUNT(m.id) = 0
+	</select>
+
+	<delete id="deleteRoom">
+		DELETE FROM room WHERE room_no = #{roomNo}
+	</delete>
+
+	<!-- 방에 속해있지 않은 사원 조회 -> 모달에서 보기 위함 -->
+	<select id="empListExcludingRoomMembers" resultType="RoomDTO">
+		SELECT i.emp_no, u.id, i.name, i.rank, d.dept_name
+		FROM user_info i
+		JOIN
+		departments d ON i.dept_no = d.dept_no
+		JOIN users u ON i.emp_no =
+		u.emp_no
+		WHERE u.id != #{id}
+		AND u.id NOT IN (
+		SELECT rm.id
+		FROM room_mem rm
+		WHERE rm.room_no = #{roomNo}
+		)
+	</select>
+
 	<!-- 채팅방 인원수 -->
 	<select id="countRoomMem" parameterType="int">
 		select count(id) as id
 		from room r, room_mem m
 		where r.room_no = m.room_no
-		and r.room_no = #{roomNo}
+		and r.room_no =
+		#{roomNo}
 	</select>
-  	
-  	<!-- 맨 마지막 채팅 보이게 하기 위함 -->
-  	<!-- <select id="getLastMessage" parameterType="int">
-	    SELECT SUBSTR(CONTENT, 1, LEAST(10, LENGTH(CONTENT))) AS CONTENT
-	    FROM (
-	        SELECT CONTENT
-	        FROM MESSAGE
-	        WHERE ROOM_NO = #{roomNo}
-	        ORDER BY MSG_TIME DESC
-	    )
-	    WHERE ROWNUM = 1
-	</select> -->
-	<select id="getLastMessage" parameterType="int">
-	    SELECT CONTENT, id
-	    FROM (
-	        SELECT CONTENT, id
-	        FROM MESSAGE
-	        WHERE ROOM_NO = #{roomNo}
-	        ORDER BY MSG_TIME DESC
-	    )
-	    WHERE ROWNUM = 1
+
+	<select id="getLastMessage" parameterType="int" resultType="RoomDTO">
+		SELECT SUBSTR(CONTENT, 1, LEAST(14, LENGTH(CONTENT))) AS CONTENT, name, room_no
+		FROM (
+				SELECT c.content, i.name, #{roomNo} as room_no
+				FROM (
+						SELECT m.content, m.id, m.MSG_TIME
+						FROM message m
+						WHERE m.ROOM_NO = #{roomNo}
+						ORDER BY m.MSG_TIME DESC
+												) c
+													INNER JOIN (
+																SELECT *
+																FROM users u
+																INNER JOIN user_info f ON u.emp_no = f.emp_no
+																												) i ON c.id = i.id
+																																	)
+		<![CDATA[	
+		WHERE ROWNUM <= 1
+		]]>
 	</select>
-  </mapper>
+	
+	<select id="getRoomName" resultType="RoomDTO">
+		select * from room where room_no = #{roomNo}
+	</select>
+	
+	<select id="getUsersName" resultType="RoomDTO">
+		SELECT r.ROOM_NO, ui.NAME as in_Room_User_Name
+		FROM room r
+		JOIN room_mem rm ON r.ROOM_NO = rm.ROOM_NO
+		JOIN users u ON rm.ID = u.ID
+		JOIN user_info ui ON u.EMP_NO = ui.EMP_NO
+		where r.room_no = #{roomNo}
+	</select>
+
+</mapper>

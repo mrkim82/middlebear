@@ -6,7 +6,8 @@
 <title>메일 발송 페이지</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 </head>
-<body layout:fragment="content">
+<body>
+<div layout:fragment="content">
 	<form method="post">
 		<button id="send" type="button" onclick="sendMail()">메일보내기</button>
 		<table>
@@ -55,6 +56,7 @@
 		</tbody>
 		</table>
 	</form>
+</div>
 <script>
 	let mailNo = document.getElementById('mailNo').value;
     let mailuuid ="";
@@ -72,6 +74,8 @@
 		referrer = document.getElementById('referrer').value;
 		title = document.getElementById('title').value;
 		content = document.getElementById('content').value;
+		var referrerList = referrer.split(",");
+		console.log(referrerList);
 		console.log('1111',sender);
 		console.log('2222',receiver);
 		console.log('333',referrer);

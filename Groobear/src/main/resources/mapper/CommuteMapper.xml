@@ -43,15 +43,20 @@
 			<if test="cri.type != null and cri.type.equals('deptName')">
 				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
 			</if>
-			<if test="commuteVO.startDay != null and commuteVO.endDay != null">
-                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN #{commuteVO.startDay} AND #{commuteVO.endDay}
-            </if>
-            <if test="commuteVO.startDay != null and commuteVO.endDay == null">
-                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN #{commuteVO.startDay} AND to_char(sysdate, 'YYYY-MM-DD')
-            </if>
-            <if test="commuteVO.startDay == null and commuteVO.endDay == null">
-                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN to_char(sysdate, 'YYYY-MM-DD') AND to_char(sysdate, 'YYYY-MM-DD')
-            </if>
+			<choose>
+				<when test="commuteVO.startDay != null and commuteVO.endDay != null">
+	                AND to_date(cm.day) BETWEEN #{commuteVO.startDay} AND #{commuteVO.endDay}
+	            </when>
+	            <when test="commuteVO.startDay != null and commuteVO.endDay == null and commuteVO.endDay == ''">
+	                AND to_date(cm.day) BETWEEN #{commuteVO.startDay} AND to_date(sysdate, 'YYYY-MM-DD')
+	            </when>
+	            <when test="commuteVO.startDay == null and commuteVO.startDay == '' and commuteVO.endDay == null and commuteVO.endDay == ''">
+	                AND trunc(cm.day) = trunc(sysdate)
+	            </when>
+	            <otherwise>
+	            	AND trunc(cm.day) = trunc(sysdate)
+	            </otherwise>
+			</choose>
 			
 		order by cm.day desc
 		) t
@@ -82,15 +87,20 @@
 			</if><if test="cri.type != null and cri.type.equals('deptName')">
 				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
 			</if>
-			<if test="commuteVO.startDay != null and commuteVO.endDay != null">
-                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN to_char(#{commuteVO.startDay}, 'YYYY-MM-DD') AND to_char(#{commuteVO.endDay}, 'YYYY-MM-DD')
-            </if>
-            <if test="commuteVO.startDay != null and commuteVO.endDay == null">
-                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN #{commuteVO.startDay} AND to_char(sysdate, 'YYYY-MM-DD')
-            </if>
-            <if test="commuteVO.startDay == null and commuteVO.endDay == null">
-                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN to_char(sysdate, 'YYYY-MM-DD') AND to_char(sysdate, 'YYYY-MM-DD')
-            </if>
+			<choose>
+				<when test="commuteVO.startDay != null and commuteVO.endDay != null">
+	                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN to_char(#{commuteVO.startDay}, 'YYYY-MM-DD') AND to_char(#{commuteVO.endDay}, 'YYYY-MM-DD')
+	            </when>
+	            <when test="commuteVO.startDay != null and commuteVO.endDay == null">
+	                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN #{commuteVO.startDay} AND to_char(sysdate, 'YYYY-MM-DD')
+	            </when>
+	            <when test="commuteVO.startDay == null and commuteVO.endDay == null">
+	                AND to_char(cm.day, 'YYYY-MM-DD') BETWEEN to_char(sysdate, 'YYYY-MM-DD') AND to_char(sysdate, 'YYYY-MM-DD')
+	            </when>
+	            <otherwise>
+	            	AND to_char(cm.day, 'YYYY-MM-DD') = to_char(sysdate, 'yyyy-MM-dd')
+	            </otherwise>
+			</choose>
 	</select>
 	
 	<select id="commuteListCnt2" resultType="int">
@@ -213,7 +223,7 @@
        	 	and TO_CHAR(day,'yyyy-MM') = TO_CHAR(sysdate, 'yyyy-MM') 
 		</if>
 		<if test="monthDate != null">
-       	 	and TO_CHAR(day,'yyyy-MM') = #{monthDate}
+       	 	and TO_CHAR(day,'yyyy-MM') = SUBSTR(#{monthDate}, 0,7)
 		</if>
 			) commute
 	</select>	

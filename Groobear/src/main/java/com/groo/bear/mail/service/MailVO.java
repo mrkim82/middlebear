@@ -19,4 +19,10 @@ public class MailVO {
 	private String sender;
 	private String receiver;
 	private String referrer;
+	private String referrer2;
+	private String referrer3;
+	private String mailType2;
+	private String mailType3;
+	private String mailType4;
+	private String mailType5;
 }

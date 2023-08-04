@@ -2,11 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>결재자 등록 모달</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 </head>
 <body>
 	<br>
-    <table style="width:200px; height:500px; display:inline-block">
+    <table style="width:200px; height:500px; float:left;">
     	<thead>
 	    	<tr>
 	    		<th><font size="3" color="gray">구성원</font></th>
@@ -39,7 +40,7 @@
     		</tr>
     	</tbody>
     </table>
-    <table>
+    <table style="float:left; margin-left:100px ;margin-top:100px;">
     	<tbody>
     		<tr>
     			<td><button type="button" id="payUser" onclick="paySet()">결재자</button></td>
@@ -52,7 +53,7 @@
     		</tr>
     	</tbody>
     </table>
-    <table style="width:300px; height:200px; display:inline-block;">
+    <table style="width:200px; height:100px; float:right;">
     	<thead>
     		<tr>
 	    		<th><font size="3" color="gray">결재자1</font></th>
@@ -62,7 +63,7 @@
     		
     	</tbody>
     </table>
-    <table style="width:300px; height:200px; display:inline-block;">
+    <table style="width:200px; height:100px; float:right;">
     	<thead>
     		<tr>
 	    		<th><font size="3" color="gray">결재자2</font></th>
@@ -72,7 +73,6 @@
     	
     	</tbody>
     </table>
-    <input type="button" value="창닫기" onclick="window.close()">
     <script>
     	var empName = '';
     	var empRank = '';
@@ -139,6 +139,7 @@
 	        		}
 	    		}else if(payUser1 === empId){
 	    			alert('결재자1에 이미 등록한 사원입니다. 결재자2에 등록이 불가능합니다.');
+	    			return;
 	    		}else if(payUser1 !== empId && !payUser2){
 	    			console.log('결재자1은 있고 2는 없음');
 	    			var str = '';
@@ -158,11 +159,14 @@
 		    		console.log('payUserNR2 = ',payUserNR2);
 	    		}else if(payUser2 === empId){
 	    			alert('결재자2에 이미 등록한 사원입니다. 더이상 결재자 등록이 불가능합니다.')
+	    			return;
 	    		}else if(payUser1 !== "" && payUser2 !== ""){
 	    			alert('결재자1 결재자2 모두 설정한 상태입니다.');
+	    			return;
 	    		}
         	}else{
         		alert('기안자는 결재자1, 결재자2에 등록 할 수 없습니다.');
+        		return;
         	}
     	}
     	function userDel(){
@@ -183,6 +187,7 @@
     		if(payUser1 === ''){
     			alert('결재자1이 없습니다. 등록해주세요.');
     			opener.document.getElementById('payUserList1').textContent = '';
+    			return;
     		}else {
     			//여기서 ajax통신으로 위에서 결정한 값을 보내줘야함.
     			//기안자 값 설정,전송

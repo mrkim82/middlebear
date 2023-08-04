@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layout/tiles}">
+<head>
+<meta charset="UTF-8">
+<title>Groobear</title>
+<script type="text/javascript"
+   src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<style>
+	/* The switch - the box around the slider */
+	.switch {
+	   position: relative;
+	   display: inline-block;
+	   width: 60px;
+	   height: 34px;
+	   vertical-align: middle;
+	}
+	
+	/* Hide default HTML checkbox */
+	.switch input {
+	   display: none;
+	}
+	
+	/* The slider */
+	.slider {
+	   position: absolute;
+	   cursor: pointer;
+	   top: 0;
+	   left: 0;
+	   right: 0;
+	   bottom: 0;
+	   background-color: #ccc;
+	   -webkit-transition: .4s;
+	   transition: .4s;
+	}
+	
+	.slider:before {
+	   position: absolute;
+	   content: "";
+	   height: 26px;
+	   width: 26px;
+	   left: 4px;
+	   bottom: 4px;
+	   background-color: white;
+	   -webkit-transition: .4s;
+	   transition: .4s;
+	}
+	
+	input:checked+.slider {
+	   background-color: #2196F3;
+	}
+	
+	input:focus+.slider {
+	   box-shadow: 0 0 1px #2196F3;
+	}
+	
+	input:checked+.slider:before {
+	   -webkit-transform: translateX(26px);
+	   -ms-transform: translateX(26px);
+	   transform: translateX(26px);
+	}
+	
+	/* Rounded sliders */
+	.slider.round {
+	   border-radius: 34px;
+	}
+	
+	.slider.round:before {
+	   border-radius: 50%;
+	}
+	p {
+   margin: 0px;
+   display: inline-block;
+   font-size: 20px;
+   font-weight: bold;
+	}
+</style>
+</head>
+<body layout:fragment="content">
+<div class="work"></div>
+	<table>
+		<tbody>
+		<tr>
+			<td colspan="2" style="width: 400px; height: 300px;">
+				<fieldset style="width: 385px; height: 280px;margin:10px;margin-left:0px;border:1px solid black;">
+					<div class="row">
+						<div class="col-4" style="display:inline-block;margin:5px;">
+							<img id="profImg" style="width:120px;height:150px;margin:15px;margin-bottom:0px;" src="../img/userProf.png">
+						</div>
+						<div class="col-6" style="display: inline-block;margin:10px;margin-left: 30px;">
+							<h4 class="dohyeon" style="font-size:35px;text-align:center;font-weight: bold;">Groobear</h4>
+							<a class="dohyeon" style="font-size:20px;display:block;margin-bottom:10px;">사번 : [[${session.EmpNo}]]</a>
+							<a class="dohyeon" style="font-size:20px;display:block;margin-bottom:10px;">이름 : [[${session.Name}]]</a>
+							<a class="dohyeon" style="font-size:20px;display:block;margin-bottom:0px;">직책 : [[${session.Rank}]]</a>
+						</div>
+					</div>
+					<div style="margin:10px;margin-left:40px;margin-top:0px;">
+						<a class="dohyeon" style="font-size:20px;">연락처 : [[${session.Phone}]]</a><br>
+						<a class="dohyeon" style="font-size:20px;">회사메일 : [[${session.Id}]]</a><br>
+						<a class="dohyeon" style="font-size:20px;">개인메일 : [[${session.Email}]]</a>
+					</div>
+				</fieldset>
+			</td>
+			<td colspan="2" style="width: 415px; height: 300px;">
+				<fieldset style="width: 395px; height: 280px;margin:10px;border:1px solid black;">
+					<div class="row" style="width: 375px;margin:10px;margin-top:5px;">
+						<div style="text-align: center;">
+							<img src="../img/mail.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/mail/receiveMail'"><br>
+							<a class="dohyeon" style="font-size:20px;" href="/mail/receiveMail">메일</a>
+						</div>
+						<div style="text-align: center;">
+							<img src="../img/calendar.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/perSch'"><br>
+							<a class="dohyeon" style="font-size:20px;" href="/perSch">캘린더</a>
+						</div>
+						<div style="text-align: center;">
+							<img src="../img/communication.png" onclick="openChat()" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;"><br>
+							<a class="dohyeon" style="font-size:20px;" onclick="openChat()">실시간대화</a>
+						</div>
+					</div>
+					<div class="row" style="width: 375px;margin:10px;">
+						<div style="text-align: center;">
+							<img src="../img/document.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/pay/payMain'"><br>
+							<a class="dohyeon" style="font-size:20px;" href="/pay/payMain">전자결재</a>
+						</div>
+						<div style="text-align: center;">
+							<img src="../img/project.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/proMain'"><br>
+							<a class="dohyeon" style="font-size:20px;" href="/proMain">프로젝트</a>
+						</div>
+						<div style="text-align: center;">
+							<img src="../img/people.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/empInfo'"><br>
+							<a class="dohyeon" style="font-size:20px;" href="/empInfo">회원조회</a>
+						</div>
+					</div>
+				</fieldset>
+			</td>
+			<td colspan="2" style="width: 400px; height: 300px;">
+				<fieldset style="width: 385px; height: 280px;margin:10px;margin-right:0px;border:1px solid black;">
+					<div class="dohyeon" style="display: inline-block;margin:10px;margin-left: 30px;">
+						<h4 style="font-size:35px;font-weight: bold;margin-bottom:25px;margin-top:10px;">전자결재</h4>
+						<a style="font-size:25px;display:block;margin-bottom:25px;">결재문서&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span>0건</span></a>
+						<a style="font-size:25px;display:block;margin-bottom:25px;">진행문서&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span>0건</span></a>
+						<a style="font-size:25px;display:block;margin-bottom:0px;">임시저장&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span>0건</span></a>
+					</div>
+				</fieldset>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="6" style="font-size:20px;width: 1215px; height: 80px;">
+				<fieldset class="dohyeon" style="width: 1211px;height: 60px;margin-top:10px;margin-bottom:10px;border:1px solid black;">
+					<div class="row" style="display: flex;">
+					   <!-- 출근/퇴근 스위치 -->
+						<div style="margin-right:70px;">
+							<a style="margin:10px;margin-left:50px;">근태현황 [ <span id="day23"></span> ]</a>
+							<label class="switch" style="margin:12px;"> 
+								<input class="chkBox" type="checkbox">
+								<span class="slider round cBtn"></span>
+							</label>
+							<span id="workSwitch"> </span> 
+							<span id="workStart">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</span>
+							<span>&nbsp&nbsp~&nbsp&nbsp</span>
+							<span id=workEnd>&nbsp&nbsp:&nbsp&nbsp</span>
+						</div>
+						
+						<!-- 연장근무 시작/종료 스위치 -->
+						<div>
+							<label class="switch" style="margin:12px;"> 
+								<input class="chkBoxo" type="checkbox">
+								<span class="slider round cBtno"></span>
+							</label>
+							<span id="overWorkSwitch"> </span> 
+							<span id="overWorkStart">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</span>
+							<span>&nbsp&nbsp~&nbsp&nbsp</span>
+							<span id="overWorkEnd">&nbsp&nbsp:&nbsp&nbsp</span>
+						
+						</div>
+					</div>
+				</fieldset>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" style="width: 607.5px; height: 500px;">
+				<fieldset style="width: 594px; height: 480px;margin:0px;margin-left:0px;">
+					<iframe style="width: 100%; height: 100%; margin: 0px;border:1px solid black;"src="boardListMain?boardType=N"></iframe>
+				</fieldset>
+			</td>
+			<td colspan="3" style="width: 607.5px height: 500px;">
+				<fieldset style="width: 594px; height: 480px;margin:0px;margin-right:0px;float: right;">
+					<iframe style="width: 100%; height: 100%; margin: 0px;border:1px solid black;"src="boardListMain?boardType=K"></iframe>
+				</fieldset>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+   <div class="work"></div>   
+	<!-- 데이터 -->
+<p class="day" style="display:none;"></p>
+<p class="startWork" style="display:none;"></p>
+<p class="endWork" style="display:none;"></p>
+<p class="startOverWork" style="display:none;"></p>
+<p class="endOverWork" style="display:none;"></p>
+<p class="monthOver" style="display:none;"></p>
+
+
+
+
+
+
+<script>
+var openChat  = function() {
+	var status = "toolbar=no, scrollbars=yes,resizable=yes,status=no,menubar=no, width=600, height=500, top=0,left=0"; 
+ window.open("/roomList", "", status, "_blank");
+}
+</script>
+   <script>
+   getProfImg();
+   function getProfImg() {
+	   $.ajax({
+   	    url: "checkProfImg", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+   	    method: "GET",   // HTTP 요청 메소드(GET, POST 등)
+		    success: function(data) {
+		      console.log(data);
+		      if(data.uuid != null){
+		    	  $('#profImg').attr('src', '/display?fileName='+data.uploadPath.replace(/\\/g, '/')+'/s_'+data.uuid+'_'+data.fileName);
+		      }
+		    },
+		    error: function(err) {
+		      console.log(err);
+		    }
+   		});
+   }
+   
+   
+	let chkCount = 0;
+	let chkCounto = 0;
+	let id = '[[${session.Id}]]';
+	let sInfo = {
+			'id' : id
+	}
+	console.log(id);
+	
+	init();
+	
+	function init(){
+		console.log('11')
+		fetch('getMonth', {
+			method:'POST',
+			headers:{
+				'content-Type' : 'application/json'	
+			},
+			body:JSON.stringify(sInfo)
+		})
+		.then(response => response.json())
+		.then(data2 => {
+	        document.querySelector('.monthOver').textContent = data2.over;
+	        console.log(data2)
+	        
+	        return fetch('getWork', {
+	            method: 'POST',
+	            headers: {
+	              'content-Type': 'application/json',
+	            },
+	            body: JSON.stringify(sInfo),
+	          });
+	        })
+	        .then((response) => response.json())
+	        .then((data) => {
+	          //console.log(data.day)
+	          document.querySelector('.day').textContent = data.day;
+	          document.querySelector('.startWork').textContent = data.workStart;
+	          document.querySelector('.endWork').textContent = data.workEnd;
+	          document.querySelector('.startOverWork').textContent = data.overWorkStart;
+	          document.querySelector('.endOverWork').textContent = data.overWorkEnd;
+
+	          document.getElementById('day23').textContent = data.day.substr(0, 10);
+	          updateSwitches(data);
+	        }) 
+	        .catch((err) => {
+	          console.log(err);
+	          // 에러 발생 시 사용자에게 에러 메시지 표시 등의 처리
+	        });
+		
+		//22
+		
+		
+		function updateSwitches(data) {
+			let chkBox = document.querySelector('.chkBox');
+			let chkBoxo = document.querySelector('.chkBoxo');
+			let work = document.querySelector('.work');
+			let noWork = document.querySelector('.noWork');
+			let onBtno = document.querySelector('.onBtno');
+
+			// 출근/퇴근 스위치 업데이트
+			if (data.workStart != null && data.workEnd == null) {
+				chkBox.checked = true;
+				if(chkBox.checked = true){
+					let p = document.createElement('p');
+					p.innerText = '출근';
+					document.querySelector('#workSwitch').append(p);
+					document.getElementById('workStart').innerText = data.workStart.substr(-5);
+					
+				}
+			} else if(data.workEnd == null && data.workStart == null){
+				chkBox.checked = false;
+				let p = document.createElement('p');
+				p.innerText = '출근 전';
+				document.querySelector('#workSwitch').append(p);
+			} else if(data.workEnd != null || data.workStart == null){
+				chkBox.checked = false;
+					let p = document.createElement('p');
+					p.innerText = '퇴근';
+					document.querySelector('#workSwitch').append(p);
+					document.getElementById('workStart').innerText = data.workStart.substr(-5);
+					document.getElementById('workEnd').innerText = data.workEnd.substr(-5);
+			} 
+			
+			
+			// 연장근무 시작/종료 스위치 업데이트
+			if(parseInt(document.querySelector('.monthOver').textContent) < 2401){
+					if (data.overWorkStart != null && data.overWorkEnd == null) {
+						chkBoxo.checked = true;
+						let p = document.createElement('p');
+						p.innerText = '연장근무 시작';
+						document.querySelector('#overWorkSwitch').append(p);
+						document.getElementById('overWorkStart').innerText = data.overWorkStart.substr(-5);
+					} else if(data.overWorkEnd == null && data.overWorkStart == null){
+						chkBoxo.checked = false;
+						let p = document.createElement('p');
+						p.innerText = '연장근무 시작 전';
+						document.querySelector('#overWorkSwitch').append(p);
+					} else if(data.overWorkEnd != null || data.overWorkStart == null){
+						chkBoxo.checked = false;
+						let p = document.createElement('p');
+						p.innerText = '연장근무 종료';
+						document.querySelector('#overWorkSwitch').append(p);
+						console.log(data.overWorkStart)
+						document.getElementById('overWorkStart').innerText = data.overWorkStart.substr(-5);
+						document.getElementById('overWorkEnd').innerText = data.overWorkEnd.substr(-5);
+					} 
+				}else if(parseInt(document.querySelector('.monthOver').textContent) > 2402){
+					chkBoxo.checked = false;
+					let p = document.createElement('p');
+					p.innerText = '연장근무 불가능';
+					document.querySelector('#overWorkSwitch').append(p);
+				}
+			
+	        let check = document.querySelector('.cBtn');
+			let ocheck = document.querySelector('.cBtno');
+
+			
+			if (document.querySelector('.startWork').textContent != '') {
+				chkCount = 1;
+			}
+			if (document.querySelector('.endWork').textContent != '') {
+				chkCount = 2;
+			}
+			let chkCounto = 0;
+			if (document.querySelector('.startOverWork').textContent != '') {
+				chkCounto = 1;
+			}
+			if (document.querySelector('.endOverWork').textContent != '') {
+				chkCounto = 2;
+			}
+			if(parseInt(document.querySelector('.monthOver').textContent) > 2400){
+				chkCounto = 2;
+			}	
+			console.log(document.querySelector('.startWork').textContent != '');
+			// 출근/퇴근 스위치 클릭 이벤트 핸들러
+			check.addEventListener('click', function () {
+				
+				let chk = document.querySelector('.chkBox').checked;
+				if (chkCount < 2) {
+					if (chk == false) {
+						chkCount++;
+						console.log(chkCount)
+						chk = true;
+						
+						fetch("workStart", {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(sInfo)
+						})
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+							})
+							.catch(err => {
+								console.log(err);
+							});
+						document.querySelector('#workSwitch').children[0].textContent = '출근';
+						location.reload();
+						
+						
+					} else {
+						chkCount++;
+						console.log(chkCount)
+						chk = false;
+						
+						fetch("workEnd", {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(sInfo)
+						})
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+							})
+							.catch(err => {
+								console.log(err);
+							});
+						document.querySelector('#workSwitch').children[0].textContent = '퇴근';
+						location.reload();
+						
+					}
+				} else {
+					event.preventDefault();
+				}
+			});
+
+			// 연장근무 시작/종료 스위치 클릭 이벤트 핸들러
+			ocheck.addEventListener('click', function () {
+				let chk = document.querySelector('.chkBoxo').checked;
+				if(chkCount > 1){
+				if (chkCounto < 2) {
+					if (chk == false) {
+						chkCounto++;
+						console.log(chkCounto)
+						chk = true;
+
+						document.querySelector('#overWorkSwitch').children[0].textContent = '연장근무 시작';
+						
+						fetch("overWorkStart", {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(sInfo)
+						})
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+							})
+							.catch(err => {
+								console.log(err);
+							});
+						
+						location.reload();
+					} else {
+						chkCounto++;
+						console.log(chkCounto)
+						chk = false;
+
+						document.querySelector('#overWorkSwitch').children[0].textContent = '연장근무 종료';
+						
+						fetch("overWorkEnd", {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(sInfo)
+							})
+						.then(response => response.json())
+						.then(data => {
+								console.log(data);
+							})
+							.catch(err => {
+								console.log(err);
+							});  
+						
+						location.reload();
+					}
+				} else {
+					event.preventDefault();
+				}
+				}else{
+					event.preventDefault();
+				}
+			});
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}//init end
+	
+	
+		
+		
+	
+		
+		
+		
+	</script>
+
+
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	  layout:decorate="~{layout/myPageATiles}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<link rel="stylesheet" href="modal6/css/ionicons.min.css">
+		<link rel="stylesheet" href="modal6/css/flaticon.css">
+		<link rel="stylesheet" href="modal6/css/style.css">
+		<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+		
+</head>
+<body>
+<div layout:fragment="content">
+	<div>
+		<h2 class="dohyeon" style="text-align: left; margin-top:25px; font-size:1.875rem;">차량관리</h2>
+	</div>
+	<div>
+		<div style="text-align: right;margin-bottom:5px;position: absolute;right: 25px;top: 35px;" class="form-group dohyeon">
+			<form name="searchForm" action="carList" >
+				<input type="hidden" name="page" value="1"/>
+				<select name="type" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;" id="selectBox" onchange="boxRe()">
+					<option value='' selected >선택</option>
+					<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
+					<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
+					<option value='carNo' th:selected="${criteria.type == 'carNo'}">차량번호</option>
+				</select>
+				<input type="text" id="textBox" name="keyword" th:value="${criteria.keyword}" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:150px;"/>
+				<button type="submit" id="searchBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f61;box-shadow:1.5px 1.5px 1.5px 1.5px gray;color: #fff;width: 50px; height:35px;">검색</button>
+			</form>
+		</div>
+
+
+
+		<table class="table table-hover dohyeon">
+			<thead>
+				<tr>
+					<th>사번</th>
+					<th>부서</th>
+					<th>이름</th>
+					<th>차량번호</th>
+					<th>연락처</th>
+				</tr> 
+			</thead>
+			<tbody>
+				<tr class="cml table-default dohyeon" th:if="${carList != null}" th:each="car, stat:${carList}" th:onclick="carInfofo()" id="carIn" data-toggle="modal" data-target="#carMInfo">
+					<td>[[${car.empNo}]]</td>
+					<td>[[${car.deptName}]]</td>
+					<td>[[${car.name}]]</td>
+					<td class="carNo">[[${car.carNo}]]</td>
+					<td>[[${car.phone}]]</td>
+					<td class="carType" style="display:none">[[${car.carType}]]</td>
+					<td class="suId" style="display:none">[[${car.id}]]</td>
+					
+				</tr>
+			</tbody>
+		</table>
+		
+	</div>
+	<div>
+			<ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
+				<li class="page-item"><a class="page-link" style="border-radius: 5px 0px 0px 5px;"
+							th:href="|javascript:goPage(1)|">&laquo;</a></li>
+				<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
+					th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+					<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+					th:text="${num}"></a>
+				</li>
+				<li class="page-item"><a class="page-link" style="border-radius: 0px 5px 5px 0px;"
+					th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+				</li>
+		    </ul>
+		</div>
+	
+	
+		<div class="modal fade" id="carMInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content" style="border-radius:20px;">
+		      <div class="modal-header">
+		        <button type="button" class="close d-flex align-items-center justify-content-center" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true" class="ion-ios-close"></span>
+		        </button>
+		      </div>
+		      <div class="row no-gutters">
+			      <div class="col-md-6 d-flex">
+				      <div class="modal-body p-5 img d-flex color-1 text-center d-flex align-items-center" style="border-radius: 20px 0px 0px 20px;">
+				      	<div class="text w-100">
+				      		<span class="icon-2 ion-ios-car"></span>
+					      	<h5>차량 정보만 변경 가능합니다.</h5>
+					      	<div class="icon">
+					      		<img id="CTI" src="" style="width:200px">
+					      	</div>
+					      </div>
+				      </div>
+				    </div>
+				    <div class="col-md-6 d-flex">
+				      <div class="modal-body p-5 img d-flex align-items-center color-2" style="border-radius: 0px 20px 20px 0px;">
+								<div class="text w-100 py-0 py-md-5">
+									<h3 class="mb-4">Change Car Info</h3>
+									<form action="carUpdate" method="post" class="signup-form"
+										name="carInfoForm">
+										<div class="form-group mb-3">
+											<label class="label">Old Car Number</label> <input
+												name="oldCarNo" id="infoCarNo" type="text" value=""
+												class="form-control" readOnly>
+										</div>
+										<div class="form-group mb-3">
+											<label class="label">New Car Number</label> <input
+												name="carNo" id="newCarNo" type="text" value=""
+												class="form-control" minlength="7"  maxlength="8" onkeyup="this.nextSibling.innerHTML=/^\d{2,3}[가-힣]\d{4}$/.test(this.value)?'정상' : '차량번호 형식이 아닙니다.'"><span id="mCarNoCk"></span>
+										</div>
+										<div class="form-group mb-3">
+											<label class="label">Car brand</label>
+											<!-- <input id="infoCarType" name="carType" type="text" value="" maxlength="15" class="form-control" placeholder="ex) hyundai"> -->
+											<select id="infoCarType" name="carType" onchange="changeImage()">
+												<option value="" selected>선택</option>
+												<option value="../img/hyd.png">Hyundai</option>
+												<option value="../img/kia.png">Kia</option>
+												<option value="../img/sy.png">Ssangyong</option>
+												<option value="../img/ch.png">Chevrolet</option>
+												<option value="../img/gs.png">Genesis</option>
+												<option value="../img/ad.png">Audi</option>
+												<option value="../img/bz.png">Mercedes-Benz</option>
+												<option value="../img/bmw.png">BMW</option>
+												<option value="../img/bgt.png">Bugatti</option>
+												<option value="../img/ben.png">Bentley</option>
+												<option value="../img/cad.png">Cadillac</option>
+												<option value="../img/fd.png">Ford</option>
+												<option value="../img/hd.png">Honda</option>
+												<option value="../img/inf.png">Infiniti</option>
+												<option value="../img/jp.png">Jeep</option>
+												<option value="../img/lb.png">Lamborghini</option>
+												<option value="../img/lex.png">Lexus</option>
+												<option value="../img/lr.png">Land-Rover</option>
+												<option value="../img/mas.png">Maserati</option>
+												<option value="../img/mc.png">Mclaren</option>
+												<option value="../img/may.png">Maybach</option>
+												<option value="../img/ns.png">Nissan</option>
+												<option value="../img/ps.png">Porsche</option>
+												<option value="../img/rr.png">Rolls-Royce</option>
+												<option value="../img/tsl.png">Tesla</option>
+												<option value="../img/tyt.png">Toyota</option>
+												<option value="../img/vv.png">Volvo</option>
+												<option value="../img/vw.png">Volkswagen</option>
+											</select>
+											<img id="carImg" style="width:300px;">											
+											
+										</div>
+										<div class="form-group mb-3"
+											style="display: none;">
+											<label class="label">id</label> <input id="suId2" name="id" type="text"
+												 class="form-control">
+										</div>
+										<div class="form-group d-md-flex"></div>
+										<div class="form-group" style="margin-left: 30px;">
+											<button type="submit" style="width: 150px;"
+												class="btn btn-primary rounded submit px-3" onclick="checkBtn2()">수정</button>
+											<button type="button" id="deleteBtn"
+												style="width: 150px; margin: 0px 5px;"
+												class="btn btn-primary rounded">삭제</button>
+										</div>
+									</form>
+								</div>
+							</div>
+				    </div>
+				 </div>
+		    </div>
+		  </div>
+		</div>
+
+	
+
+	<script src="modal6/js/jquery.min.js"></script>
+    <script src="modal6/js/popper.js"></script>
+    <script src="modal6/js/bootstrap.min.js"></script>
+    <script src="modal6/js/main.js"></script>
+	
+	
+	
+	
+<script th:inline="javascript">
+function goPage(p){
+	searchForm.page.value = p;
+	searchForm.submit();
+}
+
+$('#carMInfo').on('hidden.bs.modal', function (event) {
+	 carInfoForm.reset();
+})
+
+ 		let changeimg = document.getElementById("infoCarType");
+        let carImg = document.getElementById("CTI");
+        document.getElementById('infoCarType').children[0].selected = true;
+        function changeImage(){
+            let index = changeimg.selectedIndex;
+            carImg.src = changeimg.options[index].value;
+        }
+        
+
+
+
+
+document.getElementById('searchBtn').addEventListener('click',function(){
+				var selectBox = document.getElementById('selectBox');
+			    var textBox = document.getElementById('textBox');
+			    var selectedOption = selectBox.value;
+			    var searchText = textBox.value;
+			    
+					if(selectedOption == '' && searchText != '') {
+				        alert('검색 조건을 선택해 주세요. 선택 상태에서는 검색어를 입력할 수 없습니다.');
+				        selectBox.selectedIndex = 0; 
+				        textBox.value = ''; 
+				        event.preventDefault()
+				    } 
+					
+			}) 
+			function boxRe(){
+				document.getElementById('textBox').value = '';
+			}
+
+
+
+
+
+
+
+
+
+document.querySelector('#deleteBtn').addEventListener('click',function(){
+			
+		
+			let carNo = document.querySelector('#infoCarNo').value;
+			
+			let carInfo = {
+					 'carNo' : carNo
+			}
+			
+			fetch("carDelete",{
+				method:'POST',
+				headers:{
+					'Content-Type' : 'application/json'	
+				},
+				body:JSON.stringify(carInfo)
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log(data)
+				if(data == 'true'){
+					location.href="carList"
+				}else{
+					location.href="carList"
+				}
+			})
+			.catch(err =>{
+				console.log(err);
+			})
+	})
+
+	function carInfofo(){
+			console.log("hi");
+			
+			let carNo = event.currentTarget.querySelector('.carNo').innerText;
+			let carType = event.currentTarget.querySelector('.carType').innerText;
+			let id = event.currentTarget.querySelector('.suId').innerText;
+			let CTI = event.currentTarget.querySelector('.carType').innerText;
+
+			console.log(CTI);
+			
+			document.querySelector('#suId2').value = id;
+			document.querySelector('#infoCarNo').value = carNo;
+			document.querySelector('#infoCarType').value = carType;
+			document.querySelector('#CTI').src = CTI;
+		}
+$('#carMInfo').on('hidden.bs.modal', function (event) {
+	 carInfoForm.reset();
+})
+	/* 
+
+function checkBtn(){
+			if(document.getElementsByName('carNo')[0].value == '' || document.getElementsByName('carType')[0].value == ''){
+				event.preventDefault();
+				alert('차량번호와 차종 모두 작성해주세요')
+			}else if($('.card-body').length > 2){
+				alert('2대이상 등록 금지')
+				event.preventDefault();
+				document.getElementsByName('carNo')[0].value = '';
+				document.getElementsByName('carType')[0].value = '';
+			}else if(document.querySelector('.carNoCk').textContent != '정상'){
+				alert('차량번호를 제대로 입력해 주세요.')
+				event.preventDefault();
+				document.getElementsByName('carNo')[0].value = '';
+				document.getElementsByName('carType')[0].value = '';
+			}else{
+				document.querySelector('.insertBtn').submit();
+					
+			}
+		}
+		 */
+		
+		 function checkBtn2(){
+				if(document.getElementById('newCarNo').value == ''){
+					event.preventDefault();
+					alert('차량번호를 입력해 주세요')
+				}else if(document.querySelector('#mCarNoCk').textContent != '정상'){
+					alert('차량번호를 올바른 형식으로 입력해 주세요.')
+					event.preventDefault();
+					document.getElementById('newCarNo').value = '';
+				}else{
+					
+					
+					event.preventDefault();
+					let carNo = document.getElementById('newCarNo').value;
+					let carType = document.getElementById('infoCarType').value;
+					let oldCarNo = document.getElementById('infoCarNo').value;
+					let id2 = document.getElementById('suId2').value;
+					
+					
+					let carCk = {
+							'carNo' : carNo,
+							'carType' : carType,
+							'id' : id2,
+							'oldCarNo' : oldCarNo
+					}
+					
+					fetch("carChk",{
+						method : 'post',
+						headers : {
+							'Content-Type' : 'application/json'
+						},
+						body : JSON.stringify(carCk)
+					})
+					.then(response => response.text())
+					.then(result => {
+						if(result == 'true'){
+							alert('차량번호가 이미 존재합니다.')
+							location.reload();
+						}else{
+							
+
+							fetch("carUpdate",{
+								method : 'post',
+								headers : {
+									'Content-Type' : 'application/json'
+								},
+								body : JSON.stringify(carCk)
+							})
+							.then(response => response.json())
+							.then(result => {
+								if(result == null){
+									console.log('실패')
+								}else {
+								 location.reload();
+								}
+							})
+							.catch(err => console.log(err))
+							
+						}
+					})
+					.catch(err => console.log(err))
+					
+					
+					
+					
+					
+					
+					
+					
+						
+				}
+			}
+		
+		
+		
+		
+		
+		
+		function carCheck(str) {
+		    if (/^\d{2}[가-힣]\d{4}/.exec(str) !== null && str.length === 7) {
+		       alert('성공');
+		    }else if (/^\d{3}[가-힣]\d{4}/.exec(str) !== null && str.length === 8) {
+		    	alert('성공');
+		    }else{
+		    	alert('올바른 차량번호를 입력해 주세요');
+		    }
+		}
+		
+		
+		$("#carNo2").keyup(function(event){ 
+			if (!(event.keyCode >=37 && event.keyCode<=40)) { 
+				var inputVal = $(this).val(); 
+				var check = /[a-z|A-Z]/; 
+				var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
+				if(check.test(inputVal)){ 
+					$(this).val(inputVal.replace(check, ''));
+				}	
+					if(regExp.test(inputVal)){
+					$(this).val(inputVal.replace(regExp, '')); 
+					
+				} 
+			} 
+		});
+				
+				
+		$("#newCarNo").keyup(function(event){ 
+			if (!(event.keyCode >=37 && event.keyCode<=40)) { 
+				var inputVal = $(this).val(); 
+				var check = /[a-z|A-Z]/; 
+				var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
+				if(check.test(inputVal)){ 
+					$(this).val(inputVal.replace(check, ''));
+				}	
+					if(regExp.test(inputVal)){
+					$(this).val(inputVal.replace(regExp, '')); 
+					
+				} 
+			} 
+		});	
+
+
+
+
+
+
+
+
+
+  
+</script>
+</div>
+</body>
+
+
+
+</html>

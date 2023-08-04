@@ -51,7 +51,6 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 	@Override
 	public int insertPartiMemberAll(List<ProPostSchVO> vo) {
 		int result = 0;
-		//System.out.println("서비스"+vo);
 		
 		if(vo.get(0).getId() != null) {
 			//전체 삭제

@@ -27,6 +27,7 @@ import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
 import com.groo.bear.pro.service.provo.ProPartiAlarmVO;
+import com.groo.bear.pro.service.provo.ProPerSettingVO;
 import com.groo.bear.pro.service.provo.ProUsersVO;
 import com.groo.bear.pro.service.provo.ProVO;
 
@@ -43,9 +44,7 @@ public class ProController {
 		model.addAttribute("projectGroupList", proService.readProjectGroup((String)session.getAttribute("Id")));
 		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
 		String currentURI = request.getRequestURI();
-		System.out.println(currentURI);
 		model.addAttribute("firstURI", firstURI(currentURI));//첫번쨰 주소
-		System.out.println("주소" + firstURI(currentURI));
 		return model;
 	}
 	
@@ -104,15 +103,12 @@ public class ProController {
 			param.put("proRange", newProRange);//정렬 기본값
 			param.put("proPartiFilter", oldProPartiFilter);
 			result = proService.updateProjectOrder(newProRange, id);
-			//System.out.println("정렬임");
 		//필터 변경시
 		} else if (newProRange == null || newProRange == "") {
 			param.put("proRange", oldProRange);//정렬 기본값
 			param.put("proPartiFilter", newProPartiFilter);//기본값 참여중or관리자 프로젝트 구분
 			result = proService.updateProjectFilter(newProPartiFilter, id);
-		} else {
-			System.out.println("오류다!!!");
-		}
+		};
 		
 		model.addAttribute("projectMainList", proService.readProject(param));
 		model.addAttribute("userProjectFilter", vo2);
@@ -151,7 +147,7 @@ public class ProController {
 	}
 	
 	//프로젝트 그룹 상세 리스트 보기
-	@GetMapping("/proGroupD/{groupNo}")
+	@GetMapping("proGroupD/{groupNo}")
 	public String proGroupDetailList(Model model, @PathVariable int groupNo, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
@@ -160,7 +156,7 @@ public class ProController {
 		model.addAttribute("readGroupCheckPro", proService.readGroupCheckPro(groupNo, id));
 		proData(model, request);
 		return "proHome/proMainSub";
-	}
+	};
 	
 	//프로젝트 그룹 생성
 	@PostMapping("proGroupC")
@@ -254,10 +250,8 @@ public class ProController {
 	//프로젝트그룹에 프로젝트 추가
 	@PostMapping("creGroupManage")
 	@ResponseBody
-	public Map<String, Object> proGroupcrepro(@RequestBody ProGroupManageVO vo) {
-		int result = proService.createGroupProManage(vo);
-		
-		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
+	public ProPerSettingVO proGroupcrepro(@RequestBody ProGroupManageVO vo) {
+		return proService.createGroupProManage(vo);
 	}
 	//프로젝트그룹에 프로젝트 삭제
 	@PostMapping("delGroupManage")
@@ -272,7 +266,6 @@ public class ProController {
 	@ResponseBody
 	public Map<String, Object> updateProPartiY(@RequestBody int proMemNo) {
 		int result = proService.updateProPartiY(proMemNo);
-		System.out.println(proMemNo);
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	};
 	
@@ -280,7 +273,6 @@ public class ProController {
 	@ResponseBody
 	public Map<String, Object> deleteProPartiN(@RequestBody int proMemNo) {
 		int result = proService.deleteProPartiN(proMemNo);
-		System.out.println(proMemNo);
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	};
 	

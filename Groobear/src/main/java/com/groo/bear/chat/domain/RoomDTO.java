@@ -18,7 +18,7 @@ public class RoomDTO {
     private LocalDate roomTime;
     
     private int empNo;
-    
+    private String inRoomUserName;
     private String name;
     private String rank;
     private String deptName;
@@ -28,5 +28,6 @@ public class RoomDTO {
     
     private int participantCount;
     private String lastMessage;
+    private String content;
     
 }

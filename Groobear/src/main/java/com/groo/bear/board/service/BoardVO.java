@@ -40,5 +40,7 @@ public class BoardVO {
 	private String comDate;
 	private int btNo;
 	
+	private String deptAuth;
+	
 	
 }
