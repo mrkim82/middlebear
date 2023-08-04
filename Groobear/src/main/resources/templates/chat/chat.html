@@ -8,14 +8,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>	
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
  <style>
+ .material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 500,
+  'GRAD' 0,
+  'opsz' 58
+  
+}
     * {
         margin: 0;
         padding: 0;
     }
     body {
-	background-color: #96c8fa; /* 배경색을 #f8f9fa (회색조)로 설정 */
+	background-color: #CCFFCC; /* 배경색을 #f8f9fa (회색조)로 설정 */
 }
     .chat_wrap .header {
         font-size: 14px;
@@ -35,6 +43,7 @@
     position: relative; /* 상대 위치 지정 */
 }
 
+
 .header .room-title {
     position: absolute; /* 절대 위치 지정 */
     left: 50%; /* 왼쪽으로부터 50% 위치에 배치 */
@@ -42,9 +51,10 @@
 }
 
 .header .header-icons {
+    margin-left: 470px;
     display: flex;
     gap: 20px; /* 아이콘 사이의 간격을 조절합니다. */
-    margin-right: 20px;
+    /* margin-right: auto; */
 }
     .header a i {
         color: white;  /* Icon color */
@@ -186,6 +196,8 @@
     border-radius: 8px;         /* 테두리 모서리를 둥글게 만듭니다 */
     box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1);  /* 상자 그림자를 설정합니다 */
     z-index: 1000;              /* 상자를 다른 요소 위로 띄웁니다 */
+    left: 0;                    /* 툴팁을 상대적 위치의 왼쪽 끝으로 배치합니다 */
+    
 }
 .tooltip-content p {
     margin: 5px 0;  /* 위아래 마진을 5px로 설정 */
@@ -201,10 +213,10 @@
 		<div class="header">
             <div class="room-title">[[${roomDTO.roomName}]]</div>
             <div class="header-icons">
-                <a href="#" data-toggle="modal" data-target="#inviteModal"><i class="material-icons">group_add</i></a> <!-- Invite Icon -->
-                <a href="#" id="deleteChatroomButton"><i class="material-icons">exit_to_app</i></a> <!-- Exit Icon -->
                 <div id="membersDiv">
-                    <span class="cursor" alt="대화상대">👥</span>
+                    <span class="cursor" id="memberList" alt="대화상대"><span class="material-symbols-outlined">
+                        patient_list
+                        </span></span>
                     <div class="tooltip-content">
                         대화상대
                         <span th:each="user : ${usersName}">
@@ -212,6 +224,9 @@
                         </span>
                     </div>
                 </div>
+                <span class="cursor" data-toggle="modal" data-target="#inviteModal"><i class="material-icons">group_add</i></span> <!-- Invite Icon -->
+                
+                <span class="cursor" id="deleteChatroomButton"><i class="material-icons">exit_to_app</i></span> <!-- Exit Icon -->
             </div>
         </div>
         
@@ -347,7 +362,7 @@ let chatMessageDTO = /*[[${chatDTO}]]*/ 'chatDTO';
 
 // 페이지가 로드될 때 chatDTO 내용을 기반으로 채팅 내용을 화면에 추가
 $(document).ready(function() {
-    $('.cursor').on('click', function(){
+    $('#memberList').on('click', function(){
         $('.tooltip-content').toggle();
         event.stopPropagation(); // 이벤트 버블링을 중지
     });
