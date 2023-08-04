@@ -7,6 +7,7 @@ import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
 import com.groo.bear.pro.service.provo.ProPartiAlarmVO;
+import com.groo.bear.pro.service.provo.ProPerSettingVO;
 import com.groo.bear.pro.service.provo.ProUsersVO;
 import com.groo.bear.pro.service.provo.ProVO;
 
@@ -78,5 +79,8 @@ public interface ProMapper {
 	public int deleteProPartiN(int proMemNo);
 	// 미수락 프로젝트 수
 	public int readNoPartiProCount(String id);
+	
+	//프로젝트 개인 설정 조회
+	public ProPerSettingVO readProPerSetting(int proMemNo);
 	
 }
