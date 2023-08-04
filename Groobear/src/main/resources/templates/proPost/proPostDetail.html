@@ -10,10 +10,10 @@
 <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script> -->
 
 <style>
-
 p {
 	margin: 0px;
 }
+
 .spanCursor {
 	cursor: pointer
 }
@@ -26,20 +26,14 @@ p {
 	color: gray;
 	text-decoration:line-through;
 }
+
 [type="checkbox"] {
 	margin-right: 15px;
 }
 
-/* ul li 스타일 */
-/* ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
+.writtingBody a{
+	color: rgb(55, 50, 50);
 }
-
-li {
-	padding: 5px;
-} */
 </style>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -85,6 +79,7 @@ function drawChart() {
         var options = {
             title: '업무 리포트',
             pieHole: 0.8,
+            //fontName: 'dohyeon',
             legend: {
                 textStyle: {
                     fontSize: 14 // 폰트 크기를 12px로 설정
@@ -127,14 +122,16 @@ function drawChart() {
 			
 			<!-- 글 생성 nav -->
 			<div>
-				<ul class="nav justify-content-center"
-					style="background-color: #faf9f9; margin: 10px;color: silver;">
+				<ul class="nav justify-content-center writtingBody"
+					style="background-color: #faf9f9; margin: 10px;color: silver;
+					border: 1px solid rgb(202, 200, 200); border-radius: 15px;">
 					<li class="nav-item"
 						data-post-code="1">
 						<a class="nav-link"
 						   data-toggle="modal"
 						   data-target="#modal1"
 						   href="#">
+						   <span class="material-symbols-outlined" style="vertical-align: middle;">assignment</span>
 						   <span>글</span>
 						</a>
 					</li>
@@ -144,6 +141,7 @@ function drawChart() {
 						   data-toggle="modal"
 						   data-target="#modal2"
 						   href="#">
+						   <span class="material-symbols-outlined" style="vertical-align: middle;">list</span>
 						   <span>업무</span>
 						</a>
 					</li>
@@ -153,6 +151,7 @@ function drawChart() {
 						   data-toggle="modal"
 						   data-target="#modal3"
 						   href="#">
+						   <span class="material-symbols-outlined" style="vertical-align: middle;">calendar_month</span>
 						   <span>일정</span>
 						</a>
 					</li>
@@ -162,6 +161,7 @@ function drawChart() {
 						   data-toggle="modal"
 						   data-target="#modal4"
 						   href="#">
+						   <span class="material-symbols-outlined" style="vertical-align: middle;">select_check_box</span>
 						   <span>할일</span>
 						</a>
 					</li>
@@ -171,6 +171,7 @@ function drawChart() {
 						   data-toggle="modal"
 						   data-target="#modal5"
 						   href="#">
+						   <span class="material-symbols-outlined" style="vertical-align: middle;">how_to_vote</span>
 						   <span>투표</span>
 						</a>
 					</li>
@@ -596,8 +597,13 @@ function drawChart() {
 			
 			<!-- 게시물 공간 -->
 			<div>
-				<div>
-					<select name="postTypeFilter" id="postTypeFilter" onchange="chagePostType()">
+				<div class="d-flex justify-content-end align-items-right"
+					 style="margin-right:25px;">
+					<select name="postTypeFilter"
+							id="postTypeFilter"
+							class="custom-select"
+							onchange="chagePostType()"
+							style="width:70px; height:30px;">
 						<option value="0">전체</option>
 						<option value="2" th:selected="${proPostVO.postType == 2}">글</option>
 						<option value="1" th:selected="${proPostVO.postType == 1}">업무</option>
