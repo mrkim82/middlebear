@@ -71,7 +71,6 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 		//todo 생성
 		for (ProPostTodoCreListVO todoDetail : todoDetails) {
 			todoDetail.setProPostNo(proPostNo);
-			System.out.println("투두" + todoDetail);
 			tv.createTodo(todoDetail);
 			count++;
 		}
@@ -120,7 +119,6 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 		if(!vo.getVoteDetailContents().isEmpty()) {
 			
 			for (int i = 0; i < vo.getVoteDetailContents().size(); i++) {
-				System.out.println("돈다"+vo.getVoteDetailContents().get(i));
 				tv.createVoteDetail(vo.getVoteDetailContents().get(i), vo.getVoteNo());
 			}
 		}
@@ -146,20 +144,17 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 		for (ProUpdateTodoVO proUpdateTodoVO : vo) {
 			//제목 변경
 			if(proUpdateTodoVO.getPostTitle() != null && !proUpdateTodoVO.getPostTitle().isEmpty()) {
-				System.out.println("제목 변경"+proUpdateTodoVO);
 				ppm.updateProPostTitle(proUpdateTodoVO.getPostTitle(), proUpdateTodoVO.getProPostNo());
 				result++;
 			}
 			//항목 변경
 			if(proUpdateTodoVO.getTodoContent() != null && proUpdateTodoVO.getTodoNo() != 0) {
-				System.out.println("항목 변경"+proUpdateTodoVO);
 				tv.updateTodoDetail(proUpdateTodoVO);
 				result++;
 			}
 			
 			//항목 추가
 			if(proUpdateTodoVO.getTodoContent() != null && proUpdateTodoVO.getTodoNo() == 0) {
-				System.out.println("항목 추가"+proUpdateTodoVO);
 				tv.createTodoDetail(proUpdateTodoVO);
 				result++;
 			}

@@ -78,9 +78,9 @@ public class proPostController {
 		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));//프로젝트 참가자 수
 		String currentURI = request.getRequestURI();
 		model.addAttribute("firstURI", firstURI(currentURI));//첫번쨰 주소
-		System.out.println("ps주소"+firstURI(currentURI));
+		
 		return model;
-	}
+	};
 	
 	@GetMapping("proPostMain/{proNo}")
 	public String proPostPage(Model model, HttpServletRequest request, @PathVariable int proNo, ProPostVO vo) {
@@ -103,7 +103,6 @@ public class proPostController {
 		model.addAttribute("readPartiListM", proPostService.readPartiListM(proNo));//프로젝트 초대 할 인원
 		model.addAttribute("readProDetailCount", proPostService.readProDetailCount(proNo));//프로젝트 인원
 		
-		//System.out.println("게시글"+model.getAttribute("projectPartiMember"));
 		switch (homeTab) {
 		//업무
 		case 1 :
@@ -135,7 +134,6 @@ public class proPostController {
 			model.addAttribute("readVotePartiCount", todoNVote.readVotePartiCount(proNo));//투표 인원 수
 			model.addAttribute("readxxVote", todoNVote.readxxVote(id, proNo));//투표 checked를 위한 조회
 			
-			//System.out.println("게시글"+model.getAttribute("readFeedPost"));
 			pagePath = "proPost/proPostDetail";
 			break;
 		//간트차트
@@ -152,7 +150,7 @@ public class proPostController {
 			model.addAttribute("readPartiList", Sch.readPartiList(proNo));//참석자 조회
 			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
 			model.addAttribute("readSchparti", Sch.readSchparti(id));
-			//System.out.println("게시글"+model.getAttribute("readWorkSchView"));
+			
 			pagePath = "proPost/proPostSchd";
 			break;
 		//파일
@@ -363,8 +361,6 @@ public class proPostController {
 	@ResponseBody
 	public Map<String, Object> delProFile(@RequestBody int proFileNo) {
 		int result = proPostService.deleteProFile(proFileNo);
-		System.out.println(proFileNo);
-		System.out.println(result);
 		return Collections.singletonMap("result", result/2 > 0 ? "성공" : "취소");
 	}
 	

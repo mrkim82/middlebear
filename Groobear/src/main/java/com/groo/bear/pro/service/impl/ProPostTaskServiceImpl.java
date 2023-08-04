@@ -99,7 +99,6 @@ public class ProPostTaskServiceImpl implements ProPostTaskService {
 		if(!vo.getIds().isEmpty()) {
 			
 			for (int i = 0; i < vo.getIds().size(); i++) {
-				System.out.println(vo.getIds().get(i));
 				task.createWorkMember(vo.getProPostNo(), vo.getIds().get(i));
 			}
 		}

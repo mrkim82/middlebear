@@ -45,7 +45,6 @@ public class ProController {
 		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));
 		String currentURI = request.getRequestURI();
 		model.addAttribute("firstURI", firstURI(currentURI));//첫번쨰 주소
-		System.out.println("주소" + firstURI(currentURI));
 		return model;
 	}
 	
@@ -104,15 +103,12 @@ public class ProController {
 			param.put("proRange", newProRange);//정렬 기본값
 			param.put("proPartiFilter", oldProPartiFilter);
 			result = proService.updateProjectOrder(newProRange, id);
-			//System.out.println("정렬임");
 		//필터 변경시
 		} else if (newProRange == null || newProRange == "") {
 			param.put("proRange", oldProRange);//정렬 기본값
 			param.put("proPartiFilter", newProPartiFilter);//기본값 참여중or관리자 프로젝트 구분
 			result = proService.updateProjectFilter(newProPartiFilter, id);
-		} else {
-			System.out.println("오류다!!!");
-		}
+		};
 		
 		model.addAttribute("projectMainList", proService.readProject(param));
 		model.addAttribute("userProjectFilter", vo2);
@@ -255,7 +251,6 @@ public class ProController {
 	@PostMapping("creGroupManage")
 	@ResponseBody
 	public ProPerSettingVO proGroupcrepro(@RequestBody ProGroupManageVO vo) {
-		System.out.println("테"+vo);
 		return proService.createGroupProManage(vo);
 	}
 	//프로젝트그룹에 프로젝트 삭제
@@ -271,7 +266,6 @@ public class ProController {
 	@ResponseBody
 	public Map<String, Object> updateProPartiY(@RequestBody int proMemNo) {
 		int result = proService.updateProPartiY(proMemNo);
-		System.out.println(proMemNo);
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	};
 	
@@ -279,7 +273,6 @@ public class ProController {
 	@ResponseBody
 	public Map<String, Object> deleteProPartiN(@RequestBody int proMemNo) {
 		int result = proService.deleteProPartiN(proMemNo);
-		System.out.println(proMemNo);
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
 	};
 	

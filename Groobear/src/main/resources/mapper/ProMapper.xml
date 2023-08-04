@@ -128,7 +128,7 @@
 	<select id="readProjectGroup" resultType="ProGroupVO">
 		SELECT
 		    CASE
-		        WHEN LENGTH(group_name) >= 8 THEN CONCAT(SUBSTR(group_name, 1, 7), '...')
+		        WHEN LENGTH(group_name) >= 9 THEN CONCAT(SUBSTR(group_name, 1, 8), '...')
 		        ELSE group_name
 		    END AS group_name,
 		    group_no

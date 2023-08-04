@@ -171,13 +171,17 @@ details ul {
 .horizontal-bar {
 	height: 80px;
 	width: 100%;
-	background-color: #f9f9f9;
+	background-color: #ebebeb;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
 }
 
 .horizontal-bar2 {
 	height: 40px;
 	width: 100%;
-	background-color: #f5f5f5;
+	background-color: #e3e3e3;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
 }
 
 .spanCursor {
@@ -203,19 +207,7 @@ textarea {
 	border-bottom: 3px solid red;
 	z-index: 50;
 }
-.nav li:hover{
-  			background-color: #4fc09961;
-  			border-radius:15px;
-  		}
-  		.nav li:hover a{
-  			color:black;
-  		}
-  		.nav li{
-  			transition: 0.5s;
-  		}
-  		a {
-  			text-decoration : none !important;
-  		}
+  		
 /* 체크박스 커스텀 */
 .custom-checkbox {
   position: relative;
@@ -272,6 +264,28 @@ textarea {
 /* Optional: Hover effect */
 .custom-checkbox:hover .checkmark {
   background-color: #ccc;
+}
+
+#sidebar .nav li:hover{
+	background-color: #4fc09961;
+	border-radius:15px;
+}
+
+/* .nav li:hover a{
+	color:black;
+} */
+#sidebar .nav li{
+	transition: 0.5s;
+}
+#sidebar details a:link, #sidebar details a:visited, #sidebar details a:hover, #sidebar details a:active {
+	text-decoration : none !important;
+	color: #35A880;
+	font-size: 16px;
+}
+#sidebar details>summary {
+	font-size: 19px;
+	text-decoration: none;
+	color: #29ac7f;
 }
 </style>
 
@@ -403,15 +417,16 @@ textarea {
 <div class="row dohyeon">
 	<nav id="sidebar"
 		 class="col-md-3 col-lg-2 d-md-block sidebar" style="margin-left: 15px;margin-top: 10px;width: 230px;height: 100%;">
-		<div class="position-sticky" style="text-align: left;">
-			<ul class="nav flex-column" style="width:200px;">
+		<div class="position-sticky" style="text-align: center;">
+			<ul class="nav flex-column" style="width:170px;">
 				<!-- 사이드바 메뉴 아이템들 -->
 				<li class="nav-item"
 					style="text-align: center;">
 					<button type="button"
-							class="btn btn-primary"
+							class="btn btn-groob"
 							data-toggle="modal"
-							data-target="#inviteManPro">
+							data-target="#inviteManPro"
+							style=" font-size:20px; height: 44px; margin-bottom:10px;">
 					  초대된 프로젝트 <span class="badge badge-light inviteCountTarget"></span>
 					</button></li>
 				<!-- <li class="nav-item">
@@ -422,24 +437,22 @@ textarea {
 					data-toggle="modal"
 					data-target="#createProModal">
 					<a href="#"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
-						<span class="material-icons">add_box</span>
 						새 프로젝트 생성</a></li>
 				<li class="nav-item">
 					<a href="/proMain"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
-						<span class="material-icons">home</span>
 						내 프로젝트</a></li>
 				<li class="nav-item">
 					<a href="/proMainS"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
-						<span class="material-icons">star</span>즐겨찾기</a></li>
+						즐겨찾기</a></li>
 				<!-- <li class="nav-item">
 					<a href="#">
 						<span class="material-icons">mail</span>미확인(x)</a></li> -->
 				<li class="nav-item">
 					<a href="/proMainG"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
-						<span class="material-icons">drafts</span>미분류</a></li>
+						미분류</a></li>
 				<li class="nav-item">
 					<a href="/proMainH"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">
-						<span class="material-icons">visibility_off</span>숨김</a></li>
+						숨김</a></li>
 				<!-- <li>
 					<details>
 						<summary>모아보기</summary>
@@ -451,14 +464,14 @@ textarea {
 						</ul>
 					</details>
 				</li> -->
-				<li><div th:text="${currentURI}"></div>
+				<li style="background-color: #fff;"><div th:text="${currentURI}"></div>
 					<details id="groupFolderList" open>
 						<summary>프로젝트 폴더
 							<span onclick="makeGroupFolderModal()"
 								  class="material-icons">add</span>
 						</summary>
 						<!-- 프로젝트 그룹 리스트 -->
-						<ul id="proGroup">
+						<ul id="proGroup" style="list-style-type: none;">
 						<th:block th:each="proG : ${projectGroupList}">
 							<li th:attr="data-gN=${proG.groupNo}, data-fName=${proG.groupName}">
 								<a th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}"
@@ -577,7 +590,7 @@ textarea {
 						   maxlength="30"
 							 style="width: 372px;">
 				</div>
-				<div class=" d-flex justify-content-center" style="margin: 0 auto; padding-top: 6px; padding-bottom: 6px; margin-bottom: 5px;">
+				<div class="d-flex justify-content-center" style="margin: 0 auto; padding-top: 6px; padding-bottom: 6px; margin-bottom: 5px;">
 					<button type="button" class="btn btn-groo" onclick="makeGroupFolder()" style="border-radius:12px; margin-right: 6px;">저장</button>
 					<button type="button" class="btn btn-groo" data-dismiss="modal" style="border-radius:12px; margin-left: 6px;">닫기</button>
 				</div>
@@ -925,8 +938,8 @@ textarea {
 		spanC.textContent = 'more_vert';
 		spanC.onclick = makeGroupMan;
 		
-		if(folderContent.value.length >= 8) {
-			folderContent.value = folderContent.value.substring(0, 7) + '...';
+		if(folderContent.value.length >= 9) {
+			folderContent.value = folderContent.value.substring(0, 8) + '...';
 		};
 			
 		aC.setAttribute('href', '/proGroupD/'+ lGN);
@@ -1031,10 +1044,10 @@ textarea {
 		.then(response => response.json())
 		.then(res => {
 				if (res.result == '성공') {
-				document.querySelector(`[data-gN="${gn}"]`).remove();
-				$('#makeGroupManModal').modal('hide');
+					document.querySelector(`[data-gN="${gn}"]`).remove();
+					$('#makeGroupManModal').modal('hide');
 				} else {
-						alert('요청이 취소 되었습니다.');
+					alert('요청이 취소 되었습니다.');
 				};
 		})
 		.catch(error => {

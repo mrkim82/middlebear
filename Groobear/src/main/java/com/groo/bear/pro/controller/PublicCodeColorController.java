@@ -24,8 +24,8 @@ public class PublicCodeColorController {
 	@PutMapping("updateProMemColor")
 	public Map<String, Object> updateWorkPostStatus(@RequestBody ProGroupVO vo, HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		vo.setId((String)session.getAttribute("Id"));
 		
+		vo.setId((String)session.getAttribute("Id"));
 		int result = pccs.updateProMemColor(vo);
 		
 		return Collections.singletonMap("result", result > 0 ? "성공" : "취소");
