@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/insaTiles}">
+ 
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<title>Groobear 부서권한관리</title>
+    <style>
+    	ul {
+			list-style:none;
+		}
+		
+		li {
+			float: left;
+			padding: 10px;
+		}
+		a { 
+			text-decoration:none ;
+			color: black;
+		}
+		.paging .active a {
+		    background-color: #f00;
+		    color: #fff;
+		}
+        /* 스타일링을 위한 CSS 코드 */
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            width: calc(33.33% - 70px); /* 3개의 카드를 한 줄에 배치하기 위해 폭을 조절 */
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        button {
+			padding: 10px 20px;
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+    </style>
+</head>
+<body layout:fragment="content" >
+	<h3 style='text-align:center;'>Groobear 부서권한관리</h3>
+	<button type="button" id="addBtn" onclick="addPopUp()">부서등록</button>
+    <div class="card-container">
+        <div class="card"  th:each="dept, stat : ${deptList}">
+            <div style="margin:5px;padding:10px;border:1px solid black;text-align:center;">
+            	<a style="margin:10px auto;">부서명 : [[${dept.deptName}]]</a>
+            </div>
+          	<div style="margin:5px;padding:10px;border:1px solid black;">
+          		<table class="list" style="width:100%;margin-top:20px;margin-bottom:20px;">
+          			<tr>
+						<td style="text-align:center;" th:if="${dept.deptHead != null}">팀장 : [[${dept.deptHead}]]</td>          			
+						<td style="text-align:center;" th:unless="${dept.deptHead != null}">팀장 : 공석</td>
+          			</tr>
+          			<tr style="height: 10px;"></tr>
+          			<tr>
+          				<th:block th:each="cnt, stat : ${deptCnt}">
+							<td style="text-align:center;" th:if="${dept.deptName == cnt.deptName}">총원 : [[${cnt.deptCnt}]]명</td>        
+						</th:block>  			
+          			</tr>
+          			<tr style="height: 10px;"></tr>
+          			<tr>
+						<td style="text-align:center;">생성일 : <span th:text="${#dates.format(dept.deptDate, 'yyyy.MM.dd')}"></span></td>    
+          			</tr>
+          			<tr style="height: 10px;">
+          				<td><input type="text" style="display:none;" class="chkDeptNo" th:value="${dept.deptNo}"></td>
+          			</tr>
+          			<tr>
+						<td style="text-align:center;"><button type="button" class="deptBtn" onclick="deptPopUp()">부서정보</button></td>      			
+          			</tr>
+          		</table>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex;justify-content: center;height:30px;">
+	    <ul class="paging" th:if="${paging.endPage != 0}">
+					<li>
+						<a th:href="|javascript:goPage(1)|">처음</a>
+					</li>
+	        <li th:if="${paging.prev}">
+	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+	        </li>
+	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
+	            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+	        </li>
+	        <li th:if="${paging.next and paging.endPage > 0}">
+	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+	            </li>
+				<li>
+					<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
+				</li>
+	    </ul>
+	</div>
+	<div style="display: flex;justify-content: center;">
+		<form name="searchForm" action="deptList">
+		<input type="hidden" name="page" value="1"/><br>
+		<select name="type">
+			<option value='' selected>-- 선택 --</option>
+			<option value='deptHead' th:selected="${criteria.type == 'deptHead'}">부서장</option>
+			<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
+		</select>
+		<input type="text" name="keyword" id="inputBtn" th:value="${criteria.keyword}"/>
+		<button type="submit" id="searchBtn">검색</button>
+	</form>
+	</div>
+    <script>
+    //부서추가 팝업
+    function addPopUp() {
+    	// window.name = "부모창 이름"; 
+        window.name = "deptList";   
+        // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+        openWin = window.open("/deptAddForm", "deptInsert", "width=450, height=480, resizable = no, scrollbars = no");    	
+    } 
+	//페이징 관련
+	function goPage(p) {
+	    //event.preventDefault();
+	    document.searchForm.page.value = p;
+	    document.searchForm.submit();
+	}
+    
+ 	// 팝업창
+    let checkPop = '';
+    let openWin;
+	
+    function deptPopUp() {
+    	let deptNo = $(event.target).closest('table').find('.chkDeptNo').val();
+    	console.log(deptNo)
+    	checkPop = deptNo;
+    	// window.name = "부모창 이름"; 
+        window.name = "deptInfo";   
+        // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+        openWin = window.open("/deptDetailInfo?deptNo="+deptNo, "deptDetailInfo", "width=450, height=480, resizable = no, scrollbars = no");    	
+    }
+        
+  	//날짜포맷 맞춰주는 함수 
+	function SimpleDateTimeFormat(date, pattern) {
+		var dateString = pattern.replace(/(yyyy|MM|dd|HH|mm|ss|SSS)/g, function(match) {
+			var matchString = "";
+			switch(match) {
+				case "yyyy":
+					matchString = date.getFullYear();
+					break;
+				case "MM":
+					matchString = date.getMonth() + 1;
+					break;
+				case "dd":
+					matchString = date.getDate();
+					break;
+				case "HH":
+					matchString = date.getHours();
+					break;
+				case "mm":
+					matchString = date.getMinutes();
+					break;
+				case "ss":
+					matchString = date.getSeconds();
+					break;
+				case "SSS":
+					matchString = date.getMilliseconds();
+					break;
+				default :
+					matchString = match;
+					break;
+			}
+			if (match == "SSS") {
+				if (matchString < 10) {
+					matchString = "00" + matchString;
+				} else if (matchString < 100) {
+					matchString = "0" + matchString;
+				}
+			} else {
+				if ((typeof(matchString) == "number" && matchString < 10)) {
+					matchString = "0" + matchString;
+				}
+			}
+			return matchString;
+		});
+	
+		return dateString;
+	}
+    </script>
+</body>
+</html>

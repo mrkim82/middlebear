@@ -59,6 +59,10 @@
 	box-shadow: 2px 4px 3px 3px darkgray;
 }
 
+html {
+	height: 1300px;
+}
+
 th {
 	font-size: large;
 	text-align: center;
@@ -74,9 +78,16 @@ th {
 	border: 1px solid #35A880;
 }
 
+.btn-groob {
+	background-color: #35A880;
+	color: #fff;
+	border: 1px solid #35A880;
+	border-radius: 12px;
+}
+
 .square {
-	width: 40px;
-	height: 40px;
+	width: 35px;
+	height: 35px;
 	background-color: #000;
 	margin-left: 30px;
 	border-radius: 10px;
@@ -125,7 +136,7 @@ details {
 }
 
 .gray:before {
-  color: gray;
+  color: #ccc;
 }
 
 .yellow:before {
@@ -147,11 +158,6 @@ details {
 
 details ul {
 	padding: 0px;
-}
-
-.flex-column li {
-	margin-left: 10px;
-	padding: px;
 }
 
 .horizontal-bar {
@@ -202,6 +208,63 @@ textarea {
   		a {
   			text-decoration : none !important;
   		}
+/* 체크박스 커스텀 */
+.custom-checkbox {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 16px;
+  padding-left: 30px;
+  margin-right: 15px;
+  user-select: none;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.custom-checkbox input:checked + .checkmark {
+  background-color: #2196F3;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox input:checked + .checkmark:after {
+  display: block;
+}
+
+.custom-checkbox .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+/* Optional: Hover effect */
+.custom-checkbox:hover .checkmark {
+  background-color: #ccc;
+}
 </style>
 
 </head>
@@ -238,7 +301,8 @@ textarea {
 							<td style="font-size: 20px;">
 								<span>
 									<a href="/logout"
-									   class="dohyeon">로그아웃</a>
+									   class="dohyeon"
+									   >로그아웃</a>
 								</span>&nbsp;&nbsp;&nbsp;&nbsp;
 								<span>
 									<a id="commute"
@@ -334,7 +398,8 @@ textarea {
 		<div class="position-sticky" style="text-align: left;">
 			<ul class="nav flex-column" style="width:200px;">
 				<!-- 사이드바 메뉴 아이템들 -->
-				<li class="nav-item">
+				<li class="nav-item"
+					style="text-align: center;">
 					<button type="button"
 							class="btn btn-primary"
 							data-toggle="modal"
@@ -409,7 +474,7 @@ textarea {
 	<!-- <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 		<div layout:fragment="content"></div>
 	</main> -->
-	<div class="col-9">
+	<div  style="padding: 0px; width:1007.5px">
 	
 		<!-- 프로젝트 상세 상단 바 proPostMain으로 시작하는 경우 horizonBar 프래그먼트 포함 -->
 		<th:block th:if="${#strings.containsIgnoreCase(firstURI,'proPostMain')} or
@@ -422,6 +487,7 @@ textarea {
 						 ${!#strings.containsIgnoreCase(firstURI,'proSearch')}">
 			<div th:insert="~{layout/proMainBar :: mainTopBar}" class="dohyeon"></div>
 		</th:block>
+		
 		<main>
 	        <div layout:fragment="content" class="dohyeon"></div>
 	    </main>
@@ -432,9 +498,9 @@ textarea {
 <!-- 사이드바 내용 종료 -->
 
 <!-- 모달 영역 -->
-<!-- 초대된 프로젝트 모달 -->
 <div class="row dohyeon">
 
+	<!-- 초대된 프로젝트 모달 -->
 	<div class="modal fade" id="inviteManPro" tabindex="-1" aria-labelledby="inviteManProLabel" aria-hidden="true">
 	  <div class="modal-dialog">
 	    <div class="modal-content dohyeonModalContent">
@@ -518,7 +584,7 @@ textarea {
 	<!-- 그룹 관리 모달  -->
 	<div class="modal fade" id="makeGroupManModal" tabindex="-1" aria-labelledby="makeGroupManModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
-			<div class="modal-content"
+			<div class="modal-content dohyeonModalContent"
 					 style="width: 300px;">
 				<div class="modal-header">
 					<h5 class="modal-title" id="makeGroupManModalLabel"></h5>
@@ -527,15 +593,15 @@ textarea {
 					</button>
 				</div>
 				<div class="modal-body" style="text-align: center;">
-					<button type="button" class="btn btn-secondary"
-									style="width: 100px;border-radius: 5px;"
+					<button type="button" class="btn btn-groo"
+									style="width: 80px;border-radius: 12px;"
 									id="groupNameChangeBtn"
 									onclick="updateManButton()">수정</button>
-					<button type="button" class="btn btn-secondary"
-									style="width: 100px;border-radius: 5px;"
+					<button type="button" class="btn btn-groo"
+									style="width: 80px;border-radius: 12px;"
 									id="groupNameDeleteBtn"
 									onclick="deleteGroupFolder()">즉시삭제</button>
-					<h6>그룹안에 프로젝트는 삭제되지 않습니다</h6>
+					<h6 style="font-size: x-small; text-align: right; margin-top: 7px;">* 그룹안의 프로젝트는 삭제되지 않습니다!</h6>
 				</div>
 			</div>
 		</div>
@@ -544,23 +610,24 @@ textarea {
 	<!-- 프로젝트 그룹 수정 모달 -->
 	<div class="modal fade" id="updateManButton" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="updateManButtonLabel" aria-hidden="true">
 		<div class="modal-dialog">
-			<div class="modal-content">
+			<div class="modal-content dohyeonModalContent"  style="width: 434px;">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateManButtonLabel">수정화면</h5>
+					<h5 class="modal-title" id="updateManButtonLabel">그룹 폴더명 수정</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-			<div class="modal-body">
+			<div class="modal-body" style="text-align: center;">
 				<input type="text"
 					   placeholder="프로젝트 폴더명을 입력하세요"
 					   id="folderContentChange"
 					   autocomplete="off"
-					   maxlength="30">
+					   maxlength="30"
+						 style="width: 372px;">
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-	        	<button type="button" class="btn btn-primary" onclick="changeGroupFolderName()">수정</button>
+				<button type="button" class="btn btn-groob" onclick="changeGroupFolderName()">수정</button>
+				<button type="button" class="btn btn-groob" data-dismiss="modal">닫기</button>
 			</div>
 			</div>
 		</div>
@@ -617,6 +684,9 @@ textarea {
 	//닫길때 input 값 초기화
 	$('#createGroupFolderModal').on('hidden.bs.modal', function (event) {
 		$('#folderContent').val('');
+	});
+	$('#updateManButton').on('hidden.bs.modal', function (e) {
+		$(this).find('.input').val('');
 	});
 	
 	//postTiles꺼
@@ -690,12 +760,14 @@ textarea {
 			projectNameCell.textContent = project.proName;
 			projectNameCell.style.fontSize = '15px';
 			projectNameCell.style.paddingLeft = '20px';
+			projectNameCell.style.verticalAlign = 'middle';
 			tr.appendChild(projectNameCell);
 			
 			// 멤버명 열 추가
 			const memberNameCell = document.createElement('td');
 			memberNameCell.textContent = project.rank + ' ' +project.name;
 			memberNameCell.style.fontSize = '15px';
+			memberNameCell.style.verticalAlign = 'middle';
 			tr.appendChild(memberNameCell);
 	
 			// 수락 버튼 추가
@@ -728,10 +800,6 @@ textarea {
 			inviteTbody.appendChild(tr);
 		});
 	  };
-	  
-	/* $('#modal2').on('hidden.bs.modal', function (e) {
-		$(this).find('.uploadResult ul li').remove();
-	}); */
 </script>
 
 <!-- 프로젝트 참여 수락 -->
@@ -794,16 +862,13 @@ textarea {
 	
 	function makeGroupFolder() {
 		//폴더 갯수 확인
-		console.log(groupFolderList.querySelectorAll('li').length)
 		if(groupFolderList.querySelectorAll('li').length >= 10) {
 			alert('프로젝트 폴더는 최대 10개 생성 할 수 있습니다.');
-			folderContent.value = '';
+			$('#createGroupFolderModal').modal('hide');
 		} else {
 			//폴더명 확인
 			checkGroupFolderName();
 		}
-		//그룹 생성 모달 값 초기화
-		$('#createGroupFolderModal').modal('hide');
 	};
 	
 	//폴더명 확인
@@ -829,6 +894,7 @@ textarea {
 				if(res.result == '성공') {
 					//동적 폴더 생성
 					createFolder(res.pGN);				
+					$('#createGroupFolderModal').modal('hide');
 				} else {
 					alert('요청이 취소 되었습니다.');
 				}
@@ -843,27 +909,28 @@ textarea {
 	function createFolder(lGN) {
 		let pG = document.getElementById('proGroup');
 		let liC = document.createElement('li');
+		liC.setAttribute('data-gn', lGN);
+		liC.setAttribute('data-fname' , folderContent.value);
 		let aC = document.createElement('a');
-		let spanC = document.createElement('span');
+		aC.style.overflow = 'hidden';
+		aC.style.width = '80px';
 		
+		let spanC = document.createElement('span');
 		spanC.className = 'material-icons moreVertIcons';
 		//spanC.style = 'display : none;';
 		spanC.textContent = 'more_vert';
+		spanC.onclick = makeGroupMan;
 		
 		if(folderContent.value.length >= 8) {
 			folderContent.value = folderContent.value.substring(0, 7) + '...';
 		};
 			
 		aC.setAttribute('href', '/proGroupD/'+ lGN);
-		aC.setAttribute('data-gN', lGN);
-		aC.setAttribute('data-fName', folderContent.value);
 		aC.textContent = folderContent.value;
 		
 		aC.append(spanC);
 		liC.append(aC);
 		pG.prepend(liC);
-		
-		folderContent.value = '';
 	};
 </script>
 
@@ -893,12 +960,19 @@ textarea {
 				if(res.result == '성공') {
 					let targetGroupFolder = document.querySelector(`[data-gN="${groupNo}"]`);
 					targetGroupFolder.setAttribute('data-fname', folderContentChange.value);
-					targetGroupFolder.children[0].textContent = folderContentChange.value;
+					console.log(targetGroupFolder.children[0])
+					targetGroupFolder.children[0].innerHTML = `
+						${folderContentChange.value}
+							<span class='material-icons moreVertIcons'
+							  onclick="makeGroupMan()">more_vert
+						</span>
+					`;
 
 					//글자수 길이 제한
 					if(folderContentChange.value.length >= 8) {
 						folderContentChange.value = folderContentChange.value.substring(0, 7) + '...';
 					};
+					$('#updateManButton').modal('hide');
 				} else {
 					alert('요청이 취소 되었습니다.');
 				};

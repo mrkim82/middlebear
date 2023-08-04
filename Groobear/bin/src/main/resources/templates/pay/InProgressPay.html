@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/paymentTiles}">
+<head>
+<meta charset="UTF-8">
+<title>InProgressPay</title>
+</head>
+<body layout:fragment="content">
+	<div>
+		<table id="list" class="table">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>문서번호</th>
+					<th>문서제목</th>
+					<th>기안자</th>
+					<th>작성일자</th>
+					<th>결재</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="pay,stat : ${InProgressList}" th:attr="onclick='window.location.href=\'/payInfoRead?payNo=' + ${pay.payNo} + '+&docType='+${pay.docType}+'\''">
+					<td>[[${paging.totalCount - stat.index}]]</td>
+					<td th:text="${pay.payNo}"></td>
+					<td>[[${pay.purpose}]]</td>
+					<td>[[${pay.id}]]</td>
+					<td th:text="${#dates.format(pay.issueDate, 'yyyy.MM.dd')}"></td>
+					<td th:if="${ 
+						(pay.approver2 == session.Id and pay.payStatus2== 'N') or 
+						(pay.approver3 == session.Id and pay.payStatus2== 'Y' and pay.payStatus3=='N')}">
+						<span style="color:red">결재중</span>
+					</td>
+					<td th:unless="${ (pay.approver2 == session.Id and pay.payStatus2== 'N') or 
+						(pay.approver3 == session.Id and pay.payStatus2== 'Y')}">결재중</td>
+					<td id="docType" style="display:none;">[[${pay.docType}]]</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div>
+		<ul class="paging" th:if="${paging.endPage != 0}">
+        <li th:if="${paging.prev}">
+            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+        </li>
+        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+        </li>
+        <li th:if="${paging.next and paging.endPage > 0}">
+            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+        </li>
+    </ul>
+	</div>
+	<script>
+	function goPage(p){
+		location.href="InProgressPay?page="+p;
+			
+	}
+	</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
  layout:decorate="~{layout/paymentTiles}">
 <head>
 <meta charset="UTF-8">
-<title>InProgressPay</title>
+<title>완료된결재문서 페이지</title>
 </head>
 <body layout:fragment="content">
 	<div>
@@ -20,7 +20,7 @@
 			</thead>
 			<tbody>
 				<tr th:each="pay,stat : ${completePaymentList}" th:attr="onclick='window.location.href=\'/payInfoRead?payNo=' + ${pay.payNo} + '+&docType='+${pay.docType}+'\''">
-					<td>[[${paging.totalCount - stat.index}]]</td>
+					<td th:text="${paging.totalCount - ((paging.cri.page-1) * paging.cri.perPageNum) - stat.index}"></td>
 					<td th:text="${pay.payNo}"></td>
 					<td>[[${pay.purpose}]]</td>
 					<td>[[${pay.id}]]</td>

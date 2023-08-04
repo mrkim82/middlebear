@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.groo.bear.mail.mapper.MailMapper">
+	<!-- 메일발송 -->
+	<insert id="sendMail" statementType="CALLABLE" parameterType="MailVO">
+		 {call cre_mailsend(sysdate,
+		 					sysdate,
+		 		<choose>
+					<when test="deleteDate != null">
+							#{deleteDate},
+					</when>
+					<otherwise>
+							'',
+					</otherwise>
+				</choose>
+		 					'N',
+		 					'S',
+		 					#{id},
+		 					#{title},
+		 					#{content},
+		 					#{sender},
+		 					#{receiver},
+		 		<choose>
+				<when test="referrer != null and !referrer.equals('')">
+		 					#{referrer},
+		 		</when>
+		 		<otherwise>
+		 					'',
+		 		</otherwise>
+		 		</choose>
+		 					'S',
+		 					#{id}
+		 					)}
+	</insert>
+	<!-- 메일 전체리스트 -->
+	<select id="mailAllList" resultType="MailVO">
+		SELECT a.mail_no, a.send_date, a.receive_date, a.delete_date, a.read_check, a.mail_type, a.id,a.mail_set,b.title,b.content,c.sender,c.receiver,c.referrer
+		FROM mail a, mail_details b, mail_personnel c
+		WHERE a.mail_no = b.mail_no 
+		AND b.mail_no = c.mail_no
+		AND a.mail_set = 'N'
+		ORDER BY a.mail_no
+	</select>
+	<!-- 메일 전체리스트 조회 발송후 update -->
+	<update id="mailSetUpdate" parameterType="int">
+		UPDATE mail
+		SET mail_set = 'Y'
+		WHERE mail_no = #{mailNo}
+	</update>
+	<!-- 메일함전체조회임 잊지말것 -->
+	<select id="deletedMail" resultType="MailVO">
+          SELECT * 
+          FROM (SELECT g.mail_no,g.send_date,g.receive_date,
+			g.delete_date,g.read_check,g.mail_type,
+			g.mail_set,g.title,g.content, g.sender, g.receiver, g.referrer, g.id, ROWNUM AS rn FROM 
+	(SELECT c.mail_no,c.send_date,c.receive_date,
+			c.delete_date,c.read_check,
+			c.mail_set,c.title,c.content, d.sender, d.receiver, d.referrer, d.id, d.mail_type
+          FROM mail_personnel d JOIN
+		(SELECT a.mail_no, a.send_date, a.receive_date, a.delete_date,
+		 a.read_check, a.mail_type, a.id,a.mail_set,b.title,b.content 
+		 FROM mail a JOIN mail_details b ON a.mail_no = b.mail_no) c
+			ON c.mail_no = d.mail_no
+			
+                  where d.mail_type = #{mailVO.mailType}
+                  And c.mail_set = 'Y'
+                  <if test="mailVO.receiver != null and mailVO.referrer != null">
+                 		AND (d.receiver = #{mailVO.receiver}
+                  		OR d.referrer = #{mailVO.referrer})
+						AND d.id = #{mailVO.id}
+                 	</if>
+			<if test="mailVO.sender != null and mailVO.receiver == null">
+					AND d.sender = #{mailVO.sender}
+					AND d.id = #{mailVO.id}
+			</if>
+			<if test="mailVO.receiver != null and mailVO.sender != null">
+					AND (d.receiver = #{mailVO.receiver}
+					 OR d.sender = #{mailVO.sender}
+					 OR d.referrer = #{mailVO.referrer})
+					 AND d.id = #{mailVO.id}
+			</if>
+			<if test="mailVO.deleteDate != null">
+                  			AND c.delete_date = #{mailVO.deleteDate}
+  	        	</if>
+              )g
+          )
+          <![CDATA[
+          WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+          ]]>
+	</select>
+	<!-- 지운메일 갯수 출력 -->
+	<select id="countDeleteMail" resultType="int">
+		SELECT COUNT(*) FROM mail a, mail_personnel b
+			WHERE a.mail_no = b.mail_no
+	        AND b.mail_type = #{mailType}
+	        AND (b.sender = #{sender}
+	        OR b.receiver = #{receiver})
+	        AND b.id = #{id}
+	        <if test="deleteDate != null">
+              AND e.delete_date = #{deleteDate}
+  	        </if>
+	</select>
+	<!-- 보낸메일 갯수 출력 -->
+	<select id="countSendMail" resultType="int">
+		SELECT COUNT(*) FROM mail a, mail_personnel b
+			WHERE a.mail_no = b.mail_no
+            AND b.mail_type = 'S'
+            AND a.mail_set = 'Y'
+            AND b.sender = #{sender}
+            AND b.id = #{sender}
+	</select>
+	<!-- 받은메일 갯수 출력 -->
+	<select id="countReceiveMail" resultType="int">
+		SELECT COUNT(*) FROM mail a, mail_personnel b
+			WHERE a.mail_no = b.mail_no
+            AND b.mail_type = 'S'
+            AND (b.receiver = #{receiver}
+            OR b.referrer = #{referrer})
+            AND b.id = #{id}
+	</select>
+	
+	<!-- 메일삭제(지운메일함으로) -->
+	<delete id="deleteMail" parameterType="MailVO">
+		UPDATE mail_personnel
+		SET mail_type = 'D'
+		WHERE mail_no = #{mailNo}
+		AND id = #{id}
+	</delete>
+	<!-- 완전삭제(db에서 삭제) -->
+	<delete id="realDeleteMail" parameterType="MailVO">
+		delete mail_personnel
+		where mail_no=#{mailNo}
+		AND id = #{id}
+	</delete>
+	<!-- 메일 상세조회 -->
+	<select id="mailInfo" resultType="MailVO">
+		SELECT a.mail_no, a.send_date, a.receive_date, a.delete_date, a.read_check,b.title,b.content,c.sender,c.receiver,c.referrer,c.id
+		FROM mail a, mail_details b, mail_personnel c
+		WHERE a.mail_no = b.mail_no 
+		AND b.mail_no = c.mail_no
+		AND a.mail_no = #{mailNo}
+		AND c.id = #{id}
+	</select>
+	<!-- 메일번호 받아오는 쿼리문 -->
+	<select id="mailNo" resultType="int">
+		SELECT NVL(MAX(mail_no),0)+1 as mail_no FROM mail
+	</select>
+	<!-- 확인한메일 -->
+	<update id="mailCheck" parameterType="int">
+		UPDATE mail
+		SET read_check = 'Y'
+		WHERE mail_no = #{mailNo}
+	</update>
+	<!-- 메일 작성시 personnel에 추가용도 -->
+	<insert id="insertPersonnel" parameterType="MailVO">
+		INSERT INTO mail_personnel(sender,receiver,referrer,mail_no,id,mail_type)
+							VALUES(
+									#{sender},
+									#{receiver},
+									#{referrer},
+									#{mailNo},
+									#{id},
+									'S'
+							)
+	</insert>
+	<!-- personnel 최대번호 조회 -->
+	<select id="personnelNo" resultType="int">
+		SELECT MAX(mail_no) FROM mail_personnel
+	</select>
+	<!-- 이메일로 유저정보 받아오기 -->
+	<select id="userIdGet" resultType="String">
+		select id FROM users
+		where email=#{email}
+	</select>
+</mapper>

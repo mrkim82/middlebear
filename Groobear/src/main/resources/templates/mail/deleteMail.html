@@ -3,7 +3,7 @@
  layout:decorate="~{layout/mailTiles}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>지운메일함 페이지</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 </head>
 <body layout:fragment="content">
@@ -12,16 +12,16 @@
 		<thead>
 			<tr>
 				<th><input type="checkbox" class="allCheck"></th>
-				<th><button type="button" class="del">삭제</button></th>
+				<th style="padding-left:25px"><button type="button" class="del">삭제</button></th>
 			</tr>
 		</thead>
 		<tbody id="MailBody">
 			<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
 				<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
-				<td>[[${mail.mailNo}]]</td>
-				<td>[[${mail.sender}]]</td>
-				<td>[[${mail.content}]]</td>
-				<td th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td style="display:none">[[${mail.mailNo}]]</td>
+				<td style="padding-left:25px">[[${mail.sender}]]</td>
+				<td style="padding-left:25px">[[${mail.content}]]</td>
+				<td style="padding-left:25px" th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
 			</tr>
 		</tbody>
 	</table>
