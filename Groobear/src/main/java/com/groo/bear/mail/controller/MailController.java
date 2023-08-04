@@ -71,6 +71,7 @@ public class MailController {
 		System.out.println("메일VO"+mailVO);
 		Paging paging = new Paging();
         paging.setCri(cri);
+        paging.setTotalCount(mailService.countReceiveMail(mailVO));
 		model.addAttribute("mailList",mailService.getMailList(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/receiveMail";
