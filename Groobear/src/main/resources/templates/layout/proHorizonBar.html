@@ -65,13 +65,13 @@
 	<div class="horizontal-bar2 container">
 		
 		<nav class="nav row justify-content-between">
-		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=1)}"
+		  <a class="nav-link proMover" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=1)}"
 		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '1'} ? 'bottomLine' : ''">업무</a>
-		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=2)}"
+		  <a class="nav-link proMover" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=2)}"
 		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '2'} ? 'bottomLine' : ''">피드</a>
-		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=3)}"
+		  <a class="nav-link proMover" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=3)}"
 		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '3'} ? 'bottomLine' : ''">간트차트</a>
-		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=4)}"
+		  <a class="nav-link proMover" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=4)}"
 		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '4'} ? 'bottomLine' : ''">캘린더</a>
 		  <!-- <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=5)}"
 		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '5'} ? 'bottomLine' : ''">파일</a> -->
@@ -83,11 +83,11 @@
 			<th:block th:text="${#strings.substringAfter(#request.getQueryString(), '=')}"></th:block> -->
 			<input type="text" id="proInSearch" placeholder="프로젝트 내 검색 (제목, 내용, 작성자)" style="height:30px; margin-top: 5.5px; margin-left: 280px; width: 276px;">
 			<div style="margin-right:50px; margin-top:7px;">
-			<span class="material-symbols-outlined spanCursor"
+			<span class="material-symbols-outlined spanCursor proMover"
 				  data-toggle="modal"
 				  data-target="#inviteMember">group_add</span>
-					<span class="material-symbols-outlined spanCursor" onclick="exitProMem()">logout</span>
-					<span class="material-symbols-outlined spanCursor" onclick="delPro()">delete</span>
+					<span class="material-symbols-outlined spanCursor proMover" onclick="exitProMem()">logout</span>
+					<span class="material-symbols-outlined spanCursor proMover" onclick="delPro()">delete</span>
 				</div>
 		</nav>
 	</div>

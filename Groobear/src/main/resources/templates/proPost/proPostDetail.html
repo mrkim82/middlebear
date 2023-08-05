@@ -37,6 +37,27 @@ p {
 li {
 	list-style-type: none;
 }
+
+/* todo css */
+[data-todo-make-list] input:first-child {
+	width: 300px;
+}
+
+[data-todo-make-list] input:nth-of-type(2) {
+	width: 130px;
+	margin-top:8px;
+	margin-right:15px;
+	margin-left:10px;
+	display: inline-block;
+}
+[data-todo-make-list] select {
+	width: 100px;
+	margin-top:2px;
+	display: inline-block;
+}
+[data-todo-make-list] span {
+	display: inline-block;
+}
 </style>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -130,7 +151,7 @@ function drawChart() {
 					border: 1px solid rgb(202, 200, 200); border-radius: 15px;">
 					<li class="nav-item"
 						data-post-code="1">
-						<a class="nav-link"
+						<a class="nav-link proMover"
 						   data-toggle="modal"
 						   data-target="#modal1"
 						   href="#">
@@ -140,7 +161,7 @@ function drawChart() {
 					</li>
 					<li class="nav-item"
 						data-post-code="2">
-						<a class="nav-link"
+						<a class="nav-link proMover"
 						   data-toggle="modal"
 						   data-target="#modal2"
 						   href="#">
@@ -150,7 +171,7 @@ function drawChart() {
 					</li>
 					<li class="nav-item"
 						data-post-code="3">
-						<a class="nav-link"
+						<a class="nav-link proMover"
 						   data-toggle="modal"
 						   data-target="#modal3"
 						   href="#">
@@ -160,7 +181,7 @@ function drawChart() {
 					</li>
 					<li class="nav-item"
 						data-post-code="4">
-						<a class="nav-link"
+						<a class="nav-link proMover"
 						   data-toggle="modal"
 						   data-target="#modal4"
 						   href="#">
@@ -170,7 +191,7 @@ function drawChart() {
 					</li>
 					<li class="nav-item"
 						data-post-code="5">
-						<a class="nav-link"
+						<a class="nav-link proMover"
 						   data-toggle="modal"
 						   data-target="#modal5"
 						   href="#">
@@ -194,7 +215,7 @@ function drawChart() {
 							 style="display:none">
 							<div class="modal-dialog"
 								 role="document">
-								<div class="modal-content dohyeonModalContent" style="height: 800px;">
+								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title"
 											id="modal1Label">글</h5>
@@ -208,15 +229,15 @@ function drawChart() {
 									<!-- 태그 선택 -->
 									<div>
 										<ul class="nav justify-content-center">
-											<li class="nav-item" data-post-code="1"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="1"><a class="nav-link proMover" style="color: black;"
 												href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">assignment</span><span>글</span></a></li>
-											<li class="nav-item" data-post-code="2"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="2"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">list</span><span>업무</span></a></li>
-											<li class="nav-item" data-post-code="3"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="3"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">calendar_month</span><span>일정</span></a></li>
-											<li class="nav-item" data-post-code="4"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="4"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">select_check_box</span><span>할일</span></a></li>
-											<li class="nav-item" data-post-code="5"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="5"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">how_to_vote</span><span>투표</span></a></li>
 										</ul>
 									</div>
@@ -245,7 +266,7 @@ function drawChart() {
 						<div class="modal fade modal-dialog-scrollable" id="modal2" tabindex="-1" role="dialog"
 							aria-labelledby="modal2Label" aria-hidden="true" style="display:none">
 							<div class="modal-dialog" role="document">
-								<div class="modal-content dohyeonModalContent" style="height: 800px;">
+								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal2Label">업무</h5>
 										<button type="button" class="close" data-dismiss="modal"
@@ -256,15 +277,15 @@ function drawChart() {
 									<!-- 태그 선택 -->
 									<div class="justify-content-center">
 										<ul class="nav justify-content-center">
-											<li class="nav-item" data-post-code="1"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="1"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">assignment</span><span>글</span></a></li>
-											<li class="nav-item" data-post-code="2"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="2"><a class="nav-link proMover" style="color: black;"
 												href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">list</span><span>업무</span></a></li>
-											<li class="nav-item" data-post-code="3"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="3"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">calendar_month</span><span>일정</span></a></li>
-											<li class="nav-item" data-post-code="4"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="4"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">select_check_box</span><span>할일</span></a></li>
-											<li class="nav-item" data-post-code="5"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="5"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">how_to_vote</span><span>투표</span></a></li>
 										</ul>
 									</div>
@@ -395,7 +416,7 @@ function drawChart() {
 						<div class="modal fade modal-dialog-scrollable" id="modal3" tabindex="-1" role="dialog"
 							aria-labelledby="modal3Label" aria-hidden="true" style="display:none">
 							<div class="modal-dialog" role="document">
-								<div class="modal-content dohyeonModalContent" style="height: 800px;">
+								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal3Label">일정</h5>
 										<button type="button" class="close" data-dismiss="modal"
@@ -406,15 +427,15 @@ function drawChart() {
 									<!-- 태그 선택 -->
 									<div>
 										<ul class="nav justify-content-center">
-											<li class="nav-item" data-post-code="1"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="1"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">assignment</span><span>글</span></a></li>
-											<li class="nav-item" data-post-code="2"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="2"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">list</span><span>업무</span></a></li>
-											<li class="nav-item" data-post-code="3"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="3"><a class="nav-link proMover" style="color: black;"
 												href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">calendar_month</span><span>일정</span></a></li>
-											<li class="nav-item" data-post-code="4"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="4"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">select_check_box</span><span>할일</span></a></li>
-											<li class="nav-item" data-post-code="5"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="5"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">how_to_vote</span><span>투표</span></a></li>
 										</ul>
 									</div>
@@ -481,7 +502,7 @@ function drawChart() {
 						<div class="modal fade modal-dialog-scrollable" id="modal4" tabindex="-1" role="dialog"
 							aria-labelledby="modal4Label" aria-hidden="true" style="display:none">
 							<div class="modal-dialog" role="document">
-								<div class="modal-content dohyeonModalContent" style="height: 800px;">
+								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal4Label">할 일</h5>
 										<button type="button" class="close" data-dismiss="modal"
@@ -492,16 +513,16 @@ function drawChart() {
 									<!-- 태그 선택 -->
 									<div>
 										<ul class="nav justify-content-center">
-											<li class="nav-item" data-post-code="1"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="1"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">assignment</span>
 												<span>글</span></a></li>
-											<li class="nav-item" data-post-code="2"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="2"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">list</span><span>업무</span></a></li>
-											<li class="nav-item" data-post-code="3"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="3"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">calendar_month</span><span>일정</span></a></li>
-											<li class="nav-item" data-post-code="4"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="4"><a class="nav-link proMover" style="color: black;"
 												href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">select_check_box</span><span>할일</span></a></li>
-											<li class="nav-item" data-post-code="5"><a class="nav-link" style="color: black;"
+											<li class="nav-item" data-post-code="5"><a class="nav-link proMover" style="color: black;"
 												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">how_to_vote</span><span>투표</span></a></li>
 										</ul>
 									</div>
@@ -520,21 +541,23 @@ function drawChart() {
 	
 											</ul>
 	
-											<div>
+											<div style="margin-top:10px;">
 												<input id="todoContent"
 													   type="text"
 													   class="js-todo-content-input"
 													   placeholder="할 일 추가 (Enter) / 최대 60자"
 													   autocomplete="off"
-														 style="width: 300px;"
+													   style="width: 300px;"
 													   maxlength="60">
-												<div class="todo-menu">
-												<span>
+												<div class="todo-menu" style="margin-top:8px; margin-left:10px;">
+												<span style="display: inline-block; margin-right: 10px;">
 														<input type="date"
 																	 class="form-control"
-																	 th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
+																	 th:min="${#dates.format(cTime, 'yyyy-MM-dd')}"
 																	 style="width: 130px; border-radius: 5px;"
 																	 data-input-todo-date="todoDate">
+																	 </span>
+																	 <span style="display: inline-block;">
 														<select class="form-select custom-select"
 																		name="todoMember"
 																		style="width: 100px; border-radius: 5px;"
@@ -566,7 +589,7 @@ function drawChart() {
 							<div class="modal fade modal-dialog-scrollable" id="modal5" tabindex="-1" role="dialog"
 								aria-labelledby="modal5Label" aria-hidden="true" style="display:none">
 								<div class="modal-dialog" role="document">
-									<div class="modal-content dohyeonModalContent" style="height: 800px;">
+									<div class="modal-content dohyeonModalContent" style="height: 500px;">
 										<div class="modal-header">
 											<h5 class="modal-title" id="modal5Label">투표</h5>
 											<button type="button" class="close" data-dismiss="modal"
@@ -577,16 +600,16 @@ function drawChart() {
 										<!-- 태그 선택 -->
 										<div>
 											<ul class="nav justify-content-center">
-												<li class="nav-item" data-post-code="1"><a class="nav-link" style="color: black;"
+												<li class="nav-item" data-post-code="1"><a class="nav-link proMover" style="color: black;"
 													data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">assignment</span>
 													<span>글</span></a></li>
-												<li class="nav-item" data-post-code="2"><a class="nav-link" style="color: black;"
+												<li class="nav-item" data-post-code="2"><a class="nav-link proMover" style="color: black;"
 													data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">list</span><span>업무</span></a></li>
-												<li class="nav-item" data-post-code="3"><a class="nav-link" style="color: black;"
+												<li class="nav-item" data-post-code="3"><a class="nav-link proMover" style="color: black;"
 													data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">calendar_month</span><span>일정</span></a></li>
-												<li class="nav-item" data-post-code="4"><a class="nav-link" style="color: black;"
+												<li class="nav-item" data-post-code="4"><a class="nav-link proMover" style="color: black;"
 													data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">select_check_box</span><span>할일</span></a></li>
-												<li class="nav-item" data-post-code="5"><a class="nav-link" style="color: black;"
+												<li class="nav-item" data-post-code="5"><a class="nav-link proMover" style="color: black;"
 													href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">how_to_vote</span><span>투표</span></a></li>
 											</ul>
 										</div>
@@ -611,9 +634,12 @@ function drawChart() {
 											<!-- 투표 마감일 -->
 											<div>
 												<p style="margin-bottom: 3px;">투표 마감일</p>
-												<input type="date" id="endVoteDate" class="form-control" style="margin-left: 3px; width: 189px; border-radius: 5px;">
+												<input type="date"
+													   id="endVoteDate"
+													   class="form-control"
+													   th:min="${#dates.format(cTime, 'yyyy-MM-dd')}"
+													   style="margin-left: 3px; width: 189px; border-radius: 5px;">
 											</div>
-											<!--  -->
 										</div>
 										<button type="button" class="btn btn-groob" onclick="blankSearch()">등록</button>
 									</div>
@@ -1125,7 +1151,7 @@ function drawChart() {
 								    	   <!-- th:value="${rt.todoNo}" th:id="'firstCheckboxStretched' + ${rt.todoNo}" -->
 								   	<span th:text="'Todo : ' + ${rt.todoContent}"></span>
 									<span th:text="${rt.todoEnd == null} ? '' : '마감일 : ' + ${#dates.format(rt.todoEnd, 'MM/dd')}"
-										  th:style="${rt.todoEnd >= #dates.format(currentTime, 'MM/dd') ? 'color: red' : ''}"></span>
+										  th:style="${rt.todoEnd <= #dates.format(currentTime, 'MM/dd') ? 'color: red' : ''}"></span>
 									<span th:text="${rt.name == null} ? '' : '담당자 : ' + ${rt.name}"></span>
 								  </li>
 								</ul>
@@ -1444,7 +1470,8 @@ function drawChart() {
 							<div class="todo-menu">
 							<span>
 									<input type="date"
-												 data-input-todo-date="todoDate">
+										   th:min="${#dates.format(cTime, 'yyyy-MM-dd')}"
+										   data-input-todo-date="todoDate">
 									<select class="form-select"
 													name="todoMember"
 													data-input-todo-select="todoSelect">
@@ -1660,6 +1687,7 @@ function drawChart() {
 		$(this).find('.plusChangeVoteInput').parent().remove();
 	});
 </script>
+
 <!-- 버튼 상태 변경(업무상태, 작성 모달창) -->	
 <script>
 	let selectedButton = workTypeButtonToggle;
@@ -2815,16 +2843,15 @@ function makeVoteUlTag(updateVoteContents, ulTag) {
 			if(todoL.querySelectorAll('.list-group-item').length == 10) {
 				alert('최대 10개')
 				return;
-			}
+			};
 
 			if(todoInput.value == '') {
 				alert('값을 넣어주세요.')
 				todoInput.focus();
 				return;//event종료
-			}
+			};
 			
 			let todoValue = todoInput.value;
-			//console.log(event.target);
 			let oldVoteDate = document.querySelector('[data-input-todo-date]');
 			let oldSelectDate = document.querySelector('[data-input-todo-select]'); 
 
@@ -2844,9 +2871,10 @@ function makeVoteUlTag(updateVoteContents, ulTag) {
 
 	});
 
-	function makeTodoInputList(con, date, selN, selId) {
+	function makeTodoInputListxxxx(con, date, selN, selId) {
 		let li = document.createElement('li');
 		li.className = 'list-group-item';
+		li.className = 'todo-list-group-item';
 
 		let inputTodo = document.createElement('input');
 		inputTodo.type = 'text';
@@ -2902,20 +2930,21 @@ function makeVoteUlTag(updateVoteContents, ulTag) {
 		}
 		
 		//인풋값 찾기
-		let todoInputValuesList = todoInsertPost.querySelector('[data-todo-make-list]').querySelectorAll('input');
+		let todoInputValuesList = todoInsertPost.querySelector('[data-todo-make-list]').querySelectorAll('input, select');
 		//인풋값 검사
 		if(todoInputValuesList.length == 0) {
 			alert('내용 하나라도 있어야 함');
 			return;
-		}
+		};
+		console.log(todoInputValuesList)
 		
 		let todoInputArrSub = [];
 		//인풋값 라인 넣기
-		for (let i = 0; i < todoInputValuesList.length; i += 4) {
+		for (let i = 0; i < todoInputValuesList.length; i += 3) {
 			let todoObj = {}; // 새로운 객체 생성
 			todoObj['todoContent'] = todoInputValuesList[i].value;
 			todoObj['todoEnd'] = todoInputValuesList[i + 1].value;
-			todoObj['id'] = todoInputValuesList[i + 3].value;
+			todoObj['id'] = todoInputValuesList[i + 2].value;
 			todoInputArrSub.push(todoObj); // 배열에 객체 추가
 		}
 		
@@ -3395,6 +3424,8 @@ function chagemodal12() {
 	});
 
 	function makeTodoInputList(con, date, selN, selId) {
+		const cD = new Date().toISOString().split('T')[0];
+		
 		const li = document.createElement('li');
 		li.className = 'list-group-item';
 
@@ -3404,10 +3435,16 @@ function chagemodal12() {
 
 		const inputVoteDate = document.createElement('input');
 		inputVoteDate.type = 'date';
+		inputVoteDate.className = 'form-control';
+		inputVoteDate.style.width = '130px';
+		inputVoteDate.style.borderRadius = '5px';
 		inputVoteDate.value = date;
 
 		//3요소
 		let select = document.createElement('select');//projectPartiMember
+		select.classList.add('form-select', 'custom-select');
+		select.style.width = '100px';
+		select.style.borderRadius = '5px';
 		
 		let noneOption = document.createElement('option');
 		noneOption.textContent = '없음';
@@ -3428,7 +3465,7 @@ function chagemodal12() {
 		});
 
 		let newSpan = document.createElement('span');
-		newSpan.className = 'spanCursor';
+		newSpan.classList.add('spanCursor', 'customVoteX');
 		newSpan.textContent = 'X';
 
 		//x시 삭제
