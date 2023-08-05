@@ -69,4 +69,6 @@ public interface FilesMapper {
 	public int deleteProFile(int proFileNo);
 	// 프로젝트 첨부파일 관리 삭제
 	public int deleteProFileMan(int proFileNo);
+	//개인서명 등록
+	public int insertPublicSignImg(EmpVO vo);
 }

@@ -91,8 +91,8 @@ public class PaymentServiceImpl implements PaymentService{
 	}
 
 	@Override
-	public List<PaymentVO> paymentList(Criteria cri, PaymentVO payVO) {
-		return paymentMapper.paymentList(cri, payVO);
+	public List<PaymentVO> paymentList(PaymentVO payVO) {
+		return paymentMapper.paymentList(payVO);
 	}
 
 	@Override
@@ -188,5 +188,25 @@ public class PaymentServiceImpl implements PaymentService{
 	@Override
 	public int robinCommentUpdate(PaymentVO payVO) {
 		return paymentMapper.robinCommentUpdate(payVO);
+	}
+
+	@Override
+	public List<PaymentVO> InpaymentList(Criteria cri, PaymentVO payVO) {
+		return paymentMapper.InpaymentList(cri, payVO);
+	}
+
+	@Override
+	public List<PaymentVO> maincompletePaymentList(PaymentVO payVO) {
+		return paymentMapper.maincompletePaymentList(payVO);
+	}
+
+	@Override
+	public List<PaymentVO> mainreferrerPayList(PaymentVO payVO) {
+		return paymentMapper.mainreferrerPayList(payVO);
+	}
+
+	@Override
+	public int insertPublicSignImg(EmpVO vo) {
+		return filesMapper.insertPublicSignImg(vo);
 	}	
 }
