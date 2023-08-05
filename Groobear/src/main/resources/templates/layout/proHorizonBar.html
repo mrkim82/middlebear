@@ -62,9 +62,9 @@
 	</div>
 	
 	<!-- 프로젝트 탭 -->
-	<div class="horizontal-bar2">
+	<div class="horizontal-bar2 container">
 		
-		<nav class="nav">
+		<nav class="nav row justify-content-between">
 		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=1)}"
 		    th:classappend="${#strings.substringAfter(#request.getQueryString(), '=') == '1'} ? 'bottomLine' : ''">업무</a>
 		  <a class="nav-link" th:href="@{/proPostMain/{proNo}(proNo=${projectTopBar.proNo},homeTab=2)}"
@@ -81,14 +81,14 @@
 			<!-- <th:block th:text="${#strings.substringAfter((#strings.substringAfter(#request.requestURI, '/')), '/')}"></th:block>
 			<p th:text="${#request.requestURI}"></p>
 			<th:block th:text="${#strings.substringAfter(#request.getQueryString(), '=')}"></th:block> -->
-			<input type="text" id="proInSearch" placeholder="프로젝트 내 검색 (제목, 내용, 작성자)" style="height:30px; margin-top: 5.5px; margin-left: 350px; width: 276px;">
-		<div style="position: absolute; right: 89px; top: 264px;">
+			<input type="text" id="proInSearch" placeholder="프로젝트 내 검색 (제목, 내용, 작성자)" style="height:30px; margin-top: 5.5px; margin-left: 280px; width: 276px;">
+			<div style="margin-right:50px; margin-top:7px;">
 			<span class="material-symbols-outlined spanCursor"
 				  data-toggle="modal"
 				  data-target="#inviteMember">group_add</span>
 					<span class="material-symbols-outlined spanCursor" onclick="exitProMem()">logout</span>
 					<span class="material-symbols-outlined spanCursor" onclick="delPro()">delete</span>
-		</div>
+				</div>
 		</nav>
 	</div>
 	

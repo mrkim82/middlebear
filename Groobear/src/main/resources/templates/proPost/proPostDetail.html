@@ -34,6 +34,9 @@ p {
 .writtingBody a{
 	color: rgb(55, 50, 50);
 }
+li {
+	list-style-type: none;
+}
 </style>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -112,12 +115,12 @@ function drawChart() {
 	<div>
 	
 		<!-- 중앙 -->
-		<div style="overflow-y: auto; width: 680px; height: 600px;"
+		<div style="overflow-y: auto; width: 740px; height: 630px;"
 			 class="float-left">
 			 
 			<!-- 업무리포트(총 업무수)(차트) -->
 			<div id="donutchart"
-				 style="width: 643px; height: 178px;">
+				 style="width: 703px; height: 178px; margin-top: 5px;">
 			</div>
 			
 			<!-- 글 생성 nav -->
@@ -191,7 +194,7 @@ function drawChart() {
 							 style="display:none">
 							<div class="modal-dialog"
 								 role="document">
-								<div class="modal-content">
+								<div class="modal-content dohyeonModalContent" style="height: 800px;">
 									<div class="modal-header">
 										<h5 class="modal-title"
 											id="modal1Label">글</h5>
@@ -205,31 +208,34 @@ function drawChart() {
 									<!-- 태그 선택 -->
 									<div>
 										<ul class="nav justify-content-center">
-											<li class="nav-item" data-post-code="1"><a class="nav-link"
-												href="#"><span>글</span></a></li>
-											<li class="nav-item" data-post-code="2"><a class="nav-link"
-												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
-											<li class="nav-item" data-post-code="3"><a class="nav-link"
-												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
-											<li class="nav-item" data-post-code="4"><a class="nav-link"
-												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
-											<li class="nav-item" data-post-code="5"><a class="nav-link"
-												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+											<li class="nav-item" data-post-code="1"><a class="nav-link" style="color: black;"
+												href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">assignment</span><span>글</span></a></li>
+											<li class="nav-item" data-post-code="2"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">list</span><span>업무</span></a></li>
+											<li class="nav-item" data-post-code="3"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">calendar_month</span><span>일정</span></a></li>
+											<li class="nav-item" data-post-code="4"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">select_check_box</span><span>할일</span></a></li>
+											<li class="nav-item" data-post-code="5"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">how_to_vote</span><span>투표</span></a></li>
 										</ul>
 									</div>
 									<div class="modal-body">
-										<div>
+										<div style="margin-bottom: 10px;">
 											<input type="text"
 												   placeholder="제목을 입력하세요."
-												   class="postTitle">
+												   class="postTitle"
+													 maxlength="30"
+													 style="width: 100%;">
 										</div>
 										<div>
 											<textarea placeholder="내용을 입력하세요."
-													  id="writingContent"></textarea>
+													  id="writingContent"
+														maxlength="999"></textarea>
 										</div>
 									</div>
 									<button type="button"
-											class="btn btn-primary"
+											class="btn btn-groob"
 											id="createWritingButton">등록</button>
 								</div>
 							</div>
@@ -239,7 +245,7 @@ function drawChart() {
 						<div class="modal fade modal-dialog-scrollable" id="modal2" tabindex="-1" role="dialog"
 							aria-labelledby="modal2Label" aria-hidden="true" style="display:none">
 							<div class="modal-dialog" role="document">
-								<div class="modal-content">
+								<div class="modal-content dohyeonModalContent" style="height: 800px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal2Label">업무</h5>
 										<button type="button" class="close" data-dismiss="modal"
@@ -248,42 +254,46 @@ function drawChart() {
 										</button>
 									</div>
 									<!-- 태그 선택 -->
-									<div>
+									<div class="justify-content-center">
 										<ul class="nav justify-content-center">
-											<li class="nav-item" data-post-code="1"><a class="nav-link"
-												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
-											<li class="nav-item" data-post-code="2"><a class="nav-link"
-												href="#"><span>업무</span></a></li>
-											<li class="nav-item" data-post-code="3"><a class="nav-link"
-												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
-											<li class="nav-item" data-post-code="4"><a class="nav-link"
-												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
-											<li class="nav-item" data-post-code="5"><a class="nav-link"
-												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+											<li class="nav-item" data-post-code="1"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">assignment</span><span>글</span></a></li>
+											<li class="nav-item" data-post-code="2"><a class="nav-link" style="color: black;"
+												href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">list</span><span>업무</span></a></li>
+											<li class="nav-item" data-post-code="3"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">calendar_month</span><span>일정</span></a></li>
+											<li class="nav-item" data-post-code="4"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">select_check_box</span><span>할일</span></a></li>
+											<li class="nav-item" data-post-code="5"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">how_to_vote</span><span>투표</span></a></li>
 										</ul>
 									</div>
 									<div class="modal-body">
-										<div>
-											<input type="text" placeholder="제목을 입력하세요." class="postTitle">
+										<div style="margin-bottom: 10px;">
+											<input type="text"
+												   placeholder="제목을 입력하세요."
+												   class="postTitle"
+													 maxlength="30"
+													 style="width: 100%;">
 										</div>
 										<!-- 업무상태 -->
-										<div id="workPostStatus">
+										<div id="workPostStatus" style="text-align: center; margin-bottom: 10px;">
 											<button type="button" class="btn btn-primary" id="workTypeButtonToggle"
-													data-work-type-status="1" onclick="toggleButtonStyle(this)">요청</button>
+													data-work-type-status="1" onclick="toggleButtonStyle(this)" style="border-radius: 10px;">요청</button>
 											<button type="button" class="btn btn-outline-warning"
-													data-work-type-status="2" onclick="toggleButtonStyle(this)">진행</button>
+													data-work-type-status="2" onclick="toggleButtonStyle(this)" style="border-radius: 10px;">진행</button>
 											<button type="button" class="btn btn-outline-danger"
-													data-work-type-status="3" onclick="toggleButtonStyle(this)">피드백</button>
+													data-work-type-status="3" onclick="toggleButtonStyle(this)" style="border-radius: 10px;">피드백</button>
 											<button type="button" class="btn btn-outline-success"
-													data-work-type-status="4" onclick="toggleButtonStyle(this)">완료</button>
+													data-work-type-status="4" onclick="toggleButtonStyle(this)" style="border-radius: 10px;">완료</button>
 											<button type="button" class="btn btn-outline-secondary"
-													data-work-type-status="5" onclick="toggleButtonStyle(this)">보류</button>
+													data-work-type-status="5" onclick="toggleButtonStyle(this)" style="border-radius: 10px;">보류</button>
 										</div>
 										<!-- 담당자 추가 -->
 										<div>
-											<p>담당자 추가(Ctrl을 누르면 중복 처리 가능)</p>
-											<select class="form-select" multiple name="workMember" size=5 id="workPostPerson"
-													onchange="workPostPeople(this)">
+											<p style="margin-bottom: 3px;">담당자 추가(Ctrl을 누르면 중복 처리 가능)</p>
+											<select class="form-select custom-select" multiple name="workMember" size=5 id="workPostPerson"
+													onchange="workPostPeople(this)" style="width: 100px; margin-bottom: 10px; border-radius: 5px; margin-left: 3px;">
 												<th:block th:each="member : ${projectPartiMember}">
 														<!-- <option th:text="${member.name}" th:value="${member.id}"
 														th:if="${member.id == session.Id}" style="background-color: #eee;"></option> -->
@@ -297,29 +307,33 @@ function drawChart() {
 										<!-- 항목 추가입력 -->
 										<div>
 											<p>
-											  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
-											  			aria-expanded="false" aria-controls="collapseExample">
+											  <button class="btn btn-groo" type="button" data-toggle="collapse" data-target="#collapseExample"
+											  			aria-expanded="false" aria-controls="collapseExample" style="border-radius: 8px; margin-bottom: 10px;">
 											    + 항목추가입력
 											  </button>
 											</p>
-											<div class="collapse" id="collapseExample">
-											  <div class="card card-body">
+											<div class="collapse" id="collapseExample" style="margin-bottom: 10px; margin-left: 3px;">
+											  <div class="card card-body" style="border-radius: 10px; padding-bottom: 0px;">
 											  	<!-- 시작일 추가 -->
-											  	<ul>
-											  		<li>
-											  			<p>시작일</p>
+											  	<ul style="padding: 0px;">
+											  		<li style="margin-bottom: 7px;">
+											  			<p style="margin-bottom: 2px;">시작일</p>
 											  			<input type="datetime-local"
-											  				   id="startWorkDate">
+											  				   id="startWorkDate"
+																	 class="form-control"
+																	 style="margin-left: 3px; width: 189px; border-radius: 5px;">
 											  		</li>
-											  		<li>
-											  			<p>마감일</p>
+											  		<li style="margin-bottom: 7px;">
+											  			<p style="margin-bottom: 2px;">마감일</p>
 											  			<input type="datetime-local"
 											  				   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
-											  				   id="endWorkDate">
+											  				   id="endWorkDate"
+																	 class="form-control"
+																	 style="margin-left: 3px; width: 189px; border-radius: 5px;">
 											  		</li>
-											  		<li>
-											  			<p>우선순위</p>
-														<select class="custom-select" name="workPri" id="workPostPriPost">
+											  		<li style="margin-bottom: 7px;">
+											  			<p style="margin-bottom: 2px;">우선순위</p>
+														<select class="custom-select" name="workPri" id="workPostPriPost" style="width: 70px; margin-left: 3px; border-radius: 5px;">
 															<option value="0">없음</option>
 															<option value="1">낮음</option>
 															<option value="2">보통</option>
@@ -327,9 +341,9 @@ function drawChart() {
 															<option value="4">긴급</option>
 														</select>
 											  		</li>
-											  		<li>
-											  			<p>업무 그룹</p>
-														<select class="form-select" name="workGroup" id="workPostGroup">
+											  		<li style="margin-bottom: 7px;">
+											  			<p style="margin-bottom: 2px;">업무 그룹</p>
+														<select class="form-select custom-select" name="workGroup" id="workPostGroup" style="width: 189px; margin-left: 3px; border-radius: 5px;">
 															<th:block th:each="group : ${readWorkGroup}">
 																	<option th:text="${group.workGroupName}"
 																			th:value="${group.workGroupNo}"
@@ -372,7 +386,7 @@ function drawChart() {
 											하위업무 입력란
 										</div> -->
 									</div>
-										<button type="button" class="btn btn-primary" id="createWorkButton">등록</button>
+										<button type="button" class="btn btn-groob" id="createWorkButton">등록</button>
 								</div>
 							</div>
 						</div>
@@ -381,7 +395,7 @@ function drawChart() {
 						<div class="modal fade modal-dialog-scrollable" id="modal3" tabindex="-1" role="dialog"
 							aria-labelledby="modal3Label" aria-hidden="true" style="display:none">
 							<div class="modal-dialog" role="document">
-								<div class="modal-content">
+								<div class="modal-content dohyeonModalContent" style="height: 800px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal3Label">일정</h5>
 										<button type="button" class="close" data-dismiss="modal"
@@ -392,43 +406,56 @@ function drawChart() {
 									<!-- 태그 선택 -->
 									<div>
 										<ul class="nav justify-content-center">
-											<li class="nav-item" data-post-code="1"><a class="nav-link"
-												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
-											<li class="nav-item" data-post-code="2"><a class="nav-link"
-												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
-											<li class="nav-item" data-post-code="3"><a class="nav-link"
-												href="#"><span>일정</span></a></li>
-											<li class="nav-item" data-post-code="4"><a class="nav-link"
-												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
-											<li class="nav-item" data-post-code="5"><a class="nav-link"
-												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+											<li class="nav-item" data-post-code="1"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">assignment</span><span>글</span></a></li>
+											<li class="nav-item" data-post-code="2"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">list</span><span>업무</span></a></li>
+											<li class="nav-item" data-post-code="3"><a class="nav-link" style="color: black;"
+												href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">calendar_month</span><span>일정</span></a></li>
+											<li class="nav-item" data-post-code="4"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">select_check_box</span><span>할일</span></a></li>
+											<li class="nav-item" data-post-code="5"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">how_to_vote</span><span>투표</span></a></li>
 										</ul>
 									</div>
 									<div class="modal-body">
-										<div>
-											<input type="text" placeholder="제목을 입력하세요." class="postTitle">
+										<div style="margin-bottom: 10px;">
+											<input type="text"
+												   placeholder="제목을 입력하세요."
+												   class="postTitle"
+													 maxlength="30"
+													 style="width: 100%;">
 										</div>
 										<!-- 시작일 -->
-										<div>
-											<p>시작일</p>
-											<input type="datetime-local" id="startSchDate">
+										<div style="margin-bottom: 7px;">
+											<p style="margin-bottom: 2px;">시작일</p>
+											<input type="datetime-local"
+												   id="startSchDate"
+												   class="form-control"
+												   style="margin-left: 3px; width: 189px; border-radius: 5px;">
 										</div>
 										
 										<!-- 마감일 -->
-										<div>
-											<p>마감일</p>
-											<input type="datetime-local" th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}" id="endSchDate">
+										<div style="margin-bottom: 7px;">
+											<p style="margin-bottom: 2px;">마감일</p>
+											<input type="datetime-local"
+												   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
+												   id="endSchDate"
+												   class="form-control"
+												   style="margin-left: 3px; width: 189px; border-radius: 5px;">
 										</div>
 										<!-- 참석자 -->
-										<div>
-											<p>참석자 추가(Ctrl을 누르면 중복 처리 가능)</p>
-											<select class="form-select schPartiMembers"
+										<div style="margin-bottom: 7px;">
+											<p style="margin-bottom: 2px;">참석자 추가(Ctrl을 누르면 중복 처리 가능)</p>
+											<select id="schPartiMemberSelect"
+													class="form-select schPartiMembers custom-select"
 													multiple name="workMember"
-													size=5>
+													size=5
+													style="width: 100px; margin-left: 3px; border-radius: 5px;">
 												<th:block th:each="member : ${projectPartiMember}">
 														<!-- <option th:text="${member.name}" th:value="${member.id}"
 														th:if="${member.id == session.Id}" style="background-color: #eee;"></option> -->
-														<option th:text="${member.name}" th:value="${member.id}"
+														<option th:text="${member.name} +'(나)'" th:value="${member.id}"
 														th:if="${member.id == session.Id}"></option>
 														<option th:text="${member.name}" th:value="${member.id}"
 														th:if="${member.id != session.Id}"></option>
@@ -436,16 +463,16 @@ function drawChart() {
 											</select>
 										</div>
 										<!-- 장소 -->
-										<div>
-											<p>장소</p>
-											<input type="text" class="schPlace">
+										<div style="margin-bottom: 7px;">
+											<p style="margin-bottom: 2px;">장소</p>
+											<input type="text" class="schPlace" placeholder="장소를 입력하세요." style="width: 300px;">
 										</div>
 										<!-- 내용 -->
 										<div>
 											<textarea placeholder="내용을 입력하세요." class="schText"></textarea>
 										</div>
 									</div>
-										<button type="button" class="btn btn-primary" onclick="createSchButton()">등록</button>
+										<button type="button" class="btn btn-groob" onclick="createSchButton()">등록</button>
 								</div>
 							</div>
 						</div>
@@ -454,7 +481,7 @@ function drawChart() {
 						<div class="modal fade modal-dialog-scrollable" id="modal4" tabindex="-1" role="dialog"
 							aria-labelledby="modal4Label" aria-hidden="true" style="display:none">
 							<div class="modal-dialog" role="document">
-								<div class="modal-content">
+								<div class="modal-content dohyeonModalContent" style="height: 800px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal4Label">할 일</h5>
 										<button type="button" class="close" data-dismiss="modal"
@@ -465,21 +492,26 @@ function drawChart() {
 									<!-- 태그 선택 -->
 									<div>
 										<ul class="nav justify-content-center">
-											<li class="nav-item" data-post-code="1"><a class="nav-link"
-												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
-											<li class="nav-item" data-post-code="2"><a class="nav-link"
-												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
-											<li class="nav-item" data-post-code="3"><a class="nav-link"
-												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
-											<li class="nav-item" data-post-code="4"><a class="nav-link"
-												href="#"><span>할일</span></a></li>
-											<li class="nav-item" data-post-code="5"><a class="nav-link"
-												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span>투표</span></a></li>
+											<li class="nav-item" data-post-code="1"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">assignment</span>
+												<span>글</span></a></li>
+											<li class="nav-item" data-post-code="2"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">list</span><span>업무</span></a></li>
+											<li class="nav-item" data-post-code="3"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">calendar_month</span><span>일정</span></a></li>
+											<li class="nav-item" data-post-code="4"><a class="nav-link" style="color: black;"
+												href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">select_check_box</span><span>할일</span></a></li>
+											<li class="nav-item" data-post-code="5"><a class="nav-link" style="color: black;"
+												data-toggle="modal" data-target="#modal5" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">how_to_vote</span><span>투표</span></a></li>
 										</ul>
 									</div>
 									<div class="modal-body">
-										<div>
-											<input type="text" placeholder="제목을 입력하세요." class="postTitle">
+										<div style="margin-bottom: 10px;">
+											<input type="text"
+												   placeholder="제목을 입력하세요."
+												   class="postTitle"
+													 maxlength="30"
+													 style="width: 100%;">
 										</div>
 										<br>
 										<!-- 할 일 입력 -->
@@ -494,13 +526,18 @@ function drawChart() {
 													   class="js-todo-content-input"
 													   placeholder="할 일 추가 (Enter) / 최대 60자"
 													   autocomplete="off"
+														 style="width: 300px;"
 													   maxlength="60">
 												<div class="todo-menu">
 												<span>
 														<input type="date"
+																	 class="form-control"
+																	 th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
+																	 style="width: 130px; border-radius: 5px;"
 																	 data-input-todo-date="todoDate">
-														<select class="form-select"
+														<select class="form-select custom-select"
 																		name="todoMember"
+																		style="width: 100px; border-radius: 5px;"
 																		data-input-todo-select="todoSelect">
 															<option value="">없음</option>
 															<th:block th:each="member : ${projectPartiMember}">
@@ -520,7 +557,7 @@ function drawChart() {
 										<!-- 할 일 입력 종료 -->
 									</div>
 									<!-- modal body end -->
-									<button type="button" class="btn btn-primary" onclick="blankSearchTodo()">등록</button>
+									<button type="button" class="btn btn-groob" onclick="blankSearchTodo()">등록</button>
 								</div>
 							</div>
 						</div>
@@ -529,7 +566,7 @@ function drawChart() {
 							<div class="modal fade modal-dialog-scrollable" id="modal5" tabindex="-1" role="dialog"
 								aria-labelledby="modal5Label" aria-hidden="true" style="display:none">
 								<div class="modal-dialog" role="document">
-									<div class="modal-content">
+									<div class="modal-content dohyeonModalContent" style="height: 800px;">
 										<div class="modal-header">
 											<h5 class="modal-title" id="modal5Label">투표</h5>
 											<button type="button" class="close" data-dismiss="modal"
@@ -540,40 +577,45 @@ function drawChart() {
 										<!-- 태그 선택 -->
 										<div>
 											<ul class="nav justify-content-center">
-												<li class="nav-item" data-post-code="1"><a class="nav-link"
-													data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span>글</span></a></li>
-												<li class="nav-item" data-post-code="2"><a class="nav-link"
-													data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span>업무</span></a></li>
-												<li class="nav-item" data-post-code="3"><a class="nav-link"
-													data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span>일정</span></a></li>
-												<li class="nav-item" data-post-code="4"><a class="nav-link"
-													data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span>할일</span></a></li>
-												<li class="nav-item" data-post-code="5"><a class="nav-link"
-													href="#"><span>투표</span></a></li>
+												<li class="nav-item" data-post-code="1"><a class="nav-link" style="color: black;"
+													data-toggle="modal" data-target="#modal1" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">assignment</span>
+													<span>글</span></a></li>
+												<li class="nav-item" data-post-code="2"><a class="nav-link" style="color: black;"
+													data-toggle="modal" data-target="#modal2" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">list</span><span>업무</span></a></li>
+												<li class="nav-item" data-post-code="3"><a class="nav-link" style="color: black;"
+													data-toggle="modal" data-target="#modal3" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">calendar_month</span><span>일정</span></a></li>
+												<li class="nav-item" data-post-code="4"><a class="nav-link" style="color: black;"
+													data-toggle="modal" data-target="#modal4" data-dismiss="modal" href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">select_check_box</span><span>할일</span></a></li>
+												<li class="nav-item" data-post-code="5"><a class="nav-link" style="color: black;"
+													href="#"><span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 3px;">how_to_vote</span><span>투표</span></a></li>
 											</ul>
 										</div>
 										<div class="modal-body">
-											<ul>
+											<ul style="padding: 0px;">
 												<!-- 투표 내용 -->
-												<li><input type="text" placeholder="제목을 입력하세요." class="postTitle"></li>
+												<li style="margin-bottom: 10px;"><input type="text"
+													placeholder="제목을 입력하세요."
+													class="postTitle"
+													maxlength="30"
+													style="width: 100%;"></li>
 												<!-- 투표 설명 -->
-												<li><input type="text" placeholder="투표에 관한 설명 입력(옵션)"></li>
+												<li><input type="text" placeholder="투표에 관한 설명 입력(옵션)" style="width: 100%;"></li>
 											</ul>
 											<!-- 투표내용 -->
-											<p>Enter를 입력하면 최대 10개까지 창이 추가 됩니다.</p>
-											<ul>
+											<p style="margin-bottom: 10px;">Enter를 입력하면 최대 10개까지 창이 추가 됩니다.</p>
+											<ul style="padding: 0px;">
 												<li><input type="text" class="plusVoteInput" placeholder="항목 추가"></li>
 												<li><input type="text" class="plusVoteInput" placeholder="항목 추가"></li>
 												<!-- 투표 항목 추가 -->
 											</ul>
 											<!-- 투표 마감일 -->
 											<div>
-												<p>투표 마감일</p>
-												<input type="date" id="endVoteDate">
+												<p style="margin-bottom: 3px;">투표 마감일</p>
+												<input type="date" id="endVoteDate" class="form-control" style="margin-left: 3px; width: 189px; border-radius: 5px;">
 											</div>
 											<!--  -->
 										</div>
-										<button type="button" class="btn btn-primary" onclick="blankSearch()">등록</button>
+										<button type="button" class="btn btn-groob" onclick="blankSearch()">등록</button>
 									</div>
 								</div>
 							</div>
@@ -597,8 +639,9 @@ function drawChart() {
 			
 			<!-- 게시물 공간 -->
 			<div>
+				<!-- 게시글 종류 셀렉트 박스  -->
 				<div class="d-flex justify-content-end align-items-right"
-					 style="margin-right:25px;">
+					 style="margin-right:25px; margin-bottom:15px;">
 					<select name="postTypeFilter"
 							id="postTypeFilter"
 							class="custom-select"
@@ -613,6 +656,8 @@ function drawChart() {
 						<!-- ${param.postType} 방식으로 값을 가져 올 수 도 있음 -->
 					</select>
 				</div>
+				
+				<!-- 게시물 반복 -->
 				<div class="container">
 					<th:block th:each="allPost : ${readFeedPost}">
 					
@@ -625,7 +670,8 @@ function drawChart() {
 								<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
 								<div>
 							        <span th:text="${allPost.profileImg}"></span>
-							        <span th:text="'작성자 : ' + ${allPost.name}"></span>
+							        <span th:text="'작성자 : ' + ${allPost.name}"
+							        	  style="font-size:16px;"></span>
 							        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
 							        <span th:text="업무번호 + ${allPost.workNo}"></span>
 							        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
@@ -1507,21 +1553,33 @@ function drawChart() {
 						 tabindex="-1" aria-labelledby="proUserInfoDetailLabel" aria-hidden="true"
 						 th:data-user-info-id="${mem.id}">
 					  <div class="modal-dialog">
-					    <div class="modal-content">
+					    <div class="modal-content dohyeonModalContent" style="width:300px;">
 				        <div class="card-deck">
-						  <div class="card">
+						  <div class="card row justify-content-end">
 						  <!-- 프사 -->
-						  	<!-- <img th:src="@{|/display?fileName=${#strings.replace(mem.uploadPath,'\','/')}/s_${mem.uuid}_${mem.fileName}|}"
-						  		 class="card-img-top" alt="프로필 이미지"> -->
-					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					          <span aria-hidden="true">&times;</span>
-					        </button>
+						  	<div class="container">
+						  	<th:block th:if="${mem.uploadPath != null}">
+						  	<img th:src="@{|/display?fileName=${#strings.replace(mem.uploadPath,'\','/')}/s_${mem.uuid}_${mem.fileName}|}"
+						  		 class="card-img-top" alt="프로필 이미지">
+						  		 </th:block>
+						  		 <th:block th:if="${mem.uploadPath == null}">
+								<img id="profImg"
+									 style="width:140px;height:150px;margin:15px;margin-bottom:0px;" src="../img/userProf.png">
+									 </th:block>
+								<button type="button"
+										class="close"
+										data-dismiss="modal"
+										aria-label="Close"
+										style="text-align: right;">
+								<span aria-hidden="true">&times;</span>
+						        </button>
+							</div>
 						    <div class="card-body">
 						    	<ul>
 						    		<li th:text="'부서명 : ' + ${mem.deptName}"></li>
 						    		<li th:text="'직급 : ' + ${mem.rank}"></li>
 						    		<li th:text="'이름 : ' + ${mem.name}"></li>
-						    		<li th:text="'이메일 : ' + ${mem.email}"></li>
+						    		<li th:text="'이메일 : ' + ${mem.id}"></li>
 						    		<li th:text="'전화번호 : ' + ${mem.phone}"></li>
 						    		<li th:text="'메모 : ' + (${mem.profileNote == null} ? '-' : ${mem.profileNote})"
 						    			class="profileMemoTag"></li>
@@ -1566,6 +1624,42 @@ function drawChart() {
 	/*]]>*/
 </script>
 
+<!-- 모달 이벤트 -->
+<script>
+	//업무 초기화
+	$('#modal2').on('hidden.bs.modal', function (e) {
+		$(this).find('select').val('');
+	});
+	$('#modal12').on('hidden.bs.modal', function (e) {
+		$(this).find('select').val('');
+	});
+	
+	//일정 초기화
+	$('#modal3').on('hidden.bs.modal', function (e) {
+		$(this).find('select').val('');
+	});
+	$('#modal13').on('hidden.bs.modal', function (e) {
+		$(this).find('select').val('');
+	});
+	
+	//할일 초기화
+	$('#modal4').on('hidden.bs.modal', function (e) {
+		$(this).find('.list-group').children().remove();
+		$(this).find('select').val('');
+	});
+	$('#modal14').on('hidden.bs.modal', function (e) {
+		$(this).find('.list-group').children().remove();
+		$(this).find('select').val('');
+	});
+	
+	//투표 초기화
+	$('#modal5').on('hidden.bs.modal', function (e) {
+		$(this).find('.plusChangeVoteInput').parent().remove();
+	});
+	$('#modal15').on('hidden.bs.modal', function (e) {
+		$(this).find('.plusChangeVoteInput').parent().remove();
+	});
+</script>
 <!-- 버튼 상태 변경(업무상태, 작성 모달창) -->	
 <script>
 	let selectedButton = workTypeButtonToggle;
@@ -1808,8 +1902,6 @@ function drawChart() {
 		}
 	}
 </script>
-
-
 
 <!-- 글 작성 -->
 <script>
@@ -2743,7 +2835,6 @@ function makeVoteUlTag(updateVoteContents, ulTag) {
 			let newTodoListItem = makeTodoInputList(todoValue, oldVoteDateV, oldVoteSelectVName, oldVoteSelectVId);
 			document.querySelector('[data-todo-make-list]').append(newTodoListItem);
 
-			
 			//값 초기화
 			todoInput.value = '';
 			oldVoteDate.value ='';
@@ -2754,23 +2845,29 @@ function makeVoteUlTag(updateVoteContents, ulTag) {
 	});
 
 	function makeTodoInputList(con, date, selN, selId) {
-		const li = document.createElement('li');
+		let li = document.createElement('li');
 		li.className = 'list-group-item';
 
-		const inputTodo = document.createElement('input');
+		let inputTodo = document.createElement('input');
 		inputTodo.type = 'text';
 		inputTodo.value = con;
 
-		const inputVoteDate = document.createElement('input');
+		let inputVoteDate = document.createElement('input');
 		inputVoteDate.type = 'date';
+		inputVoteDate.className = 'form-control';
+		inputVoteDate.style.width = '130px';
+		inputVoteDate.style.borderRadius = '5px';
 		inputVoteDate.value = date;
 
-		const inputSelectDate = document.createElement('input');
+		let inputSelectDate = document.createElement('input');
 		inputSelectDate.type = 'text';
 		inputSelectDate.value = selN;
+		inputSelectDate.classList.add('form-select', 'custom-select');
+		inputSelectDate.style.width = '100px';
+		inputSelectDate.style.borderRadius = '5px';
 		inputSelectDate.readOnly = true;
 
-		const inputSelectDate2 = document.createElement('input');
+		let inputSelectDate2 = document.createElement('input');
 		inputSelectDate2.type = 'text';
 		inputSelectDate2.value = selId;
 		inputSelectDate2.type= 'hidden';
@@ -3164,7 +3261,7 @@ function chagemodal12() {
 		newInput.placeholder = '항목 추가';
 
 		let newSpan = document.createElement('span');
-		newSpan.className = 'spanCursor';
+		newSpan.classList.add('spanCursor', 'customVoteX');
 		newSpan.textContent = 'X';
 		
 		newLi.appendChild(newInput);
@@ -3186,7 +3283,7 @@ function chagemodal12() {
 				}
 	
 				//input상자 갯수 확인
-				if (document.querySelectorAll('.plusChangeVoteInput').length == 10) {
+				if (document.querySelectorAll('.plusChangeVoteInput').length == 9) {
 						alert('10개 까지만');
 						return;
 				}
@@ -3565,6 +3662,16 @@ function delProFile(ppn, filename) {
 		console.error('Error: ',error);
 	});//fetch종료
 };
+</script>
+
+<!-- select상자 크기 조절 -->
+<script>
+//선택할 수 있는 옵션의 개수 (1부터 5까지만 가능하도록 설정)
+const maxOptions = 5;
+
+// 옵션 개수가 maxOptions를 넘지 않도록 조정
+workPostPerson.size = Math.min(maxOptions, workPostPerson.length);
+schPartiMemberSelect.size = Math.min(maxOptions, schPartiMemberSelect.length);
 </script>
 
 </body>
