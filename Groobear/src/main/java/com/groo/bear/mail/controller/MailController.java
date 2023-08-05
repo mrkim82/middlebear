@@ -50,7 +50,7 @@ public class MailController {
         EmailReader receiver = new EmailReader();
         List<MailVO> list = receiver.receiveMailAttachedFile(id, id, startDate, endDate);
         //위에서 가져온 메일을 db에 저장하고 뿌려줌
-		if(list.size() > 0) {
+		if(list!=null && list.size() > 0) {
 			for(int i=0; i < list.size();i++) {
 				System.out.println("list.get(i)첵 = "+list.get(i));
 				int result = mailService.serverGetInsertMail(list.get(i));
@@ -58,10 +58,10 @@ public class MailController {
 			}
 		}
 		
-		mailVO.setReceiver((String) session.getAttribute("Id"));
-		mailVO.setReferrer((String) session.getAttribute("Id"));
-		mailVO.setReferrer2((String) session.getAttribute("Id"));
-		mailVO.setReferrer3((String) session.getAttribute("Id"));
+		mailVO.setReceiver(id);
+		mailVO.setReferrer(id);
+		mailVO.setReferrer2(id);
+		mailVO.setReferrer3(id); //(String) session.getAttribute("Id")
 		mailVO.setMailType2("R");
 		mailVO.setMailType3("R");
 		mailVO.setMailType4("R");
