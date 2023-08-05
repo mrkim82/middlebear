@@ -12,14 +12,16 @@
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	crossorigin="anonymous">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
 body {
+	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 	min-height: 100vh;
 	background: -webkit-gradient(linear, left bottom, right top, from(#92b5db),
 		to(#1d466c));
 	background: -webkit-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
 	background: -moz-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
 	background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
-	background: linear-gradient(to top right, #92b5db 0%, #1d466c 100%);
+	background: linear-gradient(to top right, #caf5d85e 2%, #8cdeb7c2 100%);
 }
 
 .input-form {
@@ -68,26 +70,29 @@ body {
 	<div class="container">
 		<div class="input-form-backgroud row">
 			<div class="input-form col-md-12 mx-auto">
-				<h4 class="mb-3">Groobear Change Password</h4>
+				<h4 class="mb-3" style="text-align:center;">Groobear Change Password</h4>
 					<form class="validation-form">
-						<div class="mb-3" style="width:320px;">
-							<label for="password">변경할 비밀번호</label> <input type="password" oninput="checkPw1()"
+						<div class="mb-3" style="margin-left:100px;width:300px;">
+							<label for="password">변경할 비밀번호</label> <input type="password" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" oninput="checkPw1()"
 								class="form-control" id="password" name="password" placeholder="8자리 이상 영어,숫자,특수문자 혼합" value="" required>
 							<p id="Pw"></p>
 						</div>
-						<div class="mb-3" style="width:320px;">
-							<label for="checkPassword">비밀번호 확인</label> <input type="password" oninput="checkPw2()"
+						
+						<div class="mb-3" style="margin-left:100px;width:300px;">
+							<label for="checkPassword">비밀번호 확인</label> <input type="password" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" oninput="checkPw2()"
 								class="form-control" id="checkPassword" name="checkPassword" placeholder="8자리 이상 영어,숫자,특수문자 혼합" value="" required>
 							<p id="rePw"></p>
 						</div>
-					<div class="mb-4"></div>
-					<button id="pwBtn" class="btn btn-primary btn-lg" style="width:300px; display:inline;" type="button">비밀번호 변경</button>
-					<button class="btn btn-primary btn-lg " style="width:300px; display:inline;" type="button" onclick="location.href='/'">돌아가기</button>	
+						
+					<div class="mb-4" style="text-align: center;margin-bottom:0px;margin-top:20px;">
+						<button id="pwBtn" class="btn btn-primary btn-lg" style="display:inline;background-color: #38d39f;border-color: #38d39f;margin-right:50px;" type="button">변경하기</button>
+						<button class="btn btn-primary btn-lg " style="display:inline;background-color: #38d39f;border-color: #38d39f;" type="button" onclick="location.href='/'">돌아가기</button>	
+					</div>
 				</form>
 			</div>
 		</div>
 		<footer class="my-3 text-center text-small">
-			<p class="mb-1">&copy; 2023.07 GrooBear</p>
+			<p class="mb-1">&copy; 2023.08 GrooBear</p>
 		</footer>
 	</div>	
 	<script src="https://code.jquery.com/jquery-latest.js"></script> 
