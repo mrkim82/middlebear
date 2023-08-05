@@ -38,7 +38,7 @@ html {
 
 					<form class="signup-form" name="commuteInfoForm">
 						<div class="modal-body" style="display:inline-block;">
-							<div class="form-group mb-3" style="display:inline-block;width: 470px;border:1px solid black;border-radius: 2px;">
+							<div class="form-group mb-3" style="display:inline-block;width: 470px;border-radius: 2px;">
 								<table style="float: left; width: 400px; font-size:20px;">
 									<thead></thead>
 									<tbody>
@@ -52,19 +52,19 @@ html {
 									<thead></thead>
 									<tbody>
 										<tr>
-											<td>13333</td>
-											<td>23333</td>
-											<td>33333</td>
+											<td>기안자</td>
+											<td>결재자</td>
+											<td>결재자</td>
 										</tr>
 										<tr>
-											<td>45555</td>
+											<td>22222</td>
 											<td>55555</td>
 											<td>65555</td>
 										</tr>
 										<tr>
-											<td>75555</td>
-											<td>85555</td>
-											<td>95555</td>
+											<td>이름 / 직급</td>
+											<td>이름 / 직급 </td>
+											<td>이름 / 직급</td>
 										</tr>
 									</tbody>
 								</table>
@@ -179,7 +179,7 @@ html {
 					</tr>
 				</tbody>	
 			</table>
-
+<span>[[${bookList}]]</span>
 		</div>
 		<div>
 			<ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
@@ -204,6 +204,11 @@ html {
 				searchForm.submit();
 			}
 
+			
+/* 			fetch("payInfoRead") */
+			
+			
+			
 			
 			
 			document.getElementById('searchBtn').addEventListener('click',function(){

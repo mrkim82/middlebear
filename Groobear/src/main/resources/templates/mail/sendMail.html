@@ -9,26 +9,18 @@
 <body>
 <div layout:fragment="content">
 	<form method="post">
-		<button id="send" type="button" onclick="sendMail()">메일보내기</button>
+		
 		<table class="table">
 		<tbody>
 			<tr><td><input type="text" id="mailNo" th:value="${mailNo}" style="display:none"></td></tr>
 			<tr>
-				<td>보내는사람 <input id="sender" type="text" name="sender" th:value="${id}" readonly></td>
+				<td><span>보내는사람&nbsp;&nbsp;&nbsp;<input id="sender" type="text" name="sender" th:value="${id}" readonly></span><span>받는사람&nbsp;&nbsp;&nbsp;<input id="receiver" type="text" name="receiver"></span><span>참조자&nbsp;&nbsp;&nbsp;<input id="referrer" type="text" name="referrer"></span></td>
 			</tr>
 			<tr>
-				<td>받는사람 <input id="receiver" type="text" name="receiver"></td>
+				<td>제목 <input id="title" type="text" name="title"><button id="send" type="button" onclick="sendMail()">메일보내기</button></td>
 			</tr>
 			<tr>
-				<td>참조자 <input id="referrer" type="text" name="referrer"></td>
-			</tr>
-			<tr>
-				<td>제목 <input id="title" type="text" name="title"></td>
-			</tr>
-			<tr>
-				<td>내용 <textarea id="content" style="width:1000px; height:1000px" name="content"></textarea></td>
-			</tr>
-			<tr><td><div class="panel-body1">
+				<td><div class="panel-body1">
                      <div class="form-group uploadDiv1">
                          <input name="uploadFile1" type="file" multiple>
                      </div>
@@ -42,6 +34,9 @@
                      </div>
                  	</div>
                  </td></tr>
+			<tr>
+				<td>내용 <textarea id="content" style="width:500px; height:200px" name="content"></textarea></td>
+			</tr>
 		</tbody>
 		</table>
 	</form>
