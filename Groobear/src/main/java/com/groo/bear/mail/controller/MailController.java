@@ -100,11 +100,10 @@ public class MailController {
 			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
 		String id = (String) session.getAttribute("Id");
 		String R = "R";
-		mailVO.setId(id);
+		mailVO.setSender(id);
 		mailVO.setMailType(R);
 		Paging paging = new Paging();
         paging.setCri(cri);
-        System.out.println("보낸메일함 = "+mailVO);
         paging.setTotalCount(mailService.countSendMail(mailVO));
         model.addAttribute("mailList",mailService.sendMailSearch(cri, id));
 		model.addAttribute("paging", paging);
