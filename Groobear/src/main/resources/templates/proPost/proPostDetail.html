@@ -1763,7 +1763,6 @@ function drawChart() {
 	});
 	
 	$('#modal15').on('hidden.bs.modal', function (e) {
-		console.log($(this).find('.newVoteTarget').children())
 		$(this).find('.newVoteTarget').children().remove();
 		$(this).find('input').val('');
 	});
@@ -2763,19 +2762,24 @@ function makeUlTag(results, ulTag, topTag) {
 		voteInput.addEventListener('keypress', function (e) {
 			if (e.key === 'Enter') {
 				//값 확인
-				if(document.querySelectorAll('.plusVoteInput')[0].value == '') {
+				if(voteInputs[0].value == '') {
 					alert('첫번째 값을 넣어주세요.');
-					document.querySelectorAll('.plusVoteInput')[0].focus();
-					return false;
-				};
-				console.log(voteInputs[1])
-				if(document.querySelectorAll('.plusVoteInput')[1].value == '') {
-					alert('두번째 값을 넣어주세요.');
-					document.querySelectorAll('.plusVoteInput')[1].focus();
+					voteInputs[0].focus();
 					return false;
 				};
 				
-				if()
+				if(voteInputs[1].value == '') {
+					alert('두번째 값을 넣어주세요.');
+					voteInputs[1].focus();
+					return false;
+				};
+				
+				for (let vi of document.querySelectorAll('.plusVoteInput')) {
+					if (vi.value === '') {
+						alert('빈 내용이 있습니다.');
+						return false;
+					};
+				};
 				
 				makeVoteInput(event.target);
 
@@ -2824,6 +2828,13 @@ function makeUlTag(results, ulTag, topTag) {
 					return false;
 				};
 				
+				for (let vi of document.querySelectorAll('.plusVoteInput')) {
+					if (vi.value === '') {
+						alert('빈 내용이 있습니다.');
+						return false;
+					};
+				};
+				
 	            makeVoteInput(event.target);
 				let nextInput = newInput.parentElement.parentElement.lastElementChild.children[0];
 	            nextInput.focus();
@@ -2862,6 +2873,11 @@ function makeUlTag(results, ulTag, topTag) {
 			let voteDetailObj = {};
 			voteDetailObj['voteDetailContent'] = inputValues[i].value;
 			voteDetailArr.push(voteDetailObj);
+			
+			//마지막 값이 빈값이면 제외
+			if(inputValues[i].value == '' && inputValues.length > 2) {
+				voteDetailArr.pop();
+			};
 		};
 		
 		if(voteDetailArr[0].voteDetailContent == '' || voteDetailArr[1].voteDetailContent == '') {
