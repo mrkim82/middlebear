@@ -46,15 +46,15 @@ public class MailController {
 		String id = (String) session.getAttribute("Id");
         Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-01-31");
         Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-08-31");
-        id = id.substring(0,id.indexOf("@"));
+       //id = id.substring(0,id.indexOf("@"));
         EmailReader receiver = new EmailReader();
         List<MailVO> list = receiver.receiveMailAttachedFile(id, id, startDate, endDate);
         //위에서 가져온 메일을 db에 저장하고 뿌려줌
 		if(list!=null && list.size() > 0) {
 			for(int i=0; i < list.size();i++) {
 				System.out.println("list.get(i)첵 = "+list.get(i));
-				int result = mailService.serverGetInsertMail(list.get(i));
-		        System.out.println("몇건 처리됨? "+result);
+				//int result = mailService.serverGetInsertMail(list.get(i));
+		        //System.out.println("몇건 처리됨? "+result);
 			}
 		}
 		
