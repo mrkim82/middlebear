@@ -12,14 +12,16 @@
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	crossorigin="anonymous">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
 body {
+	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 	min-height: 100vh;
 	background: -webkit-gradient(linear, left bottom, right top, from(#92b5db),
 		to(#1d466c));
 	background: -webkit-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
 	background: -moz-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
 	background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
-	background: linear-gradient(to top right, #92b5db 0%, #1d466c 100%);
+	background: linear-gradient(to top right, #caf5d85e 2%, #8cdeb7c2 100%);
 }
 
 .input-form {
@@ -67,31 +69,49 @@ body {
 <body>
 	<div class="container">
 		<div class="input-form-backgroud row">
-			<div class="input-form col-md-12 mx-auto">
-				<h4 class="mb-3">Groobear Search Password</h4>
+			<div class="input-form col-md-12 mx-auto" style="padding-bottom:10px;">
+				<h4 class="mb-3" style="text-align:center;">Groobear Search Password</h4>
 					<form class="validation-form">
-						<div class="mb-3" style="width:320px;">
-							<label for="name">아이디</label> <input type="text"
+						<div class="mb-3" style="margin-left:100px;width:300px;">
+							<label for="name">아이디</label> <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;"
 								class="form-control" id="id" name="id" placeholder="example@bear.com" value="" required>
 						</div>
-						<div class="mb-3" style="width:320px;">
-							<label for="phone">휴대전화</label> <input type="text" minlength="13	" maxlength="13" 
+						
+						<div class="row" >
+				            <div class="col-md-8 mb-3" style="margin-left:100px;">
+				              <label for="phone">휴대전화</label>
+				              <div class="input-group">
+				                <input type="text" minlength="13" maxlength="13" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;"
 								class="form-control phoneNumber" id="phone" name="phone" placeholder="010-0000-0000" value="" required>
-							<button type="button" id="smsbtn1">인증번호 발급</button>
-						</div>
-						<div class="mb-3" style="width:320px;">
-							<label for="phone">인증번호</label> <input type="text" minlength="6" maxlength="6"
+				                <div class="input-group-append">
+				                  <button type="button" id="smsbtn1" class="btn btn-primary" style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;">인증번호 발급</button>
+				                </div>
+				              </div>
+				            </div>
+				         </div>
+						
+						<div class="row" style="margin-bottom:20px;">
+				            <div class="col-md-8 mb-3" style="margin-left:100px;">
+				              <label for="phone">인증번호</label> 
+				              <div class="input-group">
+				                <input type="text" minlength="6" maxlength="6" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;"
 								class="form-control" id="smsnum" name="smsnum" placeholder="인증번호 6자리" required>
-								<button type="button" id="smsbtn2">인증번호 확인</button>
-						</div>
-					<div class="mb-4"></div>
-					<button id="findBtn" class="btn btn-primary btn-lg" style="width:300px; display:inline;" type="button">비밀번호 변경</button>
-					<button class="btn btn-primary btn-lg " style="width:300px; display:inline;" type="button" onclick="location.href='/'">돌아가기</button>	
+				                <div class="input-group-append">
+				                  <button type="button" id="smsbtn2" class="btn btn-primary" style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" value="">인증번호 확인</button>
+				                </div>
+				              </div>
+				            </div>
+				         </div>
+						
+					<div class="mb-4" style="text-align: center;margin-bottom:0px;">
+						<button id="findBtn" class="btn btn-primary btn-lg" style="display:inline;background-color: #38d39f;border-color: #38d39f;margin-right:50px;" type="button">변경하기</button>
+						<button class="btn btn-primary btn-lg " style="display:inline;background-color: #38d39f;border-color: #38d39f;" type="button" onclick="location.href='/'">돌아가기</button>	
+					</div>
 				</form>
 			</div>
 		</div>
 		<footer class="my-3 text-center text-small">
-			<p class="mb-1">&copy; 2023.07 GrooBear</p>
+			<p class="mb-1">&copy; 2023.08 GrooBear</p>
 		</footer>
 	</div>	
 	<script src="https://code.jquery.com/jquery-latest.js"></script> 

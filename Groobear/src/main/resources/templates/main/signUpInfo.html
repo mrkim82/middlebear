@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>인사등록 정보 조회</title>
 	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <style>
-.free table {width: 550px; margin: 0 auto; border-collapse: collapse; table-layout: fixed;}
-.free th {border-top: 3px solid blue; border-bottom: 3px solid blue;}
-.free td {border-bottom: 1px solid gray;}
-.free .col4{width: 8%;}
-.free .col3, .free .col1, .free .col5 {width: 14%;}
-.free th, .free td {padding: 10px;}
-.free td, .free td + td + td {text-align: center;}
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+body {
+	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+	background: #C5E8D2;
+	}
+main {
+	padding : 10px;
+	background:white;
+	border-radius: 10px;
+	}
 /* The Modal (background) */
         .modal {
             display: none; /* Hidden by default */
@@ -35,12 +40,14 @@
             padding: 20px;
             border: 1px solid #888;
             width: 30%; /* Could be more or less, depending on screen size */ 
+          }
 </style>
 </head>
 <body>   
-    <main>
-        <div class="free">
-            <table>
+    <main style="margin:40px">
+	    <h4 class="mb-3" style="text-align:center;">Groobear 인사등록 조회</h4>
+        <div>
+            <table class="table table-hover" style="text-align:center;margin-top: 5px;">
             	<thead>
 	                <tr>
 	                    <th class="col1">이름</th>
@@ -51,7 +58,7 @@
 	                </tr>
                 </thead>
                 <tbody id="body">
-					<tr th:each="emp, stat : ${empInfo}" th:ondblclick="${#strings.isEmpty(emp.id)} ? 'sendInfo()' : 'hasId()'">
+					<tr class="cml table-default" th:each="emp, stat : ${empInfo}" th:ondblclick="${#strings.isEmpty(emp.id)} ? 'sendInfo()' : 'hasId()'">
 							<td>[[${emp.name}]]</td>
 							<td>[[${emp.empNo}]]</td>
 							<td>[[${emp.deptName}]]</td>
@@ -61,6 +68,7 @@
 					</tr>
 				</tbody>
             </table>
+			<p style="text-align:center;">* 본인 정보에 해당하는 행을 더블클릭 바랍니다.</p>        
         </div>
     </main>
 	<!-- The Modal -->

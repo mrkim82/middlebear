@@ -13,7 +13,6 @@
 		
 		li {
 			float: left;
-			padding: 10px;
 		}
 		a { 
 			text-decoration:none ;
@@ -37,10 +36,10 @@
             border-radius: 5px;
             padding: 10px;
             width: calc(33.33% - 70px); /* 3개의 카드를 한 줄에 배치하기 위해 폭을 조절 */
-            margin-top: 40px;
+            margin-top: 20px;
             margin-bottom: 20px;
         }
-        button {
+        .button {
 			padding: 10px 20px;
 			background-color: #4CAF50;
 			color: white;
@@ -51,14 +50,17 @@
     </style>
 </head>
 <body layout:fragment="content" >
-	<h3 style='text-align:center;'>Groobear 부서권한관리</h3>
-	<button type="button" id="addBtn" onclick="addPopUp()">부서등록</button>
-    <div class="card-container">
+  <div style="padding:10px;">
+	<h2 style="margin-top: 25px;">Groobear 부서권한관리</h2>
+	<div style="text-align:right;">
+		<button class="custom-button button" type="button" id="addBtn" onclick="addPopUp()">부서등록</button>
+	</div>
+    <div class="card-container" style="font-size:17px;">
         <div class="card"  th:each="dept, stat : ${deptList}">
-            <div style="margin:5px;padding:10px;border:1px solid black;text-align:center;">
+            <div style="border-radius:10px;margin:5px;padding:10px;border:1px solid black;text-align:center;">
             	<a style="margin:10px auto;">부서명 : [[${dept.deptName}]]</a>
             </div>
-          	<div style="margin:5px;padding:10px;border:1px solid black;">
+          	<div style="border-radius:10px;margin:5px;border:1px solid black;">
           		<table class="list" style="width:100%;margin-top:20px;margin-bottom:20px;">
           			<tr>
 						<td style="text-align:center;" th:if="${dept.deptHead != null}">팀장 : [[${dept.deptHead}]]</td>          			
@@ -78,41 +80,43 @@
           				<td><input type="text" style="display:none;" class="chkDeptNo" th:value="${dept.deptNo}"></td>
           			</tr>
           			<tr>
-						<td style="text-align:center;"><button type="button" class="deptBtn" onclick="deptPopUp()">부서정보</button></td>      			
+						<td style="text-align:center;"><button type="button" class="custom-button button deptBtn" onclick="deptPopUp()">부서정보</button></td>      			
           			</tr>
           		</table>
             </div>
         </div>
     </div>
+    </div>
     <div style="display: flex;justify-content: center;height:30px;">
-	    <ul class="paging" th:if="${paging.endPage != 0}">
-					<li>
-						<a th:href="|javascript:goPage(1)|">처음</a>
-					</li>
-	        <li th:if="${paging.prev}">
-	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+	    <ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
+			<li class="page-item">
+				<a class="page-link" style="border-top-left-radius: 0.2rem;border-bottom-left-radius: 0.2rem;" th:href="|javascript:goPage(1)|">&laquo;</a></li>
+			<li class="page-item" th:if="${paging.prev}">
+	            <a class="page-link" th:href="|javascript:goPage([[${paging.startPage-1}]])|">&lsaquo;</a>
 	        </li>
-	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
-	            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+			<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
+				th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+				<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+				th:text="${num}"></a>
+			</li>
+			<li class="page-item" th:if="${paging.next and paging.endPage > 0}">
+	            <a class="page-link" th:href="|javascript:goPage([[${paging.endPage+1}]])|">&rsaquo;</a>
 	        </li>
-	        <li th:if="${paging.next and paging.endPage > 0}">
-	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
-	            </li>
-				<li>
-					<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
-				</li>
+			<li class="page-item"><a class="page-link" style="border-top-right-radius: 0.2rem;border-bottom-right-radius: 0.2rem;"
+				th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+			</li>
 	    </ul>
 	</div>
 	<div style="display: flex;justify-content: center;">
 		<form name="searchForm" action="deptList">
 		<input type="hidden" name="page" value="1"/><br>
-		<select name="type">
-			<option value='' selected>-- 선택 --</option>
+		<select style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;" name="type">
+			<option value='' selected>선택</option>
 			<option value='deptHead' th:selected="${criteria.type == 'deptHead'}">부서장</option>
 			<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
 		</select>
-		<input type="text" name="keyword" id="inputBtn" th:value="${criteria.keyword}"/>
-		<button type="submit" id="searchBtn">검색</button>
+		<input type="text" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:150px;" name="keyword" id="inputBtn" th:value="${criteria.keyword}"/>
+		<button class="custom-button" type="submit" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" id="searchBtn">검색</button>
 	</form>
 	</div>
     <script>
@@ -121,7 +125,15 @@
     	// window.name = "부모창 이름"; 
         window.name = "deptList";   
         // window.open("open할 window", "자식창 이름", "팝업창 옵션");
-        openWin = window.open("/deptAddForm", "deptInsert", "width=450, height=480, resizable = no, scrollbars = no");    	
+        //openWin = window.open("/deptAddForm", "deptInsert", "width=450, height=480, resizable = no, scrollbars = no");    	
+        var screenWidth = window.screen.width;
+        var screenHeight = window.screen.height;
+        var popupWidth = 450;
+        var popupHeight = 480;
+        var left = (screenWidth - popupWidth) / 2;
+        var top = (screenHeight - popupHeight) / 2;
+        var options = "width=" + popupWidth + ", height=" + popupHeight + ", resizable=no, scrollbars=no, top=" + top + ", left=" + left;
+        openWin = window.open("/deptAddForm", "deptInsert", options);
     } 
 	//페이징 관련
 	function goPage(p) {
@@ -141,7 +153,15 @@
     	// window.name = "부모창 이름"; 
         window.name = "deptInfo";   
         // window.open("open할 window", "자식창 이름", "팝업창 옵션");
-        openWin = window.open("/deptDetailInfo?deptNo="+deptNo, "deptDetailInfo", "width=450, height=480, resizable = no, scrollbars = no");    	
+        //openWin = window.open("/deptDetailInfo?deptNo="+deptNo, "deptDetailInfo", "width=450, height=480, resizable = no, scrollbars = no");    	
+        var screenWidth = window.screen.width;
+        var screenHeight = window.screen.height;
+        var popupWidth = 450;
+        var popupHeight = 480;
+        var left = (screenWidth - popupWidth) / 2;
+        var top = (screenHeight - popupHeight) / 2;
+        var options = "width=" + popupWidth + ", height=" + popupHeight + ", resizable=no, scrollbars=no, top=" + top + ", left=" + left;
+        openWin = window.open("/deptDetailInfo?deptNo="+deptNo, "deptDetailInfo", options);
     }
         
   	//날짜포맷 맞춰주는 함수 
