@@ -101,12 +101,14 @@ public class MailController {
 		//새테이블로
 		String id = (String) session.getAttribute("Id");
 		String R = "R";
-		mailVO.setSender(id);
+		mailVO.setId(id);
 		mailVO.setMailType(R);
 		Paging paging = new Paging();
         paging.setCri(cri);
+        System.out.println("보낸메일함 = "+mailVO);
         paging.setTotalCount(mailService.countSendMail(mailVO));
-		model.addAttribute("mailList",mailService.getMailSend(cri,mailVO));
+        model.addAttribute("mailList",mailService.sendMailSearch(cri, id));
+		//model.addAttribute("mailList",mailService.getMailSend(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/sendingMail";
 	}
@@ -114,6 +116,7 @@ public class MailController {
 	@GetMapping("mail/deleteMail")
 	public String deleteMailForm(Criteria cri, Model model, MailVO mailVO, HttpSession session) {
 		String id = (String) session.getAttribute("Id");
+		id = id.substring(0,id.indexOf("@"));
 		mailVO.setSender(id);
 		mailVO.setReceiver(id);
 		mailVO.setReferrer(id);
