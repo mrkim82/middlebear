@@ -275,8 +275,8 @@ public class MailServiceImpl implements MailService{
 		return mailMapper.getMailSend(cri, mailVO);
 	}
 	@Override
-	public List<MailVO> sendMailSearch(Criteria cri, String id) {
-		return mailMapper.sendMailSearch(cri, id);
+	public List<MailVO> sendMailSearch(Criteria cri, MailVO mailVO) {
+		return mailMapper.sendMailSearch(cri, mailVO);
 	}
 	
 }

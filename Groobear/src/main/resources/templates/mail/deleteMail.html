@@ -136,6 +136,7 @@
 			    //Ajax 성공시 호출 
 			    success : function(data){
 			        console.log("컨트롤에서 받은거 : " + data);
+			        location.href="/mail/deleteMail";
 			        alert("삭제"+data+"건 되었습니다.");
 			    },
 			    //Ajax 실패시 호출

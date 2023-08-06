@@ -432,4 +432,28 @@ public class PaymentController {
 		paymentService.insertPublicSignImg(empVO);
 		return "성공";
 	}
+	//메인페이지에 넘겨줄 결재중문서 개수
+	@PostMapping("mainProCount")
+	@ResponseBody
+	public int inProgressCountMain(@RequestBody List<String> sInfo ,Model model, HttpSession session) {
+		//String id = (String) session.getAttribute("Id");
+		String id = sInfo.get(0);
+		System.out.println("getPayCount = "+id);
+		int result = paymentService.countPaymentList(id);
+		return result;
+	}
+	//메인페이지에 넘겨줄 완료된문서 개수
+	@PostMapping("mainComCount")
+	public int completeCountMail(Model model, HttpSession session) {
+		String id = (String) session.getAttribute("Id");
+		int result = paymentService.completePayCount(id);
+		return result;
+	}
+	//메인페이지에 넘겨줄 참조된문서 개수
+	@PostMapping("mainRefCount")
+	public int refCountMail(Model model, HttpSession session) {
+		String id = (String) session.getAttribute("Id");
+		int result = paymentService.referrerPayCount(id);
+		return result;
+	}
 }
