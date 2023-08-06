@@ -83,14 +83,14 @@
                 var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
                 str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
                 + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
-                str += "<img src='/display?fileName=" + fileCallPath + "'>";
+                //str += "<img src='/display?fileName=" + fileCallPath + "'>";
                 str += "</div>";
                 str += "</li>";
             } else {
                 str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
                 + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
                 str += "<span>" + attach.fileName + "</span><br/>";
-                str += "<img src='img/attach.png/'>";
+                //str += "<img src='img/attach.png/'>";
                 str += "</div>";
                 str += "</li>";
             }
@@ -107,8 +107,8 @@
 		    var path = encodeURIComponent(liObj.data("path")+"/" + liObj.data("uuid")+"_" + liObj.data("filename"));
 		    
 		    if(liObj.data("type")){
-		      showImage(path.replace(new RegExp(/\\/g),"/"));
-		      //self.location ="/download?fileName="+path
+		      //showImage(path.replace(new RegExp(/\\/g),"/"));
+		      self.location ="/download?fileName="+path
 		    }else {
 		      //download 
 		      self.location ="/download?fileName="+path
