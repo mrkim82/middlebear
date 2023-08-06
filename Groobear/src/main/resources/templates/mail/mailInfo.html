@@ -47,7 +47,7 @@
         </tr>
         <tr>
         <td>
-        <th:block th:if="${not #strings.isEmpty(mailFile)}">
+        
 			<td><div class="bigPictureWrapper">
 			<div class="bigPicture">
 			</div>
@@ -66,7 +66,6 @@
 				</div>
 				<!-- end panel -->
 			</div>
-        </th:block>
         </td>
         </tr>
         <tr>
@@ -109,6 +108,7 @@
 		    
 		    if(liObj.data("type")){
 		      showImage(path.replace(new RegExp(/\\/g),"/"));
+		      //self.location ="/download?fileName="+path
 		    }else {
 		      //download 
 		      self.location ="/download?fileName="+path

@@ -98,7 +98,6 @@ public class MailController {
 	@GetMapping("mail/sendingMail")
 	public String sendingMailForm(Criteria cri, Model model, MailVO mailVO, HttpSession session,  @RequestParam(value="nowPage", required=false)String nowPage
 			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
-		//새테이블로
 		String id = (String) session.getAttribute("Id");
 		String R = "R";
 		mailVO.setId(id);
@@ -108,7 +107,6 @@ public class MailController {
         System.out.println("보낸메일함 = "+mailVO);
         paging.setTotalCount(mailService.countSendMail(mailVO));
         model.addAttribute("mailList",mailService.sendMailSearch(cri, id));
-		//model.addAttribute("mailList",mailService.getMailSend(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/sendingMail";
 	}
@@ -119,9 +117,9 @@ public class MailController {
 		id = id.substring(0,id.indexOf("@"));
 		mailVO.setSender(id);
 		mailVO.setReceiver(id);
-		mailVO.setReferrer(id);
-		mailVO.setReferrer2(id);
-		mailVO.setReferrer3(id);
+		mailVO.setReferrer(id+"bear.com");
+		mailVO.setReferrer2(id+"bear.com");
+		mailVO.setReferrer3(id+"bear.com");
 		mailVO.setId(id);
 		String U = "U";
 		mailVO.setMailType(U);
@@ -141,17 +139,20 @@ public class MailController {
 		int count=0;
 		String U = "U";
 		String id = (String) session.getAttribute("Id");
+		id = id.substring(0,id.indexOf("@"));
+		String id2 = id+"@bear.com";
 		for (int i=0; i< delList.size(); i++) {
+			System.out.println("delete i = "+delList.get(i));
 			MailVO mailVO = new MailVO();
 			mailVO = mailService.getMailInfo(delList.get(i));
 			mailVO.setMailType(U);
 			if(mailVO.getReceiver().equals(id)) {
 				mailService.getMailType2Del(mailVO);
-			}else if(mailVO.getReferrer().equals(id)) {
+			}else if(mailVO.getReferrer().equals(id2)) {
 				mailService.getMailType3Del(mailVO);
-			}else if(mailVO.getReferrer2().equals(id)) {
+			}else if(mailVO.getReferrer2().equals(id2)) { //null체크
 				mailService.getMailType4Del(mailVO);
-			}else if(mailVO.getReferrer3().equals(id)) {
+			}else if(mailVO.getReferrer3().equals(id2)) {
 				mailService.getMailType5Del(mailVO);
 			}
 			count++;
