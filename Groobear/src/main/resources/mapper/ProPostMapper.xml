@@ -135,7 +135,7 @@
 		ON(b.emp_no = c.emp_no)
 		JOIN pro_post p
 		ON(a.pro_post_no = p.pro_post_no)
-		JOIN files e
+		LEFT JOIN files e
 		ON (e.id = a.id)
 		
 		WHERE a.com_no IN (SELECT com_no
