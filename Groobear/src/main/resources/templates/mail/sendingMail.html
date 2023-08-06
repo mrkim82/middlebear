@@ -36,7 +36,7 @@
 				</tr>
 			</thead>
 			<tbody id="MailBody">
-				<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+				<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} +'&check=S' + '\''">
 					<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
 					<td style="display:none">[[${mail.mailNo}]]</td>
 					<td style="padding-left:25px">[[${mail.receiver}]]</td>
@@ -116,6 +116,7 @@
 		var del = document.querySelector(".del");
 		
 		del.onclick = () =>{
+			let check = 'S';
 			for(let i=0; i< list.length; i++){
 				if(list[i].checked){
 					list[i].parentElement.parentElement.remove();
@@ -128,6 +129,7 @@
 			    contentType : 'application/json',
 			    data :JSON.stringify( delList ),
 			    //Ajax 성공시 호출 
+			    async : false,
 			    success : function(data){
 			        console.log("컨트롤에서 받은거 : " + data);
 			        alert("삭제"+data+"건 되었습니다.");
