@@ -104,8 +104,8 @@
 	</select>
 	<!-- 보낸메일 갯수 출력 -->
 	<select id="countSendMail" resultType="int">
-		SELECT COUNT(*) FROM getmail
-			WHERE (sender = #{sender})
+		select COUNT(*) FROM mail
+			where id = #{id}
 	</select>
 	<!-- 받은메일 갯수 출력 -->
 	<select id="countReceiveMail" resultType="int">
@@ -311,7 +311,7 @@
 		where mail_no = #{mailNo}
 	</update>
 	<!-- 보낸메일함 db에 넣는거 기준조회 -->
-	<select id="sendMailSearch" parameterType="String">
+	<select id="sendMailSearch" resultType="MailVO">
 		SELECT * FROM (SELECT g.mail_no,g.send_date,g.receive_date,
 			g.delete_date,g.read_check,g.mail_type,
 			g.mail_set,g.title,g.content, g.sender, g.receiver, g.referrer, g.id, ROWNUM AS rn FROM 
@@ -325,7 +325,7 @@
 			ON c.mail_no = d.mail_no
             where d.mail_type = 'S'
             and sender=#{id}
-              )g
+             ORDER BY c.send_date desc)g
           )
           <![CDATA[
           	WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
