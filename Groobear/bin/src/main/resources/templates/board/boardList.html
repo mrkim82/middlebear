@@ -84,10 +84,10 @@
 	</div>
 	</div>
 	<div>
-		<th:block th:if="${(session.EmpGrade == 'A') and (boardVO.boardType == 'N')}">
+		<th:block th:if="${(boardVO.boardType == 'N') and ((session.EmpGrade == 'A') or (checkId.deptAuth == 'B1 ') or (checkId.deptAuth == 'B3 '))} ">
 			<button type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
 		</th:block>
-		<th:block th:if="${(session.EmpGrade == 'A') and (boardVO.boardType == 'C')}">
+		<th:block th:if="${(boardVO.boardType == 'C') and ((session.EmpGrade == 'A') or (checkId.deptAuth == 'B2 ') or (checkId.deptAuth == 'B3 '))}">
 			<button type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
 		</th:block>
 		<th:block th:if="${boardVO.boardType == 'K'}">

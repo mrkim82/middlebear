@@ -67,7 +67,22 @@
 	    align-items: center;
 	    transition: 0.3s;
 		}
-
+		.nav li:hover{
+  			background-color: #4fc09961;
+  			border-radius:15px;
+  		}
+  		.nav li:hover a{
+  			color:black;
+  		}
+  		.nav li{
+  			transition: 0.5s;
+  		}
+  		a {
+  			text-decoration : none !important;
+  		}
+		html ::-webkit-scrollbar{
+		 display: none;
+		}
 	</style>
   </head>
   <body style="width:1215px;margin: 0 auto;">
@@ -128,18 +143,18 @@
     </nav>
     <div class="row">
       <!-- 사이드바 -->
-      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-        <div class="position-sticky">
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block dohyeon sidebar" style="margin-left: 15px;margin-top: 10px;width: 200px;position: absolute;height: 100%;">
+        <div class="position-sticky" style="text-align:center;">
           <ul class="nav flex-column">
             <!-- 사이드바 메뉴 아이템들 -->
             <li class="nav-item">
-              <a href="/boardList?boardType=N"><span class="material-icons">add_box</span>공지사항</a>
+              <a href="/boardList?boardType=N" style="font-size: 25px; text-decoration: none; color: #29ac7f;">공지사항</a>
             </li>
             <li class="nav-item">
-              <a href="/boardList?boardType=C"><span class="material-icons">home</span>언론보도</a>
+              <a href="/boardList?boardType=C" style="font-size: 25px; text-decoration: none; color: #29ac7f;">언론보도</a>
             </li>
             <li class="nav-item">
-              <a href="/boardList?boardType=K"><span class="material-icons">star</span>자유게시판</a>
+              <a href="/boardList?boardType=K"  style="font-size: 25px; text-decoration: none; color: #29ac7f;">자유게시판</a>
             </li>
           </ul>
         </div>
@@ -152,7 +167,7 @@
 	<script>
 	//WebSocket 연결 설정
 	const alarmClient = new StompJs.Client({
-	brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+	brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
 	});
 
 	// 페이지 로드시 웹소켓 연결
