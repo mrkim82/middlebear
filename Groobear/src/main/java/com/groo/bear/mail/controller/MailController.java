@@ -46,7 +46,7 @@ public class MailController {
 		String id = (String) session.getAttribute("Id");
         Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-01-31");
         Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-08-31");
-       //id = id.substring(0,id.indexOf("@"));
+        id = id.substring(0,id.indexOf("@"));
         EmailReader receiver = new EmailReader();
         List<MailVO> list = receiver.receiveMailAttachedFile(id, id, startDate, endDate);
         //위에서 가져온 메일을 db에 저장하고 뿌려줌
@@ -101,14 +101,12 @@ public class MailController {
 		//새테이블로
 		String id = (String) session.getAttribute("Id");
 		String R = "R";
-		mailVO.setId(id);
+		mailVO.setSender(id);
 		mailVO.setMailType(R);
 		Paging paging = new Paging();
         paging.setCri(cri);
-        System.out.println("보낸메일함 = "+mailVO);
         paging.setTotalCount(mailService.countSendMail(mailVO));
-        model.addAttribute("mailList",mailService.sendMailSearch(cri, id));
-		//model.addAttribute("mailList",mailService.getMailSend(cri,mailVO));
+		model.addAttribute("mailList",mailService.getMailSend(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/sendingMail";
 	}
