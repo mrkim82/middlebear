@@ -30,7 +30,7 @@ html {
 		<div class="modal fade" id="bookModal" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
-				<div class="modal-content">
+				<div class="modal-content" style=" border-radius: 20px;">
 					<div class="modal-header">
 						<h5 class="modal-title" id="exampleModalLabel" style="font-size:30px;">운행 일지</h5>
 						<button type="button" class="btn-close" data-mdb-dismiss="modal"
@@ -39,8 +39,8 @@ html {
 					</div>
 
 					<form class="signup-form" name="commuteInfoForm">
-						<div class="modal-body" style="display:inline-block;">
-							<div class="form-group mb-3" style="display:inline-block;width: 470px;border:1px solid black;border-radius: 2px;">
+						<div class="modal-body" style="display:inline-block;padding:20px 50px;">
+							<div class="form-group mb-3" style="display:inline-block;width: 470px;">
 								<table style="float: left; width: 400px; font-size:20px;">
 									<thead></thead>
 									<tbody>
@@ -50,29 +50,10 @@ html {
 										<tr><td id="sessionId" style="display: none;">[[${session.Id}]]</td></tr>
 									</tbody>
 								</table>
-								<table style="float: left; width: 380px; font-size:20px;">
-									<thead></thead>
-									<tbody>
-										<tr>
-											<td>133333333333</td>
-											<td>23333333333</td>
-											<td>33333333333333333333333</td>
-										</tr>
-										<tr>
-											<td>45555555555</td>
-											<td>55555555555</td>
-											<td>6555555555555555</td>
-										</tr>
-										<tr>
-											<td>75555555555</td>
-											<td>85555555555</td>
-											<td>9555555555555555</td>
-										</tr>
-									</tbody>
-								</table>
 								<table style="float: left; width: 790px; font-size:20px;">
 									<thead></thead>
 									<tbody>
+										<tr><td>진행 상태 : <span id="mStatus"></span>
 										<tr><td>사유 : <span id="mPurpose"></span>
 										<tr><td>행선지 : <span id="mDestination"></span>
 										<tr><td>운행일자 : <span id="mOperDate"></span>
@@ -137,13 +118,13 @@ html {
 						<td class="name">[[${bk.name}]]</td>
 						<td class="destination">[[${bk.destination}]]</td>
 						<td class="driveKM">[[${bk.afterd}-${bk.befored}]]</td>
-						<td th:if="${bk.payStatus2 == 'F' || bk.payStatus3 == 'F'}">반려</td>
+						<td class="status" th:if="${bk.payStatus2 == 'F' || bk.payStatus3 == 'F'}">반려</td>
 						<td
-							th:if="${bk.payStatus2 == 'N' || bk.payStatus3 == 'N'} and ${bk.payStatus2 != 'F'}">진행중</td>
-						<td th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'Y'}">지급
+							class="status" th:if="${bk.payStatus2 == 'N' || bk.payStatus3 == 'N'} and ${bk.payStatus2 != 'F'}">진행중</td>
+						<td class="status" th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'Y'}">처리
 							완료</td>
 						<td
-							th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'N'} and ${bk.approver3 == ''}">지급
+							class="status" th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'N'} and ${bk.approver3 == ''}">처리
 							완료</td>
 						<td class="day" style="display: none;">[[${#dates.format(bk.day,'yyyy-MM-dd')}]]</td>
 						<td class="operDate" style="display: none;">[[${#dates.format(bk.operDate,'yyyy-MM-dd')}]]</td>
@@ -199,6 +180,7 @@ html {
 				let purpose = event.currentTarget.querySelector('.purpose').innerText;
 				let destination = event.currentTarget.querySelector('.destination').innerText;
 				let docType = event.currentTarget.querySelector('.docType').innerText;
+				let status = event.currentTarget.querySelector('.status').innerText;
 				let imprest = (parseInt(afterd) - parseInt(befored)) * 1500;
 				
 				
@@ -220,6 +202,7 @@ html {
 				document.querySelector('#mDestination').textContent = destination;
 				document.querySelector('#mImprest').textContent = imprest;
 				document.querySelector('#mDocType').textContent = docType;
+				document.querySelector('#mStatus').textContent = status;
 				
 				
 				

@@ -24,6 +24,9 @@ html {
 	transition-property: all;
   	transition-duration: 4s;
 }
+td{ 
+	vertical-align:none !important;
+}
 </style>
 </head>
 <body>
@@ -120,7 +123,7 @@ html {
 						th:each="car, es:${carPList}" data-toggle="modal" data-target="#carMInfo">
 			  <div class="card-header"></div>
 			  <div class="card-body">
-			  	<div style="height:220px;display: flex;align-items: center;">
+			  	<div style="height:220px;display: flex;text-align: center;align-items: center;">
 			  		<img id="carImg3" th:src="${car.carType}" style="width:200px;">
 			  	</div>
 			    <p class="card-title" style="margin-top:15px;">차량번호 : <span class="carNo">[[${car.carNo}]]</span></p>
