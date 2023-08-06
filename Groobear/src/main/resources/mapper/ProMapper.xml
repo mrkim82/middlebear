@@ -219,7 +219,7 @@
 	</insert>
 	
 	<!-- 프로젝트 권한 조회 -->
-	<select id="readProAuth" resultType="proVO">
+	<select id="readProAuth" resultType="ProAuthVO">
 		SELECT pro_def_tab
 			 , post_write_auth
 			 , post_update_auth

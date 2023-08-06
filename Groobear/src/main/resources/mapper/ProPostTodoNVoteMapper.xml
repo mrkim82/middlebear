@@ -51,6 +51,15 @@
 		WHERE b.pro_no = #{proNo}
 	</select>
 	
+	<!-- 투표 수정 단건 조회 -->
+	<select id="readUpVoteDetail" resultType="ProUpdateVoteVO">
+		SELECT a.pro_post_no, a.post_title, b.vote_content, b.vote_end_day
+		FROM pro_post a
+		JOIN vote b
+		ON(a.pro_post_no = b.pro_post_no)
+		WHERE a.pro_post_no = #{proPostNo}
+	</select>
+	
 	<!-- 투표 항목 조회 -->
 	<select id="readVoteListCheck" resultType="ProPostVoteVO">
 		SELECT c.vote_detail_no, c.vote_detail_content, c.vote_detail_img, b.vote_no
@@ -224,5 +233,7 @@
 		SET todo_content = #{todoContent}, todo_end = #{todoEnd}, id = #{id}
 		WHERE todo_no = #{todoNo}
 	</update>
+	
+	
 	
 </mapper>

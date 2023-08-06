@@ -164,5 +164,10 @@ public class ProTodoNVoteServiceImpl implements ProTodoNVoteService {
 		return result;
 	}
 
+	@Override
+	public ProUpdateVoteVO readUpVoteDetail(int proPostNo) {
+		return tv.readUpVoteDetail(proPostNo);
+	}
+
 	
 }

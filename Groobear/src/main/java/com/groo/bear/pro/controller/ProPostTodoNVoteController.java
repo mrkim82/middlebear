@@ -107,6 +107,12 @@ public class ProPostTodoNVoteController {
 		return ps.readTodoDetail(proPostNo);
 	};
 	
+	//할 일 수정 단건 조회
+	@PostMapping("upTodoDetail")
+	public ProUpdateVoteVO upTodoDetail(@RequestBody int proPostNo) {
+		return ps.readUpVoteDetail(proPostNo);
+	};
+	
 	//할 일 수정
 	@PostMapping("upTodo")
 	public Map<String, Object> upTodo(@RequestBody List<ProUpdateTodoVO> vo) {
