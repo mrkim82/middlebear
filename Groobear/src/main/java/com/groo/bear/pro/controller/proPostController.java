@@ -78,6 +78,8 @@ public class proPostController {
 		model.addAttribute("projectPartiList", proService.readProjectParti((String)session.getAttribute("Id")));//프로젝트 참가자 수
 		String currentURI = request.getRequestURI();
 		model.addAttribute("firstURI", firstURI(currentURI));//첫번쨰 주소
+		int homeTabNumber = getHomeTabNumber(request.getQueryString());
+		model.addAttribute("homeTab", homeTabNumber);//홈탭 숫자
 		
 		return model;
 	};
@@ -180,6 +182,18 @@ public class proPostController {
 			return matcher.group(1);
 		};
 		return input;
+    };
+    
+    public static int getHomeTabNumber(String input) {
+        Pattern pattern = Pattern.compile("homeTab=(\\d+)");
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            String numberString = matcher.group(1);
+            return Integer.parseInt(numberString);
+        } else {
+            return -1; // 해당 패턴을 찾지 못한 경우 처리
+        }
     };
 	
 	//글 생성

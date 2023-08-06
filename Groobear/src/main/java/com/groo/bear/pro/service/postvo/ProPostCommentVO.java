@@ -21,6 +21,9 @@ public class ProPostCommentVO {
 	private Date comDate;
 	private String name;
 	private int proPostNo;
-	private String profileImg;
 	private String id;
+	
+	private String uuid;
+	private String uploadPath;
+	private String fileName;
 }
