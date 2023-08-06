@@ -30,6 +30,13 @@
 		.rightPad{
 			padding-right:150px;
 		}
+		.custom-button {
+			color: #fff;
+		}
+		.custom-button:hover {
+			color: black; /* 마우스 오버 시 글자색을 남색으로 변경 */
+		  	cursor: pointer; /* 커서 모양을 손가락 모양으로 변경 */
+		}
 		#modalFolderCreate1, #modalFolderCreate2, #modalFolderCreate3{
 		  position: fixed; /* Stay in place */
 		  z-index: 1; /* Sit on top */
@@ -80,6 +87,11 @@
   		}
   		a {
   			text-decoration : none !important;
+  		}
+  		#ulId li.active a.page-link {
+    	background-color: #35A880;
+   		border: 1px solid #35A880;
+   		color: #fff;
   		}
 	</style>
   </head>
@@ -145,14 +157,14 @@
         <div class="position-sticky" style="text-align: center;">
           <ul class="nav flex-column">
             <!-- 사이드바 메뉴 아이템들 -->
-            <li class="nav-item">
+            <li class="nav-item" style="padding: 10px 0px;">
               <a href="/empInfo" style="font-size: 25px; text-decoration: none; color: #29ac7f;">회원조회</a>
             </li>
             <th:block th:if="${session.EmpGrade == 'A'}">
-	            <li class="nav-item">
+	            <li class="nav-item" style="padding: 10px 0px;">
 	              <a href="/deptList" style="font-size: 25px; text-decoration: none; color: #29ac7f;">부서권한관리</a>
 	            </li>
-	            <li class="nav-item">
+	            <li class="nav-item" style="padding: 10px 0px;">
 	              <a href="/userInfoList" style="font-size: 25px; text-decoration: none; color: #29ac7f;">인사등록</a>
 	            </li>
 	         </th:block>
@@ -290,7 +302,7 @@
 	
 	</script>
       <!-- 사이드바 우측의 컨텐츠 영역 -->
-      <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4" style="font-family: 'Do Hyeon', serif;">
         <div layout:fragment="content" ></div>
       </main>
     </div>

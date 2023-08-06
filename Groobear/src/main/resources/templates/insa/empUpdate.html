@@ -1,28 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Groobear 회원정보수정</title>
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Groobear 회원정보수정</title>
+	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+	<style>
+	 	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+	    body {
+	      font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+	      font-size : 17px;
+	      }
+	    input {
+		    font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		    background: #ffffff00;
+		    font-size : 17px;
+	    }
+	    select {
+    		
+	    }
+	    fieldset {
+	    	background: #d5ece3;
+    		border: 0px;
+	    }
+	    html {
+	        background: #d3cdcd54;
+	    }
+	    .custom-button {
+			color: #fff;
+		}
+		.custom-button:hover {
+			color: black; /* 마우스 오버 시 글자색을 남색으로 변경 */
+		  	cursor: pointer; /* 커서 모양을 손가락 모양으로 변경 */
+		}
+    </style>
 </head>
 <body>
 	<form style="height: 400px;" action="/updateEmp" method="POST">
-		<h3 style='text-align:center;'>Groobear 회원정보수정</h3>
-		<fieldset>
+		<h2 style='text-align:center;'>Groobear 회원정보수정</h2>
+		<fieldset style="border-radius: 10px 10px 0px 0px;">
 			<div class="row">
 				<div class="col-4" style="display:inline-block;">
 					<th:block th:if="${profImg != null && profImg != ''}">
-						<img style="width:120px;height:150px;" th:src="@{|/display?fileName=${#strings.replace(profImg.uploadPath,'\','/')}/s_${profImg.uuid}_${profImg.fileName}|}" 
+						<img style="border-radius: 60px; width:120px;height:150px;" th:src="@{|/display?fileName=${#strings.replace(profImg.uploadPath,'\','/')}/s_${profImg.uuid}_${profImg.fileName}|}" 
 													th:data-uploadpath="${profImg.uploadPath}" th:data-uuid="${profImg.uuid}"
 													th:data-filename="${profImg.fileName}" data-type="true">
 					</th:block>
 					<th:block th:if="${profImg == null || profImg == ''}">
-						<img style="width:120px;height:150px;" src="../img/userProf.png">
+						<img style="border-radius: 60px; width:120px;height:150px;" src="../img/userProf.png">
 					</th:block>								
 				</div>
-				<div class="col-6" style="display: inline-block;margin-left: 20px;position: absolute;">
+				<div class="col-6" style="display: inline-block;margin-left: 30px;position: absolute;">
 					<a>사번 : </a><input name="empNo" style="width:120px; padding-top:10px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.empNo}" readonly><br>
 					<a>이름 : </a><input name="name" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.name}" readonly><br>
-					<a>직급 : </a><select name="rank">
+					<a>직급 : </a><select name="rank" style="border: 1px solid lightgray;border-radius: 5px;height: 20px;font-family: 'Do Hyeon', serif;">
 								   <option value="사장" th:selected="${empInfo.rank=='사장'}">사장</option>
 								   <option value="이사" th:selected="${empInfo.rank=='이사'}">이사</option>
 								   <option value="부장" th:selected="${empInfo.rank=='부장'}">부장</option>
@@ -32,30 +64,30 @@
 					               <option value="주임" th:selected="${empInfo.rank=='주임'}">주임</option>
 					               <option value="사원" th:selected="${empInfo.rank=='사원'}">사원</option>
 					            </select><br>
-					<a>부서 : </a><select name="deptNo">
+					<a>부서 : </a><select name="deptNo" style="border: 1px solid lightgray;border-radius: 5px;height: 20px;font-family: 'Do Hyeon', serif;">
 									<th:block th:each="dept, stance : ${deptList}">
 										<option th:value="${dept.deptNo}" th:selected="${empInfo.deptNo == dept.deptNo}">[[${dept.deptName}]]</option>
 									</th:block>
 								 </select><br>
-					<a>재직여부 : </a><select name="empStatus">
+					<a>재직여부 : </a><select name="empStatus" style="border: 1px solid lightgray;border-radius: 5px;height: 20px;font-family: 'Do Hyeon', serif;">
 						               <option value="O" th:selected="${empInfo.empStatus=='O'}">재직</option>
 						               <option value="X" th:selected="${empInfo.empStatus=='X'}">퇴직</option>
 						            </select><br>
-					<a>회원권한 : </a><select name="empGrade">
+					<a>회원권한 : </a><select name="empGrade" style="border: 1px solid lightgray;border-radius: 5px;height: 20px;font-family: 'Do Hyeon', serif;">
 						               <option value="C" th:selected="${empInfo.empGrade=='C'}">일반회원</option>
 						               <option value="A" th:selected="${empInfo.empGrade=='A'}">관리자</option>
 						            </select>
 				</div>
 			</div>
 		</fieldset>
-		<fieldset style="margin-bottom:10px;">
-			<a>연락처 : </a><input name="phone" style="width:120px; padding-top:10px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.phone}" readonly><br>
-			<a>회사메일 : </a><input name="id" style="width:150px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.id}" readonly><br>
-			<a>개인메일 : </a><input name="email" style="width:150px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.email}" readonly>
+		<fieldset style="margin-bottom:10px;border-radius: 0px 0px 10px 10px;">
+			<a>연락처 : </a><input name="phone" style="width:200px; padding-top:10px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.phone}" readonly><br>
+			<a>회사메일 : </a><input name="id" style="width:200px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.id}" readonly><br>
+			<a>개인메일 : </a><input name="email" style="width:200px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.email}" readonly>
 		</fieldset>
-		<fieldset style="display: flex;justify-content: center;border:hidden;">
-			<button style="margin-right:10px;" type="submit">수정</button>
-			<button type="button" onclick="closeBtn()">닫기</button>
+		<fieldset style="display: flex;background: #ffffff00;justify-content: center;border:hidden;">
+			<button class="custom-button" style="border-radius: 10px;font-family: 'Do Hyeon', serif;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" type="submit">수정</button>
+			<button class="custom-button" style="border-radius: 10px;font-family: 'Do Hyeon', serif;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" type="button" onclick="closeBtn()">닫기</button>
 		</fieldset>
 	</form>
 	<script type="text/javascript">
