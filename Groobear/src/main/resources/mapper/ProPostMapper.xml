@@ -87,14 +87,16 @@
 	
 	<!-- 피드 글 조회 -->
 	<select id="readFeedPost" resultType="ProPostFeedVO">
-		SELECT a.pro_post_no, a.post_type, a. post_title, post_date, a.id, j.profile_img, k.name,
+		SELECT a.pro_post_no, a.post_type, a. post_title, post_date, a.id, k.name,
 		        b.writing_no, b.writing_content,
 		        c.work_no, c.work_status, c.work_pri,
 		        c.work_start_day, c.work_start_time, c.work_end_day, c.work_end_time,
 		        c.lr_work_seq, c.work_content,
 		        f.sch_no, f.sch_start_day, f.sch_start_time, f.sch_end_day, f.sch_end_time,
 		        f.sch_place, f.sch_content,
-		        i.vote_no, i.vote_content, i.vote_end_day, i.vote_end_check, e.work_group_no
+		        i.vote_no, i.vote_content, i.vote_end_day, i.vote_end_check, e.work_group_no,
+		        g.uuid, g.upload_path, g.file_name
+		        
 		FROM pro_post a
 		LEFT JOIN pro_writing b
 		ON(a.pro_post_no = b.pro_post_no)
@@ -110,6 +112,9 @@
 		ON(a.id = j.id)
 		INNER JOIN user_info k
 		ON(j.emp_no = k.emp_no)
+		LEFT JOIN files g
+		ON(a.id = g.id)
+		
 		WHERE (f.personal_sch = 'N' or f.personal_sch IS NULL)
 		AND a.pro_no = #{proNo}
 		<if test="postType != 0">
