@@ -34,7 +34,7 @@
 <body>
 <div layout:fragment="content">
 	<div>
-	  <h3 class="dohyeon" style="font-size:35px;margin-top:20px;">Groobear 지운메일함</h3>
+	  <h3 class="dohyeon" style="font-size:35px;margin-top:20px;">Groobear 지운 메일함</h3>
 		<table class="table table-hover">
 			<thead>
 				<tr style="border-bottom: 2px solid lightgray;">
@@ -50,7 +50,7 @@
 					<td style="display:none">[[${mail.mailNo}]]</td>
 					<td >[[${mail.sender}]]</td>
 					<td >[[${mail.content}]]</td>
-					<td  th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td  th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm')}"></td>
 				</tr>
 			</tbody>
 		</table>

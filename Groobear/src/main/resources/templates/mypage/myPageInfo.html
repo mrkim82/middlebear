@@ -7,37 +7,19 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- head 태그 내용 -->
     <style>
+    	li {
+	    	list-style: none;
+    	}
+    	ul {
+    		padding: 0px;
+    	}
         /* 탭 네비게이션 바 스타일 */
-        .navbar {
-            background-color: #f1f1f1;
-            padding: 10px;
-        }
-
         .nav {
             display: flex;
             list-style-type: none;
             margin: 0;
             padding: 0;
         }
-
-        .nav-item {
-            margin-right: 10px;
-        }
-
-        .nav-link {
-            padding: 8px 12px;
-            text-decoration: none;
-            color: #333;
-            border: 1px solid transparent;
-            border-radius: 4px;
-        }
-
-        .nav-link.active {
-            background-color: #007bff;
-            border-color: #007bff;
-            color: #fff;
-        }
-
         /* 탭 컨텐츠 스타일 */
         .tab-content {
             background-color: #f9f9f9;
@@ -75,14 +57,6 @@
             border-radius: 4px;
         }
 
-        button[type="submit"] {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
 
         /* 페이지 타이틀 스타일 */
         h2 {
@@ -110,6 +84,16 @@
             border: 1px solid #888;
             width: 30%; /* Could be more or less, depending on screen size */                          
         }
+        .input-file-button{
+		  cursor: pointer;
+		 border-radius: 10px;
+		 background-color: #399f61;
+		 border-color: #399f6100;
+		 box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;
+		 width: 100px;
+		 height:38px;
+		 text-align:center;
+		}
     </style>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 </head>
@@ -120,13 +104,17 @@
         </header>
 
         <!-- 네비게이션 바 (탭) -->
-        <nav class="navbar">
+        <nav class="navbar" style="background-color: #f1f1f1;padding: 10px;">
             <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link active" data-tab="password-tab" href="#">비밀번호 변경</a>
+                <li class="nav-item" style="margin-right: 10px;">
+                    <a class="nav-link active" style="padding: 8px 12px;text-decoration: none;
+            color: #333;border: 1px solid transparent;border-radius: 4px;background-color: #399f61;
+            border-color: #399f61;color: #fff;" data-tab="password-tab" href="#">비밀번호 변경</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-tab="profile-tab" href="#">회원 정보 변경</a>
+                <li class="nav-item" style="margin-right: 10px;">
+                    <a class="nav-link" style="padding: 8px 12px;text-decoration: none;
+            color: #333;border: 1px solid transparent;border-radius: 4px;background-color: #399f61;
+            border-color: #399f61;color: #fff;" data-tab="profile-tab" href="#">회원 정보 변경</a>
                 </li>
             </ul>
         </nav>
@@ -135,7 +123,7 @@
         <div class="tab-content">
             <!-- 비밀번호 변경 탭 -->
             <div class="tab-pane active" id="password-tab">
-                <h2>비밀번호 변경</h2>
+                <h2 style="color:#29ac7f;">비밀번호 변경</h2>
                 <form>
                     <!-- 비밀번호 변경 폼 요소들을 여기에 추가 -->
                     <label for="current-password">현재 비밀번호:</label>
@@ -147,13 +135,15 @@
                     <label for="confirm-password">비밀번호 확인:</label>
                     <input type="password" oninput="checkPw2()" id="confirm-password" name="confirm-password" placeholder="8자리 이상 영어,숫자,특수문자 혼합" required>
 					<p id="rePw"></p>
-                    <button class="btn btn-primary" id="pwBtn" type="button">비밀번호 변경</button>
+					<div style="text-align:center;">
+                    	<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 100px;height:38px;" id="pwBtn" type="button">비밀번호 변경</button>
+                    </div>
                 </form>
             </div>
 
             <!-- 회원 정보 변경 탭 -->
             <div class="tab-pane" id="profile-tab" style="width:800px;">
-                <h2>개인 정보 변경</h2>
+                <h2 style="color:#29ac7f;">개인 정보 변경</h2>
                 <form role='form' style="width:700px;">
                     <!-- 개인 정보 변경 폼 요소들을 여기에 추가 -->
                     <!-- 미리보기 영역 -->
@@ -172,10 +162,14 @@
 						</th:block>
 					</div>
 					<div class="row">
+						
 	                    <label for="profile-image">프로필 사진:</label>
-	                   	<input type="file" id="profile-image" name="uploadFile" accept=".jpg, .jpeg, .png, .gif">
+	                   	<label class="custom-button input-file-button" style="line-height:38px;margin-left : 380px;" for="profile-image">
+						  프로필 선택
+						</label>
+	                   	<input type="file" id="profile-image" name="uploadFile" accept=".jpg, .jpeg, .png, .gif" style="display:none;">
 	                    <div class="input-group-append">
-		                	<button class="btn btn-primary" type="button" id="profBtn">프로필 삭제</button>
+		                	<button class="custom-button input-file-button" style="margin-left : 20px;line-height:0px;" type="button" id="profBtn">프로필 삭제</button>
 		                </div>
                     </div>
                     <label for="email">이메일:</label>
@@ -189,7 +183,7 @@
 			                <input type="text" class="phoneNumber" minlength="13" maxlength="13"
 			           		 id="phone" name="phone" th:value="${userInfo.phone}" placeholder="010-0000-0000" required>
 			                <div class="input-group-append">
-			                	<button class="btn btn-primary" type="button" id="smsbtn1">인증번호 발급</button>
+			                	<button class="custom-button input-file-button" type="button" id="smsbtn1">인증번호 발급</button>
 			                </div>
 			              </div>
 			               <a id="checkPhone"></a>
@@ -200,7 +194,7 @@
 			                <input type="text" minlength="6" maxlength="6"
 			           		 id="smsnum" name="smsnum" placeholder="인증번호 6자리" required>
 			                <div class="input-group-append">
-			                	<button class="btn btn-primary" type="button" id="smsbtn2">인증번호 확인</button>
+			                	<button class="custom-button input-file-button" type="button" id="smsbtn2">인증번호 확인</button>
 			                </div>
 			              </div>
 			              <a id="checkSms"></a>
@@ -214,7 +208,7 @@
 			                <input type="text" minlength="5" maxlength="5"
 			           		 id="post" name="post" placeholder="우편번호 찾기 버튼 클릭" readonly>
 			                <div class="input-group-append">
-			                	<button class="btn btn-primary" type="button" id="postBtn" onclick="postCode()">우편번호 찾기</button>
+			                	<button class="custom-button input-file-button" type="button" id="postBtn" onclick="postCode()">우편번호 찾기</button>
 			                </div>
 			              </div>
 			            </div>
@@ -225,8 +219,9 @@
 					
 					<label for="addr2">상세주소:</label>
                     <input type="text" id="addr2" name="addr2" th:value="${userInfo.addrDetail}">
-					
-                    <button type="button"  id="infoBtn" class="btn btn-primary">정보 변경</button>
+					<div style="text-align:center;margin-top:20px;">
+                    	<button class="custom-button input-file-button" type="button"  id="infoBtn">정보 변경</button>
+                    </div>
                 </form>
             </div>
         </div>

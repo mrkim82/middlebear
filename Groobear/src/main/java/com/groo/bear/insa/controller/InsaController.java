@@ -121,7 +121,7 @@ public class InsaController {
 	@ResponseBody
 	@PostMapping("insertUserInfo")
 	public String insertUserInfo(@RequestBody EmpVO vo) {
-		if(insaService.checkPno(vo.getPno())>0) {
+		if(insaService.checkPno(vo.getPno()) != null) {
 			return "has";
 		}else{
 			if(insaService.userInfoAdd(vo) > 0) {
@@ -136,8 +136,15 @@ public class InsaController {
 	@ResponseBody
 	@PostMapping("updateUserInfo")
 	public String updateUserInfo(@RequestBody EmpVO vo) {
-		if(insaService.checkPno(vo.getPno())>0) {
-			return "has";
+		if(insaService.checkPno(vo.getPno()) != null) {
+			System.out.println(insaService.checkPno(vo.getPno()).getName());
+			System.out.println(vo.getName());
+			if(insaService.checkPno(vo.getPno()).getName().equals(vo.getName())) {
+				insaService.updateUserInfo(vo);
+				return "success";
+			}else {
+				return "has";
+			}
 		}else{
 			if(insaService.updateUserInfo(vo) > 0) {
 				return "success";

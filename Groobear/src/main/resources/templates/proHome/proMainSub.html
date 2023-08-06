@@ -202,104 +202,105 @@
 		let proMemNo = trTag.dataset.pmn;
 		
 		fetch("/updateProHide", {
-			  method: 'PUT',
-			  headers: {
-			    'Content-Type': 'application/json'
-			  },
-			  body: JSON.stringify({
-				  	proMemNo: proMemNo,
-				  	proHideCheck: hideC
-				  })
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				proMemNo: proMemNo,
+				proHideCheck: hideC
 			})
-			.then(response => response.json())
-			.then(res => {
-				let rC = res.result;
-				if(rC == '성공') {
-					trTag.remove();
-					let sss = document.querySelector('[data-pro-mem-no="' + proMemNo + '"]').closest('li').remove();
-				}
-			});
+		})
+		.then(response => response.json())
+		.then(res => {
+			let rC = res.result;
+			if(rC == '성공') {
+				trTag.remove();
+				let sss = document.querySelector('[data-pro-mem-no="' + proMemNo + '"]').closest('li').remove();
+			}''
+		});
 	};
 </script>
 
 <!-- 그룹 추가/ 삭제 -->
 <script type="text/javascript">
-function changeGorupStatus() {
-	let checkedStatus = event.target.checked;
-	let proMemNo = event.target.dataset.proMemNo;
-	let liTag = event.target.parentElement;
-	let mainCont = event.target.nextElementSibling.textContent;
-	const url = window.location.href;
-	const parts = url.split('/');
-	const lastPart = parts[parts.length - 1];
+	function changeGorupStatus() {
+		let checkedStatus = event.target.checked;
+		let proMemNo = event.target.dataset.proMemNo;
+		let liTag = event.target.parentElement;
+		let mainCont = event.target.nextElementSibling.textContent;
+		const url = window.location.href;
+		const parts = url.split('/');
+		const lastPart = parts[parts.length - 1];
+		
+		//그룹 추가
+		if(checkedStatus) {
 	
-	//그룹 추가
-	if(checkedStatus) {
-
-		fetch("/creGroupManage", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				'proMemNo' : proMemNo,
-				'groupNo' : lastPart
-				})
-		})
-		.then(response => response.json())
-		.then(res => {
-			let newTr = document.createElement("tr");
-			//tr생성
-			let starColro = res.proStarCheck == 'Y' ? 'yellow' : 'gray';
-			newTr.innerHTML = `
-			    <tr>
-			        <td><div class="square"
-						 style="background-color: ${res.proColor}"></div></td>
-			        <td><div class="star ${starColro} starCheck" onclick="changeStar()"></div></td>
-			        <td style="width: 750px; overflow: hidden; font-size: larger; padding-left: 15px;">${res.proName}</td>
-			        <td>1명</td>
-			        <td>
-			            <span class="material-symbols-outlined" onclick="hideProject()" data-pro-hide="N">visibility</span>
-			        </td>
-			    </tr>
-			`;
-			newTr.setAttribute('data-pmn', proMemNo);
-			newTr.setAttribute('data-starc', res.proStarCheck);
-			newTr.setAttribute('data-hometab', res.homeTab);
-			newTr.setAttribute('data-proNo', res.proNo);
-			newTr.style.cursor = 'pointer';
-			newTr.onclick = projectDetail;
+			fetch("/creGroupManage", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					'proMemNo' : proMemNo,
+					'groupNo' : lastPart
+					})
+			})
+			.then(response => response.json())
+			.then(res => {
+				let newTr = document.createElement("tr");
+				//tr생성
+				let starColro = res.proStarCheck == 'Y' ? 'yellow' : 'gray';
+				newTr.innerHTML = `
+				    <tr>
+				        <td><div class="square"
+							 style="background-color: ${res.proColor}"></div></td>
+				        <td><div class="star ${starColro} starCheck" onclick="changeStar()"></div></td>
+				        <td style="width: 750px; overflow: hidden; font-size: larger; padding-left: 15px;">${res.proName}</td>
+				        <td>1명</td>
+				        <td>
+				            <span class="material-symbols-outlined" onclick="hideProject()" data-pro-hide="N">visibility</span>
+				        </td>
+				    </tr>
+				`;
+				newTr.setAttribute('data-pmn', proMemNo);
+				newTr.setAttribute('data-starc', res.proStarCheck);
+				newTr.setAttribute('data-hometab', res.homeTab);
+				newTr.setAttribute('data-proNo', res.proNo);
+				newTr.style.cursor = 'pointer';
+				newTr.onclick = projectDetail;
+				
+				let aTbody = document.querySelector('#goProjectDetail');
+				aTbody.append(newTr);
+				
+			})
+			.catch(error => {
+				console.error('Error: ',error);
+			});
 			
-			let aTbody = document.querySelector('#goProjectDetail');
-			aTbody.append(newTr);
+			//투표 삭제
+		} else {
 			
-		})
-		.catch(error => {
-			console.error('Error: ',error);
-		});
-		
-		//투표 삭제
-	} else {
-		
-		fetch("/delGroupManage", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				'proMemNo' : proMemNo,
-				'groupNo' : lastPart
-				})
-		})
-		.then(response => response.json())
-		.then(res => {
-			let ss = document.querySelector('[data-pmn="' + proMemNo + '"]').remove();
-		})
-		.catch(error => console.error('Error: ',error));
-
-	}
-}
+			fetch("/delGroupManage", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					'proMemNo' : proMemNo,
+					'groupNo' : lastPart
+					})
+			})
+			.then(response => response.json())
+			.then(res => {
+				let ss = document.querySelector('[data-pmn="' + proMemNo + '"]').remove();
+			})
+			.catch(error => console.error('Error: ',error));
+	
+		};
+	};
 </script>
+<!-- 스크립트 종료 -->
 
 </div>
 </html>

@@ -13,6 +13,7 @@ import com.groo.bear.pro.service.schvo.ProPerCalComVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.schvo.ProPostWorkSchVO;
 import com.groo.bear.pro.service.schvo.ProSchDetailVO;
+import com.groo.bear.pro.service.schvo.ProSchUpdateDetailVO;
 import com.groo.bear.pro.service.schvo.ProUpdateSchVO;
 
 @Service
@@ -117,6 +118,11 @@ public class ProPostSchServiceImpl implements ProPostSchService {
 		
 		ppsm.updateProSch(vo);
 		return 0;
+	}
+
+	@Override
+	public ProSchUpdateDetailVO readUpDetailSch(int proPostNo) {
+		return ppsm.readUpDetailSch(proPostNo);
 	}
 
 }

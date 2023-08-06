@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.groo.bear.pro.service.ProPostSchService;
 import com.groo.bear.pro.service.schvo.ProCreateSchVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
+import com.groo.bear.pro.service.schvo.ProSchUpdateDetailVO;
 import com.groo.bear.pro.service.schvo.ProUpdateSchVO;
 
 @Controller
@@ -77,6 +78,13 @@ public class ProPostSchController {
 		return map;
 	}
 	
+	//일정글 수정 디테일 조회
+	@PostMapping("upSchDetail")
+	@ResponseBody
+	public ProSchUpdateDetailVO upSchDetail(@RequestBody int proPostNo) {
+		return ppss.readUpDetailSch(proPostNo);
+	};
+	
 	//일정글 수정
 	@PostMapping("upSch")
 	@ResponseBody
@@ -86,6 +94,9 @@ public class ProPostSchController {
 		
 		map.put("result", "성공했겠지");
 		return map;
-	}
+	};
+	
+	
+	
 	
 }

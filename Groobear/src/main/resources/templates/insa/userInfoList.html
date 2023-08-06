@@ -51,12 +51,14 @@
 <body>
 
 <div layout:fragment="content" >
+<div style="padding:10px;">
   <div>
-  	<h3>Groobear 인사관리</h3>
-  	<div style="margin-top:20px;">
-	  	<a>사번 : </a><input style="margin-bottom:20px; border:0 solid black;" id="empNo" name="empNo" type="text" value="" readonly><br>
-  		<a>이름 : </a><input style="margin-bottom:20px;" id="name" name="name" type="text" value=""><br>
-  		<a>직급 : </a><select style="margin-bottom:20px;" id="rank" name="rank">
+  	<h2 style="margin-top: 25px;">Groobear 인사관리</h2>
+  	<div style="border:1px solid #ccc;border-radius:10px; margin-bottom:10px;">
+  	<div style="margin-top:20px;margin-left:40px;font-size:20px">
+	  	<a>사번 : &nbsp&nbsp&nbsp</a><input style="margin-top:10px;margin-bottom:20px; border:0 solid #ccc;" id="empNo" name="empNo" type="text" value="" readonly><br>
+  		<a>이름 : &nbsp&nbsp&nbsp</a><input style="border-radius: 5px;text-align:center;height: 35px; width:300px;margin-bottom:20px;border:1px solid #ccc;" id="name" name="name" type="text" value=""><br>
+  		<a>직급 : &nbsp&nbsp&nbsp</a><select style="border-radius: 5px;height: 35px; text-align:center;width:150px;margin-bottom:20px;border:1px solid #ccc;" id="rank" name="rank">
   								   <option value="" selected="selected">선택</option>
 								   <option value="사장" >사장</option>
 								   <option value="이사" >이사</option>
@@ -67,23 +69,25 @@
 					               <option value="주임" >주임</option>
 					               <option value="사원" >사원</option>
 					            </select><br>
-		<a>부서 : </a><select style="margin-bottom:20px;" id="deptNo" name="deptNo">
+		<a>부서 : &nbsp&nbsp&nbsp</a><select style="border-radius: 5px;height: 35px; text-align:center;width:150px;margin-bottom:20px;border:1px solid #ccc;" id="deptNo" name="deptNo">
 									<option value="" selected="selected">선택</option>
 								<th:block th:each="dept, stance : ${deptList}">
 									<option th:value="${dept.deptNo}">[[${dept.deptName}]]</option>
 								</th:block>
 							 	</select><br>
-		<a>주민번호 : </a><input style="margin-bottom:20px;" id="pno" name="pno" 
+		<a>주민번호 : </a><input style="border-radius: 5px;height: 35px; width:300px;margin-bottom:20px;text-align:center;border:1px solid #ccc;" id="pno" name="pno" 
 		type="text" value="" oninput="setJumin(pno)"><br>
 		<p id="result"></p>
   	</div>
-  	<div style="float: right;margin-bottom:20px;">
-	  	<button style="margin-right:10px;" type="button" id="resetBtn">초기화</button>
-  		<button style="margin-right:10px;" type="button" id="insertBtn">등록</button>
-  		<button style="margin-right:10px;" type="button" id="updateBtn">수정</button>
-  		<button style="margin-right:10px;" type="button" id="delBtn">삭제</button>
   	</div>
-	<table id="list" class="table">
+  	<div style="float: right;margin-bottom:20px;">
+	  	<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" type="button" id="resetBtn">초기화</button>
+  		<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" type="button" id="insertBtn">등록</button>
+  		<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" type="button" id="updateBtn">수정</button>
+  		<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" type="button" id="delBtn">삭제</button>
+  	</div>
+  	
+	<table id="list" class="table table-hover" style="text-align:center;font-size:17px;">
 		<thead>
 			<tr>
 				<th><input type="checkbox" id="allChk"></th>
@@ -97,7 +101,7 @@
 		</thead>
 		<tbody id="bodyWash">
 			<tr th:each="emp, stat : ${empList}" th:attr="onclick='updateUserInfo()'">
-				<td><input type="checkbox" th:id="${emp.empNo}" class="sel"></td>
+				<td style="width:50px"><input type="checkbox" th:id="${emp.empNo}" class="sel"></td>
 				<td>[[${emp.empNo}]]</td>
 				<td>[[${emp.name}]]</td>
 				<td>[[${emp.rank}]]</td>
@@ -108,6 +112,7 @@
 			</tr>
 		</tbody>
 	</table>
+</div>
 	<div style="display: flex;justify-content: center;height:30px;">
 	    <ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
 			<li class="page-item">
@@ -129,17 +134,17 @@
 	    </ul>
 	</div>
 	</div>
-	<div style="display: flex;justify-content: center;">
+	<div style="display: flex;justify-content: center;margin-bottom:20px;">
 		<form name="searchForm" action="userInfoList">
 		<input type="hidden" name="page" value="1"/><br>
-		<select name="type">
-			<option value='' selected>-- 선택 --</option>
+		<select name="type" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;">
+			<option value='' selected>선택</option>
 			<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
 			<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
 			<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
 		</select>
-		<input type="text" name="keyword" id="inputBtn" th:value="${criteria.keyword}"/>
-		<button type="submit" id="searchBtn">검색</button>
+		<input style="border: 1px solid gray;border-radius: 5px;height: 35px; width:150px;" type="text" name="keyword" id="inputBtn" th:value="${criteria.keyword}"/>
+		<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" type="submit" id="searchBtn">검색</button>
 	</form>
 	</div>
 		<!-- The Modal -->
