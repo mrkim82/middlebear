@@ -50,44 +50,22 @@
 		WHERE room_No = #{roomNo}
 		ORDER BY msg_Time ASC
 	</select>
-
-
-	<!-- 메세지전체조회 원래거 -->
-	<!-- <select id="MessageAllList" parameterType="ChatMessageDTO">
-		select i.name, m.content, m.msg_time
-		from message m, users u, user_info i
-		where m.id = u.id
-		AND u.emp_no = i.emp_no
-		AND room_no = #{roomNo}
-		order
-		By msg_no asc
-	</select> -->
 	
 	<!-- 메세지전체조회 추가된 멤버는 이전 대화 안보이게 하는 용 -->
 	<select id="MessageAllList" parameterType="ChatMessageDTO">
-		select a.name, b.msg_no, b.content, b.room_no, b.msg_time
-from (select i.name, u.id
-        from user_info i join users u
-        on i.emp_no = u.emp_no) a
-        join
-    (select m.msg_no,m.content, m.room_no, m.id,m.msg_time
-		from message m join room r
-		on m.room_no = r.room_no
-		where m.msg_time > (select mem_time from room_mem where id = #{id} and room_no= #{roomNo})
-		and m.room_no= #{roomNo}
-		order by msg_no asc) b
-        on a.id = b.id
+		select a.id, a.name, b.msg_no, b.content, b.room_no, TO_CHAR(b.msg_time, 'YY"년" MM"월" DD"일" HH24"시" MI"분"') as msg_time
+		from (select i.name, u.id
+		        from user_info i join users u
+		        on i.emp_no = u.emp_no) a
+		        right join
+		     (select m.msg_no,m.content, m.room_no, m.id,m.msg_time
+				from message m join room r
+				on m.room_no = r.room_no
+				where m.msg_time > (select mem_time from room_mem where id = #{id} and room_no= #{roomNo})
+				and m.room_no= #{roomNo}
+				order by msg_no asc) b
+		        on a.id = b.id
 	</select>
-	
-	<!-- 추가된 멤버는 이전 대화 안보이게 하는 용 -->
-	<!-- <select id="MessageAllListReal" parameterType="ChatMessageDTO">
-		select m.msg_no,m.content, m.room_no, m.id,m.msg_time
-		from message m join room r
-		on m.room_no = r.room_no
-		where m.msg_time > (select mem_time from room_mem where id = #{id})
-		and m.room_no= #{roomNo}
-	</select> -->
-
 
 	<insert id="sendMessage" parameterType="ChatMessageDTO">
 		<selectKey keyProperty="msgNo" order="BEFORE"
@@ -178,10 +156,6 @@ from (select i.name, u.id
 		#{roomNo}
 	</select>
 
-	<!-- 맨 마지막 채팅 보이게 하기 위함 -->
-	<!-- <select id="getLastMessage" parameterType="int"> SELECT SUBSTR(CONTENT, 
-		1, LEAST(10, LENGTH(CONTENT))) AS CONTENT FROM ( SELECT CONTENT FROM MESSAGE 
-		WHERE ROOM_NO = #{roomNo} ORDER BY MSG_TIME DESC ) WHERE ROWNUM = 1 </select> -->
 	<select id="getLastMessage" parameterType="int" resultType="RoomDTO">
 		SELECT SUBSTR(CONTENT, 1, LEAST(14, LENGTH(CONTENT))) AS CONTENT, name, room_no
 		FROM (
@@ -205,6 +179,15 @@ from (select i.name, u.id
 	
 	<select id="getRoomName" resultType="RoomDTO">
 		select * from room where room_no = #{roomNo}
+	</select>
+	
+	<select id="getUsersName" resultType="RoomDTO">
+		SELECT r.ROOM_NO, ui.NAME as in_Room_User_Name
+		FROM room r
+		JOIN room_mem rm ON r.ROOM_NO = rm.ROOM_NO
+		JOIN users u ON rm.ID = u.ID
+		JOIN user_info ui ON u.EMP_NO = ui.EMP_NO
+		where r.room_no = #{roomNo}
 	</select>
 
 </mapper>

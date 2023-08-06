@@ -3,82 +3,117 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layout/proTiles}"
 >
-
 <head>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
-		
 </head>
-
 <div layout:fragment="content">
-	<!-- 그룹에 프로젝트 버튼 -->
-	<div th:if="${readPerAllPro != null}">
-		<!-- Button trigger modal -->
-		<button type="button"
-				class="btn btn-primary"
-				data-toggle="modal"
-				data-target="#proFolder">
-			프로젝트 폴더 설정
-		</button>
+<!-- 필터, 정렬 -->
+<div style="text-align: end; margin-bottom: 15px;">
+	<select class="custom-select"
+			name="parti"
+			onchange="chagepartiSelect()"
+			id="partiSelect"
+			style="width: 170px;">
+		<option 
+				value=""
+				>내가 참여중인 프로젝트</option>
+		<option 
+				th:value="${session.Id}">내가 관리자인 프로젝트</option>
+	</select>
+	<select class="custom-select"
+			name="parti"
+			onchange="chageorderSelect()"
+			id="orderSelect"
+			style="width: 130px;">
+		<option 
+				value="1 DESC">오름차순(ㄱ~ㅎ)</option>
+		<option 
+				value="1 ASC">내림차순(ㅎ~ㄱ)</option>
+	</select>
+</div>
 
-		<!-- 프로젝트를 그룹에 포함 시키는 modal -->
-		<div class="modal fade"
-			 id="proFolder"
-			 tabindex="-1"
-			 aria-labelledby="proFolderLabel"
-			 aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="proFolderLabel">그룹에 포함시킬 프로젝트</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<!-- 본문 -->
-					<div class="modal-body">
-						<ul>
-							<li th:each="pro : ${readPerAllPro}">
+<!-- 그룹에 프로젝트 추가, 삭제 버튼 -->
+<div th:if="${readPerAllPro != null}">
+	<!-- Button trigger modal -->
+	<button type="button"
+			class="btn btn-groob"
+			data-toggle="modal"
+			data-target="#proFolder"
+			style="margin-bottom: 15px; margin-left: 10px">
+		프로젝트 폴더 설정
+	</button>
+
+	<!-- 프로젝트를 그룹에 포함 시키는 modal -->
+	<div class="modal fade"
+		 id="proFolder"
+		 tabindex="-1"
+		 aria-labelledby="proFolderLabel"
+		 aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content dohyeonModalContent">
+				<div class="modal-header">
+					<h5 class="modal-title" id="proFolderLabel">그룹에 포함시킬 프로젝트</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<!-- 본문 -->
+				<div class="modal-body"
+					 style="padding-bottom: 0px;">
+					<ul style="padding-left: 10px;">
+						<li th:each="pro : ${readPerAllPro}"
+							style="list-style-type: none;">
+							<label class="custom-checkbox"
+								   style="margin-bottom: 15px">
 								<input type="checkbox"
 									   th:data-pro-mem-no="${pro.proMemNo}"
 									   onclick="changeGorupStatus()">
-								<span th:text="${pro.proName}"></span>
-							</li>
-						</ul>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-					</div>
+								<span class="checkmark"></span>
+							</label>
+							<span th:text="${pro.proName}"
+								  style="padding-left: 5px; font-size: 18px;"></span>
+						</li>
+					</ul>
+				</div>
+				<div class="modal-footer" style="padding-top: 6px;padding-bottom: 6px;">
+					<button type="button" class="btn btn-groob" data-dismiss="modal">닫기</button>
 				</div>
 			</div>
 		</div>
-		<!-- 프로젝트를 그룹에 포함 시키는 modal 종료 -->
 	</div>
-	<!-- 버튼 종료 -->
+	<!-- 프로젝트를 그룹에 포함 시키는 modal 종료 -->
 	
-	<!-- 프로젝트 테이블 -->
-	<div>
-		<table class="table table-hover" id="goProjectDetail">
-			<tr th:each="pro:${projectMainList}"
-				th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}"
-				style="cursor:pointer">
-				<td th:text="${pro.proColor}"></td>
-				<td th:text="${pro.proStarCheck}" class="starCheck"></td>
-				<td th:text="${pro.proName}"></td>
-				<td th:each="parti:${projectPartiList}"
-					th:if="${parti.proNo == pro.proNo}"
-					th:text="${parti.count} + '명'"></td>
-				<td>
-					<span class="material-symbols-outlined"
-						  onclick="hideProject()"
-						  th:data-pro-hide="${pro.proHideCheck}"
-						  th:text="${pro.proHideCheck == 'Y'} ? 'visibility_off' : 'visibility'"></span>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<!-- 프로젝트 테이블 종료 -->
+</div>
+<!-- 그룹에 프로젝트 추가, 삭제 버튼 -->
+	
+<!-- 프로젝트 테이블 -->
+<div>
+	<table class="table table-hover"
+		   id="goProjectDetail">
+		<tr th:each="pro:${projectMainList}"
+			th:attr="data-pMN=${pro.proMemNo}, data-starC=${pro.proStarCheck}, data-homeTab=${pro.homeTab}, data-proNo=${pro.proNo}"
+			style="cursor:pointer"
+			onclick="projectDetail()">
+			<td>
+				<div class="square"
+					 th:style="'background-color: ' + ${pro.proColor}"></div></td>
+			<td><div class="star starCheck"
+					 th:classappend="${pro.proStarCheck == 'Y' ? 'yellow' : 'gray'}"
+					 onclick="changeStar()"></div></td>
+			<td style="width: 750px; overflow: hidden; font-size: larger; padding-left: 15px;"
+				th:text="${pro.proName}"></td>
+			<td th:each="parti:${projectPartiList}"
+				th:if="${parti.proNo == pro.proNo}"
+				th:text="${parti.count} + '명'"></td>
+			<td>
+				<span class="material-symbols-outlined"
+					  onclick="hideProject()"
+					  th:data-pro-hide="${pro.proHideCheck}"
+					  th:text="${pro.proHideCheck == 'Y'} ? 'visibility_off' : 'visibility'"></span>
+			</td>
+		</tr>
+	</table>
+</div>
+<!-- 프로젝트 테이블 종료 -->
 
 <!-- 스크립트 -->
 <!-- model값 가져오기 -->
@@ -106,20 +141,11 @@
 	};
 </script>
 
+<!-- 즐겨찾기 -->
 <script>
-	let starCheck = document.querySelectorAll(".starCheck");
-	
-	starCheck.forEach(sC => {
-		
-		sC.addEventListener("click", function(event) {
-			event.stopPropagation();
-			changeStar();
-		});
-		
-	});
-
 	function changeStar() {
-		let trTag = event.target.parentNode;
+		event.stopPropagation();
+		let trTag = event.target.closest('tr');
 		let dpMN = trTag.getAttribute("data-pMN");
 		let starC = trTag.getAttribute("data-starC");
 
@@ -132,46 +158,38 @@
 		})
 		.then(response => response.json())
 		.then(res => {
-				changeProOne(starC, trTag);
-			
-		})
+			changeProOne(starC, trTag);
+		});
 	};
 
 	//즐겨찾기 변경
 	function changeProOne(starC, trTag) {
-		
 		if (starC == 'N') {
 			trTag.setAttribute('data-starc', 'Y');
-			trTag.getElementsByClassName('starCheck')[0].textContent = 'Y';
+			trTag.querySelector('.star').classList.remove('gray');
+			trTag.querySelector('.star').classList.add('yellow');
 		} else {
 			trTag.setAttribute('data-starc', 'N');
-			trTag.getElementsByClassName('starCheck')[0].textContent = 'N';
-		}
+			trTag.querySelector('.star').classList.remove('yellow');
+			trTag.querySelector('.star').classList.add('gray');
+		};
 
-	}
+	};
 	
 	//프로젝트 master여부
 	function chagepartiSelect() {
 		let partiSelectId = document.getElementById('partiSelect').value;
-		console.log(partiSelectId);
-		
-	}
+		console.log('마스터!!',partiSelectId);
+	};
 </script>
 	
 <!-- 프로젝트 홈에서 상세 페이지 이동 -->
 <script>
-	let gPList = document.querySelectorAll('#goProjectDetail tr');
-	
-	gPList.forEach(gPDetail => {
-		let homeTabNum = gPDetail.dataset.hometab;
-		gPDetail.addEventListener('click', function() {
-			projectDetail(homeTabNum);
-		});
-	});
-
-	function projectDetail(homeTNum) {
-		location.href="/proPostMain/" + homeTNum;
-	}
+	function projectDetail() {
+		let homeTabNum = event.target.closest('tr').dataset.hometab;
+		let proNo = event.target.closest('tr').dataset.prono;
+		location.href="/proPostMain/" + proNo + "?homeTab=" + homeTabNum;
+	};
 </script>
 	
 <!-- 프로젝트 숨김 해제 -->
@@ -180,7 +198,6 @@
 		event.stopPropagation();
 		let hideC = event.target.dataset.proHide;
 		hideC = hideC == 'N' ? 'Y' : 'N';
-		console.log(hideC)
 		let trTag = event.target.closest('tr');
 		let proMemNo = trTag.dataset.pmn;
 		
@@ -199,9 +216,10 @@
 				let rC = res.result;
 				if(rC == '성공') {
 					trTag.remove();
+					let sss = document.querySelector('[data-pro-mem-no="' + proMemNo + '"]').closest('li').remove();
 				}
 			});
-	}
+	};
 </script>
 
 <!-- 그룹 추가/ 삭제 -->
@@ -214,8 +232,6 @@ function changeGorupStatus() {
 	const url = window.location.href;
 	const parts = url.split('/');
 	const lastPart = parts[parts.length - 1];
-	
-	console.log(lastPart);
 	
 	//그룹 추가
 	if(checkedStatus) {
@@ -233,13 +249,14 @@ function changeGorupStatus() {
 		.then(response => response.json())
 		.then(res => {
 			let newTr = document.createElement("tr");
-			
 			//tr생성
+			let starColro = res.proStarCheck == 'Y' ? 'yellow' : 'gray';
 			newTr.innerHTML = `
-			    <tr style="cursor:pointer" data-pmn="${proMemNo}" data-starc="N" data-hometab="4">
-			        <td>red</td>
-			        <td class="starCheck">N</td>
-			        <td>${mainCont}</td>
+			    <tr>
+			        <td><div class="square"
+						 style="background-color: ${res.proColor}"></div></td>
+			        <td><div class="star ${starColro} starCheck" onclick="changeStar()"></div></td>
+			        <td style="width: 750px; overflow: hidden; font-size: larger; padding-left: 15px;">${res.proName}</td>
 			        <td>1명</td>
 			        <td>
 			            <span class="material-symbols-outlined" onclick="hideProject()" data-pro-hide="N">visibility</span>
@@ -247,10 +264,11 @@ function changeGorupStatus() {
 			    </tr>
 			`;
 			newTr.setAttribute('data-pmn', proMemNo);
-			newTr.setAttribute('data-starc', 'N');
-			newTr.setAttribute('data-hometab', '4');
-
-
+			newTr.setAttribute('data-starc', res.proStarCheck);
+			newTr.setAttribute('data-hometab', res.homeTab);
+			newTr.setAttribute('data-proNo', res.proNo);
+			newTr.style.cursor = 'pointer';
+			newTr.onclick = projectDetail;
 			
 			let aTbody = document.querySelector('#goProjectDetail');
 			aTbody.append(newTr);

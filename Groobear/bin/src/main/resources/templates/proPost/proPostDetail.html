@@ -3,10 +3,12 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/proTiles}">
 <head>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script> -->
+
+<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <script th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js}"></script>
-<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script> -->
+
 <style>
 
 p {
@@ -29,7 +31,7 @@ p {
 }
 
 /* ul li 스타일 */
-ul {
+/* ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
@@ -37,8 +39,9 @@ ul {
 
 li {
 	padding: 5px;
-}
+} */
 </style>
+
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <!-- 차트 -->
@@ -1460,34 +1463,36 @@ function drawChart() {
 			</div>
 			<!-- 투표 모달 종료 -->
 			
-			
 		</div>
 		<!-- 참여자공간 -->
 		<div class="float-right">
 			<div>
 				<th:block th:text="'참여자 ' + ${projectPartiMember.size}"></th:block>
 			</div>
-			<div class="card" style="width: 18rem;">
+			<div class="card" style="width: 230px;">
 			  <!-- 관리자 -->
 			  <div class="card-header openModalInfo"
 			  	   th:each="pUser : ${projectPartiMember}"
 			  	   th:if="${pUser.id == readProAuth.id}"
 			  	   th:data-user-id="${pUser.id}"
-			  	   data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.empNo}"
-			  	   style="background-color: rgb(161, 204, 239)">
+			  	   data-toggle="modal"
+			  	   th:data-target="'#proUserInfoDetail' + ${pUser.empNo}"
+			  	   style="background-color: rgb(161, 204, 239); border-top-right-radius: 15px; border-top-left-radius: 15px;">
 			  	   <span th:text="'프로젝트 관리자 : '"></span>
 			       <span th:utext="${pUser.profileImg}"></span>
 			       <span th:text="${pUser.name}"></span>
 			  	   <span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
 			  </div>
 			  <ul class="list-group list-group-flush">
-			    <li class="list-group-item openModalInfo" th:each="pUser : ${projectPartiMember}"
+			    <li class="list-group-item openModalInfo" th:each="pUser, pUserStat : ${projectPartiMember}"
 			    	th:if="${pUser.id != readProAuth.id}"
 			    	th:data-user-id="${pUser.id}"
-			    	data-toggle="modal" th:data-target="'#proUserInfoDetail' + ${pUser.empNo}">
+			    	data-toggle="modal"
+			    	th:data-target="'#proUserInfoDetail' + ${pUser.empNo}"
+			    	th:style="${pUserStat == last} ? 'border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;' : ''">
 			    	<span th:utext="${pUser.profileImg}"></span>
 			    	<span th:text="${pUser.name}"></span>
-			    	<span th:if="${session.Id == pUser.id}" th:text="(나)"></span>
+			    	<span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
 		    	</li>
 			  </ul>
 				<!-- 유저 인포 모달창 -->

@@ -8,128 +8,247 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>	
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<style>
-* {
-	margin: 0;
-	padding: 0;
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" >
+
+ <style>
+ .material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 500,
+  'GRAD' 0,
+  'opsz' 58
+}
+.room-title {
+    color:#000000;
+    font-size: 25px;
+    font-weight: 900;
 }
 
-.chat_wrap .header {
-	font-size: 14px;
-	padding: 15px 0;
-	background: #35a880;
-	color: white;
-	text-align: center;
-	position: fixed;
-	width: 100%;
-	z-index: 100;
+/* .message {
+    color: #000000; /* 검정색 
+} */
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: 'Do Hyeon', sans-serif;
+    }
+    body {
+	/*background-color: #CCFFCC;  */
+    background-color: #9deab78a;
+    min-height: 100%;
 }
-.header a i {
-    color: white;  /* Icon color */
-    font-size: 24px;  /* Icon size */
-}
-
-.header .header-buttons {
+    .chat_wrap .header {
+        font-size: 14px;
+        padding: 15px 0;
+        background: #35a880;
+        color: white;
+        text-align: center;
+        position: fixed;
+        width: 100%;
+        z-index: 100;
+    }
+    .header {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    position: relative; /* 상대 위치 지정 */
 }
 
-.header .header-buttons a {
-    margin-left: 10px;
-}
-.chat_wrap .chat {
-	padding-top: 60px;
-	height: calc(100vh - 160px);  
-    overflow-y: scroll; 
+
+.header .room-title {
+    position: absolute; /* 절대 위치 지정 */
+    left: 50%; /* 왼쪽으로부터 50% 위치에 배치 */
+    transform: translateX(-50%); /* 자신의 너비의 절반만큼 왼쪽으로 이동해서 정확히 중앙에 배치 */
 }
 
-.chat_wrap .chat ul {
-	width: 100%;
-	list-style: none;
+.header .header-icons {
+    margin-left: 470px;
+    display: flex;
+    gap: 20px; /* 아이콘 사이의 간격을 조절합니다. */
+    color: #000000;
+    
+    /* margin-right: auto; */
+}
+    .header a i {
+        color: white;  /* Icon color */
+        font-size: 24px;  /* Icon size */
+    }
+    
+    
+    .header .header-buttons {
+        display: flex;
+    }
+    
+    .header .header-buttons a {
+        margin-left: 10px;
+    }
+    
+    .chat_wrap .chat {
+        padding-top: 60px;
+        height: calc(100vh - 160px);  
+        overflow-y: scroll; 
+    }
+    
+    .chat_wrap .chat ul {
+        width: 100%;
+        list-style: none;
+    }
+    
+    .chat_wrap .chat ul li {
+        width: 100%;
+    }
+    
+    .chat_wrap .chat ul li.left {
+        text-align: left;
+    }
+    
+    .chat_wrap .chat ul li.right {
+        text-align: right;
+    }
+    .chat_wrap .chat ul li.middle{
+        text-align : flex;
+    }	
+    
+    .chat_wrap .chat ul li>div {
+        font-size: 13px;
+    }
+    
+    .chat_wrap .chat ul li>div.sender {
+        margin: 10px 20px 0 20px;
+        font-weight: bold;
+    }
+    
+    .chat_wrap .chat ul li>div.message {
+        display: inline-block;
+        word-break: break-all;
+        margin: 5px 20px;
+        max-width: 75%;
+        border: 1px solid #888;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #FCFCFC;
+        color: #555;
+        text-align: left;
+    }
+    
+    .chat_wrap .input-div {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #FFF;
+        text-align: center;
+        border-top: 1px solid #F18C7E;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .chat_wrap .input-div>textarea {
+        flex-grow: 1;
+        height: 100px; /* textarea의 높이를 조정합니다 */
+        border: none;
+        padding: 10px;
+        margin-right: 10px;
+    }
+    
+    .chat_wrap .input-div>button {
+        width: 100px;
+        height: 60px;
+        background-color: #35a880;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+    
+    .format {
+        display: none;
+    }
+    .message-time {
+        font-size: 0.7em;  /* 시간을 작게 표시합니다. */
+        color: #777;      /* 시간 텍스트의 색상을 설정합니다. */
+    }
+    #membersDiv {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
 }
 
-.chat_wrap .chat ul li {
-	width: 100%;
+#membersDiv .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* 위치는 원하는대로 조절하세요 */
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-.chat_wrap .chat ul li.left {
-	text-align: left;
+#membersDiv:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.cursor{
+    cursor: pointer; 
+}
+.tooltip-content {
+    display: none;
+    position: absolute;
+    width: 100px;
+    background-color: #f9f9f9;  /* 배경색을 설정합니다 */
+    color: #333;                /* 글자색을 설정합니다 */
+    border: 1px solid #ddd;     /* 테두리를 설정합니다 */
+    padding: 10px;              /* 내부 여백을 설정합니다 */
+    border-radius: 8px;         /* 테두리 모서리를 둥글게 만듭니다 */
+    box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1);  /* 상자 그림자를 설정합니다 */
+    z-index: 1000;              /* 상자를 다른 요소 위로 띄웁니다 */
+    left: 0;                    /* 툴팁을 상대적 위치의 왼쪽 끝으로 배치합니다 */
+    
+}
+.tooltip-content p {
+    margin: 5px 0;  /* 위아래 마진을 5px로 설정 */
+    padding: 0;  /* 패딩을 0으로 설정 */
+}
+.message-content{
+    color:#000000;
+    font-family: 'Do Hyeon';
 }
 
-.chat_wrap .chat ul li.right {
-	text-align: right;
-}
-.chat_wrap .chat ul li.middle{
-	text-align : flex;
-}	
-
-.chat_wrap .chat ul li>div {
-	font-size: 13px;
-}
-
-.chat_wrap .chat ul li>div.sender {
-	margin: 10px 20px 0 20px;
-	font-weight: bold;
-}
-
-.chat_wrap .chat ul li>div.message {
-	display: inline-block;
-	word-break: break-all;
-	margin: 5px 20px;
-	max-width: 75%;
-	border: 1px solid #888;
-	padding: 10px;
-	border-radius: 5px;
-	background-color: #FCFCFC;
-	color: #555;
-	text-align: left;
-}
-
-.chat_wrap .input-div {
-	position: fixed;
-	bottom: 0;
-	width: 100%;
-	background-color: #FFF;
-	text-align: center;
-	border-top: 1px solid #F18C7E;
-	padding: 10px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.chat_wrap .input-div>textarea {
-	flex-grow: 1;
-	height: 40px;
-	border: none;
-	padding: 10px;
-	margin-right: 10px;
-}
-
-.chat_wrap .input-div>button {
-	width: 100px;
-	height: 60px;
-	background-color: #35a880;
-	color: white;
-	border: none;
-	border-radius: 5px;
-}
-
-.format {
-	display: none;
-}
-.message-time {
-    font-size: 0.7em;  /* 시간을 작게 표시합니다. */
-    color: #777;      /* 시간 텍스트의 색상을 설정합니다. */
-}
-</style>
+    </style>
 </head>
+
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <body>
 	<div class="chat_wrap">
-		<div class="header" >[[${roomDTO.roomName}]]
-        <a href="#"data-toggle="modal" data-target="#inviteModal" ><i class="material-icons">group_add</i></a>  <!-- Invite Icon -->
-        <a href="#" id="deleteChatroomButton"><i class="material-icons">exit_to_app</i></a>  <!-- Exit Icon -->
+		<div class="header">
+            <div class="room-title">[[${roomDTO.roomName}]]</div>
+            <div class="header-icons">
+                <div id="membersDiv">
+                    <span class="cursor" id="memberList" alt="대화상대"><span class="material-symbols-outlined">
+                        patient_list
+                        </span></span>
+                    <div class="tooltip-content">
+                        대화상대
+                        <span th:each="user : ${usersName}">
+                            <p th:text="${user.inRoomUserName}"></p>
+                        </span>
+                    </div>
+                </div>
+                <span class="cursor" data-toggle="modal" data-target="#inviteModal"><i class="material-icons">group_add</i></span> <!-- Invite Icon -->
+                
+                <span class="cursor" id="deleteChatroomButton"><i class="material-icons">exit_to_app</i></span> <!-- Exit Icon -->
+            </div>
         </div>
+        
 		<div class="chat">
 			<ul>
 				<!-- 동적 생성 -->
@@ -188,9 +307,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script th:inline="javascript">
+    var profileImg = '<%=session.getAttribute("ProfileImg")%>';
+
+console.log('requestURL : ' + /*[[ ${#httpServletRequest.requestURL} ]]*/);
+console.log('requestURI : ' + /*[[ ${#httpServletRequest.requestURI} ]]*/);
+console.log('serverPort : ' + /*[[ ${#httpServletRequest.serverPort} ]]*/);
+console.log('serverName : ' + /*[[ ${#httpServletRequest.serverName} ]]*/);
+console.log('servletPath : ' + /*[[ ${#httpServletRequest.servletPath} ]]*/);
+console.log('remoteAddr : ' + /*[[ ${#httpServletRequest.remoteAddr} ]]*/);
+console.log('method : ' + /*[[ ${#httpServletRequest.method} ]]*/);
+console.log('requestedSessionId : ' + /*[[ ${#httpServletRequest.requestedSessionId} ]]*/);
+console.log('scheme : ' + /*[[ ${#httpServletRequest.scheme} ]]*/);
+console.log('protocol : ' + /*[[ ${#httpServletRequest.protocol} ]]*/);
+console.log('locale : ' + /*[[ ${#httpServletRequest.locale} ]]*/);
+console.log('secure : ' + /*[[ ${#httpServletRequest.secure} ]]*/);
+
+let uri = /*[[ ${#httpServletRequest.requestURI} ]]*/;
+let url = /*[[ ${#httpServletRequest.requestURL} ]]*/;
+let path = url.replace(uri, '');
+console.log('path 찍는 용도' + path)
+
 //WebSocket 연결 설정
 const alarmClient = new StompJs.Client({
-brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
 });
 
 // 페이지 로드시 웹소켓 연결
@@ -260,15 +399,23 @@ let chatMessageDTO = /*[[${chatDTO}]]*/ 'chatDTO';
 
 // 페이지가 로드될 때 chatDTO 내용을 기반으로 채팅 내용을 화면에 추가
 $(document).ready(function() {
+    $('#memberList').on('click', function(){
+        $('.tooltip-content').toggle();
+        event.stopPropagation(); // 이벤트 버블링을 중지
+    });
+    
+    // 페이지 어딘가를 클릭하면 툴팁이 사라지도록 설정
+    $(document).on('click', function(){
+        $('.tooltip-content').hide();
+    });
     chatDTO.forEach(function(chat) {
-    console.log(chat)
     	//chatMessageDTO.forEach(function(chat) {
         if (chat.name == myName) {  // 추가된 코드
             chat.id = realId;
         }
         //const LR = (chat.id != realId) ? "left" : "right";
         let LR; 
-        if (!chat.hasOwnProperty('id')) {
+        if (chat.id === null || chat.id === '') {
         	LR = "middle";
         } else if (chat.id === realId) {
         	LR = "right";
@@ -367,7 +514,7 @@ function receive(data) {
 	let LR;
 	console.log(data.id + "data id 확인용");
 	console.log(realId + "realId 확인용");
-    if (!data.hasOwnProperty('id')) {
+    if (data.id === null || realId === '') {
     	LR = "middle";
     } else if(data.id == realId) {
         LR = "right";
@@ -390,11 +537,19 @@ function getFullYmdStr() {
     var d = new Date();
     var year = String(d.getFullYear()).slice(-2); // 연도의 마지막 두 자리만 가져옴
 
-    var minute = d.getMinutes();
-    // 만약 분이 한 자리 수이면 앞에 '0'을 붙임
-    minute = minute < 10 ? '0' + minute : minute;
+    var month = d.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+    month = month < 10 ? '0' + month : month; // 월이 한 자리 수이면 앞에 '0'을 붙임
 
-    return year + "년 " + (d.getMonth()+1) + "월 " + d.getDate() + "일 " + d.getHours() + "시 " + minute + "분 ";
+    var date = d.getDate();
+    date = date < 10 ? '0' + date : date; // 일이 한 자리 수이면 앞에 '0'을 붙임
+
+    var hour = d.getHours();
+    hour = hour < 10 ? '0' + hour : hour; // 시간이 한 자리 수이면 앞에 '0'을 붙임
+
+    var minute = d.getMinutes();
+    minute = minute < 10 ? '0' + minute : minute; // 분이 한 자리 수이면 앞에 '0'을 붙임
+
+    return year + "년 " + month + "월 " + date + "일 " + hour + "시 " + minute + "분 ";
 }
 //메세지 보낼 때
 function sendMessage(message) {
@@ -505,6 +660,7 @@ $('#createChatroom').on('click', function() {
             // Here you might want to do something to reflect that the employees were added
             // For example, you could close the modal
             $('#inviteModal').modal('hide');
+            location.reload();
             
             // 알림2
             for(let i = 0; i < checkedEmployeeIds.length ; i++){

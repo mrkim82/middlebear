@@ -3,10 +3,31 @@
  layout:decorate="~{layout/paymentTiles}">
 <head>
 <meta charset="UTF-8">
-<title>InProgressPay</title>
+<title>완료된결재문서 페이지</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<style>
+	ul {
+			list-style:none;
+	}
+		
+	li {
+		float: left;
+		padding: 10px;
+	}
+	a { 
+		text-decoration:none ;
+		color: black;
+	}
+	.paging .active a {
+		    background-color: #f00;
+		    color: #fff;
+	}
+</style>
 </head>
-<body layout:fragment="content">
+<body>
+<div layout:fragment="content">
 	<div>
+	  <h3>Groobear 완료된 결재문서</h3>
 		<table id="list" class="table">
 			<thead>
 				<tr>
@@ -20,7 +41,7 @@
 			</thead>
 			<tbody>
 				<tr th:each="pay,stat : ${completePaymentList}" th:attr="onclick='window.location.href=\'/payInfoRead?payNo=' + ${pay.payNo} + '+&docType='+${pay.docType}+'\''">
-					<td>[[${paging.totalCount - stat.index}]]</td>
+					<td th:text="${paging.totalCount - ((paging.cri.page-1) * paging.cri.perPageNum) - stat.index}"></td>
 					<td th:text="${pay.payNo}"></td>
 					<td>[[${pay.purpose}]]</td>
 					<td>[[${pay.id}]]</td>
@@ -37,24 +58,31 @@
 			</tbody>
 		</table>
 	</div>
-	<div>
+	<div style="display: flex;justify-content: center;height:30px;">
 		<ul class="paging" th:if="${paging.endPage != 0}">
-        <li th:if="${paging.prev}">
-            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
-        </li>
-        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
-        </li>
-        <li th:if="${paging.next and paging.endPage > 0}">
-            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
-        </li>
-    </ul>
-	</div>
+			<li>
+				<a th:href="|javascript:goPage(1)|">처음</a>
+			</li>
+	        <li th:if="${paging.prev}">
+	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+	        </li>
+	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
+            	<a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+        	</li>
+	        <li th:if="${paging.next and paging.endPage > 0}">
+	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
+	        </li>
+	        <li>
+				<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
+			</li>
+	    </ul>
+    </div>
 	<script>
 	function goPage(p){
 		location.href="completePay?page="+p;
 			
 	}
 	</script>
+</div>
 </body>
 </html>
