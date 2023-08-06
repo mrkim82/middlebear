@@ -45,7 +45,7 @@
 				</tr>
 			</thead>
 			<tbody id="MailBody">
-				<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+				<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} +'&check=D' + '\''">
 					<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
 					<td style="display:none">[[${mail.mailNo}]]</td>
 					<td >[[${mail.sender}]]</td>

@@ -20,10 +20,11 @@
             <td>받는사람</td>
             <td><input type="text" th:value="${mail.receiver}" readonly /></td>
         </tr>
-        <tr th:if="${refCheck == 'A'} and ${not #strings.isEmpty(mail.referrer)}">
+        <tr th:if="${refCheck == 'A'}">
         	<td>참조자</td>
         	<td><input type="text" th:value="${mail.referrer}" readonly></td>
         </tr>
+        
         <th:block th:if="${refCheck == 'B'}">
 	        <tr th:if="${not #strings.isEmpty(mail.referrer)} and ${#strings.isEmpty(mail.referrer2)}">
 	        	<td>참조자</td>
