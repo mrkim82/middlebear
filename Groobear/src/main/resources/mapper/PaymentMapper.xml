@@ -136,34 +136,36 @@
 	        SELECT pay_no,title FROM payment_robin
 		)
 		SELECT * FROM (
-		    SELECT p.*, a.purpose, CASE WHEN p.approver2 = #{id} AND p.pay_status2='Y' AND p.pay_status3='N' THEN pay_status3 
-		                                WHEN p.approver3 = #{id} AND p.pay_status2='Y' AND p.pay_status3='N' THEN pay_status3 
-		                                WHEN p.approver3 = #{id} AND p.pay_status2='N' THEN pay_status2
-                                        WHEN p.approver2 = #{id} AND p.pay_status2='N' THEN pay_status2
-		                                ELSE pay_status1 END AS pay_status 
+		    SELECT p.*, a.purpose
 		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
-		    WHERE (p.id = #{id} OR p.approver2 = #{id} OR p.approver3 = #{id})
-		    AND (p.pay_status3='N' AND p.pay_status2='Y') OR (p.pay_status2='N' AND p.pay_status3='N'))
-		ORDER BY pay_status desc,pay_no
+		    WHERE (p.id = #{id} AND p.pay_status2 = 'N' AND p.approver3 IS NOT NULL) 
+            OR (p.id = #{id} AND p.pay_status2='Y' AND p.pay_status3='N' AND p.approver3 IS NOT NULL)
+		    OR (p.approver2 = #{id} AND p.pay_status2='N')
+            OR (p.approver2 = #{id} AND p.pay_status2='Y' AND p.approver3 IS NOT NULL AND p.pay_status3='N')
+            OR (p.approver3 = #{id} AND p.pay_status2='Y' AND p.pay_status3 = 'N')
+            OR (p.approver3 = #{id} AND p.pay_status2='N')
+            ORDER BY pay_status2,pay_status3)
+		
 	</select>
 	<!-- 결재중문서 개수(페이징용) -->
 	<select id="countPaymentList" resultType="int">
 		WITH payment_all AS (
-        SELECT pay_no,purpose FROM payment_logbook
-        UNION ALL 
-        SELECT pay_no,title FROM payment_off
-        UNION ALL
-        SELECT pay_no,title FROM payment_robin
+	        SELECT pay_no,purpose FROM payment_logbook
+	        UNION ALL 
+	        SELECT pay_no,title FROM payment_off
+	        UNION ALL
+	        SELECT pay_no,title FROM payment_robin
 		)
 		SELECT COUNT(*) FROM (
-		    SELECT p.*,a.purpose, CASE WHEN p.approver2 = #{id} AND p.pay_status3='N' THEN pay_status2 
-		                                WHEN p.approver3 = #{id} AND p.pay_status3='N' THEN pay_status3 
-		                                WHEN p.approver3 = #{id} AND p.pay_status2='N' THEN pay_status2
-		                                ELSE pay_status1 END AS pay_status ,ROWNUM AS rn
+		    SELECT p.*, a.purpose
 		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
-		    WHERE (p.id = #{id} OR p.approver2 = #{id} OR p.approver3 = #{id})
-		    AND p.pay_status3='N')
-		ORDER BY pay_status,pay_no
+		    WHERE (p.id = #{id} AND p.pay_status2 = 'N' AND p.approver3 IS NOT NULL) 
+            OR (p.id = #{id} AND p.pay_status2='Y' AND p.pay_status3='N' AND p.approver3 IS NOT NULL)
+		    OR (p.approver2 = #{id} AND p.pay_status2='N')
+            OR (p.approver2 = #{id} AND p.pay_status2='Y' AND p.approver3 IS NOT NULL AND p.pay_status3='N')
+            OR (p.approver3 = #{id} AND p.pay_status2='Y' AND p.pay_status3 = 'N')
+            OR (p.approver3 = #{id} AND p.pay_status2='N')
+            ORDER BY pay_status2,pay_status3)
 	</select>
 	
 	<!-- 결재완료된 문서 -->
@@ -176,18 +178,18 @@
 	        SELECT pay_no,title FROM payment_robin
 		)
 		SELECT * FROM (
-		    SELECT p.*, a.purpose, CASE WHEN p.approver2 = #{payVO.id} AND p.pay_status3='Y' THEN pay_status3 
+		    SELECT p.*, a.purpose, CASE WHEN p.approver2 =#{payVO.id} AND p.pay_status3='Y' THEN pay_status3 
 		                                WHEN p.approver3 = #{payVO.id} AND p.pay_status3='Y' THEN pay_status3
-                                        WHEN p.approver2 = #{payVO.id} AND p.pay_status2='F' THEN pay_status2 
-		                                WHEN p.approver3 = #{payVO.id} AND p.pay_status2='F' THEN pay_status2
+                                        WHEN p.approver2 =#{payVO.id} AND p.pay_status2='F' THEN pay_status2 
+		                                WHEN p.approver3 =#{payVO.id} AND p.pay_status2='F' THEN pay_status2
                                         WHEN p.approver2 = #{payVO.id} AND p.pay_status3='F' THEN pay_status3 
 		                                WHEN p.approver3 = #{payVO.id} AND p.pay_status3='F' THEN pay_status3
-                                        WHEN p.approver2 = #{payVO.id} AND p.approver3 = '' AND p.pay_status2='Y' THEN pay_status2
-                                        WHEN p.approver2 = #{payVO.id} AND p.approver3 = '' AND p.pay_status2='F' THEN pay_status2
-		                                ELSE pay_status1 END AS pay_status ,ROWNUM AS rn
+                                        WHEN p.approver2 = #{payVO.id} AND p.approver3 IS NULL AND p.pay_status2='Y' THEN pay_status2
+                                        WHEN p.approver2 = #{payVO.id} AND p.approver3 IS NULL AND p.pay_status2='F' THEN pay_status2
+		                                ELSE pay_status1 END AS pay_status , ROWNUM AS rn
 		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
-		    WHERE (p.id = #{payVO.id} OR p.approver2 = #{payVO.id} OR p.approver3 = #{payVO.id})
-		    AND (p.pay_status3='Y' OR p.pay_status2='F' OR p.pay_status3='F' OR (p.pay_status2='Y' AND p.approver3='')
+		    WHERE (p.id =#{payVO.id} OR p.approver2 = #{payVO.id} OR p.approver3 = #{payVO.id})
+		    AND (p.pay_status3='Y' OR p.pay_status2='F' OR p.pay_status3='F' OR (p.pay_status2='Y' AND p.approver3 IS NULL)
 		    )
 		 )
 		 <![CDATA[
@@ -199,26 +201,27 @@
 	<!-- 결재완료된 문서 카운트 -->
 	<select id="completePayCount" resultType="int">
 		WITH payment_all AS (
-        SELECT pay_no,purpose FROM payment_logbook
-        UNION ALL 
-        SELECT pay_no,title FROM payment_off
-        UNION ALL
-        SELECT pay_no,title FROM payment_robin
+	        SELECT pay_no,purpose FROM payment_logbook
+	        UNION ALL 
+	        SELECT pay_no,title FROM payment_off
+	        UNION ALL
+	        SELECT pay_no,title FROM payment_robin
 		)
 		SELECT COUNT(*) FROM (
-		    SELECT p.*,a.purpose, CASE WHEN p.approver2 = #{id} AND p.pay_status3='Y' THEN pay_status3 
+		    SELECT p.*, a.purpose, CASE WHEN p.approver2 =#{id} AND p.pay_status3='Y' THEN pay_status3 
 		                                WHEN p.approver3 = #{id} AND p.pay_status3='Y' THEN pay_status3
-                                        WHEN p.approver2 = #{id} AND p.pay_status2='F' THEN pay_status2 
-		                                WHEN p.approver3 = #{id} AND p.pay_status2='F' THEN pay_status2
+                                        WHEN p.approver2 =#{id} AND p.pay_status2='F' THEN pay_status2 
+		                                WHEN p.approver3 =#{id} AND p.pay_status2='F' THEN pay_status2
                                         WHEN p.approver2 = #{id} AND p.pay_status3='F' THEN pay_status3 
 		                                WHEN p.approver3 = #{id} AND p.pay_status3='F' THEN pay_status3
-                                        WHEN p.approver2 = #{id} AND p.approver3 = '' AND p.pay_status2='Y' THEN pay_status2
-                                        WHEN p.approver2 = #{id} AND p.approver3 = '' AND p.pay_status2='F' THEN pay_status2
-		                                ELSE pay_status1 END AS pay_status ,ROWNUM AS rn
+                                        WHEN p.approver2 = #{id} AND p.approver3 IS NULL AND p.pay_status2='Y' THEN pay_status2
+                                        WHEN p.approver2 = #{id} AND p.approver3 IS NULL AND p.pay_status2='F' THEN pay_status2
+		                                ELSE pay_status1 END AS pay_status 
 		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
-		    WHERE (p.id = #{id} OR p.approver2 = #{id} OR p.approver3 = #{id})
-		    AND (p.pay_status3='Y' OR p.pay_status3='F' OR p.pay_status2='F' OR (p.pay_status2='Y' AND p.approver3='')))
-		ORDER BY pay_status,pay_no
+		    WHERE (p.id =#{id} OR p.approver2 = #{id} OR p.approver3 = #{id})
+		    AND (p.pay_status3='Y' OR p.pay_status2='F' OR p.pay_status3='F' OR (p.pay_status2='Y' AND p.approver3 IS NULL)
+		    )
+		 )
 	</select>
 	
 	<!-- 참조된 문서 조회 -->
@@ -349,23 +352,23 @@
 	        SELECT pay_no,title FROM payment_robin
 		)
 		SELECT * FROM (
-		    SELECT p.*, a.purpose, CASE WHEN p.approver2 = #{payVO.id} AND p.pay_status2='Y' AND p.pay_status3='N' THEN pay_status3 
-		                                WHEN p.approver3 = #{payVO.id} AND p.pay_status2='Y' AND p.pay_status3='N' THEN pay_status3 
-		                                WHEN p.approver3 = #{payVO.id} AND p.pay_status2='N' THEN pay_status2
-                                        WHEN p.approver2 = #{payVO.id} AND p.pay_status2='N' THEN pay_status2
-		                                ELSE pay_status1 END AS pay_status, ROWNUM AS rn 
+		    SELECT p.*, a.purpose, ROWNUM AS rn
 		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
-		    WHERE (p.id = #{payVO.id} OR p.approver2 = #{payVO.id} OR p.approver3 = #{payVO.id})
-		    AND (p.pay_status3='N' AND p.pay_status2='Y') OR (p.pay_status2='N' AND p.pay_status3='N'))
-		
+		    WHERE (p.id = #{payVO.id} AND p.pay_status2 = 'N' AND p.approver3 IS NOT NULL) 
+            OR (p.id = #{payVO.id} AND p.pay_status2='Y' AND p.pay_status3='N' AND p.approver3 IS NOT NULL)
+		    OR (p.approver2 = #{payVO.id} AND p.pay_status2='N')
+            OR (p.approver2 = #{payVO.id} AND p.pay_status2='Y' AND p.approver3 IS NOT NULL AND p.pay_status3='N')
+            OR (p.approver3 = #{payVO.id} AND p.pay_status2='Y' AND p.pay_status3 = 'N')
+            OR (p.approver3 = #{payVO.id} AND p.pay_status2='N')
+            )
 		<![CDATA[
 	            WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
 	    ]]>
-	    ORDER BY pay_status,pay_no
+		ORDER BY pay_status2 desc,pay_status3 desc
 	</select>
 		<!-- 결재완료된 문서 -->
 	<select id="maincompletePaymentList" resultType="PaymentVO">
-		WITH payment_all AS (
+		 WITH payment_all AS (
 	        SELECT pay_no,purpose FROM payment_logbook
 	        UNION ALL 
 	        SELECT pay_no,title FROM payment_off
@@ -373,18 +376,18 @@
 	        SELECT pay_no,title FROM payment_robin
 		)
 		SELECT * FROM (
-		    SELECT p.*, a.purpose, CASE WHEN p.approver2 = #{id} AND p.pay_status3='Y' THEN pay_status3 
+		    SELECT p.*, a.purpose, CASE WHEN p.approver2 =#{id} AND p.pay_status3='Y' THEN pay_status3 
 		                                WHEN p.approver3 = #{id} AND p.pay_status3='Y' THEN pay_status3
-                                        WHEN p.approver2 = #{id} AND p.pay_status2='F' THEN pay_status2 
-		                                WHEN p.approver3 = #{id} AND p.pay_status2='F' THEN pay_status2
+                                        WHEN p.approver2 =#{id} AND p.pay_status2='F' THEN pay_status2 
+		                                WHEN p.approver3 =#{id} AND p.pay_status2='F' THEN pay_status2
                                         WHEN p.approver2 = #{id} AND p.pay_status3='F' THEN pay_status3 
 		                                WHEN p.approver3 = #{id} AND p.pay_status3='F' THEN pay_status3
-                                        WHEN p.approver2 = #{id} AND p.approver3 = '' AND p.pay_status2='Y' THEN pay_status2
-                                        WHEN p.approver2 = #{id} AND p.approver3 = '' AND p.pay_status2='F' THEN pay_status2
+                                        WHEN p.approver2 = #{id} AND p.approver3 IS NULL AND p.pay_status2='Y' THEN pay_status2
+                                        WHEN p.approver2 = #{id} AND p.approver3 IS NULL AND p.pay_status2='F' THEN pay_status2
 		                                ELSE pay_status1 END AS pay_status 
 		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
-		    WHERE (p.id = #{id} OR p.approver2 = #{id} OR p.approver3 = #{id})
-		    AND (p.pay_status3='Y' OR p.pay_status2='F' OR p.pay_status3='F' OR (p.pay_status2='Y' AND p.approver3='')
+		    WHERE (p.id =#{id} OR p.approver2 = #{id} OR p.approver3 = #{id})
+		    AND (p.pay_status3='Y' OR p.pay_status2='F' OR p.pay_status3='F' OR (p.pay_status2='Y' AND p.approver3 IS NULL)
 		    )
 		 )
 		ORDER BY pay_status,pay_no

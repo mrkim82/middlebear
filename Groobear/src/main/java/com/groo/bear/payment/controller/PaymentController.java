@@ -2,6 +2,7 @@ package com.groo.bear.payment.controller;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -206,6 +207,7 @@ public class PaymentController {
 	public String InProgressPayForm(Criteria cri, Model model, HttpSession session,PaymentVO payVO, @RequestParam(value="nowPage", required=false)String nowPage
 			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
 		String id = (String) session.getAttribute("Id");
+		System.out.println("InProgressPay id = "+id);
 		payVO.setId(id);
 		cri.setPerPageNum(10);
 		Paging paging = new Paging();
@@ -426,33 +428,34 @@ public class PaymentController {
 	@PostMapping("publicSign")
 	@ResponseBody
 	public String publicSign(@RequestBody int signNo) {
-		paymentService.searchSignImg(signNo);
-		EmpVO empVO = new EmpVO();
-		empVO.setEmpNo(signNo);
-		paymentService.insertPublicSignImg(empVO);
+		System.out.println("공용이미지 = "+signNo); //uuid부분이 유니크가 걸려있어서 공용서명은 방향을좀 바꿔야됨
+		FilesVO filesVO = new FilesVO();
+		filesVO.setSignNo(signNo);
+		paymentService.insertPublicSignImg(filesVO);
 		return "성공";
 	}
 	//메인페이지에 넘겨줄 결재중문서 개수
-	@PostMapping("mainProCount")
+	@GetMapping("getProCount")
 	@ResponseBody
-	public int inProgressCountMain(@RequestBody List<String> sInfo ,Model model, HttpSession session) {
+	public int inProgressCountMain(@RequestParam("username") String username ,Model model) {
 		//String id = (String) session.getAttribute("Id");
-		String id = sInfo.get(0);
-		System.out.println("getPayCount = "+id);
+		String id = username+"@bear.com";
 		int result = paymentService.countPaymentList(id);
 		return result;
 	}
 	//메인페이지에 넘겨줄 완료된문서 개수
-	@PostMapping("mainComCount")
-	public int completeCountMail(Model model, HttpSession session) {
-		String id = (String) session.getAttribute("Id");
+	@GetMapping("comProCount")
+	@ResponseBody
+	public int completeCountMail(@RequestParam("username") String username ,Model model) {
+		String id = username+"@bear.com";
 		int result = paymentService.completePayCount(id);
 		return result;
 	}
 	//메인페이지에 넘겨줄 참조된문서 개수
-	@PostMapping("mainRefCount")
-	public int refCountMail(Model model, HttpSession session) {
-		String id = (String) session.getAttribute("Id");
+	@GetMapping("refProCount")
+	@ResponseBody
+	public int refCountMail(@RequestParam("username") String username ,Model model) {
+		String id = username+"@bear.com";
 		int result = paymentService.referrerPayCount(id);
 		return result;
 	}

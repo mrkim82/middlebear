@@ -17,7 +17,7 @@
 			<th:block th:if="${userSignInfo != null && userSignInfo != ''}">
 				<ul>
 				<!-- public이 아니면 개인서명 조회 public이면 공용이미지 -->
-					<li th:if="${userSignInfo != 'public'}" th:data-path="${userSignInfo.uploadPath}" th:data-uuid="${userSignInfo.uuid}"
+					<li th:if="${userSignInfo.uuid != 'public'}" th:data-path="${userSignInfo.uploadPath}" th:data-uuid="${userSignInfo.uuid}"
 					data-filename="${userSignInfo.fileName}" data-type="true" style="list-style-type: none;">
 						<div>
 							<img th:src="@{|/display?fileName=${#strings.replace(userSignInfo.uploadPath,'\','/')}/${userSignInfo.uuid}_${userSignInfo.fileName}|}" 
@@ -25,11 +25,12 @@
 							th:data-filename="${userSignInfo.fileName}" data-type="true"  style="border:1px solid;">
 						</div>
 					</li>
+					<li style="list-style-type: none;" th:if="${userSignInfo.uuid == 'public'}"><img id="profImg" style="border:1px solid;" src="../img/publicSign.png"></li>
 				</ul>
 			</th:block>
 			<th:block th:if="${#strings.isEmpty(userSignInfo)}">
 				<ul style="padding:0px;"></ul>
-				<li style="list-style-type: none;"><img id="profImg" style="border:1px solid;" src="../img/publicSign.png"></li>
+				<li style="list-style-type: none;"><a>서명없음 등록요망</a></li>
 			</th:block>
 		</div>
 		<button type="button" id="signDelete">개인서명제거</button>
@@ -41,7 +42,7 @@
 		let userId = document.getElementById('userInfoId').textContent;
 		console.log(userId);
 		let signNo = document.getElementById('empNo').textContent;
-		console.log('empNo = ',empNo);
+		console.log('empNo = ',signNo);
 		//개인서명 등록 모달로 이동
 		function paySignSet(){
 			openPaySign = window.open("/pay/paySign","paymentEmp","width=400, height=450, resizable = no");
