@@ -65,6 +65,16 @@ li {
 	padding-top:14.5px;
 	padding-bottom:14.5px;
 }
+
+.memoButton {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #eaeaea;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
 </style>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -221,7 +231,7 @@ function drawChart() {
 							 aria-labelledby="modal1Label"
 							 aria-hidden="true"
 							 style="display:none">
-							<div class="modal-dialog"
+							<div class="modal-dialog modal-dialog-centered"
 								 role="document">
 								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
@@ -273,7 +283,7 @@ function drawChart() {
 						<!-- 2.업무 작성 -->
 						<div class="modal fade modal-dialog-scrollable" id="modal2" tabindex="-1" role="dialog"
 							aria-labelledby="modal2Label" aria-hidden="true" style="display:none">
-							<div class="modal-dialog" role="document">
+							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal2Label">업무</h5>
@@ -423,7 +433,7 @@ function drawChart() {
 						<!-- 3.일정 작성 -->
 						<div class="modal fade modal-dialog-scrollable" id="modal3" tabindex="-1" role="dialog"
 							aria-labelledby="modal3Label" aria-hidden="true" style="display:none">
-							<div class="modal-dialog" role="document">
+							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal3Label">일정</h5>
@@ -509,7 +519,7 @@ function drawChart() {
 						<!-- 4.할 일 작성 -->
 						<div class="modal fade modal-dialog-scrollable" id="modal4" tabindex="-1" role="dialog"
 							aria-labelledby="modal4Label" aria-hidden="true" style="display:none">
-							<div class="modal-dialog" role="document">
+							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal4Label">할 일</h5>
@@ -596,7 +606,7 @@ function drawChart() {
 						<!-- 5. 투표 작성 -->
 						<div class="modal fade modal-dialog-scrollable" id="modal5" tabindex="-1" role="dialog"
 							aria-labelledby="modal5Label" aria-hidden="true" style="display:none">
-							<div class="modal-dialog" role="document">
+							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal5Label">투표</h5>
@@ -1507,9 +1517,6 @@ function drawChart() {
 							<!-- 5종료 -->
 						</th:block>
 				
-				
-				
-
 				<!-- 포스트 종료 -->
 			</th:block>
 		</div>
@@ -1525,7 +1532,7 @@ function drawChart() {
 				 aria-labelledby="modal11lLabel"
 				 aria-hidden="true"
 				 style="display:none">
-			  <div class="modal-dialog">
+			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content dohyeonModalContent" style="height: 500px;">
 			      <div class="modal-header">
 			        <h5 class="modal-title" id="modal11Label">글 수정</h5>
@@ -1562,7 +1569,7 @@ function drawChart() {
 				 aria-labelledby="modal12Label"
 				 aria-hidden="true"
 				 style="display:none">
-			  <div class="modal-dialog">
+			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content dohyeonModalContent" style="height: 500px;">
 			      <div class="modal-header">
 			        <h5 class="modal-title" id="modal12Label">업무 수정</h5>
@@ -1628,7 +1635,7 @@ function drawChart() {
 				
 			<!-- 3.일정 수정 -->
 			<div class="modal fade modal-dialog-scrollable" id="modal13" tabindex="-1" role="dialog" aria-labelledby="modal13Label" aria-hidden="true" style="display:none">
-			  <div class="modal-dialog">
+			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content dohyeonModalContent" style="height: 500px;">
 			      <div class="modal-header">
 			        <h5 class="modal-title" id="modal13Label">일정 수정</h5>
@@ -1684,7 +1691,7 @@ function drawChart() {
 			
 			<!-- 4.할 일 수정 -->					
 			<div class="modal fade modal-dialog-scrollable" id="modal14" tabindex="-1" role="dialog" aria-labelledby="modal14Label" aria-hidden="true" style="display:none">
-			  <div class="modal-dialog">
+			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content dohyeonModalContent" style="height: 500px;">
 			      <div class="modal-header">
 			        <h5 class="modal-title" id="modal14Label">할 일 수정</h5>
@@ -1762,7 +1769,7 @@ function drawChart() {
 				 aria-labelledby="modal15Label"
 				 aria-hidden="true"
 				 style="display:none;">
-			  <div class="modal-dialog">
+			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content dohyeonModalContent" style="height: 500px;">
 			      <div class="modal-header">
 			        <h5 class="modal-title" id="modal15Label">투표 수정</h5>
@@ -1853,50 +1860,50 @@ function drawChart() {
 			    	<span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
 		    	</li>
 			  </ul>
+			  
 				<!-- 유저 인포 모달창 -->
 				<div th:each="mem : ${projectPartiMember}">
 					<div class="modal fade modal-dialog-centere" th:id="'proUserInfoDetail' + ${mem.empNo}"
 						 tabindex="-1" aria-labelledby="proUserInfoDetailLabel" aria-hidden="true"
 						 th:data-user-info-id="${mem.id}">
-					  <div class="modal-dialog">
-					    <div class="modal-content dohyeonModalContent" style="width:300px;">
+					  <div class="modal-dialog modal-dialog-centered">
+					    <div class="modal-content dohyeonModalContent" style="width:350px;">
 				        <div class="card-deck">
 						  <div class="card row justify-content-end">
 						  <!-- 프사 -->
-						  	<div class="container">
+							<button type="button"
+									class="close"
+									data-dismiss="modal"
+									aria-label="Close"
+									style="text-align: right; height:10px; margin-right:5px;">
+									<span aria-hidden="true">&times;</span>
+							</button>
+						  	<div class="container" style="text-align: center;">
 						  	<th:block th:if="${mem.uploadPath != null}">
 						  	<img th:src="@{|/display?fileName=${#strings.replace(mem.uploadPath,'\','/')}/s_${mem.uuid}_${mem.fileName}|}"
-						  		 class="card-img-top" alt="프로필 이미지">
+						  		 class="card-img-top">
 						  		 </th:block>
 						  		 <th:block th:if="${mem.uploadPath == null}">
 								<img id="profImg"
-									 style="width:140px;height:150px;margin:15px;margin-bottom:0px;" src="../img/userProf.png">
+									 style="width:140px;height:150px;margin-bottom:0px;" src="../img/userProf.png">
 									 </th:block>
-								<button type="button"
-										class="close"
-										data-dismiss="modal"
-										aria-label="Close"
-										style="text-align: right;">
-								<span aria-hidden="true">&times;</span>
-						        </button>
 							</div>
-						    <div class="card-body">
-						    	<ul>
-						    		<li th:text="'부서명 : ' + ${mem.deptName}"></li>
-						    		<li th:text="'직급 : ' + ${mem.rank}"></li>
-						    		<li th:text="'이름 : ' + ${mem.name}"></li>
-						    		<li th:text="'이메일 : ' + ${mem.id}"></li>
-						    		<li th:text="'전화번호 : ' + ${mem.phone}"></li>
-						    		<li th:text="'메모 : ' + (${mem.profileNote == null} ? '-' : ${mem.profileNote})"
-						    			class="profileMemoTag"></li>
-						    		
+						    <div class="card-body" style="padding-bottom: 0px;">
+						    	<ul style="font-size:20px; padding-left:10px;">
+						    		<li><span>부서명 : </span><span th:text="${mem.deptName}"></span></li>
+						    		<li><span>이름 : </span><span th:text="${mem.rank}"></span></li>
+						    		<li><span>이메일 : </span><span th:text="${mem.id}"></span></li>
+						    		<li><span>전화번호 : </span><span th:text="${mem.phone}"></span></li>
+						    		<li><span>메모 : </span>
+						    			<span class="profileMemoTag"
+						    				  th:text="(${mem.profileNote == null} ? '-' : ${mem.profileNote})"></span></li>
 						    	</ul>
 						    </div>
 						    <div class="card-footer">
 						    	<button type="button"
-						    			class="btn btn-primary"
+						    			class="btn btn-groob"
 						    			onclick="changeProfileNote()"
-						    			th:if="${mem.id == session.Id}">상태메세지 변경</button>
+						    			th:if="${mem.id == session.Id}">메모 변경</button>
 						    </div>
 						  </div>
 					    </div>
@@ -2609,13 +2616,13 @@ function changeProfileNote() {
 	let profileChangeButton = event.target;
 	
 	oldProfileMemoTag.innerHTML =
-				'<input type="text" placeholder="프로필 수정" id="newMemo">'
-				+'<span id="memoUpdate" class="spanCursor">수정</span>'
-				+'<span id="memoCancle" class="spanCursor">취소</span>';
+				'<input type="text" placeholder="프로필 수정" id="newMemo" maxlength="30">'
+				+'<span id="memoUpdate" class="spanCursor memoButton"style="margin-left:80px; margin-top:10px;">수정</span>'
+				+'<span id="memoCancle" class="spanCursor memoButton"style="margin-top:10px;">취소</span>';
 	
 	// 취소버튼
 	document.getElementById('memoCancle').addEventListener('click', function() {
-		event.target.parentNode.innerHTML='';
+		event.target.parentElement.innerHTML='';
 		oldProfileMemoTag.textContent = oldProfileMemoText;
 	});
 
@@ -2639,7 +2646,7 @@ function changeProfileNote() {
 			.then(response => response.json())
 			.then(res => {
 				profileChangeButton.parentNode.innerHTML='';
-				oldProfileMemoTag.textContent = '메모 : ' + newMemo;
+				oldProfileMemoTag.textContent = newMemo;
 			})
 		}
 

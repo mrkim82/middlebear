@@ -184,7 +184,15 @@ p {
 			<ul class="list-unstyled">
 				<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
 					th:if="${taskD.proPostNo == com.proPostNo}">
-					<span th:utext="${com.profileImg}"></span>
+					<th:block th:if="${com.uploadPath != null}">
+						<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+		  		 			 class="card-img-top"
+		  		 			 style="width:30px; height:30px; margin:0px;">
+		  		 	</th:block>
+		  		 	<th:block th:if="${com.uploadPath == null}">
+						<img style="width:30px; height:30px; margin:0px;"
+					 		 src="../img/userProf.png">
+					</th:block>
 					<span th:text="${com.name}"></span>
 					<span th:text="${com.comDate}"></span>
 					<span th:text="${com.comContent}"></span>
@@ -283,7 +291,7 @@ p {
 															th:data-sch-list-parti-id="${member.id}" th:data-sch-list-id="${member.id}">
 													</th:block>
 													<label th:for="'schPartiList' + ${member.id}">
-														<a class="nav-link" th:utext="${member.profileImg}"></a>
+														<!-- <a class="nav-link" th:utext="${member.profileImg}"></a> -->
 														<a class="nav-link" th:text="${member.name}"></a>
 													</label>
 											</nav>
@@ -336,7 +344,15 @@ p {
 			<ul class="list-unstyled">
 				<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
 					th:if="${calD.proPostNo == com.proPostNo}">
-					<span th:utext="${com.profileImg}"></span>
+					<th:block th:if="${com.uploadPath != null}">
+						<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+		  		 			 class="card-img-top"
+		  		 			 style="width:30px; height:30px; margin:0px;">
+		  		 	</th:block>
+		  		 	<th:block th:if="${com.uploadPath == null}">
+						<img style="width:30px; height:30px; margin:0px;"
+					 		 src="../img/userProf.png">
+					</th:block>
 					<span th:text="${com.name}"></span>
 					<span th:text="${com.comDate}"></span>
 					<span th:text="${com.comContent}"></span>
@@ -370,9 +386,6 @@ p {
 
 <!-- 캘린더 생성 -->
 <script>
-// document.addEventListener('DOMContentLoaded', async function() {
-  // await fetch('/readWorkSchView')
-  
   var calendarEl = document.getElementById('calendar');
   let allEvents = schAllDatas;
   console.log('데이터', allEvents);
@@ -452,19 +465,6 @@ p {
   });
   
   calendar.render();
-  // });
-
-  /* 데이터 양식 
-  {
-  groupId: 'availableForMeeting',
-    title: 'Meeting',
-    start: '2023-01-13T11:00:00',
-    constraint: 'availableForMeeting', // defined below
-    color: '#257e4a',
-     end: '2023-01-20',
-   display: 'background',
-   overlap: false,
-  } */
 </script>
 
 <!-- 버튼 상태 변경(업무 상태, 게시물 조회) -->
