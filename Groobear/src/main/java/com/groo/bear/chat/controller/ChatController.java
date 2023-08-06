@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.groo.bear.chat.domain.ChatMessageDTO;
 import com.groo.bear.chat.domain.RoomDTO;
 import com.groo.bear.chat.service.ChatService;
+import com.groo.bear.files.domain.FilesVO;
 
 @Controller
 //이 클래스는 STOMP 메시지를 받고 보내는 역할을 한다.
@@ -53,6 +54,10 @@ public class ChatController {
         chatDTO.setId(id);
         List<ChatMessageDTO> chatMessageList = chatService.MessageAllList(chatDTO);
         model.addAttribute("chatDTO", chatMessageList);
+        
+        
+        List<FilesVO> profileImages = chatService.getImage();
+        model.addAttribute("profileImages", profileImages);
         
         RoomDTO updatedRoomDTO = chatService.getRoomName(roomNo);
         model.addAttribute("roomDTO", updatedRoomDTO);

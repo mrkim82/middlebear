@@ -20,10 +20,11 @@
             <td>받는사람</td>
             <td><input type="text" th:value="${mail.receiver}" readonly /></td>
         </tr>
-        <tr th:if="${refCheck == 'A'} and ${not #strings.isEmpty(mail.referrer)}">
+        <tr th:if="${refCheck == 'A'}">
         	<td>참조자</td>
         	<td><input type="text" th:value="${mail.referrer}" readonly></td>
         </tr>
+        
         <th:block th:if="${refCheck == 'B'}">
 	        <tr th:if="${not #strings.isEmpty(mail.referrer)} and ${#strings.isEmpty(mail.referrer2)}">
 	        	<td>참조자</td>
@@ -47,7 +48,7 @@
         </tr>
         <tr>
         <td>
-        <th:block th:if="${not #strings.isEmpty(mailFile)}">
+        
 			<td><div class="bigPictureWrapper">
 			<div class="bigPicture">
 			</div>
@@ -66,7 +67,6 @@
 				</div>
 				<!-- end panel -->
 			</div>
-        </th:block>
         </td>
         </tr>
         <tr>
@@ -84,7 +84,7 @@
                 var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
                 str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
                 + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
-                str += "<img src='/display?fileName=" + fileCallPath + "'>";
+                /str += "<img src='/display?fileName=" + fileCallPath + "'>";
                 str += "</div>";
                 str += "</li>";
             } else {
@@ -108,7 +108,8 @@
 		    var path = encodeURIComponent(liObj.data("path")+"/" + liObj.data("uuid")+"_" + liObj.data("filename"));
 		    
 		    if(liObj.data("type")){
-		      showImage(path.replace(new RegExp(/\\/g),"/"));
+		      //showImage(path.replace(new RegExp(/\\/g),"/"));
+		      self.location ="/download?fileName="+path
 		    }else {
 		      //download 
 		      self.location ="/download?fileName="+path

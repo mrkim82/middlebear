@@ -132,7 +132,7 @@
   							#{uuid}
   							,#{uploadPath}
   							,#{fileName}
-  							,#{fileType}
+  							,1
   							,sysdate
   							,#{mailNo}
   					)

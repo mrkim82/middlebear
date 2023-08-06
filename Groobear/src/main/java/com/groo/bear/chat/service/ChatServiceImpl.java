@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.groo.bear.chat.domain.ChatMessageDTO;
 import com.groo.bear.chat.domain.RoomDTO;
 import com.groo.bear.chat.mapper.ChatMapper;
+import com.groo.bear.files.domain.FilesVO;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -105,6 +106,12 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public List<RoomDTO> getUsersName(int roomNo) {
 		return chatMapper.getUsersName(roomNo);
+	}
+
+
+	@Override
+	public List<FilesVO> getImage() {
+		return chatMapper.getImage();
 	}
 	
 	
