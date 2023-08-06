@@ -111,7 +111,7 @@
 						<tr><td><input type="text" id="offtitle" style="width:500px"></td></tr>
 						<tr><td><textarea id="offcontent" style="width:400px; height:200px"></textarea></td></tr>
 						<tr><td><div class="panel-body3">
-	                        <div class="form-group uploadDiv4">
+	                        <div class="form-group uploadDiv3">
 	                            <input name="uploadFile3" type="file" multiple>
 	                        </div>
 	                        <div class="uploadResult3">
@@ -582,8 +582,7 @@
 						approver3 : payUserList2,
 						referrer : referrerInfo,
 						title : robintitle,
-						content : robincontent,
-						com : robincomment
+						content : robincontent
 	  			    }),
 	  			    async : false,
 	  			    success: function(data) {
@@ -703,7 +702,7 @@
                   str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
 		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
-		          str += "<img src='/display?fileName="+fileCallPath+"'>";
+		          //str += "<img src='/display?fileName="+fileCallPath+"'>";
 		          str += "</div>";
 		          str +"</li>";
 		        }else{
@@ -715,7 +714,7 @@
                   str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
 		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
-		          str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+		          //str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
 		          str += "</div>";
 		          str +"</li>";
 		        } 

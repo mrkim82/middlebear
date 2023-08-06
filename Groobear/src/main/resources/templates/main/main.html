@@ -145,9 +145,9 @@ html::-webkit-scrollbar {
 				<fieldset style="width: 385px; height: 280px;margin:10px;margin-right:0px;border:1px solid black;">
 					<div class="dohyeon" style="display: inline-block;margin:10px;margin-left: 30px;">
 						<h4 style="font-size:35px;font-weight: bold;margin-bottom:25px;margin-top:10px;">전자결재</h4>
-						<a style="font-size:25px;display:block;margin-bottom:25px;">결재문서&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span>0건</span></a>
-						<a style="font-size:25px;display:block;margin-bottom:25px;">진행문서&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span>0건</span></a>
-						<a style="font-size:25px;display:block;margin-bottom:0px;">임시저장&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span>0건</span></a>
+						<a style="font-size:25px;display:block;margin-bottom:25px;">결재문서&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span id="getProgress">0건</span></a>
+						<a style="font-size:25px;display:block;margin-bottom:25px;">진행문서&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span id="comProgress">0건</span></a>
+						<a style="font-size:25px;display:block;margin-bottom:0px;">참조문서&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span id="refProCount">0건</span></a>
 					</div>
 				</fieldset>
 			</td>
@@ -245,8 +245,60 @@ var openChat  = function() {
 			'id' : id
 	}
 	console.log(id);
-	
-	
+    let myId = '[[${session.Id}]]';
+    let username = myId.split('@')[0];
+    console.log("내이름 = "+username);
+    
+	getPayCount();
+    function getPayCount(){
+      $.ajax({
+             url: "/getProCount", 
+             method: "GET",
+          contentType:"application/json; charset=utf-8",
+          data: { username: username },
+          success: function(data) {
+             console.log('getPayCount',data);
+             document.getElementById('getProgress').textContent = data+'건';
+          },
+          error: function(err) {
+            console.log(err);
+          }
+      });
+    }
+    
+	comPayCount();
+    function comPayCount(){
+      $.ajax({
+             url: "/comProCount", 
+             method: "GET",
+          contentType:"application/json; charset=utf-8",
+          data: { username: username },
+          success: function(data) {
+             console.log('comProgress',data);
+             document.getElementById('comProgress').textContent = data+'건';
+          },
+          error: function(err) {
+            console.log(err);
+          }
+      });
+    }
+    
+    refProCount();
+    function refProCount(){
+      $.ajax({
+             url: "/refProCount", 
+             method: "GET",
+          contentType:"application/json; charset=utf-8",
+          data: { username: username },
+          success: function(data) {
+             console.log('RefProCount',data);
+             document.getElementById('refProCount').textContent = data+'건';
+          },
+          error: function(err) {
+            console.log(err);
+          }
+      });
+    }
 	init();
 	
 	function init(){

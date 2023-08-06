@@ -64,13 +64,13 @@
 						<td style="width:100px; padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
 					</th:block>
 					
-						<th:block th:if="${list.payStatus2 == 'Y'} and ${not #strings.isEmpty(approver2Sign)}">
+						<th:block th:if="${list.payStatus2 == 'Y'} and ${approver2Sign.uuid != 'public'}">
 							<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
 								th:data-uploadpath="${approver2Sign.uploadPath}" th:data-uuid="${approver2Sign.uuid}"
 								th:data-filename="${approver2Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
 							</td>
 						</th:block>
-						<th:block th:if="${list.payStatus2 == 'Y'} and ${#strings.isEmpty(approver2Sign)}">
+						<th:block th:if="${list.payStatus2 == 'Y'} and ${approver2Sign.uuid == 'public'}">
 							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
 						</th:block>
 						<th:block th:if="${list.payStatus2 == 'F'}">
@@ -148,7 +148,7 @@
 	                </tr>
 				</th:block>
 					<tr th:if="${list.docType=='a'} and ${list.id != session.Id}">
-						<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:value="${list.com}"></textarea></td>
+						<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 					</tr>
 				
 				<th:block th:if="${list.docType=='b'}">
@@ -775,7 +775,7 @@
 	                var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
 	                str += "<li style='list-style-type:none' data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
-	                str += "<img src='/display?fileName=" + fileCallPath + "' style='width:200px;height:140px'>";
+	                //str += "<img src='/display?fileName=" + fileCallPath + "' style='width:200px;height:140px'>";
 	                str += "</div>";
 	                str += "</li>";
 	            } else {

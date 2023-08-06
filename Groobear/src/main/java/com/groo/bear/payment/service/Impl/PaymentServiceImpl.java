@@ -206,7 +206,7 @@ public class PaymentServiceImpl implements PaymentService{
 	}
 
 	@Override
-	public int insertPublicSignImg(EmpVO vo) {
-		return filesMapper.insertPublicSignImg(vo);
+	public int insertPublicSignImg(FilesVO filesVO) {
+		return filesMapper.insertPublicSignImg(filesVO);
 	}	
 }

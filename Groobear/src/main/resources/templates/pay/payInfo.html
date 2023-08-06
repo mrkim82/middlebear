@@ -815,12 +815,9 @@
 	            } else {
 	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
-<<<<<<< HEAD
 	                str += "<span style='display:none'>" + attach.fileName + "</span><br/>";
-=======
 	                str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
 	                str += "<span>" + attach.fileName + "</span><br/>";
->>>>>>> branch 'hwan2' of https://github.com/ByungGwan27/groobearDev.git
 	                str += "</div>";
 	                str += "</li>";
 	            }
@@ -908,7 +905,8 @@
 	    }
 	    $(".uploadResult1").on("click", "button", function(e){
 		  console.log("delete file");
-		  delOn === 'o'
+		  delOn = 'o'
+		  console.log('delOn = ',delOn);
 		  var targetFile = $(this).data("file");
 		  var type = $(this).data("type");
 		  
@@ -917,7 +915,8 @@
 	    });
         $(".uploadResult2").on("click", "button", function(e){
   		  console.log("delete file");
-  		  delOn === 'o'
+  		  delOn = 'o'
+  		  console.log('delOn = ',delOn);
   		  var targetFile = $(this).data("file");
   		  var type = $(this).data("type");
   		  
@@ -926,7 +925,7 @@
   	    });
         $(".uploadResult3").on("click", "button", function(e){
   		  console.log("delete file");
-  		  delOn === 'o'
+  		  delOn = 'o'
   		  var targetFile = $(this).data("file");
   		  var type = $(this).data("type");
   		  
@@ -935,7 +934,7 @@
   	    });
         $(".uploadResult4").on("click", "button", function(e){
   		  console.log("delete file");
-  		  delOn === 'o'
+  		  delOn = 'o'
   		  var targetFile = $(this).data("file");
   		  var type = $(this).data("type");
   		  
