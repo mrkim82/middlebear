@@ -53,8 +53,8 @@ public class MailController {
 		if(list!=null && list.size() > 0) {
 			for(int i=0; i < list.size();i++) {
 				System.out.println("list.get(i)첵 = "+list.get(i));
-				int result = mailService.serverGetInsertMail(list.get(i));
-		        System.out.println("몇건 처리됨? "+result);
+//				int result = mailService.serverGetInsertMail(list.get(i));
+//		        System.out.println("몇건 처리됨? "+result);
 			}
 		}
 		
@@ -161,16 +161,21 @@ public class MailController {
 	public String mailInfo(@RequestParam int mailNo, Model model, HttpSession session) {
 		//해당 메일 정보 조회
 		String id = (String)session.getAttribute("Id");
-		model.addAttribute("mail",mailService.getMailInfo(mailNo));
+		//model.addAttribute("mail",mailService.getMailInfo(mailNo));
 		System.out.println("서버 메일 상세조회"+mailService.getMailInfo(mailNo));
 		MailVO mailVO = new MailVO();
 		mailVO = mailService.getMailInfo(mailNo);
+		System.out.println("mailInfo페이지 ="+mailVO);
 		model.addAttribute("refCheck","B");
-		if(mailVO.getReceiver().equals(id)) {
+		String user = mailVO.getReceiver()+"@bear.com"; 
+		if(user.equals(id)) {
 			mailVO.setMailNo(mailNo);
 			String check = "Y";
+			mailVO.setMailNo(mailNo);
 			mailVO.setReadCheck(check);
+			System.out.println("Receiver = session : "+mailVO);
 			mailService.getMailInfoUpdate(mailVO);
+			model.addAttribute("mail",mailService.getMailInfo(mailNo));
 		}
 		return "mail/mailInfo";
 	}
