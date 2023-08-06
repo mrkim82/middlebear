@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 >
+
   <head>
   	<title>Groobear</title>
     <meta charset="utf-8">
@@ -30,11 +31,31 @@
 		.rightPad{
 			padding-right:150px;
 		}
+		html{
+			height:100%;
+		}
 		#ulId li.active a.page-link {
     	background-color: #35A880;
     	border: 1px solid #35A880;
     	color:#fff
   		}
+  		.nav li:hover{
+  			background-color: #4fc09961;
+  			border-radius:15px;
+  		}
+  		.nav li:hover a{
+  			color:black;
+  		}
+  		.nav li{
+  			transition: 0.5s;
+  		}
+  		a {
+  			text-decoration : none !important;
+  		}
+  		html ::-webkit-scrollbar{
+		 display: none;
+		}
+  		
 	</style>
   </head>
   <body style="width:1215px;margin: 0 auto;">
@@ -67,8 +88,9 @@
             </div>
         </div>
     </header>
-	</div>
-	<nav class="navbar navbar-expand-lg" style="text-align: center; background-color:#35A880;"> 
+	</div> 
+	<!-- background: linear-gradient(0deg, #35A880 70%, transparent);alignment-baseline: ideographic;border-radius: 20px 20px 0px 0px; -->
+	<nav class="navbar navbar-expand-lg" style="text-align: center;background-color: #35A880;alignment-baseline: ideographic;"> 
       <div class="collapse navbar-collapse" id="navbarColor01">
       
 	        <ul class="navbar-nav mr-auto" style="display:flex; margin:auto;">
@@ -95,21 +117,23 @@
     </nav>
     <div class="row">
       <!-- 사이드바 -->
-      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-        <div class="position-sticky">
+      <nav id="sidebar" class="sidebar dohyeon" 
+      	style="margin-left: 15px;margin-top: 10px;width: 200px;position: absolute;height: 100%;"
+      >
+        <div class="position-sticky" style="text-align: center;">
           <ul class="nav flex-column">
             <!-- 사이드바 메뉴 아이템들 -->
-            <li class="nav-item">
-              <a id="commute"><span class="material-icons">home</span> 근태관리 </a>
+            <li class="nav-item" style="padding: 10px 0px;">
+              <a id="commute" style="font-size: 25px; text-decoration: none; color: #29ac7f;">근태관리 </a>
             </li>
-            <li class="nav-item">
-			  <a href="/carList"><span class="material-icons">build</span> 차량관리 </a>            
+            <li class="nav-item" style="padding: 10px 0px;">
+			  <a href="/carList" style="font-size: 25px; text-decoration: none; color: #29ac7f;">차량관리 </a>            
 			</li>
-            <li class="nav-item">
-              <a id="book"><span class="material-icons">info</span> 운행일지 관리</a>
+            <li class="nav-item" style="padding: 10px 0px;">
+              <a id="book" style="font-size: 25px; text-decoration: none; color: #29ac7f;">운행일지 관리</a>
             </li>
-            <li class="nav-item">
-              <a href="/myPageCheckPassword"><span class="material-icons">people</span> 회원정보변경</a>
+            <li class="nav-item" style="padding: 10px 0px;">
+              <a href="/myPageCheckPassword" style="font-size: 25px; text-decoration: none; color: #29ac7f;">회원정보변경</a>
             </li>
           </ul>
         </div>
@@ -120,7 +144,7 @@
 	<script>
 	//WebSocket 연결 설정
 	const alarmClient = new StompJs.Client({
-	brokerURL: 'ws://localhost:8081/chatserver' // WebSocket 서버 URL
+	brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
 	});
 
 	// 페이지 로드시 웹소켓 연결

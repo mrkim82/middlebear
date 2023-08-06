@@ -24,6 +24,10 @@
     	border: 1px solid #35A880;
     	color:#fff
   	}
+  	a {
+  		text-decoration:none !important;
+  		cursor:pointer;
+  	}
 </style>
 </head>
 
@@ -56,13 +60,19 @@
 	<div>
 	
     <ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
-		<li class="page-item"><a class="page-link"
-					th:href="|javascript:goPage(1)|">&laquo;</a></li>
-		<li class="page-item active"
-			th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}" >
-			<a class="page-link" th:href="|javascript:goPage([[${num}]])|" 
+		<li class="page-item">
+			<a class="page-link" th:href="|javascript:goPage(1)|">&laquo;</a></li>
+		<li class="page-item" th:if="${paging.prev}">
+            <a class="page-link" th:href="|javascript:goPage([[${paging.startPage-1}]])|">&lsaquo;</a>
+        </li>
+		<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
+			th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+			<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
 			th:text="${num}"></a>
 		</li>
+		<li class="page-item" th:if="${paging.next and paging.endPage > 0}">
+            <a class="page-link" th:href="|javascript:goPage([[${paging.endPage+1}]])|">&rsaquo;</a>
+        </li>
 		<li class="page-item"><a class="page-link"
 			th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
 		</li>

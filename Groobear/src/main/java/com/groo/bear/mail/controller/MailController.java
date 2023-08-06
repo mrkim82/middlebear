@@ -54,7 +54,7 @@ public class MailController {
 			for(int i=0; i < list.size();i++) {
 				System.out.println("list.get(i)첵 = "+list.get(i));
 				int result = mailService.serverGetInsertMail(list.get(i));
-				System.out.println("몇건 처리됨? "+result);
+		        System.out.println("몇건 처리됨? "+result);
 			}
 		}
 		
