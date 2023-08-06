@@ -37,6 +37,7 @@
 	/*background-color: #CCFFCC;  */
     background-color: #9deab78a;
     min-height: 100%;
+    font-size: 20px; /* 원하는 크기로 변경 */
 }
     .chat_wrap .header {
         font-size: 14px;
@@ -118,6 +119,7 @@
     .chat_wrap .chat ul li>div.sender {
         margin: 10px 20px 0 20px;
         font-weight: bold;
+        font-size: 20px;
     }
     
     .chat_wrap .chat ul li>div.message {
@@ -131,6 +133,7 @@
         background-color: #FCFCFC;
         color: #555;
         text-align: left;
+        font-size: 20px;
     }
     
     .chat_wrap .input-div {
@@ -212,7 +215,7 @@
     box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1);  /* 상자 그림자를 설정합니다 */
     z-index: 1000;              /* 상자를 다른 요소 위로 띄웁니다 */
     left: 0;                    /* 툴팁을 상대적 위치의 왼쪽 끝으로 배치합니다 */
-    
+    white-space: normal;
 }
 .tooltip-content p {
     margin: 5px 0;  /* 위아래 마진을 5px로 설정 */
@@ -222,6 +225,13 @@
     color:#000000;
     font-family: 'Do Hyeon';
 }
+.modal-body li {
+    list-style-type: none;
+}
+.modal-body li input{
+    margin-right: 5px;
+}
+
 
     </style>
 </head>
@@ -233,7 +243,7 @@
             <div class="room-title">[[${roomDTO.roomName}]]</div>
             <div class="header-icons">
                 <div id="membersDiv">
-                    <span class="cursor" id="memberList" alt="대화상대"><span class="material-symbols-outlined">
+                    <span class="cursor" id="memberList"><span class="material-symbols-outlined">
                         patient_list
                         </span></span>
                     <div class="tooltip-content">
@@ -263,17 +273,34 @@
 		<!-- format -->
 
 		<div class="chat format">
-			<ul>
+		<ul class="chat-messages" id="chatRoom">
+    <div th:each="message : ${chatDTO}">
+        <div th:each="image : ${profileImages}">
+            <div th:if="${message.id} == ${image.id}">
+                <li class="message">
+                <div class="sender">
+						<span></span>
+					</div>
+                    <img class="message-profile-pic" th:src="${image.uploadPath}" alt="Profile Image">
+                    <span class="message-content"></span>
+                    <small class="message-time"></small>
+                </li>
+            </div>
+        </div>
+    </div>
+</ul>
+			<!-- <ul>
 				<li>
 					<div class="sender">
 						<span></span>
+						
 					</div>
 					<div class="message">
 						<span class="message-content"></span>
     					<small class="message-time"></small>
 					</div>
 				</li>
-			</ul>
+			</ul> -->
 		</div>
 	</div>
 	<!-- The Modal -->
@@ -586,7 +613,7 @@ console.log(roomNo + "룸방번호 확인")
         employeeListUl.innerHTML = '';
         employees.forEach(employee => {
             const li = document.createElement('li');
-
+            const label = document.createElement('label');
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = 'employee-' + employee.id;
@@ -607,12 +634,16 @@ console.log(roomNo + "룸방번호 확인")
             const empDept = document.createElement('span');
             empDept.textContent = employee.deptName;
 
-            li.appendChild(checkbox);
-            li.appendChild(empNo);
-            li.appendChild(empId);
-            li.appendChild(empName);
-            li.appendChild(empRank);
-            li.appendChild(empDept);
+
+
+            label.appendChild(checkbox);
+            label.appendChild(empNo);
+            label.appendChild(empId);
+            label.appendChild(empName);
+            label.appendChild(empRank);
+            label.appendChild(empDept);
+            
+            li.appendChild(label);
 
             employeeListUl.appendChild(li);
         });
