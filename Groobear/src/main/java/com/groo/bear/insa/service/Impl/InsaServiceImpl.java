@@ -76,7 +76,7 @@ public class InsaServiceImpl implements InsaService{
 	}
 
 	@Override
-	public int checkPno(String pno) {
+	public EmpVO checkPno(String pno) {
 		return insaMapper.checkPno(pno);
 	}
 
