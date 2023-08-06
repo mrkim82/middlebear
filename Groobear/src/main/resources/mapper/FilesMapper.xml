@@ -223,5 +223,23 @@
 		ON(a.pro_file_no = b.pro_file_no)
 		WHERE pro_post_no = #{proPostNo}
   	</select>
-  	
+	<!-- 사원 공용 서명 등록 -->
+  	<insert id="insertPublicSignImg" parameterType="EmpVO">
+  		insert into files (
+  							UUID
+  							,UPLOAD_PATH
+  							,FILE_NAME
+  							,FILE_TYPE
+  							,FILE_DATE
+  							,SIGN_NO)
+  					VALUES
+  							(
+  							'public'
+  							,'public'
+  							,'public'
+  							,'1'
+  							,sysdate
+  							,#{empNo}
+  							)
+  	</insert>
   </mapper>
