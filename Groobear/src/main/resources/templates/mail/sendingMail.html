@@ -116,7 +116,6 @@
 		var del = document.querySelector(".del");
 		
 		del.onclick = () =>{
-			let check = 'S';
 			for(let i=0; i< list.length; i++){
 				if(list[i].checked){
 					list[i].parentElement.parentElement.remove();
@@ -124,7 +123,7 @@
 			}
 			console.log(delList);
 			$.ajax({
-				url : "delete",  // 전송 URL
+				url : "sendDelete",  // 전송 URL
 			    type : 'POST',
 			    contentType : 'application/json',
 			    data :JSON.stringify( delList ),
@@ -132,6 +131,7 @@
 			    async : false,
 			    success : function(data){
 			        console.log("컨트롤에서 받은거 : " + data);
+			        location.href="/mail/sendingMail";
 			        alert("삭제"+data+"건 되었습니다.");
 			    },
 			    //Ajax 실패시 호출

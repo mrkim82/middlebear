@@ -46,6 +46,7 @@ public class MailController {
 		String id = (String) session.getAttribute("Id");
         Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-01-31");
         Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-08-31");
+        String id2=id;
         id = id.substring(0,id.indexOf("@"));
         EmailReader receiver = new EmailReader();
         List<MailVO> list = receiver.receiveMailAttachedFile(id, id, startDate, endDate);
@@ -57,15 +58,15 @@ public class MailController {
 		        System.out.println("몇건 처리됨? "+result);
 			}
 		}
-		
+		String R="R";
 		mailVO.setReceiver(id);
-		mailVO.setReferrer(id);
-		mailVO.setReferrer2(id);
-		mailVO.setReferrer3(id); //(String) session.getAttribute("Id")
-		mailVO.setMailType2("R");
-		mailVO.setMailType3("R");
-		mailVO.setMailType4("R");
-		mailVO.setMailType5("R");
+		mailVO.setReferrer(id2);
+		mailVO.setReferrer2(id2);
+		mailVO.setReferrer3(id2); //(String) session.getAttribute("Id")
+		mailVO.setMailType2(R);
+		mailVO.setMailType3(R);
+		mailVO.setMailType4(R);
+		mailVO.setMailType5(R);
 		Paging paging = new Paging();
         paging.setCri(cri);
         paging.setTotalCount(mailService.countReceiveMail(mailVO));
@@ -99,13 +100,15 @@ public class MailController {
 	public String sendingMailForm(Criteria cri, Model model, MailVO mailVO, HttpSession session,  @RequestParam(value="nowPage", required=false)String nowPage
 			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) {
 		String id = (String) session.getAttribute("Id");
-		String R = "R";
+		String S = "S";
+		mailVO.setId(id);
 		mailVO.setSender(id);
-		mailVO.setMailType(R);
+		mailVO.setMailType(S);
+		System.out.println("sendingMail = "+mailVO);
 		Paging paging = new Paging();
         paging.setCri(cri);
         paging.setTotalCount(mailService.countSendMail(mailVO));
-        model.addAttribute("mailList",mailService.sendMailSearch(cri, id));
+        model.addAttribute("mailList",mailService.sendMailSearch(cri, mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/sendingMail";
 	}
@@ -147,7 +150,8 @@ public class MailController {
 			mailVO.setMailType(U);
 			if(mailVO.getReceiver().equals(id)) {
 				mailService.getMailType2Del(mailVO);
-			}else if(mailVO.getReferrer().equals(id)) {
+			}else if(mailVO.getReferrer().equals(id2)) {
+				mailVO.setReferrer(id2);
 				mailService.getMailType3Del(mailVO);
 			}else if(mailVO.getReferrer().equals(id2)) {
 				mailVO.setReferrer(id2);
@@ -208,6 +212,8 @@ public class MailController {
 		int count=0;
 		String D = "D";
 		String id = (String) session.getAttribute("Id");
+		String id2= id;
+		id = id.substring(0,id.indexOf("@"));
 		for (int i=0; i< delList.size(); i++) {
 			System.out.println("서버에서 보내준 데이터 테이블참조");
 			MailVO mailVO = new MailVO();
@@ -215,14 +221,16 @@ public class MailController {
 			mailVO.setMailType(D);
 			if(mailVO.getReceiver().equals(id)) {
 				mailService.getMailType2Del(mailVO);
-			}else if(mailVO.getReferrer().equals(id)) {
+			}else if(mailVO.getReferrer().equals(id2)) {
+				mailVO.setReferrer(id2);
 				mailService.getMailType3Del(mailVO);
-			}else if(mailVO.getReferrer2().equals(id)) {
-				mailService.getMailType4Del(mailVO);
-			}else if(mailVO.getReferrer3().equals(id)) {
-				mailService.getMailType5Del(mailVO);
 			}
 			count++;
+//			else if(mailVO.getReferrer2().equals(id)) {
+//				mailService.getMailType4Del(mailVO);
+//			}else if(mailVO.getReferrer3().equals(id)) {
+//				mailService.getMailType5Del(mailVO);
+//			}
 		}
 		return count;
 	}
@@ -253,21 +261,21 @@ public class MailController {
 		return new ResponseEntity<>(mailService.getAttach(mailNo), HttpStatus.OK);
 	}
 	//받은메일에서 삭제시 update문으로 delete_date,mail_type설정
-//	@PostMapping("mail/delete")
-//	@ResponseBody
-//	public int sendDeleteMail(@RequestBody List<Integer> delList,HttpSession session) {
-//		//update하는곳
-//		int count=0;
-//		String U = "U";
-//		String id = (String) session.getAttribute("Id");
-//		for (int i=0; i< delList.size(); i++) {
-//			System.out.println("delete i = "+delList.get(i));
-//			MailVO mailVO = new MailVO();
-//			mailVO = mailService.getMailInfo(delList.get(i));
-//			mailVO.setMailType(U);
-//			count++;
-//		}
-//	    System.out.println("count - "+count);
-//		return count;
-//	}
+	@PostMapping("mail/sendDelete")
+	@ResponseBody
+	public int sendDeleteMail(@RequestBody List<Integer> delList,HttpSession session) {
+		//update하는곳
+		int count=0;
+		String id = (String) session.getAttribute("Id");
+		for (int i=0; i< delList.size(); i++) {
+			System.out.println("delete i = "+delList.get(i));
+			MailVO mailVO = new MailVO();
+			mailVO.setMailNo(delList.get(i));
+			mailVO.setId(id);
+			int result = mailService.deleteMail(mailVO);
+			count++;
+		}
+	    System.out.println("count - "+count);
+		return count;
+	}
 }
