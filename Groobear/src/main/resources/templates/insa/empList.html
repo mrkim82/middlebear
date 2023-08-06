@@ -8,22 +8,13 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <title>Groobear 회원조회</title>
 <style>
-		ul {
-			list-style:none;
-		}
-		
-		li {
-			float: left;
-			padding: 10px;
-		}
-		a { 
-			text-decoration:none ;
-			color: black;
-		}
-		.paging .active a {
-		    background-color: #f00;
-		    color: #fff;
-		}
+  	li{
+  		float: left;
+  	}
+  	a {
+  		text-decoration:none !important;
+  		cursor:pointer;
+  	}
  		/* The Modal (background) */
         .modal {
             display: none; /* Hidden by default */
@@ -52,9 +43,9 @@
 <body>
 
 <div layout:fragment="content" >
-  <div>
-  	<h3>Groobear 회원조회</h3>
-	<table id="list" class="table">
+  <div style="padding:10px;">
+  	<h2 style="margin-top: 25px;margin-bottom:20px;">Groobear 회원조회</h2>
+	<table id="list" class="table table-hover" style="text-align:center;">
 		<thead>
 			<tr>
 				<td>사번</td>
@@ -68,7 +59,7 @@
 			</tr>
 		</thead>
 		<tbody id="bodyWash">
-			<tr th:each="emp, stat : ${empList}" th:attr="onclick='detailPopUp()'">
+			<tr class="cml table-default" th:each="emp, stat : ${empList}" th:attr="onclick='detailPopUp()'">
 				<td>[[${emp.empNo}]]</td>
 				<td>[[${emp.name}]]</td>
 				<td>[[${emp.rank}]]</td>
@@ -86,36 +77,37 @@
 		</tbody>
 	</table>
 	<div style="display: flex;justify-content: center;height:30px;">
-	    <ul class="paging" th:if="${paging.endPage != 0}">
-					<li>
-						<a th:href="|javascript:goPage(1)|">처음</a>
-					</li>
-	        <li th:if="${paging.prev}">
-	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
+	    <ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
+			<li class="page-item">
+				<a class="page-link" style="border-top-left-radius: 0.2rem;border-bottom-left-radius: 0.2rem;" th:href="|javascript:goPage(1)|">&laquo;</a></li>
+			<li class="page-item" th:if="${paging.prev}">
+	            <a class="page-link" th:href="|javascript:goPage([[${paging.startPage-1}]])|">&lsaquo;</a>
 	        </li>
-	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
-	            <a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
+			<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
+				th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+				<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+				th:text="${num}"></a>
+			</li>
+			<li class="page-item" th:if="${paging.next and paging.endPage > 0}">
+	            <a class="page-link" th:href="|javascript:goPage([[${paging.endPage+1}]])|">&rsaquo;</a>
 	        </li>
-	        <li th:if="${paging.next and paging.endPage > 0}">
-	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
-	            </li>
-				<li>
-					<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
-				</li>
+			<li class="page-item"><a class="page-link" style="border-top-right-radius: 0.2rem;border-bottom-right-radius: 0.2rem;"
+				th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+			</li>
 	    </ul>
 	</div>
 	</div>
 	<div style="display: flex;justify-content: center;">
 		<form name="searchForm" action="empInfo">
 		<input type="hidden" name="page" value="1"/><br>
-		<select name="type">
-			<option value='' selected>-- 선택 --</option>
+		<select name="type" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;">
+			<option value='' selected>선택</option>
 			<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
 			<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
 			<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
 		</select>
-		<input type="text" name="keyword" id="inputBtn" th:value="${criteria.keyword}"/>
-		<button type="submit" id="searchBtn">검색</button>
+		<input type="text" name="keyword" id="inputBtn" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:150px;" th:value="${criteria.keyword}"/>
+		<button type="submit" class="custom-button" id="searchBtn" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;">검색</button>
 	</form>
 	</div>
 		<!-- The Modal -->
@@ -219,7 +211,15 @@
     	// window.name = "부모창 이름"; 
         window.name = "empInfo";   
         // window.open("open할 window", "자식창 이름", "팝업창 옵션");
-        openWin = window.open("/empDetailInfo?id="+id, "empDetailInfo", "width=370, height=480, resizable = no, scrollbars = no");    	
+        //openWin = window.open("/empDetailInfo?id="+id, "empDetailInfo", "width=370, height=480, resizable = no, scrollbars = no");    	
+        var screenWidth = window.screen.width;
+        var screenHeight = window.screen.height;
+        var popupWidth = 370;
+        var popupHeight = 427;
+        var left = (screenWidth - popupWidth) / 2;
+        var top = (screenHeight - popupHeight) / 2;
+        var options = "width=" + popupWidth + ", height=" + popupHeight + ", resizable=no, scrollbars=no, top=" + top + ", left=" + left;
+        openWin = window.open("/empDetailInfo?id="+id, "empDetailInfo", options);
     }
   	//모달 Close 기능
     function close_pop(flag) {

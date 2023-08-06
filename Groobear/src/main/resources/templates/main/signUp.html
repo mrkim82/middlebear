@@ -12,13 +12,15 @@
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <style>
+ 	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
     body {
+      font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
       min-height: 100vh;
       background: -webkit-gradient(linear, left bottom, right top, from(#92b5db), to(#1d466c));
       background: -webkit-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
       background: -moz-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
       background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
-      background: linear-gradient(to top right, #92b5db 0%, #1d466c 100%);
+      background: linear-gradient(to top right, #caf5d85e 2%, #8cdeb7c2 100%);
     }
 
     .input-form {
@@ -62,42 +64,42 @@
 <body>
   <div class="container">
     <div class="input-form-backgroud row">
-      <div class="input-form col-md-12 mx-auto">
-        <h4 class="mb-3">Groobear Sign Up</h4>
+      <div class="input-form col-md-12 mx-auto" style="padding-bottom:10px;">
+        <h4 class="mb-3" style="text-align:center;">Groobear Sign Up</h4>
         <form class="validation-form" novalidate>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="name">이름</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="name" name="name" minlength="1" maxlength="5" 
+                <input type="text" class="form-control" id="name" name="name" minlength="1" maxlength="5" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" 
                 oninput="removeName()" placeholder="이름" value="" required>
                 <div class="input-group-append">
-                  <button class="btn btn-primary" onclick="openPopUp()" type="button">조회</button>
+                  <button class="btn btn-primary" style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" onclick="openPopUp()" type="button">조회</button>
                 </div>
               </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="empNo">사번</label>
-              <input type="text" class="form-control" id="empNo" name="empNo" placeholder="이름 선택 시 자동 입력" value="" readonly>
+              <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" id="empNo" name="empNo" placeholder="이름 선택 시 자동 입력" value="" readonly>
             </div>
           </div>
 		  
 		  <div class="mb-3" style="width:400px;">
               <label for="deptName">부서</label>
-              <input type="text" class="form-control" id="deptName" name="deptName" placeholder="이름 선택 시 자동 입력" value="" readonly>
+              <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" id="deptName" name="deptName" placeholder="이름 선택 시 자동 입력" value="" readonly>
           </div>
           
           <div class="row">
             <div class="col-md-12 mb-3">
               <label for="id">아이디</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="id" name="id" oninput="characterCheck(this); removeId();"
+                <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" id="id" name="id" oninput="characterCheck(this); removeId();"
                 minlength="4" maxlength="15" placeholder="아이디" value="" required>
                 <div class="input-group-append">
-                <input type="text" class="form-control" id="bear" value="@bear.com" readonly>
+                <input type="text" style="border-bottom: 3px solid #ced4da;" class="form-control" id="bear" value="@bear.com" readonly>
                 </div>
                 <div class="input-group-append">
-                  <button class="btn btn-primary" type="button" id="checkId">중복검사</button>
+                  <button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="btn btn-primary" type="button" id="checkId">중복검사</button>
                 </div>
               </div>
             </div>
@@ -107,14 +109,14 @@
             <div class="col-md-6 mb-3">
               <label for="password">비밀번호</label>
               <div class="input-group">
-                <input type="password" class="form-control" id="password" name="password" oninput="checkPw1()"
+                <input type="password" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" id="password" name="password" oninput="checkPw1()"
                 minlength="8" maxlength="20" placeholder="password" value="" required>
               </div>
               <a id="Pw"></a>
             </div>
             <div class="col-md-6 mb-3">
               <label for="checkPassword">비밀번호 확인</label>
-              <input type="password" class="form-control" id="checkPassword" name="checkPassword" oninput="checkPw2()"
+              <input type="password" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" id="checkPassword" name="checkPassword" oninput="checkPw2()"
               placeholder="password check" value="" required>
               <a id="rePw"></a>
             </div>
@@ -122,7 +124,7 @@
             
           <div class="mb-3">
             <label for="email">이메일</label>
-            <input type="email" class="form-control" id="email" name="email" 
+            <input type="email" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" id="email" name="email" 
             oninput="checkEmail()" placeholder="you@example.com" required>
             <a id="checkEmail"></a>
           </div>
@@ -131,10 +133,10 @@
             <div class="col-md-6 mb-3">
               <label for="phone">연락처</label>
               <div class="input-group">
-                <input type="text" class="form-control phoneNumber" minlength="13" maxlength="13"
+                <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control phoneNumber" minlength="13" maxlength="13"
            		 id="phone" name="phone" placeholder="010-0000-0000" required>
                 <div class="input-group-append">
-                	<button class="btn btn-primary" type="button" id="smsbtn1">인증번호 발급</button>
+                	<button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="btn btn-primary" type="button" id="smsbtn1">인증번호 발급</button>
                 </div>
               </div>
                <a id="checkPhone"></a>
@@ -142,10 +144,10 @@
             <div class="col-md-6 mb-3">
             <label for="phone">연락처 인증</label>
               <div class="input-group">
-                <input type="text" class="form-control" minlength="6" maxlength="6"
+                <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" minlength="6" maxlength="6"
            		 id="smsnum" name="smsnum" placeholder="인증번호 6자리" required>
                 <div class="input-group-append">
-                	<button class="btn btn-primary" type="button" id="smsbtn2">인증번호 확인</button>
+                	<button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="btn btn-primary" type="button" id="smsbtn2">인증번호 확인</button>
                 </div>
               </div>
               <a id="checkSms"></a>
@@ -155,10 +157,10 @@
 			  <div class="col-md-9 mb-3">
 	            <label for="post">우편번호</label>
 	              <div class="input-group">
-	                <input type="text" class="form-control" minlength="5" maxlength="5"
+	                <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" minlength="5" maxlength="5"
 	           		 id="post" name="post" placeholder="우편번호 찾기 버튼 클릭" readonly>
 	                <div class="input-group-append">
-	                	<button class="btn btn-primary" type="button" id="postBtn" onclick="postCode()">우편번호 찾기</button>
+	                	<button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="btn btn-primary" type="button" id="postBtn" onclick="postCode()">우편번호 찾기</button>
 	                </div>
 	              </div>
 	            </div>
@@ -166,26 +168,28 @@
 		  
           <div class="mb-3">
             <label for="addr1">주소</label>
-            <input type="text" class="form-control" id="addr1" placeholder="서울특별시 강남구">
+            <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" id="addr1" placeholder="서울특별시 강남구">
           </div>
 
           <div class="mb-3">
             <label for="addr2">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
-            <input type="text" class="form-control" id="addr2" placeholder="상세주소를 입력해주세요.">
+            <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" id="addr2" placeholder="상세주소를 입력해주세요.">
           </div>
           
           <hr class="mb-4">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="aggrement" required>
+            <input type="checkbox" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="custom-control-input" id="aggrement" required>
             <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
           </div>
-          <div class="mb-4"></div>
-          <button class="btn btn-primary btn-lg btn-block" id="finalBtn" type="button">가입 완료</button>
+          <div class="mb-4" style="text-align: center;margin-bottom:0px;margin-top:30px;">
+          	<button style="display:inline;background-color: #38d39f;border-color: #38d39f;margin-right:50px;" class="btn btn-primary btn-lg" id="finalBtn" type="button">가입완료</button>
+          	<button class="btn btn-primary btn-lg " style="display:inline;background-color: #38d39f;border-color: #38d39f;" type="button" onclick="location.href='/'">돌아가기</button>
+          </div>
         </form>
       </div>
     </div>
     <footer class="my-3 text-center text-small">
-      <p class="mb-1">&copy; 2023 Groobear</p>
+      <p class="mb-1">&copy; 2023.08 GrooBear</p>
     </footer>
   </div>
   <script src="https://code.jquery.com/jquery-latest.js"></script> 
@@ -281,7 +285,15 @@
     		// window.name = "부모창 이름"; 
             window.name = "signUp";   
             // window.open("open할 window", "자식창 이름", "팝업창 옵션");
-            openWin = window.open("/signUpInfo?name="+name, "signUpInfo", "width=570, height=350, resizable = no, scrollbars = no");    	
+            //openWin = window.open("/signUpInfo?name="+name, "signUpInfo", "width=570, height=350, resizable = no, scrollbars = no");    	
+            var screenWidth = window.screen.width;
+            var screenHeight = window.screen.height;
+            var popupWidth = 570;
+            var popupHeight = 350;
+            var left = (screenWidth - popupWidth) / 2;
+            var top = (screenHeight - popupHeight) / 2;
+            var options = "width=" + popupWidth + ", height=" + popupHeight + ", resizable=no, scrollbars=no, top=" + top + ", left=" + left;
+            openWin = window.open("/signUpInfo?name=" + name, "signUpInfo", options);
     	}   
     }
     
