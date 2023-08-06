@@ -16,7 +16,8 @@
 		<div id="preview-container" class="uploadResult" style="margin-top: 20px;">
 			<th:block th:if="${userSignInfo != null && userSignInfo != ''}">
 				<ul>
-					<li th:data-path="${userSignInfo.uploadPath}" th:data-uuid="${userSignInfo.uuid}"
+				<!-- public이 아니면 개인서명 조회 public이면 공용이미지 -->
+					<li th:if="${userSignInfo != 'public'}" th:data-path="${userSignInfo.uploadPath}" th:data-uuid="${userSignInfo.uuid}"
 					data-filename="${userSignInfo.fileName}" data-type="true" style="list-style-type: none;">
 						<div>
 							<img th:src="@{|/display?fileName=${#strings.replace(userSignInfo.uploadPath,'\','/')}/${userSignInfo.uuid}_${userSignInfo.fileName}|}" 
@@ -65,7 +66,7 @@
   			     }
   			 });
             $.ajax({
-            	url: "/signUpdate",
+            	url: "/publicSign",
             	method:"POST",
               	 contentType:"application/json; charset=utf-8",
      			     data: signNo,

@@ -23,8 +23,8 @@ public interface PaymentMapper {
 	public int offDataInsert(PaymentVO payVO);
 	//품의서 데이터삽입
 	public int robinDataInsert(PaymentVO payVO);
-	//결재중 문서 전체조회
-	public List<PaymentVO> paymentList(Criteria cri,PaymentVO payVO);
+	//결재중 문서 전체조회 결재중문서페이지
+	public List<PaymentVO> InpaymentList(Criteria cri,PaymentVO payVO);
 	//결재중 문서 페이징용 카운트
 	public int countPaymentList(String id);
 	//결재완료된 문서 전체조회
@@ -57,5 +57,10 @@ public interface PaymentMapper {
 	public int offCommentUpdate(PaymentVO payVO);
 	//결재문서 운행일지 코멘트작성
 	public int robinCommentUpdate(PaymentVO payVO);
-
+	//결재중 문서 전체조회 전자결재 메인화면
+	public List<PaymentVO> paymentList(PaymentVO payVO);
+	//완료된 문서 전체조회 전자결재 메인화면
+	public List<PaymentVO> maincompletePaymentList(PaymentVO payVO);
+	//참조된 문서 전체조회 전자결재 메인화면
+	public List<PaymentVO> mainreferrerPayList(PaymentVO payVO);
 }

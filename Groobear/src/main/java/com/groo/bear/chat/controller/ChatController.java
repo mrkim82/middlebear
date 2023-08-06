@@ -181,13 +181,9 @@ public class ChatController {
             room.setId(id);
             room.setRoomNo(roomNo);
             chatService.insertMem(room);
-            // 현재 시간을 가져와 원하는 문자열 형식으로 변환
-            LocalDateTime now = LocalDateTime.now();
-            String formattedTime = now.format(DateTimeFormatter.ofPattern("HH:mm"));
-
             // 새로운 사용자를 초대했음을 알리는 메시지 생성
             ChatMessageDTO chatMessage = new ChatMessageDTO();
-            chatMessage.setContent(id + "님이 채팅방에 입장하였습니다. (" + formattedTime + ")");
+            chatMessage.setContent(id + "님이 채팅방에 입장하였습니다.");
             //chatMessage.setMsgTime(now);
             chatMessage.setRoomNo(roomNo);
             // 메시지를 채팅방에 전송

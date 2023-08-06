@@ -46,22 +46,22 @@ public class MailController {
 		String id = (String) session.getAttribute("Id");
         Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-01-31");
         Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-08-31");
-        id = id.substring(0,id.indexOf("@"));
+       //id = id.substring(0,id.indexOf("@"));
         EmailReader receiver = new EmailReader();
         List<MailVO> list = receiver.receiveMailAttachedFile(id, id, startDate, endDate);
         //위에서 가져온 메일을 db에 저장하고 뿌려줌
-		if(list.size() > 0) {
+		if(list!=null && list.size() > 0) {
 			for(int i=0; i < list.size();i++) {
-				//System.out.println("list.get(i)첵 = "+list.get(i));
+				System.out.println("list.get(i)첵 = "+list.get(i));
 				//int result = mailService.serverGetInsertMail(list.get(i));
 		        //System.out.println("몇건 처리됨? "+result);
 			}
 		}
 		
-		mailVO.setReceiver((String) session.getAttribute("Id"));
-		mailVO.setReferrer((String) session.getAttribute("Id"));
-		mailVO.setReferrer2((String) session.getAttribute("Id"));
-		mailVO.setReferrer3((String) session.getAttribute("Id"));
+		mailVO.setReceiver(id);
+		mailVO.setReferrer(id);
+		mailVO.setReferrer2(id);
+		mailVO.setReferrer3(id); //(String) session.getAttribute("Id")
 		mailVO.setMailType2("R");
 		mailVO.setMailType3("R");
 		mailVO.setMailType4("R");
@@ -101,12 +101,14 @@ public class MailController {
 		//새테이블로
 		String id = (String) session.getAttribute("Id");
 		String R = "R";
-		mailVO.setSender(id);
+		mailVO.setId(id);
 		mailVO.setMailType(R);
 		Paging paging = new Paging();
         paging.setCri(cri);
+        System.out.println("보낸메일함 = "+mailVO);
         paging.setTotalCount(mailService.countSendMail(mailVO));
-		model.addAttribute("mailList",mailService.getMailSend(cri,mailVO));
+        model.addAttribute("mailList",mailService.sendMailSearch(cri, id));
+		//model.addAttribute("mailList",mailService.getMailSend(cri,mailVO));
 		model.addAttribute("paging", paging);
 		return "mail/sendingMail";
 	}
@@ -114,6 +116,7 @@ public class MailController {
 	@GetMapping("mail/deleteMail")
 	public String deleteMailForm(Criteria cri, Model model, MailVO mailVO, HttpSession session) {
 		String id = (String) session.getAttribute("Id");
+		id = id.substring(0,id.indexOf("@"));
 		mailVO.setSender(id);
 		mailVO.setReceiver(id);
 		mailVO.setReferrer(id);
@@ -161,16 +164,21 @@ public class MailController {
 	public String mailInfo(@RequestParam int mailNo, Model model, HttpSession session) {
 		//해당 메일 정보 조회
 		String id = (String)session.getAttribute("Id");
-		model.addAttribute("mail",mailService.getMailInfo(mailNo));
+		//model.addAttribute("mail",mailService.getMailInfo(mailNo));
 		System.out.println("서버 메일 상세조회"+mailService.getMailInfo(mailNo));
 		MailVO mailVO = new MailVO();
 		mailVO = mailService.getMailInfo(mailNo);
+		System.out.println("mailInfo페이지 ="+mailVO);
 		model.addAttribute("refCheck","B");
-		if(mailVO.getReceiver().equals(id)) {
+		String user = mailVO.getReceiver()+"@bear.com"; 
+		if(user.equals(id)) {
 			mailVO.setMailNo(mailNo);
 			String check = "Y";
+			mailVO.setMailNo(mailNo);
 			mailVO.setReadCheck(check);
+			System.out.println("Receiver = session : "+mailVO);
 			mailService.getMailInfoUpdate(mailVO);
+			model.addAttribute("mail",mailService.getMailInfo(mailNo));
 		}
 		return "mail/mailInfo";
 	}

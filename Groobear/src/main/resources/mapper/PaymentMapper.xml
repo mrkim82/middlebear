@@ -136,17 +136,15 @@
 	        SELECT pay_no,title FROM payment_robin
 		)
 		SELECT * FROM (
-		    SELECT p.*, a.purpose, CASE WHEN p.approver2 = #{payVO.id} AND p.pay_status3='N' THEN pay_status2 
-		                                WHEN p.approver3 = #{payVO.id} AND p.pay_status3='N' THEN pay_status3 
-		                                WHEN p.approver3 = #{payVO.id} AND p.pay_status2='N' THEN pay_status2
-		                                ELSE pay_status1 END AS pay_status ,ROWNUM AS rn
+		    SELECT p.*, a.purpose, CASE WHEN p.approver2 = #{id} AND p.pay_status2='Y' AND p.pay_status3='N' THEN pay_status3 
+		                                WHEN p.approver3 = #{id} AND p.pay_status2='Y' AND p.pay_status3='N' THEN pay_status3 
+		                                WHEN p.approver3 = #{id} AND p.pay_status2='N' THEN pay_status2
+                                        WHEN p.approver2 = #{id} AND p.pay_status2='N' THEN pay_status2
+		                                ELSE pay_status1 END AS pay_status 
 		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
-		    WHERE (p.id = #{payVO.id} OR p.approver2 = #{payVO.id} OR p.approver3 = #{payVO.id})
-		    AND p.pay_status3='N')
-		<![CDATA[
-	            WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
-	    ]]>
-		ORDER BY pay_status,pay_no
+		    WHERE (p.id = #{id} OR p.approver2 = #{id} OR p.approver3 = #{id})
+		    AND (p.pay_status3='N' AND p.pay_status2='Y') OR (p.pay_status2='N' AND p.pay_status3='N'))
+		ORDER BY pay_status desc,pay_no
 	</select>
 	<!-- 결재중문서 개수(페이징용) -->
 	<select id="countPaymentList" resultType="int">
@@ -192,7 +190,7 @@
 		    AND (p.pay_status3='Y' OR p.pay_status2='F' OR p.pay_status3='F' OR (p.pay_status2='Y' AND p.approver3='')
 		    )
 		 )
-		<![CDATA[
+		 <![CDATA[
 	            WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
 	    ]]>
 		ORDER BY pay_status,pay_no
@@ -341,4 +339,82 @@
 		SELECT sign FROM users
 		WHERE user_id = #{userId}
 	</select>
+	<!-- 결재문서 결재중(본인이 해당된) 일괄조회-->
+	<select id="InpaymentList" resultType="PaymentVO">
+		WITH payment_all AS (
+	        SELECT pay_no,purpose FROM payment_logbook
+	        UNION ALL 
+	        SELECT pay_no,title FROM payment_off
+	        UNION ALL
+	        SELECT pay_no,title FROM payment_robin
+		)
+		SELECT * FROM (
+		    SELECT p.*, a.purpose, CASE WHEN p.approver2 = #{payVO.id} AND p.pay_status2='Y' AND p.pay_status3='N' THEN pay_status3 
+		                                WHEN p.approver3 = #{payVO.id} AND p.pay_status2='Y' AND p.pay_status3='N' THEN pay_status3 
+		                                WHEN p.approver3 = #{payVO.id} AND p.pay_status2='N' THEN pay_status2
+                                        WHEN p.approver2 = #{payVO.id} AND p.pay_status2='N' THEN pay_status2
+		                                ELSE pay_status1 END AS pay_status, ROWNUM AS rn 
+		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
+		    WHERE (p.id = #{payVO.id} OR p.approver2 = #{payVO.id} OR p.approver3 = #{payVO.id})
+		    AND (p.pay_status3='N' AND p.pay_status2='Y') OR (p.pay_status2='N' AND p.pay_status3='N'))
+		
+		<![CDATA[
+	            WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+	    ]]>
+	    ORDER BY pay_status,pay_no
+	</select>
+		<!-- 결재완료된 문서 -->
+	<select id="maincompletePaymentList" resultType="PaymentVO">
+		WITH payment_all AS (
+	        SELECT pay_no,purpose FROM payment_logbook
+	        UNION ALL 
+	        SELECT pay_no,title FROM payment_off
+	        UNION ALL
+	        SELECT pay_no,title FROM payment_robin
+		)
+		SELECT * FROM (
+		    SELECT p.*, a.purpose, CASE WHEN p.approver2 = #{id} AND p.pay_status3='Y' THEN pay_status3 
+		                                WHEN p.approver3 = #{id} AND p.pay_status3='Y' THEN pay_status3
+                                        WHEN p.approver2 = #{id} AND p.pay_status2='F' THEN pay_status2 
+		                                WHEN p.approver3 = #{id} AND p.pay_status2='F' THEN pay_status2
+                                        WHEN p.approver2 = #{id} AND p.pay_status3='F' THEN pay_status3 
+		                                WHEN p.approver3 = #{id} AND p.pay_status3='F' THEN pay_status3
+                                        WHEN p.approver2 = #{id} AND p.approver3 = '' AND p.pay_status2='Y' THEN pay_status2
+                                        WHEN p.approver2 = #{id} AND p.approver3 = '' AND p.pay_status2='F' THEN pay_status2
+		                                ELSE pay_status1 END AS pay_status 
+		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
+		    WHERE (p.id = #{id} OR p.approver2 = #{id} OR p.approver3 = #{id})
+		    AND (p.pay_status3='Y' OR p.pay_status2='F' OR p.pay_status3='F' OR (p.pay_status2='Y' AND p.approver3='')
+		    )
+		 )
+		ORDER BY pay_status,pay_no
+	</select>
+	<!-- 참조된 문서 조회 -->
+	<select id="mainreferrerPayList" resultType="PaymentVO">
+		SELECT * 
+        FROM (SELECT t.*
+              FROM (
+              WITH payment_all AS (
+	        SELECT pay_no,purpose FROM payment_logbook
+	        UNION ALL 
+	        SELECT pay_no,title FROM payment_off
+	        UNION ALL
+	        SELECT pay_no,title FROM payment_robin
+	    )
+			SELECT * FROM
+	        (
+	            SELECT * 
+	                FROM 
+	                    (SELECT p.*,a.purpose, CASE WHEN p.approver3 is null THEN p.pay_status2
+	                                                    ELSE p.pay_status3 END AS pay_status
+	                          FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
+	                        )
+	                 WHERE referrer Like '%${id}%'
+	                 AND (pay_status='Y' OR pay_status = 'F')
+	             )
+	         ORDER BY pay_status,pay_no
+	                     ) t
+	              )
+	</select>
+	
 </mapper>

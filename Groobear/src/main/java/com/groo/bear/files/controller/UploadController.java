@@ -99,6 +99,8 @@ public class UploadController {
 			try {
 				
 				File saveFile = new File(uploadPath, uploadFileName);
+				System.out.println("1231341234134"+uploadPath);
+				System.out.println("12342341234124"+uploadFileName);
 				multipartFile.transferTo(saveFile);
 				attachFileDTO.setUuid(uuid.toString());
 				attachFileDTO.setUploadPath(uploadFolderPath);

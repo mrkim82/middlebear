@@ -1,5 +1,6 @@
 package com.groo.bear.payment.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -171,7 +172,9 @@ public class PaymentController {
         paging.setCri(cri);
         paging.setTotalCount(paymentService.countPaymentList(id));
         model.addAttribute("userid",id);
-		model.addAttribute("InProgressList",paymentService.paymentList(cri, payVO));
+        List<PaymentVO> payList = paymentService.paymentList(payVO);
+        Collections.reverse(payList);
+		model.addAttribute("InProgressList",payList);
 		model.addAttribute("paging", paging);
 		
 		//완료,반려된 문서 조회
@@ -183,18 +186,18 @@ public class PaymentController {
         paging.setCri(cri);
         paging.setTotalCount(paymentService.completePayCount(id));
         model.addAttribute("userid",id);
-        model.addAttribute("completePaymentList",paymentService.completePaymentList(cri, payVO));
+        model.addAttribute("completePaymentList",paymentService.maincompletePaymentList(payVO));
         model.addAttribute("paging",paging);
 		
 		//참조된 문서조회
-		id = (String) session.getAttribute("Id");
+        id = (String) session.getAttribute("Id");
 		payVO.setId(id);
-		cri.setPerPageNum(5);
+		cri.setPerPageNum(10);
 		paging = new Paging();
         paging.setCri(cri);
         paging.setTotalCount(paymentService.referrerPayCount(id));
         model.addAttribute("userid",id);
-        model.addAttribute("referrerList",paymentService.referrerPayList(cri, payVO));
+        model.addAttribute("referrerList",paymentService.mainreferrerPayList(payVO));
         model.addAttribute("paging",paging);
 		return "pay/payMain";
 	}
@@ -209,7 +212,7 @@ public class PaymentController {
         paging.setCri(cri);
         paging.setTotalCount(paymentService.countPaymentList(id));
         model.addAttribute("userid",id);
-		model.addAttribute("InProgressList",paymentService.paymentList(cri, payVO));
+		model.addAttribute("InProgressList",paymentService.InpaymentList(cri,payVO));
 		model.addAttribute("paging", paging);
 		return "pay/InProgressPay";
 	}
@@ -324,7 +327,6 @@ public class PaymentController {
 		}else {
 			paymentService.robinCommentUpdate(payVO);
 		}
-		
 		return "pay/InProgressPay";
 	}
 	//결재문서 파일삭제
@@ -421,5 +423,13 @@ public class PaymentController {
 		return "pay/payInfoRead";
 	}
 	//공용서명 등록
-	
+	@PostMapping("publicSign")
+	@ResponseBody
+	public String publicSign(@RequestBody int signNo) {
+		paymentService.searchSignImg(signNo);
+		EmpVO empVO = new EmpVO();
+		empVO.setEmpNo(signNo);
+		paymentService.insertPublicSignImg(empVO);
+		return "성공";
+	}
 }

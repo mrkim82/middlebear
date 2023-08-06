@@ -53,18 +53,18 @@
 	
 	<!-- 메세지전체조회 추가된 멤버는 이전 대화 안보이게 하는 용 -->
 	<select id="MessageAllList" parameterType="ChatMessageDTO">
-		select a.name, b.msg_no, b.content, b.room_no, b.msg_time
-from (select i.name, u.id
-        from user_info i join users u
-        on i.emp_no = u.emp_no) a
-        join
-    (select m.msg_no,m.content, m.room_no, m.id,m.msg_time
-		from message m join room r
-		on m.room_no = r.room_no
-		where m.msg_time > (select mem_time from room_mem where id = #{id} and room_no= #{roomNo})
-		and m.room_no= #{roomNo}
-		order by msg_no asc) b
-        on a.id = b.id
+		select a.id, a.name, b.msg_no, b.content, b.room_no, TO_CHAR(b.msg_time, 'YY"년" MM"월" DD"일" HH24"시" MI"분"') as msg_time
+		from (select i.name, u.id
+		        from user_info i join users u
+		        on i.emp_no = u.emp_no) a
+		        right join
+		     (select m.msg_no,m.content, m.room_no, m.id,m.msg_time
+				from message m join room r
+				on m.room_no = r.room_no
+				where m.msg_time > (select mem_time from room_mem where id = #{id} and room_no= #{roomNo})
+				and m.room_no= #{roomNo}
+				order by msg_no asc) b
+		        on a.id = b.id
 	</select>
 
 	<insert id="sendMessage" parameterType="ChatMessageDTO">

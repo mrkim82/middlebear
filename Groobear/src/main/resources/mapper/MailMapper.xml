@@ -104,8 +104,8 @@
 	</select>
 	<!-- 보낸메일 갯수 출력 -->
 	<select id="countSendMail" resultType="int">
-		SELECT COUNT(*) FROM getmail
-			WHERE (sender = #{sender})
+		select COUNT(*) FROM mail
+			where id = #{id}
 	</select>
 	<!-- 받은메일 갯수 출력 -->
 	<select id="countReceiveMail" resultType="int">
@@ -310,4 +310,25 @@
 		set mail_type5 = #{mailType}
 		where mail_no = #{mailNo}
 	</update>
+	<!-- 보낸메일함 db에 넣는거 기준조회 -->
+	<select id="sendMailSearch" resultType="MailVO">
+		SELECT * FROM (SELECT g.mail_no,g.send_date,g.receive_date,
+			g.delete_date,g.read_check,g.mail_type,
+			g.mail_set,g.title,g.content, g.sender, g.receiver, g.referrer, g.id, ROWNUM AS rn FROM 
+	(SELECT c.mail_no,c.send_date,c.receive_date,
+			c.delete_date,c.read_check,
+			c.mail_set,c.title,c.content, d.sender, d.receiver, d.referrer, d.id, d.mail_type
+          FROM mail_personnel d JOIN
+		(SELECT a.mail_no, a.send_date, a.receive_date, a.delete_date,
+		 a.read_check, a.mail_type, a.id,a.mail_set,b.title,b.content 
+		 FROM mail a JOIN mail_details b ON a.mail_no = b.mail_no) c
+			ON c.mail_no = d.mail_no
+            where d.mail_type = 'S'
+            and sender=#{id}
+             ORDER BY c.send_date desc)g
+          )
+          <![CDATA[
+          	WHERE rn >= (#{cri.page}-1) * #{cri.perPageNum} +1 AND rn <= #{cri.page} * #{cri.perPageNum}
+          ]]>
+	</select>
 </mapper>

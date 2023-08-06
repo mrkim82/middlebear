@@ -198,11 +198,10 @@ textarea {
 <!-- 데이터 가져오기 -->
 <script type="text/javascript" th:inline="javascript">
 	/*<![CDATA[*/
-		
 		let schAllDatas = /*[[${readPersonalSch}]]*/;
-		
 	/*]]>*/
 </script>
+
 
 <!-- 달력 load -->
 <script>
@@ -447,18 +446,6 @@ function createSchButton() {
 		schStartDate.value = schEndDate.value;
 	};
 	
-	/* //날짜 강제 삽입
-	if(schStartDate.value == '') {
-		schStartDate = bDay(schEndDate.value);
-		schEndDate = convertToFormattedDateTime(schEndDate.value);
-	} else if (schEndDate.value == ''){
-		schEndDate = aDay(schStartDate.value);
-		schStartDate = convertToFormattedDateTime(schStartDate.value);
-	} else {
-		schStartDate = convertToFormattedDateTime(schStartDate.value);
-		schEndDate = convertToFormattedDateTime(schEndDate.value);
-	} */
-	
 	let schObj = {  'proNo' : 7,//개인 일정 관리자 프로젝트
 					'postTitle' : schTitle.value,
 					'schStartDay' : convertToFormattedDateTime(schStartDate.value),
@@ -505,7 +492,7 @@ function deletePost() {
 		if(res.result == '성공') {
 			topTarget.remove();
 			navTop.remove();
-		}
+		};
 		
 	});
 }

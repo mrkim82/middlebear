@@ -9,6 +9,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>	
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" >
+
  <style>
  .material-symbols-outlined {
   font-variation-settings:
@@ -16,14 +18,25 @@
   'wght' 500,
   'GRAD' 0,
   'opsz' 58
-  
 }
+.room-title {
+    color:#000000;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+/* .message {
+    color: #000000; /* 검정색 
+} */
     * {
         margin: 0;
         padding: 0;
+        font-family: 'Do Hyeon', sans-serif;
     }
     body {
-	background-color: #CCFFCC; /* 배경색을 #f8f9fa (회색조)로 설정 */
+	/*background-color: #CCFFCC;  */
+    background-color: #9deab78a;
+    min-height: 100%;
 }
     .chat_wrap .header {
         font-size: 14px;
@@ -54,6 +67,8 @@
     margin-left: 470px;
     display: flex;
     gap: 20px; /* 아이콘 사이의 간격을 조절합니다. */
+    color: #000000;
+    
     /* margin-right: auto; */
 }
     .header a i {
@@ -203,10 +218,14 @@
     margin: 5px 0;  /* 위아래 마진을 5px로 설정 */
     padding: 0;  /* 패딩을 0으로 설정 */
 }
-
+.message-content{
+    color:#000000;
+    font-family: 'Do Hyeon';
+}
 
     </style>
 </head>
+
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <body>
 	<div class="chat_wrap">
@@ -288,7 +307,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script th:inline="javascript">
+    var profileImg = '<%=session.getAttribute("ProfileImg")%>';
 
+console.log('requestURL : ' + /*[[ ${#httpServletRequest.requestURL} ]]*/);
+console.log('requestURI : ' + /*[[ ${#httpServletRequest.requestURI} ]]*/);
+console.log('serverPort : ' + /*[[ ${#httpServletRequest.serverPort} ]]*/);
+console.log('serverName : ' + /*[[ ${#httpServletRequest.serverName} ]]*/);
+console.log('servletPath : ' + /*[[ ${#httpServletRequest.servletPath} ]]*/);
+console.log('remoteAddr : ' + /*[[ ${#httpServletRequest.remoteAddr} ]]*/);
+console.log('method : ' + /*[[ ${#httpServletRequest.method} ]]*/);
+console.log('requestedSessionId : ' + /*[[ ${#httpServletRequest.requestedSessionId} ]]*/);
+console.log('scheme : ' + /*[[ ${#httpServletRequest.scheme} ]]*/);
+console.log('protocol : ' + /*[[ ${#httpServletRequest.protocol} ]]*/);
+console.log('locale : ' + /*[[ ${#httpServletRequest.locale} ]]*/);
+console.log('secure : ' + /*[[ ${#httpServletRequest.secure} ]]*/);
+
+let uri = /*[[ ${#httpServletRequest.requestURI} ]]*/;
+let url = /*[[ ${#httpServletRequest.requestURL} ]]*/;
+let path = url.replace(uri, '');
+console.log('path 찍는 용도' + path)
 
 //WebSocket 연결 설정
 const alarmClient = new StompJs.Client({
@@ -372,14 +409,13 @@ $(document).ready(function() {
         $('.tooltip-content').hide();
     });
     chatDTO.forEach(function(chat) {
-    console.log(chat)
     	//chatMessageDTO.forEach(function(chat) {
         if (chat.name == myName) {  // 추가된 코드
             chat.id = realId;
         }
         //const LR = (chat.id != realId) ? "left" : "right";
         let LR; 
-        if (!chat.hasOwnProperty('id')) {
+        if (chat.id === null || chat.id === '') {
         	LR = "middle";
         } else if (chat.id === realId) {
         	LR = "right";
@@ -478,7 +514,7 @@ function receive(data) {
 	let LR;
 	console.log(data.id + "data id 확인용");
 	console.log(realId + "realId 확인용");
-    if (!data.hasOwnProperty('id')) {
+    if (data.id === null || realId === '') {
     	LR = "middle";
     } else if(data.id == realId) {
         LR = "right";
@@ -501,11 +537,19 @@ function getFullYmdStr() {
     var d = new Date();
     var year = String(d.getFullYear()).slice(-2); // 연도의 마지막 두 자리만 가져옴
 
-    var minute = d.getMinutes();
-    // 만약 분이 한 자리 수이면 앞에 '0'을 붙임
-    minute = minute < 10 ? '0' + minute : minute;
+    var month = d.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+    month = month < 10 ? '0' + month : month; // 월이 한 자리 수이면 앞에 '0'을 붙임
 
-    return year + "년 " + (d.getMonth()+1) + "월 " + d.getDate() + "일 " + d.getHours() + "시 " + minute + "분 ";
+    var date = d.getDate();
+    date = date < 10 ? '0' + date : date; // 일이 한 자리 수이면 앞에 '0'을 붙임
+
+    var hour = d.getHours();
+    hour = hour < 10 ? '0' + hour : hour; // 시간이 한 자리 수이면 앞에 '0'을 붙임
+
+    var minute = d.getMinutes();
+    minute = minute < 10 ? '0' + minute : minute; // 분이 한 자리 수이면 앞에 '0'을 붙임
+
+    return year + "년 " + month + "월 " + date + "일 " + hour + "시 " + minute + "분 ";
 }
 //메세지 보낼 때
 function sendMessage(message) {

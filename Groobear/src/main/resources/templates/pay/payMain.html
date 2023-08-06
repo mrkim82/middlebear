@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  layout:decorate="~{layout/paymentTiles}">
 <head>
+<link rel="stylesheet" href="/DataTables/datatables.css" />
+
+<script src="/DataTables/datatables.js"></script>
 <meta charset="UTF-8">
 <title>결재 메인페이지</title>
 <style>
@@ -29,7 +32,7 @@
 	  <h3>Groobear 전자결재</h3>
 		<h5 style="margin-top: 20px;">결재중 문서 조회</h5>
 		<button style="float:right" type="button" id="payDoc" onclick="location.href='/pay/paymentDoc'">결재문서작성</button>
-		<table id="list" class="table">
+		<table id="dataTable" class="table">
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -42,7 +45,7 @@
 			</thead>
 			<tbody>
 				<tr th:each="pay,stat : ${InProgressList}" th:attr="onclick='window.location.href=\'/payInfoRead?payNo=' + ${pay.payNo} + '+&docType='+${pay.docType}+'\''">
-					<td>[[${paging.totalCount - stat.index}]]</td>
+					<td th:text="${stat.count}"></td>
 					<td th:text="${pay.payNo}"></td>
 					<td>[[${pay.purpose}]]</td>
 					<td>[[${pay.id}]]</td>
@@ -54,34 +57,13 @@
 					</td>
 					<td th:unless="${ (pay.approver2 == session.Id and pay.payStatus2== 'N') or 
 						(pay.approver3 == session.Id and pay.payStatus2== 'Y')}">결재중</td>
-					<td id="docType" style="display:none;">[[${pay.docType}]]</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	<div style="display: flex;justify-content: center;height:30px;">
-		<ul class="paging" th:if="${paging.endPage != 0}">
-			<li>
-				<a th:href="|javascript:goPage(1)|">처음</a>
-			</li>
-	        <li th:if="${paging.prev}">
-	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
-	        </li>
-	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
-            	<a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
-        	</li>
-	        <li th:if="${paging.next and paging.endPage > 0}">
-	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
-	        </li>
-	        <li>
-				<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
-			</li>
-	    </ul>
-	</div>
-	
 	<div>
 		<h5 style="margin-top: 20px;">완료된 문서 조회</h5>
-		<table id="list" class="table">
+		<table id="dataTable2" class="table">
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -106,33 +88,13 @@
 					</td>
 					<td th:unless="${ (pay.payStatus3== 'F') or 
 						(pay.payStatus2== 'F')}">완료</td>
-					<td id="docType" style="display:none;">[[${pay.docType}]]</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	<div style="display: flex;justify-content: center;height:30px;">
-		<ul class="paging" th:if="${paging.endPage != 0}">
-			<li>
-				<a th:href="|javascript:goPage(1)|">처음</a>
-			</li>
-	        <li th:if="${paging.prev}">
-	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
-	        </li>
-	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
-            	<a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
-        	</li>
-	        <li th:if="${paging.next and paging.endPage > 0}">
-	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
-	        </li>
-	        <li>
-				<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
-			</li>
-	    </ul>
-	</div>
 	<div>
 		<h5 style="margin-top: 20px;">참조된 문서 조회</h5>
-		<table id="list" class="table">
+		<table id="dataTable2" class="table">
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -157,33 +119,30 @@
 					</td>
 					<td th:unless="${ (pay.payStatus3== 'F') or 
 						(pay.payStatus2== 'F')}">완료</td>
-					<td id="docType" style="display:none;">[[${pay.docType}]]</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	<div style="display: flex;justify-content: center;height:30px;">
-		<ul class="paging" th:if="${paging.endPage != 0}">
-			<li>
-				<a th:href="|javascript:goPage(1)|">처음</a>
-			</li>
-	        <li th:if="${paging.prev}">
-	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
-	        </li>
-	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
-            	<a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
-        	</li>
-	        <li th:if="${paging.next and paging.endPage > 0}">
-	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
-	        </li>
-	        <li>
-				<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
-			</li>
-	    </ul>
-	</div>
-</div>
 	<script>
-	function goPage(p){
+	$(document).ready( function () {
+		$('#dataTable').DataTable({
+			"dom": '<"top">rt<"bottom"p>',
+			"pageLength":5
+		});
+	} );
+	$(document).ready( function () {
+		$('#dataTable2').DataTable({
+			"dom": '<"top">rt<"bottom"p>',
+			"pageLength":5
+		});
+	} );
+	$(document).ready( function () {
+		$('#dataTable3').DataTable({
+			"dom": '<"top">rt<"bottom"p>',
+			"pageLength":5
+		});
+	} );
+	/* function goPage(p){
 		location.href="payMain?page="+p;
 			
 	}
@@ -192,7 +151,8 @@
 	}
 	function goPageRef(p){
 		location.href="payMain?page="+p;
-	}
+	} */
 	</script>
+</div>
 </body>
 </html>

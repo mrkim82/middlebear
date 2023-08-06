@@ -6,17 +6,24 @@
 <title>지운메일함 페이지</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+	
+	.dohyeon{
+		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		color:black;
+		font-size : 20px;
+	}
+	#ulId li.active a.page-link {
+    	background-color: #35A880;
+    	border: 1px solid #35A880;
+    	color:#fff
+  	}
+  	a {
+  		text-decoration:none !important;
+  		cursor:pointer;
+  	}
 	ul {
 			list-style:none;
-	}
-		
-	li {
-		float: left;
-		padding: 10px;
-	}
-	a { 
-		text-decoration:none ;
-		color: black;
 	}
 	.paging .active a {
 		    background-color: #f00;
@@ -27,42 +34,45 @@
 <body>
 <div layout:fragment="content">
 	<div>
-	  <h3>Groobear 지운메일함</h3>
-		<table class="table">
+	  <h3 class="dohyeon" style="font-size:35px;margin-top:20px;">Groobear 지운메일함</h3>
+		<table class="table table-hover">
 			<thead>
-				<tr>
-					<th><input type="checkbox" class="allCheck"></th>
-					<th style="padding-left:25px"><button type="button" class="del">삭제</button></th>
+				<tr style="border-bottom: 2px solid lightgray;">
+					<th style="width: 100px;"><input type="checkbox" class="allCheck"><button type="button" class="del" style=" position: absolute;left: 60px;border: 0;width: 50px;height: 35px;border-radius: 15px;top: 75px;">삭제</button></th>
+					<th>보낸사람</th>
+					<th style=" width: 600px;">내용</th>
+					<th>날짜</th>
 				</tr>
 			</thead>
 			<tbody id="MailBody">
 				<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
 					<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
 					<td style="display:none">[[${mail.mailNo}]]</td>
-					<td style="padding-left:25px">[[${mail.sender}]]</td>
-					<td style="padding-left:25px">[[${mail.content}]]</td>
-					<td style="padding-left:25px" th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td >[[${mail.sender}]]</td>
+					<td >[[${mail.content}]]</td>
+					<td  th:text="${#dates.format(mail.sendDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
 				</tr>
 			</tbody>
 		</table>
 		<div style="display: flex;justify-content: center;height:30px;">
-			<ul class="paging" th:if="${paging.endPage != 0}">
-				<li>
-					<a th:href="|javascript:goPage(1)|">처음</a>
-				</li>
-		        <li th:if="${paging.prev}">
-		            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
-		        </li>
-		        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
-	            	<a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
-	        	</li>
-		        <li th:if="${paging.next and paging.endPage > 0}">
-		            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
-		        </li>
-		        <li>
-					<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
-				</li>
-		    </ul>
+			<ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
+		<li class="page-item">
+			<a class="page-link" th:href="|javascript:goPage(1)|">&laquo;</a></li>
+		<li class="page-item" th:if="${paging.prev}">
+            <a class="page-link" th:href="|javascript:goPage([[${paging.startPage-1}]])|">&lsaquo;</a>
+        </li>
+		<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
+			th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+			<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+			th:text="${num}"></a>
+		</li>
+		<li class="page-item" th:if="${paging.next and paging.endPage > 0}">
+            <a class="page-link" th:href="|javascript:goPage([[${paging.endPage+1}]])|">&rsaquo;</a>
+        </li>
+		<li class="page-item"><a class="page-link"
+			th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+		</li>
+    </ul>
 		</div>
 	</div>
 	<script>

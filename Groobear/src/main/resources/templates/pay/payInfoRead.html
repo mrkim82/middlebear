@@ -186,7 +186,7 @@
 					</td>
 				</th:block>
 				<tr th:if="${list.docType=='b'} and ${list.id != session.Id}">
-					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com} "></textarea></td>
 				</tr>
 				<th:block th:if="${list.docType=='c'}">
 				<tr>
@@ -370,7 +370,7 @@
 	                  approver3 : approver3,
 	                  payStatus2 : payStatus2,
 	                  payStatus3 : payStatus3,
-	                  com : '[[${session.Name}]] ' + ' : ' +com 
+	                  com : com 
 	                  }),
 	                  async : false,
 	                   success: function(data) {
@@ -403,7 +403,7 @@
 						approver3 : approver3,
 						payStatus2 : payStatus2,
 						payStatus3 : payStatus3,
-						com : '[[${session.Name}]] ' + ' : ' +com 
+						com : com 
 	  			    }),
 	  			    async : false,
 	  			  	success: function(data) {
@@ -491,12 +491,12 @@
 	  			    	console.log(data);
 	  			    	location.href="/pay/InProgressPay";
 	  			    	//알림 결재자2가 반려한 경우 (기안자 : drafter)
-	  			    	 alarmClient.publish({
+	  			    	 /* alarmClient.publish({
 				            destination: "/alarmCondition/payComAlm/"+drafter,
 				            body: JSON.stringify({
 				               'id' : drafter
 			            	})
-	                     });
+	                     }); */
 	  			    },
 	  			    error: function(err) {
 						console.log(err);
