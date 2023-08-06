@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.groo.bear.pro.mapper.ProMapper;
 import com.groo.bear.pro.service.ProService;
+import com.groo.bear.pro.service.provo.ProAuthVO;
 import com.groo.bear.pro.service.provo.ProGroupManageVO;
 import com.groo.bear.pro.service.provo.ProGroupVO;
 import com.groo.bear.pro.service.provo.ProHideVO;
@@ -119,7 +120,7 @@ public class ProServiceImpl implements ProService {
 	}
 
 	@Override
-	public ProVO readProAuth(int proNo) {
+	public ProAuthVO readProAuth(int proNo) {
 		return proMapper.readProAuth(proNo);
 	}
 
