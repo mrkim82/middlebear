@@ -53,14 +53,14 @@
   <div style="padding:10px;">
 	<h2 style="margin-top: 25px;">Groobear 부서권한관리</h2>
 	<div style="text-align:right;">
-		<button class="custom-button button" type="button" id="addBtn" onclick="addPopUp()">부서등록</button>
+		<button class="custom-button button" style=""type="button" id="addBtn" onclick="addPopUp()">부서등록</button>
 	</div>
     <div class="card-container" style="font-size:17px;">
         <div class="card"  th:each="dept, stat : ${deptList}">
-            <div style="border-radius:10px;margin:5px;padding:10px;border:1px solid black;text-align:center;">
+            <div style="border-radius:10px;margin:5px;padding:10px;border: 1px solid #ccc;text-align:center;">
             	<a style="margin:10px auto;">부서명 : [[${dept.deptName}]]</a>
             </div>
-          	<div style="border-radius:10px;margin:5px;border:1px solid black;">
+          	<div style="border-radius:10px;margin:5px;border: 1px solid #ccc;">
           		<table class="list" style="width:100%;margin-top:20px;margin-bottom:20px;">
           			<tr>
 						<td style="text-align:center;" th:if="${dept.deptHead != null}">팀장 : [[${dept.deptHead}]]</td>          			
@@ -107,7 +107,7 @@
 			</li>
 	    </ul>
 	</div>
-	<div style="display: flex;justify-content: center;">
+	<div style="display: flex;justify-content: center;margin-bottom:20px;">
 		<form name="searchForm" action="deptList">
 		<input type="hidden" name="page" value="1"/><br>
 		<select style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;" name="type">

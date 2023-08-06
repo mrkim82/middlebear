@@ -28,7 +28,9 @@
         </tr>
         <tr th:if="${refCheck == 'A'} and ${not #strings.isEmpty(mail.referrer)}">
         	<td>참조자<input type="text" th:value="${mail.referrer}" readonly style="position: absolute;left: 120px;border: 0;"></td>
+
         </tr>
+        
         <th:block th:if="${refCheck == 'B'}">
 	        <tr th:if="${not #strings.isEmpty(mail.referrer)} and ${#strings.isEmpty(mail.referrer2)}">
 	        	<td>참조자<input type="text" th:value="${mail.referrer}" readonly style="position: absolute;left: 120px;border: 0;"></td>
@@ -77,14 +79,14 @@
                 var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
                 str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
                 + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
-                //str += "<img src='/display?fileName=" + fileCallPath + "'>";
+                /str += "<img src='/display?fileName=" + fileCallPath + "'>";
                 str += "</div>";
                 str += "</li>";
             } else {
                 str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
                 + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
                 str += "<span>" + attach.fileName + "</span><br/>";
-                //str += "<img src='img/attach.png/'>";
+                str += "<img src='img/attach.png/'>";
                 str += "</div>";
                 str += "</li>";
             }

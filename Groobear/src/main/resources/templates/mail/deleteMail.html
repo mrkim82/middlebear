@@ -45,7 +45,7 @@
 				</tr>
 			</thead>
 			<tbody id="MailBody">
-				<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+				<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} +'&check=D' + '\''">
 					<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
 					<td style="display:none">[[${mail.mailNo}]]</td>
 					<td >[[${mail.sender}]]</td>
@@ -136,6 +136,7 @@
 			    //Ajax 성공시 호출 
 			    success : function(data){
 			        console.log("컨트롤에서 받은거 : " + data);
+			        location.href="/mail/deleteMail";
 			        alert("삭제"+data+"건 되었습니다.");
 			    },
 			    //Ajax 실패시 호출

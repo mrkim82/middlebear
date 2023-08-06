@@ -176,8 +176,8 @@
 	</insert>
 	
 	<!-- 주민번호 중복체크 -->
-	<select id="checkPno" parameterType="String">
-		select count(*)
+	<select id="checkPno" parameterType="String" resultType="EmpVO">
+		select *
 		from user_info
 		where pno = #{pno}
 	</select>

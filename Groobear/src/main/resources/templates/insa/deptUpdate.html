@@ -5,10 +5,12 @@
 <title>Groobear 부서 수정</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <style>
-	body {
-		font-family: Arial, sans-serif;
-		background-color: #f7f7f7;
-	}
+	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+    body {
+      font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+      font-size : 17px;
+      background-color: #f7f7f7;
+    }
 	
 	form {
 		height: 400px;
@@ -29,6 +31,7 @@
 		padding: 10px;
 		margin-bottom: 10px;
 		width: 400px;
+		border-radius: 10px;
 	}
 	
 	a {
@@ -36,11 +39,14 @@
 	}
 	
 	input[type="text"] {
+		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+      	font-size : 17px;
 		width: 120px;
 		padding: 10px;
 		border: 1px solid #ccc;
 		border-radius: 5px;
 		margin-bottom: 10px;
+		background: #ffffff00;
 	}
 	
 	table {
@@ -59,14 +65,12 @@
 	.blueone th {
 		background-color: #f0f8ff;
 	}
-	
-	button {
-			padding: 10px 20px;
-			background-color: #4CAF50;
-		color: white;
-		border: none;
-		border-radius: 5px;
-		cursor: pointer;
+	.custom-button {
+		color: #fff;
+	}
+	.custom-button:hover {
+		color: black; /* 마우스 오버 시 글자색을 남색으로 변경 */
+	  	cursor: pointer; /* 커서 모양을 손가락 모양으로 변경 */
 	}
 	
 	button:not(:last-child) {
@@ -85,17 +89,17 @@
 </head>
 <body>
 	<form style="height: 400px;" action="/updateDept" method="POST">
-		<h3 style="text-align:center; margin-top:50px;">Groobear 부서정보수정</h3>
+		<h2 style="text-align:center; margin-top:50px;">Groobear 부서정보수정</h2>
 		<fieldset>
-			<a>부서번호 : </a><input name="deptNo" style="width:120px;background-color: #f7f7f7; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo.deptNo}" readonly><br>
-			<a>부서명 : </a><input name="deptName" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo.deptName}"><br>
-			<a>팀장 : </a><select name="deptHead" style="width:120px; padding-bottom:10px; border:0 solid black;">
+			<a style="margin-left: 30px;">부서번호 : </a><input name="deptNo" style="width:120px;background-color: #f7f7f7; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo.deptNo}" readonly><br>
+			<a style="margin-left: 30px;">부서명 : </a><input name="deptName" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo.deptName}"><br>
+			<a style="margin-left: 30px;">팀장 : </a><select name="deptHead" style="border: 1px solid lightgray;border-radius: 5px;margin-bottom:15px;width:120px;height: 25px;font-family: 'Do Hyeon', serif;">
 							<option value="" selected>선택</option>
 							<th:block th:each="mem, stance : ${deptMem}">
 								<option th:value="${mem.name}">[[${mem.name}]]</option>
 							</th:block>
 						 </select><br>
-			<a>부서권한 : </a><select name="deptAuth" style="width:120px; padding-bottom:10px; border:0 solid black;">
+			<a style="margin-left: 30px;">부서권한 : </a><select name="deptAuth" style="border: 1px solid lightgray;border-radius: 5px;margin-bottom:10px;width:120px;height: 25px;font-family: 'Do Hyeon', serif;">
 								<option value="" selected>선택</option>
 								<th:block th:each="auth, stance : ${deptAuth}">
 									<option th:value="${auth.code}">[[${auth.codeName}]]</option>
@@ -104,9 +108,9 @@
 		</fieldset>
 		
 		<fieldset style="display: flex;justify-content: center;border:hidden;">
-			<button type="submit" style="margin-right:10px;">수정</button>
-			<button type="button" style="margin-right:10px;" onclick="goBack()">취소</button>
-			<button type="button" onclick="closeBtn()">닫기</button>
+			<button class="custom-button" type="submit" style="border-radius: 10px;font-family: 'Do Hyeon', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;">수정</button>
+			<button class="custom-button" type="button" style="border-radius: 10px;font-family: 'Do Hyeon', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" onclick="goBack()">취소</button>
+			<button class="custom-button" type="button" style="border-radius: 10px;font-family: 'Do Hyeon', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" onclick="closeBtn()">닫기</button>
 		</fieldset>
 	</form>
 	<script type="text/javascript">

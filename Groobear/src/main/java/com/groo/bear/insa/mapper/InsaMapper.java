@@ -29,7 +29,7 @@ public interface InsaMapper {
 	//UserInfo 등록
 	public int userInfoAdd(EmpVO vo);
 	//주민번호 중복체크
-	public int checkPno(String pno);
+	public EmpVO checkPno(String pno);
 	//인사정보 업데이트
 	public int updateUserInfo(EmpVO vo);
 	//부서권한관리 전체조회
