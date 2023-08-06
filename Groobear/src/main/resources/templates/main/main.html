@@ -93,7 +93,7 @@ html::-webkit-scrollbar {
 				<fieldset style="width: 385px; height: 280px;margin:10px;margin-left:0px;border:1px solid black;">
 					<div class="row">
 						<div class="col-4" style="display:inline-block;margin:5px;">
-							<img id="profImg" style="width:120px;height:150px;margin:15px;margin-bottom:0px;" src="../img/userProf.png">
+							<img id="profImg" style="border-radius: 60px;width:120px;height:150px;margin:15px;margin-bottom:0px;" src="../img/userProf.png">
 						</div>
 						<div class="col-6" style="display: inline-block;margin:10px;margin-left: 30px;">
 							<h4 class="dohyeon" style="font-size:35px;text-align:center;font-weight: bold;">Groobear</h4>
@@ -228,7 +228,7 @@ var openChat  = function() {
 		    success: function(data) {
 		      console.log(data);
 		      if(data.uuid != null){
-		    	  $('#profImg').attr('src', '/display?fileName='+data.uploadPath.replace(/\\/g, '/')+'/s_'+data.uuid+'_'+data.fileName);
+		    	  $('#profImg').attr('src', '/display?fileName='+data.uploadPath.replace(/\\/g, '/')+'/s_'+data.uuid+'_'+data.fileName).css('border-radius', '60px');
 		      }
 		    },
 		    error: function(err) {

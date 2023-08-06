@@ -5,11 +5,12 @@
 <title>Groobear 부서 생성</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <style>
-	body {
-		font-family: Arial, sans-serif;
-		background-color: #f7f7f7;
-	}
-	
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+    body {
+      font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+      font-size : 17px;
+      background-color: #f7f7f7;
+    }
 	form {
 		height: 400px;
 		display: flex;
@@ -19,7 +20,7 @@
 		padding: 20px;
 	}
 	
-	h3 {
+	h2 {
 		text-align: center;
 		margin-bottom: 20px;
 	}
@@ -32,6 +33,7 @@
 	}
 	
 	a {
+		margin-left: 50px;
 		font-weight: bold;
 	}
 	
@@ -59,16 +61,13 @@
 	.blueone th {
 		background-color: #f0f8ff;
 	}
-	
-	button {
-			padding: 10px 20px;
-			background-color: #4CAF50;
-		color: white;
-		border: none;
-		border-radius: 5px;
-		cursor: pointer;
+	.custom-button {
+		color: #fff;
 	}
-	
+	.custom-button:hover {
+		color: black; /* 마우스 오버 시 글자색을 남색으로 변경 */
+	  	cursor: pointer; /* 커서 모양을 손가락 모양으로 변경 */
+	}
 	button:not(:last-child) {
 		margin-right: 10px;
 	}
@@ -85,10 +84,10 @@
 </head>
 <body>
 	<form style="height: 400px;">
-		<h3 style="text-align:center; margin-top:50px;">Groobear 부서생성</h3>
-		<fieldset>
-			<a>부서명 : </a><input id="deptName" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" value=""><br>
-			<a>부서권한 : </a><select id="deptAuth" style="width:120px; padding-bottom:10px; border:0 solid black;">
+		<h2 style="text-align:center; margin-top:50px;">Groobear 부서생성</h2>
+		<fieldset style="border-radius: 10px;">
+			<a>부서명 : </a><input id="deptName" style="background: #ffffff00;width:120px; padding-bottom:10px; border:0 solid black;" type="text" value=""><br>
+			<a>부서권한 : </a><select id="deptAuth" style="width:120px;border: 1px solid lightgray;border-radius: 5px;height: 30px;font-family: 'Do Hyeon', serif;">
 								<option value="" selected>선택</option>
 								<th:block th:each="auth, stance : ${deptAuth}">
 									<option th:value="${auth.code}">[[${auth.codeName}]]</option>
@@ -97,13 +96,12 @@
 		</fieldset>
 		
 		<fieldset style="display: flex;justify-content: center;border:hidden;">
-			<button type="button" style="margin-right:10px;" id="addBtn">생성</button>
-			<button type="button" onclick="closeBtn()">닫기</button>
+			<button type="button" class="custom-button" style="border-radius: 10px;font-family: 'Do Hyeon', serif;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" id="addBtn">생성</button>
+			<button type="button" class="custom-button" style="border-radius: 10px;font-family: 'Do Hyeon', serif;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" onclick="closeBtn()">닫기</button>
 		</fieldset>
 	</form>
 	<!-- The Modal -->
-    <div id="errorModal" class="modal">
-      <!-- Modal content -->
+   <div id="errorModal" class="modal" style="display:none;">
       <div class="modal-content">
                 <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
                 <p><br /></p>
@@ -114,6 +112,12 @@
             </div>
       </div>
     </div>
+    
+    
+    
+    
+    
+    
 	<script type="text/javascript">
 	$(document).ready(function() {
 		$('#addBtn').on('click', function(){
@@ -121,7 +125,7 @@
 			let deptAuth = $('#deptAuth').val();
 			if(deptName == ''){
 				$('#spantext').text('부서명을 입력하세요.');
-	            $('#errorModal').show();
+				$('#errorModal').show();
 	            $('#closeModal').on('click', function() {
 	            	$('#errorModal').hide();
 	            })
@@ -141,7 +145,7 @@
 	      					window.close();
 	      				}else{
 	      					$('#spantext').text('부서 생성 과정에서 오류 발생');
-				            $('#errorModal').show();
+	      					$('#errorModal').show();
 				            $('#closeModal').on('click', function() {
 				            	$('#errorModal').hide();
 				            })
