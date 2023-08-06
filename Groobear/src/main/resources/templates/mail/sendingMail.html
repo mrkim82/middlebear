@@ -36,7 +36,7 @@
 				</tr>
 			</thead>
 			<tbody id="MailBody">
-				<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} + '\''">
+				<tr th:each="mail, stat : ${mailList}" th:attr="onclick='window.location.href=\'/mailInfo?mailNo=' + ${mail.mailNo} +'&check=S' + '\''">
 					<td onclick="event.stopPropagation();"><input type="checkbox" class="check" onclick="checkBoxClick();"></td>
 					<td style="display:none">[[${mail.mailNo}]]</td>
 					<td style="padding-left:25px">[[${mail.receiver}]]</td>
@@ -123,13 +123,15 @@
 			}
 			console.log(delList);
 			$.ajax({
-				url : "delete",  // 전송 URL
+				url : "sendDelete",  // 전송 URL
 			    type : 'POST',
 			    contentType : 'application/json',
 			    data :JSON.stringify( delList ),
 			    //Ajax 성공시 호출 
+			    async : false,
 			    success : function(data){
 			        console.log("컨트롤에서 받은거 : " + data);
+			        location.href="/mail/sendingMail";
 			        alert("삭제"+data+"건 되었습니다.");
 			    },
 			    //Ajax 실패시 호출

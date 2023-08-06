@@ -59,5 +59,5 @@ public interface MailMapper {
 	public int getMailType4Del(MailVO mailVO);
 	public int getMailType5Del(MailVO mailVO);
 	//보낸메일함
-	public List<MailVO> sendMailSearch(Criteria cri,String id);
+	public List<MailVO> sendMailSearch(Criteria cri,MailVO mailVO);
 }

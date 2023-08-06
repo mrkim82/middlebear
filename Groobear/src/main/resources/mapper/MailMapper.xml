@@ -104,16 +104,20 @@
 	</select>
 	<!-- 보낸메일 갯수 출력 -->
 	<select id="countSendMail" resultType="int">
-		select COUNT(*) FROM mail
-			where id = #{id}
+		SELECT COUNT(*) FROM mail m, mail_personnel p
+            WHERE m.mail_no = p.mail_no
+            AND p.sender = #{sender}
+            AND p.mail_type = #{mailType}
 	</select>
 	<!-- 받은메일 갯수 출력 -->
 	<select id="countReceiveMail" resultType="int">
 		SELECT COUNT(*) FROM getmail
-			WHERE (receiver = #{receiver} OR
-			referrer = #{receiver} OR
-			referrer2 = #{receiver} OR
-			referrer3 = #{receiver})
+			WHERE (
+			(receiver = #{receiver} AND mail_type2=#{mailType2}) OR
+			(referrer = #{referrer} AND mail_type3=#{mailType3}) OR
+			(referrer2 = #{referrer2} AND mail_type4=#{mailType4}) OR
+			(referrer3 = #{referrer3} AND mail_type5=#{mailType5})
+			)
 	</select>
 	
 	<!-- 메일삭제(지운메일함으로) -->
@@ -323,8 +327,8 @@
 		 a.read_check, a.mail_type, a.id,a.mail_set,b.title,b.content 
 		 FROM mail a JOIN mail_details b ON a.mail_no = b.mail_no) c
 			ON c.mail_no = d.mail_no
-            where d.mail_type = 'S'
-            and sender=#{id}
+            where d.mail_type = #{mailVO.mailType}
+            and sender=#{mailVO.sender}
              ORDER BY c.send_date desc)g
           )
           <![CDATA[
