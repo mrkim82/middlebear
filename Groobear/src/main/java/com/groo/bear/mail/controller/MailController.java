@@ -53,8 +53,8 @@ public class MailController {
 		if(list!=null && list.size() > 0) {
 			for(int i=0; i < list.size();i++) {
 				System.out.println("list.get(i)첵 = "+list.get(i));
-				int result = mailService.serverGetInsertMail(list.get(i));
-		        System.out.println("몇건 처리됨? "+result);
+				//int result = mailService.serverGetInsertMail(list.get(i));
+		        //System.out.println("몇건 처리됨? "+result);
 			}
 		}
 		
@@ -114,6 +114,7 @@ public class MailController {
 	@GetMapping("mail/deleteMail")
 	public String deleteMailForm(Criteria cri, Model model, MailVO mailVO, HttpSession session) {
 		String id = (String) session.getAttribute("Id");
+		id = id.substring(0,id.indexOf("@"));
 		mailVO.setSender(id);
 		mailVO.setReceiver(id);
 		mailVO.setReferrer(id);

@@ -15,33 +15,65 @@ textarea:focus {
 	outline:none;
 	border-radius:3px !important;
 }
+.input-file-button{
+  padding: 6px 25px;
+  background-color:#90ddb091;
+  border-radius: 4px;
+  color: black;
+  cursor: pointer;
+  position:absolute;
+  left: 120px;
+  top: 263px;
+}
+.uploadResult1 ul{
+	display:flex;
+	justify-content:left;
+	margin-left:45px;
+}
+li {
+ list-style:none;
+ margin-right:10px;
+}
+
+.uploadResult1 .btn-warning{
+	color:gray;
+	background-color:#90ddb091;
+	border-radius:7px;
+	padding:1px 8px;
+	margin-left:5px;
+	border:0;
+} 
 </style>
 </head>
 <body>
 <div layout:fragment="content">
+<h3 class="dohyeon" style="font-size:35px;margin-top:20px;">Groobear 메일 쓰기</h3>
 	<form method="post">
 		
 		<table class="table">
 		<tbody>
-			<tr><td><input type="text" id="mailNo" th:value="${mailNo}" style="display:none"></td></tr>
+			<tr><td style="padding:0;"><input type="text" id="mailNo" th:value="${mailNo}" style="display:none"></td></tr>
 			<tr>
-				<td style="border:0 !important;">보내는사람 <input id="sender" type="text" name="sender" th:value="${id}" readonly style="width: 900px;border-radius:3px;border:0;border-bottom:1px solid gray;position: absolute;top: 32px;left: 120px;"></td>
+				<td style="border:0 !important;">보내는사람 <input id="sender" type="text" name="sender" th:value="${id}" readonly style="width: 900px;border-radius:3px;border:0;border-bottom:1px solid gray;position: absolute;top: 80px;left: 120px;"></td>
 			</tr>
 			<tr>
-				<td style="border:0 !important;">받는사람 <input id="receiver" type="text" name="receiver" style="width: 900px;border-radius:3px;border: 0;border-bottom:1px solid gray;position: absolute;top:83px;left: 120px;"></td>
+				<td style="border:0 !important;">받는사람 <input id="receiver" type="text" name="receiver" style="width: 900px;border-radius:3px;border: 0;border-bottom:1px solid gray;position: absolute;top:123px;left: 120px;"></td>
 			</tr>
 			<tr>
-				<td style="border:0 !important;">참조자 <input id="referrer" type="text" name="referrer" style="width: 900px;border-radius:3px;border: 0;border-bottom:1px solid gray;position: absolute;top: 131px;left: 120px;"></td>
+				<td style="border:0 !important;">참조자 <input id="referrer" type="text" name="referrer" style="width: 900px;border-radius:3px;border: 0;border-bottom:1px solid gray;position: absolute;top: 171px;left: 120px;"></td>
 			</tr>
 			<tr>
-				<td style="border:0 !important;">제목 <input id="title" type="text" name="title" style="width: 900px;border-radius:3spx;border: 0;border-bottom:1px solid gray;position: absolute;top: 180px;left: 120px;"></td>
+				<td style="border:0 !important;">제목 <input id="title" type="text" name="title" style="width: 900px;border-radius:3px;border: 0;border-bottom:1px solid gray;position: absolute;top: 220px;left: 120px;"></td>
 			</tr>
 			<tr>
 				<td style="border:0 !important;"><div class="panel-body1">
                      <div class="form-group uploadDiv1">
                      첨부파일
-                         <input name="uploadFile1" type="file" multiple style=" position: absolute;left: 120px;">
-                         <button id="send" type="button" onclick="sendMail()" style="position: absolute;right: 30px;border: 0; width: 100px; height: 40px;background: #90ddb091;border-radius: 20px;top: 220px;">메일보내기</button>
+                     <label class="input-file-button" for="input-file">
+						  파일 선택
+					</label>
+                         <input name="uploadFile1" id="input-file" type="file" multiple style="display:none;">
+                         <button id="send" type="button" onclick="sendMail()" style="position: absolute;right: 30px;border: 0; width: 100px; height: 40px;background: #90ddb091;border-radius: 20px;top: 260px;">메일보내기</button>
                      </div>
                       <!-- foreach써서 조회하는걸로 변경 -->
 				<div class="uploadResult1">
@@ -171,7 +203,7 @@ textarea:focus {
 	              str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
 	              str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
-		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'>X<i class='fa fa-times'></i></button><br>";
 		          str += "<img src='/display?fileName="+fileCallPath+"'>";
 		          str += "</div>";
 		          str +"</li>";
@@ -183,7 +215,7 @@ textarea:focus {
 	              str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
 	              str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
-		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'>X</i></button><br>";
 		          str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
 		          str += "</div>";
 		          str +"</li>";
