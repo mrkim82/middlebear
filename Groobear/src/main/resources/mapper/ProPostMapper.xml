@@ -126,13 +126,18 @@
 	<!-- 글 댓글 조회(임시) -->
 	<select id="readPostWritingComment" resultType="ProPostCommentVO">
 		SELECT a.com_no, a.com_content, a.com_date,
-			   c.name, b.profile_img, a.id, p.pro_post_no
+			   c.name, a.id, p.pro_post_no,
+			   e.uuid, e.upload_path, e.file_name
+			   
 		FROM com a JOIN users b
 		ON(a.id=b.id)
 		JOIN user_info c
 		ON(b.emp_no = c.emp_no)
 		JOIN pro_post p
 		ON(a.pro_post_no = p.pro_post_no)
+		JOIN files e
+		ON (e.id = a.id)
+		
 		WHERE a.com_no IN (SELECT com_no
 		                  FROM com
 		                  WHERE pro_post_no IN (SELECT pro_post_no

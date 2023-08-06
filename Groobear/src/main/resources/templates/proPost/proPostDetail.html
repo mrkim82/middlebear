@@ -387,7 +387,7 @@ function drawChart() {
 										
 										<!-- 내용입력 -->
 										<div>
-											<textarea placeholder="내용을 입력하세요." id="workWritingContent"></textarea>
+											<textarea placeholder="내용을 입력하세요." id="workWritingContent" maxlength="999"></textarea>
 										</div>
 										<!-- 첨부파일 -->
 										<div>
@@ -493,11 +493,11 @@ function drawChart() {
 										<!-- 장소 -->
 										<div style="margin-bottom: 7px;">
 											<p style="margin-bottom: 2px;">장소</p>
-											<input type="text" class="schPlace" placeholder="장소를 입력하세요." style="width: 300px;">
+											<input type="text" class="schPlace" placeholder="장소를 입력하세요." style="width: 300px;" maxlength="30">
 										</div>
 										<!-- 내용 -->
 										<div>
-											<textarea placeholder="내용을 입력하세요." class="schText"></textarea>
+											<textarea placeholder="내용을 입력하세요." class="schText" maxlength="999"></textarea>
 										</div>
 									</div>
 										<button type="button" class="btn btn-groob" onclick="createSchButton()">등록</button>
@@ -719,14 +719,14 @@ function drawChart() {
 								    </div>
 							        <div th:if="${allPost.id == session.Id}" style="display:inline; margin-left: auto;">
 								        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
-								        <span onclick="deletePost()" style="cursor: pointer;">X</span>
+								        <span onclick="deletePost()" style="cursor: pointer;">삭제</span>
 							        </div>
 							    </div>
 							    
 								<!-- 업무 제목 -->
 								<div class="card-header" style="display: flex;">
 								    <span th:text="${allPost.postTitle}" style="margin-right: auto;"></span>
-								    <span th:text="업무번호 + ${allPost.workNo}"></span>
+								    <span th:text="'업무번호 ' + ${allPost.workNo}"></span>
 								</div>
 								
 								<!-- 검색 이동 포인터 -->
@@ -758,13 +758,14 @@ function drawChart() {
 								</div>
 								<div class="card-body">
 									<!-- 업무 담당자 -->
-									<div th:each="wPerson : ${readTaskWorkPerson}"
-										 th:if="${allPost.workNo == wPerson.workNo}"
-										 th:text="'담당자 : ' + ${wPerson.name}">
+									<div>담당자 : 
+										<span th:each="wPerson : ${readTaskWorkPerson}"
+											 th:if="${allPost.workNo == wPerson.workNo}"
+											 th:text="${wPerson.name} + ' '">
+										</span>
 									</div>
-									
 									<!-- 게시글 내용 -->
-									<p th:text="'내용 : ' + ${allPost.workContent}"></p>
+									<p th:text="${allPost.workContent}"></p>
 									
 									<!-- 첨부파일 영역 -->
 									<div class = 'uploadResult'>
@@ -876,7 +877,15 @@ function drawChart() {
 												<ul class="list-unstyled">
 													<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
 														th:if="${allPost.proPostNo == com.proPostNo}">
-														<span th:utext="${com.profileImg}"></span>
+														<th:block th:if="${allPost.uploadPath != null}">
+															<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+											  		 			 class="card-img-top"
+											  		 			 style="width:50px; height:50px; margin:0px;">
+											  		 	</th:block>
+											  		 	<th:block th:if="${allPost.uploadPath == null}">
+															<img style="width:50px; height:50px; margin:0px;"
+														 		 src="../img/userProf.png">
+														</th:block>
 														<span th:text="${com.name}"></span>
 														<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 														<span th:text="${com.comContent}"></span>
@@ -903,29 +912,36 @@ function drawChart() {
 						
 						<!-- 2.글 -->
 						<th:block th:if="${allPost.postType == '2'}">
-							<div class="card" style="margin-bottom: 15px; background-color: #fff;"
+							<div class="card" style="margin-bottom: 20px; background-color: #fff; font-size:15px; border-radius: 10px;"
 									 th:attr="data-feed-post-no=${allPost.proPostNo}, data-feed-writing-no=${allPost.writingNo}, data-post-type=${allPost.postType}">
 								<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
-								<div>
+								<div class="postHeader" style="display: flex;">
 							        <th:block th:if="${allPost.uploadPath != null}">
 										<img th:src="@{|/display?fileName=${#strings.replace(allPost.uploadPath,'\','/')}/s_${allPost.uuid}_${allPost.fileName}|}"
 						  		 			 class="card-img-top"
-						  		 			 style="width:40px; height:40px; margin:0px;"
-						  		 			 alt="프로필 이미지">
+						  		 			 style="width:50px; height:50px; margin:0px;">
 						  		 	</th:block>
 						  		 	<th:block th:if="${allPost.uploadPath == null}">
-										<img style="width:40px; height:40px; margin:0px;"
+										<img style="width:50px; height:50px; margin:0px;"
 									 		 src="../img/userProf.png">
 									 </th:block>
-							        <span th:text="${allPost.name}"></span>
-							        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
-							        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
-							        <span onclick="deletePost()" style="cursor: pointer;">X</span>
+									 <div style="display: flex; flex-direction: column; margin-left:12px;">
+								        <span th:text="${allPost.name}" style="font-size:17px;"></span>
+								        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"
+								              style="color: #AAAAAA; font-size:14px;"></span>
+								    </div>
+								    <div th:if="${allPost.id == session.Id}" style="display:inline; margin-left: auto;">
+								        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
+								        <span onclick="deletePost()" style="cursor: pointer;">삭제</span>
+							        </div>
 							    </div>
-								<div class="card-header" th:text="'글 : ' + ${allPost.postTitle}">
-									<!-- 글 제목 -->
+							    <!-- 글 제목 -->
+							    <div class="card-header" style="display: flex;">
+								    <span th:text="${allPost.postTitle}" style="margin-right: auto;"></span>
 								</div>
+								<!-- 검색 이동 포인터 -->
 								<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
+								
 								<div class="card-body">
 									<p th:text="${allPost.writingContent}">
 										<!-- 게시글 내용이 여기에 들어갑니다. -->
@@ -937,20 +953,29 @@ function drawChart() {
 										<a class="btn btn-link" data-toggle="collapse" href="#moreContent" role="button"
 											aria-expanded="false" aria-controls="moreContent">더보기</a>
 									</div>
-									<div class="card-footer">
+								</div>
+									<div class="card-footer"
+										 style="margin-top:10px; border-top-right-radius: 5px; border-top-left-radius: 5px;">
 										<!-- 북마크, 댓글수 -->
 										<div>
 										
 										</div>
 										<div class="row">
 											<div class="col-md-8">
-												<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
 												<h6 th:text="댓글"></h6>
 												<ul class="list-unstyled">
 													<li th:each="com : ${projectWritingDetaisComment}"
 														th:data-post-code="${com.comNo}"
 														th:if="${allPost.proPostNo == com.proPostNo}">
-														<span th:utext="${com.profileImg}"></span>
+														<th:block th:if="${allPost.uploadPath != null}">
+															<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+											  		 			 class="card-img-top"
+											  		 			 style="width:50px; height:50px; margin:0px;">
+											  		 	</th:block>
+											  		 	<th:block th:if="${allPost.uploadPath == null}">
+															<img style="width:50px; height:50px; margin:0px;"
+														 		 src="../img/userProf.png">
+														</th:block>
 														<span th:text="${com.name}"></span>
 														<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 														<span th:text="${com.comContent}"></span>
@@ -967,43 +992,46 @@ function drawChart() {
 												<div class="form-group">
 													<input type="text" class="form-control" placeholder="댓글 작성">
 												</div>
-												<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+												<button type="button" class="btn btn-groob" onclick="createCommentButton()"
 														th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
 											</div>
 										</div>
 									</div>
-								</div>
 							</div>
 							<!-- 2종료 -->
 						</th:block>
 			
 				<!-- 3.일정 -->
 				<th:block th:if="${allPost.postType == '3'}">
-					<div class="card" style="margin-bottom: 15px; background-color: #fff;"
+					<div class="card" style="margin-bottom: 20px; background-color: #fff; font-size:15px; border-radius: 10px;"
 						 th:data-feed-post-no="${allPost.proPostNo}"
 						 th:data-feed-sch-no="${allPost.schNo}"
 						 th:data-post-type="${allPost.postType}">
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
-						<div>
-								<th:block th:if="${allPost.uploadPath != null}">
+						<div class="postHeader" style="display: flex;">
+								<!-- 프사 -->
+									<th:block th:if="${allPost.uploadPath != null}">
 										<img th:src="@{|/display?fileName=${#strings.replace(allPost.uploadPath,'\','/')}/s_${allPost.uuid}_${allPost.fileName}|}"
 						  		 			 class="card-img-top"
-						  		 			 style="width:40px; height:40px; margin:0px;"
-						  		 			 alt="프로필 이미지">
+						  		 			 style="width:50px; height:50px; margin:0px;">
 						  		 	</th:block>
 						  		 	<th:block th:if="${allPost.uploadPath == null}">
-										<img style="width:40px; height:40px; margin:0px;"
+										<img style="width:50px; height:50px; margin:0px;"
 									 		 src="../img/userProf.png">
-									 </th:block>
-								<span th:text="${allPost.name}"></span>
-								<span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
-								<span onclick="updatePost()"
-									  style="cursor: pointer;">수정</span>
-						        <span onclick="deletePost()"
-						        	  style="cursor: pointer;">X</span>
+									</th:block>
+									
+							        <div style="display: flex; flex-direction: column; margin-left:12px;">
+								        <span th:text="${allPost.name}" style="font-size:17px;"></span>
+								        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"
+								              style="color: #AAAAAA; font-size:14px;"></span>
+								    </div>
+							        <div th:if="${allPost.id == session.Id}" style="display:inline; margin-left: auto;">
+								        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
+								        <span onclick="deletePost()" style="cursor: pointer;">삭제</span>
+							        </div>
 							</div>
-						<div class="card-header"
-							 th:text="'일정 : ' + ${allPost.postTitle}">
+						<div class="card-header" style="display: flex;"
+							 th:text="${allPost.postTitle}">
 							<!-- 글 제목 -->
 						</div>
 						 <a th:name="'moveMove' + ${allPost.proPostNo}"></a>
@@ -1024,18 +1052,16 @@ function drawChart() {
 										 th:data-sch-user-id="${rpl.id == session.Id ? rpl.id : ''}"
 									 	 th:data-sch-list-id="${rpl.id}"></div>
 									<th:block th:switch="${rpl.partiCheck}">
-										<nav class="nav">
-											<span th:case="Y" style="color: green;">참석</span>
-											<span th:case="N" style="color: red;">불참</span>
-											<span th:case="A" style="color: gray;">미정</span>
-										</nav>
+										<span th:case="Y" style="color: green; display: inline;">참석</span>
+										<span th:case="N" style="color: red;">불참</span>
+										<span th:case="A" style="color: gray;">미정</span>
 									</th:block>
 								</th:block>
 							</div>
 							
 								<!-- 참석자 리스트 버튼 -->
 								<div>
-									<button type="button" class="btn btn-light" data-toggle="modal"
+									<button type="button" class="btn btn-groob" data-toggle="modal" style="margin-top: 10px;"
 											th:data-target="'#schPartiListModal' + ${allPost.proPostNo}"
 											th:if="${#dates.format(allPost.schEndTime) >= #dates.format(cTime)}">
 													참석자 변경
@@ -1045,7 +1071,7 @@ function drawChart() {
 										<div class="modal fade" th:id="'schPartiListModal' + ${allPost.proPostNo}" tabindex="-1"
 												aria-labelledby="exampleModalLabel" aria-hidden="true">
 											<div class="modal-dialog modal-dialog-centered">
-												<div class="modal-content">
+												<div class="modal-content dohyeonModalContent" style="height: 500px;">
 													<div class="modal-header">
 														<h1 class="modal-title fs-5" id="exampleModalLabel">참석자 변경</h1>
 														<button type="button" class="btn-close" data-dismiss="modal"
@@ -1094,8 +1120,8 @@ function drawChart() {
 													
 													</div>
 													<div class="modal-footer">
-														<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-														<button type="button" class="btn btn-primary" onclick="changeSchParti()">확인</button>
+														<button type="button" class="btn btn-groob" onclick="changeSchParti()">확인</button>
+														<button type="button" class="btn btn-groob" data-dismiss="modal">닫기</button>
 													</div>
 												</div>
 											</div>
@@ -1140,7 +1166,15 @@ function drawChart() {
 										<ul class="list-unstyled">
 											<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
 												th:if="${allPost.proPostNo == com.proPostNo}">
-												<span th:utext="${com.profileImg}"></span>
+												<th:block th:if="${allPost.uploadPath != null}">
+													<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+									  		 			 class="card-img-top"
+									  		 			 style="width:50px; height:50px; margin:0px;">
+									  		 	</th:block>
+									  		 	<th:block th:if="${allPost.uploadPath == null}">
+													<img style="width:50px; height:50px; margin:0px;"
+												 		 src="../img/userProf.png">
+												</th:block>
 												<span th:text="${com.name}"></span>
 												<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 												<span th:text="${com.comContent}"></span>
@@ -1169,35 +1203,41 @@ function drawChart() {
 
 				<!-- 4.할 일 -->
 				<th:block th:if="${allPost.postType == '4'}">
-					<div class="card" style="margin-bottom: 15px;
-						 background-color: #fff;"
+					<div class="card" style="margin-bottom: 20px;
+						 background-color: #fff; font-size:15px; border-radius: 10px;"
 						 th:data-feed-post-no="${allPost.proPostNo}"
 						 th:data-post-type="${allPost.postType}">
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
-						<div>
-					        <th:block th:if="${allPost.uploadPath != null}">
-								<img th:src="@{|/display?fileName=${#strings.replace(allPost.uploadPath,'\','/')}/s_${allPost.uuid}_${allPost.fileName}|}"
-				  		 			 class="card-img-top"
-				  		 			 style="width:40px; height:40px; margin:0px;"
-				  		 			 alt="프로필 이미지">
-				  		 	</th:block>
-				  		 	<th:block th:if="${allPost.uploadPath == null}">
-								<img style="width:40px; height:40px; margin:0px;"
-							 		 src="../img/userProf.png">
-							 </th:block>
-					        <span th:text="${allPost.name}"></span>
-					        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
-					        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
-					        <span onclick="deletePost()" style="cursor: pointer;">X</span>
+						<div class="postHeader" style="display: flex;">
+					        <!-- 프사 -->
+									<th:block th:if="${allPost.uploadPath != null}">
+										<img th:src="@{|/display?fileName=${#strings.replace(allPost.uploadPath,'\','/')}/s_${allPost.uuid}_${allPost.fileName}|}"
+						  		 			 class="card-img-top"
+						  		 			 style="width:50px; height:50px; margin:0px;">
+						  		 	</th:block>
+						  		 	<th:block th:if="${allPost.uploadPath == null}">
+										<img style="width:50px; height:50px; margin:0px;"
+									 		 src="../img/userProf.png">
+									</th:block>
+									
+							        <div style="display: flex; flex-direction: column; margin-left:12px;">
+								        <span th:text="${allPost.name}" style="font-size:17px;"></span>
+								        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"
+								              style="color: #AAAAAA; font-size:14px;"></span>
+								    </div>
+							        <div th:if="${allPost.id == session.Id}" style="display:inline; margin-left: auto;">
+								        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
+								        <span onclick="deletePost()" style="cursor: pointer;">삭제</span>
+							        </div>
 					    </div>
-						<div class="card-header" th:text="'할 일 : ' + ${allPost.postTitle}">
+						<div class="card-header" th:text="${allPost.postTitle}" style="display: flex;">
 							<!-- 글 제목 -->
 						</div>
 						<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 						<div class="card-body">
 							<!-- 진척도 바 -->
 							<div>
-								<div class="progress">
+								<div class="progress" style="height:20px; border-radius:20px; margin-bottom:15px;">
 									<th:block th:each="prog : ${readAllTodoListPer}"
 											  th:if="${prog.proPostNo == allPost.proPostNo}">
 										<div class="progress-bar bg-info" role="progressbar"
@@ -1206,7 +1246,7 @@ function drawChart() {
 								</div>
 							</div>
 							<!-- 할 일 체크 공간 -->
-							<div>
+							<div style="margin-bottom:10px;">
 								<ul class="list-group">
 								  <li th:class="${rt.todoCheck == 'Y'} ? 'list-group-item grayC' : 'list-group-item'"
 								  	  th:each="rt : ${readTodoList}"
@@ -1226,6 +1266,7 @@ function drawChart() {
 								  </li>
 								</ul>
 							</div>
+						</div>
 							<div class="card-footer">
 								
 								<!-- 북마크, 댓글수 -->
@@ -1236,7 +1277,15 @@ function drawChart() {
 										<ul class="list-unstyled">
 											<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
 												th:if="${allPost.proPostNo == com.proPostNo}">
-												<span th:utext="${com.profileImg}"></span>
+												<th:block th:if="${allPost.uploadPath != null}">
+													<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+									  		 			 class="card-img-top"
+									  		 			 style="width:50px; height:50px; margin:0px;">
+									  		 	</th:block>
+									  		 	<th:block th:if="${allPost.uploadPath == null}">
+													<img style="width:50px; height:50px; margin:0px;"
+												 		 src="../img/userProf.png">
+												</th:block>
 												<span th:text="${com.name}"></span>
 												<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 												<span th:text="${com.comContent}"></span>
@@ -1253,12 +1302,11 @@ function drawChart() {
 										<div class="form-group">
 											<input type="text" class="form-control" placeholder="댓글 작성">
 										</div>
-										<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+										<button type="button" class="btn btn-groob" onclick="createCommentButton()"
 												th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
 									</div>
 								</div>
 							</div>
-						</div>
 					</div>
 					<!-- 4종료 -->
 				</th:block>
@@ -1266,38 +1314,44 @@ function drawChart() {
 				<!-- 5.투표 -->
 				<th:block th:if="${allPost.postType == '5'}">
 					<div class="card"
-						 style="margin-bottom: 15px; background-color: #fff;"
+						 style="margin-bottom: 20px; background-color: #fff; font-size:15px; border-radius: 10px;"
 						 th:data-feed-post-no="${allPost.proPostNo}"
 						 th:data-feed-vote-no="${allPost.voteNo}"
 						 th:data-post-type="${allPost.postType}">
 						<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
-						<div>
-					        <th:block th:if="${allPost.uploadPath != null}">
-								<img th:src="@{|/display?fileName=${#strings.replace(allPost.uploadPath,'\','/')}/s_${allPost.uuid}_${allPost.fileName}|}"
-				  		 			 class="card-img-top"
-				  		 			 style="width:40px; height:40px; margin:0px;"
-				  		 			 alt="프로필 이미지">
-				  		 	</th:block>
-				  		 	<th:block th:if="${allPost.uploadPath == null}">
-								<img style="width:40px; height:40px; margin:0px;"
-							 		 src="../img/userProf.png">
-							 </th:block>
-					        <span th:text="${allPost.name}"></span>
-					        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"></span>
-					        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
-					        <span onclick="deletePost()" style="cursor: pointer;">X</span>
+						<div class="postHeader" style="display: flex;">
+					        <!-- 프사 -->
+									<th:block th:if="${allPost.uploadPath != null}">
+										<img th:src="@{|/display?fileName=${#strings.replace(allPost.uploadPath,'\','/')}/s_${allPost.uuid}_${allPost.fileName}|}"
+						  		 			 class="card-img-top"
+						  		 			 style="width:50px; height:50px; margin:0px;">
+						  		 	</th:block>
+						  		 	<th:block th:if="${allPost.uploadPath == null}">
+										<img style="width:50px; height:50px; margin:0px;"
+									 		 src="../img/userProf.png">
+									</th:block>
+									
+							        <div style="display: flex; flex-direction: column; margin-left:12px;">
+								        <span th:text="${allPost.name}" style="font-size:17px;"></span>
+								        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"
+								              style="color: #AAAAAA; font-size:14px;"></span>
+								    </div>
+							        <div th:if="${allPost.id == session.Id}" style="display:inline; margin-left: auto;">
+								        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
+								        <span onclick="deletePost()" style="cursor: pointer;">삭제</span>
+							        </div>
 					    </div>
-					    <div>
-						    <th:block th:if="${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')} and ${allPost.voteEndCheck == 'N'}">
-						        <button type="button" class="btn btn-outline-danger">진행중</button>
-						    </th:block>
-						    <th:block th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') < #dates.format(cTime, 'yyyy-MM-dd')}) or ${allPost.voteEndCheck == 'Y'}">
-						        <button type="button" class="btn btn-outline-secondary">투표 종료</button>
-						    </th:block>
-					    </div>
-					    	<div class="card-header"
-					    		 th:text="'투표 : ' + ${allPost.postTitle}">
+					    	<div class="card-header">
+							    <div style="margin-left:10px; margin-bottom:10px;">
+								    <th:block th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')} or ${allPost.voteEndDay == null}) and ${allPost.voteEndCheck == 'N'}">
+								        <button type="button" class="btn btn-outline-danger">진행중</button>
+								    </th:block>
+								    <th:block th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') < #dates.format(cTime, 'yyyy-MM-dd')}) or ${allPost.voteEndCheck == 'Y'}">
+								        <button type="button" class="btn btn-outline-secondary">투표 종료</button>
+								    </th:block>
+							    </div>
 								<!-- 글 제목 -->
+					    		<span th:text="${allPost.postTitle}"></span>
 							</div>
 						<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 						<div class="card-body">
@@ -1349,7 +1403,15 @@ function drawChart() {
 										<ul class="list-unstyled">
 											<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
 												th:if="${allPost.proPostNo == com.proPostNo}">
-												<span th:utext="${com.profileImg}"></span>
+												<th:block th:if="${allPost.uploadPath != null}">
+													<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+									  		 			 class="card-img-top"
+									  		 			 style="width:50px; height:50px; margin:0px;">
+									  		 	</th:block>
+									  		 	<th:block th:if="${allPost.uploadPath == null}">
+													<img style="width:50px; height:50px; margin:0px;"
+												 		 src="../img/userProf.png">
+												</th:block>
 												<span th:text="${com.name}"></span>
 												<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 												<span th:text="${com.comContent}"></span>
@@ -2575,7 +2637,7 @@ function changeProfileNote() {
 	}
 </script>
 
-<!-- 글 수정-->
+<!-- 글 수정 uuu-->
 <script type="text/javascript">
 	function updatePost() {
 		let postTarget = event.target;
@@ -2599,9 +2661,9 @@ function changeProfileNote() {
 	// 일반 글 수정
 	function changeNormalBoardPost(topTag, updateFeedPostNo){
 		modal11.setAttribute("data-update-post-no", updateFeedPostNo);
-		let updateTitle = topTag.querySelector('.card-header').textContent;
+		let updateTitle = topTag.querySelector('.card-header').children[0].textContent;
 		let updateContent = topTag.querySelector('.card-body p').textContent;
-		updateNormalPostTitle.value = updateTitle.substr(4);
+		updateNormalPostTitle.value = updateTitle;
 		updateNormalPostContent.value = updateContent;
 		$('#modal11').modal('toggle');
 	};
@@ -2612,7 +2674,7 @@ function changeProfileNote() {
 		let updateTitle = topTag.querySelector('.card-header').children[0].textContent;
 		let updateContent = topTag.querySelector('.card-body p').textContent;
 		updateWorkTitle.value = updateTitle;
-		updateWorkContent.value = updateContent.substr(5);
+		updateWorkContent.value = updateContent;
 	
 		//셀렉트 박스 선택
 		fetch("/readDetailWorkMem", {
@@ -2670,7 +2732,7 @@ function changeProfileNote() {
 	function changeTodoPost(topTag, updateFeedPostNo) {
 		modal14.setAttribute("data-update-post-no", updateFeedPostNo);
 		let updateTitle = topTag.querySelector('.card-header').textContent;
-		updateTodoTitle.value = updateTitle.substr(6);
+		updateTodoTitle.value = updateTitle;
 		let ulTag = modal14.querySelector('.list-group');
 	
 		fetch("/deVote", {
