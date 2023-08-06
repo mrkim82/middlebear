@@ -5,43 +5,92 @@
 <meta charset="UTF-8">
 <title>메일 발송 페이지</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<style>
+input:focus {
+	outline:none;
+	border-bottom:3px solid lightblue !important;
+	border-radius:3px !important;
+}
+textarea:focus {
+	outline:none;
+	border-radius:3px !important;
+}
+.input-file-button{
+  padding: 6px 25px;
+  background-color:#90ddb091;
+  border-radius: 4px;
+  color: black;
+  cursor: pointer;
+  position:absolute;
+  left: 120px;
+  top: 263px;
+}
+.uploadResult1 ul{
+	display:flex;
+	justify-content:left;
+	margin-left:45px;
+}
+li {
+ list-style:none;
+ margin-right:10px;
+}
+
+.uploadResult1 .btn-warning{
+	color:gray;
+	background-color:#90ddb091;
+	border-radius:7px;
+	padding:1px 8px;
+	margin-left:5px;
+	border:0;
+} 
+</style>
 </head>
 <body>
 <div layout:fragment="content">
+<h3 class="dohyeon" style="font-size:35px;margin-top:20px;">Groobear 메일 쓰기</h3>
 	<form method="post">
-		<button id="send" type="button" onclick="sendMail()">메일보내기</button>
+		
 		<table class="table">
 		<tbody>
-			<tr><td><input type="text" id="mailNo" th:value="${mailNo}" style="display:none"></td></tr>
+			<tr><td style="padding:0;"><input type="text" id="mailNo" th:value="${mailNo}" style="display:none"></td></tr>
 			<tr>
-				<td>보내는사람 <input id="sender" type="text" name="sender" th:value="${id}" readonly></td>
+				<td style="border:0 !important;">보내는사람 <input id="sender" type="text" name="sender" th:value="${id}" readonly style="width: 900px;border-radius:3px;border:0;border-bottom:1px solid gray;position: absolute;top: 80px;left: 120px;"></td>
 			</tr>
 			<tr>
-				<td>받는사람 <input id="receiver" type="text" name="receiver"></td>
+				<td style="border:0 !important;">받는사람 <input id="receiver" type="text" name="receiver" style="width: 900px;border-radius:3px;border: 0;border-bottom:1px solid gray;position: absolute;top:123px;left: 120px;"></td>
 			</tr>
 			<tr>
-				<td>참조자 <input id="referrer" type="text" name="referrer"></td>
+				<td style="border:0 !important;">참조자 <input id="referrer" type="text" name="referrer" style="width: 900px;border-radius:3px;border: 0;border-bottom:1px solid gray;position: absolute;top: 171px;left: 120px;"></td>
 			</tr>
 			<tr>
-				<td>제목 <input id="title" type="text" name="title"></td>
+				<td style="border:0 !important;">제목 <input id="title" type="text" name="title" style="width: 900px;border-radius:3px;border: 0;border-bottom:1px solid gray;position: absolute;top: 220px;left: 120px;"></td>
 			</tr>
 			<tr>
-				<td>내용 <textarea id="content" style="width:1000px; height:1000px" name="content"></textarea></td>
-			</tr>
-			<tr><td><div class="panel-body1">
+				<td style="border:0 !important;"><div class="panel-body1">
                      <div class="form-group uploadDiv1">
-                         <input name="uploadFile1" type="file" multiple>
+                     첨부파일
+                     <label class="input-file-button" for="input-file">
+						  파일 선택
+					</label>
+                         <input name="uploadFile1" id="input-file" type="file" multiple style="display:none;">
+                         <button id="send" type="button" onclick="sendMail()" style="position: absolute;right: 30px;border: 0; width: 100px; height: 40px;background: #90ddb091;border-radius: 20px;top: 260px;">메일보내기</button>
                      </div>
                       <!-- foreach써서 조회하는걸로 변경 -->
 				<div class="uploadResult1">
 				</div>
+				
                      <div class="uploadResult1">
                          <ul>
 
                          </ul>
                      </div>
+                     
                  	</div>
+                 	
                  </td></tr>
+			<tr>
+				<td><textarea id="content" name="content" style="width: 100%;height: 500px;border: 0;" placeholder="내용을 입력해 주세요 "></textarea></td>
+			</tr>
 		</tbody>
 		</table>
 	</form>
@@ -135,26 +184,7 @@
 					console.log(err);
 				    }	
 			});
-			$.ajax({
-    			url: "/insertMailFile",
-  			    method: "POST",
-  			    contentType:"application/json; charset=utf-8",
-  			    data: JSON.stringify({
-  			      mailNo : mailNo,
-  			      uuid : mailuuid,
-  			      uploadPath : mailuploadPath,
-  			      fileName : mailfileName
-  			    }),
-  			    success: function(data) {
-  			    	console.log(data);
-  			    	alert('첨부파일 등록완료');
-  			    },
-  			    error: function(err) {
-					console.log(err);
-  			    }	
-    		});
 		}
-		
 		function showUploadResult1(uploadResultArr){
 	        console.log(uploadResultArr)
 		  if(!uploadResultArr || uploadResultArr.length == 0){return ;}
@@ -173,7 +203,7 @@
 	              str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
 	              str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
-		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'>X<i class='fa fa-times'></i></button><br>";
 		          str += "<img src='/display?fileName="+fileCallPath+"'>";
 		          str += "</div>";
 		          str +"</li>";
@@ -185,7 +215,7 @@
 	              str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
 	              str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
-		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'>X</i></button><br>";
 		          str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
 		          str += "</div>";
 		          str +"</li>";
@@ -217,9 +247,6 @@
 	        return true;
 	    }
 	    $("input[name='uploadFile1']").change(function(e) {
-	    	mailuuid = "";
-	    	mailfileName = "";
-	    	mailuploadPath = "";
 	        var formData = new FormData();
 	        var inputFile1 = $("input[name='uploadFile1']");
 	        var files = inputFile1[0].files;
@@ -241,7 +268,7 @@
 				dataType: "json",
 				success: function(result) {
 	                console.log('result = ',result);
-	                //showUploadResult1(result);
+	                showUploadResult1(result);
 	                mailuuid = result[0].uuid;
 	                mailfileName = result[0].fileName;
 	                mailuploadPath = result[0].uploadPath;
