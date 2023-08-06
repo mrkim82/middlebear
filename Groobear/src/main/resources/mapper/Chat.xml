@@ -189,5 +189,11 @@
 		JOIN user_info ui ON u.EMP_NO = ui.EMP_NO
 		where r.room_no = #{roomNo}
 	</select>
+	
+	<select id="getImage" resultType="FilesVO">
+		SELECT id, UUID, UPLOAD_PATH, FILE_NAME
+		FROM Files
+		WHERE id IS NOT NULL
+	</select>
 
 </mapper>
