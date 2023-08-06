@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.groo.bear.chat.domain.ChatMessageDTO;
 import com.groo.bear.chat.domain.RoomDTO;
+import com.groo.bear.files.domain.FilesVO;
 
 public interface ChatService {
 	
@@ -54,4 +55,7 @@ public interface ChatService {
 	
 	//방에 있는 이름
 	public List<RoomDTO> getUsersName(int roomNo);
+	
+	//프로필사진 띄우려고
+	public List<FilesVO> getImage();
 }
