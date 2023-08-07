@@ -20,7 +20,8 @@
 }
 	.uploadResult {
 		width : 100%;
-		background-color : gray;
+		background-color : #90ddb091;
+		border-radius: 20px;
 	}
 	
 	.uploadResult ul{
@@ -171,10 +172,10 @@ h2 {
 				</tr>
 			<tr>
 				<td>내용:</td>
-				<td><textarea rows="8" cols="30" th:text="${board.content}" readonly></textarea></td>
+				<td><textarea rows="8" cols="30" th:text="${board.content}" readonly style="border: 0px; width: 100%; height: 300px;"></textarea></td>
 			</tr>
 			<tr>
-				<td style="display: none"><input type="text" id="boardType"
+				<td style="display: none" ><input type="text" id="boardType"
 					name="boardType" th:value="${board.boardType}"></td>
 			</tr>
 			<!-- 댓글 -->
@@ -195,7 +196,7 @@ h2 {
 						<td>
 							<th:block th:if="${(com.id == session.Id) or (session.EmpGrade == 'A')}">
 								<span onclick="updateWritingComment()" class="spanCursor" style="color: red">수정</span>
-								<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+								<span onclick="deleteWritingComment()" class="spanCursor">&nbsp삭제</span>
 							</th:block>
 						</td>
 					</tr>
@@ -252,9 +253,9 @@ h2 {
 					</div>
 					<div class="modal-body">게시글을 정말로 삭제하시겠습니까?</div>
 					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" id="deleteButton">삭제</button>
 						<button id="firstCancel" type="button" class="btn btn-secondary"
 							data-dismiss="modal">취소</button>
-						<button type="button" class="btn btn-danger" id="deleteButton">삭제</button>
 					</div>
 				</div>
 			</div>
@@ -457,18 +458,18 @@ h2 {
 				nC.childNodes[3].textContent = document.getElementById('newComment').value;//값
 				nC.childNodes[9].childNodes[1].innerHTML = '';
 				console.log('ss',nC.childNodes[9].childNodes[1].innerHTML = '수정')
-				console.log(nC.childNodes[9].childNodes[3].innerHTML = 'X')
+				console.log(nC.childNodes[9].childNodes[3].innerHTML = '&nbsp;삭제')
 			}
 			
 			targetButton.parentNode.parentNode.childNodes[3].innerHTML = '<input type="text" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
 			targetButton.parentNode.parentNode.childNodes[9].childNodes[1].innerHTML = '<span id="ooo">수정</span>'
-			targetButton.parentNode.parentNode.childNodes[9].childNodes[3].innerHTML = '<span id="xxx">취소</span>';
+			targetButton.parentNode.parentNode.childNodes[9].childNodes[3].innerHTML = '<span id="xxx">&nbsp취소</span>';
 			
 			// 취소버튼
 			document.getElementById('xxx').addEventListener('click', function() {
 				targetButton.parentNode.parentNode.childNodes[3].textContent = oldCom;
 				targetButton.parentNode.parentNode.childNodes[9].childNodes[1].textContent = '수정';
-				targetButton.parentNode.parentNode.childNodes[9].childNodes[3].textContent = 'X';
+				targetButton.parentNode.parentNode.childNodes[9].childNodes[3].textContent = '&nbsp;삭제';
 				targetButton.parentNode.childNodes[11].textContent = '';
 			});
 			
@@ -496,7 +497,7 @@ h2 {
 						if(res.result == '성공') {
 							targetButton.parentNode.parentNode.childNodes[3].textContent = newCom.value;
 							targetButton.parentNode.parentNode.childNodes[9].childNodes[1].textContent = '수정';
-							targetButton.parentNode.parentNode.childNodes[9].childNodes[3].textContent = 'X';
+							targetButton.parentNode.parentNode.childNodes[9].childNodes[3].textContent = '  삭제';
 						} else {
 							alert('댓글 수정 실패');
 						}
