@@ -200,7 +200,7 @@
 					 		</otherwise>
 					 		</choose>
 					 		<choose>
-					 		<when test="referrer2 != null and !referrer3.equals('')">
+					 		<when test="referrer2 != null and !referrer2.equals('')">
 					 		,#{referrer2}
 					 		</when>
 					 		<otherwise>

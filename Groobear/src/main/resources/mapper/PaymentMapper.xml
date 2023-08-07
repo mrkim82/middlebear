@@ -355,6 +355,7 @@
 		    SELECT p.*, a.purpose, ROWNUM AS rn
 		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
 		    WHERE (p.id = #{payVO.id} AND p.pay_status2 = 'N' AND p.approver3 IS NOT NULL) 
+		    OR (p.id = #{payVO.id} AND p.pay_status2 = 'N' AND p.approver3 IS NULL) 
             OR (p.id = #{payVO.id} AND p.pay_status2='Y' AND p.pay_status3='N' AND p.approver3 IS NOT NULL)
 		    OR (p.approver2 = #{payVO.id} AND p.pay_status2='N')
             OR (p.approver2 = #{payVO.id} AND p.pay_status2='Y' AND p.approver3 IS NOT NULL AND p.pay_status3='N')
