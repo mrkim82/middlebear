@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>비밀번호 인증</title>
+    <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+    @import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+    .tjs{
+			font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+			color:black;
+	}
         body {
-            font-family: 'Do Hyeon', serif;
+            font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+            font-weight: 600;
             background-color: #f9f9f9;
             display: flex;
             justify-content: center;
@@ -82,7 +88,6 @@
 
         .info-text {
             text-align: center;
-            font-size: 14px;
             color: #555555;
             margin-top: 15px;
         }
@@ -92,7 +97,7 @@
     <div class="container">
         <h2 style="color:#29ac7f;font-size:30px;">비밀번호 인증</h2>
         <form action="myPageInfo" method="GET">
-            <label for="current-password" style="font-size:20px;">현재 비밀번호:</label>
+            <label for="current-password" style="font-size:19px;">현재 비밀번호:</label>
             <input type="password" oninput="checkPw()" id="password" name="password" required>
             <p id="Pw"></p>
             <div class="button-container">
@@ -100,7 +105,7 @@
                 <button class="back-button" type="button" onclick="goBack()">돌아가기</button>
             </div>
         </form>
-        <p class="info-text" style="font-size:20px;">돌아가기 버튼을 클릭하면 이전 화면으로 돌아갑니다.</p>
+        <p class="info-text" style="font-size:18px;">돌아가기 버튼을 클릭하면 이전 화면으로 돌아갑니다.</p>
     </div>
 
     <script>

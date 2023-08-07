@@ -123,7 +123,7 @@
         <div class="tab-content">
             <!-- 비밀번호 변경 탭 -->
             <div class="tab-pane active" id="password-tab">
-                <h2 style="color:#29ac7f;">비밀번호 변경</h2>
+                <h2 style="color:#29ac7f; font-weight:400;">비밀번호 변경</h2>
                 <form>
                     <!-- 비밀번호 변경 폼 요소들을 여기에 추가 -->
                     <label for="current-password">현재 비밀번호:</label>
@@ -136,14 +136,14 @@
                     <input type="password" oninput="checkPw2()" id="confirm-password" name="confirm-password" placeholder="8자리 이상 영어,숫자,특수문자 혼합" required>
 					<p id="rePw"></p>
 					<div style="text-align:center;">
-                    	<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 100px;height:38px;" id="pwBtn" type="button">비밀번호 변경</button>
+                    	<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 130px;height:38px;" id="pwBtn" type="button">비밀번호 변경</button>
                     </div>
                 </form>
             </div>
 
             <!-- 회원 정보 변경 탭 -->
             <div class="tab-pane" id="profile-tab" style="width:800px;">
-                <h2 style="color:#29ac7f;">개인 정보 변경</h2>
+                <h2 style="color:#29ac7f;font-weight:400;">개인 정보 변경</h2>
                 <form role='form' style="width:700px;">
                     <!-- 개인 정보 변경 폼 요소들을 여기에 추가 -->
                     <!-- 미리보기 영역 -->
@@ -183,7 +183,7 @@
 			                <input type="text" class="phoneNumber" minlength="13" maxlength="13"
 			           		 id="phone" name="phone" th:value="${userInfo.phone}" placeholder="010-0000-0000" required>
 			                <div class="input-group-append">
-			                	<button class="custom-button input-file-button" type="button" id="smsbtn1">인증번호 발급</button>
+			                	<button class="custom-button input-file-button" style="width:120px;" type="button" id="smsbtn1">인증번호 발급</button>
 			                </div>
 			              </div>
 			               <a id="checkPhone"></a>
@@ -194,7 +194,7 @@
 			                <input type="text" minlength="6" maxlength="6"
 			           		 id="smsnum" name="smsnum" placeholder="인증번호 6자리" required>
 			                <div class="input-group-append">
-			                	<button class="custom-button input-file-button" type="button" id="smsbtn2">인증번호 확인</button>
+			                	<button class="custom-button input-file-button" style="width:120px;" type="button" id="smsbtn2">인증번호 확인</button>
 			                </div>
 			              </div>
 			              <a id="checkSms"></a>
@@ -208,7 +208,7 @@
 			                <input type="text" minlength="5" maxlength="5"
 			           		 id="post" name="post" placeholder="우편번호 찾기 버튼 클릭" readonly>
 			                <div class="input-group-append">
-			                	<button class="custom-button input-file-button" type="button" id="postBtn" onclick="postCode()">우편번호 찾기</button>
+			                	<button class="custom-button input-file-button" style="width:120px;" type="button" id="postBtn" onclick="postCode()">우편번호 찾기</button>
 			                </div>
 			              </div>
 			            </div>
@@ -220,7 +220,7 @@
 					<label for="addr2">상세주소:</label>
                     <input type="text" id="addr2" name="addr2" th:value="${userInfo.addrDetail}">
 					<div style="text-align:center;margin-top:20px;">
-                    	<button class="custom-button input-file-button" type="button"  id="infoBtn">정보 변경</button>
+                    	<button class="custom-button input-file-button" style="width:130px;" type="button"  id="infoBtn">정보 변경</button>
                     </div>
                 </form>
             </div>
@@ -229,13 +229,19 @@
 	<!-- The Modal -->
     <div id="myModal" class="modal">
       <!-- Modal content -->
-      <div class="modal-content">
-                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
-                <p><br /></p>
-            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
-                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
-                     닫기
-                </span>
+      <div class="modal-content" style="box-shadow: 2px 4px 3px 3px darkgray;width: 500px;margin-top:280px;border-radius: 20px;padding:0px;">
+      	<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;padding: 2px;">
+			<h5 class="modal-title" id="exampleModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">회원정보변경</h5>
+			<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
+				aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
+		</div>
+                <p style="text-align: center; margin:20px;height: 70px;line-height: 70px;"><span style="font-size: 17pt;" id="spantext"></span></p>
+            <div style="text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
+	            <div class="modal-footer">
+	                <span class="pop_bt"  style="cursor:pointer;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;line-height: 45px;font-size: 17px;" id="closeModal">
+	                     닫기
+	                </span>
+	            </div>
             </div>
       </div>
       </div>
@@ -524,7 +530,10 @@
             }).open();
           });
         }
-     
+     	function closeModal() {
+  	   	  // 모달 창 닫기
+  	   	  $('#myModal').hide();
+  	   	};
      	//팝업 Close 기능
         function close_pop(flag) {
             $('#myModal').hide();

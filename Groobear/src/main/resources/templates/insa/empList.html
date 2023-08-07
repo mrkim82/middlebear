@@ -6,7 +6,6 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<title>Groobear 회원조회</title>
 <style>
   	li{
   		float: left;
@@ -44,10 +43,10 @@
 
 <div layout:fragment="content" >
   <div style="padding:10px;">
-  	<h2 style="margin-top: 25px;margin-bottom:20px;">Groobear 회원조회</h2>
+  	<h2 style="margin-top: 25px;margin-bottom:20px;font-weight:600;">Groobear 회원조회</h2>
 	<table id="list" class="table table-hover" style="text-align:center;font-size:17px;">
 		<thead>
-			<tr>
+			<tr style="font-weight:600;">
 				<td>사번</td>
 				<td>이름</td>
 				<td>직급</td>
@@ -58,7 +57,7 @@
 				<td>상태</td>
 			</tr>
 		</thead>
-		<tbody id="bodyWash">
+		<tbody id="bodyWash" style="font-weight:400;font-size:15px;cursor: Pointer;">
 			<tr class="cml table-default" th:each="emp, stat : ${empList}" th:attr="onclick='detailPopUp()'">
 				<td>[[${emp.empNo}]]</td>
 				<td>[[${emp.name}]]</td>
@@ -100,7 +99,7 @@
 	<div style="display: flex;justify-content: center;">
 		<form name="searchForm" action="empInfo">
 		<input type="hidden" name="page" value="1"/><br>
-		<select name="type" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;">
+		<select name="type" style="cursor: Pointer;border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;">
 			<option value='' selected>선택</option>
 			<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
 			<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
@@ -111,18 +110,24 @@
 	</form>
 	</div>
 		<!-- The Modal -->
-	    <div id="errorModal" class="modal">
-	      <!-- Modal content -->
-	      <div class="modal-content">
-	                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
-	                <p><br /></p>
-	            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
-	                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content" style="box-shadow: 2px 4px 3px 3px darkgray;width: 500px;margin-top:280px;border-radius: 20px;padding:0px;">
+      	<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;padding: 2px;">
+			<h5 class="modal-title" id="exampleModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">회원조회</h5>
+			<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
+				aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
+		</div>
+                <p style="text-align: center; margin:20px;height: 70px;line-height: 70px;"><span style="font-size: 17pt;" id="spantext"></span></p>
+            <div style="text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
+	            <div class="modal-footer">
+	                <span class="pop_bt"  style="cursor:pointer;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;line-height: 45px;font-size: 17px;" id="closeModal">
 	                     닫기
 	                </span>
 	            </div>
-	      </div>
-	      </div>
+            </div>
+      </div>
+      </div>
 
 	<script th:inline="javascript">
 		//input 태그 안에 빈 값인데 검색 버튼을 눌렀을 때 실행하는 함수.
@@ -136,9 +141,9 @@
 			    	}else{
 			    		$('#inputBtn').val('');
 			    		$('#spantext').text('검색 항목을 선택해주세요.');
-			            $('#errorModal').show();
+			            $('#myModal').show();
 			            $('#closeModal').on('click', function() {
-			            $('#errorModal').hide();
+			            $('#myModal').hide();
 			            })
 			            return false;
 			       	}    		
@@ -221,6 +226,10 @@
         var options = "width=" + popupWidth + ", height=" + popupHeight + ", resizable=no, scrollbars=no, top=" + top + ", left=" + left;
         openWin = window.open("/empDetailInfo?id="+id, "empDetailInfo", options);
     }
+    function closeModal() {
+	   	  // 모달 창 닫기
+	   	  $('#myModal').hide();
+	   	}
   	//모달 Close 기능
     function close_pop(flag) {
         $('#myModal').hide();

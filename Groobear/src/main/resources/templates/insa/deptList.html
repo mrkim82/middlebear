@@ -5,7 +5,6 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<title>Groobear 부서권한관리</title>
     <style>
     	ul {
 			list-style:none;
@@ -47,34 +46,56 @@
 			border-radius: 5px;
 			cursor: pointer;
 		}
+		/* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1050; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+    
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%; /* Could be more or less, depending on screen size */                          
+        }
     </style>
 </head>
 <body layout:fragment="content" >
   <div style="padding:10px;">
-	<h2 style="margin-top: 25px;">Groobear 부서권한관리</h2>
+	<h2 style="margin-top: 25px;margin-bottom:20px;font-weight:600;">Groobear 부서권한관리</h2>
 	<div style="text-align:right;">
 		<button class="custom-button button" style=""type="button" id="addBtn" onclick="addPopUp()">부서등록</button>
 	</div>
     <div class="card-container" style="font-size:17px;">
         <div class="card"  th:each="dept, stat : ${deptList}">
             <div style="border-radius:10px;margin:5px;padding:10px;border: 1px solid #ccc;text-align:center;">
-            	<a style="margin:10px auto;">부서명 : [[${dept.deptName}]]</a>
+            	<a style="margin:10px auto; font-weight:600;font-size:17px;">부서명 : </a><a style="margin:10px auto; font-weight:400;font-size:16px;">[[${dept.deptName}]]</a>
             </div>
           	<div style="border-radius:10px;margin:5px;border: 1px solid #ccc;">
           		<table class="list" style="width:100%;margin-top:20px;margin-bottom:20px;">
           			<tr>
-						<td style="text-align:center;" th:if="${dept.deptHead != null}">팀장 : [[${dept.deptHead}]]</td>          			
-						<td style="text-align:center;" th:unless="${dept.deptHead != null}">팀장 : 공석</td>
+						<td style="text-align:center;" th:if="${dept.deptHead != null}"><a style="margin:10px auto; font-weight:600;font-size:17px;">팀장 : </a><a style="margin:10px auto; font-weight:400;font-size:16px;">[[${dept.deptHead}]]</a></td>          			
+						<td style="text-align:center;" th:unless="${dept.deptHead != null}"><a style="margin:10px auto; font-weight:600;font-size:17px;">팀장 : </a><a style="margin:10px auto; font-weight:400;font-size:16px;">공석</a></td>
           			</tr>
           			<tr style="height: 10px;"></tr>
           			<tr>
           				<th:block th:each="cnt, stat : ${deptCnt}">
-							<td style="text-align:center;" th:if="${dept.deptName == cnt.deptName}">총원 : [[${cnt.deptCnt}]]명</td>        
+							<td style="text-align:center;" th:if="${dept.deptName == cnt.deptName}"><a style="margin:10px auto; font-weight:600;font-size:17px;">총원 : </a><a style="margin:10px auto; font-weight:400;font-size:16px;">[[${cnt.deptCnt}]]명</a></td>        
 						</th:block>  			
           			</tr>
           			<tr style="height: 10px;"></tr>
           			<tr>
-						<td style="text-align:center;">생성일 : <span th:text="${#dates.format(dept.deptDate, 'yyyy.MM.dd')}"></span></td>    
+						<td style="text-align:center;"><a style="margin:10px auto; font-weight:600;font-size:17px;">생성일 : <span style="margin:10px auto; font-weight:400;font-size:16px;" th:text="${#dates.format(dept.deptDate, 'yyyy.MM.dd')}"></span></a></td>    
           			</tr>
           			<tr style="height: 10px;">
           				<td><input type="text" style="display:none;" class="chkDeptNo" th:value="${dept.deptNo}"></td>
@@ -110,7 +131,7 @@
 	<div style="display: flex;justify-content: center;margin-bottom:20px;">
 		<form name="searchForm" action="deptList">
 		<input type="hidden" name="page" value="1"/><br>
-		<select style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;" name="type">
+		<select style="border: 1px solid gray;cursor:Pointer;border-radius: 5px;height: 35px; width:50px;" name="type">
 			<option value='' selected>선택</option>
 			<option value='deptHead' th:selected="${criteria.type == 'deptHead'}">부서장</option>
 			<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
@@ -119,6 +140,26 @@
 		<button class="custom-button" type="submit" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" id="searchBtn">검색</button>
 	</form>
 	</div>
+	
+	<!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content" style="box-shadow: 2px 4px 3px 3px darkgray;width: 500px;margin-top:280px;border-radius: 20px;padding:0px;">
+      	<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;padding: 2px;">
+			<h5 class="modal-title" id="exampleModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">부서권한조회</h5>
+			<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
+				aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
+		</div>
+                <p style="text-align: center; margin:20px;height: 70px;line-height: 70px;"><span style="font-size: 17pt;" id="spantext"></span></p>
+            <div style="text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
+	            <div class="modal-footer">
+	                <span class="pop_bt"  style="cursor:pointer;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;line-height: 45px;font-size: 17px;" id="closeModal">
+	                     닫기
+	                </span>
+	            </div>
+            </div>
+      </div>
+      </div>
     <script>
     //부서추가 팝업
     function addPopUp() {
@@ -129,12 +170,33 @@
         var screenWidth = window.screen.width;
         var screenHeight = window.screen.height;
         var popupWidth = 450;
-        var popupHeight = 480;
+        var popupHeight = 300;
         var left = (screenWidth - popupWidth) / 2;
         var top = (screenHeight - popupHeight) / 2;
         var options = "width=" + popupWidth + ", height=" + popupHeight + ", resizable=no, scrollbars=no, top=" + top + ", left=" + left;
         openWin = window.open("/deptAddForm", "deptInsert", options);
     } 
+    
+    $(document).ready(function() {
+		//검색 빈값 처리
+		$('#searchBtn').on('click', function() {
+		    let val = $('select[name="type"]').val();
+		    if(val == '') {
+		    	if($('#inputBtn').val()==''){
+		    		location.href='/deptList';
+		    	}else{
+		    		$('#inputBtn').val('');
+		    		$('#spantext').text('검색 항목을 선택해주세요.');
+		            $('#myModal').show();
+		            $('#closeModal').on('click', function() {
+		            $('#myModal').hide();
+		            })
+		            return false;
+		       	}    		
+	    	}
+		})
+	})
+	
 	//페이징 관련
 	function goPage(p) {
 	    //event.preventDefault();

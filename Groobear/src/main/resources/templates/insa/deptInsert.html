@@ -2,17 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Groobear 부서 생성</title>
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
     body {
-      font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+      font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
       font-size : 17px;
       background-color: #f7f7f7;
     }
 	form {
-		height: 400px;
+		height: 200px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -80,14 +81,39 @@
 	table tbody tr {
 		line-height: 1; /* Adjust the value as per your preference */
 	}
+	html ::-webkit-scrollbar{
+	 display: none;
+	}
+	/* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1050; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+    
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%; /* Could be more or less, depending on screen size */                          
+        }
 </style>
 </head>
 <body>
-	<form style="height: 400px;">
+	<form style="height: 200px;">
 		<h2 style="text-align:center; margin-top:50px;">Groobear 부서생성</h2>
 		<fieldset style="border-radius: 10px;">
-			<a>부서명 : </a><input id="deptName" style="background: #ffffff00;width:120px; padding-bottom:10px; border:0 solid black;" type="text" value=""><br>
-			<a>부서권한 : </a><select id="deptAuth" style="width:120px;border: 1px solid lightgray;border-radius: 5px;height: 30px;font-family: 'Do Hyeon', serif;">
+			<a>부서명 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</a><input id="deptName" style="background: #ffffff00;width:120px; padding-bottom:10px; border:0 solid black;font-family: 'TheJamsil', serif;" type="text" value=""><br>
+			<a>부서권한 &nbsp;: &nbsp;</a><select id="deptAuth" style="cursor:Pointer;width:120px;border: 1px solid lightgray;border-radius: 5px;height: 30px;text-align:center;font-family: 'TheJamsil', serif;">
 								<option value="" selected>선택</option>
 								<th:block th:each="auth, stance : ${deptAuth}">
 									<option th:value="${auth.code}">[[${auth.codeName}]]</option>
@@ -96,27 +122,29 @@
 		</fieldset>
 		
 		<fieldset style="display: flex;justify-content: center;border:hidden;">
-			<button type="button" class="custom-button" style="border-radius: 10px;font-family: 'Do Hyeon', serif;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" id="addBtn">생성</button>
-			<button type="button" class="custom-button" style="border-radius: 10px;font-family: 'Do Hyeon', serif;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" onclick="closeBtn()">닫기</button>
+			<button type="button" class="custom-button" style="border-radius: 10px;font-family: 'TheJamsil', serif;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" id="addBtn">생성</button>
+			<button type="button" class="custom-button" style="border-radius: 10px;font-family: 'TheJamsil', serif;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" onclick="closeBtn()">닫기</button>
 		</fieldset>
 	</form>
-	<!-- The Modal -->
-   <div id="errorModal" class="modal" style="display:none;">
-      <div class="modal-content">
-                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
-                <p><br /></p>
-            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
-                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
-                     닫기
-                </span>
+      <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content" style="box-shadow: 2px 4px 3px 3px darkgray;width: 500px;margin-top:280px;border-radius: 20px;padding:0px;">
+      	<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;padding: 2px;">
+			<h5 class="modal-title" id="exampleModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">부서권한조회</h5>
+			<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
+				aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
+		</div>
+                <p style="text-align: center; margin:20px;height: 70px;line-height: 70px;"><span style="font-size: 17pt;" id="spantext"></span></p>
+            <div style="text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
+	            <div class="modal-footer">
+	                <span class="pop_bt"  style="cursor:pointer;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;line-height: 45px;font-size: 17px;" id="closeModal">
+	                     닫기
+	                </span>
+	            </div>
             </div>
       </div>
-    </div>
-    
-    
-    
-    
-    
+      </div>
     
 	<script type="text/javascript">
 	$(document).ready(function() {
@@ -125,9 +153,9 @@
 			let deptAuth = $('#deptAuth').val();
 			if(deptName == ''){
 				$('#spantext').text('부서명을 입력하세요.');
-				$('#errorModal').show();
+				$('#myModal').show();
 	            $('#closeModal').on('click', function() {
-	            	$('#errorModal').hide();
+	            	$('#myModal').hide();
 	            })
 			}else{
 				$.ajax({

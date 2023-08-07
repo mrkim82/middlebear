@@ -4,25 +4,26 @@
 	<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Groobear 회원 상세조회</title>
+    <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 	<style>
 	 	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+	 	@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
 	    body {
-	      font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+	      font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
 	      font-size : 17px;
 	      }
 	    input {
-		    font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		    font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
 		    background: #ffffff00;
-		    font-size : 17px;
+		    font-size : 15px;
 	    }
 	    fieldset {
 	    	background: #d5ece3;
     		border: 0px;
 	    }
 	    html {
-	        background: #d3cdcd54;
+	        background: #f7f7f7;
 	    }
 	    .custom-button {
 			color: #fff;
@@ -31,11 +32,14 @@
 			color: black; /* 마우스 오버 시 글자색을 남색으로 변경 */
 		  	cursor: pointer; /* 커서 모양을 손가락 모양으로 변경 */
 		}
+		html ::-webkit-scrollbar{
+		 display: none;
+		}
     </style>
 </head>
 <body>
 	<form style="height: 400px;" action="/updateEmp" method="GET">
-		<h2 style='text-align:center;'>Groobear 회원 상세조회</h2>
+		<h2 style='text-align:center;margin-bottom:15px;'>Groobear 회원 상세조회</h2>
 		<fieldset style="border-radius: 10px 10px 0px 0px;">
 			<div class="row">
 				<div class="col-4" style="display:inline-block;">
@@ -49,23 +53,23 @@
 					</th:block>								
 				</div>
 				<div class="col-6" style="display: inline-block;margin-left: 30px;position: absolute;">
-					<a>사번 : </a><input name="empNo" style="width:120px; padding-top:10px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.empNo}" readonly><br>
-					<a>이름 : </a><input name="name" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.name}" readonly><br>
-					<a>직책 : </a><input name="rank" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.rank}" readonly><br>
-					<a>부서 : </a><input name="deptName" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.deptName}" readonly><br>
-					<a>재직여부 : </a><input name="empStatus" style="width:80px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.empStatus}" readonly>
+					<a style="font-weight:600;">사번 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </a><input name="empNo" style="width:120px; padding-top:10px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.empNo}" readonly><br>
+					<a style="font-weight:600;">이름 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </a><input name="name" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.name}" readonly><br>
+					<a style="font-weight:600;">직책 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </a><input name="rank" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.rank}" readonly><br>
+					<a style="font-weight:600;">부서 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </a><input name="deptName" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.deptName}" readonly><br>
+					<a style="font-weight:600;">재직여부 : </a><input name="empStatus" style="width:80px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.empStatus}" readonly>
 				</div>
 			</div>
 		</fieldset>
 		<fieldset style="margin-bottom:10px;border-radius: 0px 0px 10px 10px;">
-			<a>연락처 : </a><input name="phone" style="width:200px; padding-top:10px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.phone}" readonly><br>
-			<a>회사메일 : </a><input id="id" name="id" style="width:200px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.id}" readonly><br>
-			<a>개인메일 : </a><input name="email" style="width:200px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.email}" readonly>
+			<a style="font-weight:600;">연락처 &nbsp;&nbsp;&nbsp;&nbsp;: </a><input name="phone" style="width:200px; padding-top:10px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.phone}" readonly><br>
+			<a style="font-weight:600;">회사메일 : </a><input id="id" name="id" style="width:200px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.id}" readonly><br>
+			<a style="font-weight:600;">개인메일 : </a><input name="email" style="width:200px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${empInfo.email}" readonly>
 		</fieldset>
 		<fieldset style="display: flex;background: #ffffff00;justify-content: center;border:hidden;">
-			<button class="custom-button" th:if="${session.EmpGrade=='A'}" type="submit" style="border-radius: 10px;font-family: 'Do Hyeon', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" id="updateBtn">수정</button>
-			<button class="custom-button" th:if="${session.EmpGrade=='A'}" style="border-radius: 10px;font-family: 'Do Hyeon', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" type="button" id="delBtn">삭제</button>
-			<button class="custom-button" type="button" style="border-radius: 10px;font-family: 'Do Hyeon', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" onclick="closeBtn()">닫기</button>
+			<button class="custom-button" th:if="${session.EmpGrade=='A'}" type="submit" style="border-radius: 10px;font-family: 'TheJamsil', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" id="updateBtn">수정</button>
+			<button class="custom-button" th:if="${session.EmpGrade=='A'}" style="border-radius: 10px;font-family: 'TheJamsil', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" type="button" id="delBtn">삭제</button>
+			<button class="custom-button" type="button" style="border-radius: 10px;font-family: 'TheJamsil', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" onclick="closeBtn()">닫기</button>
 		</fieldset>
 	</form>
 	<script type="text/javascript">
