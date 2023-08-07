@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>사원 목록</title>
+    <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <style>
 		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
-		body {
-			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+	    body {
+	      	font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
 			background: #f7f7f7;
 		}
 
@@ -31,7 +32,7 @@
         <div>
             <table class="table table-hover"  style="text-align:center;margin-top: 5px;">
             	<thead>
-	                <tr>
+	                <tr style="font-size:17px;">
 	                	<th>사번</th>
 	                    <th>이름</th>
 	                    <th>직급</th>
@@ -40,7 +41,7 @@
                 </thead>
                 <tbody id="body">
                 	<th:block th:if="${memList != null}">
-						<tr class="cml table-default" th:each="mem, stat : ${memList}" th:ondblclick="addMem()">
+						<tr style="cursor:Pointer; font-size:15px;" class="cml table-default" th:each="mem, stat : ${memList}" th:ondblclick="addMem()">
 								<td>[[${mem.empNo}]]</td>
 								<td>[[${mem.name}]]</td>
 								<td>[[${mem.rank}]]</td>
