@@ -372,12 +372,22 @@
 			}
 		}
 		function referrerSelect(){
+			var screenWidth = window.screen.width;
+        	var screenHeight = window.screen.height;
+			var left = (screenWidth - 700) / 2;
+	        var top = (screenHeight - 500) / 2;
+	        var options = "width=700"+", height=500"+", resizable=no, scrollbars=no, top=" + top + ", left=" + left;
 			//참조자 등록하는 자식창 열기
-			openReferreruser = window.open("/pay/referrerEmp","referrerEmp","width=700, height=500, resizable = no");
+			openReferreruser = window.open("/pay/referrerEmp","referrerEmp",options);
 		}
 		function payUserSelect(){
 			//결재자 등록하는 자식창 열기
-			openPayuser = window.open("/pay/paymentEmp","paymentEmp","width=700, height=1000, resizable = no");
+			var screenWidth = window.screen.width;
+        	var screenHeight = window.screen.height;
+			var left = (screenWidth - 700) / 2;
+	        var top = (screenHeight - 500) / 2;
+	        var options = "width=700"+", height=500"+", resizable=no, scrollbars=no, top=" + top + ", left=" + left;
+			openPayuser = window.open("/pay/paymentEmp","paymentEmp",options);
 			console.log('실행됨?');
 		}
 		//자식창 닫았을때 데이터 저장

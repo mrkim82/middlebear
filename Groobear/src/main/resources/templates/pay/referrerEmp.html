@@ -47,17 +47,17 @@
 </head>
 <body>
 	<br>
-	<div style="text-align: center;width: 250px; height: 300px; margin:0px; float:left; overflow: auto">
-    <table class="tjs" style="width:200px; height:500px; border:1">
+	<div style="border: 3px solid gray ; border-radius: 10px;padding-left: 20px; width: 200px; height: 300px; margin-left:50px;margin-top: 30px; float:left; overflow: auto">
+    <table class="tjs" style="text-align: center;width:180px; height:500px; border:1">
     	<thead>
 	    	<tr>
-	    		<th><font size="3" color="gray">구성원</font></th>
+	    		<th style="position: sticky;top: 0; "><font size="3" color="gray">구성원</font></th>
 	    	</tr>
     	</thead>
     	<tbody id="EmpBody">
     		<tr class="payInfo" th:each="emp : ${payEmpList}" onmousedown="empInfo(this); trbackground(this);">
     			<td>
-	    			[[${emp.name}]] | [[${emp.rank}]] | [[${emp.deptName}]]
+	    			[[${emp.name}]]  [[${emp.rank}]]  [[${emp.deptName}]]
 	    			<div style="display:none">[[${emp.Id}]]</div>
 	    			<div style="display:none">[[${emp.name}]]</div>
 	    			<div style="display:none">[[${emp.rank}]]</div>
@@ -68,7 +68,7 @@
     	
     </table>
     </div>
-    <table class="tjs" style="float:left; margin-left:70px ;margin-top:100px;">
+    <table class="tjs" style="float:left; margin-left:20px ;margin-top:100px;">
     	<tbody>
     		<tr>
     			<td><button type="button" id="referrer" onclick="refSet()" class="tjs custom-button" 
@@ -102,7 +102,7 @@
     		</tr>
     	</tbody>
     </table>
-    <table style="width:200px; height:150px; float:right;">
+    <table class="tjs" style="margin-right: 40px;border: 3px solid gray ;border-radius: 10px;width: 220px; height: 300px; margin-top: 30px; float:right; text-align: center;">
     	<thead>
     		<tr>
 	    		<th><font size="3" color="gray">참조자</font></th>
@@ -132,8 +132,10 @@
 		
     	function empInfo(e){
 			console.log("e = ",e);
-			$('.payInfo').css('background-color','white');
-    		$('.setInfo').css('background-color','white');
+			//$('.payInfo').css('background-color','white');
+			$('.payInfo').css('color','black');
+    		//$('.setInfo').css('background-color','white');
+    		$('.setInfo').css('color','black');
 			
     		console.log(e.children[0].textContent);
 			empId = e.children[0].children[0].textContent;
@@ -148,8 +150,10 @@
     	function refSet(){
     		//push pop 사용해야됨 이미 있는 유저정보는 추가할필요없음
     		console.log('refSet 클릭');
-    		$('.payInfo').css('background-color','white');
-    		$('.setInfo').css('background-color','white');
+    		//$('.payInfo').css('background-color','white');
+    		$('.payInfo').css('color','black');
+    		//$('.setInfo').css('background-color','white');
+    		$('.setInfo').css('color','black');
     		var str = '';
     		let trTag = document.createElement('tr');
     		let tdTag = document.createElement('td');
@@ -396,13 +400,15 @@
     		}
 		}
 		function trbackground(e){
-			e.style.background = "aqua";
+			//e.style.background = "aqua";
+			e.style.color = "darkgreen";
 			console.log("e = ",e);
     		//$('.payInfo').css('background-color','white');
 		}
 		function tdbackground(e){
 			console.log("td e = ",e);
-			e.style.background = "gray";
+			e.style.color = "darkgreen";
+			//e.style.background = "gray";
 		}
     </script>
 </body>

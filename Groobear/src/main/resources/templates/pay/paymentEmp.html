@@ -2,20 +2,81 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="UTF-8">
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<link rel="icon" href="/img/bear.png" type="image/x-icon">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<style>
+		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+		@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+		.tjs{
+			font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+			color:black;
+		}
+		.dohyeon{
+			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			color:black;
+		} 
+		.dohyeonmenu{
+			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			font-size : 25px;
+			color:white;
+		}
+		.rightPad{
+			padding-right:150px;
+		}
+		.nav li:hover{
+  			background-color: #4fc09961;
+  			border-radius:15px;
+  		}
+  		.nav li:hover a{
+  			color:black;
+  		}
+  		.nav li{
+  			transition: 0.5s;
+  		}
+  		a {
+  			text-decoration : none !important;
+  		}
+  		ul {
+			list-style:none;
+	}
+	.paging .active a {
+		    background-color: #f00;
+		    color: #fff;
+	}
+	.paymentuser{
+		border : 1px solid black;
+		text-align: center;
+		font-weight: 600;
+	}
+	.custom-button:hover{
+		color: black !important
+	}
+	.input-file-button{
+  	  padding: 6px 25px;
+	  background-color:#90ddb091;
+	  border-radius: 4px;
+	  color: black;
+	  cursor: pointer;
+	  position:absolute;
+	  top: -6px;
+	  left: 80px;
+	}
+	</style>
 </head>
 <body>
 	<br>
-    <table style="width:200px; height:500px; float:left;">
+	<div style="border: 3px solid gray ; border-radius: 10px;padding-left: 20px; width: 200px; height: 300px; margin-left:50px;margin-top: 30px; float:left; overflow: auto">
+    <table class="tjs" style="text-align: center;width:180px; height:500px; border:1">
     	<thead>
 	    	<tr>
-	    		<th><font size="3" color="gray">구성원</font></th>
+	    		<th style="position: sticky;top: 0; "><font size="3" color="gray">구성원</font></th>
 	    	</tr>
     	</thead>
     	<tbody id="EmpBody">
-    		<tr th:each="emp : ${payEmpList}" onmousedown="empInfo(this);">
+    		<tr class="payInfo" th:each="emp : ${payEmpList}" onmousedown="empInfo(this);trbackground(this);">
     			<td>
-	    			[[${emp.name}]] | [[${emp.rank}]] | [[${emp.deptName}]]
+	    			[[${emp.name}]]  [[${emp.rank}]]  [[${emp.deptName}]]
 	    			<div style="display:none">[[${emp.Id}]]</div>
 	    			<div style="display:none">[[${emp.name}]]</div>
 	    			<div style="display:none">[[${emp.rank}]]</div>
@@ -24,6 +85,7 @@
     		</tr>
     	</tbody>
     </table>
+    </div>
     <table style="width:300px; height:200px; display:none;">
     	<thead>
     		<tr>
@@ -39,39 +101,48 @@
     		</tr>
     	</tbody>
     </table>
-    <table style="float:left; margin-left:100px ;margin-top:100px;">
+    <table class="tjs" style="float:left; margin-left:28px ;margin-top:100px;">
     	<tbody>
     		<tr>
-    			<td><button type="button" id="payUser" onclick="paySet()">결재자</button></td>
+    			<td><button type="button" id="payUser" onclick="paySet()" class="tjs custom-button" 
+						style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff; font-size: 17px;width: 100px;height:35px;"
+						>결재자</button></td>
     		</tr>
     		<tr>
-    			<td><button type="button" id="payDelete" onclick="userDel()">제외</button></td>
+    			<td><button type="button" id="payDelete" onclick="userDel()" class="tjs custom-button" 
+						style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff; font-size: 17px;width: 100px;height:35px;"
+						>제외</button></td>
     		</tr>
     		<tr>
-    			<td><button type="submit" id="payCheck" onclick="userSet()">확인</button></td>
+    			<td><button type="submit" id="payCheck" onclick="userSet()" class="tjs custom-button" 
+						style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff; font-size: 17px;width: 100px;height:35px;"
+						>확인</button></td>
     		</tr>
     	</tbody>
     </table>
-    <table style="width:200px; height:100px; float:right;">
-    	<thead>
-    		<tr>
-	    		<th><font size="3" color="gray">결재자1</font></th>
-	    	</tr>
-    	</thead>
-    	<tbody id="payUserList1">
-    		
-    	</tbody>
-    </table>
-    <table style="width:200px; height:100px; float:right;">
-    	<thead>
-    		<tr>
-	    		<th><font size="3" color="gray">결재자2</font></th>
-	    	</tr>
-    	</thead>
-    	<tbody id="payUserList2">
-    	
-    	</tbody>
-    </table>
+    <div class="tjs" style="text-align: center;margin-top: 30px;margin-right: 50px;border: 3px solid gray ; border-radius: 10px;width:200px; height:300px; float:right;">
+	    <table style="height:100px;text-align: center;">
+	    	<thead>
+	    		<tr style="position: absolute;">
+		    		<th ><font style="margin-left:70px;" size="3" color="gray">결재자1</font></th>
+		    	</tr>
+	    	</thead>
+	    	<tbody id="payUserList1" style="position: absolute;margin-left: 25px;margin-top: 50px;" >
+	    		
+	    	</tbody>
+	    </table>
+	    
+	    <table style="height:100px;margin-top: 35px;text-align: center;">
+	    	<thead>
+	    		<tr style="position: absolute;">
+		    		<th><font style="margin-left:70px;" size="3" color="gray">결재자2</font></th>
+		    	</tr>
+	    	</thead>
+	    	<tbody id="payUserList2"  style="position: absolute;margin-left: 25px;margin-top: 50px;">
+	    	
+	    	</tbody>
+	    </table>
+    </div>
     <script>
     	var empName = '';
     	var empRank = '';
@@ -109,7 +180,12 @@
     	}
     	function paySet(){
     		//push pop 사용해야됨 이미 있는 유저정보는 추가할필요없음
+    		//$('.payInfo').css('background-color','white');
+    		$('.payInfo').css('color','black');
+    		//$('.setInfo').css('background-color','white');
+    		$('.setInfo').css('color','black');
     		console.log('paySet 클릭');
+    		var str = '';
     		let trTag = document.createElement('tr');
     		let tdTag = document.createElement('td');
     		trTag.setAttribute("onmousedown","empInfo(this);");
@@ -117,20 +193,16 @@
         	if(drafter !== empId){
 	    		if(payUser1 === ""){
 					if(payUser2 !== empId){
-		    			var str = '';
+		    			str = '';
+		    			str += "<td class='setInfo'; onclick='tdbackground(this)';>"
 			    		str += empName+" "+empRank+" "+empDept
 			    		str += "<div style='display:none'>"+empId+"</div>"
 			    	    str += "<div style='display:none'>"+empName+"</div>"
 			    	    str += "<div style='display:none'>"+empRank+"</div>"
 			    	    str += "<div style='display:none'>"+empDept+"</div>"
-			    	    tdTag.innerHTML += str;
-			    	    trTag.append(tdTag);
+			    	    str += "</td>"
+			    	    trTag.innerHTML += str;
 			    		payUserList1.append(trTag);
-		        		//tdTag.append(empName + ' ');
-		        		//tdTag.append(empRank+' ');
-		        		//tdTag.append(empDept);
-		        		//trTag.append(tdTag);
-		        		//payUserList1.append(trTag); //화면단에 tr태그 append
 		        		payUser1 = empId; //따로 저장해두는 값
 		        		payUserName1 = empName;
 		            	payUserRank1 = empRank;
@@ -143,14 +215,15 @@
 	    			return;
 	    		}else if(payUser1 !== empId && !payUser2){
 	    			console.log('결재자1은 있고 2는 없음');
-	    			var str = '';
+	    			str = '';
+	    			str += "<td class='setInfo'; onclick='tdbackground(this)';>"
 	    			str += empName+" "+empRank+" "+empDept
 		    		str += "<div style='display:none'>"+empId+"</div>"
 		    	    str += "<div style='display:none'>"+empName+"</div>"
 		    	    str += "<div style='display:none'>"+empRank+"</div>"
 		    	    str += "<div style='display:none'>"+empDept+"</div>"
-		    	    tdTag.innerHTML += str;
-		    	    trTag.append(tdTag);
+		    	    str += "</td>"
+		    	    trTag.innerHTML += str;
 		    		payUserList2.append(trTag);
 		    		payUser2 = empId; //따로 저장해두는 값
 		    		payUserName2 = empName;
@@ -263,6 +336,17 @@
     		payUserList2.append(trTag);
     		payUser2 = payUserList2.children[0].children[0].children[0].textContent;
     	}
+    	function trbackground(e){
+			//e.style.background = "aqua";
+			e.style.color = "darkgreen";
+			console.log("e = ",e);
+    		//$('.payInfo').css('background-color','white');
+		}
+		function tdbackground(e){
+			console.log("td e = ",e);
+			e.style.color = "red";
+			//e.style.background = "gray";
+		}
     </script>
 </body>
 </html>
