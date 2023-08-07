@@ -4,7 +4,6 @@
 	layout:decorate="~{layout/myPageATiles}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <!-- Font Awesome -->
 <link
@@ -15,6 +14,9 @@
 <style>
 html {
 	height : 100%;
+}
+tbody tr {
+	cursor:pointer;
 }
 </style>
 
@@ -39,7 +41,7 @@ html {
 					<form class="signup-form" name="commuteInfoForm">
 						<div class="modal-body" style="display:inline-block;padding:0;">
 							<div class="form-group mb-3" style="display:inline-block;width: 470px;">
-								<table class="table" style="float: left; font-size:20px;margin-bottom:0;font-weight: 500;">
+								<table class="table" style="float: left; font-size:20px;margin-bottom:0;font-weight: 500;margin-left:20px;">
 									<thead></thead>
 									<tbody>
 										<tr><td><span style="display: inline-block;width: 120px;">문서 번호 </span> <span id="mPayNo" style="font-weight: 200;"></span></td></tr>
@@ -48,7 +50,7 @@ html {
 										<tr><td id="sessionId" style="display: none;">[[${session.Id}]]</td></tr>
 									</tbody>
 								</table>
-								<table class="table" style="float: left; font-size:20px;margin-bottom:0;font-weight: 500;">
+								<table class="table" style="float: left; font-size:20px;margin-bottom:0;font-weight: 500;margin-left:20px;">
 									<thead></thead>
 									<tbody>
 										<tr><td><span style="display: inline-block;width: 120px;">진행 상태 </span> <span id="mStatus" style="font-weight: 200;"></span></td></tr>
@@ -83,13 +85,13 @@ html {
 				<div style="margin-bottom: 8px;">
 					
 					<input type="hidden" name="page" value="1" /> <input
-					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;"
+					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;cursor:pointer;"
 					type="date"
 					th:value="${#dates.format(carVO.startDay, 'yyyy-MM-dd')}"
 					name="startDay" id="startDate" onchange="mindate(); changeDate();">
 					-
 				<input
-					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;"
+					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;cursor:pointer;"
 					type="date"
 					th:value="${#dates.format(carVO.endDay, 'yyyy-MM-dd')}"
 					name="endDay" id="endDate" onchange="changeDate()">
@@ -100,7 +102,7 @@ html {
 				<div
 					style="position: absolute; display: inline-block; right: 25px; top: 69px;">
 					<select
-						style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;"
+						style="border: 1px solid gray;border-radius: 5px;height: 35px; width:60px;cursor:pointer;"
 						name="type" id="selectBox" onchange="boxRe()">
 						<option value='' selected>선택</option>
 						<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
