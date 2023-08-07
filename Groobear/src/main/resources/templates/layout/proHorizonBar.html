@@ -10,7 +10,7 @@
 					<button type="button"
 							class="btn btn-primary square2"
 							data-toggle="modal"
-							title="프로젝트 개인 색상 설정입니다."
+							title="프로젝트 색상을 설정합니다."
 							data-placement="bottom"
 							th:style="'background-color: ' + ${projectTopBar.proColor}"
 							data-target="#squareStyle"></button>
@@ -107,9 +107,15 @@
 					  data-target="#inviteMember"
 					  title="프로젝트 인원 초대"
 					  data-placement="bottom">group_add</span>
-				<span class="material-symbols-outlined spanCursor proMover" data-toggle="tooltip" data-placement="bottom" title="프로젝트 나가기" onclick="exitProMem()">logout</span>
+				<span class="material-symbols-outlined spanCursor proMover proout"
+					  data-placement="bottom"
+					  title="프로젝트 나가기"
+					  onclick="exitProMem()">logout</span>
 				<span th:if="${readProAuth.id == session.Id}"
-					  class="material-symbols-outlined spanCursor proMover" onclick="delPro()"data-toggle="tooltip" data-placement="bottom" title="프로젝트 삭제">delete</span>
+					  class="material-symbols-outlined spanCursor proMover prodel"
+					  onclick="delPro()"
+					  data-placement="bottom"
+					  title="프로젝트 삭제">delete</span>
 			</div>
 		</nav>
 	</div>
@@ -166,6 +172,12 @@
 	});
 	$(document).ready(function(){
 	    $(".square2").tooltip();
+	});
+	$(document).ready(function(){
+	    $(".proout").tooltip();
+	});
+	$(document).ready(function(){
+	    $(".prodel").tooltip();
 	});
 </script>
 
