@@ -10,12 +10,11 @@
 	<!-- 전자서명 이동버튼 -->
 	<div>
 		<div style="display:none" id="empNo">[[${userInfo.empNo}]]</div>
-		<label><span>이름 </span><span>[[${userInfo.name}]]</span></label><br>
 		<span id="userInfoId" style="display:none">[[${userInfo.Id}]]</span>
 		<!-- 해당위치에 경로써서 img가져오기 -->
 		<div id="preview-container" class="uploadResult" style="margin-top: 20px;margin-bottom:10px">
 			<th:block th:if="${userSignInfo != null && userSignInfo != ''}">
-				<ul>
+				<ul style="padding:0px;padding-left:72px;">
 				<!-- public이 아니면 개인서명 조회 public이면 공용이미지 -->
 					<li th:if="${userSignInfo.uploadPath != 'public'}" th:data-path="${userSignInfo.uploadPath}" th:data-uuid="${userSignInfo.uuid}"
 					data-filename="${userSignInfo.fileName}" data-type="true" style="list-style-type: none;">
@@ -29,13 +28,14 @@
 				</ul>
 			</th:block>
 			<th:block th:if="${#strings.isEmpty(userSignInfo)}">
-				<ul style="padding:0px;"></ul>
-				<li style="list-style-type: none;"><a>서명없음 등록요망</a></li>
+				<ul style="padding:0px;padding-left:72px;">
+				<li style="list-style-type: none;"><img id="profImg" style="border:1px solid;" src="../img/publicSign.png"></li>
+				</ul>
 			</th:block>
 		</div>
-		<button type="button" id="paySign" onclick="paySignSet()" style="margin-left: 110px;font-size:18px;margin-bottom: 10px;margin-right: 10px;border: 0;width: 120px;height: 40px;background-color: #9fdfbea6;border-radius: 15px;color: #474747;">개인서명등록</button>
-		<button type="button" id="publicSign" onclick="publicSignSet()" style="font-size:18px;margin-bottom: 10px;margin-right: 10px;border: 0;width: 120px;height: 40px;background-color: #9fdfbea6;border-radius: 15px;color: #474747;">공용서명등록</button>
-		<button type="button" id="signDelete" style="font-size:18px;margin-bottom: 10px;margin-right: 10px;border: 0;width: 110px;height: 40px;background-color: #9fdfbea6;border-radius: 15px;color: #474747;">개인서명제거</button>
+		<button class="tjs" type="button" id="paySign" onclick="paySignSet()" style="margin-left: 110px;font-size:18px;margin-bottom: 10px;margin-right: 10px;border: 0;width: 130px;height: 40px;background-color: #9fdfbea6;border-radius: 15px;color: #474747;">개인서명등록</button>
+		<button class="tjs" type="button" id="publicSign" onclick="publicSignSet()" style="font-size:18px;margin-bottom: 10px;margin-right: 10px;border: 0;width: 130px;height: 40px;background-color: #9fdfbea6;border-radius: 15px;color: #474747;">공용서명등록</button>
+		<button class="tjs" type="button" id="signDelete" style="font-size:18px;margin-bottom: 10px;margin-right: 10px;border: 0;width: 130px;height: 40px;background-color: #9fdfbea6;border-radius: 15px;color: #474747;">개인서명제거</button>
 	</div>
 	<script>
 		let openPaySign;

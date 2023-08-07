@@ -4,7 +4,6 @@
    layout:decorate="~{layout/tiles}">
 <head>
 <meta charset="UTF-8">
-<title>Groobear</title>
 <script type="text/javascript"
    src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <style>
@@ -82,6 +81,7 @@ html::-webkit-scrollbar {
 		text-decoration:none !important;
 		cursor : pointer;
 	}
+	
 </style>
 </head>
 <body layout:fragment="content">
@@ -93,19 +93,19 @@ html::-webkit-scrollbar {
 				<fieldset style="width: 385px; height: 280px;margin:10px;margin-left:0px;border:1px solid black;">
 					<div class="row">
 						<div class="col-4" style="display:inline-block;margin:5px;">
-							<img id="profImg" style="border-radius: 60px;width:120px;height:150px;margin:15px;margin-bottom:0px;" src="../img/userProf.png">
+							<img id="profImg" style="border-radius: 60px;width:120px;height:150px;margin:15px;margin-left:25px;margin-bottom:0px;" src="../img/userProf.png">
 						</div>
-						<div class="col-6" style="display: inline-block;margin:10px;margin-left: 30px;">
-							<h4 class="dohyeon" style="font-size:35px;text-align:center;font-weight: bold;">Groobear</h4>
-							<a class="dohyeon" style="font-size:20px;display:block;margin-bottom:10px;">사번 : [[${session.EmpNo}]]</a>
-							<a class="dohyeon" style="font-size:20px;display:block;margin-bottom:10px;">이름 : [[${session.Name}]]</a>
-							<a class="dohyeon" style="font-size:20px;display:block;margin-bottom:0px;">직책 : [[${session.Rank}]]</a>
+						<div class="col-6" style="display: inline-block;margin:7px;margin-left: 27px;">
+							<h4 class="tjs" style="font-size:35px;text-align:center;font-weight: 600;">Groobear</h4>
+							<div style="display:block;margin-left:5px;margin-bottom:10px;cursor: Default;pointer-events: none;"><a class="tjs" style="font-weight:600;font-size:19px;">사번 : </a><a class="tjs" style="font-weight:400;font-size:19px;">[[${session.EmpNo}]]</a></div>
+							<div style="display:block;margin-left:5px;margin-bottom:10px;cursor: Default;pointer-events: none;"><a class="tjs" style="font-weight:600;font-size:19px;">이름 : </a><a class="tjs" style="font-weight:400;font-size:19px;">[[${session.Name}]]</a></div>
+							<div style="display:block;margin-left:5px;margin-bottom:10px;cursor: Default;pointer-events: none;"><a class="tjs" style="font-weight:600;font-size:19px;">직책 : </a><a class="tjs" style="font-weight:400;font-size:19px;">[[${session.Rank}]]</a></div>
 						</div>
 					</div>
 					<div style="margin:10px;margin-left:40px;margin-top:0px;">
-						<a class="dohyeon" style="font-size:20px;">연락처 : [[${session.Phone}]]</a><br>
-						<a class="dohyeon" style="font-size:20px;">회사메일 : [[${session.Id}]]</a><br>
-						<a class="dohyeon" style="font-size:20px;">개인메일 : [[${session.Email}]]</a>
+						<div style="display:block;margin-bottom:2px;cursor: Default;pointer-events: none;"><a class="tjs" style="font-weight:600;font-size:19px;">연락처&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </a><a class="tjs" style="font-weight:400;font-size:19px;">[[${session.Phone}]]</a></div>
+						<div style="display:block;margin-bottom:2px;cursor: Default;pointer-events: none;"><a class="tjs" style="font-weight:600;font-size:19px;">회사메일 : </a><a class="tjs" style="font-weight:400;font-size:19px;">[[${session.Id}]]</a></div>
+						<div style="display:block;margin-bottom:2px;cursor: Default;pointer-events: none;"><a class="tjs" style="font-weight:600;font-size:19px;">개인메일 : </a><a class="tjs" style="font-weight:400;font-size:19px;">[[${session.Email}]]</a></div>
 					</div>
 				</fieldset>
 			</td>
@@ -113,60 +113,60 @@ html::-webkit-scrollbar {
 				<fieldset style="width: 395px; height: 280px;margin:10px;border:1px solid black;">
 					<div class="row" style="width: 375px;margin:10px;margin-top:5px;">
 						<div style="text-align: center;">
-							<img src="../img/mail.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/mail/receiveMail'"><br>
-							<a class="dohyeon" style="font-size:20px;" href="/mail/receiveMail">메일</a>
+							<img src="../img/mail.png" style="width: 80px; cursor: pointer; cursor: pointer; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/mail/receiveMail'"><br>
+							<a class="tjs" style="font-size:19px;font-weight:600;" href="/mail/receiveMail">메일</a>
 						</div>
 						<div style="text-align: center;">
-							<img src="../img/calendar.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/perSch'"><br>
-							<a class="dohyeon" style="font-size:20px;" href="/perSch">캘린더</a>
+							<img src="../img/calendar.png" style="width: 80px; cursor: pointer; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/perSch'"><br>
+							<a class="tjs" style="font-size:19px;font-weight:600;" href="/perSch">캘린더</a>
 						</div>
 						<div style="text-align: center;">
-							<img src="../img/communication.png" onclick="openChat()" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;"><br>
-							<a class="dohyeon" style="font-size:20px;" onclick="openChat()">실시간대화</a>
+							<img src="../img/communication.png" onclick="openChat()" style="width: 80px; cursor: pointer;height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;"><br>
+							<a class="tjs" style="font-size:19px;font-weight:600;" onclick="openChat()">실시간대화</a>
 						</div>
 					</div>
 					<div class="row" style="width: 375px;margin:10px;">
 						<div style="text-align: center;">
-							<img src="../img/document.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/pay/payMain'"><br>
-							<a class="dohyeon" style="font-size:20px;" href="/pay/payMain">전자결재</a>
+							<img src="../img/document.png" style="width: 80px; cursor: pointer; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/pay/payMain'"><br>
+							<a class="tjs" style="font-size:19px;font-weight:600;" href="/pay/payMain">전자결재</a>
 						</div>
 						<div style="text-align: center;">
-							<img src="../img/project.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/proMain'"><br>
-							<a class="dohyeon" style="font-size:20px;" href="/proMain">프로젝트</a>
+							<img src="../img/project.png" style="width: 80px; cursor: pointer; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/proMain'"><br>
+							<a class="tjs" style="font-size:19px;font-weight:600;" href="/proMain">프로젝트</a>
 						</div>
 						<div style="text-align: center;">
-							<img src="../img/people.png" style="width: 80px; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/empInfo'"><br>
-							<a class="dohyeon" style="font-size:20px;" href="/empInfo">회원조회</a>
+							<img src="../img/people.png" style="width: 80px; cursor: pointer; height: 80px;margin:22.5px;margin-top:10px;margin-bottom:10px;" onclick="location.href='/empInfo'"><br>
+							<a class="tjs" style="font-size:19px;font-weight:600;" href="/empInfo">회원조회</a>
 						</div>
 					</div>
 				</fieldset>
 			</td>
 			<td colspan="2" style="width: 400px; height: 300px;">
 				<fieldset style="width: 385px; height: 280px;margin:10px;margin-right:0px;border:1px solid black;">
-					<div class="dohyeon" style="display: inline-block;margin:10px;margin-left: 30px;">
-						<h4 style="font-size:35px;font-weight: bold;margin-bottom:25px;margin-top:10px;">전자결재</h4>
-						<a style="font-size:25px;display:block;margin-bottom:25px;">진행문서&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span id="getProgress" onclick="location.href='/pay/InProgressPay'">0건</span></a>
-						<a style="font-size:25px;display:block;margin-bottom:25px;">완료문서&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span id="comProgress" onclick="location.href='/pay/completePay'">0건</span></a>
-						<a style="font-size:25px;display:block;margin-bottom:0px;">참조문서&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span id="refProCount" onclick="location.href='pay/referrerPay'">0건</span></a>
+					<div class="tjs" style="display: inline-block;margin:10px;margin-left: 30px;">
+						<h4 style="font-size:33px;font-weight: 600;margin-bottom:25px;margin-top:10px;">전자결재</h4>
+						<a style="font-size:23px;display:block;font-weight: 600;margin-bottom:25px;cursor: Default;">진행문서&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="getProgress" style="cursor: Pointer;" onclick="location.href='/pay/InProgressPay'">0건</span></a>
+						<a style="font-size:23px;display:block;font-weight: 600;margin-bottom:25px;cursor: Default;">완료문서&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="comProgress" style="cursor: Pointer;" onclick="location.href='/pay/completePay'">0건</span></a>
+						<a style="font-size:23px;display:block;font-weight: 600;margin-bottom:0px;cursor: Default;">참조문서&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="refProCount" style="cursor: Pointer;" onclick="location.href='pay/referrerPay'">0건</span></a>
 					</div>
 				</fieldset>
 			</td>
 		</tr>
 		<tr>
 			<td colspan="6" style="font-size:20px;width: 1215px; height: 80px;">
-				<fieldset class="dohyeon" style="width: 1211px;height: 60px;margin-top:10px;margin-bottom:10px;border:1px solid black;">
+				<fieldset class="tjs" style="width: 1211px;height: 60px;margin-top:10px;margin-bottom:10px;border:1px solid black;">
 					<div class="row" style="display: flex;">
 					   <!-- 출근/퇴근 스위치 -->
 						<div style="margin-right:70px;">
-							<a style="margin:10px;margin-left:50px;">근태현황 [ <span id="day23"></span> ]</a>
+							<a style="margin:10px;margin-left:50px;font-weight:600;cursor: Default;">근태현황 [ <span id="day23"></span> ]</a>
 							<label class="switch" style="margin:12px;"> 
 								<input class="chkBox" type="checkbox">
 								<span class="slider round cBtn"></span>
 							</label>
 							<span id="workSwitch"> </span> 
-							<span id="workStart">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</span>
-							<span>&nbsp&nbsp~&nbsp&nbsp</span>
-							<span id=workEnd>&nbsp&nbsp:&nbsp&nbsp</span>
+							<span id="workStart">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;</span>
+							<span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+							<span id=workEnd>&nbsp;&nbsp;:&nbsp;&nbsp;</span>
 						</div>
 						
 						<!-- 연장근무 시작/종료 스위치 -->
@@ -176,9 +176,9 @@ html::-webkit-scrollbar {
 								<span class="slider round cBtno"></span>
 							</label>
 							<span id="overWorkSwitch"> </span> 
-							<span id="overWorkStart">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</span>
-							<span>&nbsp&nbsp~&nbsp&nbsp</span>
-							<span id="overWorkEnd">&nbsp&nbsp:&nbsp&nbsp</span>
+							<span id="overWorkStart">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;</span>
+							<span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+							<span id="overWorkEnd">&nbsp;&nbsp;:&nbsp;&nbsp;</span>
 						
 						</div>
 					</div>
@@ -186,13 +186,13 @@ html::-webkit-scrollbar {
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3" style="width: 607.5px; height: 500px;">
-				<fieldset style="width: 594px; height: 480px;margin:0px;margin-left:0px;">
+			<td colspan="3" style="width: 607.5px; height: 470px;">
+				<fieldset style="width: 594px; height: 450px;margin:0px;margin-left:0px;">
 					<iframe style="width: 592px; height: 100%; margin: 0px;border:1px solid black;"src="boardListMain?boardType=N"></iframe>
 				</fieldset>
 			</td>
-			<td colspan="3" style="width: 607.5px height: 500px;">
-				<fieldset style="width: 594px; height: 480px;margin:0px;margin-right:0px;float: right;">
+			<td colspan="3" style="width: 607.5px height: 470px;">
+				<fieldset style="width: 594px; height: 450px;margin:0px;margin-right:0px;float: right;">
 					<iframe style="width: 592px; height: 100%; margin: 0px;border:1px solid black;"src="boardListMain?boardType=K"></iframe>
 				</fieldset>
 			</td>
