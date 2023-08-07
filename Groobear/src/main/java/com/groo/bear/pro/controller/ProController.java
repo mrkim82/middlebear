@@ -115,9 +115,7 @@ public class ProController {
 		proData(model, request);
 		
 		return Collections.singletonMap("result", result>0?"성공":"취소");
-	}
-	
-	
+	};
 	
 	//프로젝트 메인 페이지 즐찾 보기
 	@GetMapping("proMainS")
@@ -126,7 +124,7 @@ public class ProController {
 		model.addAttribute("projectMainList", proService.readProjectStar((String)session.getAttribute("Id")));
 		proData(model, request);
 		return "proHome/proMainStar";
-	}
+	};
 	
 	//프로젝트 메인 페이지 숨김 보기
 	@GetMapping("proMainH")
