@@ -11,7 +11,7 @@
 	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
 	
 	.dohyeon{
-		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		Font-family : 'Do Hyeon', serif;/*웹 폰트 지정*/
 		color:black;
 		font-size : 20px;
 	}
@@ -49,7 +49,7 @@
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text">진행중 결재문서 : <span class="count" id="getProgress" onclick="location.href='/pay/InProgressPay'">0건</span></div>
+                                    <div class="stat-text" style="text-align:center">진행 : <span class="count" id="getProgress" onclick="location.href='/pay/InProgressPay'">0건</span></div>
                                     <div class="stat-heading"></div>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text">완료된 결재문서 : <span class="count" id="comProgress" onclick="location.href='/pay/completePay'">0건</span></div>
+                                    <div class="stat-text" style="text-align:center">완료 : <span class="count" id="comProgress" onclick="location.href='/pay/completePay'">0건</span></div>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text">참조된 결재문서 : <span class="count" id="refProCount" onclick="location.href='pay/referrerPay'">0건</span></div>
+                                    <div class="stat-text" style="text-align:center">참조 : <span class="count" id="refProCount" onclick="location.href='pay/referrerPay'">0건</span></div>
                                 </div>
                             </div>
                         </div>
