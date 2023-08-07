@@ -3,19 +3,16 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layout/tiles}"
 	  >
-<th:block layout:fragment="content">
+<th:block layout:fragment="content" class="dohyeon">
 
 <style>
 #calendar {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
-    margin: 40px 10px;
+    margin: 0px 0px;
     padding: 0;
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
     font-size: 14px;
-}
-p {
-	margin: 40px 10px;
 }
 .custom-modal {
     position: fixed;
@@ -29,6 +26,20 @@ p {
     transition: transform 0.3s;
 }
 
+.btn-groob {
+	background-color: #35A880;
+	color: #fff;
+	border: 1px solid #35A880;
+	border-radius: 12px;
+}
+
+.btn-groobl {
+	background-color: #6198d3;
+	color: #fff;
+	border: 1px solid #35A880;
+	border-radius: 12px;
+}
+
 .show-modal {
     transform: translateX(0);
     z-index: 9999;
@@ -36,7 +47,7 @@ p {
 
 .modal-header {
     padding: 10px;
-    background-color: #007bff;
+    background-color: #6198d3;
     color: #fff;
 }
 
@@ -53,36 +64,66 @@ p {
 .spanCursor {
 	cursor: pointer
 }
-
 textarea {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 4px;
   padding: 10px;
-  font-family: Arial, sans-serif;
   font-size: 14px;
   padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   height: 200px;
   width: 100%;
   resize: vertical; /* 세로 조정 가능 */
+  border: none;
+  outline: none;
+  border-top: 1px solid #ddd;
+}
+/* 검색 창 스타일 */
+input[type="text"] {
+	width: 150px; /* 원하는 너비 값으로 변경 */
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 20px;
+	font-size: 16px;
+	outline: none;
+	transition: width 0.3s ease-in-out;
+}
+
+/* 검색 창에 포커스되었을 때 스타일 */
+input[type="text"]:focus {
+	width: 170px; /* 포커스되었을 때 더 넓은 너비 값으로 변경 */
+	border-color: #6c63ff;
+	box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+}
+
+.dohyeonModalContent {
+	border: 1px solid #00000021;
+	border-radius: 20px;
+	box-shadow: 2px 4px 3px 3px darkgray;
+}
+.fc {
+  margin: 0;
+}
 </style>
 
-<h1 th:text="${session.Name} + '의 개인 캘린더'"></h1>
-<h6>파랑: 개인 일정, 모달</h6>
-<h6>연두: 프젝 일정, 프로젝트 이동</h6>
-<button type="button"
-		class="btn btn-success"
-		data-toggle="modal"
-		data-target="#creSchModal">
-	개인 일정 생성
-</button>
+<h1 style="margin-top:30px; margin-left:10px;" th:text="${session.Name} + '의 개인 캘린더'"></h1>
+<div style="text-align:right; margin-right:30px; margin-bottom:30px;">
+	<button type="button"
+			class="btn btn-groobl"
+			data-toggle="modal"
+			data-target="#creSchModal">
+		개인 일정 생성
+	</button>
+</div>
 
 <!-- 일정 생성 모달 -->
-<div class="modal fade" id="creSchModal" tabindex="-1" aria-labelledby="creSchModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
+<div class="modal fade modal-dialog-scrollable" 
+	 id="creSchModal"
+	 tabindex="-1"
+	 aria-labelledby="creSchModalLabel"
+	 role="dialog"
+	 aria-hidden="true"
+	 style="display:none">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content dohyeonModalContent" style="height: 500px;">
+      <div class="modal-header" style="background-color:#6198d3;">
         <h5 class="modal-title" id="creSchModalLabel">개인 일정 생성</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -90,36 +131,40 @@ textarea {
       </div>
       <div class="modal-body">
       	<!-- 제목 -->
-      	<div>
-      		<h6>일정 제목</h6>
-			<input type="text" placeholder="제목을 입력하세요." class="postTitle">
+      	<div style="margin-bottom: 10px;">
+			<input type="text" placeholder="제목을 입력하세요." class="postTitle" maxlength="30" style="width: 100%;">
 		</div>
 		<!-- 시작일 -->
-		<div>
-			<h6>시작일</h6>
-			<input type="datetime-local" id="startSchDate">
+		<div style="margin-bottom: 7px;">
+			<p style="margin-bottom: 2px;">시작일</p>
+			<input type="datetime-local"
+				   id="startSchDate"
+				   class="form-control"
+				   style="margin-left: 3px; width: 210px; border-radius: 5px;">
 		</div>
 		<!-- 마감일 -->
-		<div>
-			<h6>마감일</h6>
+		<!-- 마감일 -->
+		<div style="margin-bottom: 7px;">
+			<p style="margin-bottom: 2px;">마감일</p>
 			<input type="datetime-local"
 				   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
-				   id="endSchDate">
+				   id="endSchDate"
+				   class="form-control"
+				   style="margin-left: 3px; width: 210px; border-radius: 5px;">
 		</div>
 		<!-- 장소 -->
-		<div>
-			<h6>장소</h6>
-			<input type="text" class="schPlace">
+		<div style="margin-bottom: 7px;">
+			<p style="margin-bottom: 2px;">장소</p>
+			<input type="text" class="schPlace" placeholder="장소를 입력하세요." style="width: 300px;" maxlength="30">
 		</div>
 		<!-- 내용 -->
 		<div>
-			<h6>내용</h6>
-			<textarea placeholder="내용을 입력하세요." class="schText"></textarea>
+			<textarea placeholder="내용을 입력하세요." class="schText" maxlength="999"></textarea>
 		</div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-dismiss="modal">닫기</button>
-        <button type="button" class="btn btn-success" onclick="createSchButton()">등록</button>
+        <button type="button" class="btn btn-groobl" onclick="createSchButton()">등록</button>
+        <button type="button" class="btn btn-groobl" data-dismiss="modal">닫기</button>
       </div>
     </div>
   </div>
@@ -133,35 +178,51 @@ textarea {
 		 th:each="calD : ${readPerCalDetail}"
 		 th:id="'modal' + ${calD.proPostNo}"
 		 th:data-feed-post-sch-no="${calD.proPostNo}"
-		 th:data-sch-no="${calD.schNo}">
+		 th:data-sch-no="${calD.schNo}"
+		 style="font-size:15px;">
 		 
 	<div class="modal-header">
-       <h6 class="modal-title"></h6>
-       <h5 class="modal-title"
-					th:text="'개인일정 : ' + ${calD.postTitle}"></h5>
-       <h5 th:text="'등록일 : ' + ${#dates.format(calD.postDate, 'yyyy-MM-dd HH:mm')}"></h5>
-       <span onclick="deletePost()"
-       		 class="spanCursor">삭제</span>
-       <button type="button"
-							class="close closeModalButton"
-							aria-label="Close">
-       	<span aria-hidden="true">&times;</span>
-       </button>
+		<div class="modal-title" style="display: flex;">
+		 <div style="display: flex; flex-direction: column; margin-left:12px;">
+			<span th:text="'개인일정 : ' + ${calD.postTitle}" style="font-size:17px;"></span>
+	        <span th:text="${#dates.format(calD.postDate, 'yyyy-MM-dd HH:mm')}"
+	              style="color: #dfdfdf; font-size:14px; margin-left:20px;"></span>
+	    </div>
+        
+		</div>
+        <div style="display:inline; margin-left: auto; text-align:right;">
+	        <span onclick="deletePost()" class="spanCursor">삭제</span>
+	       <button type="button"
+								class="close closeModalButton"
+								aria-label="Close">
+	       	<span aria-hidden="true">&times;</span>
+	       </button>
+        </div>
    	</div>
 
 	<!-- 날짜 -->
    	<div class="modal-body">
-		<input type="datetime-local"
-					 th:value="${#dates.format(calD.schStartTime, 'yyyy-MM-dd HH:mm')}"></input>
-		<input type="datetime-local"
-					 th:value="${#dates.format(calD.schEndTime, 'yyyy-MM-dd HH:mm')}"
-					 th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"></input>
-		<th:block th:text="'장소 : ' + ${calD.schPlace == null ? '' : calD.schPlace}"></th:block>
+   		<div style="margin-bottom: 7px;">
+	   		<p style="margin-bottom: 2px;">시작일</p>
+			<input type="datetime-local"
+				   class="form-control"
+				   th:value="${#dates.format(calD.schStartTime, 'yyyy-MM-dd HH:mm')}"
+				   style="margin-left: 3px; width: 210px; border-radius: 5px;"></input>
+		</div>
+		<div style="margin-bottom: 7px;">
+		<p style="margin-bottom: 2px;">마감일</p>
+			<input type="datetime-local"
+				   class="form-control"
+				   th:value="${#dates.format(calD.schEndTime, 'yyyy-MM-dd HH:mm')}"
+				   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
+				   style="margin-left: 3px; width: 210px; border-radius: 5px;"></input>
+		</div>
+		<div th:if="${calD.schPlace != null}" th:text="'장소 : ' + ${calD.schPlace}"></div>
     </div>
     
     <!-- 내용 -->
     <div class="modal-body">
-		<th:block th:text="'내용 : ' + ${calD.schContent == null ? '' : calD.schContent}"></th:block>
+		<div th:if="${calD.schContent != null}" th:text="'내용 : ' + ${calD.schContent}"></div>
     </div>
     
 	<!-- 북마크, 댓글수 -->
@@ -171,7 +232,15 @@ textarea {
 				<li th:each="com : ${readPerCalCom}"
 						th:data-post-code="${com.comNo}"
 						th:if="${calD.proPostNo == com.proPostNo}">
-					<span th:utext="${com.profileImg}"></span>
+					<th:block th:if="${com.uploadPath != null}">
+						<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+		  		 			 class="card-img-top"
+		  		 			 style="width:30px; height:30px; margin:0px;">
+		  		 	</th:block>
+		  		 	<th:block th:if="${com.uploadPath == null}">
+						<img style="width:30px; height:30px; margin:0px;"
+					 		 src="../img/userProf.png">
+					</th:block>
 					<span th:text="${com.name}"></span>
 					<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 					<span th:text="${com.comContent}"></span>
@@ -185,7 +254,7 @@ textarea {
 			<div class="form-group">
 				<input type="text" class="form-control" placeholder="댓글 작성">
 			</div>
-			<button type="button" class="btn btn-primary" onclick="createCommentButton()">댓글 등록</button>
+			<button type="button" class="btn btn-groobl" onclick="createCommentButton()">댓글 등록</button>
 		</div>
     </div>
     
