@@ -4,18 +4,47 @@
 <head>
 <meta charset="UTF-8">
 <title>결재문서 작성 페이지</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+	
+	.dohyeon{
+		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		color:black;
+		font-size : 20px;
+	}
+	#ulId li.active a.page-link {
+    	background-color: #35A880;
+    	border: 1px solid #35A880;
+    	color:#fff
+  	}
+  	a {
+  		text-decoration:none !important;
+  		cursor:pointer;
+  	}
+	ul {
+			list-style:none;
+	}
+	.paging .active a {
+		    background-color: #f00;
+		    color: #fff;
+	}
+	.paymentuser{
+		border : 1px solid black;
+	}
+</style>
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 	<div layout:fragment="content">
-		<form style="width:1200px; height:2000px">
-			
-			<table style="float:left;width:1000px;height:1000px" class="table table-hover tjs">
-				<tbody>
+		<form style="width:1000px; height:2000px">
+			<h3 class="tjs" style="font-size:35px;margin-top:20px;display:block">Groobear 문서작성</h3>
+			<table style="float:left;width:50%;" class="table table-hover tjs">
+				<tbody style="width:100%">
 					<tr style="height:50px;">
 						<td>문서번호 : [[${paymentNo}]]</td>
 					</tr>
-					<tr  style="width:200px;height:50px;">
+					<tr  style="width:400px;height:50px;">
 						<td id="drafter">기안자 : [[${userInfo.name}]] [[${userInfo.rank}]] [[${userInfo.deptName}]]</td>
 					</tr>
 					<tr style="height:50px;">
@@ -24,21 +53,21 @@
 					<tr style="height:50px;">
 						<td><button id="referrerClick" type="button" onclick="referrerSelect();">참조자선택</button></td>
 					</tr>
-					<tr id="referrerList" >
-						<td style="width:50px" ></td>
+					<tr id="referrerList">
+						<td style="display:none" ></td>
+						<td style="display:none"></td>
+						<td style="width:5%"></td>
+						<td style="width:5%"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="width:50px"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="width:50px"></td>
+						<td style="width:5%"></td>
+						<td style="width:5%"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
+						<td style="width:5%"></td>
+						<td style="width:5%"></td>
 						<td style="display:none"></td>
 					</tr>
 					<tr>
@@ -52,13 +81,11 @@
 							<option value="c">품의서</option>
 						</select></td>
 					</tr>
-					<tbody id="payNum1" style="display:none">
+					<tbody id="payNum1" style="display:none;width:55%">
 						<tr><td><input type="date" id="carDate" value="sysdate"></td></tr>
 						<tr><td>행선지 : <input type="text" id="carAddr" value="addr"></td></tr>
-						<tr>
-					<td>운행전 키로수 <input type="text" id="km1" onchange="kmChange()"></td>
-					<td>운행후 키로수 <input type="text" id="km2" onchange="kmChange()"></td>
-						</tr>
+						<tr><td>운행전 키로수 <input type="text" id="km1" onchange="kmChange()"><br></td></tr>
+						<tr><td>운행후 키로수 <input type="text" id="km2" onchange="kmChange()"></td></tr>
 						<tr><td>전도금 <input type="text" id="imprest" readonly></td></tr>
 						<tr><td>목적 <input type="text" id="purpose"></td></tr>
 						<tr><td>
@@ -105,10 +132,10 @@
 				        </td></tr>
 						<tr><td><button type="button" onclick="payNumSend1()">결재</button></td></tr>
 					</tbody>
-					<tbody id="payNum2" style="display:none">
+					<tbody id="payNum2" style="display:none;width:55%">
 						<tr><td><input type="date" id="off1">(연차시작일)</td></tr>
 						<tr><td><input type="date" id="off2">(복귀일)</td></tr>
-						<tr><td><input type="text" id="offtitle" style="width:500px"></td></tr>
+						<tr><td><input type="text" id="offtitle" style="width:55%"></td></tr>
 						<tr><td><textarea id="offcontent" style="width:400px; height:200px"></textarea></td></tr>
 						<tr><td><div class="panel-body3">
 	                        <div class="form-group uploadDiv3">
@@ -125,7 +152,7 @@
 						<tr><td><button type="button" onclick="payNumSend2()">결재</button></td></tr>
 					</tbody>
 					<tbody id="payNum3" style="display:none">
-						<tr><td><input type="text" id="robintitle" style="width:500px"></td></tr>
+						<tr><td><input type="text" id="robintitle" style="width:55%"></td></tr>
 						<tr><td><textarea id="robincontent" style="width:400px; height:200px"></textarea></td></tr>
 						<tr><td><div class="panel-body4">
 	                        <div class="form-group uploadDiv4">
@@ -143,7 +170,7 @@
 					</tbody>
 				</tbody>
 			</table>
-			<table style="float:right;margin-right:200px">
+			<table class="paymentuser" style="float:right;width:40%;margin-top:10px;">
 				<thead>
 					<tr style="display:inline-block">
 						<td style="width:130px">기안자</td>
@@ -151,31 +178,31 @@
 						<td style="width:100px">결재자2</td>
 					</tr>
 				</thead>
-				<tbody>
-					<tr style="display:inline-block">
-						<td style="width:130px; height:100px; background-color:aquamarine">기안자사인1</td>
+				<tbody class="paymentuser">
+					<tr style="display:inline-block" class="paymentuser">
+						<td style="width:131px; height:100px; background-color:white"></td>
 					</tr>
-					<tr style="display:inline-block">
-						<td style="width:130px; height:100px; background-color:MediumOrchid">결재자사인1</td>
+					<tr style="display:inline-block" class="paymentuser">
+						<td style="width:131px; height:100px; background-color:white"></td>
 					</tr>
-					<tr style="display:inline-block">
-						<td style="width:130px; height:100px; background-color:DeepSkyBlue">결재자사인2</td>
+					<tr style="display:inline-block" class="paymentuser">
+						<td style="width:131px; height:100px; background-color:white"></td>
 					</tr>
 					<tr id="drafter" style="display:inline-block">
-						<td></td>
+						<td>[[${userInfo.name}]] [[${userInfo.rank}]]</td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 					</tr>
-					<tr id="payUserList1" style="display:inline-block">
-						<td></td>
+					<tr id="payUserList1" style="display:inline-block;margin-left:50px">
+						<td style="margin-left:30px"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
 					</tr>
-					<tr id="payUserList2" style="display:inline-block">
+					<tr id="payUserList2" style="display:inline-block;margin-left:50px">
 						<td></td>
 						<td style="display:none"></td>
 						<td style="display:none"></td>
