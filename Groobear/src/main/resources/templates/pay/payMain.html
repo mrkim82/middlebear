@@ -31,7 +31,22 @@
 		    background-color: #f00;
 		    color: #fff;
 	}
-	
+	span:link {
+  text-decoration: none;
+}
+ 
+span:visited {
+  text-decoration: none;
+}
+ 
+span:hover {
+  text-decoration: underline;
+  cursor:pointer;
+}
+ 
+span:active {
+  text-decoration: underline;
+}
 	
 </style>
 </head>
@@ -49,7 +64,7 @@
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text" style="text-align:center">진행 : <span class="count" id="getProgress" onclick="location.href='/pay/InProgressPay'">0건</span></div>
+                                    <div class="stat-text" style="text-align:center;cursor:default;">진행 : <span class="count" id="getProgress" onclick="location.href='/pay/InProgressPay'">0건</span></div>
                                     <div class="stat-heading"></div>
                                 </div>
                             </div>
@@ -67,7 +82,7 @@
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text" style="text-align:center">완료 : <span class="count" id="comProgress" onclick="location.href='/pay/completePay'">0건</span></div>
+                                    <div class="stat-text" style="text-align:center;cursor:default;">완료 : <span class="count" id="comProgress" onclick="location.href='/pay/completePay'">0건</span></div>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +98,7 @@
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text" style="text-align:center">참조 : <span class="count" id="refProCount" onclick="location.href='pay/referrerPay'">0건</span></div>
+                                    <div class="stat-text" style="text-align:center;cursor:default;">참조 : <span class="count" id="refProCount" onclick="location.href='pay/referrerPay'">0건</span></div>
                                 </div>
                             </div>
                         </div>
