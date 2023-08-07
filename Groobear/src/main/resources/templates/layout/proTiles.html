@@ -21,7 +21,7 @@
 	  rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	  rel="stylesheet">
-
+ 
 <!-- 풀캘린더 -->
 <script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
 
@@ -780,6 +780,7 @@ textarea {
 	$('#createGroupFolderModal').on('hidden.bs.modal', function (event) {
 		$('#folderContent').val('');
 	});
+	
 	$('#updateManButton').on('hidden.bs.modal', function (e) {
 		$(this).find('.input').val('');
 	});
@@ -795,7 +796,6 @@ textarea {
 	$('#createProModal').on('hidden.bs.modal', function (e) {
 		$(this).find('#proDefTab2').prop('checked', true);
 	});
-	
 	
 </script>
 

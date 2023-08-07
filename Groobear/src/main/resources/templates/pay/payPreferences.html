@@ -10,14 +10,13 @@
 	<!-- 전자서명 이동버튼 -->
 	<div>
 		<div style="display:none" id="empNo">[[${userInfo.empNo}]]</div>
-		<label><span>이름 </span><span>[[${userInfo.name}]]</span></label><br>
 		<span id="userInfoId" style="display:none">[[${userInfo.Id}]]</span>
 		<!-- 해당위치에 경로써서 img가져오기 -->
 		<div id="preview-container" class="uploadResult" style="margin-top: 20px;margin-bottom:10px">
 			<th:block th:if="${userSignInfo != null && userSignInfo != ''}">
 				<ul>
 				<!-- public이 아니면 개인서명 조회 public이면 공용이미지 -->
-					<li th:if="${userSignInfo.uuid != 'public'}" th:data-path="${userSignInfo.uploadPath}" th:data-uuid="${userSignInfo.uuid}"
+					<li th:if="${userSignInfo.uploadPath != 'public'}" th:data-path="${userSignInfo.uploadPath}" th:data-uuid="${userSignInfo.uuid}"
 					data-filename="${userSignInfo.fileName}" data-type="true" style="list-style-type: none;">
 						<div>
 							<img th:src="@{|/display?fileName=${#strings.replace(userSignInfo.uploadPath,'\','/')}/${userSignInfo.uuid}_${userSignInfo.fileName}|}" 
@@ -25,7 +24,7 @@
 							th:data-filename="${userSignInfo.fileName}" data-type="true"  style="border:1px solid;">
 						</div>
 					</li>
-					<li style="list-style-type: none;" th:if="${userSignInfo.uuid == 'public'}"><img id="profImg" style="border:1px solid;" src="../img/publicSign.png"></li>
+					<li style="list-style-type: none;" th:if="${userSignInfo.uploadPath == 'public'}" th:data-uuid="${userSignInfo.uuid}"><img id="profImg" style="border:1px solid;" src="../img/publicSign.png"></li>
 				</ul>
 			</th:block>
 			<th:block th:if="${#strings.isEmpty(userSignInfo)}">
@@ -45,6 +44,7 @@
 		console.log('empNo = ',signNo);
 		//개인서명 등록 모달로 이동
 		function paySignSet(){
+			
 			openPaySign = window.open("/pay/paySign","paymentEmp","width=400, height=450, resizable = no");
 		}
 		//공용서명 등록 버튼 클릭시 db에서 가져온값 자동등록되게 설정
@@ -58,6 +58,7 @@
            	 method:"POST",
            	 contentType:"application/json; charset=utf-8",
   			     data: signNo,
+  			     async : false,
   			  	 success: function(data) {
   			    	 console.log(data);
   			    	 location.href = "/pay/payPreferences";

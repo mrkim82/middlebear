@@ -34,8 +34,8 @@
 <body>
 <div layout:fragment="content">
 	<div>
-	<h3 class="dohyeon" style="font-size:35px;margin-top:20px;">Groobear 참조 문서</h3>
-		<table id="list" class="table table-hover dohyeon">
+	<h3 class="tjs" style="font-size:35px;margin-top:20px;">Groobear 참조 문서</h3>
+		<table id="list" class="table table-hover tjs">
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -47,7 +47,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="pay,stat : ${referrerList}" th:attr="onclick='window.location.href=\'/payInfoRead?payNo=' + ${pay.payNo} + '+&docType='+${pay.docType}+'\''">
+				<tr th:each="pay,stat : ${referrerList}" th:attr="onclick='window.location.href=\'/payInfoRead?payNo=' + ${pay.payNo} + '&docType='+${pay.docType}+'\''">
 					<td th:text="${paging.totalCount - ((paging.cri.page-1) * paging.cri.perPageNum) - stat.index}"></td>
 					<td th:text="${pay.payNo}"></td>
 					<td>[[${pay.purpose}]]</td>

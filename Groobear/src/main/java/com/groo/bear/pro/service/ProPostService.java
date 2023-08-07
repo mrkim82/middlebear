@@ -12,6 +12,7 @@ import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.postvo.ProUserImgVO;
 import com.groo.bear.pro.service.postvo.ProWritingUVO;
 
 public interface ProPostService {
@@ -42,7 +43,7 @@ public interface ProPostService {
 	
 	//댓글
 	// 댓글 작성
-	public int createPostComment(ProPostCommentVO vo);
+	public ProUserImgVO createPostComment(ProPostCommentVO vo);
 	// 댓글 삭제
 	public int deletePostComment(int comNo);
 	// 댓글 수정

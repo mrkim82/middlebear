@@ -49,6 +49,7 @@ public class MailController {
         String id2=id;
         id = id.substring(0,id.indexOf("@"));
         EmailReader receiver = new EmailReader();
+        receiver.setSaveDirectory("/home/ec2-user/upload/");
         List<MailVO> list = receiver.receiveMailAttachedFile(id, id, startDate, endDate);
         //위에서 가져온 메일을 db에 저장하고 뿌려줌
 		if(list!=null && list.size() > 0) {
@@ -63,10 +64,7 @@ public class MailController {
 		mailVO.setReferrer(id2);
 		mailVO.setReferrer2(id2);
 		mailVO.setReferrer3(id2); //(String) session.getAttribute("Id")
-		mailVO.setMailType2(R);
-		mailVO.setMailType3(R);
-		mailVO.setMailType4(R);
-		mailVO.setMailType5(R);
+		mailVO.setMailType(R);
 		Paging paging = new Paging();
         paging.setCri(cri);
         paging.setTotalCount(mailService.countReceiveMail(mailVO));
@@ -149,13 +147,13 @@ public class MailController {
 			mailVO = mailService.getMailInfo(delList.get(i));
 			mailVO.setMailType(U);
 			if(mailVO.getReceiver().equals(id)) {
-				mailService.getMailType2Del(mailVO);
+				mailService.getMailDelete(mailVO);
 			}else if(mailVO.getReferrer().equals(id2)) {
 				mailVO.setReferrer(id2);
-				mailService.getMailType3Del(mailVO);
+				mailService.getMailDelete(mailVO);
 			}else if(mailVO.getReferrer().equals(id2)) {
 				mailVO.setReferrer(id2);
-				mailService.getMailType3Del(mailVO);
+				mailService.getMailDelete(mailVO);
 			}
 			
 //			if(mailVO.getReferrer2().equals("") || mailVO.getReferrer2() == null) {
@@ -220,10 +218,10 @@ public class MailController {
 			mailVO = mailService.getMailInfo(delList.get(i));
 			mailVO.setMailType(D);
 			if(mailVO.getReceiver().equals(id)) {
-				mailService.getMailType2Del(mailVO);
+				mailService.getMailDelete(mailVO);
 			}else if(mailVO.getReferrer().equals(id2)) {
 				mailVO.setReferrer(id2);
-				mailService.getMailType3Del(mailVO);
+				mailService.getMailDelete(mailVO);
 			}
 			count++;
 //			else if(mailVO.getReferrer2().equals(id)) {

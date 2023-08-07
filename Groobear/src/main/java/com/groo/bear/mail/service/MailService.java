@@ -63,10 +63,8 @@ public interface MailService {
 	public List<MailVO> getMaildelete(Criteria cri, MailVO mailVO);
 	//메일 삭제(지운메일함으로 보내는 업데이트문)
 	public int getMailType1Del(MailVO mailVO);
-	public int getMailType2Del(MailVO mailVO);
-	public int getMailType3Del(MailVO mailVO);
-	public int getMailType4Del(MailVO mailVO);
-	public int getMailType5Del(MailVO mailVO);
 	//보낸메일함
 	public List<MailVO> sendMailSearch(Criteria cri,MailVO mailVO);
+	//메일 삭제
+	public int getMailDelete(MailVO mailVO);
 }
