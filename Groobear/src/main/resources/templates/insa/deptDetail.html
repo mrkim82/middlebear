@@ -2,12 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Groobear 부서 상세조회</title>
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+    @import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
     body {
-      font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+      font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
       font-size : 17px;
       background-color: #f7f7f7;
     }
@@ -45,8 +46,8 @@
 	}
 	
 	input[type="text"] {
-		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
-      	font-size : 17px;
+		font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+      	font-size : 16px;
 		width: 120px;
 		padding: 10px;
 		border: 1px solid #ccc;
@@ -93,48 +94,51 @@
 	table tbody tr {
 		line-height: 1; /* Adjust the value as per your preference */
 	}
+	html ::-webkit-scrollbar{
+	 display: none;
+	}
 </style>
 </head>
 <body>
 	<form style="height: 400px;" action="/updateForm" method="GET">
 		<h2 style="text-align:center; margin-top:50px;">Groobear 부서 상세조회</h2>
 		<fieldset>
-			<a style="margin-left: 20px;">부서명 : </a><input name="deptName" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo[0].deptName}" readonly><br>
-			<a style="margin-left: 20px;">팀장 : </a><input name="deptHead" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo[0].deptHead}" readonly><br>
-			<a style="margin-left: 20px;">부서권한 : </a><input name="deptAuth" style="width:120px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo[0].deptAuth}" readonly><br>
+			<a style="margin-left: 20px;font-size:17px;">부서명 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </a><input name="deptName" style="width:120px;font-size:15px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo[0].deptName}" readonly><br>
+			<a style="margin-left: 20px;font-size:17px;">팀장 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </a><input name="deptHead" style="width:120px;font-size:15px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo[0].deptHead}" readonly><br>
+			<a style="margin-left: 20px;font-size:17px;">부서권한 : </a><input name="deptAuth" style="width:120px;font-size:15px; padding-bottom:10px; border:0 solid black;" type="text" th:value="${deptInfo[0].deptAuth}" readonly><br>
 		</fieldset>
 		<fieldset style="margin-bottom:10px;height:250px;">
 			<a>구성원</a>
-			<button class="custom-button button" style="float: right;margin-bottom:5px;padding:5px;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;" type="button" id="addMem" onclick="memPopUp()">추가</button>
-			<button class="custom-button button" style="float: right;margin-bottom:5px;padding:5px;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;" type="button" id="delMem">제외</button>
+			<button class="custom-button button" style="float: right;font-family: 'TheJamsil', serif;margin-bottom:5px;padding:6px;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;" type="button" id="addMem" onclick="memPopUp()">추가</button>
+			<button class="custom-button button" style="float: right;font-family: 'TheJamsil', serif;margin-bottom:5px;padding:6px;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;" type="button" id="delMem">제외</button>
 			<br>
 			<table id="tList" class="blueone" style="text-align:center;">
 				<thead>
 					<tr>
-						<th style="width: 40px;"><input type="checkbox" id="allChk"></th>
-						<th>사번</th>
-						<th>이름</th>
-						<th>직급</th>
-						<th>메일</th>
+						<th style="width: 40px;"><input style="cursor:Pointer;" type="checkbox" id="allChk"></th>
+						<th style="font-size:15px;">사번</th>
+						<th style="font-size:15px;">이름</th>
+						<th style="font-size:15px;">직급</th>
+						<th style="font-size:15px;">메일</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="dept, stat : ${deptInfo}">
-						<td><input type="checkbox" class="sel"></td>
-						<td th:if="${dept.empNo != 0}">[[${dept.empNo}]]</td>
-						<td th:unless="${dept.empNo != 0}"></td>
-						<td>[[${dept.name}]]</td>
-						<td>[[${dept.rank}]]</td>
-						<td>[[${dept.id}]]</td>
+						<td><input style="cursor:Pointer;" type="checkbox" class="sel"></td>
+						<td style="font-size:14px;" th:if="${dept.empNo != 0}">[[${dept.empNo}]]</td>
+						<td style="font-size:14px;" th:unless="${dept.empNo != 0}"></td>
+						<td style="font-size:14px;">[[${dept.name}]]</td>
+						<td style="font-size:14px;">[[${dept.rank}]]</td>
+						<td style="font-size:14px;">[[${dept.id}]]</td>
 					</tr>
 				</tbody>
 			</table>
 			<input style="display:none;" type="text" id="deptNo" name="deptNo" th:value="${deptInfo[0].deptNo}">
 		</fieldset>
 		<fieldset style="display: flex;justify-content: center;border:hidden;">
-			<button class="custom-button" type="submit" style="border-radius: 10px;font-family: 'Do Hyeon', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;">수정</button>
-			<button class="custom-button" type="button" style="border-radius: 10px;font-family: 'Do Hyeon', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" id="delBtn">삭제</button>
-			<button class="custom-button" type="button" style="border-radius: 10px;font-family: 'Do Hyeon', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" onclick="closeBtn()">닫기</button>
+			<button class="custom-button" type="submit" style="border-radius: 10px;font-family: 'TheJamsil', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;">수정</button>
+			<button class="custom-button" type="button" style="border-radius: 10px;font-family: 'TheJamsil', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" id="delBtn">삭제</button>
+			<button class="custom-button" type="button" style="border-radius: 10px;font-family: 'TheJamsil', serif;margin-right:10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;" onclick="closeBtn()">닫기</button>
 		</fieldset>
 	</form>
 	<script type="text/javascript">
@@ -234,7 +238,7 @@
         //openWin = window.open("/deptAddInfo?deptNo="+[[${deptInfo[0].deptNo}]], "deptAddInfo", "width=450, height=380, resizable = no, scrollbars = no");    	
         var screenWidth = window.screen.width;
         var screenHeight = window.screen.height;
-        var popupWidth = 450;
+        var popupWidth = 520;
         var popupHeight = 380;
         var left = (screenWidth - popupWidth) / 0.5;
         var top = (screenHeight - popupHeight) / 2;

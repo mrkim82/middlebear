@@ -9,7 +9,6 @@
 	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
 	crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<title>Insert title here</title>
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
 	@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
@@ -42,7 +41,7 @@
     <a style="font-size : 28px;font-weight:600;color: #35A880;" href="boardListMain?boardType=C">언론보도</a>
 	<table id="list" class="table table-hover" style="margin:10px;margin-top:20px;text-align:center;">
 		<thead>
-			<tr style="font-weight:600;">
+			<tr style="font-weight:600;font-size : 17px;">
 				<td>글번호</td>
 				<td>제목</td>
 				<td>작성자</td>
@@ -50,7 +49,7 @@
 				<td>조회수</td>
 			</tr>
 		</thead>
-		<tbody id="bodyWash">
+		<tbody id="bodyWash" style="font-size : 15px;">
 			<tr style="cursor: Pointer;" th:each="board, stat : ${boardList}"  th:attr="onclick='window.parent.location.href=\'/boardInfo?boardNo=' + ${board.boardNo} + '\''">
 				<td th:text="${board.btNo}"></td>
 				<td style="text-align:left;padding-left:5px;">[[${board.title}]]</td>

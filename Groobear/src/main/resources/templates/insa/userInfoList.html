@@ -6,7 +6,6 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<title>Groobear 회원조회</title>
 <style>
 		ul {
 			list-style:none;
@@ -53,12 +52,11 @@
 <div layout:fragment="content" >
 <div style="padding:10px;">
   <div>
-  	<h2 style="margin-top: 25px;">Groobear 인사관리</h2>
+  	<h2 style="margin-top: 25px;margin-bottom:20px;font-weight:600;">Groobear 인사관리</h2>
   	<div style="border:1px solid #ccc;border-radius:10px; margin-bottom:10px;">
   	<div style="margin-top:20px;margin-left:40px;font-size:20px">
-	  	<a>사번 : &nbsp&nbsp&nbsp</a><input style="margin-top:10px;margin-bottom:20px; border:0 solid #ccc;" id="empNo" name="empNo" type="text" value="" readonly><br>
-  		<a>이름 : &nbsp&nbsp&nbsp</a><input style="border-radius: 5px;text-align:center;height: 35px; width:300px;margin-bottom:20px;border:1px solid #ccc;" id="name" name="name" type="text" value=""><br>
-  		<a>직급 : &nbsp&nbsp&nbsp</a><select style="border-radius: 5px;height: 35px; text-align:center;width:150px;margin-bottom:20px;border:1px solid #ccc;" id="rank" name="rank">
+	  	<a>사번 : &nbsp&nbsp&nbsp</a><input style="text-align:center;font-family: 'TheJamsil', serif;margin-top:10px;margin-bottom:40px; width:150px;margin-right:90px; border:0 solid #ccc;" id="empNo" name="empNo" type="text" value="" readonly>
+	  	<a>직급 : &nbsp&nbsp&nbsp</a><select style="cursor:Pointer;font-family: 'TheJamsil', serif;border-radius: 5px;height: 35px; text-align:center;margin-right:90px;width:150px;margin-bottom:20px;border:1px solid #ccc;" id="rank" name="rank">
   								   <option value="" selected="selected">선택</option>
 								   <option value="사장" >사장</option>
 								   <option value="이사" >이사</option>
@@ -68,29 +66,33 @@
 					               <option value="대리" >대리</option>
 					               <option value="주임" >주임</option>
 					               <option value="사원" >사원</option>
-					            </select><br>
-		<a>부서 : &nbsp&nbsp&nbsp</a><select style="border-radius: 5px;height: 35px; text-align:center;width:150px;margin-bottom:20px;border:1px solid #ccc;" id="deptNo" name="deptNo">
+					            </select>
+		<a>부서 : &nbsp&nbsp&nbsp</a><select style="cursor:Pointer;font-family: 'TheJamsil', serif;border-radius: 5px;height: 35px; text-align:center;width:150px;margin-bottom:20px;border:1px solid #ccc;" id="deptNo" name="deptNo">
 									<option value="" selected="selected">선택</option>
 								<th:block th:each="dept, stance : ${deptList}">
 									<option th:value="${dept.deptNo}">[[${dept.deptName}]]</option>
 								</th:block>
 							 	</select><br>
-		<a>주민번호 : </a><input style="border-radius: 5px;height: 35px; width:300px;margin-bottom:20px;text-align:center;border:1px solid #ccc;" id="pno" name="pno" 
+  		<a>이름 : &nbsp&nbsp&nbsp</a><input style="font-family: 'TheJamsil', serif;border-radius: 5px;margin-right:80px;text-align:center;height: 35px; width:300px;margin-bottom:20px;border:1px solid #ccc;" id="name" name="name" type="text" value="">
+  		
+  		
+		
+		<a>주민번호 : </a><input style="font-family: 'TheJamsil', serif;border-radius: 5px;height: 35px; width:300px;margin-bottom:20px;text-align:center;border:1px solid #ccc;" id="pno" name="pno" 
 		type="text" value="" oninput="setJumin(pno)"><br>
 		<p id="result"></p>
   	</div>
   	</div>
   	<div style="float: right;margin-bottom:20px;">
-	  	<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" type="button" id="resetBtn">초기화</button>
-  		<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" type="button" id="insertBtn">등록</button>
-  		<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" type="button" id="updateBtn">수정</button>
-  		<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 50px;height:35px;margin-right:10px;" type="button" id="delBtn">삭제</button>
+	  	<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 60px;height:35px;margin-right:10px;" type="button" id="resetBtn">초기화</button>
+  		<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 60px;height:35px;margin-right:10px;" type="button" id="insertBtn">등록</button>
+  		<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 60px;height:35px;margin-right:10px;" type="button" id="updateBtn">수정</button>
+  		<button class="custom-button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;width: 60px;height:35px;margin-right:10px;" type="button" id="delBtn">삭제</button>
   	</div>
   	
 	<table id="list" class="table table-hover" style="text-align:center;font-size:17px;">
 		<thead>
 			<tr>
-				<th><input type="checkbox" id="allChk"></th>
+				<th><input style="cursor:Pointer;" type="checkbox" id="allChk"></th>
 				<th>사번</th>
 				<th>이름</th>
 				<th>직급</th>
@@ -100,8 +102,8 @@
 			</tr>
 		</thead>
 		<tbody id="bodyWash">
-			<tr th:each="emp, stat : ${empList}" th:attr="onclick='updateUserInfo()'">
-				<td style="width:50px"><input type="checkbox" th:id="${emp.empNo}" class="sel"></td>
+			<tr style="font-size:15px;cursor:Pointer;" th:each="emp, stat : ${empList}" th:attr="onclick='updateUserInfo()'">
+				<td style="width:50px"><input style="cursor:Pointer;" type="checkbox" th:id="${emp.empNo}" class="sel"></td>
 				<td>[[${emp.empNo}]]</td>
 				<td>[[${emp.name}]]</td>
 				<td>[[${emp.rank}]]</td>
@@ -137,7 +139,7 @@
 	<div style="display: flex;justify-content: center;margin-bottom:20px;">
 		<form name="searchForm" action="userInfoList">
 		<input type="hidden" name="page" value="1"/><br>
-		<select name="type" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;">
+		<select name="type" style="cursor:Pointer;border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;">
 			<option value='' selected>선택</option>
 			<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
 			<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
@@ -148,19 +150,24 @@
 	</form>
 	</div>
 		<!-- The Modal -->
-	    <div id="errorModal" class="modal">
-	      <!-- Modal content -->
-	      <div class="modal-content">
-	                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
-	                <p><br /></p>
-	            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
-	                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
+    <div id="errorModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content" style="box-shadow: 2px 4px 3px 3px darkgray;width: 500px;margin-top:280px;border-radius: 20px;padding:0px;">
+      	<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;padding: 2px;">
+			<h5 class="modal-title" id="exampleModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">인사관리</h5>
+			<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
+				aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
+		</div>
+                <p style="text-align: center; margin:20px;height: 70px;line-height: 70px;"><span style="font-size: 17pt;" id="spantext"></span></p>
+            <div style="text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
+	            <div class="modal-footer">
+	                <span class="pop_bt"  style="cursor:pointer;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;line-height: 45px;font-size: 17px;" id="closeModal">
 	                     닫기
 	                </span>
 	            </div>
-	      </div>
-	    </div>
-
+            </div>
+      </div>
+      </div>
 	<script th:inline="javascript">
 		function updateUserInfo(){
 			if(event.target.tagName=='INPUT')
@@ -485,7 +492,10 @@
     function close_pop(flag) {
         $('#myModal').hide();
    	}; 
-   	
+   	function closeModal() {
+	   	  // 모달 창 닫기
+	   	  $('#myModal').hide();
+	   	}
 	 // 한글만 입력 가능
     $("#name").keyup(function (event) {
         regexp = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
