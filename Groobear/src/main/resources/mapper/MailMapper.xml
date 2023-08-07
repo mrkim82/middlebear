@@ -95,11 +95,13 @@
 		SELECT COUNT(*)
         FROM getmail
             where ( 
-            	(sender = #{sender} and mail_type=#{mailType}) OR
-	                (receiver = #{receiver} and mail_type2=#{mailType}) OR
-	                (referrer = #{referrer} and mail_type3=#{mailType}) OR
-	                (referrer2 = #{referrer2} and mail_type4=#{mailType}) OR
-	                (referrer3 = #{referrer3} and mail_type5=#{mailType}) )
+            		(sender = #{sender}) OR
+	                (receiver = #{receiver}) OR
+	                (referrer = #{referrer}) OR
+	                (referrer2 = #{referrer2}) OR
+	                (referrer3 = #{referrer3}) 
+	                )
+	        and mail_type=#{mailType}
             ORDER BY send_date
 	</select>
 	<!-- 보낸메일 갯수 출력 -->
@@ -111,13 +113,20 @@
 	</select>
 	<!-- 받은메일 갯수 출력 -->
 	<select id="countReceiveMail" resultType="int">
-		SELECT COUNT(*) FROM getmail
-			WHERE (
-			(receiver = #{receiver} AND mail_type2=#{mailType2}) OR
-			(referrer = #{referrer} AND mail_type3=#{mailType3}) OR
-			(referrer2 = #{referrer2} AND mail_type4=#{mailType4}) OR
-			(referrer3 = #{referrer3} AND mail_type5=#{mailType5})
-			)
+		SELECT COUNT(*) FROM 
+			(SELECT a.*,ROWNUM as rn FROM 
+			(SELECT mail_no,title,content,sender,receiver,referrer,referrer2,referrer3,send_date,
+			        receive_date,mail_check,mail_type
+			        FROM getmail
+			            where (receiver = #{receiver} OR
+			                referrer = #{referrer} OR
+			                referrer2 = #{referrer2} OR
+			                referrer3 = #{referrer3}
+			            )
+                            and mail_type='R'
+			            ORDER BY mail_check
+            ) a 
+         )b
 	</select>
 	
 	<!-- 메일삭제(지운메일함으로) -->
@@ -180,11 +189,7 @@
 							,send_date
 							,receive_date
 							,mail_check
-							,mail_type
-							,mail_type2
-							,mail_type3
-							,mail_type4
-							,mail_type5)
+							,mail_type)
 					VALUES(
 							(SELECT NVL(MAX(mail_no),0)+1 FROM getmail)
 							,#{title}
@@ -200,7 +205,7 @@
 					 		</otherwise>
 					 		</choose>
 					 		<choose>
-					 		<when test="referrer2 != null and !referrer3.equals('')">
+					 		<when test="referrer2 != null and !referrer2.equals('')">
 					 		,#{referrer2}
 					 		</when>
 					 		<otherwise>
@@ -219,10 +224,6 @@
 							,sysdate
 							,'N'
 							,'R'
-							,'R'
-							,'R'
-							,'R'
-							,'R'
 							)
 	</insert>
 	<!-- 받은메일함 -->
@@ -230,12 +231,14 @@
      	 SELECT b.* FROM 
 			(SELECT a.*,ROWNUM as rn FROM 
 			(SELECT mail_no,title,content,sender,receiver,referrer,referrer2,referrer3,send_date,
-			        receive_date,mail_check,mail_type,mail_type2,mail_type3,mail_type4,mail_type5
+			        receive_date,mail_check,mail_type
 			        FROM getmail
-			            where ((receiver = #{mailVO.receiver} and mail_type2=#{mailVO.mailType2}) OR
-			                (referrer = #{mailVO.referrer} and mail_type3=#{mailVO.mailType3}) OR
-			                (referrer2 = #{mailVO.referrer2} and mail_type4=#{mailVO.mailType4}) OR
-			                (referrer3 = #{mailVO.referrer3} and mail_type5=#{mailVO.mailType5}))
+			            where (receiver = #{mailVO.receiver} OR
+			                referrer = #{mailVO.referrer} OR
+			                referrer2 = #{mailVO.referrer2} OR
+			                referrer3 = #{mailVO.referrer3}
+			            )
+                            and mail_type='R'
 			            ORDER BY mail_check
             ) a 
          )b
@@ -258,11 +261,11 @@
 	<select id="getMailSend" parameterType="MailVO">
 		SELECT b.* FROM 
 			(SELECT a.mail_no,a.title,a.content,a.sender,a.receiver,a.referrer,a.referrer2,a.referrer3,a.send_date,
-			        a.receive_date,a.mail_check,a.mail_type,a.mail_type2,a.mail_type3,a.mail_type4,a.mail_type5,ROWNUM as rn FROM 
+			        a.receive_date,a.mail_check,a.mail_type,ROWNUM as rn FROM 
 			(SELECT mail_no,title,content,sender,receiver,referrer,referrer2,referrer3,send_date,
-		        receive_date,mail_check,mail_type,mail_type2,mail_type3,mail_type4,mail_type5
+		        receive_date,mail_check,mail_type
 		        FROM getmail
-		            where ( sender = #{mailVO.sender} and mail_type=#{mailVO.mailType}  )
+		            where sender = #{mailVO.sender}
 		            ORDER BY mail_no desc
 		            ) a )b
 		     <![CDATA[
@@ -273,15 +276,16 @@
 	<select id="getMaildelete" parameterType="MailVO">
 		SELECT b.* FROM 
 			(SELECT a.mail_no,a.title,a.content,a.sender,a.receiver,a.referrer,a.referrer2,a.referrer3,a.send_date,
-			        a.receive_date,a.mail_check,a.mail_type,a.mail_type2,a.mail_type3,a.mail_type4,a.mail_type5,ROWNUM as rn FROM 
+			        a.receive_date,a.mail_check,a.mail_type,ROWNUM as rn FROM 
 			(SELECT mail_no,title,content,sender,receiver,referrer,referrer2,referrer3,send_date,
-		        receive_date,mail_check,mail_type,mail_type2,mail_type3,mail_type4,mail_type5
+		        receive_date,mail_check,mail_type
 		        FROM getmail
-		            where ( (sender = #{mailVO.sender} and mail_type=#{mailVO.mailType}) OR
-		                (receiver = #{mailVO.receiver} and mail_type2=#{mailVO.mailType}) OR
-		                (referrer = #{mailVO.referrer} and mail_type3=#{mailVO.mailType}) OR
-		                (referrer2 = #{mailVO.referrer2} and mail_type4=#{mailVO.mailType}) OR
-		                (referrer3 = #{mailVO.referrer3} and mail_type5=#{mailVO.mailType}) )
+		            where ( (sender = #{mailVO.sender}) OR
+		                (receiver = #{mailVO.receiver}) OR
+		                (referrer = #{mailVO.referrer}) OR
+		                (referrer2 = #{mailVO.referrer2}) OR
+		                (referrer3 = #{mailVO.referrer3})
+		                AND mail_type='R')
 		            ORDER BY mail_no desc
 		            ) a )b
 		    <![CDATA[
@@ -294,26 +298,11 @@
 		set mail_type = #{mailType}
 		where mail_no = #{mailNo}
 	</update>
-	<update id="getMailType2Del" parameterType="MailVO">
-		UPDATE getmail
-		set mail_type2 = #{mailType}
+	<!-- 새 테이블(서버에서 받은 메일함) 메일삭제 -->
+	<delete id="getMailDelete" parameterType="MailVO">
+		delete getmail 
 		where mail_no = #{mailNo}
-	</update>
-	<update id="getMailType3Del" parameterType="MailVO">
-		UPDATE getmail
-		set mail_type3 = #{mailType}
-		where mail_no = #{mailNo}
-	</update>
-	<update id="getMailType4Del" parameterType="MailVO">
-		UPDATE getmail
-		set mail_type4 = #{mailType}
-		where mail_no = #{mailNo}
-	</update>
-	<update id="getMailType5Del" parameterType="MailVO">
-		UPDATE getmail
-		set mail_type5 = #{mailType}
-		where mail_no = #{mailNo}
-	</update>
+	</delete>
 	<!-- 보낸메일함 db에 넣는거 기준조회 -->
 	<select id="sendMailSearch" resultType="MailVO">
 		SELECT * FROM (SELECT g.mail_no,g.send_date,g.receive_date,
