@@ -121,7 +121,7 @@
 	<!-- 글 댓글 조회(임시) -->
 	<select id="readPostWritingComment" resultType="ProPostCommentVO">
 		SELECT a.com_no, a.com_content, a.com_date,
-			   c.name, b.profile_img, a.id, p.pro_post_no
+			   c.name, a.id, p.pro_post_no
 		FROM com a JOIN users b
 		ON(a.id=b.id)
 		JOIN user_info c
