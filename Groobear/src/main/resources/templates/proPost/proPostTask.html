@@ -358,7 +358,7 @@ ul {
 	 th:id="'modal' + ${taskD.proPostNo}"
 	 th:data-feed-post-no="${taskD.proPostNo}"
 	 th:data-feed-work-no="${taskD.workNo}"
-	 style="font-size:15px;">
+	 style="font-size:17px;">
 	<div class="modal-header" style="border: none; background-color: indianred;">
 		<div class="modal-title" style="display: flex;">
 			<div class="taskInfo">
@@ -484,36 +484,63 @@ ul {
 	</div>
     <div class="modal-footer">
 		
-		<div class="col-md-8">
-			<ul class="list-unstyled">
-				<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
-					th:if="${taskD.proPostNo == com.proPostNo}">
-					<th:block th:if="${com.uploadPath != null}">
-						<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
-		  		 			 class="card-img-top"
-		  		 			 style="width:30px; height:30px; margin:0px;">
-		  		 	</th:block>
-		  		 	<th:block th:if="${com.uploadPath == null}">
-						<img style="width:30px; height:30px; margin:0px;"
-					 		 src="../img/userProf.png">
-					</th:block>
-					<span th:text="${com.name}"></span>
-					<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
-					<span th:text="${com.comContent}"></span>
-					<th:block th:if="${com.id == session.Id}">
-						<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
-						<span></span><!-- 지우면 안됨!!!!!!! -->
-						<span onclick="deleteWritingComment()" class="spanCursor">X</span>
-					</th:block>
-				</li>
-			</ul>
-		</div>
-		<div class="col-md-4">
-			<div class="form-group">
-				<input type="text" class="form-control" placeholder="댓글 작성">
+		<div class="container">
+			<div class="row">
+				<h6>댓글</h6>
+				
+				<table class="comtable table table-hover">
+					<thead>
+						<tr class="comtabletr"
+							th:each="com : ${projectWritingDetaisComment}"
+							th:data-post-code="${com.comNo}"
+							th:if="${taskD.proPostNo == com.proPostNo}">
+							<td class="comtabletd"
+								style="width:30px; padding-right:0px;">
+								<th:block th:if="${com.uploadPath != null}">
+									<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+					  		 			 class="card-img-top"
+					  		 			 style="width:30px; height:30px; margin:0px;">
+					  		 	</th:block>
+					  		 	<th:block th:if="${com.uploadPath == null}">
+									<img style="width:30px; height:30px; margin:0px;"
+								 		 src="../img/userProf.png">
+								</th:block>
+							</td>
+							<td class="comtabletd"
+								th:text="${com.name}"
+								style="width:90px; padding-right:0px;"></td>
+							<td class="comtabletd" th:text="${com.comContent}"></td>
+							<td class="comtabletd comdate"
+								style="width:140px; padding-right:0px;"
+								th:text="${#dates.format(com.comDate, 'yy-MM-dd HH:mm')}"></td>
+							<td style="width:90px; padding-right:0px;">
+								<span th:if="${com.id == session.Id}"
+									  onclick="UpdateWritingComment()"
+									  class="spanCursor"
+									  style="color: red">수정&nbsp</span>
+								<span onclick="deleteWritingComment()"
+									  th:if="${com.id == session.Id}"
+									  class="spanCursor">삭제</span>
+							</td>
+						</tr>
+					</thead>
+				</table>
 			</div>
-			<button type="button" class="btn btn-groor" onclick="createCommentButton()"
-					th:data-post-writing-no="${taskD.proPostNo}">댓글 등록</button>
+			<div class="row">
+				<div class="form-group col-10">
+					<input type="text"
+						   class="form-control"
+						   placeholder="댓글 작성"
+						   style="width:100%; overflow-x: hidden;">
+				</div>
+					<div class="col-2" style="padding:0px;">
+						<button type="button"
+								class="btn btn-groor"
+								onclick="createCommentButton()"
+								th:data-post-writing-no="${taskD.proPostNo}"
+								style="width:100px;">댓글 등록</button>
+					</div>
+			</div>
 		</div>
 		
     </div>
@@ -681,172 +708,6 @@ ul {
 	  }
 	}
 	
-</script>
-
-<!-- 댓글 등록 -->
-<script>
-	function createCommentButton() {
-		let targetButton = event.target;//버튼 동적 확인
-		let com = targetButton.parentNode.children[0].children[0]; //텍스트값 찾기
-		if(com.value == '') {
-			com.focus();
-			alert('댓글을 입력하세요');
-			return;
-		}
-		
-		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
-		
-		fetch("/postCreateComment", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-   				'proPostNo': writingNo,
-   				'comContent': com.value
-   			})
-		})
-		.then(response => response.json())
-		.then(res => {
-			let insertComment = targetButton.closest('.modal-footer').getElementsByClassName('list-unstyled')[0];
-			
-			
-			insertComment.insertAdjacentHTML('beforeend', 
-				'<li data-post-code="' + res.result + '">'+
-					'<span></span>'+
-					'<span>' + selfName + '</span>'+
-					'<span>' + currentTime + '</span>'+
-					'<span>' + com.value + '</span>'+
-					'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
-					'<span></span>'+
-					'<span onclick="deleteWritingComment()" class="spanCursor">X</span>'+
-				'</li>'
-			);
-			com.focus();
-			com.value = '';
-		})
-		//.then(res => location.href="/proPostMain/" + projectNo + "?homeTab=1");
-	}
-	//현재시간 구하기
-	const currentTime = formatDate();
-	
-	function formatDate() {
-	  let date = new Date();
-	  const year = date.getFullYear();
-	  const month = String(date.getMonth() + 1).padStart(2, '0');
-	  const day = String(date.getDate()).padStart(2, '0');
-	  const hours = String(date.getHours()).padStart(2, '0');
-	  const minutes = String(date.getMinutes()).padStart(2, '0');
-	  
-	  return `${year}/${month}/${day} ${hours}:${minutes}`;
-	}
-</script>
-
-<!-- 댓글 삭제  -->
-<script>
-	function deleteWritingComment() {
-		let targetButton = event.target;
-		//console.log(targetButton.parentNode.dataset.postCode);
-		
-		let url = window.location.pathname;
-		let lastIndex = url.lastIndexOf('/');
-		let projectNo = url.substring(lastIndex + 1);
-		
-		fetch("/postDeleteComment", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-   				'comNo': targetButton.parentNode.dataset.postCode
-   			})
-		})
-		.then(response => response.json())
-		.then(res => {
-			targetButton.parentNode.remove()
-		});
-	}
-</script>
-
-<!-- 댓글 수정  -->
-<script>
-	function UpdateWritingComment() {
-		let targetButton = event.target;
-		let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
-		
-		let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
-		let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
-		
-		//초기화
-		targetButton.parentNode.children[2].textContent = '';//날짜 초기화
-		targetButton.parentNode.children[3].textContent = '';//댓글 초기화
-		targetButton.parentNode.children[4].textContent = '';//수정 초기화
-		targetButton.parentNode.children[6].textContent = '';//X 초기화
-		
-		if(document.getElementById('newComment') != null) {
-			let nC = document.getElementById('newComment').parentNode.parentNode;
-			nC.childNodes[5].textContent = document.getElementById('newComment').dataset.comDate;
-			nC.childNodes[7].textContent = document.getElementById('newComment').value;
-			nC.childNodes[9].textContent = '수정';
-			nC.childNodes[11].textContent = '';
-			nC.childNodes[13].textContent = 'X';
-		}
-		
-		targetButton.parentNode.children[5].innerHTML = 
-				'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
-				+'<span id="ooo" class="spanCursor">수정</span>'
-				+'<span id="xxx" class="spanCursor">취소</span>';
-		
-		// 취소버튼
-		document.getElementById('xxx').addEventListener('click', function() {
-			targetButton.parentNode.children[2].textContent = oldDate;
-			targetButton.parentNode.children[3].textContent = oldCom;
-			targetButton.parentNode.children[4].textContent = '수정';
-			targetButton.parentNode.children[5].textContent = '';
-			targetButton.parentNode.children[6].textContent = 'X';
-		});
-		
-		// 수정버튼
-		document.getElementById('ooo').addEventListener('click', function() {
-			let newCom = document.getElementById('newComment');
-			if(newCom.value == '') {
-				newCom.focus();
-				alert('댓글을 수정하세요');
-			} else {
-				
-				fetch("/postUpdateComment", {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						'comContent' : newCom.value,
-		   				'comNo': comNo
-		   			})
-				})
-				.then(response => response.json())
-				.then(res => {
-					
-					if(res.result == '성공') {
-						targetButton.parentNode.children[2].textContent = oldDate;
-						targetButton.parentNode.children[3].textContent = newCom.value;
-						targetButton.parentNode.children[4].textContent = '수정';
-						targetButton.parentNode.children[6].textContent = 'X';
-						targetButton.parentNode.children[5].textContent = '';
-						
-						
-						let url = window.location.pathname;
-						let lastIndex = url.lastIndexOf('/');
-						let projectNo = url.substring(lastIndex + 1);
-						
-					} else {
-						alert('댓글 수정 실패');
-					}
-				});
-			}
-		});
-		
-	}
 </script>
 
 <!-- 멤버별 업무 보기 설정 -->

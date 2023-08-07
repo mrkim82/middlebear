@@ -87,7 +87,7 @@ th {
 	color: #fff;
 	border: 1px solid #35A880;
 	border-radius: 12px;
-	font-size: 17px;
+	font-size: 15px;
 }
 
 .square {
@@ -540,7 +540,7 @@ textarea {
 		</div>
 	</nav>
 
-	<div  style="padding: 0px; width:1007.5px">
+	<div style="padding: 0px; width:1007.5px">
 	
 		<!-- 프로젝트 상세 상단 바 proPostMain으로 시작하는 경우 horizonBar 프래그먼트 포함 -->
 		<th:block th:if="${#strings.containsIgnoreCase(firstURI,'proPostMain')} or
@@ -639,7 +639,8 @@ textarea {
 						   maxlength="30"
 						   style="width: 372px;">
 				</div>
-				<div class="d-flex justify-content-center" style="margin: 0 auto; padding-top: 6px; padding-bottom: 6px; margin-bottom: 5px;">
+				
+				<div class="modal-footer" style="display: flex; justify-content: flex-end;">
 					<button type="button" class="btn btn-groo" onclick="makeGroupFolder()" style="border-radius:12px; margin-right: 6px;">저장</button>
 					<button type="button" class="btn btn-groo" data-dismiss="modal" style="border-radius:12px; margin-left: 6px;">닫기</button>
 				</div>
@@ -664,13 +665,11 @@ textarea {
 				</div>
 				<div class="modal-footer">
 					<button type="button"
-							class="btn btn-groo"
-							style="width: 90px;border-radius: 12px;"
+							class="btn btn-groob"
 							id="groupNameChangeBtn"
 							onclick="updateManButton()">수정</button>
 					<button type="button"
-							class="btn btn-groo"
-							style="width: 90px;border-radius: 12px;"
+							class="btn btn-groob"
 							id="groupNameDeleteBtn"
 							onclick="deleteGroupFolder()">즉시삭제</button>
 				</div>
@@ -1147,6 +1146,186 @@ textarea {
 		.catch(error => {
 			console.error('Error: ',error);
 		});
+	};
+</script>
+
+<!-- 댓글 등록 -->
+<script>
+	function createCommentButton() {
+		let targetButton = event.target;//버튼 동적 확인
+		let com = targetButton.closest('.container').querySelector('.form-control');
+		console.log(targetButton)
+		if(com.value == '') {
+			com.focus();
+			alert('댓글을 입력하세요');
+			return;
+		};
+		
+		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
+		
+		fetch("/postCreateComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'proPostNo': writingNo,
+					'comContent': com.value
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			let insertComment = targetButton.closest('.container').querySelector('thead');
+			let imgsrc;
+			//이미지 주소 변환
+			if(res.uuid == null) {
+				imgsrc = '../img/userProf.png';
+			} else {
+				imgsrc = `/display?fileName=${res.uploadPath.replace(/\\/g, "/")}/s_${res.uuid}_${res.fileName}`;
+			};
+			
+			insertComment.insertAdjacentHTML('beforeend',
+			`<tr class="comtabletr" data-post-code="${res.comNo}">
+				<td class="comtabletd" style="width:30px; padding-right:0px;">
+					<img src="${imgsrc}" class="card-img-top" style="width:30px; height:30px; margin:0px;">
+				</td>
+				<td class="comtabletd" style="width:90px; padding-right:0px;">${selfName}</td>
+				<td class="comtabletd">${com.value}</td>
+				<td class="comtabletd comdate" style="width:140px; padding-right:0px;">${currentTime2}</td>
+				<td style="width:90px; padding-right:0px;">
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>
+			</tr>`
+			);
+
+			com.focus();
+			com.value = '';
+		});
+	};
+	
+	//현재시간 구하기
+	const currentTime = formatDate();
+	
+	function formatDate() {
+		let date = new Date();
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		
+		return `${year}/${month}/${day} ${hours}:${minutes}`;
+	};
+	//현재시간 구하기
+	const currentTime2 = formatDate2();
+	
+	function formatDate2() {
+		let date = new Date();
+		const year = String(date.getFullYear()).slice(2);
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		
+		return `${year}-${month}-${day} ${hours}:${minutes}`;
+	}
+</script>
+	
+<!-- 댓글 삭제  -->
+<script>
+	function deleteWritingComment() {
+		let targetTr = event.target.closest('tr');
+		
+		fetch("/postDeleteComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'comNo': targetTr.dataset.postCode
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			targetTr.remove();
+		});
+	};
+</script>
+	
+<!-- 댓글 수정  -->
+<script>
+	function UpdateWritingComment() {
+		let targetTr = event.target.closest('tr');
+		let targetThead = targetTr.parentElement;
+		let comNo = targetTr.dataset.postCode;//댓글 번호
+		
+		let oldCom = targetTr.children[2].textContent;//기존 댓글 내용
+		
+		targetTr.children[2].textContent = '';//댓글 초기화
+		targetTr.children[4].textContent = '';//수정, 삭제 초기화
+		
+		if(document.getElementById('newComment') != null) {
+			let nC = document.getElementById('newComment').closest('tr');
+			nC.children[2].textContent = document.getElementById('newComment').value;
+			nC.children[4].innerHTML =
+				`<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>`;
+		};
+		
+		// 댓글 수정 폼 생성
+		targetTr.children[2].innerHTML = '<input type="text" placeholder="댓글 수정" id="newComment" maxlength="30" style="width:100%; height:29px;" value="' + oldCom + '">'; 
+		targetTr.children[4].innerHTML = '<span id="ooo" class="spanCursor" style="color:red;">수정&nbsp&nbsp</span>' + '<span id="xxx" class="spanCursor">취소</span>';
+				
+		// 취소버튼
+		document.getElementById('xxx').addEventListener('click', function() {
+			let cancleTr = event.target.closest('tr');
+			cancleTr.children[2].textContent = oldCom;
+			cancleTr.children[4].innerHTML = 
+				`<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>`;
+		});
+		
+		// 수정버튼
+		document.getElementById('ooo').addEventListener('click', function() {
+			let newCom = document.getElementById('newComment');
+			if(newCom.value == '') {
+				newCom.focus();
+				alert('댓글을 수정하세요');
+			} else {
+				
+				fetch("/postUpdateComment", {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'comContent' : newCom.value,
+							'comNo': comNo
+						})
+				})
+				.then(response => response.json())
+				.then(res => {
+					
+					if(res.result == '성공') {
+						targetTr.children[2].textContent = newCom.value;
+						targetTr.children[4].innerHTML = 
+							`<td>
+							<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+							<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+						</td>`;;
+						
+					} else {
+						alert('댓글 수정 실패');
+					}
+				});
+			}
+		});
+		
 	};
 </script>
 
