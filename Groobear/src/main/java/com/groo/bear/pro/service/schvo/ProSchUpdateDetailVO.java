@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 @Data
-public class ProUpdateSchVO {
+public class ProSchUpdateDetailVO {
 	private int proPostNo;
 	private String postTitle;
 	

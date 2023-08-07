@@ -240,5 +240,14 @@
 		WHERE pro_post_no = #{proPostNo}
 	</update>
 	
+	<!-- 수정용 단건 조회 -->
+	<select id="readUpDetailSch" parameterType="ProSchUpdateDetailVO">
+		SELECT a.pro_post_no, a.post_title, b.sch_start_time, b.sch_end_time, b.sch_place, b.sch_content
+		FROM pro_post a
+		JOIN pro_sch b
+		ON(a.pro_post_no = b.pro_post_no)
+		WHERE a.pro_post_no = #{proPostNo}
+	</select>
+	
 	
 </mapper>

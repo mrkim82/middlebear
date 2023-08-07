@@ -81,5 +81,5 @@ public interface PaymentService {
 	//참조된 문서 전체조회 전자결재 메인화면
 	public List<PaymentVO> mainreferrerPayList(PaymentVO payVO);
 	//개인서명 등록
-	public int insertPublicSignImg(EmpVO vo);
+	public int insertPublicSignImg(FilesVO filesVO);
 }

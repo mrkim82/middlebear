@@ -224,7 +224,7 @@
 		WHERE pro_post_no = #{proPostNo}
   	</select>
 	<!-- 사원 공용 서명 등록 -->
-  	<insert id="insertPublicSignImg" parameterType="EmpVO">
+  	<insert id="insertPublicSignImg" parameterType="FilesVO">
   		insert into files (
   							UUID
   							,UPLOAD_PATH
@@ -239,7 +239,7 @@
   							,'public'
   							,'1'
   							,sysdate
-  							,#{empNo}
+  							,#{signNo}
   							)
   	</insert>
   </mapper>

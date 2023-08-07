@@ -64,5 +64,9 @@ public class ProPostFeedVO {
     private int workGroupNo;
     
     private String name;
-    private String profileImg;
+    
+    //파일
+    private String uuid;
+    private String uploadPath;
+    private String fileName;
 }

@@ -6,17 +6,24 @@
 <title>참조결재문서 조회 페이지</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <style>
+	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+	
+	.dohyeon{
+		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		color:black;
+		font-size : 20px;
+	}
+	#ulId li.active a.page-link {
+    	background-color: #35A880;
+    	border: 1px solid #35A880;
+    	color:#fff
+  	}
+  	a {
+  		text-decoration:none !important;
+  		cursor:pointer;
+  	}
 	ul {
 			list-style:none;
-	}
-		
-	li {
-		float: left;
-		padding: 10px;
-	}
-	a { 
-		text-decoration:none ;
-		color: black;
 	}
 	.paging .active a {
 		    background-color: #f00;
@@ -27,7 +34,8 @@
 <body>
 <div layout:fragment="content">
 	<div>
-		<table id="list" class="table">
+	<h3 class="dohyeon" style="font-size:35px;margin-top:20px;">Groobear 참조 문서</h3>
+		<table id="list" class="table table-hover dohyeon">
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -58,24 +66,25 @@
 		</table>
 	</div>
 	<div style="display: flex;justify-content: center;height:30px;">
-		<ul class="paging" th:if="${paging.endPage != 0}">
-			<li>
-				<a th:href="|javascript:goPage(1)|">처음</a>
-			</li>
-	        <li th:if="${paging.prev}">
-	            <a th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
-	        </li>
-	        <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
-            	<a th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
-        	</li>
-	        <li th:if="${paging.next and paging.endPage > 0}">
-	            <a th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
-	        </li>
-	        <li>
-				<a th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">마지막</a>
-			</li>
-	    </ul>
-    </div>
+			<ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
+		<li class="page-item">
+			<a class="page-link" th:href="|javascript:goPage(1)|">&laquo;</a></li>
+		<li class="page-item" th:if="${paging.prev}">
+            <a class="page-link" th:href="|javascript:goPage([[${paging.startPage-1}]])|">&lsaquo;</a>
+        </li>
+		<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
+			th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+			<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+			th:text="${num}"></a>
+		</li>
+		<li class="page-item" th:if="${paging.next and paging.endPage > 0}">
+            <a class="page-link" th:href="|javascript:goPage([[${paging.endPage+1}]])|">&rsaquo;</a>
+        </li>
+		<li class="page-item"><a class="page-link"
+			th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+		</li>
+    </ul>
+		</div>
 	<script>
 	function goPage(p){
 		location.href="referrerPay?page="+p;

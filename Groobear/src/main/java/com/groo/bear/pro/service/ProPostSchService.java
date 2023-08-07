@@ -7,6 +7,7 @@ import com.groo.bear.pro.service.schvo.ProPerCalComVO;
 import com.groo.bear.pro.service.schvo.ProPostSchVO;
 import com.groo.bear.pro.service.schvo.ProPostWorkSchVO;
 import com.groo.bear.pro.service.schvo.ProSchDetailVO;
+import com.groo.bear.pro.service.schvo.ProSchUpdateDetailVO;
 import com.groo.bear.pro.service.schvo.ProUpdateSchVO;
 
 public interface ProPostSchService {
@@ -51,4 +52,7 @@ public interface ProPostSchService {
 	
 	//스케쥴 수정
 	public int updateProSch(ProUpdateSchVO vo);
+	
+	//수정용 단건 조회
+	public ProSchUpdateDetailVO readUpDetailSch(int proPostNo);
 }

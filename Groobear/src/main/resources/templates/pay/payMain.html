@@ -8,17 +8,24 @@
 <meta charset="UTF-8">
 <title>결재 메인페이지</title>
 <style>
+	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+	
+	.dohyeon{
+		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		color:black;
+		font-size : 20px;
+	}
+	#ulId li.active a.page-link {
+    	background-color: #35A880;
+    	border: 1px solid #35A880;
+    	color:#fff
+  	}
+  	a {
+  		text-decoration:none !important;
+  		cursor:pointer;
+  	}
 	ul {
 			list-style:none;
-	}
-		
-	li {
-		float: left;
-		padding: 10px;
-	}
-	a { 
-		text-decoration:none ;
-		color: black;
 	}
 	.paging .active a {
 		    background-color: #f00;
@@ -29,10 +36,12 @@
 <body>
 <div layout:fragment="content">
 	<div>
-	  <h3>Groobear 전자결재</h3>
-		<h5 style="margin-top: 20px;">결재중 문서 조회</h5>
-		<button style="float:right" type="button" id="payDoc" onclick="location.href='/pay/paymentDoc'">결재문서작성</button>
-		<table id="dataTable" class="table">
+	  <h3 class="dohyeon" style="font-size:35px;margin-top:20px;">Groobear 전자결재</h3>
+		<h5 class="dohyeon" style="margin-top: 20px; font-size:25px;">결재중 문서 조회</h5>
+		<button type="button" id="payDoc" class="dohyeon" onclick="location.href='/pay/paymentDoc'"
+		style="position: absolute;font-size:18px;margin-bottom: 10px;margin-right: 10px;border: 0;width: 100px;height: 40px;top: 70px;right: 10px;background-color: #9fdfbea6;border-radius: 15px;color: #474747;">
+			결재문서작성</button>
+		<table id="dataTable" class="table table-hover dohyeon">
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -62,8 +71,8 @@
 		</table>
 	</div>
 	<div>
-		<h5 style="margin-top: 20px;">완료된 문서 조회</h5>
-		<table id="dataTable2" class="table">
+		<h5 class="dohyeon" style="margin-top: 20px; font-size:25px;">완료된 문서 조회</h5>
+		<table id="dataTable2" class="table table-hover dohyeon">
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -93,8 +102,8 @@
 		</table>
 	</div>
 	<div>
-		<h5 style="margin-top: 20px;">참조된 문서 조회</h5>
-		<table id="dataTable2" class="table">
+		<h5 class="dohyeon" style="margin-top: 20px font-size:25px;;">참조된 문서 조회</h5>
+		<table id="dataTable2" class="table table-hover dohyeon">
 			<thead>
 				<tr>
 					<th>번호</th>

@@ -64,4 +64,7 @@ public interface ProTodoNVoteService {
 	
 	//할 일 수정
 	public int updateTodo(List<ProUpdateTodoVO> vo);
+	
+	//투표 수정 단건 조회
+	public ProUpdateVoteVO readUpVoteDetail(int proPostNo);
 }

@@ -189,19 +189,39 @@ details ul {
 .spanCursor {
 	cursor: pointer
 }
+.spanCursor:hover {
+	color: rgb(50, 109, 203)!important;
+}
+
+.proMover:hover {
+	  color: rgb(50, 109, 203)!important;
+}
 
 textarea {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  /* background-color: #f9f9f9; */
+  /* border: 1px solid #ddd; */
+  /* border-radius: 4px; */
   padding: 10px;
-  font-family: Arial, sans-serif;
+  /* font-family: Arial, sans-serif; */
   font-size: 14px;
   padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
   height: 200px;
   width: 100%;
   resize: vertical; /* 세로 조정 가능 */
+  border: none;
+  outline: none;
+  border-top: 1px solid #ddd;
+}
+
+.plusChangeVoteInput, .plusVoteInput {
+	width: 90%!important;
+	margin-bottom:8px!important;
+}
+
+.customVoteX {
+	margin-left: 10px;
+	font-size:15px;
 }
 
 /* 탭 밑에 줄 */
@@ -233,13 +253,13 @@ textarea {
   left: 0;
   height: 20px;
   width: 20px;
-  background-color: #eee;
-  border: 1px solid #ccc;
+  background-color: #efefef;
+  border: 1px solid #efefef;
   border-radius: 3px;
 }
 
 .custom-checkbox input:checked + .checkmark {
-  background-color: #2196F3;
+  background-color: #35A880;
 }
 
 .checkmark:after {
@@ -437,12 +457,12 @@ textarea {
 			<ul class="nav flex-column" style="width:170px;">
 				<!-- 사이드바 메뉴 아이템들 -->
 				<li class="nav-item"
-					style="text-align: center;">
+					style="text-align: center; margin-bottom:10px;">
 					<button type="button"
 							class="btn btn-groob"
 							data-toggle="modal"
 							data-target="#inviteManPro"
-							style=" font-size:20px; height: 44px; margin-bottom:10px;">
+							style=" font-size:20px; height: 44px;">
 					  초대된 프로젝트 <span class="badge badge-light inviteCountTarget">0</span>
 					</button></li>
 				<!-- <li class="nav-item">
@@ -678,6 +698,7 @@ textarea {
   	let selfId = /*[[${session.Id}]]*/;
 	let selfName = /*[[${session.Name}]]*/;
 	let proDetailCount = /*[[${readProDetailCount}]]*/;
+	let proAuth = /*[[${readProAuth}]]*/;//프로젝트 권한 조회
 	
   	let url = window.location.pathname;
 	let lastIndex = url.lastIndexOf('/');
@@ -687,7 +708,7 @@ textarea {
 
 <!-- 시간 변환 -->
 <script type="text/javascript">
-	//??
+	//?? -> yyyy-MM-dd HH:mm
 	function convertToFormattedDateTime(dateTimeStr) {
 		if(dateTimeStr == '') {//빈값일때 바로 리턴
 			return;
@@ -701,6 +722,44 @@ textarea {
 		const minutes = String(date.getMinutes()).padStart(2, '0');
 	
 		return `${year}-${month}-${day} ${hours}:${minutes}`;
+	};
+	
+	//할 일 시간 변환(MM/dd -> yyyy-MM-dd)
+	function newDate(inputDate) {
+		const dateArr = inputDate.split('/'); // MM/dd 형식의 입력 날짜를 '/'로 분리합니다.
+		const year = new Date().getFullYear(); // 현재 년도를 가져옵니다.
+		const month = parseInt(dateArr[0], 10); // 입력 날짜의 월을 정수로 변환합니다.
+		const day = parseInt(dateArr[1], 10); // 입력 날짜의 일을 정수로 변환합니다.
+		
+		// 입력 날짜의 월과 일을 기반으로 새로운 날짜 객체를 생성합니다.
+		const dateObj = new Date(year, month - 1, day);
+		
+		const formattedDate = `${dateObj.getFullYear()}-${(dateObj.getMonth() + 1).toString().padStart(2, '0')}-${dateObj.getDate().toString().padStart(2, '0')}`;
+		return formattedDate;
+	};
+	
+	//시간 변환(yyyy-MM-dd -> MM/dd)
+	function MMdd(dateTimeStr) {
+		const dateObj = new Date(dateTimeStr);
+		const year = dateObj.getFullYear();
+		const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+		const day = String(dateObj.getDate()).padStart(2, '0');
+		
+		const formattedDate = `${year}-${month}-${day}`;
+		return formattedDate;
+	};
+	
+	//시간 변환(yyyy-MM-dd HH:mm -> yyyy-MM-dd)
+	function YYYYMMDD(dateTimeStr) {
+		if(dateTimeStr == null) {
+			return false;
+		};
+		const dateTime = new Date(dateTimeStr);
+		const year = dateTime.getFullYear();
+		const month = String(dateTime.getMonth() + 1).padStart(2, '0');
+		const day = String(dateTime.getDate()).padStart(2, '0');
+		
+		return `${year}-${month}-${day}`;
 	};
 </script>
 
@@ -728,9 +787,13 @@ textarea {
 		$(this).find('input, textarea').val('');
 		//$(this).find('.collapse').removeClass('show');
 	});
-	$('#modal2').on('hidden.bs.modal', function (e) {
-		$(this).find('.uploadResult ul li').remove();
+	
+	//프로젝트 생성 모달 홈 탭 설정 초기화
+	$('#createProModal').on('hidden.bs.modal', function (e) {
+		$(this).find('#proDefTab2').prop('checked', true);
 	});
+	
+	
 </script>
 
 <!-- 생성 html 불러오기(프로젝트 생성) -->
@@ -839,7 +902,6 @@ textarea {
 <script>
 	function partiY() {
 		let proMemNo = event.target.closest('tr').dataset.partiProMemNo;
-		console.log(proMemNo)
 		
 		fetch("/upPartiY", {
 	        method: 'PUT',
@@ -864,7 +926,6 @@ textarea {
 <script>
 	function partiN() {
 		let proMemNo = event.target.closest('tr').dataset.partiProMemNo;
-		console.log(proMemNo);
 		
 		fetch("/delPartiN", {
 	        method: 'DELETE',
@@ -993,7 +1054,6 @@ textarea {
 				if(res.result == '성공') {
 					let targetGroupFolder = document.querySelector(`[data-gN="${groupNo}"]`);
 					targetGroupFolder.setAttribute('data-fname', folderContentChange.value);
-					console.log(targetGroupFolder.children[0])
 					targetGroupFolder.children[0].innerHTML = `
 						${folderContentChange.value}
 							<span class='material-icons moreVertIcons'
