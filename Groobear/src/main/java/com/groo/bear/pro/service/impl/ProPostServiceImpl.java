@@ -20,6 +20,7 @@ import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.postvo.ProUserImgVO;
 import com.groo.bear.pro.service.postvo.ProWritingUVO;
 
 import lombok.Setter;
@@ -74,9 +75,20 @@ public class ProPostServiceImpl implements ProPostService {
 	}
 
 	@Override
-	public int createPostComment(ProPostCommentVO vo) {
+	public ProUserImgVO createPostComment(ProPostCommentVO vo) {
 		ppm.createPostComment(vo);
-		return vo.getComNo();
+	    ProUserImgVO vo2 = new ProUserImgVO();
+	    ProUserImgVO result = ppm.readPerProfileImg(vo.getId());
+	    
+	    if(result != null) {
+	    	vo2.setUuid(result.getUuid());
+	    	vo2.setUploadPath(result.getUploadPath());
+	    	vo2.setFileName(result.getFileName());
+	    };
+	    vo2.setComNo(vo.getComNo());
+	    
+	    System.out.println("테"+vo2);
+	    return vo2;
 	}
 
 	@Override

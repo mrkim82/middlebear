@@ -121,7 +121,7 @@
 	<!-- 글 댓글 조회(임시) -->
 	<select id="readPostWritingComment" resultType="ProPostCommentVO">
 		SELECT a.com_no, a.com_content, a.com_date,
-			   c.name, b.profile_img, a.id, p.pro_post_no
+			   c.name, a.id, p.pro_post_no
 		FROM com a JOIN users b
 		ON(a.id=b.id)
 		JOIN user_info c
@@ -334,6 +334,13 @@
 		FROM pro_mem
 		WHERE pro_no = #{proNo}
 		AND pro_parti_check = 'Y'
+	</select>
+	
+	<!-- 개인 프로필 이미지(댓글) -->
+	<select id="readPerProfileImg" resultType="ProUserImgVO">
+		SELECT uuid, upload_path, file_name
+		FROM files
+		WHERE id = #{id}
 	</select>
 	
 </mapper>

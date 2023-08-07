@@ -16,8 +16,14 @@
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+		@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+		 
 		.dohyeon{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			color:black;
+		}
+		.tjs{
+			font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
 			color:black;
 		}
 		.dohyeonmenu{
@@ -109,7 +115,7 @@
 	<script>
 	//WebSocket 연결 설정
 	const alarmClient = new StompJs.Client({
-	brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
+	brokerURL: 'ws://43.202.80.98:85/chatserver' // WebSocket 서버 URL
 	});
 
 	// 페이지 로드시 웹소켓 연결

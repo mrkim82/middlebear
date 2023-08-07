@@ -6,22 +6,33 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	<link rel="stylesheet" href="modal6/css/ionicons.min.css">
-		<link rel="stylesheet" href="modal6/css/flaticon.css">
-		<link rel="stylesheet" href="modal6/css/style.css">
-		<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<link rel="stylesheet" href="modal6/css/flaticon.css">
+<link rel="stylesheet" href="modal6/css/style.css">
 		<style>
 html {
 	height : 100%;
+}
+.carL{
+    position: absolute;
+    right: 143px;
+    top: 33.5px;
+
+}
+.carM{
+    position: absolute;
+    right: 46px;
+    top: 33.5px;
+
 }
 </style>
 </head>
 <body>
 <div layout:fragment="content">
 	<div>
-		<h2 class="dohyeon" style="text-align: left; margin-top:25px; font-size:1.875rem;">차량관리</h2>
+		<h2 class="tjs" style="text-align: left; margin-top:25px; font-size:1.875rem;">차량관리</h2>
 	</div>
 	<div>
-		<div style="text-align: right;margin-bottom:5px;position: absolute;right: 25px;top: 35px;" class="form-group dohyeon">
+		<div style="text-align: right;margin-bottom:5px;position: absolute;right: 25px;top: 35px;" class="form-group tjs">
 			<form name="searchForm" action="carList" >
 				<input type="hidden" name="page" value="1"/>
 				<select name="type" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;" id="selectBox" onchange="boxRe()">
@@ -37,7 +48,7 @@ html {
 
 
 
-		<table class="table table-hover dohyeon">
+		<table class="table table-hover tjs" style="text-align:center;">
 			<thead>
 				<tr>
 					<th>사번</th>
@@ -47,8 +58,8 @@ html {
 					<th>연락처</th>
 				</tr> 
 			</thead>
-			<tbody>
-				<tr class="cml table-default dohyeon" th:if="${carList != null}" th:each="car, stat:${carList}" th:onclick="carInfofo()" id="carIn" data-toggle="modal" data-target="#carMInfo">
+			<tbody style="font-weight:400;font-size:15px;">
+				<tr class="cml table-default tjs" th:if="${carList != null}" th:each="car, stat:${carList}" th:onclick="carInfofo()" id="carIn" data-toggle="modal" data-target="#carMInfo">
 					<td>[[${car.empNo}]]</td>
 					<td>[[${car.deptName}]]</td>
 					<td>[[${car.name}]]</td>

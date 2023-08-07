@@ -19,6 +19,11 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+		@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+		.tjs{
+			font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+			color:black;
+		} 
 		.dohyeon{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 			color:black;
@@ -27,6 +32,10 @@
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 			font-size : 25px;
 			color:white;
+		}
+		.tjs{
+			font-family: 'TheJamsil';
+			color:black;
 		}
 		.rightPad{
 			padding-right:150px;
@@ -86,8 +95,8 @@
 	                		</td>
 	                	</tr>
 	                	<tr>
-	                		<td style="font-size:20px;"><span><a href="/logout" class="dohyeon">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
-	                		<span><a id="commute2" class="dohyeon">마이페이지</a></span></td>
+	                		<td style="font-size:20px;"><span><a href="/logout" class="dohyeon carL">로그아웃</a></span>&nbsp;&nbsp;&nbsp;&nbsp;       
+	                		<span><a id="commute2" class="dohyeon carM">마이페이지</a></span></td>
 	                	</tr>
                 	</tbody>
                 </table>
@@ -150,7 +159,7 @@
 	<script>
 	//WebSocket 연결 설정
 	const alarmClient = new StompJs.Client({
-	brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
+	brokerURL: 'ws://43.202.80.98:85/chatserver' // WebSocket 서버 URL
 	});
 
 	// 페이지 로드시 웹소켓 연결
@@ -282,7 +291,7 @@
 	</script>
 
       <!-- 사이드바 우측의 컨텐츠 영역 -->
-      <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 dohyeon">
+      <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 tjs">
         <div layout:fragment="content" ></div>
       </main>
     </div>

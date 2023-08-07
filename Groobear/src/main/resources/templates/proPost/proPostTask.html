@@ -46,11 +46,11 @@ ul {
     z-index: 9999;
 }
 
-.custom-modal .modal-header {
+/* .custom-modal .modal-header {
     padding: 10px;
     background-color: #4dc7bd;
     color: #fff;
-}
+} */
 
 /*.modal-body {
     padding: 10px;
@@ -61,6 +61,25 @@ ul {
     background-color: #f8f9fa;
     text-align: right;
 } */
+.taskInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.taskName {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 14px;
+  color: #000;
+  text-align: left;
+}
+
+.btn-groor {
+	background-color: indianred;;
+	color: #fff;
+	border: 1px solid indianred;;
+	border-radius: 12px;
+}
 </style>
 </head>
 
@@ -71,84 +90,121 @@ ul {
 	<button type="button" class="btn btn-groob" data-toggle="modal" data-target="#workView" style="margin-right:15px;">보기</button>
 	<button type="button" class="btn btn-groob" data-toggle="modal" data-target="#workGroupCreate">업무 그룹 생성</button>
 </div>
+
 <!-- 보기 항목 설정 Modal -->
-<div class="modal fade" id="workView" tabindex="-1" aria-labelledby="workViewModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content dohyeonModalContent">
-      <div class="modal-header">
+<div class="modal fade modal-dialog-scrollable"
+	 id="workView"
+	 tabindex="-1"
+	 role="dialog"
+	 aria-labelledby="workViewModalLabel"
+	 aria-hidden="true"
+	 style="display:none">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content dohyeonModalContent" style="width:250px; height:330px;">
+      <div class="modal-header" style="padding-top:10px; padding-bottom:3px;">
         <h5 class="modal-title" id="workViewModalLabel">보기 설정</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <h4>항목 설정</h4>
-        <h6>조회할 항목을 선택할 수 있습니다.</h6>
+      <div class="modal-body" style="padding-bottom:0px;">
+        <h6>조회할 항목을 선택할 수 있습니다(scroll).</h6>
        	<!-- 개인 업무 보기 설정(modal) -->
-        <ul id="workViewCheck">
-        	<li><div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" role="switch" id="workNameCheckbox"
-			  		 th:checked="${readWorkView.workName == 'Y'}" th:text="업무명"
-			  		 data-work-view="workName" disabled>
-			  <label class="form-check-label" for="workNameCheckbox"></label>
-			</div></li>
-        	<li><div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" role="switch" id="workStatusCheckbox"
-			  		 th:checked="${readWorkView.workStatus == 'Y'}" th:text="상태"
+        <ul id="workViewCheck" style="font-size:20px;">
+        	<li><label class="custom-checkbox"
+					   style="margin-bottom: 15px">
+			  <input type="checkbox"
+					 role="switch"
+					 id="workNameCheckbox"
+			  		 th:checked="${readWorkView.workName == 'Y'}"
+			  		 data-work-view="workName"
+			  		 disabled>
+			  <span class="checkmark"></span>
+			  </label><span>업무명</span></li>
+        	<li><label class="custom-checkbox"
+					   style="margin-bottom: 15px">
+			  <input type="checkbox"
+					 role="switch"
+					 id="workStatusCheckbox"
+			  		 th:checked="${readWorkView.workStatus == 'Y'}"
 			  		 data-work-view="workStatus">
-			  <label class="form-check-label" for="workStatusCheckbox"></label>
-			</div></li>
-        	<li><div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" role="switch" id="workPrikCheckbox"
-			  		 th:checked="${readWorkView.workPri == 'Y'}" th:text="우선순위"
+			  <span class="checkmark"></span>
+			  </label><span>상태</span></li>
+        	<li><label class="custom-checkbox"
+					   style="margin-bottom: 15px">
+			  <input type="checkbox"
+					 role="switch"
+					 id="workPrikCheckbox"
+			  		 th:checked="${readWorkView.workPri == 'Y'}"
 			  		 data-work-view="workPri">
-			  <label class="form-check-label" for="workPrikCheckbox"></label>
-			</div></li>
-        	<li><div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" role="switch" id="workManagerCheckbox"
-			  		 th:checked="${readWorkView.workManager == 'Y'}" th:text="담당자"
+			  <span class="checkmark"></span>
+			  </label><span>우선순위</span></li>
+        	<li><label class="custom-checkbox"
+					   style="margin-bottom: 15px">
+			  <input type="checkbox"
+					 role="switch"
+					 id="workManagerCheckbox"
+			  		 th:checked="${readWorkView.workManager == 'Y'}"
 			  		 data-work-view="workManager">
-			  <label class="form-check-label" for="workManagerCheckbox"></label>
-			</div></li>
-        	<li><div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" role="switch" id="workStartDayCheckbox"
-			  		 th:checked="${readWorkView.workStartDay == 'Y'}" th:text="시작일"
+			  <span class="checkmark"></span>
+			  </label><span>담당자</span></li>
+        	<li><label class="custom-checkbox"
+					   style="margin-bottom: 15px">
+			  <input type="checkbox"
+					 role="switch"
+					 id="workStartDayCheckbox"
+			  		 th:checked="${readWorkView.workStartDay == 'Y'}"
 			  		 data-work-view="workStartDay">
-			  <label class="form-check-label" for="workStartDayCheckbox"></label>
-			</div></li>
-        	<li><div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" role="switch" id="workEndDayCheckbox"
-			  		 th:checked="${readWorkView.workEndDay == 'Y'}" th:text="마감일"
+			  <span class="checkmark"></span>
+			  </label><span>시작일</span></li>
+        	<li><label class="custom-checkbox"
+					   style="margin-bottom: 15px">
+			  <input type="checkbox"
+					 role="switch"
+					 id="workEndDayCheckbox"
+			  		 th:checked="${readWorkView.workEndDay == 'Y'}"
 			  		 data-work-view="workEndDay">
-			  <label class="form-check-label" for="workEndDayCheckbox"></label>
-			</div></li>
-        	<li><div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" role="switch" id="workDateCheckbox"
-			  		 th:checked="${readWorkView.workDate == 'Y'}" th:text="등록일"
+			  <span class="checkmark"></span>
+			  </label><span>마감일</span></li>
+        	<li><label class="custom-checkbox"
+					   style="margin-bottom: 15px">
+			  <input type="checkbox"
+					 role="switch"
+					 id="workDateCheckbox"
+			  		 th:checked="${readWorkView.workDate == 'Y'}"
 			  		 data-work-view="workDate">
-			  <label class="form-check-label" for="workDateCheckbox"></label>
-			</div></li>
-        	<li><div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" role="switch" id="workNumCheckbox"
-			  		 th:checked="${readWorkView.workNum == 'Y'}" th:text="업무번호"
+			  <span class="checkmark"></span>
+			  </label><span>등록일</span></li>
+        	<li><label class="custom-checkbox"
+					   style="margin-bottom: 15px">
+			  <input type="checkbox"
+					 role="switch"
+					 id="workNumCheckbox"
+			  		 th:checked="${readWorkView.workNum == 'Y'}"
 			  		 data-work-view="workNum">
-			  <label class="form-check-label" for="workNumCheckbox"></label>
-			</div></li>
-        	<li><div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" role="switch" id="workWriterCheckbox"
-			  		 th:checked="${readWorkView.workWriter == 'Y'}" th:text="작성자"
+			  <span class="checkmark"></span>
+			  </label><span>업무번호</span></li>
+        	<li><label class="custom-checkbox"
+					   style="margin-bottom: 15px">
+			  <input type="checkbox"
+					 role="switch"
+					 id="workWriterCheckbox"
+			  		 th:checked="${readWorkView.workWriter == 'Y'}"
 			  		 data-work-view="workWriter">
-			  <label class="form-check-label" for="workWriter"></label>
-			</div></li>
-        	<li><div class="form-check form-switch">
-			  <input class="form-check-input" type="checkbox" role="switch" id="workUpdateDayCheckbox"
-			  		 th:checked="${readWorkView.workUpdateDay == 'Y'}" th:text="수정일"
+			  <span class="checkmark"></span>
+			  </label><span>작성자</span></li>
+        	<li><label class="custom-checkbox"
+					   style="margin-bottom: 15px">
+			  <input type="checkbox"
+					 role="switch"
+					 id="workUpdateDayCheckbox"
+			  		 th:checked="${readWorkView.workUpdateDay == 'Y'}"
 			  		 data-work-view="workUpdateDay">
-			  <label class="form-check-label" for="workUpdateDayCheckbox"></label>
-			</div></li>
+			  <span class="checkmark"></span>
+			  </label><span>수정일</span></li>
         </ul>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="padding-top:6px; padding-bottom:6px;">
         <button type="button" class="btn btn-groob" onclick="subWorkView()">저장</button>
         <button type="button" class="btn btn-groob" data-dismiss="modal">닫기</button>
       </div>
@@ -266,11 +322,11 @@ ul {
 				data-work-column="workEndDay">-</td>
 	      </th:block>
 	      <th:block th:if="${task.workEndTime != null}">
-			<td th:if="${#dates.format(task.workEndTime) > #dates.format(afterOneDay)}"
+			<td th:if="${#dates.format(task.workEndTime, 'yyyy-MM-dd HH:mm') > #dates.format(afterOneDay, 'yyyy-MM-dd HH:mm')}"
 				th:text="${#dates.format(task.workEndTime, 'yyyy-MM-dd')}"
 				th:style="${readWorkView.workEndDay == 'N'} ? 'display: none;' : ''"
 				data-work-column="workEndDay">마감일</td>
-			<td th:if="${#dates.format(task.workEndTime) <= #dates.format(afterOneDay)}"
+			<td th:if="${#dates.format(task.workEndTime, 'yyyy-MM-dd HH:mm') <= #dates.format(afterOneDay, 'yyyy-MM-dd HH:mm')}"
 				th:text="${#dates.format(task.workEndTime, 'MM-dd HH:mm')}"
 				th:style="'color: red; display: ' + (${readWorkView.workEndDay == 'N'} ? 'none;' : 'block;')"
 				data-work-column="workEndDay">마감일, 24시 전</td>
@@ -296,19 +352,33 @@ ul {
   </tbody>
 </table>
 
-<!-- Custom Modal -->
-<div class="custom-modal" th:each="taskD : ${readWorkDetail}" th:id="'modal' + ${taskD.proPostNo}"
-	 th:data-feed-post-no="${taskD.proPostNo}" th:data-feed-work-no="${taskD.workNo}">
-    <div class="modal-header" style="border: none;">
-        <h6 class="modal-title"
-        	th:utext="${taskD.profileImg} + ${taskD.name} + ${#dates.format(taskD.postDate, 'yyyy-MM-dd HH:mm')}"></h6>
-        <button type="button" class="close closeModalButton" aria-label="Close">
-        	<span aria-hidden="true">&times;</span>
-        </button>
+<!-- Custom Modal background-color: #4dc7bd;-->
+<div class="custom-modal"
+	 th:each="taskD : ${readWorkDetail}"
+	 th:id="'modal' + ${taskD.proPostNo}"
+	 th:data-feed-post-no="${taskD.proPostNo}"
+	 th:data-feed-work-no="${taskD.workNo}"
+	 style="font-size:15px;">
+	<div class="modal-header" style="border: none; background-color: indianred;">
+		<div class="modal-title" style="display: flex;">
+			<div class="taskInfo">
+				<span th:text="${taskD.postTitle}" style="font-size:17px;"></span>
+				<div class="taskName">
+					<span th:text="${taskD.name}"></span>
+					<span th:text="${#dates.format(taskD.postDate, 'yyyy-MM-dd HH:mm')}"
+						  style="margin-left:20px;"></span>
+				</div>
+			</div>
+		</div>
+        <div style="display:inline; margin-left: auto; text-align:right;">
+			<button type="button"
+					class="close closeModalButton"
+					aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
     </div>
-    <div class="modal-header" style="border: none;">
-        <h5 class="modal-title" th:text="'제목 : ' + ${taskD.postTitle}"></h5>
-    </div>
+    
     <div class="modal-body">
     	<div class="workFeedPostStatus" th:attr="data-feed-work-type=${taskD.workStatus}" style="text-align: center;">
 		    <button type="button" class="btn"
@@ -331,7 +401,7 @@ ul {
 		<!-- 추가 항목 -->
 		<div>
 			<p>
-			  <button class="btn btn-groob" type="button" data-toggle="collapse" th:data-target="'#collapseExample' + ${taskD.workNo}"
+			  <button class="btn btn-groor" type="button" data-toggle="collapse" th:data-target="'#collapseExample' + ${taskD.workNo}"
 			  			aria-expanded="false" aria-controls="collapseExample">
 			    + 항목추가입력
 			  </button>
@@ -385,14 +455,6 @@ ul {
 		<p th:text="${taskD.workContent}">
 			<!-- 게시글 내용이 여기에 들어갑니다. -->
 		</p>
-		<div class="collapse" id="moreContent">
-			<p>
-				<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
-			</p>
-			<a class="btn btn-groob" data-toggle="collapse" href="#moreContent" role="button"
-				aria-expanded="false" aria-controls="moreContent">더보기</a>
-		</div>
-		
 		
     </div>
     <div class="modal-body">
@@ -426,7 +488,15 @@ ul {
 			<ul class="list-unstyled">
 				<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
 					th:if="${taskD.proPostNo == com.proPostNo}">
-					<span th:utext="${com.profileImg}"></span>
+					<th:block th:if="${com.uploadPath != null}">
+						<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+		  		 			 class="card-img-top"
+		  		 			 style="width:30px; height:30px; margin:0px;">
+		  		 	</th:block>
+		  		 	<th:block th:if="${com.uploadPath == null}">
+						<img style="width:30px; height:30px; margin:0px;"
+					 		 src="../img/userProf.png">
+					</th:block>
 					<span th:text="${com.name}"></span>
 					<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
 					<span th:text="${com.comContent}"></span>
@@ -442,7 +512,7 @@ ul {
 			<div class="form-group">
 				<input type="text" class="form-control" placeholder="댓글 작성">
 			</div>
-			<button type="button" class="btn btn-groob" onclick="createCommentButton()"
+			<button type="button" class="btn btn-groor" onclick="createCommentButton()"
 					th:data-post-writing-no="${taskD.proPostNo}">댓글 등록</button>
 		</div>
 		
@@ -453,20 +523,20 @@ ul {
 
 <!-- 업무 그룹 생성 모달 -->
 <div class="modal fade" id="workGroupCreate" tabindex="-1" aria-labelledby="workGroupCreateLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="workGroupCreateLabel">Modal title</h5>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content dohyeonModalContent" style="width:400px;">
+      <div class="modal-header" style="padding-bottom:3px; padding-top:10px;">
+        <h5 class="modal-title" id="workGroupCreateLabel">업무 그룹 생성</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-				<input type="text" placeholder="그룹명을 입력하세요." id="workGroupName">
+			<input type="text" placeholder="그룹명을 입력하세요." id="workGroupName" maxlength="30" style="width:100%">
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-        <button type="button" class="btn btn-primary" onclick="creWorkGroup()">저장</button>
+      <div class="modal-footer" style="padding-bottom:6px; padding-top:6px;">
+        <button type="button" class="btn btn-groob" data-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-groob" onclick="creWorkGroup()">저장</button>
       </div>
     </div>
   </div>
@@ -782,7 +852,7 @@ ul {
 <!-- 멤버별 업무 보기 설정 -->
 <script>
 	function subWorkView() {
-		let checkeds = document.getElementById('workViewCheck').querySelectorAll('li>div>input:checked');
+		let checkeds = document.getElementById('workViewCheck').querySelectorAll('li>label>input:checked');
 		let checkedObj= {};
 		let changeColums = [];
 		
@@ -894,10 +964,6 @@ ul {
 		});
 		
 	}
-</script>
-
-<script>
-	
 </script>
 
 </th:block>

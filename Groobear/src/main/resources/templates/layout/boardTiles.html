@@ -2,14 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
   <head>
- 	<title>Groobear</title>
+ 	<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 	
 		<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-	<link rel="stylesheet" href="/bootstrap.min.css">
+		<link rel="stylesheet" href="/bootstrap.min.css">
+		
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
     <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
@@ -17,6 +18,14 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+		html ::-webkit-scrollbar{
+		 display: none;
+		}
+		@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+		.tjs{
+			font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+			color:black;
+		} 
 		.dohyeon{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 			color:black;
@@ -76,16 +85,16 @@
   		}
   		.nav li{
   			transition: 0.5s;
+				padding: 10px;
   		}
   		a {
   			text-decoration : none !important;
   		}
-		html ::-webkit-scrollbar{
-		 display: none;
-		}
+
 	</style>
   </head>
-  <body style="width:1215px;margin: 0 auto;">
+  <body style="width:1215px;margin: 0 auto; 
+	">
   	<div>
     <header class="blog-header lh-1 py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
@@ -167,7 +176,7 @@
 	<script>
 	//WebSocket 연결 설정
 	const alarmClient = new StompJs.Client({
-	brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
+	brokerURL: 'ws://43.202.80.98:85/chatserver' // WebSocket 서버 URL
 	});
 
 	// 페이지 로드시 웹소켓 연결

@@ -18,10 +18,15 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+		@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+		.tjs{
+			font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+			color:black;
+		}
 		.dohyeon{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 			color:black;
-		}
+		} 
 		.dohyeonmenu{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 			font-size : 25px;
@@ -110,22 +115,22 @@
         <div class="position-sticky" style="text-align: center;">
           <ul class="nav flex-column">
             <!-- 사이드바 메뉴 아이템들 -->
-            <li class="nav-item">
+            <li class="nav-item" style="padding: 5px 0px;">
               <a href="/pay/payMain" style="font-size: 25px; text-decoration: none; color: #29ac7f;">전자결재</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" style="padding: 5px 0px;">
 			  <a href="/pay/paymentDoc" style="font-size: 25px; text-decoration: none; color: #29ac7f;">결재문서</a>           
 			</li>
-            <li class="nav-item">
+            <li class="nav-item" style="padding: 5px 0px;">
               <a href="/pay/InProgressPay" style="font-size: 25px; text-decoration: none; color: #29ac7f;">진행중결재조회</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" style="padding: 5px 0px;">
               <a href="/pay/completePay" style="font-size: 25px; text-decoration: none; color: #29ac7f;">완료된결재조회</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" style="padding: 5px 0px;">
               <a href="/pay/referrerPay" style="font-size: 25px; text-decoration: none; color: #29ac7f;">참조문서 조회</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" style="padding: 5px 0px;">
               <a href="/pay/payPreferences" style="font-size: 25px; text-decoration: none; color: #29ac7f;">환경설정</a>
             </li>
           </ul>
@@ -139,7 +144,7 @@
 	<script>
 	//WebSocket 연결 설정
 	const alarmClient = new StompJs.Client({
-	brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
+	brokerURL: 'ws://43.202.80.98:85/chatserver' // WebSocket 서버 URL
 	});
 
 	// 페이지 로드시 웹소켓 연결

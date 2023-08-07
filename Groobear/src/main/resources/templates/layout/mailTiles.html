@@ -4,7 +4,7 @@
 >
   <head>
   	<title>Groobear</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
@@ -18,6 +18,11 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+		@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+		.tjs{
+			font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+			color:black;
+		}
 		.dohyeon{
 			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 			color:black;
@@ -110,16 +115,16 @@
         <div class="position-sticky" style="text-align: center;">
           <ul class="nav flex-column">
             <!-- 사이드바 메뉴 아이템들 -->
-            <li class="nav-item"style="padding: 10px 0px;">
+            <li class="nav-item"style="padding: 5px 0px;">
               <a href="/mail/receiveMail" style="font-size: 25px; text-decoration: none; color: #29ac7f;">받은메일함</a>
             </li>
-            <li class="nav-item" style="padding: 10px 0px;">
+            <li class="nav-item" style="padding: 5px 0px;">
 			  <a href="/mail/sendingMail" style="font-size: 25px; text-decoration: none; color: #29ac7f;">보낸메일함</a>
 			</li>
-            <li class="nav-item" style="padding: 10px 0px;">
+            <li class="nav-item" style="padding: 5px 0px;">
               <a href="/mail/sendMail" style="font-size: 25px; text-decoration: none; color: #29ac7f;">메일쓰기</a>
             </li>
-            <li class="nav-item" style="padding: 10px 0px;">
+            <li class="nav-item" style="padding: 5px 0px;">
               <a href="/mail/deleteMail" style="font-size: 25px; text-decoration: none; color: #29ac7f;">지운메일함</a>
             </li>
           </ul>
@@ -132,7 +137,7 @@
 	<script>
 	//WebSocket 연결 설정
 	const alarmClient = new StompJs.Client({
-	brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
+	brokerURL: 'ws://43.202.80.98:85/chatserver' // WebSocket 서버 URL
 	});
 
 	// 페이지 로드시 웹소켓 연결

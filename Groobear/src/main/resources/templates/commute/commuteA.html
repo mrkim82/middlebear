@@ -16,6 +16,7 @@
 html {
 	height : 100%;
 }
+
 </style>
 
 
@@ -31,9 +32,9 @@ html {
 		<div class="modal fade" id="commuteModal" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
-				<div class="modal-content" style="border: 1px solid #00000021; border-radius: 20px; box-shadow: 2px 4px 3px 3px darkgray;">
+				<div class="modal-content tjs" style="border: 1px solid #00000021; border-radius: 20px; box-shadow: 2px 4px 3px 3px darkgray;">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel" style="font-size: 25px;">근태 정보 수정</h5>
+						<h5 class="modal-title" id="exampleModalLabel" style="font-size: 25px;font-weight:400;">근태 정보 수정</h5>
 						<button type="button" class="btn-close" data-mdb-dismiss="modal"
 							aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;">X</button>
 					</div>
@@ -41,31 +42,33 @@ html {
 					<form class="signup-form"
 						name="commuteInfoForm">
 						<div class="modal-body" style="text-align: center;margin-bottom: -35px;">
-							<div class="form-group mb-3">
+							<div class="form-group" style="display: flex;flex-wrap: wrap;margin-left: 7px;border: 1px solid #ccccccbf;border-radius: 15px;padding: 17px;">
 
-								<div style="font-size: 20px;">
-									<label class="label">사번 : <span id="mEmpNo"></span> &nbsp;
-									</label> <label class="label">이름 : <span id="mName"></span> &nbsp;
-									</label> <label class="label">부서 : <span id="mDept"></span> &nbsp; 
-									</label> <label class="label">연차 : <span id="mOff"></span>
-									</label><br> <label class="label">월 근무 일 : <span id="mMD"></span> &nbsp;
-									</label> <label class="label">월 연장 근무 시간 : <span id="mMT"></span></label>
+								<div style="font-size: 16px;margin-bottom:15px;">
+									<label class="label">사번 : <span id="mEmpNo" style="font-weight:300;"></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label> 
+									<label class="label">이름 : <span id="mName" style="font-weight:300;"></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label> 
+									<label class="label">부서 : <span id="mDept" style="font-weight:300;"></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label> 
+									<label class="label">연차 : <span id="mOff" style="font-weight:300;"></span></label>
+								</div>
+								<div style="font-size: 16px;margin-left:25px;">
+									&nbsp;&nbsp;<label class="label">월 근무 일 : <span id="mMD" style="font-weight:300;"></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label> 
+									<label class="label">월 연장 근무 시간 : <span id="mMT" style="font-weight:300;"></span></label>
 								</div>
 							</div>
 
 							<div class="form-group mb-3" style="display: flex; justify-content: space-evenly; margin-top:35px;">
-								<label class="label"style="font-size: 20px;">출근 시간 <input name="workStart" style="font-size: 20px;width: 155px;border-radius: 20px;"
+								<label class="label"style="font-size: 16px;">출근 시간 <input name="workStart" style="font-size: 15px;width: 155px;border-radius: 20px;margin-top:5px;"
 									id="newWorkStart" type="time" value="" class="form-control"></label>
 									
-									<label class="label"style="font-size: 20px;">퇴근 시간 <input name="workEnd" style="font-size: 20px;width: 155px;border-radius: 20px;"
+									<label class="label"style="font-size: 16px;">퇴근 시간 <input name="workEnd" style="font-size: 15px;width: 155px;border-radius: 20px;margin-top:5px;"
 									id="newWorkEnd" type="time" value="" class="form-control"></label>
 							</div>
 							
 							<div class="form-group mb-3" style="display: flex; justify-content: space-evenly; margin-top:30px;">
-								<label class="label" style="font-size: 20px;">연장근무 시작 시간 <input name="overWorkStart" style="font-size: 20px;width: 155px;border-radius: 20px;"
+								<label class="label" style="font-size: 16px;">연장근무 시작 시간 <input name="overWorkStart" style="font-size: 15px;width: 155px;border-radius: 20px;margin-top:5px;"
 									id="newOverWorkStart" type="time" value="" class="form-control"></label>
 									
-								<label class="label" style="font-size: 20px;">연장근무 종료 시간 <input name="overWorkEnd" style="font-size: 20px;width: 155px;border-radius: 20px;"
+								<label class="label" style="font-size: 16px;">연장근무 종료 시간 <input name="overWorkEnd" style="font-size: 15px;width: 155px;border-radius: 20px;margin-top:5px;"
 									id="newOverWorkEnd" type="time" value="" class="form-control"></label>
 							</div>
 							<div class="form-group mb-3" style="display: none;">
@@ -122,7 +125,7 @@ html {
 			</form>
 		</div>
 		<div>
-			<table class="table table-hover" style="margin-top: 5px;">
+			<table class="table table-hover" style="margin-top: 5px;text-align:center;">
 				<thead>
 					<tr>
 						<th>날짜</th>

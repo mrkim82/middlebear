@@ -17,7 +17,7 @@
 <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+ 
 <!-- 풀캘린더 -->
 <script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
 
@@ -31,12 +31,15 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
-
-.dohyeon{
-	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+.tjs{
+	font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
 	color:black;
 }
-
+.dohyeon{
+			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			color:black;
+		}
 .dohyeonmenu{
 	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 	font-size : 25px;
@@ -784,7 +787,7 @@ proInSearch.addEventListener('keyup', function(event) {
 <script>
 	//WebSocket 연결 설정
 	const alarmClient = new StompJs.Client({
-		brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
+		brokerURL: 'ws://43.202.80.98:85/chatserver' // WebSocket 서버 URL
 	});
 	
 	// 페이지 로드시 웹소켓 연결

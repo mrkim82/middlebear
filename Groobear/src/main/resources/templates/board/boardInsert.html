@@ -4,55 +4,95 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Insert a new Board</title>
 
+    <style>
+    .button-wrapper {
+                text-align: right;
+            }
+    .uploadResult .btn-warning{
+	color:gray;
+	background-color:#90ddb091;
+	border-radius:7px;
+	padding:1px 8px;
+	margin-left:5px;
+	border:0;
+} 
+.input-file-button{
+  padding: 6px 25px;
+  background-color:#90ddb091;
+  border-radius: 4px;
+  color: black;
+  cursor: pointer;
+  position:absolute;
+  top: -6px;
+  left: 68px;
+}
+.insertBtn{
+    border-radius: 10px;
+	background-color: #399f61;
+	border-color: #399f6100;
+	box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;
+	color: #fff;
+	width: 80px;
+	height: 50px;
+	margin: 10px;
+}
+.listBtn{
+    border-radius: 10px;
+	background-color: #399f61;
+	border-color: #399f6100;
+	box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;
+	color: #fff;
+	width: 80px;
+	height: 50px;
+	margin: 10px;
+}
+    </style>
 </head>
-<style>
-.button-wrapper {
-            text-align: right;
-        }
-</style>
 <!-- <script src="fileBoard.js"></script> -->
 <body class="dohyeon">
     <div layout:fragment="content">
-        <h2>글 작성</h2>
+        <h2 style="margin-top: 25px;">글 작성</h2>
+        <button type="submit" class="insertBtn" style="position:absolute; right: 116px; top: 578px; z-index: 1000;">게시글 등록</button>
+        <button id="listlist" class="listBtn" type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|" style="position: absolute;right: 24px;top: 578px; z-index: 1000;">목록으로</button>
         <form action="/boardInsert" method="post" role="form">
             <table class="table table-hover">
                 <thead>
                 <tr>
                     <td>제목:</td>
-                    <td><input type="text" id="title" name="title"  required /></td>
+                    <td><input type="text" id="title" name="title"  required  style="border: 0px; width:400px;" placeholder="이곳에 제목을 입력하세요"/></td>
                 </tr>
                 <tr>
                     <td>내용:</td>
-                    <td><textarea rows="8" cols="30" id="content" name="content" required></textarea></td>
+                    <td><textarea rows="8" cols="30" id="content" name="content" required style="border: 0px; width: 100%; height: 400px;" placeholder="이곳에 내용을 입력하세요"></textarea></td>
                 </tr>
-                <!-- <tr >
-                	<td>첨부파일:</td>
-                	<td><input type="file" name="uploadFile" multiple/></td>
-                </tr> -->
                 <tr style="display: none;">
                     <td>작성자 ID:</td>
                     <td><input type="text" id="name" name="name" th:value="${session.Name}" readonly /></td>
                 </tr>
                 <tr style="display:none;">
                 	<td ><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
-               	</tr>
-               	<tr style="display: none;">
-               		<td ><input id="boardType" name="boardType" th:value="${board.boardType}"></td>
-               	</tr>
+                </tr>
+                <tr style="display: none;">
+                    <td ><input id="boardType" name="boardType" th:value="${board.boardType}"></td>
+                </tr>
             </thead>
-            </table>
-            
-            
+        </table>
+        <hr>
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">첨부파일</div>
+                    
                     <div class="panel-body">
                         <div class="form-group uploadDiv">
-                            <input type="file" name="uploadFile" multiple>
+                            <label class="input-file-button" for="input-file">
+                                파일 선택
+                          </label>
+                               <input name="uploadFile" id="input-file" type="file" multiple style="display:none;">
+                            
                         </div>
+                       
                         <div class="uploadResult">
                             <ul>
 
@@ -62,16 +102,12 @@
                 </div>
             </div>
         </div>
-        <div class="button-wrapper">
-            <button type="submit" >게시글 등록</button>
-            <button id="listlist" type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|" >목록으로</button>
-        </div>
     </form>
-<!-- Modal -->
-<div class="modal fade dohyeon" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<!-- <div class="modal fade dohyeon" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="width: 500px; margin-top:280px;">
         <div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;width: 500px;">
-            <div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;">
+            <div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray; padding: 0px;">
                 <h5 class="modal-title" id="exampleModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">알림</h5>
                 <button type="button" class="btn-close" data-dismiss="modal" onclick="closeModal()" aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
             </div>
@@ -85,8 +121,36 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
+<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1"
+			role="dialog" aria-labelledby="deletePostModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document" style="width: 500px; ">
+				<div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;width: 500px; height:280px;">
+					<div class="modal-header">
+						<h5 class="modal-title" id="deletePostModalLabel">게시글 등록 알림</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" style="display: flex; justify-content: space-evenly; font-size: 28px;color: black; text-align:center; height: auto;">
+                        <p style="font-size: 28px;color: black; margin:30px 0px; height: 40px !important;">제목 및 내용을 입력해주세요</p>
+                    </div>
+					<div class="modal-footer">
+						<button id="firstCancel" type="button" class="btn btn-secondary"
+							data-dismiss="modal" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+			integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+			crossorigin="anonymous"></script>
 <script>
     function closeModal() {
         $('#myModal').modal('hide');
@@ -108,13 +172,10 @@
     });
 
     $("button[type='submit']").on("click", function(e) {
-        // 이 부분은 비워둡니다.
+
     });
 
 });
-
-
-
 
         function showUploadResult(uploadResultArr){
             console.log(uploadResultArr)
@@ -135,7 +196,7 @@
                   str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
                   str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
-		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'>X</i></button><br>";
 		          str += "<img src='/display?fileName="+fileCallPath+"'>";
 		          str += "</div>";
 		          str +"</li>";
@@ -147,7 +208,7 @@
                   str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
                   str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
-		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'>X</i></button><br>";
 		          str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
 		          str += "</div>";
 		          str +"</li>";

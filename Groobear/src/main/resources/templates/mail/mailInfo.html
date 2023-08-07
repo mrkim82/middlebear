@@ -15,10 +15,10 @@
 </style>
 </head>
 <body layout:fragment="content">
-<h3 class="dohyeon" style="font-size:35px;margin-top:20px;">G-Mail  </h3>
-	<table class="table dohyeon">
+<h3 class="tjs" style="font-size:35px;margin-top:20px;">Groobear Mail  </h3>
+	<table class="table tjs">
         <tr>
-            <td>제목<input type="text" th:value="${mail.title}" readonly style="position: absolute;left: 120px;border: 0;"/><input th:value="${#dates.format(mail.sendDate, 'yyyy.MM.dd')}" readonly style="border:0;position: absolute;right: 0;"/></td>
+            <td>제목<input type="text" th:value="${mail.title}" readonly style="position: absolute;left: 120px;border: 0;width:300px;"/><input th:value="${#dates.format(mail.sendDate, 'yyyy.MM.dd')}" readonly style="border:0;position: absolute;right: 0;"/></td>
         </tr>
         <tr>
             <td>보낸사람<input type="text" th:value="${mail.sender}" readonly style="position: absolute;left: 120px;border: 0;"/></td>
