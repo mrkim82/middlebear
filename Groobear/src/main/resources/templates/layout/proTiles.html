@@ -107,6 +107,14 @@ th {
 	border: 0px;
 }
 
+.mcmodal {
+	border-radius: 8px;
+	border: 1px solid gray;
+	padding: 2px 9px;
+	background-color: #998b79;
+	color: #fff;
+}
+
 /* 검색 창 스타일 */
 input[type="text"] {
 	width: 150px; /* 원하는 너비 값으로 변경 */
@@ -509,7 +517,7 @@ textarea {
 					<details id="groupFolderList" open>
 						<summary>프로젝트 폴더
 							<span onclick="makeGroupFolderModal()"
-								  class="material-icons">add</span>
+								  class="material-icons spanCursor">add</span>
 						</summary>
 						<!-- 프로젝트 그룹 리스트 -->
 						<ul id="proGroup" style="list-style-type: none;">
@@ -518,7 +526,7 @@ textarea {
 								<a th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}"
 								   style="overflow:hidden; width:80px">
 								   [[${proG.groupName}]]
-									<span class='material-icons moreVertIcons'
+									<span class='material-icons moreVertIcons spanCursor'
 										  onclick="makeGroupMan()">more_vert
 									</span>
 									<!-- style='display: none;' -->
@@ -563,7 +571,7 @@ textarea {
 	  <div class="modal-dialog modal-dialog-centered">
 	    <div class="modal-content dohyeonModalContent">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="inviteManProLabel">미수락 프로젝트</h5>
+	        <h2 class="modal-title" id="inviteManProLabel" style="font-weight:600;">미수락 프로젝트</h2>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
@@ -573,8 +581,8 @@ textarea {
 					<table class="table table-hover" style="margin: 0px;">
 						<thead>
 							<tr>
-								<th scope="col" style="font-size: 20px; font-weight: 300; width: 250px;">프로젝트 명</th>
-								<th scope="col" style="font-size: 20px; font-weight: 300; width: 120px;">초대자</th>
+								<th scope="col" style="font-size: 20px; font-weight: 600; width: 250px;">프로젝트 명</th>
+								<th scope="col" style="font-size: 20px; font-weight: 600; width: 120px;">초대자</th>
 								<th scope="col" style="font-size: 20px; font-weight: 100; width: 75px;"></th>
 								<th scope="col" style="font-size: 20px; font-weight: 100; width: 75px; padding-left: 0px;"></th>
 							</tr>
@@ -600,7 +608,7 @@ textarea {
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content dohyeonModalContent">
 				<div class="modal-header">
-					<h5 class="modal-title" id="createProModal">프로젝트 생성하기</h5>
+					<h2 class="modal-title" id="createProModal" style="font-weight:600;">프로젝트 생성하기</h2>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 					</button>
@@ -618,7 +626,7 @@ textarea {
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content dohyeonModalContent" style="width: 434px;">
 				<div class="modal-header">
-					<h5 class="modal-title" id="createGroupFolderModallLabel">그룹 폴더 생성</h5>
+					<h2 class="modal-title" id="createGroupFolderModallLabel" style="font-weight:600;">그룹 폴더 생성</h2>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -629,7 +637,7 @@ textarea {
 						   id="folderContent"
 						   autocomplete="off"
 						   maxlength="30"
-							 style="width: 372px;">
+						   style="width: 372px;">
 				</div>
 				<div class="d-flex justify-content-center" style="margin: 0 auto; padding-top: 6px; padding-bottom: 6px; margin-bottom: 5px;">
 					<button type="button" class="btn btn-groo" onclick="makeGroupFolder()" style="border-radius:12px; margin-right: 6px;">저장</button>
@@ -643,15 +651,16 @@ textarea {
 	<div class="modal fade" id="makeGroupManModal" tabindex="-1" aria-labelledby="makeGroupManModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content dohyeonModalContent"
-					 style="width: 350px;">
+					 style="width: 450px;">
 				<div class="modal-header">
-					<h5 class="modal-title" id="makeGroupManModalLabel"></h5>
+					<h2 class="modal-title" id="makeGroupManModalLabel" style="font-weight:600;"></h2>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body" style="text-align: center;">
-					<h6 style="text-align: center; margin-top: 7px;">* 그룹안의 프로젝트는 삭제되지 않습니다!</h6>
+					<h6 style="text-align: center;">폴더 수정공간입니다.</h6>
+					<h6 style="text-align: center; margin:0px;">그룹 폴더안의 프로젝트는 삭제되지 않습니다!</h6>
 				</div>
 				<div class="modal-footer">
 					<button type="button"
@@ -674,7 +683,7 @@ textarea {
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content dohyeonModalContent"  style="width: 434px;">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateManButtonLabel">그룹 폴더명 수정</h5>
+					<h2 class="modal-title" id="updateManButtonLabel" style="font-weight:600;">그룹 폴더명 수정</h2>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -1019,7 +1028,7 @@ textarea {
 		aC.style.width = '80px';
 		
 		let spanC = document.createElement('span');
-		spanC.className = 'material-icons moreVertIcons';
+		spanC.classList.add('material-icons', 'moreVertIcons', 'spanCursor');
 		//spanC.style = 'display : none;';
 		spanC.textContent = 'more_vert';
 		spanC.onclick = makeGroupMan;
@@ -1065,7 +1074,7 @@ textarea {
 					targetGroupFolder.setAttribute('data-fname', folderContentChange.value);
 					targetGroupFolder.children[0].innerHTML = `
 						${folderContentChange.value}
-							<span class='material-icons moreVertIcons'
+							<span class='material-icons moreVertIcons spanCursor'
 							  onclick="makeGroupMan()">more_vert
 						</span>
 					`;
