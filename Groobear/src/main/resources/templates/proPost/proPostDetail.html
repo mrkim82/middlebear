@@ -14,10 +14,6 @@ p {
 	margin: 0px;
 }
 
-.spanCursor {
-	cursor: pointer
-}
-
 .gray {
 	color: gray;
 }
@@ -1279,7 +1275,8 @@ function drawChart() {
 												<div class="progress-bar bg-info" role="progressbar"
 													 th:style="'width: ' + ${prog.per} + '%'"
 													 aria-valuemin="0"
-													 aria-valuemax="100"></div>
+													 aria-valuemax="100"
+													 th:text="${prog.per} + '%'"></div>
 											<th:block>
 										</div>
 									</div>
@@ -1831,12 +1828,12 @@ function drawChart() {
 		</div>
 		<!-- 참여자공간 -->
 		<div class="float-right">
-			<div>
+			<div style="margin-top:10px;">
 				<th:block th:text="'참여자 ' + ${projectPartiMember.size}"></th:block>
 			</div>
-			<div class="card" style="width: 230px;">
+			<div class="card" style="width: 230px; border:none; margin-top:5px;">
 			  <!-- 관리자 -->
-			  <div class="card-header openModalInfo"
+			  <div class="card-header openModalInfo spanCursor"
 			  	   th:each="pUser : ${projectPartiMember}"
 			  	   th:if="${pUser.id == readProAuth.id}"
 			  	   th:data-user-id="${pUser.id}"
@@ -1848,8 +1845,8 @@ function drawChart() {
 			       <span th:text="${pUser.name}"></span>
 			  	   <span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
 			  </div>
-			  <ul class="list-group list-group-flush">
-			    <li class="list-group-item openModalInfo" th:each="pUser, pUserStat : ${projectPartiMember}"
+			  <ul class="list-group list-group-flush border">
+			    <li class="list-group-item openModalInfo spanCursor" th:each="pUser, pUserStat : ${projectPartiMember}"
 			    	th:if="${pUser.id != readProAuth.id}"
 			    	th:data-user-id="${pUser.id}"
 			    	data-toggle="modal"
@@ -1869,7 +1866,7 @@ function drawChart() {
 					  <div class="modal-dialog modal-dialog-centered">
 					    <div class="modal-content dohyeonModalContent" style="width:350px;">
 				        <div class="card-deck">
-						  <div class="card row justify-content-end">
+						  <div class="card row justify-content-end" style="border-radius: 12px;">
 						  <!-- 프사 -->
 							<button type="button"
 									class="close"
@@ -2598,6 +2595,7 @@ function drawChart() {
 			
 			//퍼센트 변경
 			totalInputExp.closest('.card-body').children[0].children[0].children[0].style.width = per + '%';
+			totalInputExp.closest('.card-body').children[0].children[0].children[0].innerText = per + '%';
 			
 		})
 		.catch(error => {
