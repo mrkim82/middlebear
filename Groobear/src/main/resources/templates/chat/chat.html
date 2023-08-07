@@ -254,7 +254,7 @@
                     </div>
                 </div>
                 <span class="cursor" data-toggle="modal" data-target="#inviteModal"><i class="material-icons">group_add</i></span> <!-- Invite Icon -->
-                
+                <!-- 나가는버튼 -->
                 <span class="cursor" id="deleteChatroomButton"><i class="material-icons">exit_to_app</i></span> <!-- Exit Icon -->
             </div>
         </div>
@@ -305,17 +305,17 @@
 	</div>
 	<!-- The Modal -->
     <div class="modal" id="inviteModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <div class="modal-dialog" style="width: 500px; ">
+            <div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;">
 
                 <!-- Modal Header -->
-                <div class="modal-header">
+                <div class="modal-header" style="border-bottom: 1px solid #dee2e6;">
                     <h4 class="modal-title">초대하기</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
-                <div class="modal-body">
+                <div class="modal-body" style="justify-content: space-evenly; color: black; height: auto;">
                 
                     <ul id="employeeList"></ul>
                     <div id="userListContainer">
@@ -324,16 +324,58 @@
                 </div>
 				
                 <!-- Modal footer -->
-                <div class="modal-footer">
+                <div class="modal-footer" style="border-top: 1px solid #dee2e6;"> 
                     <button type="button" class="btn btn-primary" id="createChatroom">생성</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- 진짜 나가게? 물어보는 모달용 -->
+<div class="modal" id="exitModal" >
+    <div class="modal-dialog" style="width: 500px; ">
+        <div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;width: 500px; height:280px;">
+
+            <!-- Modal Header -->
+            <div class="modal-header" style="border-bottom: 1px solid #dee2e6;">
+                <h4 class="modal-title">채팅방 나가기 알림</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="display: flex; justify-content: space-evenly; font-size: 28px;color: black; text-align:center; height: auto;">
+                <p style="font-size: 28px;color: black; margin:30px 0px; height: 40px !important;">
+                채팅방을 나가시겠습니까?
+            </p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer" style="border-top: 1px solid #dee2e6;">
+                <button type="button" class="btn btn-primary" id="confirmExit">나가기</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script th:inline="javascript">
+
+function closeErrorModal() {
+			$('#exitModal').modal('hide');
+	}
+
+	$(document).ready(function() {
+			// 검색 빈값 처리
+			$('#deleteChatroomButton').on('click', function() {
+					
+					
+							$('#exitModal').modal('show'); // 모달 표시
+							return false;
+					
+			});
+	});
     var profileImg = '<%=session.getAttribute("ProfileImg")%>';
 
 console.log('requestURL : ' + /*[[ ${#httpServletRequest.requestURL} ]]*/);
@@ -481,7 +523,7 @@ stompClient.onWebSocketClose = (event) => {
     console.error('Websocket closed', event);
 };
 //채팅방 나가기
-const deleteButton = document.getElementById('deleteChatroomButton');
+const deleteButton = document.getElementById('confirmExit');
 deleteButton.addEventListener('click', (event) => {
     event.preventDefault();
     fetch('/deleteChatroom', {
@@ -621,8 +663,8 @@ console.log(roomNo + "룸방번호 확인")
             checkbox.id = 'employee-' + employee.id;
             checkbox.value = employee.id;
 
-            const empNo = document.createElement('span');
-            empNo.textContent = employee.empNo + ' ';
+            // const empNo = document.createElement('span');
+            // empNo.textContent = employee.empNo + ' ';
             
             const empId = document.createElement('span');
             empId.textContent = employee.id + ' ';
@@ -639,7 +681,7 @@ console.log(roomNo + "룸방번호 확인")
 
 
             label.appendChild(checkbox);
-            label.appendChild(empNo);
+            // label.appendChild(empNo);
             label.appendChild(empId);
             label.appendChild(empName);
             label.appendChild(empRank);
