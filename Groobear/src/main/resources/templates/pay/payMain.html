@@ -11,7 +11,7 @@
 	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
 	
 	.dohyeon{
-		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		Font-family : 'Do Hyeon', serif;/*웹 폰트 지정*/
 		color:black;
 		font-size : 20px;
 	}
@@ -37,9 +37,9 @@
 </head>
 <body>
 <div layout:fragment="content">
-	<div>
-	  <h3 class="dohyeon" style="font-size:35px;margin-top:20px;">Groobear 전자결재</h3>
-	  	<div class="row">
+	<div class="tjs">
+	  <h3 class="tjs" style="font-size:35px;margin-top:20px;">Groobear 전자결재</h3>
+	  	<div class="row tjs">
             <div class="col-lg-3 col-md-6">
                 <div class="card">
                     <div class="card-body">
@@ -49,7 +49,7 @@
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text">진행중 결재문서 : <span class="count" id="getProgress" onclick="location.href='/pay/InProgressPay'">0건</span></div>
+                                    <div class="stat-text" style="text-align:center">진행 : <span class="count" id="getProgress" onclick="location.href='/pay/InProgressPay'">0건</span></div>
                                     <div class="stat-heading"></div>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text">완료된 결재문서 : <span class="count" id="comProgress" onclick="location.href='/pay/completePay'">0건</span></div>
+                                    <div class="stat-text" style="text-align:center">완료 : <span class="count" id="comProgress" onclick="location.href='/pay/completePay'">0건</span></div>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text">참조된 결재문서 : <span class="count" id="refProCount" onclick="location.href='pay/referrerPay'">0건</span></div>
+                                    <div class="stat-text" style="text-align:center">참조 : <span class="count" id="refProCount" onclick="location.href='pay/referrerPay'">0건</span></div>
                                 </div>
                             </div>
                         </div>
@@ -91,11 +91,11 @@
                 </div>
             </div>
 	  	</div>
-		<h5 class="dohyeon" style="margin-top: 20px; font-size:25px;">1) 결재중 문서 조회</h5>
-		<button type="button" id="payDoc" class="dohyeon" onclick="location.href='/pay/paymentDoc'"
-		style="position: absolute;font-size:18px;margin-bottom: 10px;margin-right: 10px;border: 0;width: 100px;height: 40px;top: 70px;right: 10px;background-color: #9fdfbea6;border-radius: 15px;color: #474747;">
+		<h5 class="tjs" style="margin-top: 20px; font-size:25px;">1) 결재중 문서 조회</h5>
+		<button type="button" id="payDoc" class="tjs" onclick="location.href='/pay/paymentDoc'"
+		style="position: absolute;font-size:18px;margin-bottom: 10px;margin-right: 10px;border: 0;width: 120px;height: 40px;top: 70px;right: 10px;background-color: #9fdfbea6;border-radius: 15px;color: #474747;">
 			결재문서작성</button>
-		<table id="dataTable" class="table table-hover dohyeon">
+		<table id="dataTable" class="table table-hover tjs">
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -125,8 +125,8 @@
 		</table>
 	</div>
 	<div>
-		<h5 class="dohyeon" style="margin-top: 20px; font-size:25px;">2) 완료된 문서 조회</h5>
-		<table id="dataTable2" class="table table-hover dohyeon">
+		<h5 class="tjs" style="margin-top: 20px; font-size:25px;">2) 완료된 문서 조회</h5>
+		<table id="dataTable2" class="table table-hover tjs">
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -156,8 +156,8 @@
 		</table>
 	</div>
 	<div>
-		<h5 class="dohyeon" style="margin-top: 20px font-size:25px;;">3) 참조된 문서 조회</h5>
-		<table id="dataTable2" class="table table-hover dohyeon">
+		<h5 class="tjs" style="margin-top: 20px; font-size:25px;">3) 참조된 문서 조회</h5>
+		<table id="dataTable2" class="table table-hover tjs">
 			<thead>
 				<tr>
 					<th>번호</th>
