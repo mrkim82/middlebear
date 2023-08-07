@@ -2,12 +2,53 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="UTF-8">
-<title>참조자 등록 모달</title>
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
+<link rel="icon" href="/img/bear.png" type="image/x-icon">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<style>
+		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+		@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+		.tjs{
+			font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+			color:black;
+		}
+		.dohyeon{
+			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			color:black;
+		} 
+		.dohyeonmenu{
+			font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+			font-size : 25px;
+			color:white;
+		}
+		.rightPad{
+			padding-right:150px;
+		}
+		.nav li:hover{
+  			background-color: #4fc09961;
+  			border-radius:15px;
+  		}
+  		.nav li:hover a{
+  			color:black;
+  		}
+  		.nav li{
+  			transition: 0.5s;
+  		}
+  		a {
+  			text-decoration : none !important;
+  		}
+  		html ::-webkit-scrollbar{
+		 display: none;
+		}
+		.custom-button:hover{
+			color: black !important
+		}
+	</style>
 </head>
 <body>
 	<br>
-    <table style="width:200px; height:500px; float:left;">
+	<div style="text-align: center;width: 250px; height: 300px; margin:0px; float:left; overflow: auto">
+    <table class="tjs" style="width:200px; height:500px; border:1">
     	<thead>
 	    	<tr>
 	    		<th><font size="3" color="gray">구성원</font></th>
@@ -26,20 +67,27 @@
     	</tbody>
     	
     </table>
-    <table style="float:left; margin-left:100px ;margin-top:100px;">
+    </div>
+    <table class="tjs" style="float:left; margin-left:70px ;margin-top:100px;">
     	<tbody>
     		<tr>
-    			<td><button type="button" id="referrer" onclick="refSet()">참조자</button></td>
+    			<td><button type="button" id="referrer" onclick="refSet()" class="tjs custom-button" 
+						style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff; font-size: 17px;width: 100px;height:35px;"
+						>참조자</button></td>
     		</tr>
     		<tr>
-    			<td><button type="button" id="payDelete" onclick="userDel()">제외</button></td>
+    			<td><button type="button" id="payDelete" onclick="userDel()" class="tjs custom-button" 
+						style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff; font-size: 17px;width: 100px;height:35px;"
+						>제외</button></td>
     		</tr>
     		<tr>
-    			<td><button type="submit" id="payCheck" onclick="userSet()">확인</button></td>
+    			<td><button type="submit" id="payCheck" onclick="userSet()" class="tjs custom-button" 
+						style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff; font-size: 17px;width: 100px;height:35px;"
+						>확인</button></td>
     		</tr>
     	</tbody>
     </table>
-    <table style="width:300px; height:200px; display:none;">
+    <table class="tjs" style="width:300px; height:200px; display:none;">
     	<thead>
     		<tr>
 	    		<th><font size="3" color="gray">기안자</font></th>
