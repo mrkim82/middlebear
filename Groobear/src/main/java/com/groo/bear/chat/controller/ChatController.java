@@ -180,7 +180,9 @@ public class ChatController {
     public ResponseEntity<?> inviteEmployees(@RequestBody RoomDTO roomDTO) {
         List<String> employeeIds = roomDTO.getEmployeeIds();
         int roomNo = roomDTO.getRoomNo();
-        
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy년 MM월 dd일 HH시 mm분");
+        String formattedTime = now.format(formatter);
         for(String id : employeeIds) {
             RoomDTO room = new RoomDTO();
             room.setId(id);
@@ -189,6 +191,7 @@ public class ChatController {
             // 새로운 사용자를 초대했음을 알리는 메시지 생성
             ChatMessageDTO chatMessage = new ChatMessageDTO();
             chatMessage.setContent(id + "님이 채팅방에 입장하였습니다.");
+            //chatMessage.setContent(id + "님이 채팅방에 입장하였습니다." + formattedTime);
             //chatMessage.setMsgTime(now);
             chatMessage.setRoomNo(roomNo);
             // 메시지를 채팅방에 전송

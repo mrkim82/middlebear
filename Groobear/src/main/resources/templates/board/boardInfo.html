@@ -12,7 +12,6 @@
 	crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
-<title>게시글 단건조회</title>
 <style>
 .input {
   border: none;
@@ -134,7 +133,7 @@ h2 {
 			<thead>
 			<tr>
 				<td>제목:</td>
-				<td><input class="input" type="text" th:value="${board.title}" readonly /></td>
+				<td><input class="input" type="text" th:value="${board.title}" readonly style=""/></td>
 			</tr>
 			<tr>
 				<td>작성일:</td>
