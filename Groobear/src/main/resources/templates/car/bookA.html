@@ -30,53 +30,33 @@ html {
 			<div class="modal-dialog">
 				<div class="modal-content" style=" border-radius: 25px; box-shadow: 2px 3px 1px 1px #d3d3d37a;">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel" style="font-size:30px;">운행 일지</h5>
+						<h5 class="modal-title" id="exampleModalLabel" style="font-size:30px;">운행 일지 정보 조회</h5>
 						<button type="button" class="btn-close" data-mdb-dismiss="modal"
 						style="border-radius: 10px;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: gray;width: 30px;height:25px;"
 							aria-label="Close">X</button>
 					</div>
 
 					<form class="signup-form" name="commuteInfoForm">
-						<div class="modal-body" style="display:inline-block;">
-							<div class="form-group mb-3" style="display:inline-block;width: 470px;border-radius: 2px;">
-								<table style="float: left; width: 400px; font-size:20px;">
+						<div class="modal-body" style="display:inline-block;padding:0;">
+							<div class="form-group mb-3" style="display:inline-block;width: 470px;">
+								<table class="table" style="float: left; font-size:20px;margin-bottom:0;font-weight: 500;">
 									<thead></thead>
 									<tbody>
-										<tr><td>문서 번호 : <span id="mPayNo"></span></td></tr>
-										<tr><td>작성자 : <span id="mName"></span> / <span id="mDept"></span></td></tr>
-										<tr><td>작성일자 : <span id="mIssueDate"></span></td></tr>
+										<tr><td><span style="display: inline-block;width: 120px;">문서 번호 </span> <span id="mPayNo" style="font-weight: 200;"></span></td></tr>
+										<tr><td><span style="display: inline-block;width: 120px;">작성자 </span> <span id="mName" style="font-weight: 200;"></span><span style="font-weight: 300;">/</span><span id="mDept" style="font-weight: 200;"></span></td></tr>
+										<tr><td><span style="display: inline-block;width: 120px;">작성일자 </span> <span id="mIssueDate" style="font-weight: 200;"></span></td></tr>
 										<tr><td id="sessionId" style="display: none;">[[${session.Id}]]</td></tr>
 									</tbody>
 								</table>
-								<table style="float: left; width: 380px; font-size:20px">
+								<table class="table" style="float: left; font-size:20px;margin-bottom:0;font-weight: 500;">
 									<thead></thead>
 									<tbody>
-										<tr>
-											<td>기안자</td>
-											<td>결재자</td>
-											<td>결재자</td>
-										</tr>
-										<tr>
-											<td>22222</td>
-											<td>55555</td>
-											<td>65555</td>
-										</tr>
-										<tr>
-											<td>이름 / 직급</td>
-											<td>이름 / 직급 </td>
-											<td>이름 / 직급</td>
-										</tr>
-									</tbody>
-								</table>
-								<table style="float: left; width: 790px; font-size:20px;">
-									<thead></thead>
-									<tbody>
-										<tr><td>사유 : <span id="mPurpose"></span>
-										<tr><td>행선지 : <span id="mDestination"></span>
-										<tr><td>운행일자 : <span id="mOperDate"></span>
-										<tr><td>운행전 키로수 : <span id="mBefored"></span>
-										<tr><td>운행후 키로수 : <span id="mAfterd"></span>
-										<tr><td>전도금 : <span id="mImprest"></span>
+										<tr><td><span style="display: inline-block;width: 120px;">진행 상태 </span> <span id="mStatus" style="font-weight: 200;"></span></td></tr>
+										<tr><td><span style="display: inline-block;width: 120px;">사유 </span> <span id="mPurpose" style="font-weight: 200;"></span></td></tr>
+										<tr><td><span style="display: inline-block;width: 120px;" >행선지 </span> <span id="mDestination" style="font-weight: 200;"></span></td></tr>
+										<tr><td><span style="display: inline-block;width: 120px;">운행일자</span> <span id="mOperDate" style="font-weight: 200;"></span></td></tr>
+										<tr><td><span style="display: inline-block;width: 120px;"> 운행전 키로수 </span> <span id="mBefored" style="font-weight: 200;margin-right:60px;"></span>운행후 키로수  <span id="mAfterd" style="font-weight: 200;"></span></td></tr>
+										<tr><td><span style="display: inline-block;width: 120px;"> 전도금 </span> <span id="mImprest" style="font-weight: 200;"></span></td></tr>
 										<tr style="display:none;"><td><input id="mDocType" style="border:none;"></td></tr>
 									</tbody>
 								</table>
@@ -85,7 +65,7 @@ html {
 
 						<div class="modal-footer">
 							<button type="button" id="saveBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 50px;height:35px;">수정</button>
-							<button type="button" class="" style="border-radius: 10px; border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: gray;width: 50px;height:35px;"
+							<button type="button" class="" style="border-radius: 10px; border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: gray;width: 60px;height:35px;"
 								data-mdb-dismiss="modal">닫기</button>
 						</div>
 					</form>
@@ -96,7 +76,7 @@ html {
 
 
 		<div>
-			<h2 style="text-align: left; margin-top:25px;" class="dohyeon">운행 일지 관리</h2>
+			<h2 style="text-align: left; margin-top:25px;" class="tjs">운행 일지 관리</h2>
 		</div>
 		<div style="display: block">
 			<form name="searchForm" action="bookList">
@@ -131,7 +111,7 @@ html {
 					</select> <input id="textBox"
 						style="border: 1px solid gray;border-radius: 5px;height: 35px; width:150px;"
 						type="text" name="keyword" th:value="${criteria.keyword}" />
-					<button type="submit" id="searchBtn" class="btn btn-primary" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 50px;height:35px;">검색</button>
+					<button type="submit" id="searchBtn" class="btn btn-primary" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 60px;height:35px;">검색</button>
 				</div>
 			</form>
 		</div>
@@ -158,13 +138,13 @@ html {
 						<td class="name">[[${bk.name}]]</td>
 						<td class="destination">[[${bk.destination}]]</td>
 						<td class="driveKM">[[${bk.afterd}-${bk.befored}]]</td>
-						<td th:if="${bk.payStatus2 == 'F' || bk.payStatus3 == 'F'}">반려</td>
+						<td class="status" th:if="${bk.payStatus2 == 'F' || bk.payStatus3 == 'F'}">반려</td>
 						<td
-							th:if="${bk.payStatus2 == 'N' || bk.payStatus3 == 'N'} and ${bk.payStatus2 != 'F'}">진행중</td>
-						<td th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'Y'}">지급
+							class="status" th:if="${bk.payStatus2 == 'N' || bk.payStatus3 == 'N'} and ${bk.payStatus2 != 'F'}">진행중</td>
+						<td class="status" th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'Y'}">지급
 							완료</td>
 						<td
-							th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'N'} and ${bk.approver3 == ''}">지급
+							class="status" th:if="${bk.payStatus2 == 'Y' && bk.payStatus3 == 'N'} and ${bk.approver3 == ''}">지급
 							완료</td>
 						<td class="day" style="display: none;">[[${#dates.format(bk.day,'yyyy-MM-dd')}]]</td>
 						<td class="operDate" style="display: none;">[[${#dates.format(bk.operDate,'yyyy-MM-dd')}]]</td>
@@ -248,6 +228,7 @@ html {
 				let purpose = event.currentTarget.querySelector('.purpose').innerText;
 				let destination = event.currentTarget.querySelector('.destination').innerText;
 				let docType = event.currentTarget.querySelector('.docType').innerText;
+				let status = event.currentTarget.querySelector('.status').innerText;
 				let imprest = (parseInt(afterd) - parseInt(befored)) * 1500;
 				
 				
@@ -269,6 +250,7 @@ html {
 				document.querySelector('#mDestination').textContent = destination;
 				document.querySelector('#mImprest').textContent = imprest;
 				document.querySelector('#mDocType').textContent = docType;
+				document.querySelector('#mStatus').textContent = status;
 				
 				
 			}
