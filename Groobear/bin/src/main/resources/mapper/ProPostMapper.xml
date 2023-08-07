@@ -336,4 +336,11 @@
 		AND pro_parti_check = 'Y'
 	</select>
 	
+	<!-- 개인 프로필 이미지(댓글) -->
+	<select id="readPerProfileImg" resultType="ProUserImgVO">
+		SELECT uuid, upload_path, file_name
+		FROM files
+		WHERE id = #{id}
+	</select>
+	
 </mapper>
