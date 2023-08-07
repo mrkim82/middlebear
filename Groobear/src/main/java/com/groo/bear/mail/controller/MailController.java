@@ -49,6 +49,7 @@ public class MailController {
         String id2=id;
         id = id.substring(0,id.indexOf("@"));
         EmailReader receiver = new EmailReader();
+        receiver.setSaveDirectory("/home/ec2-user/upload/");
         List<MailVO> list = receiver.receiveMailAttachedFile(id, id, startDate, endDate);
         //위에서 가져온 메일을 db에 저장하고 뿌려줌
 		if(list!=null && list.size() > 0) {

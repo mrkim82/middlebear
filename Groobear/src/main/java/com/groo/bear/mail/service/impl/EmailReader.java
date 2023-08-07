@@ -116,7 +116,7 @@ public class EmailReader {
                             String fileName = part.getFileName();
                             attachFiles += fileName + ", ";
                             System.out.println();
-                            //part.saveFile(saveDirectory + File.separator + fileName);
+                            part.saveFile(saveDirectory + File.separator + fileName);
                         } else {
                             // 메일 내용 저장
                             messageContent = part.getContent().toString();
