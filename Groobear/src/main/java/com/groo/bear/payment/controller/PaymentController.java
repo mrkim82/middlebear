@@ -227,66 +227,155 @@ public class PaymentController {
 		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
 		model.addAttribute("mySign",paymentService.searchSignImg(empvo.getEmpNo()));
 		if(docType.equals("a")) {
-			PaymentVO payVO = paymentService.logList(payNo);
+			PaymentVO payVO = paymentService.offList(payNo); //payVO.Id = 기안자 approver2 결재자1 approver3 결재자2
+			System.out.println("payVO = "+payVO);
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
-			model.addAttribute("list",paymentService.logList(payNo));
-			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			model.addAttribute("list",paymentService.offList(payNo));
+			System.out.println("docType b에서 if직전");
+			if(paymentService.searchSignImg(empvo.getEmpNo()) != null) {
+				System.out.println("searchSignImg = "+paymentService.searchSignImg(empvo.getEmpNo()));
+				System.out.println("empvo.getEmpNo = "+empvo.getEmpNo());
+				model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("drafterSign",filesVO);
+			}
+			empvo = new EmpVO();
 			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			System.out.println("docType b 결재자2 = "+empvo);
 			model.addAttribute("approver2Info",empvo);
-			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			if(paymentService.searchSignImg(empvo.getEmpNo())!= null) {
+				System.out.println("payment DocType=B"+paymentService.searchSignImg(empvo.getEmpNo()));
+				model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				System.out.println("결재자2는 사인없음");
+				model.addAttribute("approver2Sign",filesVO);
+			}
 			//결재자3이 있으면 보내줌
 			String approver3 = payVO.getApprover3();
+			empvo = new EmpVO();
+			empvo = paymentService.payEmpInfo(payVO.getApprover3());
 			if(approver3 == null || approver3 =="") {
-				//System.out.println("조건 임시변경 테스트");
+				System.out.println("조건 임시변경 테스트");
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("approver3Sign",filesVO);
+				model.addAttribute("approver3Info",empvo);
 			}else {
-				if(empvo != null) {
-					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+				if(approver3 != null) {
+					System.out.println("결재자3 empvo = "+empvo);
+					if(paymentService.searchSignImg(empvo.getEmpNo())!=null){
+						System.out.println("approver3Sign"+paymentService.searchSignImg(empvo.getEmpNo()));
+						model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					}else {
+						FilesVO filesVO = new FilesVO();
+						System.out.println("approver3은 있지만 사인없음");
+						model.addAttribute("approver3Sign",filesVO);
+					}
 					model.addAttribute("approver3Info",empvo);
-					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
 				}
 			}
 		}
 		if(docType.equals("b")) {
-			PaymentVO payVO = paymentService.offList(payNo);
+			PaymentVO payVO = paymentService.offList(payNo); //payVO.Id = 기안자 approver2 결재자1 approver3 결재자2
+			System.out.println("payVO = "+payVO);
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.offList(payNo));
-			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			System.out.println("docType b에서 if직전");
+			if(paymentService.searchSignImg(empvo.getEmpNo()) != null) {
+				System.out.println("searchSignImg = "+paymentService.searchSignImg(empvo.getEmpNo()));
+				System.out.println("empvo.getEmpNo = "+empvo.getEmpNo());
+				model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("drafterSign",filesVO);
+			}
+			empvo = new EmpVO();
 			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			System.out.println("docType b 결재자2 = "+empvo);
 			model.addAttribute("approver2Info",empvo);
-			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			if(paymentService.searchSignImg(empvo.getEmpNo())!= null) {
+				System.out.println("payment DocType=B"+paymentService.searchSignImg(empvo.getEmpNo()));
+				model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				System.out.println("결재자2는 사인없음");
+				model.addAttribute("approver2Sign",filesVO);
+			}
 			//결재자3이 있으면 보내줌
 			String approver3 = payVO.getApprover3();
+			empvo = new EmpVO();
+			empvo = paymentService.payEmpInfo(payVO.getApprover3());
 			if(approver3 == null || approver3 =="") {
-				//System.out.println("조건 임시변경 테스트");
+				System.out.println("조건 임시변경 테스트");
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("approver3Sign",filesVO);
+				model.addAttribute("approver3Info",empvo);
 			}else {
-				if(empvo != null) {
-					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+				if(approver3 != null) {
+					System.out.println("결재자3 empvo = "+empvo);
+					if(paymentService.searchSignImg(empvo.getEmpNo())!=null){
+						System.out.println("approver3Sign"+paymentService.searchSignImg(empvo.getEmpNo()));
+						model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					}else {
+						FilesVO filesVO = new FilesVO();
+						System.out.println("approver3은 있지만 사인없음");
+						model.addAttribute("approver3Sign",filesVO);
+					}
 					model.addAttribute("approver3Info",empvo);
-					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
 				}
 			}
 		}
 		if(docType.equals("c")){
-			PaymentVO payVO = paymentService.robinList(payNo);
+			PaymentVO payVO = paymentService.offList(payNo); //payVO.Id = 기안자 approver2 결재자1 approver3 결재자2
 			System.out.println("payVO = "+payVO);
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
-			model.addAttribute("list",paymentService.robinList(payNo));
-			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			model.addAttribute("list",paymentService.offList(payNo));
+			System.out.println("docType b에서 if직전");
+			if(paymentService.searchSignImg(empvo.getEmpNo()) != null) {
+				System.out.println("searchSignImg = "+paymentService.searchSignImg(empvo.getEmpNo()));
+				System.out.println("empvo.getEmpNo = "+empvo.getEmpNo());
+				model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("drafterSign",filesVO);
+			}
+			empvo = new EmpVO();
 			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			System.out.println("docType b 결재자2 = "+empvo);
 			model.addAttribute("approver2Info",empvo);
-			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			if(paymentService.searchSignImg(empvo.getEmpNo())!= null) {
+				System.out.println("payment DocType=B"+paymentService.searchSignImg(empvo.getEmpNo()));
+				model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				System.out.println("결재자2는 사인없음");
+				model.addAttribute("approver2Sign",filesVO);
+			}
 			//결재자3이 있으면 보내줌
 			String approver3 = payVO.getApprover3();
+			empvo = new EmpVO();
+			empvo = paymentService.payEmpInfo(payVO.getApprover3());
 			if(approver3 == null || approver3 =="") {
-				//System.out.println("조건 임시변경 테스트");
+				System.out.println("조건 임시변경 테스트");
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("approver3Sign",filesVO);
+				model.addAttribute("approver3Info",empvo);
 			}else {
-				if(empvo != null) {
-					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+				if(approver3 != null) {
+					System.out.println("결재자3 empvo = "+empvo);
+					if(paymentService.searchSignImg(empvo.getEmpNo())!=null){
+						System.out.println("approver3Sign"+paymentService.searchSignImg(empvo.getEmpNo()));
+						model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					}else {
+						FilesVO filesVO = new FilesVO();
+						System.out.println("approver3은 있지만 사인없음");
+						model.addAttribute("approver3Sign",filesVO);
+					}
 					model.addAttribute("approver3Info",empvo);
-					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
 				}
 			}
 		}
@@ -352,71 +441,164 @@ public class PaymentController {
 	@GetMapping("payInfoRead")
 	public String payInfoRead(@RequestParam int payNo, @RequestParam String docType, Model model, HttpSession session) {
 		String id = (String) session.getAttribute("Id");
+		System.out.println("payNo = "+payNo);
+		System.out.println("docType = "+docType);
 		EmpVO empvo = new EmpVO();
-		empvo = paymentService.payEmpInfo(id);
+		empvo = paymentService.payEmpInfo(id); //empvo가 없어서 나오는 에러
+		System.out.println("empvo dsa = "+empvo);
 		model.addAttribute("userInfo",paymentService.payEmpInfo(id));
 		model.addAttribute("mySign",paymentService.searchSignImg(empvo.getEmpNo()));
 		if(docType.equals("a")) {
-			PaymentVO payVO = paymentService.logList(payNo);
+			PaymentVO payVO = paymentService.logList(payNo); //payVO.Id = 기안자 approver2 결재자1 approver3 결재자2
+			System.out.println("payVO = "+payVO);
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.logList(payNo));
-			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			System.out.println("docType a에서 if직전");
+			if(paymentService.searchSignImg(empvo.getEmpNo()) != null) {
+				System.out.println("searchSignImg = "+paymentService.searchSignImg(empvo.getEmpNo()));
+				System.out.println("empvo.getEmpNo = "+empvo.getEmpNo());
+				model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("drafterSign",filesVO);
+			}
+			empvo = new EmpVO();
+			System.out.println("payVO.getApprover2 = "+payVO.getApprover2());
 			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			System.out.println("docType a 결재자2 = "+empvo);
 			model.addAttribute("approver2Info",empvo);
-			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			if(paymentService.searchSignImg(empvo.getEmpNo())!= null) {
+				System.out.println("payment DocType=B"+paymentService.searchSignImg(empvo.getEmpNo()));
+				model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				System.out.println("결재자2는 사인없음");
+				model.addAttribute("approver2Sign",filesVO);
+			}
 			//결재자3이 있으면 보내줌
 			String approver3 = payVO.getApprover3();
+			empvo = new EmpVO();
+			empvo = paymentService.payEmpInfo(payVO.getApprover3());
 			if(approver3 == null || approver3 =="") {
-				//System.out.println("조건 임시변경 테스트");
+				System.out.println("조건 임시변경 테스트");
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("approver3Sign",filesVO);
+				model.addAttribute("approver3Info",empvo);
 			}else {
-				if(empvo != null) {
-					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+				if(approver3 != null) {
+					System.out.println("결재자3 empvo = "+empvo);
+					if(paymentService.searchSignImg(empvo.getEmpNo())!=null){
+						System.out.println("approver3Sign"+paymentService.searchSignImg(empvo.getEmpNo()));
+						model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					}else {
+						FilesVO filesVO = new FilesVO();
+						System.out.println("approver3은 있지만 사인없음");
+						model.addAttribute("approver3Sign",filesVO);
+					}
 					model.addAttribute("approver3Info",empvo);
-					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
 				}
 			}
 		}
 		else if(docType.equals("b")) {
-			PaymentVO payVO = paymentService.offList(payNo);
+			PaymentVO payVO = paymentService.offList(payNo); //payVO.Id = 기안자 approver2 결재자1 approver3 결재자2
+			System.out.println("payVO = "+payVO);
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.offList(payNo));
-			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			System.out.println("docType b에서 if직전");
+			if(paymentService.searchSignImg(empvo.getEmpNo()) != null) {
+				System.out.println("searchSignImg = "+paymentService.searchSignImg(empvo.getEmpNo()));
+				System.out.println("empvo.getEmpNo = "+empvo.getEmpNo());
+				model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("drafterSign",filesVO);
+			}
+			empvo = new EmpVO();
 			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			System.out.println("docType b 결재자2 = "+empvo);
 			model.addAttribute("approver2Info",empvo);
-			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			if(paymentService.searchSignImg(empvo.getEmpNo())!= null) {
+				System.out.println("payment DocType=B"+paymentService.searchSignImg(empvo.getEmpNo()));
+				model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				System.out.println("결재자2는 사인없음");
+				model.addAttribute("approver2Sign",filesVO);
+			}
 			//결재자3이 있으면 보내줌
 			String approver3 = payVO.getApprover3();
+			empvo = new EmpVO();
+			empvo = paymentService.payEmpInfo(payVO.getApprover3());
 			if(approver3 == null || approver3 =="") {
-				//System.out.println("조건 임시변경 테스트");
+				System.out.println("조건 임시변경 테스트");
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("approver3Sign",filesVO);
+				model.addAttribute("approver3Info",empvo);
 			}else {
-				if(empvo != null) {
-					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+				if(approver3 != null) {
+					System.out.println("결재자3 empvo = "+empvo);
+					if(paymentService.searchSignImg(empvo.getEmpNo())!=null){
+						System.out.println("approver3Sign"+paymentService.searchSignImg(empvo.getEmpNo()));
+						model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					}else {
+						FilesVO filesVO = new FilesVO();
+						System.out.println("approver3은 있지만 사인없음");
+						model.addAttribute("approver3Sign",filesVO);
+					}
 					model.addAttribute("approver3Info",empvo);
-					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
 				}
 			}
 		}
 		else if(docType.equals("c")){
-			PaymentVO payVO = paymentService.robinList(payNo);
+			PaymentVO payVO = paymentService.robinList(payNo); //payVO.Id = 기안자 approver2 결재자1 approver3 결재자2
+			System.out.println("payVO = "+payVO);
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
 			model.addAttribute("list",paymentService.robinList(payNo));
-			model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			System.out.println("docType b에서 if직전");
+			if(paymentService.searchSignImg(empvo.getEmpNo()) != null) {
+				System.out.println("searchSignImg = "+paymentService.searchSignImg(empvo.getEmpNo()));
+				System.out.println("empvo.getEmpNo = "+empvo.getEmpNo());
+				model.addAttribute("drafterSign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("drafterSign",filesVO);
+			}
+			empvo = new EmpVO();
 			empvo = paymentService.payEmpInfo(payVO.getApprover2());
+			System.out.println("docType b 결재자2 = "+empvo);
 			model.addAttribute("approver2Info",empvo);
-			model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			if(paymentService.searchSignImg(empvo.getEmpNo())!= null) {
+				System.out.println("payment DocType=B"+paymentService.searchSignImg(empvo.getEmpNo()));
+				model.addAttribute("approver2Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+			}else {
+				FilesVO filesVO = new FilesVO();
+				System.out.println("결재자2는 사인없음");
+				model.addAttribute("approver2Sign",filesVO);
+			}
 			//결재자3이 있으면 보내줌
 			String approver3 = payVO.getApprover3();
+			empvo = new EmpVO();
+			empvo = paymentService.payEmpInfo(payVO.getApprover3());
 			if(approver3 == null || approver3 =="") {
-				//System.out.println("조건 임시변경 테스트");
+				System.out.println("조건 임시변경 테스트");
+				FilesVO filesVO = new FilesVO();
+				model.addAttribute("approver3Sign",filesVO);
+				model.addAttribute("approver3Info",empvo);
 			}else {
-				System.out.println("제대로찍힘");
-				if(empvo != null) {
-					empvo = paymentService.payEmpInfo(payVO.getApprover3());
+				if(approver3 != null) {
+					System.out.println("결재자3 empvo = "+empvo);
+					if(paymentService.searchSignImg(empvo.getEmpNo())!=null){
+						System.out.println("approver3Sign"+paymentService.searchSignImg(empvo.getEmpNo()));
+						model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
+					}else {
+						FilesVO filesVO = new FilesVO();
+						System.out.println("approver3은 있지만 사인없음");
+						model.addAttribute("approver3Sign",filesVO);
+					}
 					model.addAttribute("approver3Info",empvo);
-					model.addAttribute("approver3Sign",paymentService.searchSignImg(empvo.getEmpNo()));
 				}
 			}
 		}
