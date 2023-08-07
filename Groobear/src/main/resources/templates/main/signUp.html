@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Groobear Sign Up</title>
+  <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
   <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -13,8 +13,10 @@
 
   <style>
  	@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+ 	@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
     body {
-      font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+      font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+	  font-weight:800;
       min-height: 100vh;
       background: -webkit-gradient(linear, left bottom, right top, from(#92b5db), to(#1d466c));
       background: -webkit-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
@@ -22,7 +24,13 @@
       background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
       background: linear-gradient(to top right, #caf5d85e 2%, #8cdeb7c2 100%);
     }
-
+	.custom-button {
+		color: #fff;
+	}
+	.custom-button:hover {
+		color: black; /* 마우스 오버 시 글자색을 남색으로 변경 */
+	  	cursor: pointer; /* 커서 모양을 손가락 모양으로 변경 */
+	}
     .input-form {
       max-width: 680px;
 
@@ -65,7 +73,7 @@
   <div class="container">
     <div class="input-form-backgroud row">
       <div class="input-form col-md-12 mx-auto" style="padding-bottom:10px;">
-        <h4 class="mb-3" style="text-align:center;">Groobear Sign Up</h4>
+        <h4 class="mb-3" style="text-align:center;">Groobear 회원가입</h4>
         <form class="validation-form" novalidate>
           <div class="row">
             <div class="col-md-6 mb-3">
@@ -74,7 +82,7 @@
                 <input type="text" class="form-control" id="name" name="name" minlength="1" maxlength="5" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" 
                 oninput="removeName()" placeholder="이름" value="" required>
                 <div class="input-group-append">
-                  <button class="btn btn-primary" style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" onclick="openPopUp()" type="button">조회</button>
+                  <button class="custom-button btn btn-primary" style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" onclick="openPopUp()" type="button">조회</button>
                 </div>
               </div>
             </div>
@@ -99,7 +107,7 @@
                 <input type="text" style="border-bottom: 3px solid #ced4da;" class="form-control" id="bear" value="@bear.com" readonly>
                 </div>
                 <div class="input-group-append">
-                  <button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="btn btn-primary" type="button" id="checkId">중복검사</button>
+                  <button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="custom-button btn btn-primary" type="button" id="checkId">중복검사</button>
                 </div>
               </div>
             </div>
@@ -136,7 +144,7 @@
                 <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control phoneNumber" minlength="13" maxlength="13"
            		 id="phone" name="phone" placeholder="010-0000-0000" required>
                 <div class="input-group-append">
-                	<button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="btn btn-primary" type="button" id="smsbtn1">인증번호 발급</button>
+                	<button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="custom-button btn btn-primary" type="button" id="smsbtn1">인증번호 발급</button>
                 </div>
               </div>
                <a id="checkPhone"></a>
@@ -147,7 +155,7 @@
                 <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" minlength="6" maxlength="6"
            		 id="smsnum" name="smsnum" placeholder="인증번호 6자리" required>
                 <div class="input-group-append">
-                	<button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="btn btn-primary" type="button" id="smsbtn2">인증번호 확인</button>
+                	<button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="custom-button btn btn-primary" type="button" id="smsbtn2">인증번호 확인</button>
                 </div>
               </div>
               <a id="checkSms"></a>
@@ -160,7 +168,7 @@
 	                <input type="text" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="form-control" minlength="5" maxlength="5"
 	           		 id="post" name="post" placeholder="우편번호 찾기 버튼 클릭" readonly>
 	                <div class="input-group-append">
-	                	<button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="btn btn-primary" type="button" id="postBtn" onclick="postCode()">우편번호 찾기</button>
+	                	<button style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" class="custom-button btn btn-primary" type="button" id="postBtn" onclick="postCode()">우편번호 찾기</button>
 	                </div>
 	              </div>
 	            </div>
@@ -178,12 +186,12 @@
           
           <hr class="mb-4">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="custom-control-input" id="aggrement" required>
-            <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
+            <input type="checkbox" style="cursor: pointer;border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" class="custom-control-input" id="aggrement" required>
+            <label class="custom-control-label" style="cursor: pointer;" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
           </div>
           <div class="mb-4" style="text-align: center;margin-bottom:0px;margin-top:30px;">
-          	<button style="display:inline;background-color: #38d39f;border-color: #38d39f;margin-right:50px;" class="btn btn-primary btn-lg" id="finalBtn" type="button">가입완료</button>
-          	<button class="btn btn-primary btn-lg " style="display:inline;background-color: #38d39f;border-color: #38d39f;" type="button" onclick="location.href='/'">돌아가기</button>
+          	<button style="display:inline;background-color: #38d39f;border-color: #38d39f;margin-right:50px;" class="custom-button btn btn-primary btn-lg" id="finalBtn" type="button">가입완료</button>
+          	<button class="custom-button btn btn-primary btn-lg " style="display:inline;background-color: #38d39f;border-color: #38d39f;" type="button" onclick="location.href='/'">돌아가기</button>
           </div>
         </form>
       </div>
@@ -196,16 +204,22 @@
     <!-- The Modal -->
     <div id="myModal" class="modal">
       <!-- Modal content -->
-      <div class="modal-content">
-                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
-                <p><br /></p>
-            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
-                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
-                     닫기
-                </span>
+      <div class="modal-content" style="box-shadow: 2px 4px 3px 3px darkgray;width: 500px;margin-top:280px;border-radius: 20px;padding:0px;">
+      	<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;padding: 2px;">
+			<h5 class="modal-title" id="exampleModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">아이디 찾기</h5>
+			<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
+				aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
+		</div>
+                <p style="text-align: center; margin:20px;height: 70px;line-height: 70px;"><span style="font-size: 17pt;" id="spantext"></span></p>
+            <div style="text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
+	            <div class="modal-footer">
+	                <span class="pop_bt"  style="cursor:pointer;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;line-height: 45px;font-size: 17px;" id="closeModal">
+	                     닫기
+	                </span>
+	            </div>
             </div>
       </div>
-    </div>
+      </div>
     <!-- 우편번호 api 필수-->
   	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js?autoload=false"></script>
     <script type="text/javascript">  
@@ -314,6 +328,11 @@
  	$('#smsnum').on('keyup', function () {
     	$(this).val($(this).val().replace(/[^0-9]/g, ""));
 	});
+ 	
+ 	function closeModal() {
+	   	  // 모달 창 닫기
+	   	  $('#myModal').hide();
+	   	}
  	
   	//모달 Close 기능
     function close_pop(flag) {
@@ -552,7 +571,7 @@
   			    success: function(data) {
   			    	if(data == "success"){
   			    		$('#spantext').text('회원가입 완료');
-			    		$('#closeModal').text('로그인 화면');
+			    		$('#closeModal').text('닫기');
 			    		$('#goLogin').attr('onclick', "location.href='/'")
 			    		$('#myModal').show();	
   			    	} else{
