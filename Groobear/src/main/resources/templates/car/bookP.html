@@ -14,6 +14,7 @@
 html {
 	height : 100%;
 }
+
 </style>
 
 
@@ -39,9 +40,9 @@ html {
 					</div>
 
 					<form class="signup-form" name="commuteInfoForm">
-						<div class="modal-body" style="display:inline-block;padding:20px 50px;">
+						<div class="modal-body" style="display:inline-block;padding:0;">
 							<div class="form-group mb-3" style="display:inline-block;width: 470px;">
-								<table class="table" style="float: left; font-size:20px;">
+								<table class="table" style="float: left; font-size:20px;margin-bottom:0;">
 									<thead></thead>
 									<tbody>
 										<tr><td>문서 번호 : <span id="mPayNo"></span></td></tr>
@@ -50,10 +51,10 @@ html {
 										<tr><td id="sessionId" style="display: none;">[[${session.Id}]]</td></tr>
 									</tbody>
 								</table>
-								<table class="table" style="float: left; font-size:20px;">
+								<table class="table" style="float: left; font-size:20px;margin-bottom:0;">
 									<thead></thead>
 									<tbody>
-										<tr><th>진행 상태 : </th><td><span id="mStatus"></span></td></tr>
+										<tr><th>진행 상태 : <span id="mStatus"></span></td></tr>
 										<tr><td>사유 : <span id="mPurpose"></span>
 										<tr><td>행선지 : <span id="mDestination"></span>
 										<tr><td>운행일자 : <span id="mOperDate"></span>
