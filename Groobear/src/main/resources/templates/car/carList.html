@@ -4,11 +4,10 @@
  	  layout:decorate="~{layout/myPageATiles}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
 	<link rel="stylesheet" href="modal6/css/ionicons.min.css">
 <link rel="stylesheet" href="modal6/css/flaticon.css">
 <link rel="stylesheet" href="modal6/css/style.css">
-		<style>
+<style>
 html {
 	height : 100%;
 }
@@ -24,18 +23,21 @@ html {
     top: 33.5px;
 
 }
+tbody tr {
+	cursor:pointer;
+}
 </style>
 </head>
 <body>
 <div layout:fragment="content">
 	<div>
-		<h2 class="tjs" style="text-align: left; margin-top:25px; font-size:1.875rem;">차량관리</h2>
+		<h2 class="tjs" style="text-align: left; margin-top:25px; font-size:1.875rem;font-weight:300;">차량관리</h2>
 	</div>
 	<div>
 		<div style="text-align: right;margin-bottom:5px;position: absolute;right: 25px;top: 35px;" class="form-group tjs">
 			<form name="searchForm" action="carList" >
 				<input type="hidden" name="page" value="1"/>
-				<select name="type" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;" id="selectBox" onchange="boxRe()">
+				<select name="type" style="border: 1px solid gray;border-radius: 5px;height: 35px; width:60px;cursor:pointer;" id="selectBox" onchange="boxRe()">
 					<option value='' selected >선택</option>
 					<option value='name' th:selected="${criteria.type == 'name'}">이름</option>
 					<option value='deptName' th:selected="${criteria.type == 'deptName'}">부서</option>
@@ -99,7 +101,7 @@ html {
 		      </div>
 		      <div class="row no-gutters">
 			      <div class="col-md-6 d-flex">
-				      <div class="modal-body p-5 img d-flex color-1 text-center d-flex align-items-center" style="border-radius: 20px 0px 0px 20px;">
+				      <div class="modal-body p-5 img d-flex color-1 text-center d-flex align-items-center" style="border-radius: 20px 0px 0px 20px;background-color:#58ce55b0;">
 				      	<div class="text w-100">
 				      		<span class="icon-2 ion-ios-car"></span>
 					      	<h5 class="dohyeon">차량 정보만 변경 가능합니다.</h5>
@@ -110,7 +112,7 @@ html {
 				      </div>
 				    </div>
 				    <div class="col-md-6 d-flex">
-				      <div class="modal-body p-5 img d-flex align-items-center color-2" style="border-radius: 0px 20px 20px 0px;">
+				      <div class="modal-body p-5 img d-flex align-items-center color-2" style="border-radius: 0px 20px 20px 0px;background-color:#146542;">
 								<div class="text w-100 py-0 py-md-5">
 									<h3 class="mb-4">Change Car Info</h3>
 									<form action="carUpdate" method="post" class="signup-form"
@@ -169,10 +171,10 @@ html {
 										</div>
 										<div class="form-group d-md-flex"></div>
 										<div class="form-group" style="margin-left: 30px;">
-											<button type="submit" style="width: 150px;"
+											<button type="submit" style="width: 150px; background-color:#68e18ead !important;"
 												class="btn btn-primary rounded submit px-3" onclick="checkBtn2()">수정</button>
 											<button type="button" id="deleteBtn"
-												style="width: 150px; margin: 0px 5px;"
+												style="width: 150px; margin: 0px 5px;  background-color:#68e18ead !important;"
 												class="btn btn-primary rounded">삭제</button>
 										</div>
 									</form>

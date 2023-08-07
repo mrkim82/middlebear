@@ -4,7 +4,6 @@
 	layout:decorate="~{layout/myPageATiles}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <!-- Font Awesome -->
 <link
@@ -87,7 +86,7 @@ html {
 					<button type="button" onclick="prevMon()" class="" style="border-radius: 10px;padding: 5px 7px 5px 5px;color: black;background-color: #fff; border:1px solid #399f61bd;">
 						&laquo;</button>
 					<input
-						style="border: 1px solid rgba(0, 0, 0, 0.1);border-radius: 10px;height: 35px;border-color: #399f61;text-align: center;"
+						style="border: 1px solid rgba(0, 0, 0, 0.1);border-radius: 10px;height: 35px;border-color: #399f61;text-align: center;cursor:pointer;"
 						type="month" name="monthDate" id="monthDate"
 						onchange="changeMon()" th:value="${monthDate}">
 					<button type="button" onclick="nextMon()" class="" style="border-radius: 10px;padding: 5px 5px 5px 7px;color: black;background-color: #fff; border:1px solid #399f61bd;">

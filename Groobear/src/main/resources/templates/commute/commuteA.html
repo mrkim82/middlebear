@@ -4,7 +4,6 @@
 	layout:decorate="~{layout/myPageATiles}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <!-- Font Awesome -->
 <link
@@ -16,7 +15,9 @@
 html {
 	height : 100%;
 }
-
+tbody tr {
+	cursor:pointer;
+}
 </style>
 
 
@@ -81,7 +82,7 @@ html {
 							<div class="form-group d-md-flex"></div>
 
 						</div>
-						<div class="modal-footer">
+						<div class="modal-footer" style="margin-top: 15px;">
 							<button type="button" id="saveBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 50px;height:35px;">저장</button>
 							<button type="button" class="" 
 								style="border-radius: 10px; border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: gray;width: 50px;height:35px;"
@@ -98,19 +99,19 @@ html {
 		<div>
 			<form name="searchForm" action="commuteList" style="margin-bottom: 10px;">
 				<input type="hidden" name="page" value="1" /> <input
-					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;"
+					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;cursor:pointer;"
 					type="date"
 					th:value="${#dates.format(commuteVO.startDay, 'yyyy-MM-dd')}"
 					name="startDay" id="startDate" onchange="mindate(); changeDate();">
 					 - 
 				<input
-					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;"
+					style="border: 1px solid gray;border-radius: 5px;height: 35px;text-align: center;cursor:pointer;"
 					type="date"
 					th:value="${#dates.format(commuteVO.endDay, 'yyyy-MM-dd')}"
 					name="endDay" id="endDate" onchange="changeDate()">
 				<div style="position: absolute; display: inline-block; right: 25px;">
 					<select
-						style="border: 1px solid gray;border-radius: 5px;height: 35px; width:50px;"
+						style="border: 1px solid gray;border-radius: 5px;height: 35px; width:60px;cursor:pointer;"
 						name="type" id="selectBox" onchange="boxRe()">
 						<option value='' selected id="base">선택</option>
 						<option value='empNo' th:selected="${criteria.type == 'empNo'}">사번</option>
@@ -365,14 +366,14 @@ html {
 			
 				 let data = {
 						'id' : document.querySelector('#mId').value,
-						'workStart2' : document.querySelector('#mDate').value + ' ' +document.querySelector('#newWorkStart').value,
-						'workEnd2' : newWorkEnd !== '' ? document.querySelector('#mDate').value + ' ' +newWorkEnd : null,
-						'overWorkStart2' : newOverWorkStart !== '' ? document.querySelector('#mDate').value + ' ' +newOverWorkStart : null,
-						'overWorkEnd2' : newOverWorkEnd !== '' ? document.querySelector('#mDate').value + ' ' +newOverWorkEnd : null,
- 						'day2' : document.querySelector('#mDate').value
+						'workStart2' : document.querySelector('#mDate').textContent + ' ' +document.querySelector('#newWorkStart').value,
+						'workEnd2' : newWorkEnd !== '' ? document.querySelector('#mDate').textContent + ' ' +newWorkEnd : null,
+						'overWorkStart2' : newOverWorkStart !== '' ? document.querySelector('#mDate').textContent + ' ' +newOverWorkStart : null,
+						'overWorkEnd2' : newOverWorkEnd !== '' ? document.querySelector('#mDate').textContent + ' ' +newOverWorkEnd : null,
+ 						'day2' : document.querySelector('#mDate').textContent
  						
 				 } 
-						
+						console.log("!!!!"+data)
 				 
 					fetch('/commuteUpdate', {
 		               method : 'post',
