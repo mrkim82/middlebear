@@ -77,7 +77,6 @@
 	color: #fff;
 	width: 60px;
 	height: 50px;
-	
 	float: right;
 	margin: 10px;
 }
@@ -120,13 +119,25 @@ table.tdWrite { padding: 0; }
     <h2 th:if="${boardVO.boardType == 'C'}">언론보도</h2>
     <h2 th:if="${boardVO.boardType == 'K'}">자유게시판</h2>
 		<th:block th:if="${(boardVO.boardType == 'N') and ((session.EmpGrade == 'A') or (checkId.deptAuth == 'B1 ') or (checkId.deptAuth == 'B3 '))} ">
-			<button class="writeBtn" type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
+			<button style="
+			position: absolute;
+			right: 18px;
+			top: 0px;
+	" class="writeBtn" type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
 		</th:block>
 		<th:block th:if="${(boardVO.boardType == 'C') and ((session.EmpGrade == 'A') or (checkId.deptAuth == 'B2 ') or (checkId.deptAuth == 'B3 '))}">
-			<button class="writeBtn" type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
+			<button style="
+			position: absolute;
+			right: 18px;
+			top: 0px;
+	" class="writeBtn" type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
 		</th:block>
 		<th:block th:if="${boardVO.boardType == 'K'}">
-			<button class="writeBtn" type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
+			<button style="
+			position: absolute;
+			right: 18px;
+			top: 0px;
+	" class="writeBtn" type="button" id="write" th:onclick="|location.href='@{/boardInsert(boardType=${boardVO.boardType})}'|">글쓰기</button>
 		</th:block>
 	<table id="list" class="table table-hover">
 		<thead>
@@ -151,23 +162,24 @@ table.tdWrite { padding: 0; }
 	</table>
 	<div>
 	
-    <ul id="ulId" class="paging pagination pagination-sm" th:if="${paging.endPage != 0}" style="display: flex;justify-content: center;">
-				<li class="page-item">
-					<a class="page-link" th:href="|javascript:goPage(1)|" style="border-radius: 5px 0px 0px 5px;">처음</a>
-				</li>
-        <li class="page-item" th:if="${paging.prev}">
-            <a class="page-link" th:href="|javascript:goPage([[${paging.startPage-1}]])|">이전</a>
-        </li>
-        <li class="page-item active" th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${num==paging.cri.page ? 'active' : ''}">
-            <a class="page-link" th:href="|javascript:goPage([[${num}]])|" th:text="${num}"></a>
-        </li>
-        <li class="page-item" th:if="${paging.next and paging.endPage > 0}">
-            <a class="page-link" th:href="|javascript:goPage([[${paging.endPage+1}]])|">다음</a>
-            </li>
-				<li class="page-item" >
-					<a class="page-link" th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|" style="border-radius: 0px 5px 5px 0px;">마지막</a>
+    <ul id="ulId" class="paging pagination pagination-sm" style="display: flex;justify-content: center;" th:if="${paging.endPage != 0}">
+			<li class="page-item">
+				<a class="page-link" th:href="|javascript:goPage(1)|">&laquo;</a></li>
+			<li class="page-item" th:if="${paging.prev}">
+							<a class="page-link" th:href="|javascript:goPage([[${paging.startPage-1}]])|">&lsaquo;</a>
+					</li>
+			<li class="page-item active" th:class="${num==paging.cri.page ? 'active' : ''}" 
+				th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+				<a class="page-link" th:href="|javascript:goPage([[${num}]])|"
+				th:text="${num}"></a>
 			</li>
-    </ul>
+			<li class="page-item" th:if="${paging.next and paging.endPage > 0}">
+							<a class="page-link" th:href="|javascript:goPage([[${paging.endPage+1}]])|">&rsaquo;</a>
+					</li>
+			<li class="page-item"><a class="page-link"
+				th:href="|javascript:goPage([[${paging.totalCount / paging.cri.perPageNum + (paging.totalCount % paging.cri.perPageNum > 0 ? 1 : 0)}]])|">&raquo;</a>
+			</li>
+			</ul>
 
 	</div>
 	</div>
@@ -176,9 +188,9 @@ table.tdWrite { padding: 0; }
 		<form name="searchForm" action="boardList" class="search-form">
 			<input type="hidden" name="boardType" th:value="${boardVO.boardType}"/>
 			<input type="hidden" name="page" value="1"/>
-			<select name="type" style="border: 1px solid gray;border-radius: 5px; height: 45px; width:90px;">
+			<select name="type" style="border: 1px solid gray;border-radius: 5px; height: 35px; width:90px;">
 				<option value='' selected>-- 선택 --</option>
-				<option value='title' th:selected="${criteria.type == 'title'}">제목</option>
+				<option value='title' th:selected="${criteria.type == 'title'}" >제목</option>
 				<option value='content' th:selected="${criteria.type == 'content'}">내용</option>
 				<option value='name' th:selected="${criteria.type == 'name'}">작성자</option>
 			</select>
@@ -189,39 +201,47 @@ table.tdWrite { padding: 0; }
 <!-- <button type="button" id="resetBtn" class="resetBtn" style="visibility: hidden;">초기화</button> -->
 <!-- <button type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|" class="resetBtn" >초기화</button> -->
 		<!-- The Modal -->
-	    <div id="errorModal" class="modal">
-	      <!-- Modal content -->
-	      <div class="modal-content">
-	                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
-	                <p><br /></p>
-	            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
-	                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
-	                     닫기
-	                </span>
-	            </div>
-	      </div>
-	      </div>
-<script th:inline="javascript">
-	//input 태그 안에 빈 값인데 검색 버튼을 눌렀을 때 실행하는 함수.
+<!-- Modal -->
+<div class="modal fade dohyeon" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 500px; margin-top:280px;">
+			<div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;width: 500px;">
+					<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray; padding: 0px;">
+							<h5 class="modal-title" id="errorModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">알림</h5>
+							<button type="button" class="btn-close" data-dismiss="modal" onclick="closeErrorModal()" aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
+					</div>
+					<div class="modal-body" style="text-align: center;">
+							<div class="form-group mb-3" style="display: flex; justify-content: space-evenly; margin-top:20px;">
+									<p id="pTextError" style="font-size: 28px;color: black;"></p>
+							</div>
+					</div>
+					<div class="modal-footer">
+							<button type="button" onclick="closeErrorModal()" id="closeModalBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;">확인</button>
+					</div>
+			</div>
+	</div>
+</div>
+
+<script>
+	function closeErrorModal() {
+			$('#errorModal').modal('hide');
+	}
+
 	$(document).ready(function() {
-		
-		//검색 빈값 처리
-		$('#searchBtn').on('click', function() {
-    let val = $('select[name="type"]').val();
-    if(val == '') {
-    	$('#spantext').text('검색 항목을 선택해주세요.');
-        $('#errorModal').show();
-        $('#closeModal').on('click', function() {
-            $('#errorModal').hide();
-        })
-        return false;
-    	}
-		})
+			// 검색 빈값 처리
+			$('#searchBtn').on('click', function() {
+					let val = $('select[name="type"]').val();
+					if(val == '') {
+							$('#pTextError').text('검색 항목을 선택해주세요.');
+							$('#errorModal').modal('show'); // 모달 표시
+							return false;
+					}
+			});
+	});
+
 		//초기화 처리
 		$('#resetBtn').on('click', function() {
 			$('input[name="keyword"]').val('');
 		})
-	})
 
 //페이징 관련
 function goPage(p) {
