@@ -170,8 +170,10 @@
         display: none;
     }
     .message-time {
-        font-size: 0.7em;  /* 시간을 작게 표시합니다. */
         color: #777;      /* 시간 텍스트의 색상을 설정합니다. */
+        margin-right: 30px;
+        margin-left: 30px;
+        font-size: inherit;
     }
     #membersDiv {
   position: relative;
@@ -272,16 +274,16 @@
 		
 		<!-- format -->
 
-		<div class="chat format">
-		<!-- <ul class="chat-messages" id="chatRoom">
+		<!-- <div class="chat format">
+		<ul class="chat-messages" id="chatRoom">
     <div th:each="message : ${chatDTO}">
         <div th:each="image : ${profileImages}">
             <div th:if="${message.id} == ${image.id}">
+                <img class="message-profile-pic" th:src="${image.uploadPath}" alt="Profile Image">
                 <li class="message">
                 <div class="sender">
 						<span></span>
 					</div>
-                    <img class="message-profile-pic" th:src="${image.uploadPath}" alt="Profile Image">
                     <span class="message-content"></span>
                     <small class="message-time"></small>
                 </li>
@@ -289,20 +291,49 @@
         </div>
     </div>
 </ul> -->
+<!-- <div class="chat format">
+<div th:each="message : ${chatDTO}">
+    <div class="message-container">
+        <div class="sender">
+            <th:block th:if="${message.profileImage.uploadPath != null}">
+                <img th:src="@{|/display?fileName=${#strings.replace(message.profileImage.uploadPath,'\','/')}/s_${message.profileImage.uuid}_${message.profileImage.fileName}|}" class="card-img-top">
+            </th:block>
+            <th:block th:if="${message.profileImage.uploadPath == null}">
+                <img id="profImg" style="width:50px;height:50px;" src="../img/userProf.png">
+            </th:block>
+            <span></span>
+        </div>
+        <div class="message">
+            <span class="message-content" th:text="${message.content}"></span>
+        </div>
+        <div class="message2">
+            <small class="message-time" th:text="${message.time}"></small>
+        </div>
+    </div>
+</div>
+</div> -->
+
+<!-- 기존 메세지 코드. -->
+ <div class="chat format">
 			<ul>
 				<li>
 					<div class="sender">
+                        <div class="profile" style="height: 100px; background-repeat: no-repeat; background-image: url('/img/userProf.png');"></div>
 						<span></span>
 						
 					</div>
 					<div class="message">
 						<span class="message-content"></span>
-    					<small class="message-time"></small>
 					</div>
+                    <div class="message2">
+                    <small class="message-time"></small>
+                </div>
 				</li>
 			</ul>
 		</div>
 	</div>
+<!-- 기존 메세지 코드. -->   
+
 	<!-- The Modal -->
     <div class="modal" id="inviteModal">
         <div class="modal-dialog" style="width: 500px; ">
@@ -378,85 +409,85 @@ function closeErrorModal() {
 	});
     var profileImg = '<%=session.getAttribute("ProfileImg")%>';
 
-console.log('requestURL : ' + /*[[ ${#httpServletRequest.requestURL} ]]*/);
-console.log('requestURI : ' + /*[[ ${#httpServletRequest.requestURI} ]]*/);
-console.log('serverPort : ' + /*[[ ${#httpServletRequest.serverPort} ]]*/);
-console.log('serverName : ' + /*[[ ${#httpServletRequest.serverName} ]]*/);
-console.log('servletPath : ' + /*[[ ${#httpServletRequest.servletPath} ]]*/);
-console.log('remoteAddr : ' + /*[[ ${#httpServletRequest.remoteAddr} ]]*/);
-console.log('method : ' + /*[[ ${#httpServletRequest.method} ]]*/);
-console.log('requestedSessionId : ' + /*[[ ${#httpServletRequest.requestedSessionId} ]]*/);
-console.log('scheme : ' + /*[[ ${#httpServletRequest.scheme} ]]*/);
-console.log('protocol : ' + /*[[ ${#httpServletRequest.protocol} ]]*/);
-console.log('locale : ' + /*[[ ${#httpServletRequest.locale} ]]*/);
-console.log('secure : ' + /*[[ ${#httpServletRequest.secure} ]]*/);
+// console.log('requestURL : ' + /*[[ ${#httpServletRequest.requestURL} ]]*/);
+// console.log('requestURI : ' + /*[[ ${#httpServletRequest.requestURI} ]]*/);
+// console.log('serverPort : ' + /*[[ ${#httpServletRequest.serverPort} ]]*/);
+// console.log('serverName : ' + /*[[ ${#httpServletRequest.serverName} ]]*/);
+// console.log('servletPath : ' + /*[[ ${#httpServletRequest.servletPath} ]]*/);
+// console.log('remoteAddr : ' + /*[[ ${#httpServletRequest.remoteAddr} ]]*/);
+// console.log('method : ' + /*[[ ${#httpServletRequest.method} ]]*/);
+// console.log('requestedSessionId : ' + /*[[ ${#httpServletRequest.requestedSessionId} ]]*/);
+// console.log('scheme : ' + /*[[ ${#httpServletRequest.scheme} ]]*/);
+// console.log('protocol : ' + /*[[ ${#httpServletRequest.protocol} ]]*/);
+// console.log('locale : ' + /*[[ ${#httpServletRequest.locale} ]]*/);
+// console.log('secure : ' + /*[[ ${#httpServletRequest.secure} ]]*/);
 
-let uri = /*[[ ${#httpServletRequest.requestURI} ]]*/;
-let url = /*[[ ${#httpServletRequest.requestURL} ]]*/;
-let path = url.replace(uri, '');
-console.log('path 찍는 용도' + path)
+// let uri = /*[[ ${#httpServletRequest.requestURI} ]]*/;
+// let url = /*[[ ${#httpServletRequest.requestURL} ]]*/;
+// let path = url.replace(uri, '');
+// console.log('path 찍는 용도' + path)
 
 //WebSocket 연결 설정
-const alarmClient = new StompJs.Client({
-brokerURL: 'ws://43.202.80.98:85/chatserver' // WebSocket 서버 URL
-});
+// const alarmClient = new StompJs.Client({
+// brokerURL: 'ws://43.202.80.98:85/chatserver' // WebSocket 서버 URL
+// });
 
-// 페이지 로드시 웹소켓 연결
-window.addEventListener("load", function(event) {
-   alarmClient.activate();
-});
+// // 페이지 로드시 웹소켓 연결
+// window.addEventListener("load", function(event) {
+//    alarmClient.activate();
+// });
 
-  // 연결 성공시
-alarmClient.onConnect = (frame) => {
-    console.log('Connected: ' + frame);
-    // 프로젝트 구독     
-	alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]', (alarmMsg) => {
-	    almSendMsg(JSON.parse(alarmMsg.body));
-    });
-    // 채팅방 생성 초대 구독
-	alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
-	    almSendMsgChat(JSON.parse(alarmMsg.body));
-    });
+//   // 연결 성공시
+// alarmClient.onConnect = (frame) => {
+//     console.log('Connected: ' + frame);
+//     // 프로젝트 구독     
+// 	alarmClient.subscribe('/alarmMan/proAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+// 	    almSendMsg(JSON.parse(alarmMsg.body));
+//     });
+//     // 채팅방 생성 초대 구독
+// 	alarmClient.subscribe('/alarmMan/chatAlm/' + '[[${session.Id}]]', (alarmMsg) => {
+// 	    almSendMsgChat(JSON.parse(alarmMsg.body));
+//     });
     
- };
+//  };
 
-//에러
-alarmClient.onWebSocketError = (error) => {
-      console.error('Error with websocket', error);
-};
+// //에러
+// alarmClient.onWebSocketError = (error) => {
+//       console.error('Error with websocket', error);
+// };
 
-alarmClient.onStompError = (frame) => {
-      console.error('Broker reported error: ' + frame.headers['message']);
-      console.error('Additional details: ' + frame.body);
-};
-function almSendMsg() {
-	   toastAct()	
-}
-function almSendMsgChat() {
-	   toastActChat()	
-}
+// alarmClient.onStompError = (frame) => {
+//       console.error('Broker reported error: ' + frame.headers['message']);
+//       console.error('Additional details: ' + frame.body);
+// };
+// function almSendMsg() {
+// 	   toastAct()	
+// }
+// function almSendMsgChat() {
+// 	   toastActChat()	
+// }
 
-function toastAct() {
-	  toastr.options.escapeHtml = true;
-      toastr.options.closeButton = true;
-      toastr.options.newestOnTop = false;
-      toastr.options.progressBar = true;
-      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
-      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
-      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
-      toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
-}
+// function toastAct() {
+// 	  toastr.options.escapeHtml = true;
+//       toastr.options.closeButton = true;
+//       toastr.options.newestOnTop = false;
+//       toastr.options.progressBar = true;
+//       toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+//       toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+//       toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+//       toastr.info('새로운 프로젝트에 초대되었습니다.', '프로젝트 알림', {timeOut: 5000});
+// }
 
-function toastActChat() {
-	  toastr.options.escapeHtml = true;
-      toastr.options.closeButton = true;
-      toastr.options.newestOnTop = false;
-      toastr.options.progressBar = true;
-      toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
-      toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
-      toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
-      toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
-}
+// function toastActChat() {
+// 	  toastr.options.escapeHtml = true;
+//       toastr.options.closeButton = true;
+//       toastr.options.newestOnTop = false;
+//       toastr.options.progressBar = true;
+//       toastr.options.positionClass = 'toast-bottom-right'; // toast를 오른쪽 아래에 띄우도록 설정
+//       toastr.options.backgroundColor = '#35A880'; // 배경 색상을 #35A880로 설정
+//       toastr.options.textColor = '#FFFFFF'; // 글자 색상을 흰색(#FFFFFF)으로 설정
+//       toastr.info('새로운 채팅방에 초대되었습니다.', '채팅방 알림', {timeOut: 5000});
+// }
 
 let myName = /*[[${name}]]*/ 'name';
 let senderName = /*[[${name}]]*/ 'name';
@@ -477,10 +508,17 @@ $(document).ready(function() {
     $(document).on('click', function(){
         $('.tooltip-content').hide();
     });
+    console.log(JSON.stringify(chatDTO) + "chatDTO 확인하렬로 하는거임")
     chatDTO.forEach(function(chat) {
+        console.log(chat + "chat확인할려고 제발 ㅋㅋㅋㅋ")
     	//chatMessageDTO.forEach(function(chat) {
         if (chat.name == myName) {  // 추가된 코드
             chat.id = realId;
+        }
+        var imageUrl
+        if (chat.uuid && chat.uploadPath && chat.fileName) {
+            // 이미지 URL 생성
+        imageUrl = chat.uploadPath ? '/display?fileName=' + encodeURIComponent(chat.uploadPath + '/s_' + chat.uuid + '_' + chat.fileName) : '';
         }
         //const LR = (chat.id != realId) ? "left" : "right";
         let LR; 
@@ -491,15 +529,15 @@ $(document).ready(function() {
         } else {
         	LR = "left";
         }
-        
-        appendMessageTag(LR, chat.name, chat.content, chat.msgTime);
+        console.log(imageUrl + "확인용확인용")
+        appendMessageTag(LR, chat.name, chat.content, chat.msgTime, imageUrl);
     });
 });
 
 
 const stompClient = new StompJs.Client({
-	brokerURL : 'ws://43.202.80.98:85/chatserver'
-	//brokerURL : 'ws://localhost:8081/chatserver'
+	//brokerURL : 'ws://43.202.80.98:85/chatserver'
+	brokerURL : 'ws://localhost:8081/chatserver'
 });
 
 
@@ -556,18 +594,26 @@ $(document).on('keydown', 'div.input-div textarea', function(e) {
     }
 });
 
-function createMessageTag(LR_className, senderName, message, msgTime) {
+function createMessageTag(LR_className, senderName, message, msgTime, imageUrl) {
     let chatLi = $('div.chat.format ul li').clone();
     chatLi.addClass(LR_className);
     chatLi.find('.sender span').text(senderName);
     chatLi.find('.message span').text(message);
-	chatLi.find('.message small').text(msgTime);
+    chatLi.find('.message2 small').text(msgTime);
+    console.log(imageUrl + "이거 확인해봐야함. 그래야 append들어감.")
+    // 이미지가 있으면 그 이미지를 사용하고, 없으면 기본 이미지를 사용
+    if (imageUrl !== null && imageUrl !== '') {
+    console.log(imageUrl + "확인하려고 여기 놔두기 imageUrl1")
+    chatLi.find('.sender .profile').css('background-image', 'url(' + imageUrl + ')');
+    console.log(imageUrl + "확인하려고 여기 놔두기 imageUrl2")
+} else {
+    chatLi.find('.sender .profile').css('background-image', 'url(/img/userProf.png)');
+}
     return chatLi;
 }
 
-function appendMessageTag(LR_className, senderName, message, msgTime) {
-    //msgTime = new Date();
-	var chatLi = createMessageTag(LR_className, senderName, message, msgTime);
+function appendMessageTag(LR_className, senderName, message, msgTime, imageUrl) {
+    var chatLi = createMessageTag(LR_className, senderName, message, msgTime, imageUrl);
     $('div.chat:not(.format) ul').append(chatLi);
     window.requestAnimationFrame(function () {
         const chatDiv = $('div.chat');
@@ -592,8 +638,6 @@ function receive(data) {
     } else {
     	LR = "left";
     }
-    console.log(LR + "얘 먼지 확인")
-    console.log(data.msgTime + "시간 나오나?");
     appendMessageTag(LR, data.name, data.content, data.msgTime);  // 서버에서 받은 시간 데이터를 사용합니다.
 }
 
@@ -648,7 +692,6 @@ $(window).on('beforeunload', function(){
     disconnect();
 });
 function fetchEmployees(roomNo) {
-console.log(roomNo + "룸방번호 확인")
     fetch('/empListExcludingRoomMembers/' + roomNo)
     .then(response => response.json())
     .then(employees => {
