@@ -42,6 +42,7 @@ import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.postvo.ProUserImgVO;
 import com.groo.bear.pro.service.postvo.ProWritingUVO;
 import com.groo.bear.pro.service.task.ProWorkViewVO;
 
@@ -231,12 +232,11 @@ public class proPostController {
 	//댓글 작성
 	@PostMapping("postCreateComment")
 	@ResponseBody
-	public Map<String, Object> createPostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
+	public ProUserImgVO createPostComment(HttpServletRequest request, @RequestBody ProPostCommentVO vo) {
 		HttpSession session = request.getSession();
 		vo.setId((String)session.getAttribute("Id"));
-		
-		int comNo = proPostService.createPostComment(vo);
-		return Collections.singletonMap("result", comNo);
+		System.out.println("시작"+vo);
+		return proPostService.createPostComment(vo);
 	}
 	
 	//댓글 수정
