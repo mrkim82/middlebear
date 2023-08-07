@@ -17,6 +17,7 @@
 .input {
   border: none;
   outline: none;
+	width: 400px;
 }
 	.uploadResult {
 		width : 100%;
@@ -125,7 +126,7 @@ h2 {
 
 	</style>
 </head>
-<body class="dohyeon">
+<body class="dohyeon" >
 	<div layout:fragment="content">
 		<h2 >게시글 단건조회</h2>
 		
@@ -196,7 +197,7 @@ h2 {
 						<td>
 							<th:block th:if="${(com.id == session.Id) or (session.EmpGrade == 'A')}">
 								<span onclick="updateWritingComment()" class="spanCursor" style="color: red">수정</span>
-								<span onclick="deleteWritingComment()" class="spanCursor">&nbsp삭제</span>
+								<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
 							</th:block>
 						</td>
 					</tr>
@@ -458,18 +459,18 @@ h2 {
 				nC.childNodes[3].textContent = document.getElementById('newComment').value;//값
 				nC.childNodes[9].childNodes[1].innerHTML = '';
 				console.log('ss',nC.childNodes[9].childNodes[1].innerHTML = '수정')
-				console.log(nC.childNodes[9].childNodes[3].innerHTML = '&nbsp;삭제')
+				console.log(nC.childNodes[9].childNodes[3].innerHTML = '삭제')
 			}
 			
 			targetButton.parentNode.parentNode.childNodes[3].innerHTML = '<input type="text" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
 			targetButton.parentNode.parentNode.childNodes[9].childNodes[1].innerHTML = '<span id="ooo">수정</span>'
-			targetButton.parentNode.parentNode.childNodes[9].childNodes[3].innerHTML = '<span id="xxx">&nbsp취소</span>';
+			targetButton.parentNode.parentNode.childNodes[9].childNodes[3].innerHTML = '<span id="xxx">취소</span>';
 			
 			// 취소버튼
 			document.getElementById('xxx').addEventListener('click', function() {
 				targetButton.parentNode.parentNode.childNodes[3].textContent = oldCom;
 				targetButton.parentNode.parentNode.childNodes[9].childNodes[1].textContent = '수정';
-				targetButton.parentNode.parentNode.childNodes[9].childNodes[3].textContent = '&nbsp;삭제';
+				targetButton.parentNode.parentNode.childNodes[9].childNodes[3].textContent = '삭제';
 				targetButton.parentNode.childNodes[11].textContent = '';
 			});
 			
