@@ -893,31 +893,40 @@ function drawChart() {
 										</div>
 										<div class="row">
 											<div class="col-md-8">
-												<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
-												<h6 th:text="댓글"></h6>
-												<ul class="list-unstyled">
-													<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
-														th:if="${allPost.proPostNo == com.proPostNo}">
-														<th:block th:if="${allPost.uploadPath != null}">
-															<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
-											  		 			 class="card-img-top"
-											  		 			 style="width:30px; height:30px; margin:0px;">
-											  		 	</th:block>
-											  		 	<th:block th:if="${allPost.uploadPath == null}">
-															<img style="width:30px; height:30px; margin:0px;"
-														 		 src="../img/userProf.png">
-														</th:block>
-														<span th:text="${com.name}"></span>
-														<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
-														<span th:text="${com.comContent}"></span>
-														<th:block th:if="${com.id == session.Id}">
-															<span onclick="UpdateWritingComment()" class="spanCursor"
-																  style="color: red">수정</span>
-															<span></span>
-															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
-														</th:block>
-													</li>
-												</ul>
+												<h6>댓글</h6>
+												
+												<table class="comtable table table-hover">
+													<thead>
+														<tr class="comtabletr"
+															th:each="com : ${projectWritingDetaisComment}"
+															th:data-post-code="${com.comNo}"
+															th:if="${allPost.proPostNo == com.proPostNo}">
+															<td class="comtabletd">
+																<th:block th:if="${allPost.uploadPath != null}">
+																	<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+													  		 			 class="card-img-top"
+													  		 			 style="width:30px; height:30px; margin:0px;">
+													  		 	</th:block>
+													  		 	<th:block th:if="${allPost.uploadPath == null}">
+																	<img style="width:30px; height:30px; margin:0px;"
+																 		 src="../img/userProf.png">
+																</th:block>
+															</td>
+															<td class="comtabletd" th:text="${com.name}"></td>
+															<td class="comtabletd" th:text="${com.comContent}"></td>
+															<td class="comtabletd comdate" th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></td>
+															<td>
+																<th:block th:if="${com.id == session.Id}">
+																	<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+																	<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+																</th:block>
+															</td>
+														</tr>
+													</thead>
+												</table>
+												
+														
+												
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
@@ -2358,12 +2367,13 @@ function drawChart() {
 <script>
 	function createCommentButton() {
 		let targetButton = event.target;//버튼 동적 확인
-		let com = targetButton.parentNode.children[0].children[0]; //텍스트값 찾기
+		let com = targetButton.closest('.row').querySelector('.form-control');
+		
 		if(com.value == '') {
 			com.focus();
 			alert('댓글을 입력하세요');
 			return;
-		}
+		};
 		
 		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
 		
@@ -2379,23 +2389,34 @@ function drawChart() {
 		})
 		.then(response => response.json())
 		.then(res => {
-			let insertComment = targetButton.closest('.card').getElementsByClassName('list-unstyled')[0];
+			let insertComment = targetButton.closest('.row').querySelector('thead');
+			let imgsrc
+			//이미지 주소 변환
+			if(res.uuid == null) {
+				imgsrc = '../img/userProf.png';
+			} else {
+				imgsrc = `/display?fileName=${res.uploadPath}/s_${res.uuid}_${res.fileName}`;
+			};
 			
-			insertComment.insertAdjacentHTML('beforeend', 
-				'<li data-post-code="' + res.result + '">'+
-					'<span></span>'+
-					'<span>' + selfName + '</span>'+
-					'<span>' + currentTime + '</span>'+
-					'<span>' + com.value + '</span>'+
-					'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
-					'<span></span>'+
-					'<span onclick="deleteWritingComment()" class="spanCursor">X</span>'+
-				'</li>'
+			insertComment.insertAdjacentHTML('beforeend',
+			`<tr class="comtabletr" data-post-code="${res.comNo}">
+				<td class="comtabletd">
+					<img src="${imgsrc}" class="card-img-top" style="width:30px; height:30px; margin:0px;">
+				</td>
+				<td class="comtabletd">${selfName}</td>
+				<td class="comtabletd">${com.value}</td>
+				<td class="comtabletd comdate">${currentTime}</td>
+				<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>
+			</tr>`
 			);
+
 			com.focus();
 			com.value = '';
 		});
-	}
+	};
 	
 	//현재시간 구하기
 	const currentTime = formatDate();
@@ -2409,13 +2430,13 @@ function drawChart() {
 		const minutes = String(date.getMinutes()).padStart(2, '0');
 		
 		return `${year}/${month}/${day} ${hours}:${minutes}`;
-	}
+	};
 </script>
 	
 <!-- 댓글 삭제  -->
 <script>
 	function deleteWritingComment() {
-		let targetButton = event.target;
+		let targetTr = event.target.closest('tr');
 		
 		fetch("/postDeleteComment", {
 			method: 'POST',
@@ -2423,53 +2444,51 @@ function drawChart() {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-					'comNo': targetButton.parentNode.dataset.postCode
+					'comNo': targetTr.dataset.postCode
 				})
 		})
 		.then(response => response.json())
 		.then(res => {
-			targetButton.parentNode.remove()
+			targetTr.remove();
 		});
-	}
+	};
 </script>
 	
 <!-- 댓글 수정  -->
 <script>
 	function UpdateWritingComment() {
-		let targetButton = event.target;
-		let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
+		let targetTr = event.target.closest('tr');
+		let targetThead = targetTr.parentElement;
+		let comNo = targetTr.dataset.postCode;//댓글 번호
 		
-		let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
-		let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
+		let oldCom = targetTr.children[2].textContent;//기존 댓글 내용
 		
-		//초기화
-		targetButton.parentNode.children[2].textContent = '';//날짜 초기화
-		targetButton.parentNode.children[3].textContent = '';//댓글 초기화
-		targetButton.parentNode.children[4].textContent = '';//수정 초기화
-		targetButton.parentNode.children[6].textContent = '';//X 초기화
+		targetTr.children[2].textContent = '';//댓글 초기화
+		targetTr.children[4].textContent = '';//수정, 삭제 초기화
 		
 		if(document.getElementById('newComment') != null) {
-			let nC = document.getElementById('newComment').parentNode.parentNode;
-			nC.childNodes[5].textContent = document.getElementById('newComment').dataset.comDate;
-			nC.childNodes[7].textContent = document.getElementById('newComment').value;
-			nC.childNodes[9].textContent = '수정';
-			nC.childNodes[11].textContent = '';
-			nC.childNodes[13].textContent = 'X';
-		}
+			let nC = document.getElementById('newComment').closest('tr');
+			nC.children[2].textContent = document.getElementById('newComment').value;
+			nC.children[4].innerHTML =
+				`<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>`;
+		};
 		
 		// 댓글 수정 폼 생성
-		targetButton.parentNode.children[5].innerHTML = 
-				'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
-				+'<span id="ooo" class="spanCursor">수정</span>'
-				+'<span id="xxx" class="spanCursor">취소</span>';
+		targetTr.children[2].innerHTML = '<input type="text" placeholder="댓글 수정" id="newComment" maxlength="30" value="' + oldCom + '">'; 
+		targetTr.children[4].innerHTML = '<span id="ooo" class="spanCursor" style="color:red;">수정</span>' + '<span id="xxx" class="spanCursor">취소</span>';
 				
 		// 취소버튼
 		document.getElementById('xxx').addEventListener('click', function() {
-			targetButton.parentNode.children[2].textContent = oldDate;
-			targetButton.parentNode.children[3].textContent = oldCom;
-			targetButton.parentNode.children[4].textContent = '수정';
-			targetButton.parentNode.children[5].textContent = '';
-			targetButton.parentNode.children[6].textContent = 'X';
+			let cancleTr = event.target.closest('tr');
+			cancleTr.children[2].textContent = oldCom;
+			cancleTr.children[4].innerHTML = 
+				`<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>`;
 		});
 		
 		// 수정버튼
@@ -2494,11 +2513,12 @@ function drawChart() {
 				.then(res => {
 					
 					if(res.result == '성공') {
-						targetButton.parentNode.children[2].textContent = oldDate;
-						targetButton.parentNode.children[3].textContent = newCom.value;
-						targetButton.parentNode.children[4].textContent = '수정';
-						targetButton.parentNode.children[6].textContent = 'X';
-						targetButton.parentNode.children[5].textContent = '';
+						targetTr.children[2].textContent = newCom.value;
+						targetTr.children[4].innerHTML = 
+							`<td>
+							<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+							<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+						</td>`;;
 						
 					} else {
 						alert('댓글 수정 실패');
