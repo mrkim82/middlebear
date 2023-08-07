@@ -50,10 +50,10 @@
 				</div>
 	     		<div class = "row">
 					<div class = "col-lg-12">
-						<div class = "panel-heading">Files</div>
+						<div class = "panel-heading"></div>
 						<!-- /.panel-heading -->
 							<div class = "panel-body">
-								<div class = 'uploadResult'>
+								<div class = "uploadResult">첨부파일
 									<ul>
 									</ul>
 								</div>
@@ -77,9 +77,9 @@
             console.log("여기도 들어와짐");
             if(attach.fileType){
                 var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
-                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
+                str += "<li style='list-style-type:none' data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
                 + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
-                /str += "<img src='/display?fileName=" + fileCallPath + "'>";
+                str += "<img src='/display?fileName=" + fileCallPath + "'>";
                 str += "</div>";
                 str += "</li>";
             } else {
@@ -126,6 +126,20 @@
 		      $('.bigPictureWrapper').hide();
 		    }, 1000);
 		  });
+		  var regex = new RegExp("(.*?)\\.(sh|alz)$"); //제외하고 싶은 확장자.
+		    var maxSize = 5242880;
+		
+		    function checkExtension(fileName, fileSize) {
+		        if (fileSize >= maxSize) {
+		            alert('파일 사이즈 초과');
+		            return false;
+		        }
+		        if (regex.test(fileName)) {
+		            alert('해당 종류의 파일은 업로드할 수 없습니다.');
+		            return false;
+		        }
+		        return true;
+		    }
     </script>
 </body>
 </html>

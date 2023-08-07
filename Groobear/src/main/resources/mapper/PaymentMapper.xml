@@ -136,15 +136,17 @@
 	        SELECT pay_no,title FROM payment_robin
 		)
 		SELECT * FROM (
-		    SELECT p.*, a.purpose
+		    SELECT p.*, a.purpose, ROWNUM AS rn
 		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
 		    WHERE (p.id = #{id} AND p.pay_status2 = 'N' AND p.approver3 IS NOT NULL) 
+		    OR (p.id = #{id} AND p.pay_status2 = 'N' AND p.approver3 IS NULL) 
             OR (p.id = #{id} AND p.pay_status2='Y' AND p.pay_status3='N' AND p.approver3 IS NOT NULL)
 		    OR (p.approver2 = #{id} AND p.pay_status2='N')
             OR (p.approver2 = #{id} AND p.pay_status2='Y' AND p.approver3 IS NOT NULL AND p.pay_status3='N')
             OR (p.approver3 = #{id} AND p.pay_status2='Y' AND p.pay_status3 = 'N')
             OR (p.approver3 = #{id} AND p.pay_status2='N')
-            ORDER BY pay_status2,pay_status3)
+            )
+		ORDER BY pay_status2 desc,pay_status3 desc
 		
 	</select>
 	<!-- 결재중문서 개수(페이징용) -->
@@ -160,6 +162,7 @@
 		    SELECT p.*, a.purpose
 		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
 		    WHERE (p.id = #{id} AND p.pay_status2 = 'N' AND p.approver3 IS NOT NULL) 
+            OR (p.id = #{id} AND p.pay_status2 = 'N' AND p.approver3 IS NULL) 
             OR (p.id = #{id} AND p.pay_status2='Y' AND p.pay_status3='N' AND p.approver3 IS NOT NULL)
 		    OR (p.approver2 = #{id} AND p.pay_status2='N')
             OR (p.approver2 = #{id} AND p.pay_status2='Y' AND p.approver3 IS NOT NULL AND p.pay_status3='N')
@@ -355,6 +358,7 @@
 		    SELECT p.*, a.purpose, ROWNUM AS rn
 		      FROM payment p JOIN payment_all a ON (p.pay_no = a.pay_no)
 		    WHERE (p.id = #{payVO.id} AND p.pay_status2 = 'N' AND p.approver3 IS NOT NULL) 
+		    OR (p.id = #{payVO.id} AND p.pay_status2 = 'N' AND p.approver3 IS NULL) 
             OR (p.id = #{payVO.id} AND p.pay_status2='Y' AND p.pay_status3='N' AND p.approver3 IS NOT NULL)
 		    OR (p.approver2 = #{payVO.id} AND p.pay_status2='N')
             OR (p.approver2 = #{payVO.id} AND p.pay_status2='Y' AND p.approver3 IS NOT NULL AND p.pay_status3='N')
@@ -390,7 +394,7 @@
 		    AND (p.pay_status3='Y' OR p.pay_status2='F' OR p.pay_status3='F' OR (p.pay_status2='Y' AND p.approver3 IS NULL)
 		    )
 		 )
-		ORDER BY pay_status,pay_no
+		ORDER BY issue_date desc
 	</select>
 	<!-- 참조된 문서 조회 -->
 	<select id="mainreferrerPayList" resultType="PaymentVO">
@@ -415,7 +419,7 @@
 	                 WHERE referrer Like '%${id}%'
 	                 AND (pay_status='Y' OR pay_status = 'F')
 	             )
-	         ORDER BY pay_status,pay_no
+	         ORDER BY issue_date desc
 	                     ) t
 	              )
 	</select>

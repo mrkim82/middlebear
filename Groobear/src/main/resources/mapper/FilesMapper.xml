@@ -234,7 +234,7 @@
   							,SIGN_NO)
   					VALUES
   							(
-  							'public'
+  							(SELECT DBMS_RANDOM.STRING('X',20) FROM dual)
   							,'public'
   							,'public'
   							,'1'

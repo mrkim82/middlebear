@@ -2,7 +2,6 @@ package com.groo.bear.pro.mapper;
 
 import java.util.List;
 
-import com.groo.bear.pro.service.ProFileVO;
 import com.groo.bear.pro.service.postvo.ProDetailSearchVO;
 import com.groo.bear.pro.service.postvo.ProInviteMailVO;
 import com.groo.bear.pro.service.postvo.ProPartiListVO;
@@ -13,6 +12,7 @@ import com.groo.bear.pro.service.postvo.ProPostUserVO;
 import com.groo.bear.pro.service.postvo.ProPostVO;
 import com.groo.bear.pro.service.postvo.ProPostWorkVO;
 import com.groo.bear.pro.service.postvo.ProPostWritingVO;
+import com.groo.bear.pro.service.postvo.ProUserImgVO;
 import com.groo.bear.pro.service.postvo.ProWritingUVO;
 
 public interface ProPostMapper {
@@ -83,4 +83,7 @@ public interface ProPostMapper {
 	
 	//프로젝트 인원(단건)
 	public int readProDetailCount(int proNo);
+	
+	//개인 프로필 이미지(댓글)
+	public ProUserImgVO readPerProfileImg(String id);
 }

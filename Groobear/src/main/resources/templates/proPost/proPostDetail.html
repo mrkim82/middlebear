@@ -14,10 +14,6 @@ p {
 	margin: 0px;
 }
 
-.spanCursor {
-	cursor: pointer
-}
-
 .gray {
 	color: gray;
 }
@@ -64,6 +60,16 @@ li {
 	padding-right:30px;
 	padding-top:14.5px;
 	padding-bottom:14.5px;
+}
+
+.memoButton {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #eaeaea;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
 }
 </style>
 
@@ -221,7 +227,7 @@ function drawChart() {
 							 aria-labelledby="modal1Label"
 							 aria-hidden="true"
 							 style="display:none">
-							<div class="modal-dialog"
+							<div class="modal-dialog modal-dialog-centered"
 								 role="document">
 								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
@@ -273,7 +279,7 @@ function drawChart() {
 						<!-- 2.업무 작성 -->
 						<div class="modal fade modal-dialog-scrollable" id="modal2" tabindex="-1" role="dialog"
 							aria-labelledby="modal2Label" aria-hidden="true" style="display:none">
-							<div class="modal-dialog" role="document">
+							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal2Label">업무</h5>
@@ -423,7 +429,7 @@ function drawChart() {
 						<!-- 3.일정 작성 -->
 						<div class="modal fade modal-dialog-scrollable" id="modal3" tabindex="-1" role="dialog"
 							aria-labelledby="modal3Label" aria-hidden="true" style="display:none">
-							<div class="modal-dialog" role="document">
+							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal3Label">일정</h5>
@@ -509,7 +515,7 @@ function drawChart() {
 						<!-- 4.할 일 작성 -->
 						<div class="modal fade modal-dialog-scrollable" id="modal4" tabindex="-1" role="dialog"
 							aria-labelledby="modal4Label" aria-hidden="true" style="display:none">
-							<div class="modal-dialog" role="document">
+							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal4Label">할 일</h5>
@@ -596,7 +602,7 @@ function drawChart() {
 						<!-- 5. 투표 작성 -->
 						<div class="modal fade modal-dialog-scrollable" id="modal5" tabindex="-1" role="dialog"
 							aria-labelledby="modal5Label" aria-hidden="true" style="display:none">
-							<div class="modal-dialog" role="document">
+							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content dohyeonModalContent" style="height: 500px;">
 									<div class="modal-header">
 										<h5 class="modal-title" id="modal5Label">투표</h5>
@@ -735,24 +741,34 @@ function drawChart() {
 									 style="text-align: center; margin-top:15px;">
 								    <button type="button" class="btn"
 								    		th:classappend="${allPost.workStatus == '1' ? 'btn-primary' : 'btn-outline-primary'}"
-								            data-work-type-status="1" onclick="toggleFeedButtonStyle(this)"
-								            style="border-radius:10px;">요청</button>
+								            data-work-type-status="1"
+								            onclick="toggleFeedButtonStyle(this)"
+								            style="border-radius:10px;"
+								            th:disabled="${allPost.id != session.Id}">요청</button>
 								    <button type="button" class="btn"
 								    		th:classappend="${allPost.workStatus == '2' ? 'btn-warning' : 'btn-outline-warning'}"
-								            data-work-type-status="2" onclick="toggleFeedButtonStyle(this)"
-								            style="border-radius:10px;">진행</button>
+								            data-work-type-status="2"
+								            onclick="toggleFeedButtonStyle(this)"
+								            style="border-radius:10px;"
+								            th:disabled="${allPost.id != session.Id}">진행</button>
 								    <button type="button" class="btn"
 								    		th:classappend="${allPost.workStatus == '3' ? 'btn-danger' : 'btn-outline-danger'}"
-								            data-work-type-status="3" onclick="toggleFeedButtonStyle(this)"
-								            style="border-radius:10px;">피드백</button>
+								            data-work-type-status="3"
+								            onclick="toggleFeedButtonStyle(this)"
+								            style="border-radius:10px;"
+								            th:disabled="${allPost.id != session.Id}">피드백</button>
 								    <button type="button" class="btn"
 								    		th:classappend="${allPost.workStatus == '4' ? 'btn-success' : 'btn-outline-success'}"
-								            data-work-type-status="4" onclick="toggleFeedButtonStyle(this)"
-								            style="border-radius:10px;">완료</button>
+								            data-work-type-status="4"
+								            onclick="toggleFeedButtonStyle(this)"
+								            style="border-radius:10px;"
+								            th:disabled="${allPost.id != session.Id}">완료</button>
 								    <button type="button" class="btn"
 								    		th:classappend="${allPost.workStatus == '5' ? 'btn-secondary' : 'btn-outline-secondary'}"
-								            data-work-type-status="5" onclick="toggleFeedButtonStyle(this)"
-								            style="border-radius:10px;">보류</button>
+								            data-work-type-status="5"
+								            onclick="toggleFeedButtonStyle(this)"
+								            style="border-radius:10px;"
+								            th:disabled="${allPost.id != session.Id}">보류</button>
 								</div>
 								
 								<!-- 내용 -->
@@ -760,7 +776,7 @@ function drawChart() {
 									<!-- 업무 담당자 -->
 									<div style="margin-bottom: 10px;">
 										<span>담당자 : </span>
-										<span th:each="wPerson, iterStat : ${readTaskWorkPerson}"
+										<span th:each="wPerson : ${readTaskWorkPerson}"
 										      th:if="${allPost.workNo == wPerson.workNo}"
 										      th:text="${wPerson.name} + ' '"></span>
 									</div>
@@ -801,7 +817,8 @@ function drawChart() {
 													<input type="datetime-local"
 														   class="startWorkDate2 form-control"
 														   th:value="${#dates.format(allPost.workStartTime, 'yyyy-MM-dd HH:mm')}"
-														   style="margin-left: 3px; width: 210px; border-radius: 5px;">
+														   style="margin-left: 3px; width: 210px; border-radius: 5px;"
+														   th:disabled="${allPost.id != session.Id}">
 										  	</div>
 										  	<!-- 마감일 추가 -->
 										  	<div style="margin-bottom: 7px;">
@@ -810,14 +827,16 @@ function drawChart() {
 										  			   class="endWorkDate2 form-control"
 										  			   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 										  			   th:value="${#dates.format(allPost.workEndTime, 'yyyy-MM-dd HH:mm')}"
-										  			   style="margin-left: 3px; width: 210px; border-radius: 5px;">
+										  			   style="margin-left: 3px; width: 210px; border-radius: 5px;"
+										  			   th:disabled="${allPost.id != session.Id}">
 										  	</div>
 										  	<!-- 우선순위 추가 -->
 										  	<div style="margin-bottom: 7px;">
 												<p style="margin-bottom: 2px;">우선순위</p>
 												<select class="workPostPri custom-select"
 														name="workPri"
-														style="width: 70px; margin-left: 3px; border-radius: 5px;">
+														style="width: 70px; margin-left: 3px; border-radius: 5px;"
+														th:disabled="${allPost.id != session.Id}">
 													<option value="0" th:selected="${allPost.workStatus == '0'}">없음</option>
 													<option value="1" th:selected="${allPost.workStatus == '1'}">낮음</option>
 													<option value="2" th:selected="${allPost.workStatus == '2'}">보통</option>
@@ -831,7 +850,8 @@ function drawChart() {
 											  	<p style="margin-bottom: 2px;">업무 그룹</p>
 												<select class="workPostGroup2 custom-select"
 														name="workGroup"
-														style="width: 210px; margin-left: 3px; border-radius: 5px;">
+														style="width: 210px; margin-left: 3px; border-radius: 5px;"
+														th:disabled="${allPost.id != session.Id}">
 													<th:block th:each="group : ${readWorkGroup}">
 															<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}"
 																	th:selected="${allPost.workGroupNo == group.workGroupNo}"></option>
@@ -873,31 +893,40 @@ function drawChart() {
 										</div>
 										<div class="row">
 											<div class="col-md-8">
-												<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
-												<h6 th:text="댓글"></h6>
-												<ul class="list-unstyled">
-													<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
-														th:if="${allPost.proPostNo == com.proPostNo}">
-														<th:block th:if="${allPost.uploadPath != null}">
-															<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
-											  		 			 class="card-img-top"
-											  		 			 style="width:30px; height:30px; margin:0px;">
-											  		 	</th:block>
-											  		 	<th:block th:if="${allPost.uploadPath == null}">
-															<img style="width:30px; height:30px; margin:0px;"
-														 		 src="../img/userProf.png">
-														</th:block>
-														<span th:text="${com.name}"></span>
-														<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
-														<span th:text="${com.comContent}"></span>
-														<th:block th:if="${com.id == session.Id}">
-															<span onclick="UpdateWritingComment()" class="spanCursor"
-																  style="color: red">수정</span>
-															<span></span>
-															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
-														</th:block>
-													</li>
-												</ul>
+												<h6>댓글</h6>
+												
+												<table class="comtable table table-hover">
+													<thead>
+														<tr class="comtabletr"
+															th:each="com : ${projectWritingDetaisComment}"
+															th:data-post-code="${com.comNo}"
+															th:if="${allPost.proPostNo == com.proPostNo}">
+															<td class="comtabletd">
+																<th:block th:if="${allPost.uploadPath != null}">
+																	<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+													  		 			 class="card-img-top"
+													  		 			 style="width:30px; height:30px; margin:0px;">
+													  		 	</th:block>
+													  		 	<th:block th:if="${allPost.uploadPath == null}">
+																	<img style="width:30px; height:30px; margin:0px;"
+																 		 src="../img/userProf.png">
+																</th:block>
+															</td>
+															<td class="comtabletd" th:text="${com.name}"></td>
+															<td class="comtabletd" th:text="${com.comContent}"></td>
+															<td class="comtabletd comdate" th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></td>
+															<td>
+																<th:block th:if="${com.id == session.Id}">
+																	<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+																	<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+																</th:block>
+															</td>
+														</tr>
+													</thead>
+												</table>
+												
+														
+												
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
@@ -1201,7 +1230,7 @@ function drawChart() {
 												<div class="form-group">
 													<input type="text" class="form-control" placeholder="댓글 작성">
 												</div>
-												<button type="button" class="btn btn-primary" onclick="createCommentButton()"
+												<button type="button" class="btn btn-groob" onclick="createCommentButton()"
 														th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
 											</div>
 										</div>
@@ -1253,7 +1282,10 @@ function drawChart() {
 											<th:block th:each="prog : ${readAllTodoListPer}"
 													  th:if="${prog.proPostNo == allPost.proPostNo}">
 												<div class="progress-bar bg-info" role="progressbar"
-													 th:style="'width: ' + ${prog.per} + '%'" aria-valuemin="0" aria-valuemax="100"></div>
+													 th:style="'width: ' + ${prog.per} + '%'"
+													 aria-valuemin="0"
+													 aria-valuemax="100"
+													 th:text="${prog.per} + '%'"></div>
 											<th:block>
 										</div>
 									</div>
@@ -1261,7 +1293,7 @@ function drawChart() {
 									<!-- 할 일 체크 공간 -->
 									<div>
 										<ul class="list-group">
-											<li th:class="${rt.todoCheck == 'Y'} ? 'list-group-item grayC' : 'list-group-item'"
+											<li class="list-group-item"
 												th:each="rt : ${readTodoList}"
 												th:if="${rt.proPostNo == allPost.proPostNo}"
 												th:data-post-todo-no="${rt.todoNo}">
@@ -1272,27 +1304,187 @@ function drawChart() {
 												    	   type="checkbox"
 												    	   th:data-todo-no="${rt.todoNo}"
 												    	   th:checked="${rt.todoCheck == 'Y'}"
+												    	   th:disabled="${rt.id != session.Id} and ${rt.id != null}"
 												    	   style="cursor: pointer;"
 														   onclick="changeTodoStatus()">
 													<span class="checkmark"></span>
 												</label>
 												
-										   	<span th:text="'Todo : ' + ${rt.todoContent}"></span>
-											<span th:text="${rt.todoEnd == null} ? '' : '마감일 : ' + ${#dates.format(rt.todoEnd, 'MM/dd')}"
-												  th:style="${rt.todoEnd <= #dates.format(currentTime, 'MM/dd') ? 'float: right; color: red;' : 'float: right;'}"></span>
+										   	<span th:text="'Todo : ' + ${rt.todoContent}"
+										   		  th:class="${rt.todoCheck == 'Y'} ? 'grayC' : ''"></span>
+											<span th:text="${rt.todoEnd == null} ? '' : '마감일 : ' + ${#dates.format(rt.todoEnd, 'MM-dd')}"
+												  th:style="${#dates.format(rt.todoEnd, 'MM/dd') <= #dates.format(afterOneDay, 'MM/dd') ? 'float: right; color: red;' : 'float: right;'}"
+												  th:class="${rt.todoCheck == 'Y'} ? 'grayC' : ''"></span>
 											<span th:text="${rt.name == null} ? '' : '담당자 : ' + ${rt.name} + '&nbsp&nbsp'"
-												  style="float: right;"></span>
+												  style="float: right;"
+												  th:class="${rt.todoCheck == 'Y'} ? 'grayC' : ''"></span>
 											
 										  </li>
 										</ul>
 									</div>
+									
+								</div>
+								
+								<div class="card-footer">
+									
+									<!-- 북마크, 댓글수 -->
+									<div class="row">
+										<div class="col-md-8">
+											<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
+											<h6 th:text="댓글"></h6>
+											<ul class="list-unstyled">
+												<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
+													th:if="${allPost.proPostNo == com.proPostNo}">
+													<th:block th:if="${allPost.uploadPath != null}">
+														<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+										  		 			 class="card-img-top"
+										  		 			 style="width:30px; height:30px; margin:0px;">
+										  		 	</th:block>
+										  		 	<th:block th:if="${allPost.uploadPath == null}">
+														<img style="width:30px; height:30px; margin:0px;"
+													 		 src="../img/userProf.png">
+													</th:block>
+													<span th:text="${com.name}"></span>
+													<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
+													<span th:text="${com.comContent}"></span>
+													<th:block th:if="${com.id == session.Id}">
+														<span onclick="UpdateWritingComment()" class="spanCursor"
+															  style="color: red">수정</span>
+														<span></span>
+														<span onclick="deleteWritingComment()" class="spanCursor">X</span>
+													</th:block>
+												</li>
+											</ul>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="댓글 작성">
+											</div>
+											<button type="button" class="btn btn-groob" onclick="createCommentButton()"
+													th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 4종료 -->
+						</th:block>
+				
+						<!-- 5.투표 -->
+						<th:block th:if="${allPost.postType == '5'}">
+							<div class="card"
+								 style="margin-bottom: 20px; background-color: #fff; font-size:15px; border-radius: 10px;"
+								 th:data-feed-post-no="${allPost.proPostNo}"
+								 th:data-feed-vote-no="${allPost.voteNo}"
+								 th:data-post-type="${allPost.postType}">
+								<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
+								<div class="postHeader" style="display: flex;">
+							        <!-- 프사 -->
+									<th:block th:if="${allPost.uploadPath != null}">
+										<img th:src="@{|/display?fileName=${#strings.replace(allPost.uploadPath,'\','/')}/s_${allPost.uuid}_${allPost.fileName}|}"
+						  		 			 class="card-img-top"
+						  		 			 style="width:50px; height:50px; margin:0px;">
+						  		 	</th:block>
+						  		 	<th:block th:if="${allPost.uploadPath == null}">
+										<img style="width:50px; height:50px; margin:0px;"
+									 		 src="../img/userProf.png">
+									</th:block>
+									
+							        <div style="display: flex; flex-direction: column; margin-left:12px;">
+								        <span th:text="${allPost.name}" style="font-size:17px;"></span>
+								        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"
+								              style="color: #AAAAAA; font-size:14px;"></span>
+								    </div>
+								    
+							        <div th:if="${allPost.id == session.Id}" style="display:inline; margin-left: auto;">
+								        <span onclick="updatePost()"
+								        	  class="spanCursor"
+								        	  th:if="${allPost.voteEndCheck == 'N'}">수정</span>
+								        <span onclick="deletePost()" class="spanCursor">삭제</span>
+							        </div>
+							    </div>
+							    	<div class="card-header">
+									    <div>
+										    <th:block th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')}
+										    				  or ${allPost.voteEndDay == null})
+										    				 and ${allPost.voteEndCheck == 'N'}">
+										        <a type="button"
+										           class="btn btn-outline-danger"
+										           style="height:30px; border-radius:5px; margin-right:5px;">진행중</a>
+										    </th:block>
+										    <th:block th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') < #dates.format(cTime, 'yyyy-MM-dd')}
+										    				  or ${allPost.voteEndDay != null})
+										    				 and ${allPost.voteEndCheck == 'Y'}">
+										        <a type="button"
+										           class="btn btn-outline-secondary"
+										           style="height:30px; border-radius:5px; margin-right:5px;">투표 종료</a>
+										    </th:block>
+							    			<span th:text="${allPost.postTitle}"></span>
+									    </div>
+										<!-- 글 제목 -->
+									</div>
+								<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
+								<div class="card-body">
+									<!-- 투표 설명 -->
+									<ul style="padding:0px; margin-bottom:10px;">
+										<li th:text="'투표 마감일 : ' + ${allPost.voteEndDay == null ? '미정' : #dates.format(allPost.voteEndDay, 'yyyy-MM-dd') + ' 까지'}"
+											style="margin-bottom:5px;"></li>
+										<!-- <li th:text="'투표 설명 : ' + ${allPost.voteContent == null ? '' : allPost.voteContent}"
+											style="margin-bottom:5px;"></li> -->
+										<li th:if="${allPost.voteContent != null}"
+											th:text="'투표 설명 : ' + ${allPost.voteContent}"
+											style="margin-bottom:5px;"></li>
+									</ul>
+									
+									<!-- 투표창 -->
+									<ul class="list-group" style="margin-bottom: 15px">
+									
+										<!-- 리스트 출력 -->
+									  <li class="list-group-item"
+										  th:each="vtCheck : ${readVoteListCheck}"
+									  	  th:if="${vtCheck.voteNo == allPost.voteNo}">
+									  	  
+									  	  <!-- vote 이미지 -->
+									  	<span></span>
+										<label class="custom-checkbox"
+											   th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')}
+								    				  or ${allPost.voteEndDay == null})
+								    				 and ${allPost.voteEndCheck == 'N'}"
+											   style="margin-bottom: 15px">
+		 								    <input class="form-check-input me-1"
+										    	   type="checkbox"
+										    	   th:data-vote-detail-no="${vtCheck.voteDetailNo}"
+												   onclick="changeVoteStatus()">
+											<span class="checkmark"></span>
+										</label>
+										<span class="voteContent"
+											  th:text="${vtCheck.voteDetailContent}"></span>
+										<span th:each="vC : ${readVotePartiCount}"
+											  th:if="${vtCheck.voteDetailNo == vC.voteDetailNo}"
+											  class="spanCursor voteCount"
+											  th:text="${vC.count} + '명'"
+											  style="float: right; margin-right:10px;"> 
+										</span>
+										
+									  </li>
+									</ul>
+									
+									<!-- 투표 종료 버튼 -->
+									<div th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')}
+								    				  or ${allPost.voteEndDay == null})
+								    				 and ${allPost.voteEndCheck == 'N'}"
+								    	 style="text-align: center;">
+								        <button type="button"
+								        		class="btn btn-danger"
+								        		onclick="voteEnd()"
+								        		style="border-radius:8px; margin-bottom: 15px;">투표 마감</button>
+								    </div>
+									<!-- 하단 -->
 								</div>
 									<div class="card-footer">
 										
 										<!-- 북마크, 댓글수 -->
 										<div class="row">
 											<div class="col-md-8">
-												<!--/* <h6 th:text="'댓글('+${#lists.size(projectWritingDetaisComment)}+')'"></h6> */-->
 												<h6 th:text="댓글"></h6>
 												<ul class="list-unstyled">
 													<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
@@ -1328,139 +1520,9 @@ function drawChart() {
 										</div>
 									</div>
 							</div>
-							<!-- 4종료 -->
-						</th:block>
-				
-						<!-- 5.투표 -->
-						<th:block th:if="${allPost.postType == '5'}">
-							<div class="card"
-								 style="margin-bottom: 20px; background-color: #fff; font-size:15px; border-radius: 10px;"
-								 th:data-feed-post-no="${allPost.proPostNo}"
-								 th:data-feed-vote-no="${allPost.voteNo}"
-								 th:data-post-type="${allPost.postType}">
-								<!-- 프로필 이미지, 이름, 작성 날짜 및 시간, 상단고정 표시, 수정, 삭제 -->
-								<div class="postHeader" style="display: flex;">
-							        <!-- 프사 -->
-											<th:block th:if="${allPost.uploadPath != null}">
-												<img th:src="@{|/display?fileName=${#strings.replace(allPost.uploadPath,'\','/')}/s_${allPost.uuid}_${allPost.fileName}|}"
-								  		 			 class="card-img-top"
-								  		 			 style="width:50px; height:50px; margin:0px;">
-								  		 	</th:block>
-								  		 	<th:block th:if="${allPost.uploadPath == null}">
-												<img style="width:50px; height:50px; margin:0px;"
-											 		 src="../img/userProf.png">
-											</th:block>
-											
-									        <div style="display: flex; flex-direction: column; margin-left:12px;">
-										        <span th:text="${allPost.name}" style="font-size:17px;"></span>
-										        <span th:text="${#dates.format(allPost.postDate, 'yyyy-MM-dd HH:mm')}"
-										              style="color: #AAAAAA; font-size:14px;"></span>
-										    </div>
-									        <div th:if="${allPost.id == session.Id}" style="display:inline; margin-left: auto;">
-										        <span onclick="updatePost()" style="cursor: pointer;">수정</span>
-										        <span onclick="deletePost()" style="cursor: pointer;">삭제</span>
-									        </div>
-							    </div>
-							    	<div class="card-header">
-									    <div style="margin-left:10px; margin-bottom:10px;">
-										    <th:block th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')} or ${allPost.voteEndDay == null}) and ${allPost.voteEndCheck == 'N'}">
-										        <button type="button" class="btn btn-outline-danger">진행중</button>
-										    </th:block>
-										    <th:block th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') < #dates.format(cTime, 'yyyy-MM-dd')}) or ${allPost.voteEndCheck == 'Y'}">
-										        <button type="button" class="btn btn-outline-secondary">투표 종료</button>
-										    </th:block>
-									    </div>
-										<!-- 글 제목 -->
-							    		<span th:text="${allPost.postTitle}"></span>
-									</div>
-								<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
-								<div class="card-body">
-									<!-- 투표 설명 -->
-									<ul>
-										<li th:text="'투표 마감일 : ' + ${allPost.voteEndDay == null ? '미정' : #dates.format(allPost.voteEndDay, 'yyyy-MM-dd') + ' 까지'}"></li>
-										<li th:text="'투표 설명 : ' + ${allPost.voteContent == null ? '' : allPost.voteContent}"></li>
-									</ul>
-									<!-- 투표창 -->
-									<ul class="list-group">
-									  <li class="list-group-item" th:each="vtCheck : ${readVoteListCheck}"
-									  	  th:if="${vtCheck.voteNo == allPost.voteNo}">
-									  	  
-									  	<span th:utext="${vtCheck.voteDetailImg}"
-									  		  th:data-vote-detail-img="${vtCheck.voteDetailImg}"></span>
-									  		  
-		 								    <input class="form-check-input me-1"
-										    	   type="checkbox"
-										    	   th:data-vote-detail-no="${vtCheck.voteDetailNo}"
-												   onclick="changeVoteStatus()"
-		 										   th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')}) and ${allPost.voteEndCheck == 'N'}">
-		 										   
-										<span class="voteContent"
-											  th:text="${vtCheck.voteDetailContent}"></span>
-										<span th:each="vC : ${readVotePartiCount}"
-											  th:if="${vtCheck.voteDetailNo == vC.voteDetailNo}"
-											  class="spanCursor voteCount"
-											  th:text="${vC.count} + '명'"> 
-										</span>
-										
-									  </li>
-									</ul>
-										<!-- <span th:each="vpl : ${readVoteListParti}"
-											  th:if="${vtCheck.voteDetailNo == vpl.voteDetailNo}"
-											  th:data-vote-parti-person-id="${vpl.votePartiNo}">
-											  <span th:text="${vpl.name} + ' '"></span>
-										</span> -->
-									<!-- 투표 종료 버튼 -->
-									<th:block th:if="${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')} and ${allPost.voteEndCheck == 'N'}">
-								        <button type="button" class="btn btn-danger" onclick="voteEnd()">투표 마감</button>
-								    </th:block>
-									<!-- 하단 -->
-									<div class="card-footer">
-										
-										<!-- 북마크, 댓글수 -->
-										<div class="row">
-											<div class="col-md-8">
-												<h6 th:text="댓글"></h6>
-												<ul class="list-unstyled">
-													<li th:each="com : ${projectWritingDetaisComment}" th:data-post-code="${com.comNo}"
-														th:if="${allPost.proPostNo == com.proPostNo}">
-														<th:block th:if="${allPost.uploadPath != null}">
-															<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
-											  		 			 class="card-img-top"
-											  		 			 style="width:30px; height:30px; margin:0px;">
-											  		 	</th:block>
-											  		 	<th:block th:if="${allPost.uploadPath == null}">
-															<img style="width:30px; height:30px; margin:0px;"
-														 		 src="../img/userProf.png">
-														</th:block>
-														<span th:text="${com.name}"></span>
-														<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
-														<span th:text="${com.comContent}"></span>
-														<th:block th:if="${com.id == session.Id}">
-															<span onclick="UpdateWritingComment()" class="spanCursor"
-																  style="color: red">수정</span>
-															<span></span>
-															<span onclick="deleteWritingComment()" class="spanCursor">X</span>
-														</th:block>
-													</li>
-												</ul>
-											</div>
-											<div class="col-md-4">
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="댓글 작성">
-												</div>
-												<button type="button" class="btn btn-primary" onclick="createCommentButton()"
-														th:data-post-writing-no="${allPost.proPostNo}">댓글 등록</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
 							<!-- 5종료 -->
 						</th:block>
 				
-				
-				
-
 				<!-- 포스트 종료 -->
 			</th:block>
 		</div>
@@ -1476,7 +1538,7 @@ function drawChart() {
 				 aria-labelledby="modal11lLabel"
 				 aria-hidden="true"
 				 style="display:none">
-			  <div class="modal-dialog">
+			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content dohyeonModalContent" style="height: 500px;">
 			      <div class="modal-header">
 			        <h5 class="modal-title" id="modal11Label">글 수정</h5>
@@ -1513,7 +1575,7 @@ function drawChart() {
 				 aria-labelledby="modal12Label"
 				 aria-hidden="true"
 				 style="display:none">
-			  <div class="modal-dialog">
+			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content dohyeonModalContent" style="height: 500px;">
 			      <div class="modal-header">
 			        <h5 class="modal-title" id="modal12Label">업무 수정</h5>
@@ -1579,7 +1641,7 @@ function drawChart() {
 				
 			<!-- 3.일정 수정 -->
 			<div class="modal fade modal-dialog-scrollable" id="modal13" tabindex="-1" role="dialog" aria-labelledby="modal13Label" aria-hidden="true" style="display:none">
-			  <div class="modal-dialog">
+			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content dohyeonModalContent" style="height: 500px;">
 			      <div class="modal-header">
 			        <h5 class="modal-title" id="modal13Label">일정 수정</h5>
@@ -1635,7 +1697,7 @@ function drawChart() {
 			
 			<!-- 4.할 일 수정 -->					
 			<div class="modal fade modal-dialog-scrollable" id="modal14" tabindex="-1" role="dialog" aria-labelledby="modal14Label" aria-hidden="true" style="display:none">
-			  <div class="modal-dialog">
+			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content dohyeonModalContent" style="height: 500px;">
 			      <div class="modal-header">
 			        <h5 class="modal-title" id="modal14Label">할 일 수정</h5>
@@ -1713,7 +1775,7 @@ function drawChart() {
 				 aria-labelledby="modal15Label"
 				 aria-hidden="true"
 				 style="display:none;">
-			  <div class="modal-dialog">
+			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content dohyeonModalContent" style="height: 500px;">
 			      <div class="modal-header">
 			        <h5 class="modal-title" id="modal15Label">투표 수정</h5>
@@ -1775,12 +1837,12 @@ function drawChart() {
 		</div>
 		<!-- 참여자공간 -->
 		<div class="float-right">
-			<div>
+			<div style="margin-top:10px;">
 				<th:block th:text="'참여자 ' + ${projectPartiMember.size}"></th:block>
 			</div>
-			<div class="card" style="width: 230px;">
+			<div class="card" style="width: 230px; border:none; margin-top:5px;">
 			  <!-- 관리자 -->
-			  <div class="card-header openModalInfo"
+			  <div class="card-header openModalInfo spanCursor"
 			  	   th:each="pUser : ${projectPartiMember}"
 			  	   th:if="${pUser.id == readProAuth.id}"
 			  	   th:data-user-id="${pUser.id}"
@@ -1792,8 +1854,8 @@ function drawChart() {
 			       <span th:text="${pUser.name}"></span>
 			  	   <span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
 			  </div>
-			  <ul class="list-group list-group-flush">
-			    <li class="list-group-item openModalInfo" th:each="pUser, pUserStat : ${projectPartiMember}"
+			  <ul class="list-group list-group-flush border">
+			    <li class="list-group-item openModalInfo spanCursor" th:each="pUser, pUserStat : ${projectPartiMember}"
 			    	th:if="${pUser.id != readProAuth.id}"
 			    	th:data-user-id="${pUser.id}"
 			    	data-toggle="modal"
@@ -1804,50 +1866,50 @@ function drawChart() {
 			    	<span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
 		    	</li>
 			  </ul>
+			  
 				<!-- 유저 인포 모달창 -->
 				<div th:each="mem : ${projectPartiMember}">
 					<div class="modal fade modal-dialog-centere" th:id="'proUserInfoDetail' + ${mem.empNo}"
 						 tabindex="-1" aria-labelledby="proUserInfoDetailLabel" aria-hidden="true"
 						 th:data-user-info-id="${mem.id}">
-					  <div class="modal-dialog">
-					    <div class="modal-content dohyeonModalContent" style="width:300px;">
+					  <div class="modal-dialog modal-dialog-centered">
+					    <div class="modal-content dohyeonModalContent" style="width:350px;">
 				        <div class="card-deck">
-						  <div class="card row justify-content-end">
+						  <div class="card row justify-content-end" style="border-radius: 12px;">
 						  <!-- 프사 -->
-						  	<div class="container">
+							<button type="button"
+									class="close"
+									data-dismiss="modal"
+									aria-label="Close"
+									style="text-align: right; height:10px; margin-right:5px;">
+									<span aria-hidden="true">&times;</span>
+							</button>
+						  	<div class="container" style="text-align: center;">
 						  	<th:block th:if="${mem.uploadPath != null}">
 						  	<img th:src="@{|/display?fileName=${#strings.replace(mem.uploadPath,'\','/')}/s_${mem.uuid}_${mem.fileName}|}"
-						  		 class="card-img-top" alt="프로필 이미지">
+						  		 class="card-img-top">
 						  		 </th:block>
 						  		 <th:block th:if="${mem.uploadPath == null}">
 								<img id="profImg"
-									 style="width:140px;height:150px;margin:15px;margin-bottom:0px;" src="../img/userProf.png">
+									 style="width:140px;height:150px;margin-bottom:0px;" src="../img/userProf.png">
 									 </th:block>
-								<button type="button"
-										class="close"
-										data-dismiss="modal"
-										aria-label="Close"
-										style="text-align: right;">
-								<span aria-hidden="true">&times;</span>
-						        </button>
 							</div>
-						    <div class="card-body">
-						    	<ul>
-						    		<li th:text="'부서명 : ' + ${mem.deptName}"></li>
-						    		<li th:text="'직급 : ' + ${mem.rank}"></li>
-						    		<li th:text="'이름 : ' + ${mem.name}"></li>
-						    		<li th:text="'이메일 : ' + ${mem.id}"></li>
-						    		<li th:text="'전화번호 : ' + ${mem.phone}"></li>
-						    		<li th:text="'메모 : ' + (${mem.profileNote == null} ? '-' : ${mem.profileNote})"
-						    			class="profileMemoTag"></li>
-						    		
+						    <div class="card-body" style="padding-bottom: 0px;">
+						    	<ul style="font-size:20px; padding-left:10px;">
+						    		<li><span>부서명 : </span><span th:text="${mem.deptName}"></span></li>
+						    		<li><span>이름 : </span><span th:text="${mem.rank}"></span></li>
+						    		<li><span>이메일 : </span><span th:text="${mem.id}"></span></li>
+						    		<li><span>전화번호 : </span><span th:text="${mem.phone}"></span></li>
+						    		<li><span>메모 : </span>
+						    			<span class="profileMemoTag"
+						    				  th:text="(${mem.profileNote == null} ? '-' : ${mem.profileNote})"></span></li>
 						    	</ul>
 						    </div>
 						    <div class="card-footer">
 						    	<button type="button"
-						    			class="btn btn-primary"
+						    			class="btn btn-groob"
 						    			onclick="changeProfileNote()"
-						    			th:if="${mem.id == session.Id}">상태메세지 변경</button>
+						    			th:if="${mem.id == session.Id}">메모 변경</button>
 						    </div>
 						  </div>
 					    </div>
@@ -2305,12 +2367,13 @@ function drawChart() {
 <script>
 	function createCommentButton() {
 		let targetButton = event.target;//버튼 동적 확인
-		let com = targetButton.parentNode.children[0].children[0]; //텍스트값 찾기
+		let com = targetButton.closest('.row').querySelector('.form-control');
+		
 		if(com.value == '') {
 			com.focus();
 			alert('댓글을 입력하세요');
 			return;
-		}
+		};
 		
 		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
 		
@@ -2326,23 +2389,34 @@ function drawChart() {
 		})
 		.then(response => response.json())
 		.then(res => {
-			let insertComment = targetButton.closest('.card').getElementsByClassName('list-unstyled')[0];
+			let insertComment = targetButton.closest('.row').querySelector('thead');
+			let imgsrc
+			//이미지 주소 변환
+			if(res.uuid == null) {
+				imgsrc = '../img/userProf.png';
+			} else {
+				imgsrc = `/display?fileName=${res.uploadPath}/s_${res.uuid}_${res.fileName}`;
+			};
 			
-			insertComment.insertAdjacentHTML('beforeend', 
-				'<li data-post-code="' + res.result + '">'+
-					'<span></span>'+
-					'<span>' + selfName + '</span>'+
-					'<span>' + currentTime + '</span>'+
-					'<span>' + com.value + '</span>'+
-					'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
-					'<span></span>'+
-					'<span onclick="deleteWritingComment()" class="spanCursor">X</span>'+
-				'</li>'
+			insertComment.insertAdjacentHTML('beforeend',
+			`<tr class="comtabletr" data-post-code="${res.comNo}">
+				<td class="comtabletd">
+					<img src="${imgsrc}" class="card-img-top" style="width:30px; height:30px; margin:0px;">
+				</td>
+				<td class="comtabletd">${selfName}</td>
+				<td class="comtabletd">${com.value}</td>
+				<td class="comtabletd comdate">${currentTime}</td>
+				<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>
+			</tr>`
 			);
+
 			com.focus();
 			com.value = '';
 		});
-	}
+	};
 	
 	//현재시간 구하기
 	const currentTime = formatDate();
@@ -2356,13 +2430,13 @@ function drawChart() {
 		const minutes = String(date.getMinutes()).padStart(2, '0');
 		
 		return `${year}/${month}/${day} ${hours}:${minutes}`;
-	}
+	};
 </script>
 	
 <!-- 댓글 삭제  -->
 <script>
 	function deleteWritingComment() {
-		let targetButton = event.target;
+		let targetTr = event.target.closest('tr');
 		
 		fetch("/postDeleteComment", {
 			method: 'POST',
@@ -2370,53 +2444,51 @@ function drawChart() {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-					'comNo': targetButton.parentNode.dataset.postCode
+					'comNo': targetTr.dataset.postCode
 				})
 		})
 		.then(response => response.json())
 		.then(res => {
-			targetButton.parentNode.remove()
+			targetTr.remove();
 		});
-	}
+	};
 </script>
 	
 <!-- 댓글 수정  -->
 <script>
 	function UpdateWritingComment() {
-		let targetButton = event.target;
-		let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
+		let targetTr = event.target.closest('tr');
+		let targetThead = targetTr.parentElement;
+		let comNo = targetTr.dataset.postCode;//댓글 번호
 		
-		let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
-		let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
+		let oldCom = targetTr.children[2].textContent;//기존 댓글 내용
 		
-		//초기화
-		targetButton.parentNode.children[2].textContent = '';//날짜 초기화
-		targetButton.parentNode.children[3].textContent = '';//댓글 초기화
-		targetButton.parentNode.children[4].textContent = '';//수정 초기화
-		targetButton.parentNode.children[6].textContent = '';//X 초기화
+		targetTr.children[2].textContent = '';//댓글 초기화
+		targetTr.children[4].textContent = '';//수정, 삭제 초기화
 		
 		if(document.getElementById('newComment') != null) {
-			let nC = document.getElementById('newComment').parentNode.parentNode;
-			nC.childNodes[5].textContent = document.getElementById('newComment').dataset.comDate;
-			nC.childNodes[7].textContent = document.getElementById('newComment').value;
-			nC.childNodes[9].textContent = '수정';
-			nC.childNodes[11].textContent = '';
-			nC.childNodes[13].textContent = 'X';
-		}
+			let nC = document.getElementById('newComment').closest('tr');
+			nC.children[2].textContent = document.getElementById('newComment').value;
+			nC.children[4].innerHTML =
+				`<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>`;
+		};
 		
 		// 댓글 수정 폼 생성
-		targetButton.parentNode.children[5].innerHTML = 
-				'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
-				+'<span id="ooo" class="spanCursor">수정</span>'
-				+'<span id="xxx" class="spanCursor">취소</span>';
+		targetTr.children[2].innerHTML = '<input type="text" placeholder="댓글 수정" id="newComment" maxlength="30" value="' + oldCom + '">'; 
+		targetTr.children[4].innerHTML = '<span id="ooo" class="spanCursor" style="color:red;">수정</span>' + '<span id="xxx" class="spanCursor">취소</span>';
 				
 		// 취소버튼
 		document.getElementById('xxx').addEventListener('click', function() {
-			targetButton.parentNode.children[2].textContent = oldDate;
-			targetButton.parentNode.children[3].textContent = oldCom;
-			targetButton.parentNode.children[4].textContent = '수정';
-			targetButton.parentNode.children[5].textContent = '';
-			targetButton.parentNode.children[6].textContent = 'X';
+			let cancleTr = event.target.closest('tr');
+			cancleTr.children[2].textContent = oldCom;
+			cancleTr.children[4].innerHTML = 
+				`<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>`;
 		});
 		
 		// 수정버튼
@@ -2441,11 +2513,12 @@ function drawChart() {
 				.then(res => {
 					
 					if(res.result == '성공') {
-						targetButton.parentNode.children[2].textContent = oldDate;
-						targetButton.parentNode.children[3].textContent = newCom.value;
-						targetButton.parentNode.children[4].textContent = '수정';
-						targetButton.parentNode.children[6].textContent = 'X';
-						targetButton.parentNode.children[5].textContent = '';
+						targetTr.children[2].textContent = newCom.value;
+						targetTr.children[4].innerHTML = 
+							`<td>
+							<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+							<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+						</td>`;;
 						
 					} else {
 						alert('댓글 수정 실패');
@@ -2516,7 +2589,9 @@ function drawChart() {
 		let checkedYN = event.target.checked ? 'Y' : 'N';
 		let totalInputExp = event.target.closest('ul');
 		let liTag = event.target.closest('li');
-		liTag.classList.toggle("grayC");
+		liTag.querySelectorAll('span').forEach(asd => {
+			asd.classList.toggle("grayC");
+		});
 		
 		fetch("/updateTotoStatus", {
 			method: 'PUT',
@@ -2540,6 +2615,7 @@ function drawChart() {
 			
 			//퍼센트 변경
 			totalInputExp.closest('.card-body').children[0].children[0].children[0].style.width = per + '%';
+			totalInputExp.closest('.card-body').children[0].children[0].children[0].innerText = per + '%';
 			
 		})
 		.catch(error => {
@@ -2558,13 +2634,13 @@ function changeProfileNote() {
 	let profileChangeButton = event.target;
 	
 	oldProfileMemoTag.innerHTML =
-				'<input type="text" placeholder="프로필 수정" id="newMemo">'
-				+'<span id="memoUpdate" class="spanCursor">수정</span>'
-				+'<span id="memoCancle" class="spanCursor">취소</span>';
+				'<input type="text" placeholder="프로필 수정" id="newMemo" maxlength="30">'
+				+'<span id="memoUpdate" class="spanCursor memoButton"style="margin-left:80px; margin-top:10px;">수정</span>'
+				+'<span id="memoCancle" class="spanCursor memoButton"style="margin-top:10px;">취소</span>';
 	
 	// 취소버튼
 	document.getElementById('memoCancle').addEventListener('click', function() {
-		event.target.parentNode.innerHTML='';
+		event.target.parentElement.innerHTML='';
 		oldProfileMemoTag.textContent = oldProfileMemoText;
 	});
 
@@ -2588,7 +2664,7 @@ function changeProfileNote() {
 			.then(response => response.json())
 			.then(res => {
 				profileChangeButton.parentNode.innerHTML='';
-				oldProfileMemoTag.textContent = '메모 : ' + newMemo;
+				oldProfileMemoTag.textContent = newMemo;
 			})
 		}
 
@@ -3221,7 +3297,7 @@ function makeUlTag(results, ulTag, topTag) {
 	function changeVoteStatus() {
 		let checkedStatus = event.target.checked;
 		let voteDetailNo = event.target.dataset.voteDetailNo;
-		let liTag = event.target.parentElement;
+		let liTag = event.target.closest('li');
 		
 		//투표 등록
 		if(checkedStatus) {
@@ -3262,17 +3338,22 @@ function makeUlTag(results, ulTag, topTag) {
 
 	//투표 숫자 증가 및 생성
 	function createUpCount(liTag) {
+		console.log(liTag)
 		let countWrite = liTag.children[3];
 
 		if(countWrite == null) {
 			let newSpan = document.createElement('span');
 			newSpan.className = 'voteCount spanCursor';
+			newSpan.style.float = 'right';
+			newSpan.style.marginRight = '10px';
 			newSpan.textContent = '1명';
-
+			
 			liTag.appendChild(newSpan);
 		} else {
 			let countWriteV = Number(countWrite.textContent.substr(0, 1)) + 1;
 			countWrite.textContent = countWriteV + '명';
+			countWrite.style.float = 'right';
+			countWrite.style.marginRight = '10px';
 		}
 	}
 

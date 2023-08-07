@@ -10,6 +10,8 @@
 					<button type="button"
 							class="btn btn-primary square2"
 							data-toggle="modal"
+							title="프로젝트 개인 색상 설정입니다."
+							data-placement="bottom"
 							th:style="'background-color: ' + ${projectTopBar.proColor}"
 							data-target="#squareStyle"></button>
 							
@@ -100,12 +102,14 @@
 				   style="height:30px; margin-top: 5.5px; margin-left: 280px; width: 276px;">
 			<div style="margin-right:50px; margin-top:7px;">
 				<span th:if="${readProAuth.id == session.Id}"
-					  class="material-symbols-outlined spanCursor proMover"
+					  class="material-symbols-outlined spanCursor proMover invitetooltip"
 					  data-toggle="modal"
-					  data-target="#inviteMember">group_add</span>
-				<span class="material-symbols-outlined spanCursor proMover" onclick="exitProMem()">logout</span>
+					  data-target="#inviteMember"
+					  title="프로젝트 인원 초대"
+					  data-placement="bottom">group_add</span>
+				<span class="material-symbols-outlined spanCursor proMover" data-toggle="tooltip" data-placement="bottom" title="프로젝트 나가기" onclick="exitProMem()">logout</span>
 				<span th:if="${readProAuth.id == session.Id}"
-					  class="material-symbols-outlined spanCursor proMover" onclick="delPro()">delete</span>
+					  class="material-symbols-outlined spanCursor proMover" onclick="delPro()"data-toggle="tooltip" data-placement="bottom" title="프로젝트 삭제">delete</span>
 			</div>
 		</nav>
 	</div>
@@ -154,6 +158,16 @@
 		</div>
 	</div>
 	<!-- 인원 초대 모달 종료 -->
+
+<!-- 제이쿼리 툴팁 -->
+<script>
+	$(document).ready(function(){
+	    $(".invitetooltip").tooltip();
+	});
+	$(document).ready(function(){
+	    $(".square2").tooltip();
+	});
+</script>
 
 <!-- 검색기능 -->
 <script type="text/javascript">
@@ -296,5 +310,5 @@
 	};
 </script>
 
-</div>	
+
 </html>

@@ -54,40 +54,44 @@
 	               <td>결재자</td>
 	            </tr>
 	            <tr>
-		            <th:block th:if="${not #strings.isEmpty(drafterSign)}">
+		            <th:block th:if="${drafterSign.uploadPath != 'public'}">
 		                <td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(drafterSign.uploadPath,'\','/')}/${drafterSign.uuid}_${drafterSign.fileName}|}" 
 							th:data-uploadpath="${drafterSign.uploadPath}" th:data-uuid="${drafterSign.uuid}"
 							th:data-filename="${drafterSign.fileName}" data-type="true"  style="border:1px solid; width:100px">
 					    </td>
 					</th:block>
-					<th:block th:unless="${not #strings.isEmpty(drafterSign)}">
+					<th:block th:if="${drafterSign.uploadPath==null or drafterSign.uploadPath=='public'}">
 						<td style="width:100px; padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
 					</th:block>
 					
-						<th:block th:if="${list.payStatus2 == 'Y'} and ${approver2Sign.uuid != 'public'}">
-							<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
-								th:data-uploadpath="${approver2Sign.uploadPath}" th:data-uuid="${approver2Sign.uuid}"
-								th:data-filename="${approver2Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
-							</td>
-						</th:block>
-						<th:block th:if="${list.payStatus2 == 'Y'} and ${approver2Sign.uuid == 'public'}">
-							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
-						</th:block>
-						<th:block th:if="${list.payStatus2 == 'F'}">
-							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
-						</th:block>
-						<th:block th:if="${list.payStatus3 == 'Y'} and ${not #strings.isEmpty(approver3Sign)}">
-							<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver3Sign.uploadPath,'\','/')}/${approver3Sign.uuid}_${approver3Sign.fileName}|}" 
-								th:data-uploadpath="${approver3Sign.uploadPath}" th:data-uuid="${approver3Sign.uuid}"
-								th:data-filename="${approver3Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
-							</td>
-						</th:block>
-						<th:block th:if="${list.payStatus3 == 'Y'} and ${#strings.isEmpty(approver3Sign)}">
-							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
-						</th:block>
-						<th:block th:if="${list.payStatus3 == 'F'}">
-							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
-						</th:block>
+					<th:block th:if="${list.payStatus2 == 'Y'} and ${approver2Sign.uploadPath != null and approver2Sign.uploadPath != 'public'}">
+						<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
+							th:data-uploadpath="${approver2Sign.uploadPath}" th:data-uuid="${approver2Sign.uuid}"
+							th:data-filename="${approver2Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
+						</td>
+					</th:block>
+					<th:block th:if="${list.payStatus2 == 'Y'} and ${approver2Sign.uploadPath == null or approver2Sign.uploadPath=='public'}">
+						<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+					</th:block>
+					<th:block th:if="${list.payStatus2 == 'F'}">
+						<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
+					</th:block>
+					
+					<th:block th:if="${list.payStatus3 == 'Y'} and ${approver3Sign.uploadPath != null and approver3Sign.uploadPath != 'public'}">
+						<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver3Sign.uploadPath,'\','/')}/${approver3Sign.uuid}_${approver3Sign.fileName}|}" 
+							th:data-uploadpath="${approver3Sign.uploadPath}" th:data-uuid="${approver3Sign.uuid}"
+							th:data-filename="${approver3Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
+						</td>
+					</th:block>
+					<th:block th:if="${list.payStatus3 == 'Y'} and ${approver3Sign.uploadPath == null or approver3Sign.uploadPath == 'public'}">
+						<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+					</th:block>
+					<th:block th:if="${list.payStatus3 == 'Y'} and ${not #strings.isEmpty(approver3Sign)} and ${approver3Sign.uploadPath == 'public'}">
+						<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+					</th:block>
+					<th:block th:if="${list.payStatus3 == 'F'}">
+						<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
+					</th:block>
 	            </tr>
 	            <tr>
 	               <td>[[${drafterInfo.name}]] [[${drafterInfo.rank}]]</td>

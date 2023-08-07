@@ -176,7 +176,7 @@ ol {
 				    </th:block>
                     
                     <button class="delete-chatroom" th:data-room-no="${room.roomNo}" style="display: none;">Delete</button>
-                    <a href="#" class="exit-chatroom" th:data-room-no="${room.roomNo}" th:data-id="${realId}"><i class="material-icons" style="color: black;">exit_to_app</i></a>
+                    <span style="cursor: pointer;" class="exit-chatroom" th:data-room-no="${room.roomNo}" th:data-id="${realId}"><i class="material-icons" style="color: black;">close</i></span>
 				</div>
             </div>
                 <!-- <a href="#" id="deleteChatroomButton"><i class="material-icons">exit_to_app</i></a>  Exit Icon -->
@@ -249,7 +249,7 @@ ol {
 <script>
 //WebSocket 연결 설정
 const alarmClient = new StompJs.Client({
-brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
+brokerURL: 'ws://43.202.80.98:85/chatserver' // WebSocket 서버 URL
 });
 
 // 페이지 로드시 웹소켓 연결
@@ -359,8 +359,8 @@ function toastActChat() {
                     checkbox.id = 'employee-' + employee.id;
                     checkbox.value = employee.id;
 
-                    const empNo = document.createElement('span');
-                    empNo.textContent = employee.empNo + ' ';
+                    // const empNo = document.createElement('span');
+                    // empNo.textContent = employee.empNo + ' ';
 					
                     const empId = document.createElement('span');
                     empId.textContent = employee.id + ' ';
@@ -375,7 +375,7 @@ function toastActChat() {
                     empDept.textContent = employee.deptName;
                     
                     label.appendChild(checkbox);
-                    label.appendChild(empNo);
+                    // label.appendChild(empNo);
                     label.appendChild(empId);
                     label.appendChild(empName);
                     label.appendChild(empRank);

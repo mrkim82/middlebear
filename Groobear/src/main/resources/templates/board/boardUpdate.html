@@ -3,11 +3,50 @@
  layout:decorate="~{layout/boardTiles}">
 <head>
     <meta charset="UTF-8">
-    <title>Update a Board</title>
 <style>
+      .button-wrapper {
+                text-align: right;
+            }
+    .uploadResult .btn-warning{
+	color:white;
+	background-color:black;
+	border-radius:7px;
+	padding:1px 8px;
+	margin-left:5px;
+	border:0;
+} 
+.input-file-button{
+  padding: 6px 25px;
+  background-color:#90ddb091;
+  border-radius: 4px;
+  color: black;
+  cursor: pointer;
+  position:absolute;
+  top: -6px;
+  left: 68px;
+}
+.insertBtn{
+  border-radius: 7px;
+	background-color: #90ddb091;
+	border-color: #399f6100;
+	color: black;
+	width: 80px;
+	height: 35px;
+	margin: 10px; 
+}
+.listBtn{
+  border-radius: 7px;
+	background-color: #90ddb091;
+	border-color: #399f6100;
+	color: black;
+	width: 80px;
+	height: 35px;
+	margin: 10px; 
+}
 .uploadResult {
+  border-radius: 20px;
     width : 100%;
-    background-color : gray;
+    background-color : #90ddb091;
 }
 
 .uploadResult ul{
@@ -29,7 +68,7 @@
 }
 
 .uploadResult ul li span {
-    color : white;
+    color : black;
 }
 
 .bigPictureWrapper{
@@ -58,34 +97,36 @@
 </style>
 
 </head>
-<body>
+<body class="dohyeon">
     <!-- 기존의 폼 요소들 -->
  <div layout:fragment="content">
-        <h2>글 수정</h2>
+        <h2 style="margin-top: 25px;">글 수정</h2>
         <form th:action="@{/boardUpdate}" method="post">
-            <table>
-                <tr>
-				    <td style="visibility: hidden;">게시글 번호:</td>
-				    <td><input type="hidden" id="boardNo" name="boardNo" th:value="${board.boardNo}" /></td>
-				</tr>
+            <table class="table table-hover">
+              <thead>
+                <tr style="display:none;">
+                    <td>게시글 번호:</td>
+                    <td><input type="hidden" id="boardNo" name="boardNo" th:value="${board.boardNo}" /></td>
+				        </tr>
                 <tr>
                     <td>제목:</td>
-                    <td><input type="text" id="title" name="title" th:value="${board.title}" required /></td>
+                    <td><input type="text" id="title" name="title" th:value="${board.title}" required style="border: 0px;"/></td>
                 </tr>
                 <tr>
                     <td>내용:</td>
-                    <td><textarea id="content" name="content" required th:text="${board.content}"></textarea></td>
+                    <td><textarea rows="8" cols="30" id="content" name="content" required th:text="${board.content}" style="border: 0px; width: 100%; height: 400px;"></textarea></td>
                 </tr>
-                <tr>
-                    <td style="visibility: hidden;">작성자 ID:</td>
+                <tr style="display:none;">
+                    <td>작성자 ID:</td>
                     <td><input type="hidden" id="name" name="name" th:value="${session.Name}" readonly /></td>
                 </tr>
-                <tr>
-                    <td style="display:none;"><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
+                <tr style="display:none;">
+                    <td ><input type="text" id="id" name="id" th:value="${session.Id}" readonly /></td>
                 </tr>
+              </thead>
             </table>
-            <button type="submit" data-oper="">저장</button>
-            <button type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|">목록으로</button>
+            <button type="submit" data-oper="" class="insertBtn" style="position:absolute;right: 116px;top: 552px;z-index: 1000;">저장</button>
+            <button type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|" style="position: absolute;right: 24px;top: 552px; z-index: 1000;" class="listBtn">목록으로</button>
         </form>
         <div class='bigPictureWrapper'>
             <div class='bigPicture'>
@@ -100,9 +141,13 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
       
-            <div class = "form-group uploadDiv">
-            <input type = "file" name = 'uploadFile' multiple="multiple">
-             </div>
+              <div class="form-group uploadDiv">
+                <label class="input-file-button" for="input-file">
+                    파일 선택
+              </label>
+                   <input name="uploadFile" id="input-file" type="file" multiple style="display:none;">
+                
+            </div>
             <div class="panel-body">
             
             <div class='uploadResult'> 
@@ -200,7 +245,7 @@ $(document).ready(function() {
 			str +" ><div>";
 			str += "<span> "+ obj.fileName+"</span>";
 			str += "<button type='button' data-file=\'"+fileCallPath+"\' "
-			str += "data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			str += "data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'>X</i></button><br>";
 			str += "<img src='/display?fileName="+fileCallPath+"'>";
 			str += "</div>";
 			str +"</li>";
@@ -212,7 +257,7 @@ $(document).ready(function() {
 			str += "data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"' ><div>";
 			str += "<span> "+ obj.fileName+"</span>";
 			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' " 
-			str += "class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			str += "class='btn btn-warning btn-circle'><i class='fa fa-times'>X</i></button><br>";
 			str += "<img src='img/attach.png/'></a>";
 			str += "</div>";
 			str +"</li>";
@@ -263,7 +308,7 @@ $(document).ready(function() {
 			+ attach.fileName + "' data-type = '" + attach.fileType + "'><div>";
 			str+= "<span> " + attach.fileName + "</span>";
 			str+= "<button type = 'button' data-file=\'" + fileCallPath + "\' data-type='image'";
-			str+= "class = 'btn btn-warning btn-circle'><i class = 'fa fa-times'></i></button><br>";
+			str+= "class = 'btn btn-warning btn-circle'><i class = 'fa fa-times'>X</i></button><br>";
 			str+= "<img src = '/display?fileName=" + fileCallPath + "'>";
 			str+= "</div>";
 			str+ "</li>";
@@ -273,7 +318,7 @@ $(document).ready(function() {
 			str += "data-filename='" + attach.fileName + "' data-type = '" + attach.fileType + "'><div>";
 			str += "<span>" + attach.fileName + "</span><br/>";
 			str+= "<button type = 'button' data-file = \'" + fileCallPath + "\' data-type = 'file'";
-			str+= " class = 'btn btn-warning btn-circle'><i class = 'fa fa-times'></i></button><br>";
+			str+= " class = 'btn btn-warning btn-circle'><i class = 'fa fa-times'>X</i></button><br>";
 			str += "<img src='img/attach.png/'></a>";
 			str += "</div>";
 			str + "</li>";

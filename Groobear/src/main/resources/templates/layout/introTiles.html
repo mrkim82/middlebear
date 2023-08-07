@@ -74,11 +74,11 @@
 		.bearTextColor {
 	color: #0033FF;
 }
-.dohyeon {
+/* .dohyeon {
 	font-family: 'Do Hyeon', sans-serif;
     letter-spacing: 1px;
-    line-height: 1.6; /* 원하는 간격 값으로 변경 가능 */
-}
+    line-height: 1.6; 
+} */
 .nav li:hover{
   			background-color: #4fc09961;
   			border-radius:15px;
@@ -176,7 +176,7 @@
 	<script>
 	//WebSocket 연결 설정
 	const alarmClient = new StompJs.Client({
-	brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
+	brokerURL: 'ws://43.202.80.98:85/chatserver' // WebSocket 서버 URL
 	});
 
 	// 페이지 로드시 웹소켓 연결

@@ -257,7 +257,7 @@ textarea {
   height: 20px;
   width: 20px;
   background-color: #efefef;
-  border: 1px solid #efefef;
+  border: 1px solid #ccc;
   border-radius: 3px;
 }
 
@@ -780,6 +780,7 @@ textarea {
 	$('#createGroupFolderModal').on('hidden.bs.modal', function (event) {
 		$('#folderContent').val('');
 	});
+	
 	$('#updateManButton').on('hidden.bs.modal', function (e) {
 		$(this).find('.input').val('');
 	});
@@ -795,7 +796,6 @@ textarea {
 	$('#createProModal').on('hidden.bs.modal', function (e) {
 		$(this).find('#proDefTab2').prop('checked', true);
 	});
-	
 	
 </script>
 
@@ -1280,7 +1280,7 @@ textarea {
 <script>
 	//WebSocket 연결 설정
 	const alarmClient = new StompJs.Client({
-		brokerURL: 'ws://43.202.80.98:83/chatserver' // WebSocket 서버 URL
+		brokerURL: 'ws://43.202.80.98:85/chatserver' // WebSocket 서버 URL
 	});
 	
 	// 페이지 로드시 웹소켓 연결
