@@ -180,11 +180,7 @@
 							,send_date
 							,receive_date
 							,mail_check
-							,mail_type
-							,mail_type2
-							,mail_type3
-							,mail_type4
-							,mail_type5)
+							,mail_type)
 					VALUES(
 							(SELECT NVL(MAX(mail_no),0)+1 FROM getmail)
 							,#{title}
@@ -219,10 +215,6 @@
 							,sysdate
 							,'N'
 							,'R'
-							,'R'
-							,'R'
-							,'R'
-							,'R'
 							)
 	</insert>
 	<!-- 받은메일함 -->
@@ -232,7 +224,8 @@
 			(SELECT mail_no,title,content,sender,receiver,referrer,referrer2,referrer3,send_date,
 			        receive_date,mail_check,mail_type,mail_type2,mail_type3,mail_type4,mail_type5
 			        FROM getmail
-			            where ((receiver = #{mailVO.receiver} and mail_type2=#{mailVO.mailType2}) OR
+			            where (
+			                (receiver = #{mailVO.receiver} and mail_type2=#{mailVO.mailType2}) OR
 			                (referrer = #{mailVO.referrer} and mail_type3=#{mailVO.mailType3}) OR
 			                (referrer2 = #{mailVO.referrer2} and mail_type4=#{mailVO.mailType4}) OR
 			                (referrer3 = #{mailVO.referrer3} and mail_type5=#{mailVO.mailType5}))
@@ -294,26 +287,11 @@
 		set mail_type = #{mailType}
 		where mail_no = #{mailNo}
 	</update>
-	<update id="getMailType2Del" parameterType="MailVO">
-		UPDATE getmail
-		set mail_type2 = #{mailType}
+	<!-- 새 테이블(서버에서 받은 메일함) 메일삭제 -->
+	<delete id="getMailDelete" parameterType="MailVO">
+		delete getmail 
 		where mail_no = #{mailNo}
-	</update>
-	<update id="getMailType3Del" parameterType="MailVO">
-		UPDATE getmail
-		set mail_type3 = #{mailType}
-		where mail_no = #{mailNo}
-	</update>
-	<update id="getMailType4Del" parameterType="MailVO">
-		UPDATE getmail
-		set mail_type4 = #{mailType}
-		where mail_no = #{mailNo}
-	</update>
-	<update id="getMailType5Del" parameterType="MailVO">
-		UPDATE getmail
-		set mail_type5 = #{mailType}
-		where mail_no = #{mailNo}
-	</update>
+	</delete>
 	<!-- 보낸메일함 db에 넣는거 기준조회 -->
 	<select id="sendMailSearch" resultType="MailVO">
 		SELECT * FROM (SELECT g.mail_no,g.send_date,g.receive_date,
