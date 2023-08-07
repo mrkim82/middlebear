@@ -6,19 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>인사등록 정보 조회</title>
+    <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
 body {
-	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
-	background: #C5E8D2;
-	}
+	font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+	font-weight:800;
+	background: #f7f7f7;
+}
+#body{
+	font-weight:400;
+}
 main {
-	padding : 10px;
-	background:white;
-	border-radius: 10px;
-	}
+      padding : 10px;
+      background: #f7f7f7;
+      border:1px solid #ccc;
+	  border-radius: 10px;
+}
+html ::-webkit-scrollbar{
+		 display: none;
+		}
 /* The Modal (background) */
         .modal {
             display: none; /* Hidden by default */
@@ -45,7 +54,7 @@ main {
 </head>
 <body>   
     <main style="margin:40px">
-	    <h2 class="mb-3" style="text-align:center;">Groobear 인사등록 조회</h2>
+	    <h4 class="mb-3" style="text-align:center;margin:10px;">Groobear 인사등록 조회</h4>
         <div>
             <table class="table table-hover" style="text-align:center;margin-top: 5px;">
             	<thead>
@@ -58,7 +67,7 @@ main {
 	                </tr>
                 </thead>
                 <tbody id="body">
-					<tr class="cml table-default" th:each="emp, stat : ${empInfo}" th:ondblclick="${#strings.isEmpty(emp.id)} ? 'sendInfo()' : 'hasId()'">
+					<tr class="cml table-default" style="cursor: pointer;" th:each="emp, stat : ${empInfo}" th:ondblclick="${#strings.isEmpty(emp.id)} ? 'sendInfo()' : 'hasId()'">
 							<td>[[${emp.name}]]</td>
 							<td>[[${emp.empNo}]]</td>
 							<td>[[${emp.deptName}]]</td>
@@ -74,16 +83,22 @@ main {
 	<!-- The Modal -->
     <div id="myModal" class="modal">
       <!-- Modal content -->
-      <div class="modal-content">
-                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
-                <p><br /></p>
-            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
-                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
-                     닫기
-                </span>
+      <div class="modal-content" style="box-shadow: 2px 4px 3px 3px darkgray;width: 350px;height:250px;border-radius: 20px;padding:0px;">
+      	<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;padding: 2px;">
+			<h5 class="modal-title" id="exampleModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">아이디 찾기</h5>
+			<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
+				aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
+		</div>
+                <p style="text-align: center; margin:20px;height: 40px;line-height: 40px;"><span style="font-size: 17pt;" id="spantext"></span></p>
+            <div style="text-align: center;padding-bottom: 5px;padding-top: 5px;" onClick="close_pop();" id="goLogin">
+	            <div class="modal-footer">
+	                <span class="pop_bt"  style="cursor:pointer;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 60px;height: 35px;line-height: 35px;font-size: 12px;" id="closeModal">
+	                     닫기
+	                </span>
+	            </div>
             </div>
       </div>
-    </div>
+      </div>
 	<script type="text/javascript">
 	function sendInfo(){
 		opener.$('#empNo').val($(event.target).closest('tr').find('td:eq(1)').text());
@@ -94,6 +109,10 @@ main {
 		$('#spantext').text('이미 계정이 있는 인원입니다.');
         $('#myModal').show();
 	}
+	function closeModal() {
+   	  // 모달 창 닫기
+   	  $('#myModal').hide();
+   	}
 	//모달 Close 기능
     function close_pop(flag) {
         $('#myModal').hide();

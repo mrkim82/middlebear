@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Groobear Forgot Password</title>
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet"
@@ -13,8 +13,10 @@
 	crossorigin="anonymous">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
 body {
-	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+	font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+	font-weight:800;
 	min-height: 100vh;
 	background: -webkit-gradient(linear, left bottom, right top, from(#92b5db),
 		to(#1d466c));
@@ -23,7 +25,13 @@ body {
 	background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
 	background: linear-gradient(to top right, #caf5d85e 2%, #8cdeb7c2 100%);
 }
-
+.custom-button {
+	color: #fff;
+}
+.custom-button:hover {
+	color: black; /* 마우스 오버 시 글자색을 남색으로 변경 */
+  	cursor: pointer; /* 커서 모양을 손가락 모양으로 변경 */
+}
 .input-form {
 	max-width: 680px;
 	margin-top: 80px;
@@ -70,7 +78,7 @@ body {
 	<div class="container">
 		<div class="input-form-backgroud row">
 			<div class="input-form col-md-12 mx-auto" style="padding-bottom:10px;">
-				<h4 class="mb-3" style="text-align:center;">Groobear Change Password</h4>
+				<h4 class="mb-3" style="text-align:center;">Groobear 비밀번호 변경</h4>
 					<form class="validation-form">
 						<div class="mb-3" style="margin-left:100px;width:300px;">
 							<label for="password">변경할 비밀번호</label> <input type="password" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;" oninput="checkPw1()"
@@ -85,8 +93,8 @@ body {
 						</div>
 						
 					<div class="mb-4" style="text-align: center;margin-bottom:0px;margin-top:20px;">
-						<button id="pwBtn" class="btn btn-primary btn-lg" style="display:inline;background-color: #38d39f;border-color: #38d39f;margin-right:50px;" type="button">변경하기</button>
-						<button class="btn btn-primary btn-lg " style="display:inline;background-color: #38d39f;border-color: #38d39f;" type="button" onclick="location.href='/'">돌아가기</button>	
+						<button id="pwBtn" class="custom-button btn btn-primary btn-lg" style="display:inline;background-color: #38d39f;border-color: #38d39f;margin-right:50px;" type="button">변경하기</button>
+						<button class="custom-button btn btn-primary btn-lg " style="display:inline;background-color: #38d39f;border-color: #38d39f;" type="button" onclick="location.href='/'">돌아가기</button>	
 					</div>
 				</form>
 			</div>
@@ -100,13 +108,19 @@ body {
     <!-- The Modal -->
     <div id="myModal" class="modal">
       <!-- Modal content -->
-      <div class="modal-content">
-                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
-                <p><br /></p>
-            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
-                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
-                     닫기
-                </span>
+      <div class="modal-content" style="box-shadow: 2px 4px 3px 3px darkgray;width: 500px;margin-top:280px;border-radius: 20px;padding:0px;">
+      	<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;padding: 2px;">
+			<h5 class="modal-title" id="exampleModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">아이디 찾기</h5>
+			<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
+				aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
+		</div>
+                <p style="text-align: center; margin:20px;height: 70px;line-height: 70px;"><span style="font-size: 17pt;" id="spantext"></span></p>
+            <div style="text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
+	            <div class="modal-footer">
+	                <span class="pop_bt"  style="cursor:pointer;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;line-height: 45px;font-size: 17px;" id="closeModal">
+	                     닫기
+	                </span>
+	            </div>
             </div>
       </div>
       </div>
@@ -205,7 +219,10 @@ body {
     		 }
     	 }
      }
-     
+     function closeModal() {
+	   	  // 모달 창 닫기
+	   	  $('#myModal').hide();
+	   	}
      //팝업 Close 기능
       function close_pop(flag) {
           $('#myModal').hide();

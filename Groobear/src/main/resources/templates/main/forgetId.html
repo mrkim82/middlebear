@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Groobear Forgot Id</title>
+<title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet"
@@ -13,8 +13,10 @@
 	crossorigin="anonymous">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
 body {
-	font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+	font-family: 'TheJamsil', serif;/*웹 폰트 지정*/
+	font-weight:800;
 	min-height: 100vh;
 	background: -webkit-gradient(linear, left bottom, right top, from(#92b5db),
 		to(#1d466c));
@@ -23,7 +25,13 @@ body {
 	background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
 	background: linear-gradient(to top right, #caf5d85e 2%, #8cdeb7c2 100%);
 }
-
+.custom-button {
+	color: #fff;
+}
+.custom-button:hover {
+	color: black; /* 마우스 오버 시 글자색을 남색으로 변경 */
+  	cursor: pointer; /* 커서 모양을 손가락 모양으로 변경 */
+}
 .input-form {
 	max-width: 680px;
 	margin-top: 80px;
@@ -70,7 +78,7 @@ body {
 	<div class="container">
 		<div class="input-form-backgroud row">
 			<div class="input-form col-md-12 mx-auto" style="padding-bottom:10px;">
-				<h4 class="mb-3" style="text-align:center;">Groobear Search ID</h4>
+				<h4 class="mb-3" style="text-align:center;">Groobear 아이디 찾기</h4>
 					<form class="validation-form">
 						<div class="mb-3" style="margin-left:100px;width:300px;">
 							<label for="name">이름</label> <input type="text" minlength="1" maxlength="5" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;"
@@ -84,7 +92,7 @@ body {
 				                <input type="text" minlength="13" maxlength="13" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;"
 								class="form-control phoneNumber" id="phone" name="phone" placeholder="010-0000-0000" value="" required>
 				                <div class="input-group-append">
-				                  <button type="button" id="smsbtn1" class="btn btn-primary" style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;">인증번호 발급</button>
+				                  <button type="button" id="smsbtn1" class="custom-button btn btn-primary" style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;">인증번호 발급</button>
 				                </div>
 				              </div>
 				            </div>
@@ -98,14 +106,14 @@ body {
 				                <input type="text" minlength="6" maxlength="6" style="border-left: 3px solid #ced4da;border-bottom: 3px solid #ced4da;"
 									class="form-control" id="smsnum" name="smsnum" placeholder="인증번호 6자리" required>
 				                <div class="input-group-append">
-				                  <button type="button" id="smsbtn2" class="btn btn-primary" style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" value="">인증번호 확인</button>
+				                  <button type="button" id="smsbtn2" class="custom-button btn btn-primary" style="border-bottom: 1px solid #ced4da;background-color: #38d39f;border-color: #38d39f;" value="">인증번호 확인</button>
 				                </div>
 				              </div>
 				            </div>
 				         </div>
 					<div class="mb-4" style="text-align: center;margin-bottom:0px;">
-						<button id="findBtn" class="btn btn-primary btn-lg" style="display:inline;background-color: #38d39f;border-color: #38d39f;margin-right:50px;" type="button">조회하기</button>
-						<button class="btn btn-primary btn-lg " style="display:inline;background-color: #38d39f;border-color: #38d39f;" type="button" onclick="location.href='/'">돌아가기</button>	
+						<button id="findBtn" class="custom-button btn btn-primary btn-lg" style="display:inline;background-color: #38d39f;border-color: #38d39f;margin-right:50px;" type="button">조회하기</button>
+						<button class="custom-button btn btn-primary btn-lg " style="display:inline;background-color: #38d39f;border-color: #38d39f;" type="button" onclick="location.href='/'">돌아가기</button>	
 					</div>
 				</form>
 			</div>
@@ -119,13 +127,19 @@ body {
     <!-- The Modal -->
     <div id="myModal" class="modal">
       <!-- Modal content -->
-      <div class="modal-content">
-                <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="spantext"></span></p>
-                <p><br /></p>
-            <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
-                <span class="pop_bt" style="font-size: 13pt;" id="closeModal">
-                     닫기
-                </span>
+      <div class="modal-content" style="box-shadow: 2px 4px 3px 3px darkgray;width: 500px;margin-top:280px;border-radius: 20px;padding:0px;">
+      	<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;padding: 2px;">
+			<h5 class="modal-title" id="exampleModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">아이디 찾기</h5>
+			<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
+				aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
+		</div>
+                <p style="text-align: center; margin:20px;height: 70px;line-height: 70px;"><span style="font-size: 17pt;" id="spantext"></span></p>
+            <div style="text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();" id="goLogin">
+	            <div class="modal-footer">
+	                <span class="pop_bt"  style="cursor:pointer;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;line-height: 45px;font-size: 17px;" id="closeModal">
+	                     닫기
+	                </span>
+	            </div>
             </div>
       </div>
       </div>
@@ -246,8 +260,11 @@ body {
       $(document).on("keyup", ".phoneNumber", function() { 
     		$(this).val( $(this).val().replace(/[^0-9]/g, "").replace(/(^02|^0505|^1[0-9]{3}|^0[0-9]{2})([0-9]+)?([0-9]{4})$/,"$1-$2-$3").replace("--", "-") );
     	});
-     
-    //팝업 Close 기능
+      function closeModal() {
+	   	  // 모달 창 닫기
+	   	  $('#myModal').hide();
+	   	}
+    	//팝업 Close 기능
       function close_pop(flag) {
           $('#myModal').hide();
      };  
