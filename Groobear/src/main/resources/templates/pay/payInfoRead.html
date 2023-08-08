@@ -4,13 +4,58 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>결재문서 상세조회 페이지</title>
+	<style>
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+	
+	.dohyeon{
+		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		font-size : 20px;
+	}
+	#ulId li.active a.page-link {
+    	background-color: #35A880;
+    	border: 1px solid #35A880;
+    	color:#fff
+  	}
+  	a {
+  		text-decoration:none !important;
+  		cursor:pointer;
+  	}
+	ul {
+			list-style:none;
+	}
+	.paging .active a {
+		    background-color: #f00;
+		    color: #fff;
+	}
+	.paymentuser{
+		border : 1px solid black;
+		text-align: center;
+		font-weight: 600;
+	}
+	.custom-button:hover{
+		color: black !important
+	}
+	.cshov:hover{
+	
+	}
+	.input-file-button{
+  	  padding: 6px 25px;
+	  background-color:#90ddb091;
+	  border-radius: 4px;
+	  color: black;
+	  cursor: pointer;
+	  position:absolute;
+	  top: -6px;
+	  left: 80px;
+	}		
+	</style>
 </head>
 
 <body layout:fragment="content">
 	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-	<div style="width: 800px;">
-		<table style="float:left; width: 400px;">
+	<div style="width: 1000px;">
+	<h3 class="tjs" style="font-size:35px;margin-top:20px;display:block">Groobear 문서조회</h3>
+		<table class="table table-hover tjs" style="float:left; width: 400px;">
 			<thead></thead>
 			<tbody>
 				<tr>
@@ -45,64 +90,83 @@
 				</tr>
 			</tbody>
 		</table>
-		<table style="float:right; width: 300px;">
-			<thead></thead>
-			<tbody>
-				<tr>
-	               <td>기안자</td>
-	               <td>결재자</td>
-	               <td>결재자</td>
+		<table class="paymentuser tjs"style="float:right;width:40%;margin-top:10px;">
+			<thead>
+				<tr style="display:inline-block">
+	               <td style="width:133px" class="paymentuser">기안자</td>
+	               <td style="width:131px" class="paymentuser">결재자</td>
+	               <td style="width:133px" class="paymentuser">결재자</td>
 	            </tr>
-	            <tr>
+			</thead>
+			<tbody class="paymentuser">
+	            <tr style="display:inline-block" class="paymentuser">
 		            <th:block th:if="${drafterSign.uploadPath != 'public'}">
-		                <td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(drafterSign.uploadPath,'\','/')}/${drafterSign.uuid}_${drafterSign.fileName}|}" 
+		                <td style="width:131px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(drafterSign.uploadPath,'\','/')}/${drafterSign.uuid}_${drafterSign.fileName}|}" 
 							th:data-uploadpath="${drafterSign.uploadPath}" th:data-uuid="${drafterSign.uuid}"
 							th:data-filename="${drafterSign.fileName}" data-type="true"  style="border:1px solid; width:100px">
 					    </td>
 					</th:block>
 					<th:block th:if="${drafterSign.uploadPath==null or drafterSign.uploadPath=='public'}">
-						<td style="width:100px; padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+						<td style="width:131px; padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
 					</th:block>
 					
 					<th:block th:if="${list.payStatus2 == 'Y'} and ${approver2Sign.uploadPath != null and approver2Sign.uploadPath != 'public'}">
-						<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
+						<td style="width:130px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
 							th:data-uploadpath="${approver2Sign.uploadPath}" th:data-uuid="${approver2Sign.uuid}"
 							th:data-filename="${approver2Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
 						</td>
 					</th:block>
 					<th:block th:if="${list.payStatus2 == 'Y'} and ${approver2Sign.uploadPath == null or approver2Sign.uploadPath=='public'}">
-						<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+						<td style="width:131px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
 					</th:block>
 					<th:block th:if="${list.payStatus2 == 'F'}">
-						<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
+						<td style="width:131px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
 					</th:block>
 					
 					<th:block th:if="${list.payStatus3 == 'Y'} and ${approver3Sign.uploadPath != null and approver3Sign.uploadPath != 'public'}">
-						<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver3Sign.uploadPath,'\','/')}/${approver3Sign.uuid}_${approver3Sign.fileName}|}" 
+						<td style="width:133px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver3Sign.uploadPath,'\','/')}/${approver3Sign.uuid}_${approver3Sign.fileName}|}" 
 							th:data-uploadpath="${approver3Sign.uploadPath}" th:data-uuid="${approver3Sign.uuid}"
 							th:data-filename="${approver3Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
 						</td>
 					</th:block>
 					<th:block th:if="${list.payStatus3 == 'Y'} and ${approver3Sign.uploadPath == null or approver3Sign.uploadPath == 'public'}">
-						<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+						<td style="width:133px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
 					</th:block>
 					<th:block th:if="${list.payStatus3 == 'Y'} and ${not #strings.isEmpty(approver3Sign)} and ${approver3Sign.uploadPath == 'public'}">
-						<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+						<td style="width:133px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
 					</th:block>
 					<th:block th:if="${list.payStatus3 == 'F'}">
-						<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
+						<td style="width:133px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
 					</th:block>
 	            </tr>
-	            <tr>
-	               <td>[[${drafterInfo.name}]] [[${drafterInfo.rank}]]</td>
-	               <td>[[${approver2Info.name}]] [[${approver2Info.rank}]]</td>
+					<th:block th:if="${list.payStatus2 == 'N'}">
+						<tr style="display:inline-block" class="paymentuser">
+						<td style="width:130px; height:100px; background-color:white"></td>
+					</tr>
+					</th:block>
+					<th:block th:if="${list.payStatus3 == 'N'}">
+						<tr style="display:inline-block" class="paymentuser">
+						<td style="width:131px; height:100px; background-color:white"></td>
+					</tr>
+					</th:block>
+	            <tr  style="display:inline-block;width:133px;height: 30px;" class="paymentuser">
+	               <td style="text-align: center; position:absolute;left: 650px;top:213px;">[[${drafterInfo.name}]] [[${drafterInfo.rank}]]</td>
+	            <tr  style="display:inline-block;width:132px;height: 30px;" class="paymentuser">
+	               <td style="text-align: center; position:absolute;left: 781px;top:213px;">[[${approver2Info.name}]] [[${approver2Info.rank}]]</td>
+	               </tr>
 	               <th:block th:if="${not #strings.isEmpty(approver3Info)}">
-	               		<td>[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
-	               </th:block>
+	               <tr  style="display:inline-block;width:132px;height: 30px;" class="paymentuser">
+	               		<td style="text-align: center; position:absolute;left: 922px;top:213px;">[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
 	            </tr>
+	               </th:block>
+	               <th:block th:if="${#strings.isEmpty(approver3Info)}">
+	               	<tr style="display:inline-block;width:133px;height: 30px;" class="paymentuser">
+	               		<td></td>
+	               	</tr>
+	               </th:block>
 			</tbody>
 		</table>
-		<table style="float:left; width: 790px;">
+		<table class="table table-hover tjs" style="float:left; width: 790px;">
 			<thead></thead>
 			<tbody>
 				<th:block th:if="${list.docType=='a'}">
@@ -110,18 +174,22 @@
 						<td style="display:none"><input type="text" id="laydocType" th:value="${list.docType}" readonly></td>
 					</tr>
 					<tr>
-						<td style="width: 300px;">사유 : <input type="text" id="purpose" th:value="${list.purpose}" readonly></td>
-						<td style="width: 300px;">운행일자 : <input type="text" id="operDate" th:value="${#dates.format(list.operDate, 'yyyy-MM-dd')}" readonly></td>
+						<td style="width: 300px;"><span style="width:100px; display: inline-block;">사유</span><input type="text" id="purpose" th:value="${list.purpose}" readonly></td>
+					</tr>
+					<tr>
+						<td style="width: 300px;"><span style="width:100px; display: inline-block;">운행일자</span><input type="text" id="operDate" th:value="${#dates.format(list.operDate, 'yyyy-MM-dd')}" readonly></td>
 					</tr> 
 					<tr>
-						<td>행선지 <input type="text" id="destination" th:value="${list.destination}" readonly></td>
+						<td><span style="width:100px; display: inline-block;">행선지</span><input type="text" id="destination" th:value="${list.destination}" readonly></td>
 					</tr>
 					<tr>
-						<td>운행전 키로수 <input type="text" id="befored" th:value="${list.befored}" onchange="kmChange()" readonly></td>
-						<td>운행후 키로수 <input type="text" id="afterd" th:value="${list.afterd}" onchange="kmChange()" readonly></td>
+						<td><span style="width:100px; display: inline-block;">운행전 키로수</span><input type="text" id="befored" th:value="${list.befored}" onchange="kmChange()" readonly></td>
 					</tr>
 					<tr>
-						<td>출자금 <input type="text" id="imprest" th:value="${list.imprest}" readonly></td>
+						<td><span style="width:100px; display: inline-block;">운행후 키로수</span><input type="text" id="afterd" th:value="${list.afterd}" onchange="kmChange()" readonly></td>
+					</tr>
+					<tr>
+						<td><span style="width:100px; display: inline-block;">출자금</span><input type="text" id="imprest" th:value="${list.imprest}" readonly></td>
 					</tr>
 					<tr>
 						<td>
@@ -139,20 +207,25 @@
 					</tr>
 					<tr>
 						<td>
-							<div class="panel-body1">
-		                        <div class="form-group uploadDiv1">
-		                            <input name="uploadFile1" type="file" multiple>
+							<div class="row">
+			            				<div class="col-lg-12" style="vertical-align: middle;">
+										<div class="panel-heading" style="top: -20px; margin-top:-3px;">첨부파일</div>
+					                    <div class="panel-body1">
+		                        <div class="form-group uploadDiv1">첨부파일
+		                            <input name="uploadFile1" type="file" id="input-file" multiple style="display:none;">
 		                        </div>
 		                        <div class="uploadResult9">
 		                            <ul>
 		                            </ul>
 		                        </div>
-		                    </div>
+		                        </div>
+		                        </div>
+		                        </div>
 	                   	</td>
 	                </tr>
 				</th:block>
 					<tr th:if="${list.docType=='a'} and ${list.id != session.Id}">
-						<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+						<td><span style="width:100px; display: inline-block;">코멘트</span><textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 					</tr>
 				
 				<th:block th:if="${list.docType=='b'}">
@@ -160,14 +233,16 @@
 					<td style="display:none" id="offdocType" th:value="${list.docType}"></td>
 				</tr>
 				<tr>
-					<td>시작일 <input type="date" id="useDate" th:value="${#dates.format(list.useDate,'yyyy-MM-dd')}" readonly></td>
-					<td>복귀일 <input type="date" id="returnDate" th:value="${#dates.format(list.returnDate,'yyyy-MM-dd')}" readonly></td>
+					<td><span style="width:100px; display: inline-block;">시작일</span><input type="date" id="useDate" th:value="${#dates.format(list.useDate,'yyyy-MM-dd')}" readonly></td>
 				</tr>
 				<tr>
-					<td>제목 <input type="text" id="offTitle" th:value="${list.title}" readonly></td>
+					<td><span style="width:100px; display: inline-block;">복귀일</span><input type="date" id="returnDate" th:value="${#dates.format(list.returnDate,'yyyy-MM-dd')}" readonly></td>
 				</tr>
 				<tr>
-					<td>내용 <textarea id="offContent" style="width: 400px;height: 200px;" th:text="${list.content}" readonly></textarea></td>
+					<td><span style="width:100px; display: inline-block;">제목</span><input type="text" id="offTitle" th:value="${list.title}" readonly></td>
+				</tr>
+				<tr>
+					<td><span style="width:100px; display: inline-block; vertical-align:middle;">내용</span><textarea id="offContent" style="width: 400px;height: 200px;" th:text="${list.content}" readonly></textarea></td>
 				</tr>
 					<td><div class="bigPictureWrapper3">
 					<div class="bigPicture3">
@@ -177,8 +252,11 @@
 						<div class = "col-lg-12">
 							<div class = "panel-heading3"></div>
 							<!-- /.panel-heading -->
-							<div class = "panel-body3">
-								<div class = 'uploadResult3'>
+							<div class="panel-body3">
+		                        <div class="form-group uploadDiv3"><label style="position:absolute;top:8px">첨부파일</label>
+		                            <input name="uploadFile3" type="file" id="input-file" multiple style="display:none;">
+		                        </div>
+								<div class = 'uploadResult3'  style="margin-top:-20px;">
 									<ul>
 									</ul>
 								</div>
@@ -190,17 +268,17 @@
 					</td>
 				</th:block>
 				<tr th:if="${list.docType=='b'} and ${list.id != session.Id}">
-					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com} "></textarea></td>
+					<td><span style="width:100px; display: inline-block;">코멘트</span><textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com} "></textarea></td>
 				</tr>
 				<th:block th:if="${list.docType=='c'}">
 				<tr>
 					<td style="display:none" id="robindocType" th:value="${list.docType}"></td>
 				</tr>
 				<tr>
-					<td>제목 <input type="text" id="robinTitle" th:value="${list.title}" readonly></td>
+					<td><span style="width:100px; display: inline-block;">제목</span><input type="text" id="robinTitle" th:value="${list.title}" readonly></td>
 				</tr>
 				<tr>
-					<td>내용 <textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}" readonly></textarea></td>
+					<td><span style="width:100px; display: inline-block;">내용</span><textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}" readonly></textarea></td>
 				</tr>
 					<td><div class="bigPictureWrapper4">
 					<div class="bigPicture4">
@@ -210,7 +288,10 @@
 						<div class = "col-lg-12">
 							<div class = "panel-heading4"></div>
 							<!-- /.panel-heading -->
-							<div class = "panel-body4">
+							<div class="panel-body4">
+		                        <div class="form-group uploadDiv4">
+		                            <input name="uploadFile4" type="file" id="input-file" multiple style="display:none;">
+		                        </div>
 								<div class = 'uploadResult4'>
 									<ul>
 									</ul>
@@ -223,21 +304,26 @@
 					</td>
 			</th:block>
 				<tr th:if="${list.docType=='c'} and ${list.id != session.Id}">
-					<td>코멘트 <textarea id="robinCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+					<td><span style="width:100px; display: inline-block;">코멘트</span><textarea id="robinCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 				</tr>
 			</tbody>
 		</table>
 		<div>
 		<th:block th:if="${list.id == session.Id and list.payStatus2 == 'N'}">
-			<button type="button" id="paymentModify" onclick="payModify()" style="margin-left:10px">수정페이지</button>
+			<button type="button" id="paymentModify" onclick="payModify()" class="tjs custom-button" 
+						style="margin-top:20px;margin-left:10px;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
+						>수정페이지</button>
 		</th:block>
 		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
 							(list.approver3 == session.Id and list.payStatus3 == 'N' and list.payStatus2 == 'Y')}">
-			<button type="button" id="paymentOk" onclick="payOks()" style="margin-left:10px">결재</button>
-		</th:block>
-		<th:block th:if="${(list.approver2 == session.Id and list.payStatus2 == 'N') OR
-							(list.approver3 == session.Id and list.payStatus3 == 'N' and list.payStatus2 == 'Y')}">
-			<button type="button" id="paymentPass" onclick="payPassed()" style="margin-left:10px">반려</button>
+			<div class="row" style="display:inline-block;position:absolute;top:920px;left:50px;margin-bottom:50px">
+			<button type="button" id="paymentOk" onclick="payOks()" class="custom-button tjs" 
+						style="margin-top:20px;margin-left:10px;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
+						>결재</button>
+			<button type="button" id="paymentPass" onclick="payPassed()" class="custom-button tjs" 
+						style="margin-top:20px;margin-left:10px;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
+						>반려</button>
+			</div>
 		</th:block>
 		</div>
 	</div>
@@ -785,7 +871,7 @@
 	            } else {
 	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
-	                str += "<span>" + attach.fileName + "</span><br/>";
+	                str += "<span style='position:absolute;top:8px;left:115px'>" + attach.fileName + "</span><br/>";
 	                str += "</div>";
 	                str += "</li>";
 	            }

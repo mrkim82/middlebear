@@ -60,7 +60,7 @@
 					th:if="${parti.proNo == pro.proNo}"
 					th:text="${parti.count} + '명'"></td>
 				<td>
-					<span class="material-symbols-outlined"
+					<span class="material-symbols-outlined spanCursor"
 						  onclick="hideProject()"
 						  th:data-pro-hide="${pro.proHideCheck}"
 						  th:text="${pro.proHideCheck == 'Y'} ? 'visibility_off' : 'visibility'"></span>
@@ -94,7 +94,7 @@
 					th:if="${parti.proNo == pro.proNo}"
 					th:text="${parti.count} + '명'"></td>
 				<td>
-					<span class="material-symbols-outlined"
+					<span class="material-symbols-outlined spanCursor"
 						  onclick="hideProject()"
 						  th:data-pro-hide="${pro.proHideCheck}"
 						  th:text="${pro.proHideCheck == 'Y'} ? 'visibility_off' : 'visibility'"></span>

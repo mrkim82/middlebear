@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Chat List</title>
+    <title>그루베어(groobear) - 예담 NO.1 그룹웨어</title>
     <link rel="icon" href="/img/bear.png" type="image/x-icon"> 
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>	
@@ -13,16 +13,18 @@
     <script src="chatjs.js"></script>
 
     <style>
+@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
 html {
     background-color: #35a880;
     height: 100%;
+    
 }
 
 
 body {
-    font-family: 'Do Hyeon', sans-serif;
     min-height: 100%;
     background-color: inherit; 
+    font-family: 'TheJamsil', serif;
 }
 
 .modal-body {
@@ -59,7 +61,6 @@ body {
     width: 400px;
     list-style-type: none;
     padding: 0;
-    font-family: Arial, sans-serif;
 }
 
 .chatroom {
@@ -75,7 +76,6 @@ body {
 }
 
 .chatroom-info {
-    font-family: 'Do Hyeon', sans-serif;
     flex-grow: 1;
     background-color: #9ad3bf;
     border-radius: 5px; 

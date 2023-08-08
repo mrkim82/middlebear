@@ -71,6 +71,15 @@ from files f JOIN(
             left join files f
             on a.id = f.id
 	</select>
+	
+	<select id="getMessagesWithProfileImages" resultType="ChatMessageDTO">
+		SELECT m.ID, m.CONTENT, m.MSG_TIME, m.MSG_NO, m.ROOM_NO, m.TYPE, f.UUID, f.UPLOAD_PATH, f.FILE_NAME
+		FROM message m
+		JOIN users u ON m.ID = u.ID
+		JOIN files f ON u.ID = f.ID
+		WHERE m.ROOM_NO = #{roomNo}
+		ORDER BY m.MSG_TIME DESC;
+	</select>
 
 
 	<insert id="sendMessage" parameterType="ChatMessageDTO">
@@ -201,5 +210,14 @@ from files f JOIN(
 		FROM Files
 		WHERE id IS NOT NULL
 	</select>
+	
+	 <select id="getUserAndFileByMessage" resultType="map">
+        SELECT m.ID, m.CONTENT, m.MSG_TIME, m.MSG_NO, m.ROOM_NO, m.TYPE, f.UUID, f.UPLOAD_PATH, f.FILE_NAME
+        FROM message m
+        JOIN users u ON m.ID = u.ID
+        JOIN files f ON u.ID = f.ID
+        WHERE m.ROOM_NO = #{roomNo}
+        ORDER BY m.MSG_TIME DESC;
+    </select>
 
 </mapper>

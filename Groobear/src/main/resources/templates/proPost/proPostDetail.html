@@ -86,6 +86,13 @@ li {
 		})
 		.then(response => response.json())
 		.then(res => {
+			let countZero = res.filter(re => re.count == 0).length;
+			
+			if(countZero == 5) {
+				donutchart.remove();
+				return false;
+			};
+			
 			var chartData = new google.visualization.DataTable();
 			chartData.addColumn('string', 'workStatus');
 			chartData.addColumn('number', 'count');
@@ -1122,17 +1129,15 @@ li {
 								<div class="card-body">
 									<ul style="padding-left:0px; margin:0px;">
 										<li th:if="${allPost.schStartTime != null}"
-											 th:text="'시작일 : ' + ${#dates.format(allPost.schStartTime, 'yyyy-MM-dd HH:mm')}"
-											 class="targetStart"
-											 style="margin-bottom:5px;"></li>
+											style="margin-bottom:5px;">
+											<span style="font-size:17px;">시작일 : </span><span style="font-size:17px;" th:text="${#dates.format(allPost.schStartTime, 'yyyy-MM-dd HH:mm')}"></span></li>
 										<li th:if="${allPost.schEndTime != null}"
-											 th:text="'종료일 : ' + ${#dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm')}"
-											 class="targetEnd"
-											 style="margin-bottom:5px;"></li>
+											style="margin-bottom:5px;">
+											<span style="font-size:17px;">종료일 : </span><span style="font-size:17px;" th:text="${#dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm')}"></span></li>
 									</ul>
 									
 									<!-- 참석자 존 -->
-									<div>참석자 : 
+									<div style="font-size:17px;">참석자 : 
 										<th:block th:each="rpl : ${readPartiZone}"
 												  th:if="${rpl.schNo == allPost.schNo}">
 											<div th:text="${rpl.name + ' : '}"
@@ -1152,7 +1157,7 @@ li {
 												data-toggle="modal"
 												style="height:25px; padding: 3px 12px;"
 												th:data-target="'#schPartiListModal' + ${allPost.proPostNo}"
-												th:if="${#dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm') >= #dates.format(cTime, 'yyyy-MM-dd HH:mm')}
+												th:if="(${#dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm') >= #dates.format(cTime, 'yyyy-MM-dd HH:mm')} or ${allPost.schEndTime == null})
 													   and ${allPost.id == session.Id}">
 														참석자 변경
 										</button>
@@ -1168,7 +1173,7 @@ li {
 											<div class="modal-dialog modal-dialog-centered">
 												<div class="modal-content dohyeonModalContent">
 													<div class="modal-header">
-														<h5 class="modal-title fs-5" id="exampleModalLabel">참석자 변경</h5>
+														<h2 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:600;">참석자 변경</h2>
 														<button type="button" class="close" data-dismiss="modal"
 															aria-label="Close">
 															<span aria-hidden="true">&times;</span>
@@ -1179,9 +1184,10 @@ li {
 														<ul style="padding:0px;">
 															<!-- 참가자 목록 -->
 															<li th:each="member : ${projectPartiMember}"
-																style="list-style-type: none; padding-left:10px;">
+																style="list-style-type: none; padding-left:10px; padding-top:6px; padding-bottom:6px;"
+																class="list-group-item">
 																
-																<label class="custom-checkbox" style="margin-bottom: 15px">
+																<label class="custom-checkbox" style="margin-bottom: 15px;">
 																	<th:block th:each="rpl : ${readPartiList}"
 																			  th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck != null}">
 																		<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
@@ -1214,7 +1220,8 @@ li {
 									</div>
 									
 									<!-- 장소 -->
-									<div th:text="'장소 : ' + ${allPost.schPlace != null ? allPost.schPlace : ''}"
+									<div th:if="${allPost.schPlace != null}" 
+										 th:text="'장소 : ' + ${allPost.schPlace}"
 										 class="targetPlace"
 										 style="margin-bottom: 5px;">
 									</div>
@@ -1231,15 +1238,24 @@ li {
 										  		and #dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm') >= #dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 										 th:attr="data-feed-sch-type=${rparti.partiCheck}"
 										 style="text-align: center; margin-bottom: 5px; margin-top: 20px;">
-										<button type="button" class="btn"
-											th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
-											data-sch-type-status="Y" onclick="toggleFeedSchButtonStyle(this)">참석</button>
-										<button type="button" class="btn"
-											th:classappend="${rparti.partiCheck == 'N' ? 'btn-danger' : 'btn-outline-danger'}"
-											data-sch-type-status="N" onclick="toggleFeedSchButtonStyle(this)">불참</button>
-										<button type="button" class="btn"
-											th:classappend="${rparti.partiCheck == 'A' ? 'btn-secondary' : 'btn-outline-secondary'}"
-											data-sch-type-status="A" onclick="toggleFeedSchButtonStyle(this)">미정</button>
+										<button type="button"
+												class="btn"
+												th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
+												data-sch-type-status="Y"
+												onclick="toggleFeedSchButtonStyle(this)"
+												style="border-radius:10px;">참석</button>
+										<button type="button"
+												class="btn"
+												th:classappend="${rparti.partiCheck == 'N' ? 'btn-danger' : 'btn-outline-danger'}"
+												data-sch-type-status="N"
+												onclick="toggleFeedSchButtonStyle(this)"
+												style="border-radius:10px;">불참</button>
+										<button type="button"
+												class="btn"
+												th:classappend="${rparti.partiCheck == 'A' ? 'btn-secondary' : 'btn-outline-secondary'}"
+												data-sch-type-status="A"
+												onclick="toggleFeedSchButtonStyle(this)"
+												style="border-radius:10px;">미정</button>
 									</div>
 									
 								</div>
@@ -1787,7 +1803,7 @@ li {
 					
 					<!-- 마감일 -->
 					<div style="margin-bottom: 7px;">
-						<p style="margin-bottom: 2px;">마감일</p>
+						<p style="margin-bottom: 2px;">종료일</p>
 						<input type="datetime-local"
 							   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 							   id="updateSchEnd"
@@ -2023,7 +2039,7 @@ li {
 						    				  th:text="(${mem.profileNote == null} ? '-' : ${mem.profileNote})"></span></li>
 						    	</ul>
 						    </div>
-						    <div class="card-footer">
+						    <div class="card-footer d-flex justify-content-end">
 						    	<button type="button"
 						    			class="btn btn-groob"
 						    			onclick="changeProfileNote()"
@@ -2481,186 +2497,7 @@ li {
 	});
 </script>
 	
-<!-- 댓글 등록 -->
-<script>
-	function createCommentButton() {
-		let targetButton = event.target;//버튼 동적 확인
-		let com = targetButton.closest('.container').querySelector('.form-control');
-		console.log(targetButton)
-		if(com.value == '') {
-			com.focus();
-			alert('댓글을 입력하세요');
-			return;
-		};
-		
-		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
-		
-		fetch("/postCreateComment", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-					'proPostNo': writingNo,
-					'comContent': com.value
-				})
-		})
-		.then(response => response.json())
-		.then(res => {
-			let insertComment = targetButton.closest('.container').querySelector('thead');
-			let imgsrc;
-			//이미지 주소 변환
-			if(res.uuid == null) {
-				imgsrc = '../img/userProf.png';
-			} else {
-				imgsrc = `/display?fileName=${res.uploadPath.replace(/\\/g, "/")}/s_${res.uuid}_${res.fileName}`;
-			};
-			
-			insertComment.insertAdjacentHTML('beforeend',
-			`<tr class="comtabletr" data-post-code="${res.comNo}">
-				<td class="comtabletd" style="width:30px; padding-right:0px;">
-					<img src="${imgsrc}" class="card-img-top" style="width:30px; height:30px; margin:0px;">
-				</td>
-				<td class="comtabletd" style="width:90px; padding-right:0px;">${selfName}</td>
-				<td class="comtabletd">${com.value}</td>
-				<td class="comtabletd comdate" style="width:140px; padding-right:0px;">${currentTime}</td>
-				<td style="width:90px; padding-right:0px;">
-					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
-					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
-				</td>
-			</tr>`
-			);
 
-			com.focus();
-			com.value = '';
-		});
-	};
-	
-	//현재시간 구하기
-	const currentTime = formatDate();
-	
-	function formatDate() {
-		let date = new Date();
-		const year = date.getFullYear();
-		const month = String(date.getMonth() + 1).padStart(2, '0');
-		const day = String(date.getDate()).padStart(2, '0');
-		const hours = String(date.getHours()).padStart(2, '0');
-		const minutes = String(date.getMinutes()).padStart(2, '0');
-		
-		return `${year}/${month}/${day} ${hours}:${minutes}`;
-	};
-	//현재시간 구하기
-	const currentTime2 = formatDate2();
-	
-	function formatDate2() {
-		let date = new Date();
-		const year = String(date.getFullYear()).slice(2);
-		const month = String(date.getMonth() + 1).padStart(2, '0');
-		const day = String(date.getDate()).padStart(2, '0');
-		const hours = String(date.getHours()).padStart(2, '0');
-		const minutes = String(date.getMinutes()).padStart(2, '0');
-		
-		return `${year}-${month}-${day} ${hours}:${minutes}`;
-	}
-</script>
-	
-<!-- 댓글 삭제  -->
-<script>
-	function deleteWritingComment() {
-		let targetTr = event.target.closest('tr');
-		
-		fetch("/postDeleteComment", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-					'comNo': targetTr.dataset.postCode
-				})
-		})
-		.then(response => response.json())
-		.then(res => {
-			targetTr.remove();
-		});
-	};
-</script>
-	
-<!-- 댓글 수정  -->
-<script>
-	function UpdateWritingComment() {
-		let targetTr = event.target.closest('tr');
-		let targetThead = targetTr.parentElement;
-		let comNo = targetTr.dataset.postCode;//댓글 번호
-		
-		let oldCom = targetTr.children[2].textContent;//기존 댓글 내용
-		
-		targetTr.children[2].textContent = '';//댓글 초기화
-		targetTr.children[4].textContent = '';//수정, 삭제 초기화
-		
-		if(document.getElementById('newComment') != null) {
-			let nC = document.getElementById('newComment').closest('tr');
-			nC.children[2].textContent = document.getElementById('newComment').value;
-			nC.children[4].innerHTML =
-				`<td>
-					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
-					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
-				</td>`;
-		};
-		
-		// 댓글 수정 폼 생성
-		targetTr.children[2].innerHTML = '<input type="text" placeholder="댓글 수정" id="newComment" maxlength="30" style="width:100%; height:29px;" value="' + oldCom + '">'; 
-		targetTr.children[4].innerHTML = '<span id="ooo" class="spanCursor" style="color:red;">수정&nbsp&nbsp</span>' + '<span id="xxx" class="spanCursor">취소</span>';
-				
-		// 취소버튼
-		document.getElementById('xxx').addEventListener('click', function() {
-			let cancleTr = event.target.closest('tr');
-			cancleTr.children[2].textContent = oldCom;
-			cancleTr.children[4].innerHTML = 
-				`<td>
-					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
-					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
-				</td>`;
-		});
-		
-		// 수정버튼
-		document.getElementById('ooo').addEventListener('click', function() {
-			let newCom = document.getElementById('newComment');
-			if(newCom.value == '') {
-				newCom.focus();
-				alert('댓글을 수정하세요');
-			} else {
-				
-				fetch("/postUpdateComment", {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						'comContent' : newCom.value,
-							'comNo': comNo
-						})
-				})
-				.then(response => response.json())
-				.then(res => {
-					
-					if(res.result == '성공') {
-						targetTr.children[2].textContent = newCom.value;
-						targetTr.children[4].innerHTML = 
-							`<td>
-							<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
-							<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
-						</td>`;;
-						
-					} else {
-						alert('댓글 수정 실패');
-					}
-				});
-			}
-		});
-		
-	}
-	
-</script>
 	
 <!-- 참석자 선택 처리 -->
 <script>

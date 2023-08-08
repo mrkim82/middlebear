@@ -291,19 +291,23 @@
 	
 	<!-- 프로젝트 초대 할 인원 리스트 -->
 	<select id="readPartiListM" parameterType="ProPartiListVO">
-		SELECT a.name, a.rank, b.id, b.email
+		SELECT a.name, a.rank, b.id, d.dept_name
 		FROM user_info a
 		JOIN users b
 		ON(a.emp_no = b.emp_no)
+		JOIN departments d
+		ON(d.dept_no = a.dept_no)
 		
 		MINUS
 		
-		SELECT c.name, c.rank, a.id, b.email
+		SELECT c.name, c.rank, a.id, d.dept_name
 		FROM pro_mem a
 		JOIN users b
 		ON(a.id = b.id)
 		JOIN user_info c
 		ON(b.emp_no = c.emp_no)
+		JOIN departments d
+		ON(d.dept_no = c.dept_no)
 		WHERE a.pro_no = #{proNo}
 	</select>
 	

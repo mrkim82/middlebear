@@ -27,7 +27,8 @@
 		<div class="border" style="border-radius: 8px;">
 			<div class="d-flex justify-content-left" style="margin-top: 6px; margin-left: 2px;">
 				<label for="proName"
-						class="nomainWrite">프로젝트 이름</label>
+					   class="nomainWrite"
+					   style="font-weight:600;">프로젝트 이름</label>
 				<input type="text"
 						id="proName"
 						th:field="*{proName}"
@@ -39,14 +40,15 @@
 			
 			<div class="d-flex justify-content-left" style="margin-top: 6px; margin-left: 2px; margin-bottom: 6px;">
 				<label for="proContent"
-							class="nomainWrite">프로젝트 설명</label>
+					   class="nomainWrite"
+					   style="font-weight:600;">프로젝트 설명</label>
 				<textarea
 						id="proContent"
 						th:field="*{proContent}"
 						placeholder="옵션(선택)"
 						maxlength="160"
 						autocomplete="off"
-						style="margin-left: 5px; width: 350px; height: 200px; border-radius: 20px;"></textarea>
+						style="margin-left: 5px; width: 350px; height: 200px; border-radius: 20px; border: 1px solid #ddd;"></textarea>
 			</div>
 		</div>
 	
@@ -54,7 +56,7 @@
 	<div class="border" style="margin-top: 10px; border-radius: 8px;">
 		<h5 class="mainWrite d-flex justify-content-left"
 				style="text-align: left; margin-top: 10px; margin-left: 10px;
-							 margin-bottom: 6px; font-size: medium;">홈 탭 설정</h5>
+					   margin-bottom: 6px; font-size: medium; font-weight:600;">홈 탭 설정</h5>
 		<div th:each="index : ${#numbers.sequence(1, 5)}"
 				 style="display: inline-block;"
 				 class="nomainWrite">
@@ -136,7 +138,7 @@
 	</div>
 	
 	<!-- 버튼 -->
-	<div class="d-flex justify-content-center" style="margin-top: 10px;">
+	<div style="margin-top: 10px; display: flex; justify-content: flex-end;">
 		<button type="submit"
 				class="btn btn-groo"
 				style="border-radius: 12px; margin-right: 6px;">등록</button>
