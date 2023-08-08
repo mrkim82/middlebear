@@ -383,9 +383,9 @@ li {
 										  		<li style="margin-bottom: 7px;">
 										  			<p style="margin-bottom: 2px;">마감일</p>
 										  			<input type="datetime-local"
-										  				   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 										  				   id="endWorkDate"
 																 class="form-control"
+																 th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 																 style="margin-left: 3px; width: 210px; border-radius: 5px;">
 										  		</li>
 										  		<li style="margin-bottom: 7px;">
@@ -496,9 +496,9 @@ li {
 										<div style="margin-bottom: 7px;">
 											<p style="margin-bottom: 2px;">마감일</p>
 											<input type="datetime-local"
-												   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 												   id="endSchDate"
 												   class="form-control"
+												   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 												   style="margin-left: 3px; width: 210px; border-radius: 5px;">
 										</div>
 										<!-- 참석자 -->
@@ -588,10 +588,10 @@ li {
 												<div class="todo-menu" style="margin-top:8px; margin-left:10px;">
 												<span style="display: inline-block; margin-right: 10px;">
 														<input type="date"
-															   th:min="${#dates.format(cTime, 'yyyy-MM-dd')}"
 															   class="js-todo-content-input form-control"
 															   style="width: 130px; border-radius: 5px;"
 															   data-input-todo-date="todoDate">
+															   <!-- th:min="${#dates.format(cTime, 'yyyy-MM-dd')}" -->
 												 </span>
 												 <span style="display: inline-block;">
 														<select class="custom-select"
@@ -673,8 +673,8 @@ li {
 											<input type="date"
 												   id="endVoteDate"
 												   class="form-control"
-												   th:min="${#dates.format(cTime, 'yyyy-MM-dd')}"
 												   style="margin-left: 3px; width: 189px; border-radius: 5px;">
+												   <!-- th:min="${#dates.format(cTime, 'yyyy-MM-dd')}" -->
 										</div>
 									</div>
 									<button type="button" class="btn btn-groob" onclick="blankSearchVote()">등록</button>
@@ -751,7 +751,7 @@ li {
 							    
 								<!-- 업무 제목 -->
 								<div class="card-header" style="display: flex;">
-								    <span th:text="${allPost.postTitle}" style="margin-right: auto;"></span>
+								    <span th:text="${allPost.postTitle}" style="margin-right: auto; font-size:20px;"></span>
 								    <span th:text="'업무번호 ' + ${allPost.workNo}"></span>
 								</div>
 								
@@ -848,8 +848,8 @@ li {
 										  		<p style="margin-bottom: 2px;">마감일</p>
 										  		<input type="datetime-local"
 										  			   class="endWorkDate2 form-control"
-										  			   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 										  			   th:value="${#dates.format(allPost.workEndTime, 'yyyy-MM-dd HH:mm')}"
+										  			   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 										  			   style="margin-left: 3px; width: 210px; border-radius: 5px;"
 										  			   th:disabled="${allPost.id != session.Id}">
 										  	</div>
@@ -926,12 +926,12 @@ li {
 															th:if="${allPost.proPostNo == com.proPostNo}">
 															<td class="comtabletd"
 																style="width:30px; padding-right:0px;">
-																<th:block th:if="${allPost.uploadPath != null}">
+																<th:block th:if="${com.uploadPath != null}">
 																	<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
 													  		 			 class="card-img-top"
 													  		 			 style="width:30px; height:30px; margin:0px;">
 													  		 	</th:block>
-													  		 	<th:block th:if="${allPost.uploadPath == null}">
+													  		 	<th:block th:if="${com.uploadPath == null}">
 																	<img style="width:30px; height:30px; margin:0px;"
 																 		 src="../img/userProf.png">
 																</th:block>
@@ -1003,7 +1003,7 @@ li {
 							    </div>
 							    <!-- 글 제목 -->
 							    <div class="card-header" style="display: flex;">
-								    <span th:text="${allPost.postTitle}" style="margin-right: auto;"></span>
+								    <span th:text="${allPost.postTitle}" style="margin-right: auto; font-size:20px;"></span>
 								</div>
 								<!-- 검색 이동 포인터 -->
 								<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
@@ -1038,12 +1038,12 @@ li {
 															th:if="${allPost.proPostNo == com.proPostNo}">
 															<td class="comtabletd"
 																style="width:30px; padding-right:0px;">
-																<th:block th:if="${allPost.uploadPath != null}">
+																<th:block th:if="${com.uploadPath != null}">
 																	<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
 													  		 			 class="card-img-top"
 													  		 			 style="width:30px; height:30px; margin:0px;">
 													  		 	</th:block>
-													  		 	<th:block th:if="${allPost.uploadPath == null}">
+													  		 	<th:block th:if="${com.uploadPath == null}">
 																	<img style="width:30px; height:30px; margin:0px;"
 																 		 src="../img/userProf.png">
 																</th:block>
@@ -1120,7 +1120,7 @@ li {
 								</div>
 								
 								<!-- 글 제목 -->
-								<div class="card-header" style="display: flex;"
+								<div class="card-header" style="display: flex; font-size:20px;"
 									 th:text="${allPost.postTitle}">
 								</div>
 								<!-- 앵커 -->
@@ -1236,7 +1236,8 @@ li {
 									<!-- 참석 여부 버튼 -->
 									<div th:each="rparti : ${readSchparti}"
 										 th:if="${rparti.schNo == allPost.schNo
-										  		and #dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm') >= #dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
+										  		and #dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm') >= #dates.format(cTime, 'yyyy-MM-dd HH:mm')}
+										  		or ${allPost.schEndTime == null}"
 										 th:attr="data-feed-sch-type=${rparti.partiCheck}"
 										 style="text-align: center; margin-bottom: 5px; margin-top: 20px;">
 										<button type="button"
@@ -1278,12 +1279,12 @@ li {
 															th:if="${allPost.proPostNo == com.proPostNo}">
 															<td class="comtabletd"
 																style="width:30px; padding-right:0px;">
-																<th:block th:if="${allPost.uploadPath != null}">
+																<th:block th:if="${com.uploadPath != null}">
 																	<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
 													  		 			 class="card-img-top"
 													  		 			 style="width:30px; height:30px; margin:0px;">
 													  		 	</th:block>
-													  		 	<th:block th:if="${allPost.uploadPath == null}">
+													  		 	<th:block th:if="${com.uploadPath == null}">
 																	<img style="width:30px; height:30px; margin:0px;"
 																 		 src="../img/userProf.png">
 																</th:block>
@@ -1361,7 +1362,7 @@ li {
 							    </div>
 							    
 								<!-- 글 제목 -->
-								<div class="card-header" th:text="${allPost.postTitle}" style="display: flex;"></div>
+								<div class="card-header" th:text="${allPost.postTitle}" style="display: flex; font-size:20px;"></div>
 								<!-- 앵커 -->
 								<a th:name="'moveMove' + ${allPost.proPostNo}"></a>
 								<!-- 본문 -->
@@ -1430,12 +1431,12 @@ li {
 															th:if="${allPost.proPostNo == com.proPostNo}">
 															<td class="comtabletd"
 																style="width:30px; padding-right:0px;">
-																<th:block th:if="${allPost.uploadPath != null}">
+																<th:block th:if="${com.uploadPath != null}">
 																	<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
 													  		 			 class="card-img-top"
 													  		 			 style="width:30px; height:30px; margin:0px;">
 													  		 	</th:block>
-													  		 	<th:block th:if="${allPost.uploadPath == null}">
+													  		 	<th:block th:if="${com.uploadPath == null}">
 																	<img style="width:30px; height:30px; margin:0px;"
 																 		 src="../img/userProf.png">
 																</th:block>
@@ -1530,7 +1531,7 @@ li {
 										           class="btn btn-outline-secondary"
 										           style="height:30px; border-radius:5px; margin-right:5px;">투표 종료</a>
 										    </th:block>
-							    			<span th:text="${allPost.postTitle}"></span>
+							    			<span th:text="${allPost.postTitle}" style="font-size:20px;"></span>
 									    </div>
 										<!-- 글 제목 -->
 									</div>
@@ -1607,12 +1608,12 @@ li {
 															th:if="${allPost.proPostNo == com.proPostNo}">
 															<td class="comtabletd"
 																style="width:30px; padding-right:0px;">
-																<th:block th:if="${allPost.uploadPath != null}">
+																<th:block th:if="${com.uploadPath != null}">
 																	<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
 													  		 			 class="card-img-top"
 													  		 			 style="width:30px; height:30px; margin:0px;">
 													  		 	</th:block>
-													  		 	<th:block th:if="${allPost.uploadPath == null}">
+													  		 	<th:block th:if="${com.uploadPath == null}">
 																	<img style="width:30px; height:30px; margin:0px;"
 																 		 src="../img/userProf.png">
 																</th:block>
@@ -1806,9 +1807,9 @@ li {
 					<div style="margin-bottom: 7px;">
 						<p style="margin-bottom: 2px;">종료일</p>
 						<input type="datetime-local"
-							   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 							   id="updateSchEnd"
 							   class="form-control"
+							   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 							   style="margin-left: 3px; width: 210px; border-radius: 5px;">
 					</div>
 					<!-- 장소 -->
@@ -1955,8 +1956,8 @@ li {
 						<p>투표 마감일</p>
 						<input type="date"
 							   class="endVoteDate form-control"
-							   th:min="${#dates.format(cTime, 'yyyy-MM-dd')}"
 							   style="margin-left: 3px; width: 189px; border-radius: 5px;">
+							   <!-- th:min="${#dates.format(cTime, 'yyyy-MM-dd')}" -->
 					</div>
 					
 			      </div>
@@ -1988,7 +1989,7 @@ li {
 			       <span th:text="${pUser.name}"></span>
 			  	   <span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
 			  </div>
-			  <ul class="list-group list-group-flush border">
+			  <ul class="list-group list-group-flush border" style="height:190px; overflow-y:auto;">
 			    <li class="list-group-item openModalInfo spanCursor" th:each="pUser, pUserStat : ${projectPartiMember}"
 			    	th:if="${pUser.id != readProAuth.id}"
 			    	th:data-user-id="${pUser.id}"
@@ -2030,7 +2031,8 @@ li {
 						    <div class="card-body" style="padding-bottom: 0px;">
 						    	<ul style="font-size:20px; padding-left:10px;">
 						    		<li><span>부서명 : </span><span th:text="${mem.deptName}"></span></li>
-						    		<li><span>이름 : </span><span th:text="${mem.rank}"></span></li>
+						    		<li><span>직급 : </span><span th:text="${mem.rank}"></span></li>
+						    		<li><span>이름 : </span><span th:text="${mem.name}"></span></li>
 						    		<li><span>이메일 : </span><span th:text="${mem.id}"></span></li>
 						    		<li><span>전화번호 : </span><span th:text="${mem.phone}"></span></li>
 						    		<li><span>메모 : </span>
