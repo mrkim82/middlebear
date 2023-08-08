@@ -118,6 +118,14 @@
                 <if test="monthDate != null">
 	                AND to_char(cm.day, 'YYYY-MM') = #{monthDate}
 				</if>
+				<if test="cri.type != null and cri.type.equals('name')">
+				and ui.name LIKE '%${cri.keyword}%'
+			</if>
+			<if test="cri.type != null and cri.type.equals('empNo')">
+				and u.emp_no LIKE '%${cri.keyword}%'
+			</if><if test="cri.type != null and cri.type.equals('deptName')">
+				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
+			</if>
 	</select>
 	
 	
@@ -176,6 +184,10 @@
 	</select>	
 
 	<select id="getMyCommute" resultType="CommuteVO">
+	SELECT * 
+            FROM (
+              SELECT t.*, ROWNUM AS rn
+              FROM (
 		select
 				u.emp_no,
 			    d.dept_name,
@@ -202,7 +214,23 @@
 				<if test="monthDate != null">
 	                AND to_char(cm.day, 'YYYY-MM') = #{monthDate}
 				</if>
-		order by cm.day desc	
+				<if test="cri.type != null and cri.type.equals('name')">
+				and ui.name LIKE '%${cri.keyword}%'
+			</if>
+			<if test="cri.type != null and cri.type.equals('empNo')">
+				and u.emp_no LIKE '%${cri.keyword}%'
+			</if>
+			<if test="cri.type != null and cri.type.equals('deptName')">
+				and d.dept_name LIKE '%'||upper('${cri.keyword}')||'%'
+			</if>
+		order by cm.day desc
+		) t
+            )
+            <![CDATA[
+            WHERE rn >= (#{cri.page}-1) * 10 +1 
+			and rn <= #{cri.page} * 10
+            ]]>
+		
 	</select>
 			
 	<!-- 회원가입 날짜 초기지정 -->

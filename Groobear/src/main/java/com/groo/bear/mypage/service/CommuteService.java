@@ -11,7 +11,7 @@ public interface CommuteService {
 	//페이징
 	public int commuteCnt(Criteria cri, CommuteVO commuteVO);
 	//paging
-	public int commuteCnt2(String id,String monthDate);
+	public int commuteCnt2(Criteria cri, String id, String monthDate,CommuteVO commuteVO);
 	
 	//출근
 	public int startWork(CommuteVO commuteVO);
@@ -39,6 +39,7 @@ public interface CommuteService {
 	public List<CommuteVO> getAllMonth(Criteria cri, CommuteVO commuteVO, String monthDate);
 	//수정
 	public int commuteUpdate(CommuteVO commuteVO);
+	
 	
 	
 	
