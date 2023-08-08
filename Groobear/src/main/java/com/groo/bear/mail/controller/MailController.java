@@ -57,15 +57,14 @@ public class MailController {
 			for(int i=0; i < list.size();i++) {
 				System.out.println("list.get(i)첵 = "+list.get(i));
 				int result = mailService.serverGetInsertMail(list.get(i));
-				List<String> files = list.get(i).getFiles(); //첨부파일리스트
+				List<FilesVO> files = list.get(i).getFiles(); //첨부파일리스트
 				if(files != null) {
 					for(int j=0;j<files.size();j++) {
 					//insert문 VO만들기
-						FilesVO filesVO = new FilesVO();
+						FilesVO filesVO = files.get(i);
 						UUID uuid = UUID.randomUUID();
 						filesVO.setUuid(uuid.toString());
 						filesVO.setUploadPath("mail");
-						filesVO.setFileName(files.get(i));
 						filesVO.setReadMailNo(list.get(i).getMailNo());
 						mailService.insertMailFile(filesVO);
 					}
@@ -209,7 +208,6 @@ public class MailController {
 				String checks = "Y";
 				mailVO.setMailNo(mailNo);
 				mailVO.setReadCheck(checks);
-				System.out.println("Receiver = session : "+mailVO);
 				mailService.getMailInfoUpdate(mailVO);
 				model.addAttribute("mail",mailService.getMailInfo(mailNo));
 			}

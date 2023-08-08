@@ -71,4 +71,6 @@ public interface FilesMapper {
 	public int deleteProFileMan(int proFileNo);
 	//개인서명 등록
 	public int insertPublicSignImg(FilesVO filesVO);
+	//받은메일 첨부파일 확인
+	public List<FilesVO> readMailFile(int readMailNo); 
 }
