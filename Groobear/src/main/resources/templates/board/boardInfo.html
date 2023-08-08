@@ -13,6 +13,7 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
 <style>
+	
 .input {
   border: none;
   outline: none;
@@ -236,7 +237,7 @@ h2 {
 			role="dialog" aria-labelledby="deletePostModalLabel"
 			aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
+				<div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;width: 500px; height:280px;">
 					<div class="modal-header">
 						<h5 class="modal-title" id="deletePostModalLabel">게시글 삭제</h5>
 						<button type="button" class="close" data-dismiss="modal"
@@ -244,7 +245,7 @@ h2 {
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<div class="modal-body">게시글을 정말로 삭제하시겠습니까?</div>
+					<div class="modal-body" style="display: flex; justify-content: space-evenly; font-size: 28px;color: black; text-align:center; height: auto;">게시글을 정말로 삭제하시겠습니까?</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-danger" id="deleteButton">삭제</button>
 						<button id="firstCancel" type="button" class="btn btn-secondary"
