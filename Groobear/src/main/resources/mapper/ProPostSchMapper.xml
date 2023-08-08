@@ -10,8 +10,7 @@
 		       s.pro_post_no, 
 		       p.parti_check, 
 		       p.id, 
-		       i.name, 
-		       u.profile_img
+		       i.name
 		
 		FROM pro_sch s 
 		JOIN sch_parti p
@@ -158,7 +157,6 @@
 			 , a.post_date
 			 , a.id
 			 , i.name
-			 , u.profile_img
 			 , b.sch_no
 			 , b.sch_start_time
 			 , b.sch_end_time
