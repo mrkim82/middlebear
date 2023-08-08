@@ -276,8 +276,8 @@
 	
 	<!-- 미수락 프로젝트 -->
 	<select id="readNoPartiPro" parameterType="String" resultType="ProPartiAlarmVO">
-		SELECT b.pro_name,--프로젝트이름
-		       i.name,--초대장
+		SELECT b.pro_name,
+		       i.name,
 		       a.pro_mem_no,
 		       i.rank
 		
@@ -321,4 +321,5 @@
 		ON(a.pro_no = b.pro_no)
 		WHERE pro_mem_no = #{proMemNo}
 	</select>
+	
 </mapper>

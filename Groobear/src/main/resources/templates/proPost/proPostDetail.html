@@ -1985,7 +1985,6 @@ li {
 			  	   th:data-target="'#proUserInfoDetail' + ${pUser.empNo}"
 			  	   style="background-color: rgb(161, 204, 239); border-top-right-radius: 15px; border-top-left-radius: 15px;">
 			  	   <span th:text="'프로젝트 관리자 : '"></span>
-			       <span th:utext="${pUser.profileImg}"></span>
 			       <span th:text="${pUser.name}"></span>
 			  	   <span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
 			  </div>
@@ -1996,7 +1995,6 @@ li {
 			    	data-toggle="modal"
 			    	th:data-target="'#proUserInfoDetail' + ${pUser.empNo}"
 			    	th:style="${pUserStat == last} ? 'border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;' : ''">
-			    	<span th:utext="${pUser.profileImg}"></span>
 			    	<span th:text="${pUser.name}"></span>
 			    	<span th:if="${session.Id == pUser.id}" th:text="${'(나)'}"></span>
 		    	</li>
