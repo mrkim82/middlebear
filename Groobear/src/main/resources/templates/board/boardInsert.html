@@ -160,7 +160,7 @@
 						</button>
 					</div>
 					<div class="modal-body" style="display: flex; justify-content: space-evenly; font-size: 28px;color: black; text-align:center; height: auto;">
-                        <p style="font-size: 28px;color: black; margin:30px 0px; height: 40px !important;">제목은 30자를 넘기지 말아주세요.</p>
+                        <p style="font-size: 28px;color: black; margin:30px 0px; height: 40px !important;">제목은 50자를 넘기지 말아주세요.</p>
                     </div>
 					<div class="modal-footer">
 						<button id="firstCancel" type="button" class="btn btn-secondary"
@@ -209,12 +209,13 @@
     formObj.on("submit", function(e) {
         var title = $("#title").val();
         var content = $("#content").val();
-
+        console.log(title.length)
         if (!title || !content) {
             e.preventDefault();  
             $('#myModal').modal('show');
             return false;  
-        } else if (title.length > 30) {
+        } else if (title.length > 50) {
+            console.log(title.length)
             e.preventDefault();
             $('#myModal2').modal('show');
             return false; 

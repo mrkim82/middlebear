@@ -49,7 +49,9 @@
 		<tbody id="bodyWash">
 			<tr th:each="board, stat : ${boardList}"  th:attr="onclick='window.parent.location.href=\'/boardInfo?boardNo=' + ${board.boardNo} + '\''">
 				<td th:text="${board.btNo}"></td>
-				<td>[[${board.title}]]</td>
+				<td><div style="text-align: left;  overflow:hidden;
+					text-overflow:ellipsis;
+					white-space:nowrap; width: 150px;">[[${board.title}]]</div></td>
 				<td>[[${board.name}]]</td>
 				<td th:text="${#dates.format(board.insertDate, 'yyyy.MM.dd')}"></td>
 				<td>[[${board.count}]]</td>
