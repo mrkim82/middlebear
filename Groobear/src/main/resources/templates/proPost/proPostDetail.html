@@ -2074,6 +2074,7 @@ li {
 		//투표 check하기
 		let modelVoteChecks = /*[[${readxxVote}]]*/;
 		let proAllMember = /*[[${projectPartiMember}]]*/;
+		let workMemberAll = /*[[${readTaskWorkPerson}]]*/;
 	/*]]>*/
 </script>
 
@@ -3931,5 +3932,12 @@ function delProFile(ppn, filename) {
 	updateWorkPostPerson.size = Math.min(maxOptions, updateWorkPostPerson.length);
 </script>
 
+<!-- 업무 담당자 조회 -->
+<script>
+	workMemberAll.forEach(workMember => {
+		//console.log(workMember)
+	});
+	console.log('ss',document.querySelector('[data-feed-work-no="40"]'));
+</script>
 </body>
 </html>
