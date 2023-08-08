@@ -85,7 +85,17 @@
 	padding: 10px;
 	padding-left: 40px; 
 	padding-right: 40px; 
-	
+    word-wrap: break-word; /* 단어 단위로 줄바꿈이 되도록 함 */
+    width: 200px;
+}
+.comtabletdcontent{
+	padding: 10px;
+	padding-left: 40px; 
+	padding-right: 40px; 
+    word-wrap: break-word; /* 단어 단위로 줄바꿈이 되도록 함 */
+    max-width: 700px; /* 원하는 최대 폭 설정 */
+    white-space: normal; /* 기본적으로 공백과 줄바꿈을 고려하여 내용 표시 */
+    display:inline-block;
 }
 .updateBtn{
 	margin-left: 655px;
@@ -96,6 +106,7 @@
 	color: #fff;
 	width: 92.45px;
 	height: 38px;
+	
 }
 .listBtn{
 	margin-right: 0px;
@@ -112,7 +123,7 @@
 	margin-right: 5px;
 }
 h2 {
-	margin-top: 25px;
+	margin-top: 35px;
 	font-family: 'TheJamsil', serif;
 }
 
@@ -178,13 +189,13 @@ h2 {
 			</th:block>
 			</thead>
 			</table>
-			<table class="comtable table table-hover">
+			<table class="comtable table table-hover" style="width: 400px !important;">
 				<thead th:if="${boardCom != null}">
 					<hr>
 					<h3>댓글작성</h3>
 					<tr class="comtabletr" th:each="com : ${boardCom}" th:data-post-code="${com.comNo}">
 						<!-- <td class="comtabletd" th:utext="${com.profileImg}"></td> -->
-						<td class="comtabletd" style="width: 400px !important;" th:text="${com.comContent}"></td>
+						<td class="comtabletdcontent"  th:text="${com.comContent}"></td>
 						<td class="comtabletd" th:text="${com.name}"></td>
 						<td class="comtabletd comdate" th:text="${com.comDate}"></td>
 						<td>
@@ -220,7 +231,9 @@ h2 {
 			<a th:href="@{/boardUpdate/{boardNo}(boardNo=${board.boardNo})}">
 				<button class="updateBtn" type="button">수정</button></a>
 		</th:block>
-		<button class="listBtn" type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|">목록으로</button>
+		<button style="
+    margin-bottom: 100px;
+" class="listBtn" type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|">목록으로</button>
 
 		<!-- Button trigger modal -->
 		<th:block th:if="${(board.boardType == 'N') and ((session.EmpGrade == 'A') or (session.Id == board.id))}">

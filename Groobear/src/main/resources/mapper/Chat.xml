@@ -13,6 +13,7 @@
 		) a
 		on r.room_no = a.room_no
 		where a.id = #{id}
+		order by r.room_time
 	</select>
 
 	<!-- 채팅방 생성 -->
