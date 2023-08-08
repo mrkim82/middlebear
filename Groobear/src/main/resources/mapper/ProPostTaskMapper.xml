@@ -171,4 +171,12 @@
 		WHERE a.pro_no = #{proNo}
 		AND (b.work_start_time IS NOT NULL OR b. work_end_time iS NOT NULL)
 	</select>
+	
+	<!-- 업무 수정일자 최신화 -->
+	<update id="updateProWorkDate" parameterType="int">
+		UPDATE pro_work
+		SET work_update_day = SYSDATE
+		WHERE pro_post_no = #{proPostNo}
+	</update>
+	
 </mapper>

@@ -49,4 +49,8 @@ public interface ProPostTaskMapper {
 	
 	//간트차트 조회용
 	public List<ProPostTaskVO> readGantt(int proNo);
+	
+	//업무 수정일자 최신화
+	public int updateProWorkDate(int proPostNo);
+	
 }

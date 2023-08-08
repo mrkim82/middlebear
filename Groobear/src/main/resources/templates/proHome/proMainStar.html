@@ -5,32 +5,6 @@
 >
 
 <div layout:fragment="content">
-<!-- 필터, 정렬 -->
-<div style="text-align: end; margin-bottom: 15px;">
-	<select class="custom-select"
-			name="parti"
-			onchange="chagepartiSelect()"
-			id="partiSelect"
-			style="width: 190px;">
-		<option 
-				value=""
-				>내가 참여중인 프로젝트</option>
-		<option 
-				th:value="${session.Id}">내가 관리자인 프로젝트</option>
-	</select>
-	<select class="custom-select"
-			name="parti"
-			onchange="chageorderSelect()"
-			id="orderSelect"
-			style="width: 150px;">
-		<option 
-				value="1 DESC">오름차순(ㄱ~ㅎ)</option>
-		<option 
-				value="1 ASC">내림차순(ㅎ~ㄱ)</option>
-	</select>
-</div>
-<!-- 필터, 정렬 끝 -->
-
 <!-- 프로젝트 리스트 -->
 <div>
 	<table class="table table-hover"

@@ -760,6 +760,7 @@ li {
 								
 								<div class="workFeedPostStatus"
 									 th:attr="data-feed-work-type=${allPost.workStatus}"
+									 th:data-work-disabled-no="${allPost.workNo}"
 									 style="text-align: center; margin-top:15px;">
 								    <button type="button" class="btn"
 								    		th:classappend="${allPost.workStatus == '1' ? 'btn-primary' : 'btn-outline-primary'}"
@@ -1393,7 +1394,7 @@ li {
 												    	   type="checkbox"
 												    	   th:data-todo-no="${rt.todoNo}"
 												    	   th:checked="${rt.todoCheck == 'Y'}"
-												    	   th:disabled="${rt.id != session.Id} and ${rt.id != null}"
+												    	   th:disabled="${rt.id != session.Id} and ${allPost.id != session.Id} and ${rt.id != null}"
 												    	   style="cursor: pointer;"
 														   onclick="changeTodoStatus()">
 													<span class="checkmark"></span>
@@ -2074,6 +2075,8 @@ li {
 		//투표 check하기
 		let modelVoteChecks = /*[[${readxxVote}]]*/;
 		let proAllMember = /*[[${projectPartiMember}]]*/;
+		let workMemberAll = /*[[${readTaskWorkPerson}]]*/;
+		selfId = /*[[${session.Id}]]*/;
 	/*]]>*/
 </script>
 
@@ -2497,8 +2500,6 @@ li {
 	});
 </script>
 	
-
-	
 <!-- 참석자 선택 처리 -->
 <script>
 	function changeSchParti() {
@@ -2631,7 +2632,6 @@ function changeProfileNote() {
 			})
 			.then(response => response.json())
 			.then(res => {
-				profileChangeButton.parentNode.innerHTML='';
 				oldProfileMemoTag.textContent = newMemo;
 			})
 		}
@@ -3099,7 +3099,7 @@ function makeUlTag(results, ulTag, topTag) {
 	todoContent.addEventListener('keypress', function (e) {
 		if (e.key === 'Enter') {
 			let todoL = document.querySelector('[data-todo-make-list]');
-			if(todoL.querySelectorAll('.list-group-item').length == 10) {
+			if(todoL.querySelectorAll('.list-group-item').length == 9) {
 				alert('최대 10개')
 				return;
 			};
@@ -3142,8 +3142,9 @@ function makeUlTag(results, ulTag, topTag) {
 		
 		//인풋값 찾기
 		let todoInputValuesList = modal4.querySelector('[data-todo-make-list]').querySelectorAll('input, select');
+		let inputButton = document.getElementById('todoContent');
 		//인풋값 검사
-		if(todoInputValuesList.length == 0) {
+		if(todoInputValuesList.length == 0 && inputButton.value == '') {
 			alert('내용 하나라도 있어야 함');
 			return;
 		};
@@ -3151,7 +3152,7 @@ function makeUlTag(results, ulTag, topTag) {
 		//빈 내용 테스트
 		let blankContentCheck = modal4.querySelectorAll('.list-group-item input:nth-of-type(1)');
 		for (let bcc of blankContentCheck) {
-			if (bcc.value === '') {
+			if (bcc.value === '' && inputButton.value == '') {
 				alert('빈 내용이 있습니다.');
 				return false;
 			};
@@ -3164,6 +3165,16 @@ function makeUlTag(results, ulTag, topTag) {
 			todoObj['todoContent'] = todoInputValuesList[i].value;
 			todoObj['todoEnd'] = todoInputValuesList[i + 1].value;
 			todoObj['id'] = todoInputValuesList[i + 2].value;
+			todoInputArrSub.push(todoObj); // 배열에 객체 추가
+		};
+		
+		//입력창 값 가져가기
+		if(inputButton.value != '') {
+			let todoObj = {};
+			todoObj['todoContent'] = inputButton.value;
+			todoObj['todoEnd'] = inputButton.parentElement.querySelector('.form-control').value;
+			todoObj['id'] = inputButton.parentElement.querySelector('.custom-select').value;
+			console.log(todoObj);
 			todoInputArrSub.push(todoObj); // 배열에 객체 추가
 		};
 		
@@ -3923,5 +3934,23 @@ function delProFile(ppn, filename) {
 	updateWorkPostPerson.size = Math.min(maxOptions, updateWorkPostPerson.length);
 </script>
 
+<!-- 업무 담당자 조회 -->
+<script>
+	console.log(selfId)
+	workMemberAll.forEach(workMember => {
+		//console.log(workMember);
+		if(workMember.id == selfId) {
+			let targetDiv = document.querySelector('[data-work-disabled-no="' + workMember.workNo + '"]');
+			//console.log('뇬',targetDiv);
+			let tbuttons = targetDiv.querySelectorAll('button');
+			
+			tbuttons.forEach(button => {
+				button.disabled = false; // 버튼의 disabled 속성을 해제
+			});
+		}
+	});
+	//console.log('눔',document.querySelector('[data-feed-work-no]'));
+	//console.log('ss',document.querySelector('[data-feed-work-no="40"]'));
+</script>
 </body>
 </html>
