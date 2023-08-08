@@ -71,8 +71,6 @@
 	}
 	textarea{
 		border : none;
-		/* width: 400px;
-		height: 400px; */
 	}
 	.comment-section {
     min-height: 100px; /* 예시 값 */
@@ -88,12 +86,6 @@
 	padding-right: 40px; 
 	
 }
-/* .comdate{
-	width: 200px;
-} */
-/* .comtabletr{
-	margin-left: 200px;
-} */
 .updateBtn{
 	margin-left: 655px;
 	border-radius: 5px;
@@ -120,20 +112,21 @@
 }
 h2 {
 	margin-top: 25px;
+	font-family: 'TheJamsil', serif;
 }
 
 
 	</style>
 </head>
-<body class="dohyeon" >
+<body class="tjs" >
 	<div layout:fragment="content">
 		<h2 >게시글 단건조회</h2>
 		
 		<table class="table table-hover">
 			<thead>
-			<tr>
+			<tr style="font-weight: 600; color: black;">
 				<td>제목:</td>
-				<td><input class="input" type="text" th:value="${board.title}" readonly style=""/></td>
+				<td><input  style="font-weight: 600; color: black;" class="input" type="text" th:value="${board.title}" readonly/></td>
 			</tr>
 			<tr>
 				<td>작성일:</td>
@@ -171,8 +164,8 @@ h2 {
 				</td>
 				</tr>
 			<tr>
-				<td>내용:</td>
-				<td><textarea rows="8" cols="30" th:text="${board.content}" readonly style="border: 0px; width: 100%; height: 300px;"></textarea></td>
+				<td style="font-weight: 400; color: black;">내용:</td>
+				<td><textarea rows="8" cols="30" th:text="${board.content}" readonly style="border: 0px; width: 100%; height: 300px; font-weight: 600; color: black;"></textarea></td>
 			</tr>
 			<tr>
 				<td style="display: none" ><input type="text" id="boardType"
@@ -190,7 +183,7 @@ h2 {
 					<h3>댓글작성</h3>
 					<tr class="comtabletr" th:each="com : ${boardCom}" th:data-post-code="${com.comNo}">
 						<!-- <td class="comtabletd" th:utext="${com.profileImg}"></td> -->
-						<td class="comtabletd" th:text="${com.comContent}"></td>
+						<td class="comtabletd" style="width: 400px !important;" th:text="${com.comContent}"></td>
 						<td class="comtabletd" th:text="${com.name}"></td>
 						<td class="comtabletd comdate" th:text="${com.comDate}"></td>
 						<td>
