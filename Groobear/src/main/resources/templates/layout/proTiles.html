@@ -57,6 +57,10 @@
 	color: white;
 }
 
+.useraname:hover {
+    color: inherit; /* 현재 상속된 색상 사용 */
+  }
+
 .dohyeonModalContent {
 	border: 1px solid #00000021;
 	border-radius: 20px;
@@ -365,7 +369,7 @@ textarea {
 					<tbody>
 						<tr>
 							<td style="font-size: 20px;">
-								<a class="dohyeon">[[${session.Name}]]님 반갑습니다</a>
+								<a class="dohyeon useraname">[[${session.Name}]]님 반갑습니다</a>
 							</td>
 						</tr>
 						<tr>
