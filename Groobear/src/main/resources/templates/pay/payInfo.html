@@ -3,11 +3,53 @@
  layout:decorate="~{layout/paymentTiles}">
 <head>
 <meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gugi&display=swap');
+	
+	.dohyeon{
+		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
+		font-size : 20px;
+	}
+	#ulId li.active a.page-link {
+    	background-color: #35A880;
+    	border: 1px solid #35A880;
+    	color:#fff
+  	}
+  	a {
+  		text-decoration:none !important;
+  		cursor:pointer;
+  	}
+	ul {
+			list-style:none;
+	}
+	.paging .active a {
+		    background-color: #f00;
+		    color: #fff;
+	}
+	.paymentuser{
+		border : 1px solid black;
+		text-align: center;
+		font-weight: 600;
+	}
+	.custom-button:hover{
+		color: black !important
+	}
+	.input-file-button{
+  	  padding: 6px 25px;
+	  background-color:#90ddb091;
+	  border-radius: 4px;
+	  color: black;
+	  cursor: pointer;
+	  position:absolute;
+	  top: -6px;
+	  left: 80px;
+	}		
+	</style>
 </head>
 <body layout:fragment="content">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 	<div style="width: 800px;">
-		<table style="float:left; width: 400px;">
+		<table class="table table-hover tjs" style="float:left; width: 400px;">
 			<thead></thead>
 			<tbody>
 				<tr>
@@ -42,7 +84,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<table style="float:left; width: 380px;">
+		<table class="table table-hover tjs" style="float:left; width: 380px;">
 			<thead></thead>
 			<tbody>
 				<tr>
@@ -95,7 +137,7 @@
 	            </tr>
 			</tbody>
 		</table>
-		<table style="float:left; width: 790px;">
+		<table class="table table-hover tjs" style="float:left; width: 790px;">
 			<thead></thead>
 			<tbody>
 				<th:block th:if="${list.docType=='a'}">
@@ -103,20 +145,22 @@
 					<td style="display:none"><input type="text" id="laydocType" th:value="${list.docType}"></td>
 				</tr>
 				<tr>
-					<td style="width: 300px;">사유 : <input type="text" id="purpose" th:value="${list.purpose}" readonly></td>
-					<td style="width: 300px;">운행일자 : <input type="text" id="operDate" th:value="${#dates.format(list.operDate, 'yyyy-MM-dd')}" readonly></td>
+					<td style="width: 300px;"><span style="width:100px; display: inline-block;">사유</span><input type="text" id="purpose" th:value="${list.purpose}" readonly></td>
+				</tr>
+				<tr>
+					<td style="width: 300px;"><span style="width:100px; display: inline-block;">운행일자</span><input type="text" id="operDate" th:value="${#dates.format(list.operDate, 'yyyy-MM-dd')}" readonly></td>
 				</tr> 
 				<tr>
-					<td>행선지 <input type="text" id="destination" th:value="${list.destination}"></td>
+					<td><span style="width:100px; display: inline-block;">행선지</span><input type="text" id="destination" th:value="${list.destination}"></td>
 				</tr>
 				<tr>
-					<td>운행전 키로수 <input type="text" id="befored" th:value="${list.befored}" onchange="kmChange()"></td>
-					<td>운행후 키로수 <input type="text" id="afterd" th:value="${list.afterd}" onchange="kmChange()"></td>
+					<td><span style="width:100px; display: inline-block;">운행전 키로수</span><input type="text" id="befored" th:value="${list.befored}" onchange="kmChange()"></td>
 				</tr>
 				<tr>
-					<td>
-						출자금 <input type="text" id="imprest" th:value="${list.imprest}" readonly>
-					</td>
+					<td><span style="width:100px; display: inline-block;">운행후 키로수</span><input type="text" id="afterd" th:value="${list.afterd}" onchange="kmChange()"></td>
+				</tr>
+				<tr>
+					<td><span style="width:100px; display: inline-block;">출자금</span><input type="text" id="imprest" th:value="${list.imprest}" readonly></td>
 				</tr>
 				<td><div class="bigPictureWrapper1">
 					<div class="bigPicture1">
@@ -151,7 +195,7 @@
 	                    	</div>
 	                    </td></tr>
 	                <tr th:if="${list.id != session.Id}">
-						<td>코멘트 <textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+						<td><span style="width:100px; display: inline-block;">코멘트</span><textarea id="logCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 					</tr>
 				</th:block>
 				<th:block th:if="${list.docType=='b'}">
@@ -159,14 +203,16 @@
 					<td style="display:none" id="offdocType" th:value="${list.docType}"></td>
 				</tr>
 				<tr>
-					<td>시작일 <input type="date" id="useDate" th:value="${#dates.format(list.useDate,'yyyy-MM-dd')}"></td>
-					<td>복귀일 <input type="date" id="returnDate" th:value="${#dates.format(list.returnDate,'yyyy-MM-dd')}"></td>
+					<td><span style="width:100px; display: inline-block;">시작일</span><input type="date" id="useDate" th:value="${#dates.format(list.useDate,'yyyy-MM-dd')}"></td>
 				</tr>
 				<tr>
-					<td>제목 <input type="text" id="offTitle" th:value="${list.title}"></td>
+					<td><span style="width:100px; display: inline-block;">복귀일</span><input type="date" id="returnDate" th:value="${#dates.format(list.returnDate,'yyyy-MM-dd')}"></td>
 				</tr>
 				<tr>
-					<td>내용 <textarea id="offContent" style="width: 400px;height: 200px;" th:text="${list.content}"></textarea></td>
+					<td><span style="width:100px; display: inline-block;">제목</span><input type="text" id="offTitle" th:value="${list.title}"></td>
+				</tr>
+				<tr>
+					<td><span style="width:100px; display: inline-block;">내용</span><textarea id="offContent" style="width: 400px;height: 200px;" th:text="${list.content}"></textarea></td>
 				</tr>
 					<td><div class="bigPictureWrapper3">
 					<div class="bigPicture3">
@@ -174,7 +220,7 @@
 					</div>
 		     		<div class = "row">
 						<div class = "col-lg-12">
-							<div class = "panel-heading3">Files</div>
+							<div class = "panel-heading3" style="top: -20px; margin-top:-3px;">첨부파일</div>
 							<!-- /.panel-heading -->
 							<div class = "panel-body3">
 								<div class = 'uploadResult3'>
@@ -188,7 +234,7 @@
 					</div>
 					</td>
 				<tr th:if="${list.id != session.Id}">
-					<td>코멘트 <textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+					<td><span style="width:100px; display: inline-block;">코멘트</span><textarea id="offCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 				</tr>
 				</th:block>
 				<th:block th:if="${list.docType == 'c'}">
@@ -196,10 +242,10 @@
 					<td style="display:none" id="robindocType" th:value="${list.docType}"></td>
 				</tr>
 				<tr>
-					<td>제목 <input type="text" id="robinTitle" th:value="${list.title}"></td>
+					<td><span style="width:100px; display: inline-block;">제목</span><input type="text" id="robinTitle" th:value="${list.title}"></td>
 				</tr>
 				<tr>
-					<td>내용 <textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}"></textarea></td>
+					<td><span style="width:100px; display: inline-block;">내용</span><textarea id="robinContent" style="width: 400px;height: 200px;" th:text="${list.content}"></textarea></td>
 				</tr>
 					<td><div class="bigPictureWrapper4">
 					<div class="bigPicture4">
@@ -207,7 +253,7 @@
 					</div>
 		     		<div class = "row">
 						<div class = "col-lg-12">
-							<div class = "panel-heading4">Files</div>
+							<div class = "panel-heading4" style="top: -20px; margin-top:-3px;">첨부파일</div>
 							<!-- /.panel-heading -->
 							<div class = "panel-body4">
 								<div class = 'uploadResult4'>
@@ -221,12 +267,14 @@
 					</div>
 					</td>
 				<tr th:if="${list.id != session.Id}">
-					<td>코멘트 <textarea id="robinCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
+					<td><span style="width:100px; display: inline-block;">코멘트</span><textarea id="robinCom" style="width: 400px;height: 200px;" th:text="${list.com}"></textarea></td>
 				</tr>
 			</th:block>
 			</tbody>
 		</table>
-		<button type="button" id="paymentModify" onclick="paymentModify()" style="margin-left:10px">수정</button>
+		<button type="button" id="paymentModify" onclick="paymentModify()" class="custom-button tjs" 
+			style="margin-top:20px;margin-left:10px;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;font-size:17px;width: 70px;height:35px;"
+			>수정</button>
 	</div>
 	<script>
 	/*<![CDATA[*/
@@ -243,6 +291,7 @@
 		let logCom ="";
 		let offCom ="";
 		let robinCom ="";
+		
 		//이미지 제거용 구이미지 값 저장용
 		let olduuid = "";
 		let olduploadPath = "";
@@ -269,7 +318,7 @@
 			let befored = document.getElementById('befored').value;
 			let afterd = document.getElementById('afterd').value;
 			if(document.getElementById('logCom')){
-				let logCom = document.getElementById('logCom').value;
+				logCom = document.getElementById('logCom');
 			}
 			console.log('masterDocType',masterDocType);
 			console.log('payNo',payNo);
@@ -287,7 +336,7 @@
 			let returnDate = document.getElementById('returnDate').value;
 			let offTitle = document.getElementById('offTitle').value;
 			let offContent = document.getElementById('offContent').value;
-			let offCom = document.getElementById('offCom').value;
+			let offCom = document.getElementById('offCom');
 			console.log('useDate',useDate);
 			console.log('returnDate',returnDate);
 			console.log('offTitle',offTitle);
@@ -297,7 +346,9 @@
 		//품의서
 			let robinTitle = document.getElementById('robinTitle').value;
 			let robinContent = document.getElementById('robinContent').value;
-			let robinCom = document.getElementById('robinCom').value;
+			if(document.getElementById('robinCom')){
+				robinCom = document.getElementById('robinCom');
+			}
 			console.log('robinTitle',robinTitle);
 			console.log('robinContent',robinContent);
 			console.log('robinCom',robinCom);
