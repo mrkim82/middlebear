@@ -3,7 +3,7 @@
  layout:decorate="~{layout/mailTiles}">
 <head>
 <meta charset="UTF-8">
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
 <style>
 input:focus {
 	outline:none;
@@ -46,6 +46,7 @@ li {
 </head>
 <body>
 <div layout:fragment="content">
+	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <h3 class="tjs" style="font-size:35px;margin-top:20px;">Groobear 메일 쓰기</h3>
 	<form method="post">
 		
@@ -65,19 +66,20 @@ li {
 				<td style="border:0 !important;">제목 <input id="title" type="text" name="title" style="width: 900px;border-radius:3px;border: 0;border-bottom:1px solid gray;position: absolute;top: 220px;left: 120px;"></td>
 			</tr>
 			<tr>
-				<td style="border:0 !important;"><div class="panel-body1">
+				<td style="border:0 !important;">
+					<div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">첨부파일</div>
+					<div class="panel-body1">
                      <div class="form-group uploadDiv1">
-                     첨부파일
                      <label class="input-file-button" for="input-file">
 						  파일 선택
 					</label>
                          <input name="uploadFile1" id="input-file" type="file" multiple style="display:none;">
                          <button id="send" type="button" onclick="sendMail()" style="position: absolute;right: 30px;border: 0; width: 100px; height: 40px;background: #90ddb091;border-radius: 20px;top: 260px;">메일보내기</button>
-                     </div>
+                     
                       <!-- foreach써서 조회하는걸로 변경 -->
-				<div class="uploadResult1">
-				</div>
-				
                      <div class="uploadResult1">
                          <ul>
 
@@ -85,7 +87,10 @@ li {
                      </div>
                      
                  	</div>
-                 	
+                     </div>
+                     </div>
+                     </div>
+                     </div>
                  </td></tr>
 			<tr>
 				<td><textarea id="content" name="content" style="width: 100%;height: 500px;border: 0;" placeholder="내용을 입력해 주세요 "></textarea></td>

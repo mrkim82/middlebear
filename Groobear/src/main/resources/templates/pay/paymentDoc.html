@@ -77,33 +77,33 @@
 		<option value="c">품의서</option>
 	</select>
 </div>
-<table class="tjs" style="margin-top:10px; width:1005px; border:1px solid black;">
-	<tbody id="payUserForm" style="display:none">
+<table class="tjs" style="margin-top:10px; width:995px; border:1px solid black;">
+	<tbody id="payUserForm" style="display:none" class="paymentuser">
 		<tr>
 			<td style="height:30px;"></td>
 			<td style="height:30px;"></td>
 			<td style="height:30px;"></td>
-			<td style="height:30px;">기안자</td>
-			<td style="height:30px;">결재자</td>
-			<td style="height:30px;">결재자</td>
+			<td class="paymentuser" style="height:30px;">기안자</td>
+			<td class="paymentuser" style="height:30px;">결재자</td>
+			<td class="paymentuser" style="height:30px;">결재자</td>
 		</tr>
 		<tr>
 			<td></td>
 			<td></td>
 			<td></td>
-			<td rowspan="2">기안자 서명</td>
-			<td rowspan="2">결재자 서명</td>
-			<td rowspan="2">결재자 서명</td>
+			<td class="paymentuser" rowspan="2"></td>
+			<td class="paymentuser" rowspan="2"></td>
+			<td class="paymentuser" rowspan="2"></td>
 		</tr>
 		<tr>
 			<td></td>
-			<td rowspan="2" colspan="2">제목</td>
+			<td rowspan="2" colspan="2" id="selectTitle"></td>
 		</tr>
 		<tr>
 			<td style="height:30px;"></td>
-			<td style="height:30px;">[[${userInfo.name}]]</td>
-			<td style="height:30px;">결재자 이름</td>
-			<td style="height:30px;">결재자 이름</td>
+			<td class="paymentuser" style="height:30px;">[[${userInfo.name}]]</td>
+			<td class="paymentuser" style="height:30px;" id="payUser1NameRank"></td>
+			<td class="paymentuser" style="height:30px;" id="payUser2NameRank"></td>
 		</tr>
 		<!-- 공통 -->
 		<tr>
@@ -125,15 +125,17 @@
 		</tr>
 		
 		<tr>
-			<td><input id="referrerClick" value="참조자선택" type="text" onclick="referrerSelect();" class="custom-button" 
+			<td class="tdbd"><input id="referrerClick" value="참조자선택" type="text" onclick="referrerSelect();" class="custom-button" 
 				style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
 				></td>
-			<td></td>
+			<td id="referrerAllList1"></td>
+			<td id="referrerAllList2"></td>
+			<td id="referrerAllList3"></td>
 		</tr>
 	</tbody>
 	
 	<!-- 운행일지 -->
-	<tbody id="payNum1" style="display:none">
+	<tbody id="payNum1" class="paymentuser" style="display:none">
 		<tr>
 			<td class="tdbd">일자</td>
 			<td><input type="date" id="carDate" value="sysdate"></td>
@@ -303,25 +305,50 @@
 				   box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;display:none"
 	>결재</button>
 </div>
-<div style="display: none;">
-	<ul id="referrerList">
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-	</ul>
-</div>
 
 
-
+<table style="display: none;">
+	<tbody>
+<tr id="drafter" class="paymentuser">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+<tr id="payUserList1">
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<tr id="payUserList2">
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<tr id="referrerList">
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+</tbody>
+</table>
 
 		<!-- 	<tr style="display:inline-block">
 				<td style="width:131px" class="paymentuser">기안자</td>
@@ -549,6 +576,7 @@ var payNum3 = document.getElementById('payNum3');
 var payUserForm = document.getElementById('payUserForm');
 	function paychange(){
 		if(selectPay.value == 'a'){
+			document.getElementById('selectTitle').textContent = "운행일지작성";
 			console.log('a맞음');
 			$(payNum2).hide() //.style.display = 'none';
 			$(payNum3).hide() //.style.display = 'none';
@@ -562,6 +590,7 @@ var payUserForm = document.getElementById('payUserForm');
 			document.getElementById('selectValue').value = '운행일지';
 
 		}else if(selectPay.value == 'b'){
+			document.getElementById('selectTitle').textContent = "연차계작성"
 			payUserForm.style.display = 'block';
 			payNum1.style.display = 'none';
 			payNum3.style.display = 'none';
@@ -573,6 +602,7 @@ var payUserForm = document.getElementById('payUserForm');
 			document.getElementById('selectValue').value = '연차계';
 			
 		}else if(selectPay.value == 'c'){
+			document.getElementById('selectTitle').textContent = "품의서작성";
 			payUserForm.style.display = 'block';
 			payNum1.style.display = 'none';
 			payNum2.style.display = 'none';
