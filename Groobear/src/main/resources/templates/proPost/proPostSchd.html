@@ -104,22 +104,33 @@ li {
     
     <div class="modal-body">
     	<div class="workFeedPostStatus" th:attr="data-feed-work-type=${taskD.workStatus}" style="text-align: center;">
-		    <button type="button" class="btn"
+		    <button type="button" class="btn" style="border-radius:10px;"
 		    		th:classappend="${taskD.workStatus == '1' ? 'btn-primary' : 'btn-outline-primary'}"
-		            data-work-type-status="1" onclick="toggleFeedButtonStyle(this)">요청</button>
-		    <button type="button" class="btn"
+		            data-work-type-status="1" onclick="toggleFeedButtonStyle(this)" th:disabled="${taskD.id != session.Id}">요청</button>
+		    <button type="button" class="btn" style="border-radius:10px;"
 		    		th:classappend="${taskD.workStatus == '2' ? 'btn-warning' : 'btn-outline-warning'}"
-		            data-work-type-status="2" onclick="toggleFeedButtonStyle(this)">진행</button>
-		    <button type="button" class="btn"
+		            data-work-type-status="2" onclick="toggleFeedButtonStyle(this)" th:disabled="${taskD.id != session.Id}">진행</button>
+		    <button type="button" class="btn" style="border-radius:10px;"
 		    		th:classappend="${taskD.workStatus == '3' ? 'btn-danger' : 'btn-outline-danger'}"
-		            data-work-type-status="3" onclick="toggleFeedButtonStyle(this)">피드백</button>
-		    <button type="button" class="btn"
+		            data-work-type-status="3" onclick="toggleFeedButtonStyle(this)" th:disabled="${taskD.id != session.Id}">피드백</button>
+		    <button type="button" class="btn" style="border-radius:10px;"
 		    		th:classappend="${taskD.workStatus == '4' ? 'btn-success' : 'btn-outline-success'}"
-		            data-work-type-status="4" onclick="toggleFeedButtonStyle(this)">완료</button>
-		    <button type="button" class="btn"
+		            data-work-type-status="4" onclick="toggleFeedButtonStyle(this)" th:disabled="${taskD.id != session.Id}">완료</button>
+		    <button type="button" class="btn" style="border-radius:10px;"
 		    		th:classappend="${taskD.workStatus == '5' ? 'btn-secondary' : 'btn-outline-secondary'}"
-		            data-work-type-status="5" onclick="toggleFeedButtonStyle(this)">보류</button>
+		            data-work-type-status="5" onclick="toggleFeedButtonStyle(this)" th:disabled="${taskD.id != session.Id}">보류</button>
 		</div>
+		
+		<div style="margin-bottom: 10px;">
+			<span>담당자 : </span>
+			<span th:each="wPerson : ${readTaskWorkPerson}"
+			      th:if="${taskD.workNo == wPerson.workNo}"
+			      th:text="${wPerson.name} + ' '"></span>
+		</div>
+		
+		<!-- 내용 -->
+		<p th:text="${taskD.workContent}" style="margin-top:0px; margin-bottom: 10px;">
+		</p>
 		
 		<!-- 추가 항목 -->
 		<div>
@@ -136,44 +147,57 @@ li {
 			<div class="collapse" th:id="'collapseExample' + ${taskD.workNo}">
 			  <div class="card card-body">
 			  	<!-- 시작일 추가 -->
-			  	<div>
-			  		<p style="margin-top:0px;">시작일</p>
-						<input type="datetime-local" id="startWorkDate2" th:value="${#dates.format(taskD.workStartDay, 'yyyy-MM-dd HH:mm')}">
+			  	<div style="margin-bottom: 7px;">
+			  		<p style="margin-bottom: 2px; margin-top:0px;">시작일</p>
+						<input type="datetime-local"
+							   class="startWorkDate2 form-control"
+							   th:value="${#dates.format(taskD.workStartTime, 'yyyy-MM-dd HH:mm')}"
+							   style="margin-left: 3px; width: 210px; border-radius: 5px;"
+							   th:disabled="${taskD.id != session.Id}">
 			  	</div>
 			  	<!-- 마감일 추가 -->
-			  	<div>
-			  		<p style="margin-top:0px;">마감일</p>
-			  		<input type="datetime-local"  id="endWorkDate2" th:min="${#dates.format(#calendars.createNow())}" th:value="${#dates.format(taskD.workStartTime, 'yyyy-MM-dd HH:mm')}">
+			  	<div style="margin-bottom: 7px;">
+			  		<p style="margin-bottom: 2px; margin-top:0px;">마감일</p>
+			  		<input type="datetime-local"
+			  			   class="endWorkDate2 form-control"
+			  			   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
+			  			   th:value="${#dates.format(taskD.workEndTime, 'yyyy-MM-dd HH:mm')}"
+			  			   style="margin-left: 3px; width: 210px; border-radius: 5px;"
+			  			   th:disabled="${taskD.id != session.Id}">
 			  	</div>
 			  	<!-- 우선순위 추가 -->
-			  	<div>
-						<p style="margin-top:0px;">우선순위</p>
-						<select class="custom-select" name="workPri" id="workPostPri">
-							<option value="">없음</option>
-							<option value="1" th:selected="${taskD.workStatus == '1'}">낮음</option>
-							<option value="2" th:selected="${taskD.workStatus == '2'}">보통</option>
-						    <option value="3" th:selected="${taskD.workStatus == '3'}">높음</option>
-						    <option value="4" th:selected="${taskD.workStatus == '4'}">긴급</option>
-						</select>
+			  	<div style="margin-bottom: 7px;">
+					<p style="margin-top:0px; margin-bottom: 2px;">우선순위</p>
+					<select class="custom-select workPostPri"
+							name="workPri"
+							style="width: 70px; margin-left: 3px; border-radius: 5px;"
+							th:disabled="${taskD.id != session.Id}">
+						<option value="">없음</option>
+						<option value="1" th:selected="${taskD.workStatus == '1'}">낮음</option>
+						<option value="2" th:selected="${taskD.workStatus == '2'}">보통</option>
+					    <option value="3" th:selected="${taskD.workStatus == '3'}">높음</option>
+					    <option value="4" th:selected="${taskD.workStatus == '4'}">긴급</option>
+					</select>
 			  	</div>
-			  	<!-- 그룹 추가 -->
-			  	<div>
 			  	
-			  	<p style="margin-top:0px;">업무 그룹</p>
-				<select class="form-select" name="workGroup" id="workPostGroup2">
-					<th:block th:each="group : ${readWorkGroup}">
-							<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}"
-									th:selected="${taskD.workGroupNo == group.workGroupNo}"></option>
-					</th:block>
-				</select>
+			  	<!-- 그룹 추가 -->
+			  	<div style="margin-bottom: 7px;">
+				  	<p style="margin-bottom: 2px; margin-top: 0px;">업무 그룹</p>
+					<select class="workPostGroup2 custom-select"
+							name="workGroup"
+							style="width: 210px; margin-left: 3px; border-radius: 5px;"
+							th:disabled="${taskD.id != session.Id}">
+						<th:block th:each="group : ${readWorkGroup}">
+								<option th:text="${group.workGroupName}" th:value="${group.workGroupNo}"
+										th:selected="${taskD.workGroupNo == group.workGroupNo}"></option>
+						</th:block>
+					</select>
 			  	</div>
 			  </div>
 			</div>
 		</div>
 		<!-- 항목추가 종료 -->
-		<p th:text="${taskD.workContent}" style="margin-top:0px;">
-			<!-- 게시글 내용이 여기에 들어갑니다. -->
-		</p>
+		
 		<div class="collapse" id="moreContent">
 			<p style="margin-top:0px;">
 				<!-- 추가적인 일정 내용이 여기에 들어갑니다. -->
@@ -392,15 +416,24 @@ li {
 			  		and #dates.format(calD.schEndTime, 'yyyy-MM-dd HH:mm') >= #dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 			 th:attr="data-feed-sch-type=${rparti.partiCheck}"
 			 style="text-align: center; margin-bottom: 5px; margin-top: 20px;">
-			<button type="button" class="btn"
-				th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
-				data-sch-type-status="Y" onclick="toggleFeedSchButtonStyle(this)">참석</button>
-			<button type="button" class="btn"
-				th:classappend="${rparti.partiCheck == 'N' ? 'btn-danger' : 'btn-outline-danger'}"
-				data-sch-type-status="N" onclick="toggleFeedSchButtonStyle(this)">불참</button>
-			<button type="button" class="btn"
-				th:classappend="${rparti.partiCheck == 'A' ? 'btn-secondary' : 'btn-outline-secondary'}"
-				data-sch-type-status="A" onclick="toggleFeedSchButtonStyle(this)">미정</button>
+			<button type="button"
+					class="btn"
+					th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
+					data-sch-type-status="Y"
+					onclick="toggleFeedSchButtonStyle(this)"
+					style="border-radius:10px;">참석</button>
+			<button type="button"
+					class="btn"
+					th:classappend="${rparti.partiCheck == 'N' ? 'btn-danger' : 'btn-outline-danger'}"
+					data-sch-type-status="N"
+					onclick="toggleFeedSchButtonStyle(this)"
+					style="border-radius:10px;">불참</button>
+			<button type="button"
+					class="btn"
+					th:classappend="${rparti.partiCheck == 'A' ? 'btn-secondary' : 'btn-outline-secondary'}"
+					data-sch-type-status="A"
+					onclick="toggleFeedSchButtonStyle(this)"
+					style="border-radius:10px;">미정</button>
 		</div>
 
 
@@ -636,7 +669,6 @@ li {
 		let updateObj = {};
 		
 		let schPlNo = event.target.closest('.custom-modal').dataset.feedSchNo;//스케줄 고유번호
-		console.log(inputValues);
 		inputValues.forEach(inputValue => {
 			updateObj.schNo = schPlNo;
 			updateObj.partiCheck = inputValue.dataset.schStatus == null ? 'A' : inputValue.dataset.schStatus;
@@ -646,10 +678,7 @@ li {
 	    });
 		let noSchNo = [{'schNo' : schPlNo}];
 		formData = updatePartiList.length == 0 ? noSchNo : updatePartiList;
-		console.log(formData);
 		
-		//console.log(formDataDel.get('schNo'))
-				
 		//기존 & 추가 인원 추가
 		fetch("/insertPartiMemberAll", {
 			method: 'POST',
@@ -699,9 +728,6 @@ li {
 
 		selectedSchButton.set(postSchNo, newStatus);//신규 번호 삽입
 		
-		//console.log('신규상태',newStatus);//새 번호 찾기
-		//console.log('고유번호',schNo);
-		
 		fetch("/updateSchPartiCheck", {
 			method: 'PUT',
 			headers: {
@@ -714,7 +740,6 @@ li {
 		})
 		.then(response => response.json())
 		.then(res => {
-			console.log(res);
 			if(res.result == '성공') {
 				
 				if (oldSchButton !== button) {//기존 버튼과 셀렉한 버튼이 다를 때
@@ -759,31 +784,27 @@ li {
 	    button.classList.remove(className);
 	    button.classList.add(filledClassName);
 	  }
-	}
+	};
 	
 	//글자 바꾸기
 	function changeSchStatus(button, newStatus) {
 		let schPartiChange = button.closest(".custom-modal").querySelector('[data-sch-user-id]').nextElementSibling;//상태창 위치
-		//console.log('ss',button.closest(".custom-modal").querySelector('[data-sch-user-id]'));
-		//console.log('sss',schPartiChange)
-		
-		//console.log(selfId);
-		//console.log('id값을 찾아서3',button.closest(".custom-modal").querySelector('[data-sch-list-id = '+selfId+']'));
+		let partiChangeList = button.closest(".custom-modal").querySelector('[data-sch-list-parti-id="'+selfId+'"]');
 		
 		if(newStatus == 'Y') {
 			schPartiChange.textContent ='참석';
-			button.closest(".custom-modal").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'Y';
+			partiChangeList.dataset.schStatus = 'Y';
 			schPartiChange.style.color = 'green';
 		} else if(newStatus == 'N') {
 			schPartiChange.textContent ='불참';
-			button.closest(".custom-modal").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'N';
+			partiChangeList.dataset.schStatus = 'N';
 			schPartiChange.style.color = 'red';
 		} else if(newStatus == 'A') {
 			schPartiChange.textContent ='미정';
-			button.closest(".custom-modal").querySelector('[data-sch-list-parti-id = '+selfId+']').dataset.schStatus = 'A';
+			partiChangeList.dataset.schStatus = 'A';
 			schPartiChange.style.color = 'gray';
-		}
-	}
+		};
+	};
 </script>
 
 </th:block>

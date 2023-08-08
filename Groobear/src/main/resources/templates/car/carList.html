@@ -186,7 +186,33 @@ tbody tr {
 		  </div>
 		</div>
 
+		<div class="modal fade tjs" id="myModal2" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width: 500px; margin-top:200px;">
+				<div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;width: 500px;">
+					<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;">
+						<h5 class="modal-title" id="exampleModalLabel" style="font-size: 20px;margin-left: 15px;margin-top: 20px;margin-bottom: 20px;">차량 관리</h5>
+						<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
+							aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;margin-right: 20px;margin-top: 15px;">X</button>
+					</div>
+						<div class="modal-body" style="text-align: center;">
+							<div class="form-group mb-3" style="display: flex; justify-content: space-evenly; margin-top:20px;">
+								<p id="pText" style="font-size: 28px;color: black;"></p>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" onclick="closeModal()" id="saveBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;">확인</button>
+							
+						</div>
+				</div>
+			</div>
+		</div>
+
+
+
 	
+
+
 
 	<script src="modal6/js/jquery.min.js"></script>
     <script src="modal6/js/popper.js"></script>
@@ -201,6 +227,12 @@ function goPage(p){
 	searchForm.page.value = p;
 	searchForm.submit();
 }
+
+function closeModal() {
+ 	  // 모달 창 닫기
+ 	  $('#myModal').modal('hide');
+ 	 location.reload();
+ 	}
 
 $('#carMInfo').on('hidden.bs.modal', function (event) {
 	 carInfoForm.reset();
@@ -225,7 +257,8 @@ document.getElementById('searchBtn').addEventListener('click',function(){
 			    var searchText = textBox.value;
 			    
 					if(selectedOption == '' && searchText != '') {
-				        alert('검색 조건을 선택해 주세요. 선택 상태에서는 검색어를 입력할 수 없습니다.');
+						$('#pText').text('검색 조건을 선택해 주세요. 선택 상태에서는 검색어를 입력할 수 없습니다.');
+						$('#myModal2').modal('show');
 				        selectBox.selectedIndex = 0; 
 				        textBox.value = ''; 
 				        event.preventDefault()
@@ -292,35 +325,16 @@ document.querySelector('#deleteBtn').addEventListener('click',function(){
 $('#carMInfo').on('hidden.bs.modal', function (event) {
 	 carInfoForm.reset();
 })
-	/* 
 
-function checkBtn(){
-			if(document.getElementsByName('carNo')[0].value == '' || document.getElementsByName('carType')[0].value == ''){
-				event.preventDefault();
-				alert('차량번호와 차종 모두 작성해주세요')
-			}else if($('.card-body').length > 2){
-				alert('2대이상 등록 금지')
-				event.preventDefault();
-				document.getElementsByName('carNo')[0].value = '';
-				document.getElementsByName('carType')[0].value = '';
-			}else if(document.querySelector('.carNoCk').textContent != '정상'){
-				alert('차량번호를 제대로 입력해 주세요.')
-				event.preventDefault();
-				document.getElementsByName('carNo')[0].value = '';
-				document.getElementsByName('carType')[0].value = '';
-			}else{
-				document.querySelector('.insertBtn').submit();
-					
-			}
-		}
-		 */
 		
 		 function checkBtn2(){
 				if(document.getElementById('newCarNo').value == ''){
+					$('#pText').text('차량번호와 차종 모두 작성해주세요.');
+					$('#myModal2').modal('show');
 					event.preventDefault();
-					alert('차량번호를 입력해 주세요')
 				}else if(document.querySelector('#mCarNoCk').textContent != '정상'){
-					alert('차량번호를 올바른 형식으로 입력해 주세요.')
+					$('#pText').text('차량번호를 확인 주세요.');
+					$('#myModal2').modal('show');
 					event.preventDefault();
 					document.getElementById('newCarNo').value = '';
 				}else{
@@ -350,10 +364,12 @@ function checkBtn(){
 					.then(response => response.text())
 					.then(result => {
 						if(result == 'true'){
-							alert('차량번호가 이미 존재합니다.')
-							location.reload();
-						}else{
+							$('#pText').text('차량번호가 이미 존재합니다.');
+							$('#myModal2').modal('show');
+							$('#carNo').val('');
+							$('#infoCarType').val('');
 							
+						}else{
 
 							fetch("carUpdate",{
 								method : 'post',
@@ -367,7 +383,9 @@ function checkBtn(){
 								if(result == null){
 									console.log('실패')
 								}else {
-								 location.reload();
+									$('#carMInfo').modal('hide');
+									$('#pText').text('정상처리 되었습니다.');
+									$('#myModal2').modal('show');
 								}
 							})
 							.catch(err => console.log(err))
