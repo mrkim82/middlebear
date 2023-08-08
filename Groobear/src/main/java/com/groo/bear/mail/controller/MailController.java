@@ -39,7 +39,7 @@ public class MailController {
 	@Autowired
 	MailService mailService;
 	
-	//받은메일함
+	//받은메일함 
 	@GetMapping("mail/receiveMail")
 	public String receiveMailForm(Criteria cri ,Model model, MailVO mailVO, HttpSession session ,  @RequestParam(value="nowPage", required=false)String nowPage
 			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) throws ParseException, MessagingException {
