@@ -52,7 +52,7 @@
 <!-- <script src="fileBoard.js"></script> -->
 <body class="tjs">
     <div layout:fragment="content">
-        <h2 style="margin-top: 25px;">글 작성</h2>
+        <h2 style="margin-top: 35px;" class="tjs">글 작성</h2>
         <button type="submit" class="insertBtn" style="position:absolute; right: 116px; top: 578px; z-index: 1000;">게시글 등록</button>
         <button id="listlist" class="listBtn" type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|" style="position: absolute;right: 24px;top: 578px; z-index: 1000;">목록으로</button>
         <form action="/boardInsert" method="post" role="form">
@@ -60,7 +60,7 @@
                 <thead>
                 <tr style="font-weight: 600; color: black;"> 
                     <td>제목:</td>
-                    <td><input type="text" id="title" name="title"  required  style="border: 0px; width:600px; font-weight: 600; color: black;" placeholder="이곳에 제목을 입력하세요"/></td>
+                    <td><input type="text" id="title" name="title"  required  style="border: 0px; width:800px; font-weight: 600; color: black;" placeholder="이곳에 제목을 입력하세요"/></td>
                 </tr>
                 <tr style="font-weight: 400; color: black;">
                     <td>내용:</td>
