@@ -147,7 +147,7 @@ on b.id = c.id
 	<!-- 댓글 -->
 	<select id="readBoardComment" resultType="BoardVO">
       SELECT a.com_no, a.com_content, TO_CHAR(a.com_date, 'yyyy/MM/dd HH24:mi') AS com_Date,
-            c.name, u.profile_img, a.id, b.board_no
+            c.name, a.id, b.board_no
       FROM com a JOIN users u
       ON(a.id=u.id)
       JOIN user_info c
