@@ -1,6 +1,7 @@
 package com.groo.bear.mail.service;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -21,4 +22,5 @@ public class MailVO {
 	private String referrer;
 	private String referrer2;
 	private String referrer3;
+	private List<String> files;
 }
