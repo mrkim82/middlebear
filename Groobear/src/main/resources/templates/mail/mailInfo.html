@@ -43,6 +43,7 @@
         </th:block>
         <tr>
 			<td>
+			
 				<div class="bigPictureWrapper">
 					<div class="bigPicture">
 					</div>
@@ -54,6 +55,9 @@
 							<div class = "panel-body">
 								<div class = "uploadResult">첨부파일
 									<ul>
+										<li  th:each="file, stat : ${mail.files}" >
+											<a th:text="${file.fileName}"></a>
+										</li>
 									</ul>
 								</div>
 							</div>
@@ -69,7 +73,7 @@
         </td></tr>
     </table>
     <script>
-    $.getJSON(`/getAttach?mailNo=[[${mail.mailNo}]]`, function(arr) {
+    /* $.getJSON(`/getAttach?mailNo=[[${mail.mailNo}]]`, function(arr) {
         var str = "";
         console.log('들어는와짐');
         $(arr).each(function(i, attach){
@@ -138,7 +142,7 @@
 		            return false;
 		        }
 		        return true;
-		    }
+		    } */
     </script>
 </body>
 </html>

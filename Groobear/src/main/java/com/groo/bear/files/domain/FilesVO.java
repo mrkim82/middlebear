@@ -26,5 +26,6 @@ public class FilesVO {
 	private int no;
 	private String id;
 	private int signNo;
+	private int readMailNo;
 	
 }

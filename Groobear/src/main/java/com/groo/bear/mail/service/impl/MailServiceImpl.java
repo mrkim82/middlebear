@@ -235,7 +235,9 @@ public class MailServiceImpl implements MailService{
 	}
 	@Override
 	public MailVO getMailInfo(int mailNo) {
-		return mailMapper.getMailInfo(mailNo);
+		MailVO mailVO = mailMapper.getMailInfo(mailNo);
+		mailVO.setFiles(filesMapper.readMailFile(mailNo));
+		return mailVO;
 	}
 	@Override
 	public int getMailInfoUpdate(MailVO mailVO) {
