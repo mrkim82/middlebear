@@ -18,9 +18,9 @@ public interface ProMapper {
 	
 	//프로젝트 조회
 	public List<ProVO> readProject(Map<String, Object> map);
-	public List<ProVO> readProjectHide(String id);
-	public List<ProVO> readProjectStar(String id);
-	public List<ProVO> readProjectNoGroup(String id);
+	public List<ProVO> readProjectHide(String id, String proPartiFilter, String proRange);
+	public List<ProVO> readProjectStar(String id, String proPartiFilter, String proRange);
+	public List<ProVO> readProjectNoGroup(String id, String proPartiFilter, String proRange);
 	
 	//유저 정렬, 필터 조회
 	public ProUsersVO readOrder(String id);
@@ -35,7 +35,7 @@ public interface ProMapper {
 	// 프로젝트 그룹 목록 조회
 	public List<ProGroupVO> readProjectGroup(String id);
 	// 프로젝트 그룹 프로젝트 조회
-	public List<ProGroupVO> readProjectGroupDetail(int groupNo, String id);
+	public List<ProGroupVO> readProjectGroupDetail(int groupNo, String id, String proPartiFilter, String proRange);
 	// 프로젝트 그룹 생성
 	public int createProjectGroup(String groupName, String id);
 	// 프로젝트 그룹 생성 후 번호 조회

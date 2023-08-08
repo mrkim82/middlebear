@@ -6,31 +6,6 @@
 <head>
 </head>
 <div layout:fragment="content">
-<!-- 필터, 정렬 -->
-<div style="text-align: end; margin-bottom: 15px;">
-	<select class="custom-select"
-			name="parti"
-			onchange="chagepartiSelect()"
-			id="partiSelect"
-			style="width: 190px;">
-		<option 
-				value=""
-				>내가 참여중인 프로젝트</option>
-		<option 
-				th:value="${session.Id}">내가 관리자인 프로젝트</option>
-	</select>
-	<select class="custom-select"
-			name="parti"
-			onchange="chageorderSelect()"
-			id="orderSelect"
-			style="width: 150px;">
-		<option 
-				value="1 DESC">오름차순(ㄱ~ㅎ)</option>
-		<option 
-				value="1 ASC">내림차순(ㅎ~ㄱ)</option>
-	</select>
-</div>
-
 <!-- 그룹에 프로젝트 추가, 삭제 버튼 -->
 <div th:if="${readPerAllPro != null}">
 	<!-- Button trigger modal -->
@@ -175,14 +150,58 @@
 		};
 
 	};
-	
-	//프로젝트 master여부
+</script>
+
+<!-- 프로젝트 필터 -->
+<script>
 	function chagepartiSelect() {
 		let partiSelectId = document.getElementById('partiSelect').value;
-		console.log('마스터!!',partiSelectId);
+		
+		fetch("/proMainO", {
+			method: 'POST',
+			headers: {
+   			    'Content-Type': 'application/json'
+   			  },
+   			body: JSON.stringify({
+   				'proPartiFilter': partiSelectId
+   			})
+		})
+		.then(response => response.json())
+		.then(res => {
+			if (res.result == '성공') {
+				location.reload();
+			} else {
+				alert('요청 실패');
+			};
+		});
 	};
 </script>
-	
+
+<!-- 프로젝트 정렬 -->
+<script>
+	function chageorderSelect() {
+		let proRange = document.getElementById('orderSelect').value;
+		
+		fetch("/proMainO", {
+			method: 'POST',
+			headers: {
+   			    'Content-Type': 'application/json'
+   			  },
+   			body: JSON.stringify({
+   				'proRange': proRange
+   			})
+		})
+		.then(response => response.json())
+		.then(res => {
+			if (res.result == '성공') {
+				location.reload();
+			} else {
+				alert('요청 실패');
+			};
+		});
+	};
+</script>
+
 <!-- 프로젝트 홈에서 상세 페이지 이동 -->
 <script>
 	function projectDetail() {

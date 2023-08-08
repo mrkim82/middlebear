@@ -121,7 +121,9 @@ public class ProController {
 	@GetMapping("proMainS")
 	public String proMainPageS(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		model.addAttribute("projectMainList", proService.readProjectStar((String)session.getAttribute("Id")));
+		String id = (String)session.getAttribute("Id");
+		model.addAttribute("userProjectFilter", proService.readOrder(id));
+		model.addAttribute("projectMainList", proService.readProjectStar(id));
 		proData(model, request);
 		return "proHome/proMainStar";
 	};
@@ -130,6 +132,8 @@ public class ProController {
 	@GetMapping("proMainH")
 	public String proMainPageH(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("Id");
+		model.addAttribute("userProjectFilter", proService.readOrder(id));
 		model.addAttribute("projectMainList", proService.readProjectHide((String)session.getAttribute("Id")));
 		proData(model, request);
 		return "proHome/proMainSub";
@@ -139,6 +143,8 @@ public class ProController {
 	@GetMapping("proMainG")
 	public String proMainPageG(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("Id");
+		model.addAttribute("userProjectFilter", proService.readOrder(id));
 		model.addAttribute("projectMainList", proService.readProjectNoGroup((String)session.getAttribute("Id")));
 		proData(model, request);
 		return "proHome/proMainSub";
@@ -149,6 +155,7 @@ public class ProController {
 	public String proGroupDetailList(Model model, @PathVariable int groupNo, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("Id");
+		model.addAttribute("userProjectFilter", proService.readOrder(id));
 		model.addAttribute("projectMainList", proService.readProjectGroupDetail(groupNo, id));
 		model.addAttribute("readPerAllPro", proService.readPerAllPro(id));//개인 전체 프로젝트 조회(이름, 멤버번호)
 		model.addAttribute("readGroupCheckPro", proService.readGroupCheckPro(groupNo, id));
