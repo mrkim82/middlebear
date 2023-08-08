@@ -223,7 +223,7 @@
 		       (SELECT NVL(MAX(pro_post_no), 0)
 		        FROM pro_post),
 		        #{voteContent},
-		        TO_DATE('2023-07-22 18:00', 'YYYY-MM-DD HH24:MI')
+		        SYSDATE)
 		)
 	</insert>
 

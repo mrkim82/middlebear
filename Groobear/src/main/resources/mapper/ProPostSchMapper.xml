@@ -43,7 +43,7 @@
 		with pm as
 		( select p.sch_no, m.id 
 		  from (SELECT * 
-		          FROM pro_mem WHERE pro_no = 1 AND pro_parti_check = 'Y'
+		          FROM pro_mem WHERE pro_no = #{proNo} AND pro_parti_check = 'Y'
 		        ) m,
 		        ( SELECT *
 		        FROM pro_sch a
@@ -206,7 +206,7 @@
 		LEFT JOIN files e
 		  ON (e.id = a.id)
 		WHERE a.id = #{id}
-		AND d.pro_no = 7
+		AND d.pro_no = 1
 	</select>
 	
 	<!-- 회원 탈퇴용 참가자 삭제 -->
