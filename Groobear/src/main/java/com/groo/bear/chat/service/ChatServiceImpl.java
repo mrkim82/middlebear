@@ -1,6 +1,7 @@
 package com.groo.bear.chat.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,6 +113,21 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public List<FilesVO> getImage() {
 		return chatMapper.getImage();
+	}
+
+
+	@Override
+	public List<ChatMessageDTO> getMessagesWithProfileImages(int roomNo) {
+		return chatMapper.getMessagesWithProfileImages(roomNo);
+	}
+
+
+	@Override
+	public String getProfileImagePath(String id) {
+		Map<String, Object> userAndFile = chatMapper.getUserAndFileByMessage(id);
+	    String uploadPath = (String) userAndFile.get("UPLOAD_PATH");
+	    String fileName = (String) userAndFile.get("FILE_NAME");
+	    return uploadPath + "/" + fileName;
 	}
 	
 	

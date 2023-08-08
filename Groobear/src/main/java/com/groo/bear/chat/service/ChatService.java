@@ -58,4 +58,9 @@ public interface ChatService {
 	
 	//프로필사진 띄우려고
 	public List<FilesVO> getImage();
+	
+	//프로필사진 또 띄워
+	public List<ChatMessageDTO> getMessagesWithProfileImages(int roomNo);
+	
+	public String getProfileImagePath(String id);
 }
