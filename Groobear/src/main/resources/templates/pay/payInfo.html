@@ -10,6 +10,51 @@
 		font-family: 'Do Hyeon', serif;/*웹 폰트 지정*/
 		font-size : 20px;
 	}
+	.input-file-button{
+  padding: 6px 25px;
+  background-color:#90ddb091;
+  border-radius: 4px;
+  color: black;
+  cursor: pointer;
+  position:absolute;
+  top: -6px;
+  left: 80px;
+}
+.uploadResult1 .btn-warning {
+    color: gray;
+    background-color: #90ddb091;
+    border-radius: 7px;
+    padding: 1px 8px;
+    margin-left: 5px;
+    border: 0;
+}
+.uploadResult2 .btn-warning {
+    color: gray;
+    background-color: #90ddb091;
+    border-radius: 7px;
+    padding: 1px 8px;
+    margin-left: 5px;
+    border: 0;
+}
+.uploadResult3 .btn-warning {
+    color: gray;
+    background-color: #90ddb091;
+    border-radius: 7px;
+    padding: 1px 8px;
+    margin-left: 5px;
+    border: 0;
+}
+.uploadResult4 .btn-warning {
+    color: gray;
+    background-color: #90ddb091;
+    border-radius: 7px;
+    padding: 1px 8px;
+    margin-left: 5px;
+    border: 0;
+}
+	.button-wrapper {
+                text-align: right;
+            }
 	#ulId li.active a.page-link {
     	background-color: #35A880;
     	border: 1px solid #35A880;
@@ -46,9 +91,11 @@
 	}		
 	</style>
 </head>
-<body layout:fragment="content">
+<body>
+<div layout:fragment="content">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-	<div style="width: 800px;">
+	<div style="width: 1000px;">
+	<h3 class="tjs" style="font-size:35px;margin-top:20px;display:block">Groobear 문서조회</h3>
 		<table class="table table-hover tjs" style="float:left; width: 400px;">
 			<thead></thead>
 			<tbody>
@@ -84,57 +131,82 @@
 				</tr>
 			</tbody>
 		</table>
-		<table class="table table-hover tjs" style="float:left; width: 380px;">
-			<thead></thead>
-			<tbody>
-				<tr>
-	               <td>기안자</td>
-	               <td>결재자</td>
-	               <td>결재자</td>
+		<table class="paymentuser tjs" style="float:right;width:40%;margin-top:10px;">
+			<thead>
+				<tr style="display:inline-block">
+	               <td style="width:133px" class="paymentuser">기안자</td>
+	               <td style="width:131px" class="paymentuser">결재자</td>
+	               <td style="width:133px" class="paymentuser">결재자</td>
 	            </tr>
-	            <tr>
-		            <th:block th:if="${not #strings.isEmpty(drafterSign)}">
-		                <td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(drafterSign.uploadPath,'\','/')}/${drafterSign.uuid}_${drafterSign.fileName}|}" 
+			</thead>
+			<tbody class="paymentuser">
+	            <tr style="display:inline-block" class="paymentuser">
+		            <th:block th:if="${drafterSign.uploadPath != 'public'}">
+		                <td style="width:131px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(drafterSign.uploadPath,'\','/')}/${drafterSign.uuid}_${drafterSign.fileName}|}" 
 							th:data-uploadpath="${drafterSign.uploadPath}" th:data-uuid="${drafterSign.uuid}"
 							th:data-filename="${drafterSign.fileName}" data-type="true"  style="border:1px solid; width:100px">
 					    </td>
 					</th:block>
-					<th:block th:unless="${not #strings.isEmpty(drafterSign)}">
-						<td style="width:100px; padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+					<th:block th:if="${drafterSign.uploadPath==null or drafterSign.uploadPath=='public'}">
+						<td style="width:131px; padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
 					</th:block>
 					
-						<th:block th:if="${list.payStatus2 == 'Y'} and ${not #strings.isEmpty(approver2Sign)}">
-							<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
-								th:data-uploadpath="${approver2Sign.uploadPath}" th:data-uuid="${approver2Sign.uuid}"
-								th:data-filename="${approver2Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
-							</td>
-						</th:block>
-						<th:block th:if="${list.payStatus2 == 'Y'} and ${#strings.isEmpty(approver2Sign)}">
-							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
-						</th:block>
-						<th:block th:if="${list.payStatus2 == 'F'}">
-							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
-						</th:block>
-						<th:block th:if="${list.payStatus3 == 'Y'} and ${not #strings.isEmpty(approver3Sign)}">
-							<td style="width:100px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver3Sign.uploadPath,'\','/')}/${approver3Sign.uuid}_${approver3Sign.fileName}|}" 
-								th:data-uploadpath="${approver3Sign.uploadPath}" th:data-uuid="${approver3Sign.uuid}"
-								th:data-filename="${approver3Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
-							</td>
-						</th:block>
-						<th:block th:if="${list.payStatus3 == 'Y'} and ${#strings.isEmpty(approver3Sign)}">
-							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
-						</th:block>
-						<th:block th:if="${list.payStatus3 == 'F'}">
-							<td style="width:100px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
-						</th:block>
+					<th:block th:if="${list.payStatus2 == 'Y'} and ${approver2Sign.uploadPath != null and approver2Sign.uploadPath != 'public'}">
+						<td style="width:131px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
+							th:data-uploadpath="${approver2Sign.uploadPath}" th:data-uuid="${approver2Sign.uuid}"
+							th:data-filename="${approver2Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
+						</td>
+					</th:block>
+					<th:block th:if="${list.payStatus2 == 'Y'} and ${approver2Sign.uploadPath == null or approver2Sign.uploadPath=='public'}">
+						<td style="width:131px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+					</th:block>
+					<th:block th:if="${list.payStatus2 == 'F'}">
+						<td style="width:131px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
+					</th:block>
+					
+					<th:block th:if="${list.payStatus3 == 'Y'} and ${approver3Sign.uploadPath != null and approver3Sign.uploadPath != 'public'}">
+						<td style="width:133px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver3Sign.uploadPath,'\','/')}/${approver3Sign.uuid}_${approver3Sign.fileName}|}" 
+							th:data-uploadpath="${approver3Sign.uploadPath}" th:data-uuid="${approver3Sign.uuid}"
+							th:data-filename="${approver3Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
+						</td>
+					</th:block>
+					<th:block th:if="${list.payStatus3 == 'Y'} and ${approver3Sign.uploadPath == null or approver3Sign.uploadPath == 'public'}">
+						<td style="width:133px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+					</th:block>
+					<th:block th:if="${list.payStatus3 == 'Y'} and ${not #strings.isEmpty(approver3Sign)} and ${approver3Sign.uploadPath == 'public'}">
+						<td style="width:133px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/publicSign.png"></td>
+					</th:block>
+					<th:block th:if="${list.payStatus3 == 'F'}">
+						<td style="width:133px;padding:0px;"><img id="profImg" style="border:1px solid;width:100px;" src="../img/rejectSign.png"></td>
+					</th:block>
 	            </tr>
-	            <tr>
-	               <td>[[${drafterInfo.name}]] [[${drafterInfo.rank}]]</td>
-	               <td>[[${approver2Info.name}]] [[${approver2Info.rank}]]</td>
+					<th:block th:if="${list.payStatus2 == 'N'}">
+						<tr style="display:inline-block" class="paymentuser">
+						<td style="width:130px; height:100px; background-color:white"></td>
+					</tr>
+					</th:block>
+					<th:block th:if="${list.payStatus3 == 'N'}">
+						<tr style="display:inline-block" class="paymentuser">
+						<td style="width:131px; height:100px; background-color:white"></td>
+					</tr>
+					</th:block>
+					
+	            	<tr style="display:inline-block;width:133px;height: 30px;" class="paymentuser">
+	               		<td style="text-align: center; position:absolute;left: 650px;top:213px;">[[${drafterInfo.name}]] [[${drafterInfo.rank}]]</td>
+	               	</tr>
+	            	<tr style="display:inline-block;width:132px;height: 30px;" class="paymentuser">
+	               		<td style="text-align: center; position:absolute;left: 781px;top:213px;">[[${approver2Info.name}]] [[${approver2Info.rank}]]</td>
+	               	</tr>
 	               <th:block th:if="${not #strings.isEmpty(approver3Info)}">
-	               		<td>[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
+	               		<tr style="display:inline-block;width:131px;height: 30px;" class="paymentuser">
+	               			<td style="text-align: center; position:absolute;left: 922px;top:213px;">[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
+	            		</tr>
 	               </th:block>
-	            </tr>
+	               <th:block th:if="${#strings.isEmpty(approver3Info)}">
+		               	<tr style="display:inline-block;width:133px;height: 30px;" class="paymentuser">
+		               		<td style="text-align: center; position:absolute;left: 922px;top:213px;"></td>
+		               	</tr>
+	               </th:block>
 			</tbody>
 		</table>
 		<table class="table table-hover tjs" style="float:left; width: 790px;">
@@ -273,7 +345,7 @@
 			</tbody>
 		</table>
 		<button type="button" id="paymentModify" onclick="paymentModify()" class="custom-button tjs" 
-			style="margin-top:20px;margin-left:10px;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;font-size:17px;width: 70px;height:35px;"
+			style="position:absolute;top:800px;left:50px;border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;font-size:17px;width: 70px;height:35px;"
 			>수정</button>
 	</div>
 	<script>
@@ -798,7 +870,7 @@
 	                var fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
 	                str += "<li style='list-style-type:none' data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
-	                str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+	                str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i>X</button><br>";
 	                str += "<img src='/display?fileName=" + fileCallPath + "' style='width:200px;height:140px'>";
 	                str += "</div>";
 	                str += "</li>";
@@ -806,6 +878,7 @@
 	               	str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
 	                str += "<span>" + attach.fileName + "</span><br/>";
+	                str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i>X</button><br>";
 	                str += "<img style='display:none' src='img/attach.png/'>";
 	                str += "</div>";
 	                str += "</li>";
@@ -861,13 +934,23 @@
 	        $(arr).each(function(i, attach){
 	            console.log("여기도 들어와짐");
 	            if(attach.fileType){
-	                var fileCallPath = "";
+	                var fileCallPath = encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+	                str += "<li data-path='"+obj.uploadPath+"'";
+	                str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
+	                str + "><div>";
+			        str += "<span> "+ obj.fileName+"</span>";
+			        if(obj.uuid != null){
+	                	str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'>X</i></button><br>";
+			        }
+	                str += "</div>";
+			        str +="</li>";
 	            } else {
 	                str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='"
 	                + attach.fileName + "' data-type='" + attach.fileType + "'><div>";
 	                str += "<span style='display:none'>" + attach.fileName + "</span><br/>";
-	                str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
-	                str += "<span>" + attach.fileName + "</span><br/>";
+	                if(attach.uuid != null){
+	               		str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'>X</i></button><br>";
+	                }
 	                str += "</div>";
 	                str += "</li>";
 	            }
@@ -993,5 +1076,6 @@
   	    });
 	/*]]>*/
 	</script>
+	</div>
 </body>
 </html>
