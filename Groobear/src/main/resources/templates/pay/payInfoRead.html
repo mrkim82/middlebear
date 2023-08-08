@@ -111,7 +111,7 @@
 					</th:block>
 					
 					<th:block th:if="${list.payStatus2 == 'Y'} and ${approver2Sign.uploadPath != null and approver2Sign.uploadPath != 'public'}">
-						<td style="width:130px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
+						<td style="width:131px;padding:0px;"><img th:src="@{|/display?fileName=${#strings.replace(approver2Sign.uploadPath,'\','/')}/${approver2Sign.uuid}_${approver2Sign.fileName}|}" 
 							th:data-uploadpath="${approver2Sign.uploadPath}" th:data-uuid="${approver2Sign.uuid}"
 							th:data-filename="${approver2Sign.fileName}" data-type="true"  style="border:1px solid; width:100px">
 						</td>
@@ -149,20 +149,22 @@
 						<td style="width:131px; height:100px; background-color:white"></td>
 					</tr>
 					</th:block>
-	            <tr  style="display:inline-block;width:133px;height: 30px;" class="paymentuser">
-	               <td style="text-align: center; position:absolute;left: 650px;top:213px;">[[${drafterInfo.name}]] [[${drafterInfo.rank}]]</td>
-	            <tr  style="display:inline-block;width:132px;height: 30px;" class="paymentuser">
-	               <td style="text-align: center; position:absolute;left: 781px;top:213px;">[[${approver2Info.name}]] [[${approver2Info.rank}]]</td>
-	               </tr>
+					
+	            	<tr style="display:inline-block;width:133px;height: 30px;" class="paymentuser">
+	               		<td style="text-align: center; position:absolute;left: 650px;top:213px;">[[${drafterInfo.name}]] [[${drafterInfo.rank}]]</td>
+	               	</tr>
+	            	<tr style="display:inline-block;width:132px;height: 30px;" class="paymentuser">
+	               		<td style="text-align: center; position:absolute;left: 781px;top:213px;">[[${approver2Info.name}]] [[${approver2Info.rank}]]</td>
+	               	</tr>
 	               <th:block th:if="${not #strings.isEmpty(approver3Info)}">
-	               <tr  style="display:inline-block;width:132px;height: 30px;" class="paymentuser">
-	               		<td style="text-align: center; position:absolute;left: 922px;top:213px;">[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
-	            </tr>
+	               		<tr style="display:inline-block;width:131px;height: 30px;" class="paymentuser">
+	               			<td style="text-align: center; position:absolute;left: 922px;top:213px;">[[${approver3Info.name}]] [[${approver3Info.rank}]]</td>
+	            		</tr>
 	               </th:block>
 	               <th:block th:if="${#strings.isEmpty(approver3Info)}">
-	               	<tr style="display:inline-block;width:133px;height: 30px;" class="paymentuser">
-	               		<td></td>
-	               	</tr>
+		               	<tr style="display:inline-block;width:133px;height: 30px;" class="paymentuser">
+		               		<td style="text-align: center; position:absolute;left: 922px;top:213px;"></td>
+		               	</tr>
 	               </th:block>
 			</tbody>
 		</table>
