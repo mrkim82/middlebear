@@ -56,6 +56,13 @@ public class MailController {
 			for(int i=0; i < list.size();i++) {
 				System.out.println("list.get(i)첵 = "+list.get(i));
 				int result = mailService.serverGetInsertMail(list.get(i));
+				List<String> files = list.get(i).getFiles(); //첨부파일리스트
+				if(files != null) {
+					//insert문 VO만들기
+					FilesVO filesVO = new FilesVO();
+//					filesVO.setUuid()
+//					insertMailFile
+				}
 		        System.out.println("몇건 처리됨? "+result);
 			}
 		}

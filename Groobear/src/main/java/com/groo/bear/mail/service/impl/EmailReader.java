@@ -54,6 +54,7 @@ public class EmailReader {
      * @throws MessagingException
      */
     public List<MailVO> receiveMailAttachedFile(String userName, String password, Date startDate, Date endDate) throws MessagingException {
+    	
         Properties props = System.getProperties();
         props.setProperty("mail.store.protocol", "pop3");
         List<MailVO> mailList = new ArrayList<MailVO>(); 
@@ -104,7 +105,7 @@ public class EmailReader {
                 String contentType = msg.getContentType();
                 String messageContent = msg.getContent().toString();
                 String attachFiles = "";
-                
+                List<String> files = new ArrayList<>();
                 // 첨부파일
                 if (contentType.contains("multipart")) {
                     Multipart multiPart = (Multipart) msg.getContent();
@@ -116,11 +117,15 @@ public class EmailReader {
                             String fileName = part.getFileName();
                             attachFiles += fileName + ", ";
                             System.out.println();
+                            fileName = "a_"+fileName;
+                            files.add(fileName);
                             part.saveFile(saveDirectory + File.separator + fileName);
+                            //db에 저장하는 insert문 추가
                         } else {
                             // 메일 내용 저장
                             messageContent = part.getContent().toString();
                         }
+                        mailVO.setFiles(files);
                     }
                     if (attachFiles.length() > 1) {
                         attachFiles = attachFiles.substring(0, attachFiles.length() - 2);
