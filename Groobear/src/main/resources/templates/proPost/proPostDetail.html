@@ -1238,15 +1238,24 @@ li {
 										  		and #dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm') >= #dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 										 th:attr="data-feed-sch-type=${rparti.partiCheck}"
 										 style="text-align: center; margin-bottom: 5px; margin-top: 20px;">
-										<button type="button" class="btn"
-											th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
-											data-sch-type-status="Y" onclick="toggleFeedSchButtonStyle(this)">참석</button>
-										<button type="button" class="btn"
-											th:classappend="${rparti.partiCheck == 'N' ? 'btn-danger' : 'btn-outline-danger'}"
-											data-sch-type-status="N" onclick="toggleFeedSchButtonStyle(this)">불참</button>
-										<button type="button" class="btn"
-											th:classappend="${rparti.partiCheck == 'A' ? 'btn-secondary' : 'btn-outline-secondary'}"
-											data-sch-type-status="A" onclick="toggleFeedSchButtonStyle(this)">미정</button>
+										<button type="button"
+												class="btn"
+												th:classappend="${rparti.partiCheck == 'Y' ? 'btn-success' : 'btn-outline-success'}"
+												data-sch-type-status="Y"
+												onclick="toggleFeedSchButtonStyle(this)"
+												style="border-radius:10px;">참석</button>
+										<button type="button"
+												class="btn"
+												th:classappend="${rparti.partiCheck == 'N' ? 'btn-danger' : 'btn-outline-danger'}"
+												data-sch-type-status="N"
+												onclick="toggleFeedSchButtonStyle(this)"
+												style="border-radius:10px;">불참</button>
+										<button type="button"
+												class="btn"
+												th:classappend="${rparti.partiCheck == 'A' ? 'btn-secondary' : 'btn-outline-secondary'}"
+												data-sch-type-status="A"
+												onclick="toggleFeedSchButtonStyle(this)"
+												style="border-radius:10px;">미정</button>
 									</div>
 									
 								</div>
