@@ -29,18 +29,30 @@ td{
 .carL{
     position: absolute;
     right: 143px;
-    top: 33.5px;
+    top: 17.5px;
 
 }
 .carM{
     position: absolute;
     right: 46px;
-    top: 33.5px;
+    top: 17.5px;
 
 }
 .card-body {
 	cursor:pointer;
 }
+.carTR {
+	position:absolute;
+	top:-18.5px;
+	right:45px;
+}
+input {
+	font-weight:300;
+}
+#infoCarType{
+cursor:pointer;
+}
+
 </style>
 </head>
 <body>
@@ -48,27 +60,27 @@ td{
 		<div>
 			<form>
 				<div th:each="info, es:${info}">
-						<h2 style="text-align: left; margin-top:25px; font-size:1.875rem; font-weight:300;" class="tjs">차량 관리</h2>
+						<h2 style="text-align: left; margin-top:35px; font-weight:500;" class="tjs">차량 관리</h2>
 					<div style="display: inline-block; width: 100%;">
 						<div style="border:1px solid lightgray;border-radius: 15px;width: 100%;">
-						<div class="form-group row" style="position: relative;left: 180px;">
+						<div class="form-group row" style="position: relative;left: 155px;">
 					      <label class="col-form-label">사번 :</label>
 					      <div class="col-sm-1">
-					        <input type="text" class="form-control-plaintext" name="empNo" th:value="${info.empNo}" readonly>
+					        <input type="text" style="margin-" class="form-control-plaintext" name="empNo" th:value="${info.empNo}" readonly>
 					      </div>
-					       <label class="col-form-label">부서 :</label>
-					      <div class="" style=" width: 70px;">
+					       <label class="col-form-label" style="margin-left:15px;">부서 :</label>
+					      <div class="col-sm-1" style=" width: 70px;">
 					        <input type="text" class="form-control-plaintext" name="deptName" th:value="${info.deptName}" readonly>
 					      </div>
-					       <label class="col-form-label">직급 :</label>
+					       <label class="col-form-label" style="margin-left:15px;">직급 :</label>
 					      <div class="col-sm-1">
 					        <input type="text" class="form-control-plaintext" name="rank" th:value="${info.Rank}" readonly>
 					      </div>
-					       <label class="col-form-label">이름 :</label>
+					       <label class="col-form-label" style="margin-left:15px;">이름 :</label>
 					      <div class="col-sm-1">
 					        <input type="text" class="form-control-plaintext" name="name" th:value="${info.Name}" readonly>
 					      </div>
-					      <label class="col-form-label">연락처 :</label>
+					      <label class="col-form-label" style="margin-left:15px;">연락처 :</label>
 					      <div class="col-sm-2">
 					        <input type="text" class="form-control-plaintext" name="phone" th:value="${info.Phone}" readonly>
 					      </div>
@@ -86,7 +98,7 @@ td{
 					      </div>
 					       <label class="col-form-label">자동차 브랜드 :</label>
 					      <div class="col-sm-2">
-					        <select id="infoCarType" name="carType" style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;">
+					        <select id="infoCarType" name="carType" style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 5px; height: 35px;text-align:center;">
 												<option value="" selected>선택</option>
 												<option value="../img/hyd.png">Hyundai</option>
 												<option value="../img/kia.png">Kia</option>

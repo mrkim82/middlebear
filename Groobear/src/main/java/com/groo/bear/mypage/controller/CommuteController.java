@@ -50,18 +50,21 @@ public class CommuteController {
 		if(empG.equals("A")) {
 			model.addAttribute("commuteList",commuteService.getAllCommuteList(cri, commuteVO));
 			model.addAttribute("paging",paging);
+			System.out.println(cri);
 			return "commute/commuteA";
+			
 			
 		}else {
 			model.addAttribute("comInfo",commuteService.getComInfo(id));
 			model.addAttribute("info",commuteService.getMyCommuteList(cri, id, monthDate));
 			model.addAttribute("work",commuteService.monthWork(id, monthDate));
 			model.addAttribute("noWork",commuteService.monthNoWork(id, monthDate));
-			int commuteListCnt2 = commuteService.commuteCnt2(id, monthDate);
+			int commuteListCnt2 = commuteService.commuteCnt2(cri, id, monthDate,commuteVO);
 			Paging paging2 = new Paging();
 			paging2.setCri(cri);
 			paging2.setTotalCount(commuteListCnt2);
 			model.addAttribute("paging",paging2);
+			System.out.println(paging2);
 			return "commute/commuteP";
 		}
 		

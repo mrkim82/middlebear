@@ -104,8 +104,8 @@ public class CommuteServiceImpl implements CommuteService {
 
 
 	@Override
-	public int commuteCnt2(String id,String monthDate) {
-		return commuteMapper.commuteListCnt2(id, monthDate);
+	public int commuteCnt2(Criteria cri, String id,String monthDate,CommuteVO commuteVO) {
+		return commuteMapper.commuteListCnt2(cri, id, monthDate, commuteVO);
 	}
 
 
