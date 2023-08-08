@@ -181,12 +181,51 @@ tbody tr {
 		</div>
 
 
+
+	<div class="modal fade tjs" id="myModal" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width: 500px; margin-top:200px;">
+				<div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;width: 500px;">
+					<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;">
+						<h5 class="modal-title" id="exampleModalLabel" style="font-size: 27px;font-weight:400;">근태 관리</h5>
+						<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
+							aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;">X</button>
+					</div>
+						<div class="modal-body" style="text-align: center;">
+							<div class="form-group mb-3" style="display: flex; justify-content: space-evenly; margin-top:20px;">
+								<p id="pText" style="font-size: 26px;color: black;font-weight:300;"></p>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" onclick="closeModal()" id="saveBtn" class="" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;">확인</button>
+							
+						</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+
+
+
+
 		<script th:inline="javascript">
 			function goPage(p) {
 				searchForm.page.value = p;
 
 				searchForm.submit();
 			}
+			
+			function closeModal() {
+			   	  // 모달 창 닫기
+			   	  $('#myModal').modal('hide');
+			   		location.reload();
+			   	}
+			
+			
 			
 			document.getElementById('searchBtn').addEventListener('click',function(){
 				var selectBox = document.getElementById('selectBox');
@@ -195,7 +234,8 @@ tbody tr {
 			    var searchText = textBox.value;
 			    
 					if(selectedOption == '' && searchText != '') {
-				        alert('검색 조건을 선택해 주세요. 선택 상태에서는 검색어를 입력할 수 없습니다.');
+						$('#pText').text('검색 조건을 선택해 주세요. 선택 상태에서는 검색어를 입력할 수 없습니다.');
+						$('#myModal').modal('show');
 				        selectBox.selectedIndex = 0; 
 				        textBox.value = ''; 
 				        event.preventDefault()
@@ -386,11 +426,15 @@ tbody tr {
 		            .then(result => {
 		               if(result == 'success'){
 		            	   console.log('success')
-		            	   alert('success');
-		            	   location.reload();
+		            	   $('#pText').text('정상 처리 되었습니다.');
+						   $('#myModal').modal('show');
+						   $('#commuteModal').modal('hide');
+
 		               } else if(result == 'fail'){
 		            	   console.log('fail')
-		            	   alert('fail')
+		            	   $('#pText').text('다시 한번 확인해 주세요');
+						   $('#myModal').modal('show');
+						   location.reload();
 		               }else {
 		            	   console.log('etc')
 		               }

@@ -290,7 +290,7 @@ td{
 
 
 
-		<div class="modal fade dohyeon" id="myModal" tabindex="-1"
+		<div class="modal fade tjs" id="myModal" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" style="width: 500px; margin-top:280px;">
 				<div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;width: 500px;">
@@ -312,7 +312,10 @@ td{
 			</div>
 		</div>
 
-
+		
+		
+		
+		
 
 
 
@@ -328,6 +331,7 @@ td{
 	   	function closeModal() {
 	   	  // 모달 창 닫기
 	   	  $('#myModal').modal('hide');
+	   	location.reload();
 	   	}
 		
 		function carInfofo(){
@@ -425,12 +429,14 @@ td{
 				event.preventDefault();
 				document.getElementsByName('carNo')[0].value = '';
 				document.getElementsByName('carType')[0].value = '';
+				document.querySelector('.carNoCk').textContent = '';
 			}else if(document.querySelector('.carNoCk').textContent != '정상'){
 				$('#pText').text('차량번호를 확인 주세요.');
 				$('#myModal').modal('show');
 				event.preventDefault();
 				document.getElementsByName('carNo')[0].value = '';
 				document.getElementsByName('carType')[0].value = '';
+				document.querySelector('.carNoCk').textContent = '';
 			}else{	
 				event.preventDefault();
 				let carNo = document.getElementById('carNo2').value;
@@ -472,8 +478,9 @@ td{
 							if(result == null){
 								console.log('실패')
 							}else {
-							
-							 location.reload();
+								$('#pText').text('정상처리 되었습니다.');
+								$('#myModal').modal('show');
+							 
 							}
 						})
 						.catch(err => console.log(err))
@@ -538,6 +545,7 @@ td{
 						$('#pText').text('차량번호가 이미 존재합니다.');
 						$('#myModal').modal('show');
 						$('#newCarNo').val('');
+						$('#mCarNoCk').text('');
 						
 					}else{
 						
