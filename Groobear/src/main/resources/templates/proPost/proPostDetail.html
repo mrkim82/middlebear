@@ -1184,9 +1184,10 @@ li {
 														<ul style="padding:0px;">
 															<!-- 참가자 목록 -->
 															<li th:each="member : ${projectPartiMember}"
-																style="list-style-type: none; padding-left:10px;">
+																style="list-style-type: none; padding-left:10px; padding-top:6px; padding-bottom:6px;"
+																class="list-group-item">
 																
-																<label class="custom-checkbox" style="margin-bottom: 15px">
+																<label class="custom-checkbox" style="margin-bottom: 15px;">
 																	<th:block th:each="rpl : ${readPartiList}"
 																			  th:if="${rpl.schNo == allPost.schNo && rpl.id == member.id && rpl.partiCheck != null}">
 																		<input type="checkbox" th:id="'schPartiList' + ${member.id} + ${rpl.schNo}"
@@ -1793,7 +1794,7 @@ li {
 					
 					<!-- 마감일 -->
 					<div style="margin-bottom: 7px;">
-						<p style="margin-bottom: 2px;">마감일</p>
+						<p style="margin-bottom: 2px;">종료일</p>
 						<input type="datetime-local"
 							   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 							   id="updateSchEnd"
