@@ -44,7 +44,7 @@
 	}
 	
 	.uploadResult ul li span {
-		color : white;
+		color : black;
 	}
 	
 	.bigPictureWrapper{
@@ -79,13 +79,25 @@
 .comtable{
 	margin-left:auto;
 	margin-right:auto;
-	width: 800px;
+	width: 700px;
 }
 .comtabletd{
 	padding: 10px;
 	padding-left: 40px; 
 	padding-right: 40px; 
-	
+    word-wrap: break-word; /* 단어 단위로 줄바꿈이 되도록 함 */
+    width: 200px;
+	white-space: normal;
+	display:inline-block;
+}
+.comtabletdcontent{
+	padding: 10px;
+	padding-left: 40px; 
+	padding-right: 40px; 
+    word-wrap: break-word; /* 단어 단위로 줄바꿈이 되도록 함 */
+    max-width: 500px; /* 원하는 최대 폭 설정 */
+    white-space: normal; /* 기본적으로 공백과 줄바꿈을 고려하여 내용 표시 */
+    display:inline-block;
 }
 .updateBtn{
 	margin-left: 655px;
@@ -96,6 +108,7 @@
 	color: #fff;
 	width: 92.45px;
 	height: 38px;
+	
 }
 .listBtn{
 	margin-right: 0px;
@@ -112,9 +125,10 @@
 	margin-right: 5px;
 }
 h2 {
-	margin-top: 25px;
+	margin-top: 35px;
 	font-family: 'TheJamsil', serif;
 }
+
 
 
 	</style>
@@ -184,7 +198,7 @@ h2 {
 					<h3>댓글작성</h3>
 					<tr class="comtabletr" th:each="com : ${boardCom}" th:data-post-code="${com.comNo}">
 						<!-- <td class="comtabletd" th:utext="${com.profileImg}"></td> -->
-						<td class="comtabletd" style="width: 400px !important;" th:text="${com.comContent}"></td>
+						<td class="comtabletd" th:text="${com.comContent}"></td>
 						<td class="comtabletd" th:text="${com.name}"></td>
 						<td class="comtabletd comdate" th:text="${com.comDate}"></td>
 						<td>
@@ -220,7 +234,9 @@ h2 {
 			<a th:href="@{/boardUpdate/{boardNo}(boardNo=${board.boardNo})}">
 				<button class="updateBtn" type="button">수정</button></a>
 		</th:block>
-		<button class="listBtn" type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|">목록으로</button>
+		<button style="
+    margin-bottom: 100px;
+" class="listBtn" type="button" th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|">목록으로</button>
 
 		<!-- Button trigger modal -->
 		<th:block th:if="${(board.boardType == 'N') and ((session.EmpGrade == 'A') or (session.Id == board.id))}">
@@ -247,8 +263,8 @@ h2 {
 					</div>
 					<div class="modal-body" style="margin:25px; display: flex; justify-content: space-evenly; font-size: 28px;color: black; text-align:center; height: auto;">게시글을 정말로 삭제하시겠습니까?</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-danger" id="deleteButton">삭제</button>
-						<button id="firstCancel" type="button" class="btn btn-secondary"
+						<button style="border-radius: 10px;background-color: #dc3545; border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff; width: 70px; height: 45px;font-size: 20px;" type="button" class="btn btn-danger" id="deleteButton">삭제</button>
+						<button style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;" id="firstCancel" type="button" class="btn btn-secondary"
 							data-dismiss="modal">취소</button>
 					</div>
 				</div>
@@ -258,17 +274,17 @@ h2 {
 		<div class="modal fade" id="successModal" tabindex="-1" role="dialog"
 			aria-labelledby="successModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
+				<div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;width: 500px; height:280px;">
 					<div class="modal-header">
-						<h5 class="modal-title" id="successModalLabel">Success</h5>
+						<h5 class="modal-title" id="successModalLabel">게시글 삭제 성공</h5>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<div class="modal-body" id="successModalBody">게시글이 삭제되었습니다.</div>
+					<div class="modal-body"  style="margin:25px; display: flex; justify-content: space-evenly; font-size: 28px;color: black; text-align:center; height: auto;" id="successModalBody">게시글이 삭제되었습니다.</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
+						<button type="button" style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;" class="btn btn-secondary"
 							data-dismiss="modal"
 							th:onclick="|location.href='@{/boardList(boardType=${board.boardType})}'|">닫기</button>
 					</div>
@@ -280,17 +296,17 @@ h2 {
 		<div class="modal fade" id="errorModal" tabindex="-1" role="dialog"
 			aria-labelledby="errorModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
+				<div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;width: 500px; height:280px;">
 					<div class="modal-header">
-						<h5 class="modal-title" id="errorModalLabel">Error</h5>
+						<h5 class="modal-title" id="errorModalLabel">게시글 삭제 실패</h5>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<div class="modal-body" id="errorModalBody">게시글 삭제에 실패했습니다.</div>
+					<div class="modal-body"  style="margin:25px; display: flex; justify-content: space-evenly; font-size: 28px;color: black; text-align:center; height: auto;" id="errorModalBody">게시글 삭제에 실패했습니다.</div>
 					<div class="modal-footer">
-						<button id="closeModal" type="button" class="btn btn-secondary"
+						<button style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;" id="closeModal" type="button" class="btn btn-secondary"
 							data-dismiss="modal">닫기</button>
 					</div>
 				</div>

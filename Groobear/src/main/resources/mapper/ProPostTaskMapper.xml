@@ -48,7 +48,7 @@
 	
 	<!-- 업무단건 조회 -->
 	<select id="readWorkDetail" resultType="ProPostTaskDetailVO">
-		SELECT a.pro_post_no, a.post_title, a.post_date, a.id, i.name, u.profile_img,
+		SELECT a.pro_post_no, a.post_title, a.post_date, a.id, i.name,
 		       b.work_no, b.work_status, b.work_pri,
 		       b.work_start_day, b.work_start_time, b.work_end_day, b.work_end_time,
 		       b.lr_work_seq, b.work_group_no, b.work_content, c.work_group_name
@@ -171,4 +171,12 @@
 		WHERE a.pro_no = #{proNo}
 		AND (b.work_start_time IS NOT NULL OR b. work_end_time iS NOT NULL)
 	</select>
+	
+	<!-- 업무 수정일자 최신화 -->
+	<update id="updateProWorkDate" parameterType="int">
+		UPDATE pro_work
+		SET work_update_day = SYSDATE
+		WHERE pro_post_no = #{proPostNo}
+	</update>
+	
 </mapper>

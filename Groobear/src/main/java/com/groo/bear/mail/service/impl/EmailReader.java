@@ -24,8 +24,8 @@ import javax.mail.search.ReceivedDateTerm;
 import javax.mail.search.SearchTerm;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
+import com.groo.bear.files.domain.FilesVO;
 import com.groo.bear.mail.service.MailService;
 import com.groo.bear.mail.service.MailVO;
 
@@ -54,6 +54,7 @@ public class EmailReader {
      * @throws MessagingException
      */
     public List<MailVO> receiveMailAttachedFile(String userName, String password, Date startDate, Date endDate) throws MessagingException {
+    	
         Properties props = System.getProperties();
         props.setProperty("mail.store.protocol", "pop3");
         List<MailVO> mailList = new ArrayList<MailVO>(); 
@@ -104,7 +105,7 @@ public class EmailReader {
                 String contentType = msg.getContentType();
                 String messageContent = msg.getContent().toString();
                 String attachFiles = "";
-                
+                List<FilesVO> files = new ArrayList<>();
                 // 첨부파일
                 if (contentType.contains("multipart")) {
                     Multipart multiPart = (Multipart) msg.getContent();
@@ -116,11 +117,17 @@ public class EmailReader {
                             String fileName = part.getFileName();
                             attachFiles += fileName + ", ";
                             System.out.println();
+                            //files.add(fileName);
                             part.saveFile(saveDirectory + File.separator + fileName);
+                            FilesVO filesVO = new FilesVO();
+                            filesVO.setFileName(fileName);
+                            files.add(filesVO);
+                            //db에 저장하는 insert문 추가
                         } else {
                             // 메일 내용 저장
                             messageContent = part.getContent().toString();
                         }
+                        mailVO.setFiles(files);
                     }
                     if (attachFiles.length() > 1) {
                         attachFiles = attachFiles.substring(0, attachFiles.length() - 2);

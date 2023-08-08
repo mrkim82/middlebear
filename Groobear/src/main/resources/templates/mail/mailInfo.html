@@ -43,6 +43,7 @@
         </th:block>
         <tr>
 			<td>
+			
 				<div class="bigPictureWrapper">
 					<div class="bigPicture">
 					</div>
@@ -54,6 +55,9 @@
 							<div class = "panel-body">
 								<div class = "uploadResult">첨부파일
 									<ul>
+										<li  th:each="file, stat : ${mail.files}" >
+											<a th:text="mail"+"/" + "${file.fileName}" ></a>
+										</li>
 									</ul>
 								</div>
 							</div>
@@ -69,7 +73,19 @@
         </td></tr>
     </table>
     <script>
-    $.getJSON(`/getAttach?mailNo=[[${mail.mailNo}]]`, function(arr) {
+		function downloadURI(uri, name) {
+		  var link = document.createElement("a");
+		  link.download = name;
+		  link.href = uri;
+		  document.body.appendChild(link);
+		  link.click();
+		  document.body.removeChild(link);
+		  delete link;
+		}
+		
+		downloadURI("data:text/html,[html내용]", "저장할 파일명");
+		downloadURI("data:image/jpeg;base64,[base64인코딩된내용]", "저장할 파일명");
+    /* $.getJSON(`/getAttach?mailNo=[[${mail.mailNo}]]`, function(arr) {
         var str = "";
         console.log('들어는와짐');
         $(arr).each(function(i, attach){
@@ -138,7 +154,7 @@
 		            return false;
 		        }
 		        return true;
-		    }
+		    } */
     </script>
 </body>
 </html>

@@ -34,12 +34,18 @@ public class ProServiceImpl implements ProService {
 
 	@Override
 	public List<ProVO> readProjectHide(String id) {
-		return proMapper.readProjectHide(id);
+		ProUsersVO vo = proMapper.readOrder(id);
+		String proPartiFilter = vo.getProPartiFilter();
+		String proRange = vo.getProRange();
+		return proMapper.readProjectHide(id, proPartiFilter, proRange);
 	}
 	
 	@Override
 	public List<ProVO> readProjectStar(String id) {
-		return proMapper.readProjectStar(id);
+		ProUsersVO vo = proMapper.readOrder(id);
+		String proPartiFilter = vo.getProPartiFilter();
+		String proRange = vo.getProRange();
+		return proMapper.readProjectStar(id, proPartiFilter, proRange);
 	}
 	
 	@Override
@@ -59,7 +65,11 @@ public class ProServiceImpl implements ProService {
 
 	@Override
 	public List<ProGroupVO> readProjectGroupDetail(int groupNo, String id) {
-		return proMapper.readProjectGroupDetail(groupNo, id);
+		ProUsersVO vo = proMapper.readOrder(id);
+		System.out.println("vo를찾아서"+vo);
+		String proPartiFilter = vo.getProPartiFilter();
+		String proRange = vo.getProRange();
+		return proMapper.readProjectGroupDetail(groupNo, id, proPartiFilter, proRange);
 	}
 
 	@Override
@@ -74,7 +84,10 @@ public class ProServiceImpl implements ProService {
 
 	@Override
 	public List<ProVO> readProjectNoGroup(String id) {
-		return proMapper.readProjectNoGroup(id);
+		ProUsersVO vo = proMapper.readOrder(id);
+		String proPartiFilter = vo.getProPartiFilter();
+		String proRange = vo.getProRange();
+		return proMapper.readProjectNoGroup(id, proPartiFilter, proRange);
 	}
 
 	@Override

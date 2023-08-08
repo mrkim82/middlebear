@@ -111,11 +111,11 @@ table.tdWrite { padding: 0; }
 
 <body class="tjs">
 	
-<div layout:fragment="content" class="dohyeon" >
+<div layout:fragment="content" >
   <div>
-    <h2 th:if="${boardVO.boardType == 'N'}">공지사항</h2>
-    <h2 th:if="${boardVO.boardType == 'C'}">언론보도</h2>
-    <h2 th:if="${boardVO.boardType == 'K'}">자유게시판</h2>
+    <h2 style="margin-top: 35px; font-weight:bold;"  class="tjs" th:if="${boardVO.boardType == 'N'}">공지사항</h2>
+    <h2 style="margin-top: 35px; font-weight:bold;"  class="tjs" th:if="${boardVO.boardType == 'C'}">언론보도</h2>
+    <h2 style="margin-top: 35px; font-weight:bold;"  class="tjs" th:if="${boardVO.boardType == 'K'}">자유게시판</h2>
 		<th:block th:if="${(boardVO.boardType == 'N') and ((session.EmpGrade == 'A') or (checkId.deptAuth == 'B1 ') or (checkId.deptAuth == 'B3 '))} ">
 			<button style="
 			position: absolute;
@@ -188,7 +188,7 @@ table.tdWrite { padding: 0; }
 		<form name="searchForm" action="boardList" class="search-form">
 			<input type="hidden" name="boardType" th:value="${boardVO.boardType}"/>
 			<input type="hidden" name="page" value="1"/>
-			<select name="type" style="border: 1px solid gray;border-radius: 5px; height: 35px; width:90px;">
+			<select name="type" style="border: 1px solid gray;border-radius: 5px; height: 35px; width:100px;">
 				<option value='' selected>-- 선택 --</option>
 				<option value='title' th:selected="${criteria.type == 'title'}" >제목</option>
 				<option value='content' th:selected="${criteria.type == 'content'}">내용</option>

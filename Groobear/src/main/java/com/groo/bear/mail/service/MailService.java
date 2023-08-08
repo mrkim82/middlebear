@@ -67,4 +67,5 @@ public interface MailService {
 	public List<MailVO> sendMailSearch(Criteria cri,MailVO mailVO);
 	//메일 삭제
 	public int getMailDelete(MailVO mailVO);
+	
 }

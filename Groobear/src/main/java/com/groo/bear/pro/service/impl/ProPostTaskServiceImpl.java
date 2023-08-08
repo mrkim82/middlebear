@@ -100,8 +100,10 @@ public class ProPostTaskServiceImpl implements ProPostTaskService {
 			
 			for (int i = 0; i < vo.getIds().size(); i++) {
 				task.createWorkMember(vo.getProPostNo(), vo.getIds().get(i));
-			}
-		}
+			};
+		};
+		
+		task.updateProWorkDate(vo.getProPostNo());
 		return 0;
 	}
 

@@ -33,7 +33,8 @@
 		font-weight: 600;
 	}
 	.custom-button:hover{
-		color: black !important
+		color: black !important;
+		text-decoration: none;
 	}
 	.input-file-button{
   	  padding: 6px 25px;
@@ -45,230 +46,620 @@
 	  top: -6px;
 	  left: 80px;
 	}
+	td {
+		width:165px;
+		height:50px;
+	}
+	.tdbd {
+		background-color: lightslategray;		
+	}
+	input[type="Text"],textarea{
+		width:100%;
+	}
 </style>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-	<div layout:fragment="content">
-		<form style="width:1000px; height:2000px">
-			<h3 class="tjs" style="font-size:35px;margin-top:20px;display:block">Groobear 문서작성</h3>
-			<table style="float:left;width:50%;" class="table table-hover tjs">
-				<tbody style="width:100%; border-bottom: 0px;">
-					<tr style="height:50px;">
-						<td>문서번호 : [[${paymentNo}]]</td>
-					</tr>
-					<tr  style="width:400px;height:50px;">
-						<td id="drafter">기안자 : [[${userInfo.name}]] [[${userInfo.rank}]] [[${userInfo.deptName}]]</td>
-					</tr>
-					<tr>
-						<td><button id="childClick" type="button" onclick="payUserSelect();" class="custom-button" 
-						style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
-						>결재자선택</button></td>
-					</tr>
-					<tr style="height:50px;">
-						<td><button id="referrerClick" type="button" onclick="referrerSelect();" class="custom-button" 
-						style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
-						>참조자선택</button></td>
-					</tr>
-					<tr id="referrerList" style="border-top: 0;">
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="width:100px;"></td>
-						<td style="width:100px;position:absolute;left: 80px;"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="width:100px; position:absolute; left: 140px;"></td>
-						<td style="width:100px; position:absolute; left: 198px;"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="width:100px; position:absolute; left: 268px;"></td>
-						<td style="width:100px; position:absolute; left: 324px;"></td>
-						<td style="display:none"></td>
-					</tr>
-					<tr>
-						<td>작성일자 <input type="date" id="now_date" readonly></td>
-					</tr>
-					<tr style="border-bottom: 0px;">
-						<td><select id="payType" onchange="paychange()">
-							<option value="" selected>결재문서종류</option>
-							<option value="a">운행일지</option>
-							<option value="b">연차계</option>
-							<option value="c">품의서</option>
-						</select></td>
-					</tr>
-					<tbody id="payNum1" style="display:none; width:400px">
-						<tr><td><input type="date" id="carDate" value="sysdate"></td></tr>
-						<tr><td><span style="width:100px; display: inline-block;">행선지</span><input type="text" id="carAddr" value="addr"></td></tr>
-						<tr><td><span style="width:100px; display: inline-block;">운행전 키로수</span><input type="text" id="km1" onchange="kmChange()"><br></td></tr>
-						<tr><td><span style="width:100px; display: inline-block;">운행후 키로수</span><input type="text" id="km2" onchange="kmChange()"></td></tr>
-						<tr><td><span style="width:100px; display: inline-block;">전도금</span><input type="text" id="imprest" readonly></td></tr>
-						<tr><td><span style="width:100px; display: inline-block;">목적</span><input type="text" id="purpose"></td></tr>
-						<tr><td>
-							<div class="bigPictureWrapper">
-								<div class="bigPicture">
+<div layout:fragment="content">
+<div>
+	<h3 class="tjs" style="font-size:35px;margin-top:20px;display:block">Groobear 문서작성</h3>
+</div>
+<div>
+	<button id="childClick" type="button" onclick="payUserSelect();" class="custom-button" 
+	style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
+	>결재자선택</button>
+</div>
+<div>
+	<select id="payType" onchange="paychange()">
+		<option value="d" selected>결재문서종류</option>
+		<option value="a">운행일지</option>
+		<option value="b">연차계</option>
+		<option value="c">품의서</option>
+	</select>
+</div>
+<table class="tjs" style="margin-top:10px; width:995px; border:1px solid black;">
+	<tbody id="payUserForm" style="display:none" class="paymentuser">
+		<tr>
+			<td style="height:30px;"></td>
+			<td style="height:30px;"></td>
+			<td style="height:30px;"></td>
+			<td class="paymentuser" style="height:30px;">기안자</td>
+			<td class="paymentuser" style="height:30px;">결재자</td>
+			<td class="paymentuser" style="height:30px;">결재자</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td class="paymentuser" rowspan="2"></td>
+			<td class="paymentuser" rowspan="2"></td>
+			<td class="paymentuser" rowspan="2"></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td rowspan="2" colspan="2" id="selectTitle"></td>
+		</tr>
+		<tr>
+			<td style="height:30px;"></td>
+			<td class="paymentuser" style="height:30px;">[[${userInfo.name}]]</td>
+			<td class="paymentuser" style="height:30px;" id="payUser1NameRank"></td>
+			<td class="paymentuser" style="height:30px;" id="payUser2NameRank"></td>
+		</tr>
+		<!-- 공통 -->
+		<tr>
+			<td class="tdbd">문서번호</td>
+			<td>[[${paymentNo}]]</td>
+			<td class="tdbd">작성일자</td>
+			<td><input type="date" id="now_date" readonly></td>
+			<td class="tdbd">작성양식</td>
+			<td><input type="text" id="selectValue" readonly></td>
+		</tr>
+	
+		<tr>
+			<td class="tdbd">부서</td>
+			<td>[[${userInfo.deptName}]]</td>
+			<td class="tdbd">직책</td>
+			<td>[[${userInfo.rank}]]</td>
+			<td class="tdbd">기안자</td>
+			<td>[[${userInfo.name}]]</td>
+		</tr>
+		
+		<tr>
+			<td class="tdbd"><input id="referrerClick" value="참조자선택" type="text" onclick="referrerSelect();" class="custom-button" 
+				style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
+				></td>
+			<td id="referrerAllList1"></td>
+			<td id="referrerAllList2"></td>
+			<td id="referrerAllList3"></td>
+		</tr>
+	</tbody>
+	
+	<!-- 운행일지 -->
+	<tbody id="payNum1" class="paymentuser" style="display:none">
+		<tr>
+			<td class="tdbd">일자</td>
+			<td><input type="date" id="carDate" value="sysdate"></td>
+			<td class="tdbd">운행전</td>
+			<td><input type="text" id="km1" onchange="kmChange()"></td>
+			<td class="tdbd">운행후</td>
+			<td><input type="text" id="km2" onchange="kmChange()"></td>
+		</tr>
+		<tr>
+			<td class="tdbd">목적</td>
+			<td colspan="2"><input type="text" id="purpose"></td>
+			<td class="tdbd">행선지</td>
+			<td colspan="2"><input type="text" id="carAddr" value="addr"></td>
+		</tr>
+		<tr>
+			<td class="tdbd">운행전첨부</td>
+			<!-- 파일첨부 -->
+			<td>
+				<div class="bigPictureWrapper">
+					<div class="bigPicture"></div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="panel panel-default1">
+							<div class="row">
+								<div class="col-lg-12" style="vertical-align: middle;">
+									<div class="panel-heading">첨부파일</div>
+									<div class="panel-body1">
+										<div class="form-group uploadDiv1">
+											<label class="input-file-button" for="input-file">파일 선택</label>
+											<input type="file" name="uploadFile1" id="input-file" multiple style="display:none;">
+										</div>
+										<div class="uploadResult1">
+											<ul></ul>
+										</div>
+									</div>
 								</div>
 							</div>
+						</div>
+					</div>
+				</div>
+			</td>
+			<td class="tdbd">운행후첨부</td>
+			<td>
+				<div class="bigPictureWrapper2">
+					<div class="bigPicture2"></div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="panel panel-default1">
 							<div class="row">
-					            <div class="col-lg-12">
-					                <div class="panel panel-default1">
-					                    <div class="panel-heading1">운행전</div>
-					                    <div class="row">
-			            				<div class="col-lg-12" style="vertical-align: middle;">
-										<div class="panel-heading" style="top: -20px; margin-top:14px;">첨부파일</div>
-					                    <div class="panel-body1">
-					                        <div class="form-group uploadDiv1">
-												<label class="input-file-button" for="input-file" style="margin-top:14px;">
-				                                파일 선택
-				                          		</label>
-					                            <input type="file" name="uploadFile1" id="input-file" multiple style="display:none;">
-					                        </div>
-					                        <div class="uploadResult1">
-					                            <ul>
-					
-					                            </ul>
-					                        </div>
-					                    </div>
-					                    </div>
-					                    </div>
-					                </div>
-					            </div>
-					        </div>
-				        </td></tr>
-						<tr><td>
+								<div class="col-lg-12" style="vertical-align: middle;">
+									<div class="panel-heading2">첨부파일</div>
+									<div class="panel-body2">
+										<div class="form-group uploadDiv2">
+											<label class="input-file-button" for="input-file" >파일 선택</label>
+											<input type="file" name="uploadFile2" id="input-file" multiple style="display:none;">
+										</div>
+										<div class="uploadResult2">
+											<ul></ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</td>
+			<td class="tdbd">전도금</td>
+			<td><input type="text" id="imprest" readonly></td>
+		</tr>
+	</tbody>
+	<!-- 운행일지 종료-->
+	<!-- 연차계 -->
+	<tbody id="payNum2" style="display:none">
+		<tr>
+			<td>연차시작일</td>
+			<td colspan="2"><input type="date" id="off1"></td>
+			<td>연차복귀일</td>
+			<td colspan="2"><input type="date" id="off2"><td>
+		</tr>
+		<tr>
+			<td>제목</td>
+			<td colspan="5"><input type="text" id="offtitle"></td>
+		</tr>
+		<tr>
+			<td>내용</td>
+			<td colspan="5"><textarea id="offcontent"></textarea></td>
+		</tr>
+		<tr>
+			<td>첨부파일</td>
+			<td colspan="5">
+				<div class="bigPictureWrapper2">
+					<div class="bigPicture2"></div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="panel panel-default1">
 							<div class="row">
-					            <div class="col-lg-12">
-					                <div class="panel panel-default2">
-					                    <div class="panel-heading2">운행후</div>
-					                    <div class="row">
-			            				<div class="col-lg-12" style="vertical-align: middle;">
-										<div class="panel-heading" style="top: -20px; margin-top:14px;">첨부파일</div>
-					                    <div class="panel-body2">
-					                        <div class="form-group uploadDiv2">
-												<label class="input-file-button" for="input-file" style="margin-top:14px;">
-				                                파일 선택
-				                          		</label>
-					                            <input name="uploadFile2" type="file" id="input-file" multiple style="display:none;">
-					                        </div>
-					                        <div class="uploadResult2">
-					                            <ul>
-					
-					                            </ul>
-					                        </div>
-					                    </div>
-					                    </div>
-					                    </div>
-					                </div>
-					            </div>
-					        </div>
-				        </td></tr>
-						<tr><td><button type="button" onclick="payNumSend1()" class="custom-button" 
-						style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
-						>결재</button></td></tr>
-					</tbody>
-					<tbody id="payNum2" style="display:none;width:55%;vertical-align: middle;">
-						<tr><td><input type="date" id="off1">(연차시작일)</td></tr>
-						<tr><td><input type="date" id="off2">(복귀일)</td></tr>
-						<tr><td><input type="text" id="offtitle" style="width:400px;"></td></tr>
-						<tr><td><textarea id="offcontent" style="width:400px; height:200px"></textarea></td></tr>
-						<tr><td>
+								<div class="col-lg-12" style="vertical-align: middle;">
+									<div class="panel-heading3">첨부파일</div>
+									<div class="panel-body3">
+										<div class="form-group uploadDiv3">
+											<label class="input-file-button" for="input-file" >파일 선택</label>
+											<input type="file" name="uploadFile3" id="input-file" multiple style="display:none;">
+										</div>
+										<div class="uploadResult3">
+											<ul></ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+
+	<!-- 품의서 -->
+	<tbody id="payNum3" style="display:none">
+		<tr>
+			<td>제목</td>
+			<td colspan="5"><input type="text" id="robintitle"></td>
+		</tr>
+		<tr>
+			<td>내용</td>
+			<td colspan="5"><textarea id="robincontent"></textarea></td>
+		</tr>
+		<tr>
+			<td>첨부파일</td>
+			<td colspan="5">
+				<div class="bigPictureWrapper2">
+					<div class="bigPicture2"></div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="panel panel-default1">
 							<div class="row">
-            				<div class="col-lg-12" style="vertical-align: middle;">
+								<div class="col-lg-12" style="vertical-align: middle;">
+									<div class="panel-heading4">첨부파일</div>
+									<div class="panel-body4">
+										<div class="form-group uploadDiv4">
+											<label class="input-file-button" for="input-file" >파일 선택</label>
+											<input type="file" name="uploadFile4" id="input-file" multiple style="display:none;">
+										</div>
+										<div class="uploadResult4">
+											<ul></ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+	
+</table>
+<div>
+	<button type="button"
+			id = "superSend"
+			onclick="payNumSend()"
+			class="custom-button" 
+			style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;
+				   box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;display:none"
+	>결재</button>
+</div>
+
+
+<table style="display: none;">
+	<tbody>
+<tr id="drafter" class="paymentuser">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+<tr id="payUserList1">
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<tr id="payUserList2">
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<tr id="referrerList">
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+
+		<!-- 	<tr style="display:inline-block">
+				<td style="width:131px" class="paymentuser">기안자</td>
+				<td style="width:133px" class="paymentuser">결재자1</td>
+				<td style="width:133px" class="paymentuser">결재자2</td>
+			</tr>
+		<tbody class="paymentuser">
+			<tr style="display:inline-block" class="paymentuser">
+				<td style="width:130px; height:100px; background-color:white"></td>
+			</tr>
+			<tr style="display:inline-block" class="paymentuser">
+				<td style="width:130px; height:100px; background-color:white"></td>
+			</tr>
+			<tr style="display:inline-block" class="paymentuser">
+				<td style="width:130px; height:100px; background-color:white"></td>
+			</tr>
+			<tr id="drafter" style="display:inline-block;width:130px;height: 30px;" class="paymentuser">
+				<td style="text-align: center; position:absolute;left: 655px;top:213px;">[[${userInfo.name}]] [[${userInfo.rank}]]</td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+			</tr>
+			<tr id="payUserList1" style="display:inline-block;width:130px;height: 30px;" class="paymentuser">
+				<td style="text-align: center; position:absolute;left: 781px;top:213px;"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+			</tr>
+			<tr id="payUserList2" style="display:inline-block;width:131px;height: 30px;" class="paymentuser">
+				<td style="text-align: center; position:absolute;left: 922px;top:213px;"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+			</tr>
+		</tbody>
+	</table>
+	<div style="width:1000px;float:left">
+	<table style="float:left;width:1000px;" class="table table-hover tjs">
+		<tbody style="width:100%; border-bottom: 0px;">
+			<tr style="height:50px;">
+				<td>문서번호 : [[${paymentNo}]]</td>
+			</tr>
+			<tr  style="width:1000px;height:50px;">
+				<td id="drafter">기안자 : [[${userInfo.name}]] [[${userInfo.rank}]] [[${userInfo.deptName}]]</td>
+			</tr>
+			<tr>
+				<td><button id="childClick" type="button" onclick="payUserSelect();" class="custom-button" 
+				style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
+				>결재자선택</button></td>
+			</tr>
+			<tr style="height:50px;">
+				<td><button id="referrerClick" type="button" onclick="referrerSelect();" class="custom-button" 
+				style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
+				>참조자선택</button></td>
+			</tr>
+			<tr id="referrerList" style="border-top: 0;">
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+				<td style="width:100px;"></td>
+				<td style="width:100px;position:absolute;left: 80px;"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+				<td style="width:100px; position:absolute; left: 140px;"></td>
+				<td style="width:100px; position:absolute; left: 198px;"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+				<td style="display:none"></td>
+				<td style="width:100px; position:absolute; left: 268px;"></td>
+				<td style="width:100px; position:absolute; left: 324px;"></td>
+				<td style="display:none"></td>
+			</tr>
+			<tr>
+				<td>작성일자 <input type="date" id="now_date" readonly></td>
+			</tr>
+			<tr style="border-bottom: 0px;">
+				<td><select id="payType" onchange="paychange()">
+					<option value="" selected>결재문서종류</option>
+					<option value="a">운행일지</option>
+					<option value="b">연차계</option>
+					<option value="c">품의서</option>
+				</select></td>
+			</tr>
+			<tbody id="payNum1" style="display:none; width:1000px">
+				<tr><td><input type="date" id="carDate" value="sysdate"></td></tr>
+				<tr><td><span style="width:100px; display: inline-block;">행선지</span><input type="text" id="carAddr" value="addr"></td></tr>
+				<tr><td><span style="width:100px; display: inline-block;">운행전 키로수</span><input type="text" id="km1" onchange="kmChange()"><br></td></tr>
+				<tr><td><span style="width:100px; display: inline-block;">운행후 키로수</span><input type="text" id="km2" onchange="kmChange()"></td></tr>
+				<tr><td><span style="width:100px; display: inline-block;">전도금</span><input type="text" id="imprest" readonly></td></tr>
+				<tr><td><span style="width:100px; display: inline-block;">목적</span><input type="text" id="purpose"></td></tr>
+				<tr><td>
+					<div class="bigPictureWrapper">
+						<div class="bigPicture">
+						</div>
+					</div>
+					<div class="row">
+			            <div class="col-lg-12">
+			                <div class="panel panel-default1">
+			                    <div class="panel-heading1">운행전</div>
+			                    <div class="row">
+	            				<div class="col-lg-12" style="vertical-align: middle;">
 								<div class="panel-heading" style="top: -20px; margin-top:14px;">첨부파일</div>
-							<div class="panel-body3" style="vertical-align: middle;">
-	                        <div class="form-group uploadDiv3" style="vertical-align: middle;">
-								<label class="input-file-button" for="input-file" style="margin-top:14px;">
-                                파일 선택
-                          		</label>
-	                            <input name="uploadFile3" type="file" id="input-file" multiple style="display:none;">
-	                        </div>
-	                        <div class="uploadResult3">
-	                            <ul>
+			                    <div class="panel-body1">
+			                        <div class="form-group uploadDiv1">
+										<label class="input-file-button" for="input-file" style="margin-top:14px;">
+		                                파일 선택
+		                          		</label>
+			                            <input type="file" name="uploadFile1" id="input-file" multiple style="display:none;">
+			                        </div>
+			                        <div class="uploadResult1">
+			                            <ul>
+			
+			                            </ul>
+			                        </div>
+			                    </div>
+			                    </div>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+		        </td></tr>
+				<tr><td>
+					<div class="row">
+			            <div class="col-lg-12">
+			                <div class="panel panel-default2">
+			                    <div class="panel-heading2">운행후</div>
+			                    <div class="row">
+	            				<div class="col-lg-12" style="vertical-align: middle;">
+								<div class="panel-heading" style="top: -20px; margin-top:14px;">첨부파일</div>
+			                    <div class="panel-body2">
+			                        <div class="form-group uploadDiv2">
+										<label class="input-file-button" for="input-file" style="margin-top:14px;">
+		                                파일 선택
+		                          		</label>
+			                            <input name="uploadFile2" type="file" id="input-file" multiple style="display:none;">
+			                        </div>
+			                        <div class="uploadResult2">
+			                            <ul>
+			
+			                            </ul>
+			                        </div>
+			                    </div>
+			                    </div>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+		        </td></tr>
+				<tr><td><button type="button" onclick="payNumSend1()" class="custom-button" 
+				style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
+				>결재</button></td></tr>
+			</tbody>
+			<tbody id="payNum2" style="display:none;width:1000px;vertical-align: middle;">
+				<tr><td><input type="date" id="off1">(연차시작일)</td></tr>
+				<tr><td><input type="date" id="off2">(복귀일)</td></tr>
+				<tr><td><input type="text" id="offtitle" style="width:400px;"></td></tr>
+				<tr><td><textarea id="offcontent" style="width:400px; height:200px"></textarea></td></tr>
+				<tr><td>
+					<div class="row">
+          				<div class="col-lg-12" style="vertical-align: middle;">
+						<div class="panel-heading" style="top: -20px; margin-top:14px;">첨부파일</div>
+					<div class="panel-body3" style="vertical-align: middle;">
+                       <div class="form-group uploadDiv3" style="vertical-align: middle;">
+						<label class="input-file-button" for="input-file" style="margin-top:14px;">
+                              파일 선택
+                        		</label>
+                           <input name="uploadFile3" type="file" id="input-file" multiple style="display:none;">
+                       </div>
+                       <div class="uploadResult3">
+                           <ul>
+
+                           </ul>
+                       </div>
+                   	</div>
+                   	</div>
+                   	</div>
+                   </td></tr>
+				<tr style="display: none;"><td><textarea id="offcomment" style="width:1000px; height:100px"></textarea></td></tr>
+				<tr><td><button type="button" onclick="payNumSend2()" class="custom-button" 
+				style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
+				>결재</button></td></tr>
+			</tbody>
+			<tbody id="payNum3" style="display:none">
+				<tr><td><input type="text" id="robintitle" style="width:400px;"></td></tr>
+				<tr><td><textarea id="robincontent" style="width:1000px; height:200px"></textarea></td></tr>
+				<tr><td>
+					<div class="row">
+          				<div class="col-lg-12" style="vertical-align: middle;">
+					<div class="panel-heading" style="top: -20px; margin-top:14px;">첨부파일</div>
+					<div class="panel-body4">
+                       <div class="form-group uploadDiv4">
+						<label class="input-file-button" for="input-file" style="margin-top:14px;">
+                              파일 선택
+                        		</label>
+                           <input name="uploadFile4" type="file" id="input-file" multiple style="display:none;">
+                       </div>
+                       <div class="uploadResult4">
+                           <ul>
+
+                           </ul>
+                       </div>
+                   	</div>
+                   	</div>
+                   	</div>
+                   </td></tr>
+				<tr style="display: none;"><td><textarea id="robincomment" style="width:400px; height:100px"></textarea></td></tr>
+				<tr><td><button type="button" onclick="payNumSend3()" class="custom-button" 
+				style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;"
+				>결재</button></td></tr>
+			</tbody>
+		</tbody>
+	</table>
+	</div> -->
 	
-	                            </ul>
-	                        </div>
-	                    	</div>
-	                    	</div>
-	                    	</div>
-	                    </td></tr>
-						<tr style="display: none;"><td><textarea id="offcomment" style="width:400px; height:100px"></textarea></td></tr>
-						<tr><td><button type="button" onclick="payNumSend2()" class="custom-button" 
-						style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
-						>결재</button></td></tr>
-					</tbody>
-					<tbody id="payNum3" style="display:none">
-						<tr><td><input type="text" id="robintitle" style="width:400px;"></td></tr>
-						<tr><td><textarea id="robincontent" style="width:400px; height:200px"></textarea></td></tr>
-						<tr><td>
-							<div class="row">
-            				<div class="col-lg-12" style="vertical-align: middle;">
-							<div class="panel-heading" style="top: -20px; margin-top:14px;">첨부파일</div>
-							<div class="panel-body4">
-	                        <div class="form-group uploadDiv4">
-								<label class="input-file-button" for="input-file" style="margin-top:14px;">
-                                파일 선택
-                          		</label>
-	                            <input name="uploadFile4" type="file" id="input-file" multiple style="display:none;">
-	                        </div>
-	                        <div class="uploadResult4">
-	                            <ul>
+
+<!-- 셀렉트 박스 선택 -->	
+<script>
+var selectPay = document.getElementById('payType');
+var payNum1 = document.getElementById('payNum1');
+var payNum2 = document.getElementById('payNum2');
+var payNum3 = document.getElementById('payNum3');
+var payUserForm = document.getElementById('payUserForm');
+	function paychange(){
+		if(selectPay.value == 'a'){
+			document.getElementById('selectTitle').textContent = "운행일지작성";
+			console.log('a맞음');
+			$(payNum2).hide() //.style.display = 'none';
+			$(payNum3).hide() //.style.display = 'none';
+			payUserForm.style.display = 'block';
+			payNum1.style.display = 'block';
+			superSend.style.display = 'block';
+			pay2reset();
+			pay3reset();
+			payNum2.querySelector('textarea').value = '';
+			payNum3.querySelector('textarea').value = '';
+			document.getElementById('selectValue').value = '운행일지';
+
+		}else if(selectPay.value == 'b'){
+			document.getElementById('selectTitle').textContent = "연차계작성"
+			payUserForm.style.display = 'block';
+			payNum1.style.display = 'none';
+			payNum3.style.display = 'none';
+			payNum2.style.display = 'block';
+			superSend.style.display = 'block';
+			pay1reset();
+			pay3reset();
+			payNum3.querySelector('textarea').value = '';
+			document.getElementById('selectValue').value = '연차계';
+			
+		}else if(selectPay.value == 'c'){
+			document.getElementById('selectTitle').textContent = "품의서작성";
+			payUserForm.style.display = 'block';
+			payNum1.style.display = 'none';
+			payNum2.style.display = 'none';
+			payNum3.style.display = 'block';
+			superSend.style.display = 'block';
+			pay1reset();
+			pay2reset();
+			payNum2.querySelector('textarea').value = '';
+			document.getElementById('selectValue').value = '품의서';
+
+		}else if(selectPay.value == 'd'){
+			payUserForm.style.display = 'none';
+			payNum1.style.display = 'none';
+			payNum2.style.display = 'none';
+			payNum3.style.display = 'none';
+			superSend.style.display = 'none';
+			pay1reset();
+			pay2reset();
+			pay3reset();
+			document.getElementById('selectValue').value = '';
+			payNum2.querySelector('textarea').value = '';
+			payNum3.querySelector('textarea').value = '';
+		}
+	}
 	
-	                            </ul>
-	                        </div>
-	                    	</div>
-	                    	</div>
-	                    	</div>
-	                    </td></tr>
-						<tr style="display: none;"><td><textarea id="robincomment" style="width:400px; height:100px"></textarea></td></tr>
-						<tr><td><button type="button" onclick="payNumSend3()" class="custom-button" 
-						style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;"
-						>결재</button></td></tr>
-					</tbody>
-				</tbody>
-			</table>
-			<table class="paymentuser tjs" style="float:right;width:40%;margin-top:10px;">
-				<thead>
-					<tr style="display:inline-block">
-						<td style="width:131px" class="paymentuser">기안자</td>
-						<td style="width:133px" class="paymentuser">결재자1</td>
-						<td style="width:133px" class="paymentuser">결재자2</td>
-					</tr>
-				</thead>
-				<tbody class="paymentuser">
-					<tr style="display:inline-block" class="paymentuser">
-						<td style="width:130px; height:100px; background-color:white"></td>
-					</tr>
-					<tr style="display:inline-block" class="paymentuser">
-						<td style="width:131px; height:100px; background-color:white"></td>
-					</tr>
-					<tr style="display:inline-block" class="paymentuser">
-						<td style="width:131px; height:100px; background-color:white"></td>
-					</tr>
-					<tr id="drafter" style="display:inline-block;width:132px;height: 30px;" class="paymentuser">
-						<td style="text-align: center; position:absolute;left: 650px;top:213px;">[[${userInfo.name}]] [[${userInfo.rank}]]</td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-					</tr>
-					<tr id="payUserList1" style="display:inline-block;width:133px;height: 30px;" class="paymentuser">
-						<td style="text-align: center; position:absolute;left: 781px;top:213px;"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-					</tr>
-					<tr id="payUserList2" style="display:inline-block;width:133px;height: 30px;" class="paymentuser">
-						<td style="text-align: center; position:absolute;left: 922px;top:213px;"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-						<td style="display:none"></td>
-					</tr>
-				</tbody>
-			</table>
-		</form>
+	function pay1reset() {
+		let pay1values = payNum1.querySelectorAll('input');
+		pay1values.forEach(pay1value => {
+			pay1value.value = '';
+		});
+	};
+	function pay2reset() {
+		let pay2values = payNum2.querySelectorAll('input');
+		pay2values.forEach(pay2value => {
+			pay2value.value = '';
+		});
+	};
+	function pay3reset() {
+		let pay3values = payNum3.querySelectorAll('input');
+		pay3values.forEach(pay3value => {
+			pay3value.value = '';
+		});
+	};
+</script>
+
+<script>
+	function payNumSend() {
+		if(payType.value == 'a') {
+			payNumSend1();
+		} else if (payType.value == 'b') {
+			payNumSend2();
+		} else if (payType.value == 'c') {
+			payNumSend3();
+		};
+	};
+</script>
+	
 	
 	<script th:inline="javascript">
 	/*<![CDATA[*/
@@ -291,9 +682,11 @@
 		var payNum1 = document.getElementById('payNum1');
 		var payNum2 = document.getElementById('payNum2');
 		var payNum3 = document.getElementById('payNum3');
+		var payUserForm = document.getElementById('payUserForm');
 		//문서 데이터 변수
 		document.getElementById('now_date').valueAsDate = new Date();
 		let nowDate = document.getElementById('now_date').value;
+		console.log(nowDate);
 		//운행일지 ajax전송용 데이터
 		let carDate = document.getElementById('carDate').value;
 		let carAddr = document.getElementById('carAddr').value;
@@ -330,47 +723,7 @@
 			imprest = ((km2*1)-(km1*1))*1500;
 			document.getElementById('imprest').value = imprest;
 	    }
-		function paychange(){
-			console.log(selectPay.value);
-			if(selectPay.value == 'a'){
-				console.log('a맞음');
-				$(payNum2).hide() //.style.display = 'none';
-				$(payNum3).hide() //.style.display = 'none';
-				payNum1.style.display = 'block';
-				off1 = '';
-				off2 = '';
-				offtitle = '';
-				offcontent = '';
-				offcomment = '';
-				robintitle = '';
-				robincontent = '';
-				robincomment = '';
-			}else if(selectPay.value == 'b'){
-				payNum1.style.display = 'none';
-				payNum3.style.display = 'none';
-				payNum2.style.display = 'block';
-				carDate = '';
-				carAddr = '';
-				km1 = '';
-				km2 = '';
-				robintitle = '';
-				robincontent = '';
-				robincomment = '';
-			}else if(selectPay.value == 'c'){
-				payNum1.style.display = 'none';
-				payNum2.style.display = 'none';
-				payNum3.style.display = 'block';
-				off1 = '';
-				off2 = '';
-				offtitle = '';
-				offcontent = '';
-				offcomment = '';
-				carDate = '';
-				carAddr = '';
-				km1 = '';
-				km2 = '';
-			}
-		}
+		
 		function referrerSelect(){
 			var screenWidth = window.screen.width;
         	var screenHeight = window.screen.height;

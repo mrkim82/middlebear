@@ -46,7 +46,7 @@
 		 ORDER BY ${proRange}
 	</select>
 	
-	<!-- 정렬 조회 -->
+	<!-- 정렬, 필터 조회 -->
 	<select id="readOrder" resultType="ProUsersVO">
 		SELECT pro_range, pro_parti_filter
 		FROM users
@@ -73,7 +73,10 @@
 		WHERE m.id = #{id}
 		AND p.pro_no = m.pro_no
 		AND m.pro_hide_check = 'Y'
-		ORDER BY p.pro_no DESC
+		<if test="proPartiFilter != null and proPartiFilter != ''">
+		   AND p.id = #{proPartiFilter}
+	 	</if>
+		ORDER BY ${proRange}
 	</select>
 	
 	<!-- 프로젝트 즐겨찾기 조회 -->
@@ -84,7 +87,10 @@
 		AND p.pro_no = m.pro_no
 		AND m.pro_star_check = 'Y'
 		AND m.pro_hide_check = 'N'
-		ORDER BY p.pro_no DESC
+		<if test="proPartiFilter != null and proPartiFilter != ''">
+		   AND p.id = #{proPartiFilter}
+	 	</if>
+		ORDER BY ${proRange}
 	</select>
 	
 	<!-- 프로젝트 미분류 조회 -->
@@ -98,7 +104,10 @@
 		AND m.pro_hide_check = 'N'
 		AND m.pro_parti_check = 'Y'
 		AND group_no IS NULL
-		ORDER BY p.pro_no DESC
+		<if test="proPartiFilter != null and proPartiFilter != ''">
+		   AND p.id = #{proPartiFilter}
+	 	</if>
+		ORDER BY ${proRange}
 	</select>
 	
 	<!-- 프로젝트 즐겨찾기 변경 -->
@@ -124,9 +133,9 @@
 	
 	<!-- 프로젝트 그룹 프로젝트 조회 -->
 	<select id="readProjectGroupDetail" resultType="ProGroupVO">
-		SELECT g.group_no,
+		SELECT k.pro_name,
 			   g.pro_mem_no,
-			   k.pro_name,
+			   g.group_no,
 			   k.pro_color,
 			   k.pro_star_check,
 			   k.pro_hide_check,
@@ -135,7 +144,7 @@
 			   u.id,
 			   k.home_tab
 		FROM pro_group_management g
-		    JOIN (SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no, m.home_tab
+		    JOIN (SELECT p.pro_name, m.pro_color, m.pro_star_check, m.pro_hide_check, m.pro_mem_no, p.pro_no, m.home_tab, p.id
 		          FROM pro p JOIN pro_mem m
 		          ON p.pro_no = m.pro_no) k
 		    ON g.pro_mem_no = k.pro_mem_no
@@ -144,6 +153,10 @@
 		WHERE u.group_no = #{groupNo}
 		AND u.id = #{id}
 		AND k.pro_hide_check = 'N'
+		<if test="proPartiFilter != null and proPartiFilter != ''">
+		   AND k.id = #{proPartiFilter}
+	 	</if>
+		ORDER BY ${proRange}
 	</select>
 	
 	<!-- 프로젝트 그룹 생성 -->
@@ -263,8 +276,8 @@
 	
 	<!-- 미수락 프로젝트 -->
 	<select id="readNoPartiPro" parameterType="String" resultType="ProPartiAlarmVO">
-		SELECT b.pro_name,--프로젝트이름
-		       i.name,--초대장
+		SELECT b.pro_name,
+		       i.name,
 		       a.pro_mem_no,
 		       i.rank
 		
@@ -308,4 +321,5 @@
 		ON(a.pro_no = b.pro_no)
 		WHERE pro_mem_no = #{proMemNo}
 	</select>
+	
 </mapper>
