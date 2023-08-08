@@ -121,7 +121,6 @@
 		AND a.pro_no = #{proNo}
 	</select>
 	
-	
 	<!-- 캘린더(개인) 화면 조회 -->
 	<select id="readPersonalSch" resultType="ProPostWorkSchVO">
 		SELECT '일정(프로젝트) : ' || c.post_title AS title,
@@ -194,7 +193,9 @@
 	<!-- 개인 캘린더 댓글 조회 -->
 	<select id="readPerCalCom" resultType="ProPostCommentVO">
 		SELECT a.com_no, a.com_content, a.com_date,
-		       c.name, b.profile_img, a.id, a.pro_post_no
+		       c.name, a.id, a.pro_post_no,
+		       e.uuid, e.upload_path, e.file_name
+		       
 		FROM com a
 		JOIN users b
 		  ON a.id = b.id
@@ -202,6 +203,8 @@
 		  ON b.emp_no = c.emp_no
 		JOIN pro_post d
 		  ON a.pro_post_no = d.pro_post_no
+		LEFT JOIN files e
+		  ON (e.id = a.id)
 		WHERE a.id = #{id}
 		AND d.pro_no = 7
 	</select>
