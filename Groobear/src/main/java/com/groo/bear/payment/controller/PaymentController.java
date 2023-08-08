@@ -329,11 +329,12 @@ public class PaymentController {
 			}
 		}
 		if(docType.equals("c")){
-			PaymentVO payVO = paymentService.offList(payNo); //payVO.Id = 기안자 approver2 결재자1 approver3 결재자2
+			PaymentVO payVO = paymentService.robinList(payNo); //payVO.Id = 기안자 approver2 결재자1 approver3 결재자2
 			System.out.println("payVO = "+payVO);
+			System.out.println("pavVO.getId = "+payVO.getId());
 			empvo = paymentService.payEmpInfo(payVO.getId());
 			model.addAttribute("drafterInfo",empvo);
-			model.addAttribute("list",paymentService.offList(payNo));
+			model.addAttribute("list",paymentService.robinList(payNo));
 			System.out.println("docType b에서 if직전");
 			if(paymentService.searchSignImg(empvo.getEmpNo()) != null) {
 				System.out.println("searchSignImg = "+paymentService.searchSignImg(empvo.getEmpNo()));
