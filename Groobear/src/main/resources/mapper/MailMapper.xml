@@ -178,6 +178,9 @@
 	</select>
 	<!-- mailsever에서 받아온 session 유저에게온 메일을 저장 -->
 	<insert id="serverGetInsertMail" parameterType="MailVO">
+	<selectKey resultType="int" keyProperty="mailNo" order="BEFORE">
+        SELECT NVL(MAX(mail_no),0)+1 FROM getmail        
+    </selectKey>
 		INSERT INTO getmail(mail_no
 							,title
 							,content
@@ -191,7 +194,7 @@
 							,mail_check
 							,mail_type)
 					VALUES(
-							(SELECT NVL(MAX(mail_no),0)+1 FROM getmail)
+							#{mailNo}
 							,#{title}
 							,#{content}
 							,#{sender}

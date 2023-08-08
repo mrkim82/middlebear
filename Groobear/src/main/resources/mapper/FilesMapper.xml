@@ -127,6 +127,7 @@
   							,FILE_TYPE
   							,FILE_DATE
   							,MAIL_NO
+  							,read_mail_no
   							) 
   					VALUES(
   							#{uuid}
@@ -135,6 +136,7 @@
   							,1
   							,sysdate
   							,#{mailNo}
+  							,#{readMailNo}
   					)
   	</insert>
   	<!-- 메일 첨부파일 조회 -->

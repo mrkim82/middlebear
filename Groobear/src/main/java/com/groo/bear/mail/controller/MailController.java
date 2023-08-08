@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +50,7 @@ public class MailController {
         String id2=id;
         id = id.substring(0,id.indexOf("@"));
         EmailReader receiver = new EmailReader();
-        receiver.setSaveDirectory("/home/ec2-user/upload/");
+        receiver.setSaveDirectory("/home/ec2-user/upload/mail");
         List<MailVO> list = receiver.receiveMailAttachedFile(id, id, startDate, endDate);
         //위에서 가져온 메일을 db에 저장하고 뿌려줌
 		if(list!=null && list.size() > 0) {
@@ -58,10 +59,16 @@ public class MailController {
 				int result = mailService.serverGetInsertMail(list.get(i));
 				List<String> files = list.get(i).getFiles(); //첨부파일리스트
 				if(files != null) {
+					for(int j=0;j<files.size();j++) {
 					//insert문 VO만들기
-					FilesVO filesVO = new FilesVO();
-//					filesVO.setUuid()
-//					insertMailFile
+						FilesVO filesVO = new FilesVO();
+						UUID uuid = UUID.randomUUID();
+						filesVO.setUuid(uuid.toString());
+						filesVO.setUploadPath("mail");
+						filesVO.setFileName(files.get(i));
+						filesVO.setReadMailNo(list.get(i).getMailNo());
+						mailService.insertMailFile(filesVO);
+					}
 				}
 		        System.out.println("몇건 처리됨? "+result);
 			}

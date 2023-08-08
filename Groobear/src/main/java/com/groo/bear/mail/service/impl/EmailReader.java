@@ -117,7 +117,6 @@ public class EmailReader {
                             String fileName = part.getFileName();
                             attachFiles += fileName + ", ";
                             System.out.println();
-                            fileName = "a_"+fileName;
                             files.add(fileName);
                             part.saveFile(saveDirectory + File.separator + fileName);
                             //db에 저장하는 insert문 추가
