@@ -760,6 +760,7 @@ li {
 								
 								<div class="workFeedPostStatus"
 									 th:attr="data-feed-work-type=${allPost.workStatus}"
+									 th:data-work-disabled-no="${allPost.workNo}"
 									 style="text-align: center; margin-top:15px;">
 								    <button type="button" class="btn"
 								    		th:classappend="${allPost.workStatus == '1' ? 'btn-primary' : 'btn-outline-primary'}"
@@ -2075,6 +2076,7 @@ li {
 		let modelVoteChecks = /*[[${readxxVote}]]*/;
 		let proAllMember = /*[[${projectPartiMember}]]*/;
 		let workMemberAll = /*[[${readTaskWorkPerson}]]*/;
+		selfId = /*[[${session.Id}]]*/;
 	/*]]>*/
 </script>
 
@@ -3934,10 +3936,21 @@ function delProFile(ppn, filename) {
 
 <!-- 업무 담당자 조회 -->
 <script>
+	console.log(selfId)
 	workMemberAll.forEach(workMember => {
-		//console.log(workMember)
+		//console.log(workMember);
+		if(workMember.id == selfId) {
+			let targetDiv = document.querySelector('[data-work-disabled-no="' + workMember.workNo + '"]');
+			//console.log('뇬',targetDiv);
+			let tbuttons = targetDiv.querySelectorAll('button');
+			
+			tbuttons.forEach(button => {
+				button.disabled = false; // 버튼의 disabled 속성을 해제
+			});
+		}
 	});
-	console.log('ss',document.querySelector('[data-feed-work-no="40"]'));
+	//console.log('눔',document.querySelector('[data-feed-work-no]'));
+	//console.log('ss',document.querySelector('[data-feed-work-no="40"]'));
 </script>
 </body>
 </html>
