@@ -7,5 +7,5 @@ public class ProPartiListVO {
 	private String name;
 	private String rank;
 	private String id;
-	private String email;
+	private String deptName;
 }
