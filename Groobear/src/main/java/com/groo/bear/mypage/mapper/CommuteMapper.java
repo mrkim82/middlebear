@@ -12,7 +12,7 @@ public interface CommuteMapper {
 	//페이징
 	public int commuteListCnt(Criteria cri, CommuteVO commuteVO);
 	//paging
-	public int commuteListCnt2(String id,String monthDate);
+	public int commuteListCnt2(Criteria cri, String id,String monthDate,CommuteVO commuteVO);
 	//출근
 	public int workStart(CommuteVO commuteVO); 
 	//퇴근
