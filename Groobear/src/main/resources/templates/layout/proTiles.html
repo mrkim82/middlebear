@@ -88,7 +88,7 @@ th {
 	color: #fff;
 	border: 1px solid #35A880;
 	border-radius: 12px;
-	font-size: 17px;
+	font-size: 15px;
 }
 
 .square {
@@ -106,6 +106,14 @@ th {
 	margin-left: 30px;
 	border-radius: 10px;
 	border: 0px;
+}
+
+.mcmodal {
+	border-radius: 8px;
+	border: 1px solid gray;
+	padding: 2px 9px;
+	background-color: #998b79;
+	color: #fff;
 }
 
 /* 검색 창 스타일 */
@@ -510,7 +518,7 @@ textarea {
 					<details id="groupFolderList" open>
 						<summary>프로젝트 폴더
 							<span onclick="makeGroupFolderModal()"
-								  class="material-icons">add</span>
+								  class="material-icons spanCursor">add</span>
 						</summary>
 						<!-- 프로젝트 그룹 리스트 -->
 						<ul id="proGroup" style="list-style-type: none;">
@@ -519,7 +527,7 @@ textarea {
 								<a th:href="@{/proGroupD/{groupNo}(groupNo=${proG.groupNo})}"
 								   style="overflow:hidden; width:80px">
 								   [[${proG.groupName}]]
-									<span class='material-icons moreVertIcons'
+									<span class='material-icons moreVertIcons spanCursor'
 										  onclick="makeGroupMan()">more_vert
 									</span>
 									<!-- style='display: none;' -->
@@ -533,7 +541,7 @@ textarea {
 		</div>
 	</nav>
 
-	<div  style="padding: 0px; width:1007.5px">
+	<div style="padding: 0px; width:1007.5px">
 	
 		<!-- 프로젝트 상세 상단 바 proPostMain으로 시작하는 경우 horizonBar 프래그먼트 포함 -->
 		<th:block th:if="${#strings.containsIgnoreCase(firstURI,'proPostMain')} or
@@ -564,7 +572,7 @@ textarea {
 	  <div class="modal-dialog modal-dialog-centered">
 	    <div class="modal-content dohyeonModalContent">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="inviteManProLabel">미수락 프로젝트</h5>
+	        <h2 class="modal-title" id="inviteManProLabel" style="font-weight:600;">미수락 프로젝트</h2>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
@@ -574,8 +582,8 @@ textarea {
 					<table class="table table-hover" style="margin: 0px;">
 						<thead>
 							<tr>
-								<th scope="col" style="font-size: 20px; font-weight: 300; width: 250px;">프로젝트 명</th>
-								<th scope="col" style="font-size: 20px; font-weight: 300; width: 120px;">초대자</th>
+								<th scope="col" style="font-size: 20px; font-weight: 600; width: 250px;">프로젝트 명</th>
+								<th scope="col" style="font-size: 20px; font-weight: 600; width: 120px;">초대자</th>
 								<th scope="col" style="font-size: 20px; font-weight: 100; width: 75px;"></th>
 								<th scope="col" style="font-size: 20px; font-weight: 100; width: 75px; padding-left: 0px;"></th>
 							</tr>
@@ -601,7 +609,7 @@ textarea {
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content dohyeonModalContent">
 				<div class="modal-header">
-					<h5 class="modal-title" id="createProModal">프로젝트 생성하기</h5>
+					<h2 class="modal-title" id="createProModal" style="font-weight:600;">프로젝트 생성하기</h2>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 					</button>
@@ -619,7 +627,7 @@ textarea {
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content dohyeonModalContent" style="width: 434px;">
 				<div class="modal-header">
-					<h5 class="modal-title" id="createGroupFolderModallLabel">그룹 폴더 생성</h5>
+					<h2 class="modal-title" id="createGroupFolderModallLabel" style="font-weight:600;">그룹 폴더 생성</h2>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -630,9 +638,10 @@ textarea {
 						   id="folderContent"
 						   autocomplete="off"
 						   maxlength="30"
-							 style="width: 372px;">
+						   style="width: 372px;">
 				</div>
-				<div class="d-flex justify-content-center" style="margin: 0 auto; padding-top: 6px; padding-bottom: 6px; margin-bottom: 5px;">
+				
+				<div class="modal-footer" style="display: flex; justify-content: flex-end;">
 					<button type="button" class="btn btn-groo" onclick="makeGroupFolder()" style="border-radius:12px; margin-right: 6px;">저장</button>
 					<button type="button" class="btn btn-groo" data-dismiss="modal" style="border-radius:12px; margin-left: 6px;">닫기</button>
 				</div>
@@ -644,25 +653,24 @@ textarea {
 	<div class="modal fade" id="makeGroupManModal" tabindex="-1" aria-labelledby="makeGroupManModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content dohyeonModalContent"
-					 style="width: 350px;">
+					 style="width: 450px;">
 				<div class="modal-header">
-					<h5 class="modal-title" id="makeGroupManModalLabel"></h5>
+					<h2 class="modal-title" id="makeGroupManModalLabel" style="font-weight:600;"></h2>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body" style="text-align: center;">
-					<h6 style="text-align: center; margin-top: 7px;">* 그룹안의 프로젝트는 삭제되지 않습니다!</h6>
+					<h6 style="text-align: center;">폴더 수정공간입니다.</h6>
+					<h6 style="text-align: center; margin:0px;">그룹 폴더안의 프로젝트는 삭제되지 않습니다!</h6>
 				</div>
 				<div class="modal-footer">
 					<button type="button"
-							class="btn btn-groo"
-							style="width: 90px;border-radius: 12px;"
+							class="btn btn-groob"
 							id="groupNameChangeBtn"
 							onclick="updateManButton()">수정</button>
 					<button type="button"
-							class="btn btn-groo"
-							style="width: 90px;border-radius: 12px;"
+							class="btn btn-groob"
 							id="groupNameDeleteBtn"
 							onclick="deleteGroupFolder()">즉시삭제</button>
 				</div>
@@ -675,7 +683,7 @@ textarea {
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content dohyeonModalContent"  style="width: 434px;">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateManButtonLabel">그룹 폴더명 수정</h5>
+					<h2 class="modal-title" id="updateManButtonLabel" style="font-weight:600;">그룹 폴더명 수정</h2>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -1020,7 +1028,7 @@ textarea {
 		aC.style.width = '80px';
 		
 		let spanC = document.createElement('span');
-		spanC.className = 'material-icons moreVertIcons';
+		spanC.classList.add('material-icons', 'moreVertIcons', 'spanCursor');
 		//spanC.style = 'display : none;';
 		spanC.textContent = 'more_vert';
 		spanC.onclick = makeGroupMan;
@@ -1066,7 +1074,7 @@ textarea {
 					targetGroupFolder.setAttribute('data-fname', folderContentChange.value);
 					targetGroupFolder.children[0].innerHTML = `
 						${folderContentChange.value}
-							<span class='material-icons moreVertIcons'
+							<span class='material-icons moreVertIcons spanCursor'
 							  onclick="makeGroupMan()">more_vert
 						</span>
 					`;
@@ -1139,6 +1147,186 @@ textarea {
 		.catch(error => {
 			console.error('Error: ',error);
 		});
+	};
+</script>
+
+<!-- 댓글 등록 -->
+<script>
+	function createCommentButton() {
+		let targetButton = event.target;//버튼 동적 확인
+		let com = targetButton.closest('.container').querySelector('.form-control');
+		console.log(targetButton)
+		if(com.value == '') {
+			com.focus();
+			alert('댓글을 입력하세요');
+			return;
+		};
+		
+		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
+		
+		fetch("/postCreateComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'proPostNo': writingNo,
+					'comContent': com.value
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			let insertComment = targetButton.closest('.container').querySelector('thead');
+			let imgsrc;
+			//이미지 주소 변환
+			if(res.uuid == null) {
+				imgsrc = '../img/userProf.png';
+			} else {
+				imgsrc = `/display?fileName=${res.uploadPath.replace(/\\/g, "/")}/s_${res.uuid}_${res.fileName}`;
+			};
+			
+			insertComment.insertAdjacentHTML('beforeend',
+			`<tr class="comtabletr" data-post-code="${res.comNo}">
+				<td class="comtabletd" style="width:30px; padding-right:0px;">
+					<img src="${imgsrc}" class="card-img-top" style="width:30px; height:30px; margin:0px;">
+				</td>
+				<td class="comtabletd" style="width:90px; padding-right:0px;">${selfName}</td>
+				<td class="comtabletd">${com.value}</td>
+				<td class="comtabletd comdate" style="width:140px; padding-right:0px;">${currentTime2}</td>
+				<td style="width:90px; padding-right:0px;">
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>
+			</tr>`
+			);
+
+			com.focus();
+			com.value = '';
+		});
+	};
+	
+	//현재시간 구하기
+	const currentTime = formatDate();
+	
+	function formatDate() {
+		let date = new Date();
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		
+		return `${year}/${month}/${day} ${hours}:${minutes}`;
+	};
+	//현재시간 구하기
+	const currentTime2 = formatDate2();
+	
+	function formatDate2() {
+		let date = new Date();
+		const year = String(date.getFullYear()).slice(2);
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		
+		return `${year}-${month}-${day} ${hours}:${minutes}`;
+	}
+</script>
+	
+<!-- 댓글 삭제  -->
+<script>
+	function deleteWritingComment() {
+		let targetTr = event.target.closest('tr');
+		
+		fetch("/postDeleteComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'comNo': targetTr.dataset.postCode
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			targetTr.remove();
+		});
+	};
+</script>
+	
+<!-- 댓글 수정  -->
+<script>
+	function UpdateWritingComment() {
+		let targetTr = event.target.closest('tr');
+		let targetThead = targetTr.parentElement;
+		let comNo = targetTr.dataset.postCode;//댓글 번호
+		
+		let oldCom = targetTr.children[2].textContent;//기존 댓글 내용
+		
+		targetTr.children[2].textContent = '';//댓글 초기화
+		targetTr.children[4].textContent = '';//수정, 삭제 초기화
+		
+		if(document.getElementById('newComment') != null) {
+			let nC = document.getElementById('newComment').closest('tr');
+			nC.children[2].textContent = document.getElementById('newComment').value;
+			nC.children[4].innerHTML =
+				`<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>`;
+		};
+		
+		// 댓글 수정 폼 생성
+		targetTr.children[2].innerHTML = '<input type="text" placeholder="댓글 수정" id="newComment" maxlength="30" style="width:100%; height:29px;" value="' + oldCom + '">'; 
+		targetTr.children[4].innerHTML = '<span id="ooo" class="spanCursor" style="color:red;">수정&nbsp&nbsp</span>' + '<span id="xxx" class="spanCursor">취소</span>';
+				
+		// 취소버튼
+		document.getElementById('xxx').addEventListener('click', function() {
+			let cancleTr = event.target.closest('tr');
+			cancleTr.children[2].textContent = oldCom;
+			cancleTr.children[4].innerHTML = 
+				`<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>`;
+		});
+		
+		// 수정버튼
+		document.getElementById('ooo').addEventListener('click', function() {
+			let newCom = document.getElementById('newComment');
+			if(newCom.value == '') {
+				newCom.focus();
+				alert('댓글을 수정하세요');
+			} else {
+				
+				fetch("/postUpdateComment", {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'comContent' : newCom.value,
+							'comNo': comNo
+						})
+				})
+				.then(response => response.json())
+				.then(res => {
+					
+					if(res.result == '성공') {
+						targetTr.children[2].textContent = newCom.value;
+						targetTr.children[4].innerHTML = 
+							`<td>
+							<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+							<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+						</td>`;;
+						
+					} else {
+						alert('댓글 수정 실패');
+					}
+				});
+			}
+		});
+		
 	};
 </script>
 

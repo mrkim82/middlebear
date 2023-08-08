@@ -1,6 +1,7 @@
 package com.groo.bear.chat.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.groo.bear.chat.domain.ChatMessageDTO;
 import com.groo.bear.chat.domain.RoomDTO;
@@ -62,4 +63,11 @@ public interface ChatMapper {
 	
 	//프로필사진 띄우려고
 	public List<FilesVO> getImage();
+	
+	//프로필사진 또 띄워
+	public List<ChatMessageDTO> getMessagesWithProfileImages(int roomNo);
+	
+	public String getProfileImageUrl(String id);
+	
+	public Map<String, Object> getUserAndFileByMessage(String id);
 }

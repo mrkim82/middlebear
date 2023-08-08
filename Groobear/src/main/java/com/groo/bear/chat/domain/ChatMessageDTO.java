@@ -22,7 +22,7 @@ public class ChatMessageDTO {
     //@DateTimeFormat(pattern = "yy-MM-dd HH-mm")
     private String msgTime;
     private String created;
-    private String profileImage;
+    private String profileImageUrl;
     private String uuid; // 첨부파일 보관
 	private String uploadPath; //파일이 업로드된 경로
 	private String fileName; //파일이름

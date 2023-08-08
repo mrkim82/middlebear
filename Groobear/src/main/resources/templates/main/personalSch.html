@@ -36,7 +36,7 @@
 .btn-groobl {
 	background-color: #6198d3;
 	color: #fff;
-	border: 1px solid #35A880;
+	border: 1px solid #6198d3;
 	border-radius: 12px;
 }
 
@@ -101,9 +101,13 @@ input[type="text"]:focus {
 .fc {
   margin: 0;
 }
+
+.comtable td {
+	text-align:left;
+}
 </style>
 
-<h1 style="margin-top:30px; margin-left:10px;" th:text="${session.Name} + '의 개인 캘린더'"></h1>
+<h2 style="margin-top:30px; margin-left:10px; font-weight:600" th:text="${session.Name} + '의 개인 캘린더'"></h2>
 <div style="text-align:right; margin-right:30px; margin-bottom:30px;">
 	<button type="button"
 			class="btn btn-groobl"
@@ -142,7 +146,6 @@ input[type="text"]:focus {
 				   class="form-control"
 				   style="margin-left: 3px; width: 210px; border-radius: 5px;">
 		</div>
-		<!-- 마감일 -->
 		<!-- 마감일 -->
 		<div style="margin-bottom: 7px;">
 			<p style="margin-bottom: 2px;">마감일</p>
@@ -210,14 +213,16 @@ input[type="text"]:focus {
 				   style="margin-left: 3px; width: 210px; border-radius: 5px;"></input>
 		</div>
 		<div style="margin-bottom: 7px;">
-		<p style="margin-bottom: 2px;">마감일</p>
+		<p style="margin-bottom: 2px;">종료일</p>
 			<input type="datetime-local"
 				   class="form-control"
 				   th:value="${#dates.format(calD.schEndTime, 'yyyy-MM-dd HH:mm')}"
 				   th:min="${#dates.format(cTime, 'yyyy-MM-dd HH:mm')}"
 				   style="margin-left: 3px; width: 210px; border-radius: 5px;"></input>
 		</div>
-		<div th:if="${calD.schPlace != null}" th:text="'장소 : ' + ${calD.schPlace}"></div>
+		<div th:if="${calD.schPlace != null}"
+			 th:text="'장소 : ' + ${calD.schPlace}"
+			 style="margin-top:10px;"></div>
     </div>
     
     <!-- 내용 -->
@@ -227,42 +232,75 @@ input[type="text"]:focus {
     
 	<!-- 북마크, 댓글수 -->
     <div class="modal-footer">
-		<div class="col-md-8">
-			<ul class="list-unstyled">
-				<li th:each="com : ${readPerCalCom}"
-						th:data-post-code="${com.comNo}"
-						th:if="${calD.proPostNo == com.proPostNo}">
-					<th:block th:if="${com.uploadPath != null}">
-						<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
-		  		 			 class="card-img-top"
-		  		 			 style="width:30px; height:30px; margin:0px;">
-		  		 	</th:block>
-		  		 	<th:block th:if="${com.uploadPath == null}">
-						<img style="width:30px; height:30px; margin:0px;"
-					 		 src="../img/userProf.png">
-					</th:block>
-					<span th:text="${com.name}"></span>
-					<span th:text="${#dates.format(com.comDate, 'yyyy-MM-dd HH:mm')}"></span>
-					<span th:text="${com.comContent}"></span>
-					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
-					<span></span><!-- 지우면 안됨!!!!!!! -->
-					<span onclick="deleteWritingComment()" class="spanCursor">X</span>
-				</li>
-			</ul>
-		</div>
-		<div class="col-md-4">
-			<div class="form-group">
-				<input type="text" class="form-control" placeholder="댓글 작성">
+    
+    	<div class="container">
+			<div class="row">
+				<h6>댓글</h6>
+				
+				<table class="comtable table table-hover">
+					<thead>
+						<tr class="comtabletr"
+							th:each="com : ${readPerCalCom}"
+							th:data-post-code="${com.comNo}"
+							th:if="${calD.proPostNo == com.proPostNo}">
+							<td class="comtabletd"
+								style="width:30px; padding-right:0px;">
+								<th:block th:if="${com.uploadPath != null}">
+									<img th:src="@{|/display?fileName=${#strings.replace(com.uploadPath,'\','/')}/s_${com.uuid}_${com.fileName}|}"
+					  		 			 class="card-img-top"
+					  		 			 style="width:30px; height:30px; margin:0px;">
+					  		 	</th:block>
+					  		 	<th:block th:if="${com.uploadPath == null}">
+									<img style="width:30px; height:30px; margin:0px;"
+								 		 src="../img/userProf.png">
+								</th:block>
+							</td>
+							<td class="comtabletd"
+								th:text="${com.name}"
+								style="width:90px; padding-right:0px;"></td>
+							<td class="comtabletd" th:text="${com.comContent}"></td>
+							<td class="comtabletd comdate"
+								style="width:140px; padding-right:0px;"
+								th:text="${#dates.format(com.comDate, 'yy-MM-dd HH:mm')}"></td>
+							<td style="width:90px; padding-right:0px;">
+								<span th:if="${com.id == session.Id}"
+									  onclick="UpdateWritingComment(event)"
+									  class="spanCursor"
+									  style="color: red">수정&nbsp</span>
+								<span onclick="deleteWritingComment(event)"
+									  th:if="${com.id == session.Id}"
+									  class="spanCursor">삭제</span>
+							</td>
+						</tr>
+					</thead>
+				</table>
 			</div>
-			<button type="button" class="btn btn-groobl" onclick="createCommentButton()">댓글 등록</button>
+			<div class="row">
+				<div class="form-group col-10">
+					<input type="text"
+						   class="form-control"
+						   placeholder="댓글 작성"
+						   style="width:100%; overflow-x: hidden;">
+				</div>
+				<div class="col-2" style="padding:0px;">
+					<button type="button"
+							class="btn btn-groobl"
+							onclick="createCommentButton(event)"
+							th:data-post-writing-no="${calD.proPostNo}"
+							style="width:100px;">댓글 등록</button>
+				</div>
+			</div>
 		</div>
-    </div>
+	</div>
     
 </div>
 	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js}"></script>
 <script src="/fullcalendar-6.1.8/dist/index.global.js"></script>
+
+<!-- 한글패치 -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.js"></script>
 
 <!-- 데이터 가져오기 -->
 <script type="text/javascript" th:inline="javascript">
@@ -330,151 +368,13 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     businessHours: false,
     editable: false,
     selectable: false,
+    locale: 'ko',
 	events: formattedEvents
 });
 
 calendar.render();
 </script>
 
-<!-- 댓글 등록 -->
-<script>
-function createCommentButton() {
-	let targetButton = event.target;//버튼 동적 확인
-	let com = targetButton.parentNode.children[0].children[0]; //텍스트값 찾기
-	if(com.value == '') {
-		com.focus();
-		alert('댓글을 입력하세요');
-		return;
-	}
-	
-	let proPostNo = targetButton.closest('.custom-modal').dataset.feedPostSchNo;//글번호 찾기
-	
-	fetch("/postCreateComment", {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-  				'proPostNo': proPostNo,
-  				'comContent': com.value
-  			})
-	})
-	.then(response => response.json())
-	.then(res => {
-		let insertComment = targetButton.closest('.modal-footer').getElementsByClassName('list-unstyled')[0];
-		insertComment.insertAdjacentHTML('beforeend', 
-			'<li data-post-code="' + res.result + '">'+
-				'<span></span>'+
-				'<span>' + selfName + '</span>'+
-				'<span>' + formatDate() + '</span>'+
-				'<span>' + com.value + '</span>'+
-				'<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>'+
-				'<span></span>'+
-				'<span onclick="deleteWritingComment()" class="spanCursor">X</span>'+
-			'</li>'
-		);
-		com.focus();
-		com.value = '';
-	})
-}
-</script>
-
-<!-- 댓글 삭제  -->
-<script>
-function deleteWritingComment() {
-	let targetButton = event.target;
-	
-	fetch("/postDeleteComment", {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-				 'comNo': targetButton.parentNode.dataset.postCode
-			 })
-	})
-	.then(response => response.json())
-	.then(res => {
-		targetButton.parentNode.remove()
-	});
-}
-</script>
-
-<!-- 댓글 수정  -->
-<script>
-function UpdateWritingComment() {
-	let targetButton = event.target;
-	let comNo = targetButton.parentNode.dataset.postCode;//댓글 번호
-	
-	let oldCom = targetButton.parentNode.children[3].textContent;//기존 댓글
-	let oldDate = targetButton.parentNode.children[2].textContent;//기존 날짜, 후에 수정x, 다시 불러 오는 용도
-	
-	//초기화
-	targetButton.parentNode.children[2].textContent = '';//날짜 초기화
-	targetButton.parentNode.children[3].textContent = '';//댓글 초기화
-	targetButton.parentNode.children[4].textContent = '';//수정 초기화
-	targetButton.parentNode.children[6].textContent = '';//X 초기화
-	
-	if(document.getElementById('newComment') != null) {
-		let nC = document.getElementById('newComment').parentNode.parentNode;
-		nC.childNodes[5].textContent = document.getElementById('newComment').dataset.comDate;
-		nC.childNodes[7].textContent = document.getElementById('newComment').value;
-		nC.childNodes[9].textContent = '수정';
-		nC.childNodes[11].textContent = '';
-		nC.childNodes[13].textContent = 'X';
-	}
-	
-	targetButton.parentNode.children[5].innerHTML = 
-			'<input type="text" data-com-date="' + oldDate + '" placeholder="댓글 수정" id="newComment" value="' + oldCom + '">'
-			+'<span id="ooo" class="spanCursor">수정</span>'
-			+'<span id="xxx" class="spanCursor">취소</span>';
-	
-	// 취소버튼
-	document.getElementById('xxx').addEventListener('click', function() {
-		targetButton.parentNode.children[2].textContent = oldDate;
-		targetButton.parentNode.children[3].textContent = oldCom;
-		targetButton.parentNode.children[4].textContent = '수정';
-		targetButton.parentNode.children[5].textContent = '';
-		targetButton.parentNode.children[6].textContent = 'X';
-	});
-	
-	// 수정버튼
-	document.getElementById('ooo').addEventListener('click', function() {
-		let newCom = document.getElementById('newComment');
-		if(newCom.value == '') {
-			newCom.focus();
-			alert('댓글을 수정하세요');
-		} else {
-			
-			fetch("/postUpdateComment", {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					'comContent' : newCom.value,
-						 'comNo': comNo
-					 })
-			})
-			.then(response => response.json())
-			.then(res => {
-				
-				if(res.result == '성공') {
-					targetButton.parentNode.children[2].textContent = oldDate;
-					targetButton.parentNode.children[3].textContent = newCom.value;
-					targetButton.parentNode.children[4].textContent = '수정';
-					targetButton.parentNode.children[6].textContent = 'X';
-					targetButton.parentNode.children[5].textContent = '';
-					
-				} else {
-					alert('댓글 수정 실패');
-				}
-			});
-		}
-	});
-	
-}
-</script>
 
 <!-- java값 가져오기 -->
 <script type="text/javascript" th:inline="javascript">
@@ -565,6 +465,173 @@ function deletePost() {
 		
 	});
 }
+</script>
+
+<!-- 댓글 등록 -->
+<script>
+	function createCommentButton() {
+		let targetButton = event.target;//버튼 동적 확인
+		let com = targetButton.closest('.container').querySelector('.form-control');
+		if(com.value == '') {
+			com.focus();
+			alert('댓글을 입력하세요');
+			return;
+		};
+		
+		let writingNo = targetButton.dataset.postWritingNo;//글번호 찾기
+		
+		fetch("/postCreateComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'proPostNo': writingNo,
+					'comContent': com.value
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			console.log(res)
+			let insertComment = targetButton.closest('.container').querySelector('thead');
+			let imgsrc;
+			//이미지 주소 변환
+			if(res.uuid == null) {
+				imgsrc = '../img/userProf.png';
+			} else {
+				imgsrc = `/display?fileName=${res.uploadPath.replace(/\\/g, "/")}/s_${res.uuid}_${res.fileName}`;
+			};
+			
+			insertComment.insertAdjacentHTML('beforeend',
+			`<tr class="comtabletr" data-post-code="${res.comNo}">
+				<td class="comtabletd" style="width:30px; padding-right:0px;">
+					<img src="${imgsrc}" class="card-img-top" style="width:30px; height:30px; margin:0px;">
+				</td>
+				<td class="comtabletd" style="width:90px; padding-right:0px;">${selfName}</td>
+				<td class="comtabletd">${com.value}</td>
+				<td class="comtabletd comdate" style="width:140px; padding-right:0px;">${currentTime2}</td>
+				<td style="width:90px; padding-right:0px;">
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>
+			</tr>`
+			);
+
+			com.focus();
+			com.value = '';
+		});
+	};
+	
+	//현재시간 구하기
+	const currentTime2 = formatDate2();
+	
+	function formatDate2() {
+		let date = new Date();
+		const year = String(date.getFullYear()).slice(2);
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		
+		return `${year}-${month}-${day} ${hours}:${minutes}`;
+	}
+</script>
+	
+<!-- 댓글 삭제  -->
+<script>
+	function deleteWritingComment() {
+		let targetTr = event.target.closest('tr');
+		
+		fetch("/postDeleteComment", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+					'comNo': targetTr.dataset.postCode
+				})
+		})
+		.then(response => response.json())
+		.then(res => {
+			targetTr.remove();
+		});
+	};
+</script>
+	
+<!-- 댓글 수정  -->
+<script>
+	function UpdateWritingComment() {
+		let targetTr = event.target.closest('tr');
+		let targetThead = targetTr.parentElement;
+		let comNo = targetTr.dataset.postCode;//댓글 번호
+		
+		let oldCom = targetTr.children[2].textContent;//기존 댓글 내용
+		
+		targetTr.children[2].textContent = '';//댓글 초기화
+		targetTr.children[4].textContent = '';//수정, 삭제 초기화
+		
+		if(document.getElementById('newComment') != null) {
+			let nC = document.getElementById('newComment').closest('tr');
+			nC.children[2].textContent = document.getElementById('newComment').value;
+			nC.children[4].innerHTML =
+				`<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>`;
+		};
+		
+		// 댓글 수정 폼 생성
+		targetTr.children[2].innerHTML = '<input type="text" placeholder="댓글 수정" id="newComment" maxlength="30" style="width:100%; height:29px;" value="' + oldCom + '">'; 
+		targetTr.children[4].innerHTML = '<span id="ooo" class="spanCursor" style="color:red;">수정&nbsp&nbsp</span>' + '<span id="xxx" class="spanCursor">취소</span>';
+				
+		// 취소버튼
+		document.getElementById('xxx').addEventListener('click', function() {
+			let cancleTr = event.target.closest('tr');
+			cancleTr.children[2].textContent = oldCom;
+			cancleTr.children[4].innerHTML = 
+				`<td>
+					<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정&nbsp</span>
+					<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+				</td>`;
+		});
+		
+		// 수정버튼
+		document.getElementById('ooo').addEventListener('click', function() {
+			let newCom = document.getElementById('newComment');
+			if(newCom.value == '') {
+				newCom.focus();
+				alert('댓글을 수정하세요');
+			} else {
+				
+				fetch("/postUpdateComment", {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'comContent' : newCom.value,
+							'comNo': comNo
+						})
+				})
+				.then(response => response.json())
+				.then(res => {
+					
+					if(res.result == '성공') {
+						targetTr.children[2].textContent = newCom.value;
+						targetTr.children[4].innerHTML = 
+							`<td>
+							<span onclick="UpdateWritingComment()" class="spanCursor" style="color: red">수정</span>
+							<span onclick="deleteWritingComment()" class="spanCursor">삭제</span>
+						</td>`;;
+						
+					} else {
+						alert('댓글 수정 실패');
+					}
+				});
+			}
+		});
+		
+	}
 </script>
 
 <!-- 시간 -->

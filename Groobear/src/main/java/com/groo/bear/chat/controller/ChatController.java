@@ -82,6 +82,20 @@ public class ChatController {
             e.printStackTrace();
         }
     }
+// // 메시지 받고 주기
+//    @MessageMapping("/chat/{roomNo}") 
+//    public void send(ChatMessageDTO chatMessage, @DestinationVariable int roomNo) {
+//        try {
+//            // Set the profile image URL of the message sender
+//            String profileImageUrl = chatService.getProfileImageUrl(chatMessage.getId());
+//            chatMessage.setProfileImageUrl(profileImageUrl);
+//
+//            messagingTemplate.convertAndSend("/topic/messages/" + roomNo , chatMessage);
+//            chatService.sendMessage(chatMessage); 
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
     //채팅방 전체 리스트
     @GetMapping("/roomList")
     public String roomList(HttpSession session, Model model) {
