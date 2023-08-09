@@ -55,19 +55,22 @@
 	}
 	input[type="Text"],textarea{
 		width:100%;
+		border:none;
+		outline:none;
+	}
+	input[type="date"]{
+		width:100%;
+		border:none;
+		outline:none;
 	}
 </style>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 </head>
+
 <body>
 <div layout:fragment="content">
 <div>
 	<h3 class="tjs" style="font-size:35px;margin-top:20px;display:block">Groobear 문서작성</h3>
-</div>
-<div>
-	<button id="childClick" type="button" onclick="payUserSelect();" class="custom-button" 
-	style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
-	>결재자선택</button>
 </div>
 <div>
 	<select id="payType" onchange="paychange()">
@@ -77,17 +80,30 @@
 		<option value="c">품의서</option>
 	</select>
 </div>
-<table class="tjs" style="margin-top:10px; width:995px; border:1px solid black;">
-	<tbody id="payUserForm" style="display:none" class="paymentuser">
-		<tr>
+
+<div>
+	<button id="childClick" type="button" onclick="payUserSelect();" class="custom-button" 
+		style="border-radius: 10px;margin-top:10px;float:left ;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;display:none"
+	>결재자선택</button>
+</div>
+
+<div>
+	<button id="referrerClick" value="참조자선택" type="button" onclick="referrerSelect();" class="custom-button" 
+		style="display:none;margin-top:10px;border-radius: 10px;float:left ;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
+	>참조자선택</button>
+</div>
+
+<table class="tjs" style="float:left;margin-top:10px; width:995px; border:1px solid black;">
+	<tbody id="payUserForm" style="display:none">
+		<tr class="paymentuser">
 			<td style="height:30px;"></td>
 			<td style="height:30px;"></td>
 			<td style="height:30px;"></td>
-			<td class="paymentuser" style="height:30px;">기안자</td>
-			<td class="paymentuser" style="height:30px;">결재자</td>
-			<td class="paymentuser" style="height:30px;">결재자</td>
+			<td class="paymentuser tjs" style="height:30px;">기안자</td>
+			<td class="paymentuser tjs" style="height:30px;">결재자</td>
+			<td class="paymentuser tjs" style="height:30px;">결재자</td>
 		</tr>
-		<tr>
+		<tr class="paymentuser">
 			<td></td>
 			<td></td>
 			<td></td>
@@ -95,63 +111,59 @@
 			<td class="paymentuser" rowspan="2"></td>
 			<td class="paymentuser" rowspan="2"></td>
 		</tr>
-		<tr>
-			<td></td>
-			<td rowspan="2" colspan="2" id="selectTitle"></td>
+		<tr style="text-align:center">
+			<td class="paymentuser tjs" rowspan="2" colspan="3" id="selectTitle"></td>
 		</tr>
-		<tr>
-			<td style="height:30px;"></td>
-			<td class="paymentuser" style="height:30px;">[[${userInfo.name}]]</td>
-			<td class="paymentuser" style="height:30px;" id="payUser1NameRank"></td>
-			<td class="paymentuser" style="height:30px;" id="payUser2NameRank"></td>
+		<tr class="paymentuser">
+			<td class="paymentuser tjs" style="height:30px;">[[${userInfo.name}]]</td>
+			<td class="paymentuser tjs" style="height:30px;" id="payUser1NameRank"></td>
+			<td class="paymentuser tjs" style="height:30px;" id="payUser2NameRank"></td>
 		</tr>
 		<!-- 공통 -->
-		<tr>
-			<td class="tdbd">문서번호</td>
-			<td>[[${paymentNo}]]</td>
-			<td class="tdbd">작성일자</td>
-			<td><input type="date" id="now_date" readonly></td>
-			<td class="tdbd">작성양식</td>
-			<td><input type="text" id="selectValue" readonly></td>
+		<tr class="paymentuser">
+			<td class="tdbd tjs">문서번호</td>
+			<td class="paymentuser tjs">[[${paymentNo}]]</td>
+			<td class="tdbd tjs">작성일자</td>
+			<td><input class="paymentuser tjs" type="date" id="now_date" readonly></td>
+			<td class="tdbd tjs">작성양식</td>
+			<td><input class="paymentuser tjs" type="text" id="selectValue" readonly></td>
 		</tr>
 	
-		<tr>
-			<td class="tdbd">부서</td>
-			<td>[[${userInfo.deptName}]]</td>
-			<td class="tdbd">직책</td>
-			<td>[[${userInfo.rank}]]</td>
-			<td class="tdbd">기안자</td>
-			<td>[[${userInfo.name}]]</td>
+		<tr class="paymentuser">
+			<td class="tdbd tjs">부서</td>
+			<td class="paymentuser tjs">[[${userInfo.deptName}]]</td>
+			<td class="tdbd tjs">직책</td>
+			<td class="paymentuser tjs">[[${userInfo.rank}]]</td>
+			<td class="tdbd tjs">기안자</td>
+			<td class="paymentuser tjs">[[${userInfo.name}]]</td>
 		</tr>
 		
-		<tr>
-			<td class="tdbd"><input id="referrerClick" value="참조자선택" type="text" onclick="referrerSelect();" class="custom-button" 
-				style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
-				></td>
-			<td id="referrerAllList1"></td>
-			<td id="referrerAllList2"></td>
-			<td id="referrerAllList3"></td>
+		<tr class="paymentuser">
+			<td class="tdbd">참조자</td>
+			<td class="paymentuser tjs" id="referrerAllList1"></td>
+			<td class="paymentuser tjs" id="referrerAllList2"></td>
+			<td class="paymentuser tjs" id="referrerAllList3"></td>
 		</tr>
 	</tbody>
 	
 	<!-- 운행일지 -->
-	<tbody id="payNum1" class="paymentuser" style="display:none">
-		<tr>
-			<td class="tdbd">일자</td>
-			<td><input type="date" id="carDate" value="sysdate"></td>
-			<td class="tdbd">운행전</td>
-			<td><input type="text" id="km1" onchange="kmChange()"></td>
-			<td class="tdbd">운행후</td>
-			<td><input type="text" id="km2" onchange="kmChange()"></td>
+	<tbody id="payNum1" style="display:none">
+		<tr class="paymentuser">
+			<td class="tdbd tjs">일자</td>
+			<td><input class="paymentuser tjs" type="date" id="carDate" value="sysdate"></td>
+			<td class="tdbd tjs">운행전</td>
+			<td><input class="paymentuser tjs" type="text" id="km1" onchange="kmChange()"></td>
+			<td class="tdbd tjs">운행후</td>
+			<td><input class="paymentuser tjs" type="text" id="km2" onchange="kmChange()"></td>
 		</tr>
-		<tr>
-			<td class="tdbd">목적</td>
-			<td colspan="2"><input type="text" id="purpose"></td>
-			<td class="tdbd">행선지</td>
-			<td colspan="2"><input type="text" id="carAddr" value="addr"></td>
+		<tr class="paymentuser">
+			<td class="tdbd tjs">목적</td>
+			<td colspan="2"><input class="paymentuser tjs" type="text" id="purpose"></td>
+			<td class="tdbd tjs">행선지</td>
+			<td colspan="2"><input class="paymentuser tjs" type="text" id="carAddr" value=""></td>
 		</tr>
-		<tr>
-			<td class="tdbd">운행전첨부</td>
+		<tr class="paymentuser">
+			<td class="tdbd tjs">운행전첨부</td>
 			<!-- 파일첨부 -->
 			<td>
 				<div class="bigPictureWrapper">
@@ -162,11 +174,11 @@
 						<div class="panel panel-default1">
 							<div class="row">
 								<div class="col-lg-12" style="vertical-align: middle;">
-									<div class="panel-heading">첨부파일</div>
+									<div class="panel-heading"></div>
 									<div class="panel-body1">
 										<div class="form-group uploadDiv1">
-											<label class="input-file-button" for="input-file">파일 선택</label>
-											<input type="file" name="uploadFile1" id="input-file" multiple style="display:none;">
+											<label style="position:absolute;top:-10px;left:45px" class="input-file-button" for="input-file1">파일 선택</label>
+											<input type="file" name="uploadFile1" id="input-file1" multiple style="display:none;">
 										</div>
 										<div class="uploadResult1">
 											<ul></ul>
@@ -178,7 +190,7 @@
 					</div>
 				</div>
 			</td>
-			<td class="tdbd">운행후첨부</td>
+			<td class="tdbd tjs">운행후첨부</td>
 			<td>
 				<div class="bigPictureWrapper2">
 					<div class="bigPicture2"></div>
@@ -188,11 +200,11 @@
 						<div class="panel panel-default1">
 							<div class="row">
 								<div class="col-lg-12" style="vertical-align: middle;">
-									<div class="panel-heading2">첨부파일</div>
+									<div class="panel-heading2"></div>
 									<div class="panel-body2">
 										<div class="form-group uploadDiv2">
-											<label class="input-file-button" for="input-file" >파일 선택</label>
-											<input type="file" name="uploadFile2" id="input-file" multiple style="display:none;">
+											<label style="position:absolute;top:-10px;left:45px" class="input-file-button" for="input-file2" >파일 선택</label>
+											<input type="file" name="uploadFile2" id="input-file2" multiple style="display:none;">
 										</div>
 										<div class="uploadResult2">
 											<ul></ul>
@@ -204,29 +216,33 @@
 					</div>
 				</div>
 			</td>
-			<td class="tdbd">전도금</td>
-			<td><input type="text" id="imprest" readonly></td>
+			<td class="tdbd tjs">전도금</td>
+			<td><input class="paymentuser tjs" type="text" id="imprest" readonly></td>
 		</tr>
 	</tbody>
 	<!-- 운행일지 종료-->
+	
 	<!-- 연차계 -->
 	<tbody id="payNum2" style="display:none">
-		<tr>
-			<td>연차시작일</td>
-			<td colspan="2"><input type="date" id="off1"></td>
-			<td>연차복귀일</td>
-			<td colspan="2"><input type="date" id="off2"><td>
+		<tr class="paymentuser">
+			<td class="tdbd tjs">연차시작일</td>
+			<td colspan="2"><input class="paymentuser tjs" type="date" id="off1"></td>
+			<td  class="tdbd tjs">연차복귀일</td>
+			<td colspan="2"><input class="paymentuser tjs" type="date" id="off2"><td>
 		</tr>
-		<tr>
-			<td>제목</td>
-			<td colspan="5"><input type="text" id="offtitle"></td>
+		
+		<tr class="paymentuser">
+			<td  class="tdbd tjs">제목</td>
+			<td colspan="5"><input class="paymentuser tjs" type="text" id="offtitle"></td>
 		</tr>
-		<tr>
-			<td>내용</td>
-			<td colspan="5"><textarea id="offcontent"></textarea></td>
+		
+		<tr class="paymentuser tjs">
+			<td class="tdbd tjs">내용</td>
+			<td colspan="5"><textarea class="paymentuser tjs" id="offcontent" style="height:205px"></textarea></td>
 		</tr>
-		<tr>
-			<td>첨부파일</td>
+		
+		<tr class="paymentuser tjs">
+			<td  class="tdbd tjs">첨부파일</td>
 			<td colspan="5">
 				<div class="bigPictureWrapper2">
 					<div class="bigPicture2"></div>
@@ -236,11 +252,11 @@
 						<div class="panel panel-default1">
 							<div class="row">
 								<div class="col-lg-12" style="vertical-align: middle;">
-									<div class="panel-heading3">첨부파일</div>
+									<div class="panel-heading3"></div>
 									<div class="panel-body3">
 										<div class="form-group uploadDiv3">
-											<label class="input-file-button" for="input-file" >파일 선택</label>
-											<input type="file" name="uploadFile3" id="input-file" multiple style="display:none;">
+											<label style="position:absolute;top:-10px;left:45px" class="input-file-button" for="input-file3" >파일 선택</label>
+											<input type="file" name="uploadFile3" id="input-file3" multiple style="display:none;">
 										</div>
 										<div class="uploadResult3">
 											<ul></ul>
@@ -253,20 +269,21 @@
 				</div>
 			</td>
 		</tr>
+		
 	</tbody>
 
 	<!-- 품의서 -->
 	<tbody id="payNum3" style="display:none">
-		<tr>
-			<td>제목</td>
-			<td colspan="5"><input type="text" id="robintitle"></td>
+		<tr class="paymentuser tjs">
+			<td class="tdbd tjs">제목</td>
+			<td colspan="5"><input class="paymentuser tjs" type="text" id="robintitle" style="width:823px"></td>
 		</tr>
-		<tr>
-			<td>내용</td>
-			<td colspan="5"><textarea id="robincontent"></textarea></td>
+		<tr class="paymentuser tjs">
+			<td class="tdbd tjs">내용</td>
+			<td colspan="5"><textarea class="paymentuser tjs" id="robincontent" style="width:824px;height:300px"></textarea></td>
 		</tr>
-		<tr>
-			<td>첨부파일</td>
+		<tr class="paymentuser tjs">
+			<td class="tdbd tjs">첨부파일</td>
 			<td colspan="5">
 				<div class="bigPictureWrapper2">
 					<div class="bigPicture2"></div>
@@ -276,11 +293,11 @@
 						<div class="panel panel-default1">
 							<div class="row">
 								<div class="col-lg-12" style="vertical-align: middle;">
-									<div class="panel-heading4">첨부파일</div>
+									<div class="panel-heading4"></div>
 									<div class="panel-body4">
 										<div class="form-group uploadDiv4">
-											<label class="input-file-button" for="input-file" >파일 선택</label>
-											<input type="file" name="uploadFile4" id="input-file" multiple style="display:none;">
+											<label style="position:absolute;top:-10px;left:45px" class="input-file-button" for="input-file4">파일 선택</label>
+											<input type="file" name="uploadFile4" id="input-file4" multiple style="display:none;">
 										</div>
 										<div class="uploadResult4">
 											<ul></ul>
@@ -301,7 +318,8 @@
 			id = "superSend"
 			onclick="payNumSend()"
 			class="custom-button" 
-			style="border-radius: 10px;background-color: #399f61;border-color: #399f6100;
+			style="float:left; margin-top:10px;
+				   border-radius: 10px;background-color: #399f61;border-color: #399f6100;
 				   box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 70px;height: 45px;font-size: 20px;display:none"
 	>결재</button>
 </div>
@@ -309,45 +327,45 @@
 
 <table style="display: none;">
 	<tbody>
-<tr id="drafter" class="paymentuser">
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-<tr id="payUserList1">
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-</tr>
-<tr id="payUserList2">
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-</tr>
-<tr id="referrerList">
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-</tr>
-</tbody>
+		<tr id="drafter" class="paymentuser">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr id="payUserList1">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr id="payUserList2">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr id="referrerList">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</tbody>
 </table>
 
 
@@ -360,6 +378,8 @@ var payNum3 = document.getElementById('payNum3');
 var payUserForm = document.getElementById('payUserForm');
 	function paychange(){
 		if(selectPay.value == 'a'){
+			document.getElementById('childClick').style.display = 'block';
+			document.getElementById('referrerClick').style.display = 'block';
 			document.getElementById('selectTitle').textContent = "운행일지작성";
 			console.log('a맞음');
 			$(payNum2).hide() //.style.display = 'none';
@@ -374,6 +394,8 @@ var payUserForm = document.getElementById('payUserForm');
 			document.getElementById('selectValue').value = '운행일지';
 
 		}else if(selectPay.value == 'b'){
+			document.getElementById('childClick').style.display = 'block';
+			document.getElementById('referrerClick').style.display = 'block';
 			document.getElementById('selectTitle').textContent = "연차계작성"
 			payUserForm.style.display = 'block';
 			payNum1.style.display = 'none';
@@ -386,6 +408,8 @@ var payUserForm = document.getElementById('payUserForm');
 			document.getElementById('selectValue').value = '연차계';
 			
 		}else if(selectPay.value == 'c'){
+			document.getElementById('childClick').style.display = 'block';
+			document.getElementById('referrerClick').style.display = 'block';
 			document.getElementById('selectTitle').textContent = "품의서작성";
 			payUserForm.style.display = 'block';
 			payNum1.style.display = 'none';
@@ -398,6 +422,8 @@ var payUserForm = document.getElementById('payUserForm');
 			document.getElementById('selectValue').value = '품의서';
 
 		}else if(selectPay.value == 'd'){
+			document.getElementById('childClick').style.display = 'none';
+			document.getElementById('referrerClick').style.display = 'none';
 			payUserForm.style.display = 'none';
 			payNum1.style.display = 'none';
 			payNum2.style.display = 'none';
@@ -927,7 +953,7 @@ var payUserForm = document.getElementById('payUserForm');
 			   //image type
 		        if(obj.image){
 		          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
-		          str += "<li data-path='"+obj.uploadPath+"'";
+		          str += "<li style='position:absolute;top:-5px;left:170px' data-path='"+obj.uploadPath+"'";
                   str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
                   str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
@@ -939,7 +965,7 @@ var payUserForm = document.getElementById('payUserForm');
 		          var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
 		          var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
 		              
-                  str += "<li data-path='"+obj.uploadPath+"'";
+                  str += "<li style='position:absolute;top:-5px;left:170px' data-path='"+obj.uploadPath+"'";
                   str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
                   str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
@@ -966,24 +992,24 @@ var payUserForm = document.getElementById('payUserForm');
 			   //image type
 		        if(obj.image){
 		          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
-		          str += "<li data-path='"+obj.uploadPath+"'";
+		          str += "<li style='position:absolute;top:-5px;left:170px' data-path='"+obj.uploadPath+"'";
                   str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
                   str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
 		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
-		          str += "<img src='/display?fileName="+fileCallPath+"'>";
+		          //str += "<img src='/display?fileName="+fileCallPath+"'>";
 		          str += "</div>";
 		          str +"</li>";
 		        }else{
 		          var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
 		          var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
 		              
-                  str += "<li data-path='"+obj.uploadPath+"'";
+                  str += "<li style='position:absolute;top:-5px;left:170px' data-path='"+obj.uploadPath+"'";
                   str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
                   str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
 		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
-		          str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+		          //str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
 		          str += "</div>";
 		          str +"</li>";
 		        } 
@@ -1049,7 +1075,7 @@ var payUserForm = document.getElementById('payUserForm');
 	        var formData = new FormData();
 	        var inputFile1 = $("input[name='uploadFile1']");
 	        var files = inputFile1[0].files;
-	
+			console.log('운행전 첨부파일 인코딩받는곳');
 	        for(var i=0; i<files.length; i++) {
 	
 	            if(!checkExtension(files[i].name, files[i].size) ){
