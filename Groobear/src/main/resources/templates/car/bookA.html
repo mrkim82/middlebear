@@ -61,7 +61,7 @@ tbody tr {
 										<tr><td><span style="display: inline-block;width: 120px;" >행선지 </span> <span id="mDestination" style="font-weight: 200;"></span></td></tr>
 										<tr><td><span style="display: inline-block;width: 120px;">운행일자</span> <span id="mOperDate" style="font-weight: 200;"></span></td></tr>
 										<tr><td><span style="display: inline-block;width: 120px;"> 운행전 키로수 </span> <span id="mBefored" style="font-weight: 200;margin-right:60px;"></span>운행후 키로수  <span id="mAfterd" style="font-weight: 200;"></span></td></tr>
-										<tr><td><span style="display: inline-block;width: 120px;"> 전도금 </span> <span id="mImprest" style="font-weight: 200;"></span></td></tr>
+										<tr><td><span style="display: inline-block;width: 120px;"> 전도금 </span> <span id="mImprest" style="font-weight: 200;"></span>원</td></tr>
 										<tr style="display:none;"><td><input id="mDocType" style="border:none;"></td></tr>
 									</tbody>
 								</table>
@@ -186,7 +186,7 @@ tbody tr {
 			<div class="modal-dialog" style="width: 500px; margin-top:200px;">
 				<div class="modal-content" style="border: 1px solid #00000021;border-radius: 20px;box-shadow: 2px 4px 3px 3px darkgray;width: 500px;">
 					<div class="modal-header" style="position: relative;border-bottom: 1px solid lightgray;">
-						<h5 class="modal-title" id="exampleModalLabel" style="font-size: 27px;font-weight:400;">근태 관리</h5>
+						<h5 class="modal-title" id="exampleModalLabel" style="font-size: 27px;font-weight:400;">운행일지 관리</h5>
 						<button type="button" class="btn-close" data-mdb-dismiss="modal" onclick="closeModal()"
 							aria-label="Close" style="border-radius: 8px;border: 1px solid gray;padding: 2px 9px;background-color: #998b79;color: #fff;">X</button>
 					</div>
@@ -280,12 +280,12 @@ tbody tr {
 				document.querySelector('#mName').textContent = name;
 				//document.querySelector('#mId').value = id;
 				document.querySelector('#mPayNo').textContent = payNo;
-				document.querySelector('#mBefored').textContent = befored;
-				document.querySelector('#mAfterd').textContent = afterd;
+				document.querySelector('#mBefored').textContent = befored.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+				document.querySelector('#mAfterd').textContent = afterd.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 				document.querySelector('#mIssueDate').textContent = issueDate;
 				document.querySelector('#mPurpose').textContent = purpose;
 				document.querySelector('#mDestination').textContent = destination;
-				document.querySelector('#mImprest').textContent = imprest;
+				document.querySelector('#mImprest').textContent = imprest.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 				document.querySelector('#mDocType').textContent = docType;
 				document.querySelector('#mStatus').textContent = status;
 				
