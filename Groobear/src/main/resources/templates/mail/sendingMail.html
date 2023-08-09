@@ -39,8 +39,7 @@
 				<tr style="border-bottom: 2px solid lightgray;">
 					<th style="width: 100px;"><input type="checkbox" class="allCheck"><button type="button" class="del" style=" position: absolute;left: 60px;border: 0;width: 50px;height: 35px;border-radius: 15px;top: 75px;">삭제</button></th>
 					<th>보낸사람</th>
-					<th style=" width: 200px;">제목</th>
-					<th style=" width: 400px;">내용</th>
+					<th  style="overflow: hidden;text-overflow: ellipsis; white-space:nowrap;width:500px;">제목</th>
 					<th>날짜</th>
 					
 				</tr>
@@ -51,7 +50,6 @@
 					<td style="display:none">[[${mail.mailNo}]]</td>
 					<td >[[${mail.receiver}]]</td>
 					<td style="overflow: hidden;text-overflow: ellipsis; white-space:nowrap;width:300px;">[[${mail.title}]]</td>
-					<td style="overflow: hidden;text-overflow: ellipsis; white-space:nowrap;width:300px;">[[${mail.content}]]</td>
 					<td th:text="${#dates.format(mail.sendDate, 'MM-dd HH:mm')}"></td>
 					<td style="display:none"><input id="mailNo" type="text" th:value="${mail.mailNo}"></td>
 				</tr>

@@ -56,7 +56,7 @@
 								<div class = "uploadResult">첨부파일
 									<ul>
 										<li  th:each="file, stat : ${mail.files}" >
-											<a th:text="mail"+"/" + "${file.fileName}" ></a>
+											<a href="${file.fileName}"></a>
 										</li>
 									</ul>
 								</div>

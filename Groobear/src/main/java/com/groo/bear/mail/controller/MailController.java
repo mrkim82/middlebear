@@ -159,14 +159,15 @@ public class MailController {
 			MailVO mailVO = new MailVO();
 			mailVO = mailService.getMailInfo(delList.get(i));
 			mailVO.setMailType(U);
+			mailVO.setMailNo(delList.get(i));
 			if(mailVO.getReceiver().equals(id)) {
-				mailService.getMailDelete(mailVO);
+				mailService.getMailType1Del(mailVO);
 			}else if(mailVO.getReferrer().equals(id2)) {
 				mailVO.setReferrer(id2);
-				mailService.getMailDelete(mailVO);
+				mailService.getMailType1Del(mailVO);
 			}else if(mailVO.getReferrer().equals(id2)) {
 				mailVO.setReferrer(id2);
-				mailService.getMailDelete(mailVO);
+				mailService.getMailType1Del(mailVO);
 			}
 			
 //			if(mailVO.getReferrer2().equals("") || mailVO.getReferrer2() == null) {
@@ -224,16 +225,24 @@ public class MailController {
 		String id = (String) session.getAttribute("Id");
 		String id2= id;
 		id = id.substring(0,id.indexOf("@"));
+		System.out.println("session id = "+id);
 		for (int i=0; i< delList.size(); i++) {
 			System.out.println("서버에서 보내준 데이터 테이블참조");
 			MailVO mailVO = new MailVO();
 			mailVO = mailService.getMailInfo(delList.get(i));
+			System.out.println("getMail 값"+mailVO);
 			mailVO.setMailType(D);
 			if(mailVO.getReceiver().equals(id)) {
-				mailService.getMailDelete(mailVO);
+				mailService.getMailDeleted(delList.get(i));
 			}else if(mailVO.getReferrer().equals(id2)) {
 				mailVO.setReferrer(id2);
-				mailService.getMailDelete(mailVO);
+				mailService.getMailDeleted(delList.get(i));
+			}else if(mailVO.getReferrer2().equals(id2)) {
+				mailVO.setReferrer(id2);
+				mailService.getMailDeleted(delList.get(i));
+			}else if(mailVO.getReferrer3().equals(id2)) {
+				mailVO.setReferrer(id2);
+				mailService.getMailDeleted(delList.get(i));
 			}
 			count++;
 //			else if(mailVO.getReferrer2().equals(id)) {
