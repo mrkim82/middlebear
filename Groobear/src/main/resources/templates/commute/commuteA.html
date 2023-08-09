@@ -318,20 +318,25 @@ tbody tr {
 			for (let i = 0; i < document.querySelectorAll('.cml').length; i++) {
 
 				var number = document.querySelectorAll('.wt')[i].textContent;
-
-				var hours = Math.floor(number / 60);
-				if (hours < 10) {
-					hours = '0' + hours;
-				}
-				var minutes = number % 60;
-				if (minutes < 10) {
-					minutes = '0' + minutes;
-				}
-
-				var cal = hours + ':' + minutes;
-
-				document.querySelectorAll('.wt')[i].textContent = cal;
-
+					if( number != 0){
+					var hours = Math.floor(number / 60)-1;
+					if (hours < 10) {
+						hours = '0' + hours;
+					}
+					var minutes = number % 60;
+					if (minutes < 10) {
+						minutes = '0' + minutes;
+					}
+	
+					var cal = hours + ':' + minutes;
+	
+					document.querySelectorAll('.wt')[i].textContent = cal;
+					}	
+					else {
+						document.querySelectorAll('.wt')[i].textContent = '00:00';
+					}
+				
+				
 				var number2 = document.querySelectorAll('.owt')[i].textContent;
 
 				var hours2 = Math.floor(number2 / 60);
