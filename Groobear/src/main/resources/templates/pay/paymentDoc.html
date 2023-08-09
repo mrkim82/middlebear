@@ -89,33 +89,27 @@
 
 <div>
 	<button id="referrerClick" value="참조자선택" type="button" onclick="referrerSelect();" class="custom-button" 
-		style="display:none;margin-top:10px;border-radius: 10px;float:left ;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
+		style="display:none;margin-top:10px;margin-left:10px;border-radius: 10px;float:left ;background-color: #399f61;border-color: #399f6100;box-shadow: 0.5px 1.5px 1.5px 1.5px lightgray;color: #fff;width: 100px;height:35px;"
 	>참조자선택</button>
 </div>
 
 <table class="tjs" style="float:left;margin-top:10px; width:995px; border:1px solid black;">
 	<tbody id="payUserForm" style="display:none">
 		<tr class="paymentuser">
-			<td style="height:30px;"></td>
-			<td style="height:30px;"></td>
-			<td style="height:30px;"></td>
+			<td class="paymentuser tjs" rowspan="4" colspan="3" style="font-size:30px" id="selectTitle"></td>
 			<td class="paymentuser tjs" style="height:30px;">기안자</td>
 			<td class="paymentuser tjs" style="height:30px;">결재자</td>
 			<td class="paymentuser tjs" style="height:30px;">결재자</td>
 		</tr>
 		<tr class="paymentuser">
-			<td></td>
-			<td></td>
-			<td></td>
 			<td class="paymentuser" rowspan="2"></td>
 			<td class="paymentuser" rowspan="2"></td>
 			<td class="paymentuser" rowspan="2"></td>
 		</tr>
 		<tr style="text-align:center">
-			<td class="paymentuser tjs" rowspan="2" colspan="3" id="selectTitle"></td>
 		</tr>
 		<tr class="paymentuser">
-			<td class="paymentuser tjs" style="height:30px;">[[${userInfo.name}]]</td>
+			<td class="paymentuser tjs" style="height:30px;">[[${userInfo.name}]] [[${userInfo.Rank}]]</td>
 			<td class="paymentuser tjs" style="height:30px;" id="payUser1NameRank"></td>
 			<td class="paymentuser tjs" style="height:30px;" id="payUser2NameRank"></td>
 		</tr>
@@ -140,9 +134,9 @@
 		
 		<tr class="paymentuser">
 			<td class="tdbd">참조자</td>
-			<td class="paymentuser tjs" id="referrerAllList1"></td>
-			<td class="paymentuser tjs" id="referrerAllList2"></td>
-			<td class="paymentuser tjs" id="referrerAllList3"></td>
+			<td colspan="3" class="paymentuser tjs" id="referrerAllList1"></td>
+			<td></td>
+			<td></td>
 		</tr>
 	</tbody>
 	
@@ -158,9 +152,11 @@
 		</tr>
 		<tr class="paymentuser">
 			<td class="tdbd tjs">목적</td>
-			<td colspan="2"><input class="paymentuser tjs" type="text" id="purpose"></td>
+			<td colspan="5"><textarea class="paymentuser tjs" id="purpose" style="width:800px;height:300px;"></textarea></td>
+		</tr>
+		<tr class="paymentuser">
 			<td class="tdbd tjs">행선지</td>
-			<td colspan="2"><input class="paymentuser tjs" type="text" id="carAddr" value=""></td>
+			<td colspan="5"><input class="paymentuser tjs" type="text" id="carAddr" value="" style="width:800px;"></td>
 		</tr>
 		<tr class="paymentuser">
 			<td class="tdbd tjs">운행전첨부</td>
@@ -179,9 +175,6 @@
 										<div class="form-group uploadDiv1">
 											<label style="position:absolute;top:-10px;left:45px" class="input-file-button" for="input-file1">파일 선택</label>
 											<input type="file" name="uploadFile1" id="input-file1" multiple style="display:none;">
-										</div>
-										<div class="uploadResult1">
-											<ul></ul>
 										</div>
 									</div>
 								</div>
@@ -206,9 +199,6 @@
 											<label style="position:absolute;top:-10px;left:45px" class="input-file-button" for="input-file2" >파일 선택</label>
 											<input type="file" name="uploadFile2" id="input-file2" multiple style="display:none;">
 										</div>
-										<div class="uploadResult2">
-											<ul></ul>
-										</div>
 									</div>
 								</div>
 							</div>
@@ -218,6 +208,18 @@
 			</td>
 			<td class="tdbd tjs">전도금</td>
 			<td><input class="paymentuser tjs" type="text" id="imprest" readonly></td>
+		</tr>
+		<tr class="paymentuser">
+			<td class="paymentuser tjs"></td>
+			<td  class="paymentuser tjs"><div class="uploadResult1">
+					<ul></ul>
+				</div></td>
+			<td class="paymentuser tjs"></td>
+			<td class="paymentuser tjs"><div class="uploadResult2">
+					<ul></ul>
+				</div></td>
+			<td class="paymentuser tjs"></td>
+			<td></td>
 		</tr>
 	</tbody>
 	<!-- 운행일지 종료-->
@@ -233,12 +235,12 @@
 		
 		<tr class="paymentuser">
 			<td  class="tdbd tjs">제목</td>
-			<td colspan="5"><input class="paymentuser tjs" type="text" id="offtitle"></td>
+			<td colspan="5"><input class="paymentuser tjs" type="text" id="offtitle" style="width:824px;"></td>
 		</tr>
 		
 		<tr class="paymentuser tjs">
 			<td class="tdbd tjs">내용</td>
-			<td colspan="5"><textarea class="paymentuser tjs" id="offcontent" style="height:205px"></textarea></td>
+			<td colspan="5"><textarea class="paymentuser tjs" id="offcontent" style="width:824px;height:300px"></textarea></td>
 		</tr>
 		
 		<tr class="paymentuser tjs">
