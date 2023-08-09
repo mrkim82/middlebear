@@ -141,25 +141,25 @@ var number3 = document.getElementById('owt2').textContent;
 
 if(number3 != 0){
 	
-
-var hours3 = Math.floor(number2/60);
-if(hours3 < 10){
-	hours3 = '0'+hours3;
-}
-var minutes3 = number3%60;
-if(minutes3 < 10){
-	minutes3 = '0'+minutes3;
-}
-
-var cal3 = 
-	hours3 + ':' + minutes3;
-
-
-document.getElementById('owtIn').textContent = cal3;
-}
-else {
-	document.getElementById('owtIn').textContent = '00:00';
-}
+	
+	var hours3 = Math.floor(number3/60);
+	if(hours3 < 10){
+		hours3 = '0'+hours3;
+	}
+	var minutes3 = number3%60;
+	if(minutes3 < 10){
+		minutes3 = '0'+minutes3;
+	}
+	
+	var cal3 = 
+		hours3 + ':' + minutes3;
+	
+	
+	document.getElementById('owtIn').textContent = cal3;
+	}
+	else {
+		document.getElementById('owtIn').textContent = '00:00';
+	}
 
 
 var mon = document.querySelector('#monthDate').value
