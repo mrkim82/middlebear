@@ -153,7 +153,6 @@ public class proPostController {
 			model.addAttribute("readPartiList", Sch.readPartiList(proNo));//참석자 조회
 			model.addAttribute("readPartiZone", Sch.readPartiZone(proNo));
 			model.addAttribute("readSchparti", Sch.readSchparti(id));
-			
 			pagePath = "proPost/proPostSchd";
 			break;
 		//파일
