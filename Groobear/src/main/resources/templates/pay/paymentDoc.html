@@ -279,7 +279,7 @@
 									<div class="panel-heading4">첨부파일</div>
 									<div class="panel-body4">
 										<div class="form-group uploadDiv4">
-											<label class="input-file-button" for="input-file" >파일 선택</label>
+											<label class="input-file-button" for="input-file">파일 선택</label>
 											<input type="file" name="uploadFile4" id="input-file" multiple style="display:none;">
 										</div>
 										<div class="uploadResult4">
@@ -1049,7 +1049,7 @@ var payUserForm = document.getElementById('payUserForm');
 	        var formData = new FormData();
 	        var inputFile1 = $("input[name='uploadFile1']");
 	        var files = inputFile1[0].files;
-	
+			console.log('운행전 첨부파일 인코딩받는곳');
 	        for(var i=0; i<files.length; i++) {
 	
 	            if(!checkExtension(files[i].name, files[i].size) ){
