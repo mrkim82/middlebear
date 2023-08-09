@@ -2183,7 +2183,6 @@ li {
 	function toggleFeedButtonStyle(button) {
 		let postWorkNo = button.closest('.card').dataset.feedPostNo;// 글 번호
 		let workNo = button.closest('.card').dataset.feedWorkNo;
-		//let newStatus = button.parentNode.dataset.feedWorkType;//신규 선택 버튼 번호
 		let newStatus = button.dataset.workTypeStatus;
 		let oldStatusNo = selectedFeedButton.get(postWorkNo);//선택했던 기존 버튼 번호 null or 존재
 
