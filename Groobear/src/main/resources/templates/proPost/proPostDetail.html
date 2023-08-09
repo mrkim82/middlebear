@@ -1236,8 +1236,7 @@ li {
 									<!-- 참석 여부 버튼 -->
 									<div th:each="rparti : ${readSchparti}"
 										 th:if="${rparti.schNo == allPost.schNo
-										  		and #dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm') >= #dates.format(cTime, 'yyyy-MM-dd HH:mm')}
-										  		or ${allPost.schEndTime == null}"
+										  		and (#dates.format(allPost.schEndTime, 'yyyy-MM-dd HH:mm') >= #dates.format(cTime, 'yyyy-MM-dd HH:mm') or allPost.schEndTime == null)}"
 										 th:attr="data-feed-sch-type=${rparti.partiCheck}"
 										 style="text-align: center; margin-bottom: 5px; margin-top: 20px;">
 										<button type="button"
@@ -1584,7 +1583,8 @@ li {
 									<!-- 투표 종료 버튼 -->
 									<div th:if="(${#dates.format(allPost.voteEndDay, 'yyyy-MM-dd') >= #dates.format(cTime, 'yyyy-MM-dd')}
 								    				  or ${allPost.voteEndDay == null})
-								    				 and ${allPost.voteEndCheck == 'N'}"
+								    				 and ${allPost.voteEndCheck == 'N'}
+								    				 and ${allPost.id == session.Id}"
 								    	 style="text-align: center;">
 								        <button type="button"
 								        		class="btn btn-danger"
