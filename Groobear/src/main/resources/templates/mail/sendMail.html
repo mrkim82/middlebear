@@ -48,8 +48,8 @@ li {
 <div layout:fragment="content">
 	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <h3 class="tjs" style="font-size:35px;margin-top:20px;">Groobear 메일 쓰기</h3>
+		<button id="send" type="button" onclick="sendMail()" style="position: absolute;right: 30px;border: 0; width: 100px; height: 40px;background: #90ddb091;border-radius: 20px;top: 20px;">메일보내기</button>
 	<form method="post">
-		
 		<table class="table">
 		<tbody>
 			<tr><td style="padding:0;"><input type="text" id="mailNo" th:value="${mailNo}" style="display:none"></td></tr>
@@ -70,14 +70,13 @@ li {
 					<div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">첨부파일</div>
+                    <div class="panel-heading" style="position: absolute;top:0px;">첨부파일</div>
 					<div class="panel-body1">
                      <div class="form-group uploadDiv1">
-                     <label class="input-file-button" for="input-file">
+                     <label class="input-file-button" for="input-file" style="position: absolute;top:-10px;left:80px;">
 						  파일 선택
 					</label>
                          <input name="uploadFile1" id="input-file" type="file" multiple style="display:none;">
-                         <button id="send" type="button" onclick="sendMail()" style="position: absolute;right: 30px;border: 0; width: 100px; height: 40px;background: #90ddb091;border-radius: 20px;top: 260px;">메일보내기</button>
                      
                       <!-- foreach써서 조회하는걸로 변경 -->
                      <div class="uploadResult1">
@@ -203,12 +202,12 @@ li {
 			   //image type
 		        if(obj.image){
 		          var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
-		          str += "<li data-path='"+obj.uploadPath+"'";
+		          str += "<li style='position: absolute;top:-3px;left:220px' data-path='"+obj.uploadPath+"'";
 	              str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'"
 	              str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
 		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'>X<i class='fa fa-times'></i></button><br>";
-		          str += "<img src='/display?fileName="+fileCallPath+"'>";
+		          //str += "<img src='/display?fileName="+fileCallPath+"'>";
 		          str += "</div>";
 		          str +"</li>";
 		        }else{
@@ -220,7 +219,7 @@ li {
 	              str + "><div>";
 		          str += "<span> "+ obj.fileName+"</span>";
 		          str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'>X</i></button><br>";
-		          str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
+		          //str += "<img src='img/attach.png/' style='height:100px; width:100px;'></a>";
 		          str += "</div>";
 		          str +"</li>";
 		        } 

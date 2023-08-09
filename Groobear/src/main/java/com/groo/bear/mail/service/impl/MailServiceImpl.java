@@ -261,8 +261,8 @@ public class MailServiceImpl implements MailService{
 		return mailMapper.sendMailSearch(cri, mailVO);
 	}
 	@Override
-	public int getMailDelete(MailVO mailVO) {
-		return mailMapper.getMailDelete(mailVO);
+	public int getMailDeleted(int mailNo) {
+		return mailMapper.getMailDeleted(mailNo);
 	}
 	
 }

@@ -288,7 +288,7 @@
 		                (referrer = #{mailVO.referrer}) OR
 		                (referrer2 = #{mailVO.referrer2}) OR
 		                (referrer3 = #{mailVO.referrer3})
-		                AND mail_type='R')
+		                AND mail_type='U')
 		            ORDER BY mail_no desc
 		            ) a )b
 		    <![CDATA[
@@ -302,7 +302,7 @@
 		where mail_no = #{mailNo}
 	</update>
 	<!-- 새 테이블(서버에서 받은 메일함) 메일삭제 -->
-	<delete id="getMailDelete" parameterType="MailVO">
+	<delete id="getMailDeleted" parameterType="MailVO">
 		delete getmail 
 		where mail_no = #{mailNo}
 	</delete>
