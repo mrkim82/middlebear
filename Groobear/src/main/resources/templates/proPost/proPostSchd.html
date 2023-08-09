@@ -65,6 +65,9 @@ li {
 .comtable td {
 	text-align:left;
 }
+.spanCursor {
+	cursor: pointer
+}
 </style>
 <!-- 캘린더 스타일 종료 -->
 
@@ -522,7 +525,7 @@ li {
 		start: eventData.start,
 		end: eventData.end,
 		color: eventData.postType == '1' ? 'indianred' : '#35A880',
-		classNames: 'sideWork',
+		classNames: 'sideWork spanCursor',
 		extendedProps: {
 		    proPostNo: eventData.proPostNo
 		}
