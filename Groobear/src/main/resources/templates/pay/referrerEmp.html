@@ -279,9 +279,9 @@
         		opener.document.getElementById('referrerList').children[12].textContent = referrerInfo[9];
         		opener.document.getElementById('referrerList').children[13].textContent = referrerInfo[10];
         		opener.document.getElementById('referrerList').children[14].textContent = referrerInfo[11];
-        		opener.document.getElementById('referrerAllList1').textContent = referrerInfo[0] + " "+referrerInfo[1];
-        		opener.document.getElementById('referrerAllList2').textContent = referrerInfo[4] + " "+referrerInfo[5];
-        		opener.document.getElementById('referrerAllList3').textContent = referrerInfo[8] + " "+referrerInfo[9];
+        		opener.document.getElementById('referrerAllList1').textContent = referrerInfo[1] + " "+referrerInfo[2];
+        		opener.document.getElementById('referrerAllList2').textContent = referrerInfo[5] + " "+referrerInfo[6];
+        		opener.document.getElementById('referrerAllList3').textContent = referrerInfo[9] + " "+referrerInfo[10];
         		
     		}else if(referrerList.length > 1){
     			opener.document.getElementById('referrerList').children[0].textContent = referrerList[0]; //referrerNR값
@@ -294,14 +294,15 @@
         		opener.document.getElementById('referrerList').children[7].textContent = referrerInfo[5];
         		opener.document.getElementById('referrerList').children[8].textContent = referrerInfo[6];
         		opener.document.getElementById('referrerList').children[9].textContent = referrerInfo[7];
-        		opener.document.getElementById('referrerAllList2').textContent = referrerInfo[4] + " "+referrerInfo[5];
+        		opener.document.getElementById('referrerAllList1').textContent = referrerInfo[1] + " "+referrerInfo[2];
+        		opener.document.getElementById('referrerAllList2').textContent = referrerInfo[5] + " "+referrerInfo[6];
     		}else if(referrerList.length > 0){
     			opener.document.getElementById('referrerList').children[0].textContent = referrerList[0]; //referrerNR값
         		opener.document.getElementById('referrerList').children[1].textContent = referrerInfo[0];
         		opener.document.getElementById('referrerList').children[2].textContent = referrerInfo[1];
         		opener.document.getElementById('referrerList').children[3].textContent = referrerInfo[2];
         		opener.document.getElementById('referrerList').children[4].textContent = referrerInfo[3];
-        		opener.document.getElementById('referrerAllList3').textContent = referrerInfo[0] + " "+referrerInfo[1];
+        		opener.document.getElementById('referrerAllList1').textContent = referrerInfo[1] + " "+referrerInfo[2];
     		}
     		window.close();
 		}
